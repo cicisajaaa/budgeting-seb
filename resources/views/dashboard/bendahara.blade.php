@@ -4,112 +4,386 @@
 @section('content')
 
 
-<h2>
-Dashboard Bendahara
-</h2>
+
+<div class="welcome-card">
 
 
-<div class="card">
-
-<h3>
-Total Dana Masuk
-</h3>
-
+<div>
 
 <h1>
-Rp {{ number_format($totalDeposit) }}
+Dashboard Bendahara
 </h1>
+
+
+<p>
+Kelola transaksi keuangan, distribusi dana, dan pengeluaran project.
+</p>
+
+
+</div>
+
+
+<div class="date-box">
+
+{{ date('d M Y') }}
+
+</div>
 
 
 </div>
 
 
 
-<div class="card">
+
+
+
+
+<div class="finance-grid">
+
+
+
+<div class="finance-card">
+
+
+<span>
+Total Dana Masuk
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalDeposit ?? 0,0,',','.') }}
+
+</h2>
+
+
+<p>
+Pembayaran client
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Total Pengeluaran
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalExpense ?? 0,0,',','.') }}
+
+</h2>
+
+
+<p>
+Dana yang sudah digunakan
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Saldo Divisi
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalSaldoDivisi ?? 0,0,',','.') }}
+
+</h2>
+
+
+<p>
+Sisa dana tersedia
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Status Keuangan
+</span>
+
+
+<h2 style="color:#10b981">
+
+Aktif
+
+</h2>
+
+
+<p>
+Sistem berjalan normal
+</p>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="content-grid">
+
+
+
+
+
+<div class="panel">
+
 
 <h3>
 Menu Finance
 </h3>
 
 
-<ul>
 
-<li>
-<a href="{{ route('finance.deposit') }}">
+<table>
+
+
+<tr>
+
+<td>
 Input Pembayaran Client
+</td>
+
+
+<td>
+
+<a href="{{ route('finance.deposit') }}">
+
+Buka
+
 </a>
-</li>
+
+</td>
 
 
-<li>
+</tr>
+
+
+
+
+
+<tr>
+
+<td>
 Distribusi Dana
-</li>
+</td>
 
 
-<li>
-Pengeluaran
-</li>
+<td>
 
+<a href="{{ route('finance.distribution') }}">
 
-<li>
-Laporan Keuangan
-</li>
+Buka
 
-
-</ul>
-
-</div>
-<li>
-<a href="{{route('finance.distribution')}}">
-Lihat Distribusi Dana
-</a>
-</li>
-<li>
-
-<a href="{{route('expense.approval')}}">
-Approval Pengeluaran
 </a>
 
-</li>
+</td>
 
-<li>
+
+</tr>
+
+
+
+
+
+<tr>
+
+<td>
+Saldo Divisi
+</td>
+
+
+<td>
 
 <a href="{{ route('finance.balance') }}">
-Saldo Divisi
+
+Buka
+
 </a>
 
-</li>
-<div class="card">
+</td>
 
-<h3>
-Total Pengeluaran
-</h3>
 
-<h2>
-Rp {{number_format($totalExpense)}}
-</h2>
-
-</div>
+</tr>
 
 
 
-<div class="card">
 
-<h3>
-Saldo Divisi
-</h3>
 
-<h2>
-Rp {{number_format($totalSaldoDivisi)}}
-</h2>
+<tr>
 
-</div>
+<td>
+Approval Pengeluaran
+</td>
 
-<li>
 
-<a href="{{route('finance.report')}}">
+<td>
+
+<a href="{{ route('expense.approval') }}">
+
+Buka
+
+</a>
+
+</td>
+
+
+</tr>
+
+
+
+
+
+<tr>
+
+<td>
 Laporan Keuangan
+</td>
+
+
+<td>
+
+<a href="{{ route('finance.report') }}">
+
+Buka
+
 </a>
 
-</li>
+</td>
+
+
+</tr>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+Informasi Bendahara
+</h3>
+
+
+
+<table>
+
+
+<tr>
+
+<td>
+User
+
+</td>
+
+<td>
+
+{{auth()->user()->name}}
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+Role
+
+</td>
+
+<td>
+
+Bendahara
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+Akses
+
+</td>
+
+<td style="color:#10b981">
+
+Finance Management
+
+</td>
+
+</tr>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
 @endsection

@@ -13,8 +13,12 @@ use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\ExpenseRequestController;
 use App\Http\Controllers\ExpenseApprovalController;
 
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProjectController;
 
-
+use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\AllocationController;
 /*
 |--------------------------------------------------------------------------
 | Public
@@ -297,10 +301,124 @@ Route::middleware(['auth'])->group(function(){
 
 });
 
+   /*
+|--------------------------------------------------------------------------
+| ADMIN MODULE
+|--------------------------------------------------------------------------
+*/
+
+
+Route::middleware([
+    'auth',
+    'role:admin'
+])
+->prefix('admin')
+->name('admin.')
+->group(function(){
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Dashboard
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/dashboard',[
+        AdminDashboardController::class,
+        'index'
+    ])
+    ->name('dashboard');
 
 
 
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Management
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::resource(
+        'users',
+        UserController::class
+    );
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Project Management
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::resource(
+        'projects',
+        ProjectController::class
+    );
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Division Management
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::resource(
+        'divisions',
+        DivisionController::class
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allocation Budget
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get(
+        '/projects/{project}/allocation',
+        [
+            AllocationController::class,
+            'index'
+        ]
+    )
+    ->name('allocation.index');
+
+
+
+    Route::post(
+        '/projects/{project}/allocation',
+        [
+            AllocationController::class,
+            'store'
+        ]
+    )
+    ->name('allocation.store');
+
+
+
+    Route::delete(
+        '/allocation/{allocation}',
+        [
+            AllocationController::class,
+            'destroy'
+        ]
+    )
+    ->name('allocation.destroy');
+
+
+
+});
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes

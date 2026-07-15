@@ -4,20 +4,43 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class ProjectDivisionAllocation extends Model
 {
-    // Mengizinkan semua kolom diisi data
-    protected $guarded = [];
 
-    // Relasi ke tabel Project
+
+    protected $fillable = [
+
+        'project_id',
+
+        'division_id',
+
+        'persentase',
+
+    ];
+
+
+
     public function project()
     {
-        return $this->belongsTo(Project::class);
+
+        return $this->belongsTo(
+            Project::class
+        );
+
     }
 
-    // Relasi ke tabel Division
+
+
+
     public function division()
     {
-        return $this->belongsTo(Division::class);
+
+        return $this->belongsTo(
+            Division::class
+        );
+
     }
+
+
 }

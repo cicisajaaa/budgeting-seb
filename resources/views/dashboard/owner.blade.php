@@ -4,138 +4,251 @@
 @section('content')
 
 
-<h2>
+
+<div class="welcome-card">
+
+
+<div>
+
+
+<h1>
 Dashboard Owner
-</h2>
+</h1>
+
+
+<p>
+Monitoring perkembangan project dan kondisi keuangan perusahaan.
+</p>
+
+
+</div>
+
+
+<div class="date-box">
+
+{{ date('d M Y') }}
+
+</div>
+
+
+</div>
 
 
 
-<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
 
 
 
-<div class="card">
 
-<h3>
+<div class="finance-grid">
+
+
+
+<div class="finance-card">
+
+
+<span>
 Total Project
-</h3>
-
-<h1>
-{{ $totalProject }}
-</h1>
-
-</div>
-
-
-
-
-<div class="card">
-
-<h3>
-Total Budget
-</h3>
-
-<h1>
-Rp {{ number_format($totalBudget) }}
-</h1>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>
-Dana Masuk
-</h3>
-
-<h1>
-Rp {{ number_format($totalDeposit) }}
-</h1>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>
-Total Pengeluaran
-</h3>
-
-<h1>
-Rp {{ number_format($totalExpense) }}
-</h1>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>
-Sisa Dana
-</h3>
-
-<h1>
-Rp {{ number_format($sisaDana) }}
-</h1>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>
-Progress Project
-</h3>
-
-<h1>
-{{ $totalProjectProgress }}%
-</h1>
-
-</div>
-
-
-
-</div>
-
-
-
-<hr>
-
+</span>
 
 
 <h2>
-Ringkasan Keuangan
+
+{{ $totalProject }}
+
 </h2>
 
 
+<p>
+Project terdaftar
 
-<table border="1" width="100%">
+</p>
 
 
-<tr>
+</div>
 
-<th>
-Keterangan
-</th>
 
-<th>
-Nominal
-</th>
 
-</tr>
 
+
+
+
+<div class="finance-card">
+
+
+<span>
+Total Budget
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalBudget,0,',','.') }}
+
+</h2>
+
+
+<p>
+Nilai seluruh project
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Dana Masuk
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalDeposit,0,',','.') }}
+
+</h2>
+
+
+<p>
+Pembayaran client
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Total Pengeluaran
+</span>
+
+
+<h2>
+
+Rp {{ number_format($totalExpense,0,',','.') }}
+
+</h2>
+
+
+<p>
+Dana digunakan
+
+</p>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-grid">
+
+
+
+<div class="finance-card">
+
+
+<span>
+Sisa Dana
+
+</span>
+
+
+<h2 style="color:#2563eb">
+
+Rp {{ number_format($sisaDana,0,',','.') }}
+
+</h2>
+
+
+<p>
+Saldo tersedia
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="finance-card">
+
+
+<span>
+Progress Project
+
+</span>
+
+
+<h2>
+
+{{ $totalProjectProgress }}%
+
+</h2>
+
+
+<p>
+Rata-rata penyelesaian
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="content-grid">
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+Ringkasan Keuangan
+</h3>
+
+
+
+<table>
 
 
 <tr>
@@ -144,11 +257,16 @@ Nominal
 Dana Masuk
 </td>
 
+
 <td>
-Rp {{number_format($totalDeposit)}}
+
+Rp {{number_format($totalDeposit,0,',','.')}}
+
 </td>
 
+
 </tr>
+
 
 
 
@@ -158,11 +276,16 @@ Rp {{number_format($totalDeposit)}}
 Pengeluaran
 </td>
 
+
 <td>
-Rp {{number_format($totalExpense)}}
+
+Rp {{number_format($totalExpense,0,',','.')}}
+
 </td>
 
+
 </tr>
+
 
 
 
@@ -172,21 +295,69 @@ Rp {{number_format($totalExpense)}}
 Saldo Akhir
 </td>
 
-<td>
-Rp {{number_format($sisaDana)}}
+
+<td style="color:#10b981;font-weight:600">
+
+Rp {{number_format($sisaDana,0,',','.')}}
+
 </td>
 
+
 </tr>
+
 
 
 </table>
 
 
-<li>
 
-<a href="{{route('finance.report')}}">
-Laporan Keuangan
+</div>
+
+
+
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+Akses Owner
+</h3>
+
+
+
+<p>
+Owner dapat melihat laporan keuangan secara keseluruhan.
+</p>
+
+
+<br>
+
+
+<a href="{{route('finance.report')}}"
+class="btn">
+
+
+Lihat Laporan Keuangan
+
+
 </a>
 
-</li>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
 @endsection

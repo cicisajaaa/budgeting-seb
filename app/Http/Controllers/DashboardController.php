@@ -141,10 +141,8 @@ class DashboardController extends Controller
 
             case 'admin':
 
-                return view(
-                    'dashboard.admin',
-                    $data
-                );
+    return redirect()
+        ->route('admin.dashboard');
 
 
 
