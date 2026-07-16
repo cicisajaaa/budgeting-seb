@@ -637,5 +637,3 @@ gap:15px;
 </style>
 
 
-
-@endsection

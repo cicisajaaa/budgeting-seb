@@ -1260,7 +1260,235 @@ margin-left:110px;
 
 }
 
+.notification{
 
+position:relative;
+
+}
+
+
+
+.notification-btn{
+
+width:42px;
+
+height:42px;
+
+border-radius:15px;
+
+background:white;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:20px;
+
+text-decoration:none;
+
+position:relative;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+.badge{
+
+
+position:absolute;
+
+top:-5px;
+
+right:-5px;
+
+
+background:#dc2626;
+
+
+color:white;
+
+
+width:20px;
+
+height:20px;
+
+
+border-radius:50%;
+
+
+font-size:11px;
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+font-weight:700;
+
+
+}
+
+
+
+
+
+.notification-box{
+
+
+position:absolute;
+
+
+right:0;
+
+
+top:55px;
+
+
+width:320px;
+
+
+background:white;
+
+
+border-radius:18px;
+
+
+padding:12px;
+
+
+box-shadow:0 20px 50px rgba(0,0,0,.15);
+
+
+display:none;
+
+
+z-index:100;
+
+
+
+}
+
+
+
+
+
+.notification:hover .notification-box{
+
+
+display:block;
+
+
+}
+
+
+
+
+
+.notification-item{
+
+
+display:block;
+
+
+padding:12px;
+
+
+border-radius:12px;
+
+
+text-decoration:none;
+
+
+color:#334155;
+
+
+margin-bottom:8px;
+
+
+background:#f8fafc;
+
+
+}
+
+
+
+
+
+.notification-item:hover{
+
+
+background:#dcfce7;
+
+
+}
+
+
+
+.notification-item strong{
+
+
+font-size:13px;
+
+
+color:#166534;
+
+
+}
+
+
+
+
+.notification-item p{
+
+
+font-size:12px;
+
+
+margin:5px 0;
+
+
+}
+
+
+
+
+.notification-item small{
+
+
+font-size:11px;
+
+
+color:#94a3b8;
+
+
+}
+
+
+
+
+.empty-notif{
+
+
+padding:20px;
+
+
+text-align:center;
+
+
+font-size:12px;
+
+
+color:#94a3b8;
+
+
+}
 
 </style>
 
@@ -1306,7 +1534,7 @@ MAIN
 </div>
 
 
-
+@if(auth()->user()->role == 'admin')
 
 
 <a href="{{route('admin.dashboard')}}"
@@ -1329,6 +1557,34 @@ Dashboard
 
 </a>
 
+
+
+@else
+
+
+<a href="{{route('dashboard')}}"
+class="{{request()->routeIs('dashboard')?'active':''}}">
+
+
+<div class="icon">
+
+⌂
+
+</div>
+
+
+<span>
+
+Dashboard
+
+</span>
+
+
+</a>
+
+
+
+@endif
 
 
 
@@ -1777,6 +2033,101 @@ Financial Management System
 <div class="profile-area">
 
 
+<!-- NOTIFICATION -->
+
+<div class="notification">
+
+
+<a href="#"
+class="notification-btn">
+
+🔔
+
+
+@if(auth()->user()->unreadNotifications->count() > 0)
+
+<span class="badge">
+
+{{auth()->user()->unreadNotifications->count()}}
+
+</span>
+
+@endif
+
+
+</a>
+
+
+
+<div class="notification-box">
+
+
+@if(auth()->user()->unreadNotifications->count() > 0)
+
+
+@foreach(auth()->user()->unreadNotifications as $notification)
+
+
+
+<a href="{{route(
+'notification.read',
+$notification->id
+)}}"
+class="notification-item">
+
+
+<strong>
+
+{{$notification->data['title']}}
+
+</strong>
+
+
+<p>
+
+{{$notification->data['message']}}
+
+</p>
+
+
+<small>
+
+Klik untuk melihat
+
+</small>
+
+
+</a>
+
+
+
+@endforeach
+
+
+
+@else
+
+
+<div class="empty-notif">
+
+Tidak ada notifikasi
+
+</div>
+
+
+@endif
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 
 
 
@@ -1791,8 +2142,6 @@ Financial Management System
 
 
 </div>
-
-
 
 
 
@@ -1820,6 +2169,17 @@ Financial Management System
 
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -25,20 +25,15 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-
         $totalProject = Project::count();
-
 
 
         $totalBudget = Project::sum('total_budget');
 
 
-
         $totalProjectProgress = Project::avg(
             'progress_keseluruhan'
         );
-
-
 
 
 
@@ -49,23 +44,15 @@ class DashboardController extends Controller
         */
 
 
-        // Total uang masuk dari client
-
         $totalDeposit = ProjectDeposit::sum(
             'jumlah_setoran'
         );
 
 
-
-        // Total uang yang sudah dikeluarkan
-
         $totalExpense = ExpenseTransaction::sum(
             'jumlah'
         );
 
-
-
-        // Sisa uang perusahaan
 
         $sisaDana = 
             $totalDeposit - $totalExpense;
@@ -83,6 +70,27 @@ class DashboardController extends Controller
         $totalSaldoDivisi = DivisionBalance::sum(
             'saldo'
         );
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TRANSAKSI TERBARU (STEP 2)
+        |--------------------------------------------------------------------------
+        */
+
+
+        $recentExpenses = ExpenseTransaction::with('request')
+            ->latest()
+            ->take(5)
+            ->get();
+
+
+
+        $recentDeposits = ProjectDeposit::with('project')
+            ->latest()
+            ->take(5)
+            ->get();
 
 
 
@@ -114,17 +122,17 @@ class DashboardController extends Controller
             ),
 
 
+            'recentExpenses' => $recentExpenses,
+
+
+            'recentDeposits' => $recentDeposits,
+
+
         ];
 
 
 
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | DASHBOARD BERDASARKAN ROLE
-        |--------------------------------------------------------------------------
-        */
 
 
         switch ($user->role) {
@@ -141,8 +149,8 @@ class DashboardController extends Controller
 
             case 'admin':
 
-    return redirect()
-        ->route('admin.dashboard');
+                return redirect()
+                    ->route('admin.dashboard');
 
 
 

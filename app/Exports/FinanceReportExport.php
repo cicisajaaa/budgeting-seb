@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 
@@ -14,11 +15,15 @@ class FinanceReportExport implements WithMultipleSheets
 
         return [
 
+            new DashboardSheet(),
+
             new IncomeSheet(),
 
             new ExpenseSheet(),
 
             new BalanceSheet(),
+
+            new ApprovalSheet(),
 
         ];
 

@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\ExpenseTransaction;
+use App\Models\ExpenseRequest;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 
-class ExpenseSheet implements
+class ApprovalSheet implements
 FromCollection,
 WithTitle,
 WithStyles,
@@ -31,71 +31,77 @@ WithColumnWidths
     {
 
 
-        $data = ExpenseTransaction::with([
+        $data = ExpenseRequest::with([
 
-            'request.project',
-            'request.division',
-            'request.user',
-            'approver'
+            'project',
+            'division',
+            'user'
 
         ])
         ->latest()
         ->get()
-        ->map(function($expense){
+        ->map(function($request){
 
 
             return [
 
 
-                'Tanggal' => date(
+                'Tanggal' =>
+                date(
                     'd M Y',
                     strtotime(
-                        $expense->tanggal
+                        $request->created_at
                     )
                 ),
 
 
+
                 'Pemohon' =>
-                $expense->request->user->name ?? '-',
+                $request->user->name ?? '-',
+
 
 
 
                 'Project' =>
-                $expense->request->project->nama_project ?? '-',
+                $request->project->nama_project ?? '-',
+
+
 
 
 
                 'Divisi' =>
-                $expense->request->division->nama_divisi ?? '-',
+                $request->division->nama_divisi ?? '-',
+
+
 
 
 
                 'Judul Pengajuan' =>
-                $expense->request->judul ?? '-',
+                $request->judul ?? '-',
+
+
 
 
 
                 'Nominal' =>
-                $expense->jumlah,
+                $request->jumlah,
 
 
-
-                'Disetujui Oleh' =>
-                $expense->approver->name ?? '-',
 
 
 
                 'Status' =>
-                'Approved'
+                ucfirst(
+                    $request->status
+                )
 
 
             ];
 
+
         });
 
 
-
-        // TOTAL PENGELUARAN
 
 
         $data->push([
@@ -109,11 +115,9 @@ WithColumnWidths
 
             'Divisi'=>'',
 
-            'Judul Pengajuan'=>'TOTAL PENGELUARAN',
+            'Judul Pengajuan'=>'TOTAL PENGAJUAN',
 
             'Nominal'=>$data->sum('Nominal'),
-
-            'Disetujui Oleh'=>'',
 
             'Status'=>'Total'
 
@@ -134,46 +138,14 @@ WithColumnWidths
 
 
 
-    public function headings():array
-    {
-
-        return [
-
-
-            'Tanggal',
-
-            'Pemohon',
-
-            'Project',
-
-            'Divisi',
-
-            'Judul Pengajuan',
-
-            'Nominal',
-
-            'Disetujui Oleh',
-
-            'Status'
-
-
-        ];
-
-    }
-
-
-
-
-
-
-
 
     public function title():string
     {
 
-        return 'Pengeluaran';
+        return 'Approval Dana';
 
     }
+
 
 
 
@@ -195,18 +167,32 @@ WithColumnWidths
         */
 
 
-        $sheet->insertNewRowBefore(1,3);
+        $sheet->insertNewRowBefore(1,4);
+
 
 
 
         $sheet->mergeCells(
-            'A1:H1'
+            'A1:G1'
         );
 
 
         $sheet->mergeCells(
-            'A2:H2'
+            'A2:G2'
         );
+
+
+
+        $sheet->mergeCells(
+            'A3:B3'
+        );
+
+
+        $sheet->mergeCells(
+            'D3:G3'
+        );
+
+
 
 
 
@@ -217,27 +203,53 @@ WithColumnWidths
         );
 
 
+
+
         $sheet->setCellValue(
             'A2',
-            'LAPORAN PENGELUARAN KEUANGAN'
+            'LAPORAN APPROVAL PENGAJUAN DANA'
+        );
+
+
+
+
+        $sheet->setCellValue(
+            'A3',
+            'Report No : FIN-'.date('Y').'-001'
+        );
+
+
+
+        $sheet->setCellValue(
+            'D3',
+            'Periode : '.date('F Y')
         );
 
 
 
 
 
+
+
+
         $sheet->getStyle(
-            'A1:H2'
+            'A1:G3'
         )
         ->getFont()
-        ->setBold(true)
+        ->setBold(true);
+
+
+
+        $sheet->getStyle(
+            'A1:G2'
+        )
+        ->getFont()
         ->setSize(16);
 
 
 
-
         $sheet->getStyle(
-            'A1:H2'
+            'A1:G3'
         )
         ->getAlignment()
         ->setHorizontal(
@@ -250,15 +262,17 @@ WithColumnWidths
 
 
 
+
+
         /*
         |--------------------------------------------------------------------------
-        | HEADER TABLE
+        | TABLE HEADER
         |--------------------------------------------------------------------------
         */
 
 
         $sheet->getStyle(
-            'A4:H4'
+            'A5:G5'
         )
         ->getFill()
         ->setFillType(
@@ -272,9 +286,8 @@ WithColumnWidths
 
 
 
-
         $sheet->getStyle(
-            'A4:H4'
+            'A5:G5'
         )
         ->getFont()
         ->setBold(true)
@@ -293,7 +306,7 @@ WithColumnWidths
 
         /*
         |--------------------------------------------------------------------------
-        | RUPIAH
+        | FORMAT NOMINAL
         |--------------------------------------------------------------------------
         */
 
@@ -303,12 +316,77 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            "F5:F$lastRow"
+            "F6:F$lastRow"
         )
         ->getNumberFormat()
         ->setFormatCode(
             '"Rp" #,##0'
         );
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATUS COLOR
+        |--------------------------------------------------------------------------
+        */
+
+
+        for($i=6;$i<$lastRow;$i++)
+
+        {
+
+
+            $status = strtolower(
+                $sheet->getCell(
+                    "G$i"
+                )->getValue()
+            );
+
+
+
+            if($status=="approved")
+            {
+
+                $color='DCFCE7';
+
+            }
+            elseif($status=="pending")
+            {
+
+                $color='FEF3C7';
+
+            }
+            else
+            {
+
+                $color='FEE2E2';
+
+            }
+
+
+
+            $sheet->getStyle(
+                "G$i"
+            )
+            ->getFill()
+            ->setFillType(
+                Fill::FILL_SOLID
+            )
+            ->getStartColor()
+            ->setARGB(
+                $color
+            );
+
+
+        }
+
 
 
 
@@ -326,7 +404,7 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            "A$lastRow:H$lastRow"
+            "A$lastRow:G$lastRow"
         )
         ->getFill()
         ->setFillType(
@@ -334,16 +412,17 @@ WithColumnWidths
         )
         ->getStartColor()
         ->setARGB(
-            'FEE2E2'
+            'DCFCE7'
         );
 
 
 
         $sheet->getStyle(
-            "A$lastRow:H$lastRow"
+            "A$lastRow:G$lastRow"
         )
         ->getFont()
         ->setBold(true);
+
 
 
 
@@ -361,48 +440,13 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            "A4:H$lastRow"
+            "A5:G$lastRow"
         )
         ->getBorders()
         ->getAllBorders()
         ->setBorderStyle(
             Border::BORDER_THIN
         );
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS APPROVED
-        |--------------------------------------------------------------------------
-        */
-
-
-        for($i=5;$i<$lastRow;$i++)
-        {
-
-
-            $sheet->getStyle(
-                "H$i"
-            )
-            ->getFill()
-            ->setFillType(
-                Fill::FILL_SOLID
-            )
-            ->getStartColor()
-            ->setARGB(
-                'DCFCE7'
-            );
-
-
-        }
-
 
 
 
@@ -469,19 +513,76 @@ WithColumnWidths
 
         /*
         |--------------------------------------------------------------------------
-        | FREEZE + FILTER
+        | FOOTER TANDA TANGAN
+        |--------------------------------------------------------------------------
+        */
+
+
+        $signRow = $lastRow + 4;
+
+
+
+        $sheet->setCellValue(
+            "A$signRow",
+            "Mengetahui,"
+        );
+
+
+
+        $sheet->setCellValue(
+            "E$signRow",
+            "Bendahara,"
+        );
+
+
+
+        $sheet->setCellValue(
+            "A".($signRow+3),
+            "(........................)"
+        );
+
+
+
+        $sheet->setCellValue(
+            "E".($signRow+3),
+            "(........................)"
+        );
+
+
+
+        $sheet->getStyle(
+            "A$signRow:G".($signRow+3)
+        )
+        ->getAlignment()
+        ->setHorizontal(
+            'center'
+        );
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER + FREEZE
         |--------------------------------------------------------------------------
         */
 
 
         $sheet->freezePane(
-            'A5'
+            'A6'
         );
+
 
 
         $sheet->setAutoFilter(
-            "A4:H".($lastRow-1)
+            "A5:G".($lastRow-1)
         );
+
 
 
 
@@ -497,11 +598,13 @@ WithColumnWidths
 
 
 
+
     public function columnWidths():array
     {
 
 
         return [
+
 
             'A'=>18,
 
@@ -515,12 +618,11 @@ WithColumnWidths
 
             'F'=>20,
 
-            'G'=>25,
-
-            'H'=>15,
+            'G'=>15,
 
 
         ];
+
 
     }
 

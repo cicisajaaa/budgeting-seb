@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class DivisionBalance extends Model
 {
+
 
     protected $fillable = [
 
@@ -20,20 +20,44 @@ class DivisionBalance extends Model
 
 
 
+
+
+    protected $casts = [
+
+        'saldo' => 'integer',
+
+    ];
+
+
+
+
+
+
+
     public function project()
     {
 
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(
+            Project::class
+        );
 
     }
+
+
+
+
 
 
 
     public function division()
     {
 
-        return $this->belongsTo(Division::class);
+        return $this->belongsTo(
+            Division::class
+        );
 
     }
+
+
 
 }
