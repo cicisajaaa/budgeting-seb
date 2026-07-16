@@ -31,55 +31,92 @@ WithColumnWidths
     {
 
 
-        $data = ProjectDeposit::with('project')
-            ->latest()
-            ->get()
-            ->map(function($deposit){
+        $data = ProjectDeposit::with([
+
+            'project',
+
+            'bank'
+
+        ])
+        ->latest()
+        ->get()
+        ->map(function($deposit){
 
 
-                return [
+            return [
 
-                    'Tanggal' => date(
-                        'd M Y',
-                        strtotime(
-                            $deposit->tanggal_setoran
-                        )
-                    ),
+                'Tanggal' => date(
+
+                    'd M Y',
+
+                    strtotime(
+                        $deposit->tanggal_setoran
+                    )
+
+                ),
 
 
-                    'Project' =>
+                'Project' =>
+
                     $deposit->project->nama_project ?? '-',
 
 
 
-                    'Nominal' =>
+                'Bank' =>
+
+                    $deposit->bank->nama_bank ?? '-',
+
+
+
+                'Nominal' =>
+
                     $deposit->jumlah_setoran,
 
 
 
-                    'Keterangan' =>
+                'Keterangan' =>
+
                     'Pembayaran Project'
 
-                ];
+
+            ];
 
 
-            });
+        });
 
 
 
-        // Tambahkan total
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Total Dana Masuk
+        |--------------------------------------------------------------------------
+        */
+
 
         $data->push([
 
+
             'Tanggal'=>'',
+
 
             'Project'=>'TOTAL DANA MASUK',
 
+
+            'Bank'=>'',
+
+
             'Nominal'=>$data->sum('Nominal'),
+
 
             'Keterangan'=>'Total Pemasukan'
 
+
         ]);
+
+
+
 
 
 
@@ -93,12 +130,17 @@ WithColumnWidths
 
 
 
-    public function title():string
+
+
+
+    public function title(): string
     {
 
         return 'Dana Masuk';
 
     }
+
+
 
 
 
@@ -122,34 +164,55 @@ WithColumnWidths
 
 
 
+
+
         $sheet->mergeCells(
-            'A1:D1'
+            'A1:E1'
         );
 
 
         $sheet->mergeCells(
-            'A2:D2'
+            'A2:E2'
         );
+
+
+
+
 
 
 
         $sheet->setCellValue(
+
             'A1',
+
             'CV SAHABAT ALAM'
+
         );
+
+
+
+
 
 
         $sheet->setCellValue(
+
             'A2',
+
             'LAPORAN DANA MASUK PROJECT'
+
         );
+
+
+
 
 
 
 
 
         $sheet->getStyle(
-            'A1:D2'
+
+            'A1:E2'
+
         )
         ->getFont()
         ->setBold(true)
@@ -157,13 +220,23 @@ WithColumnWidths
 
 
 
+
+
+
+
         $sheet->getStyle(
-            'A1:D2'
+
+            'A1:E2'
+
         )
         ->getAlignment()
         ->setHorizontal(
+
             'center'
+
         );
+
+
 
 
 
@@ -179,29 +252,44 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            'A4:D4'
+
+            'A4:E4'
+
         )
         ->getFill()
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
         ->getStartColor()
         ->setARGB(
+
             '166534'
+
         );
+
+
+
+
 
 
 
 
         $sheet->getStyle(
-            'A4:D4'
+
+            'A4:E4'
+
         )
         ->getFont()
         ->setBold(true)
         ->getColor()
         ->setARGB(
+
             'FFFFFF'
+
         );
+
 
 
 
@@ -221,13 +309,21 @@ WithColumnWidths
 
 
 
+
+
         $sheet->getStyle(
-            "C5:C$lastRow"
+
+            "D5:D$lastRow"
+
         )
         ->getNumberFormat()
         ->setFormatCode(
+
             '"Rp" #,##0'
+
         );
+
+
 
 
 
@@ -243,21 +339,34 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            "A$lastRow:D$lastRow"
+
+            "A$lastRow:E$lastRow"
+
         )
         ->getFill()
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
         ->getStartColor()
         ->setARGB(
+
             'DCFCE7'
+
         );
 
 
 
+
+
+
+
+
         $sheet->getStyle(
-            "A$lastRow:D$lastRow"
+
+            "A$lastRow:E$lastRow"
+
         )
         ->getFont()
         ->setBold(true);
@@ -278,13 +387,19 @@ WithColumnWidths
 
 
         $sheet->getStyle(
-            "A4:D$lastRow"
+
+            "A4:E$lastRow"
+
         )
         ->getBorders()
         ->getAllBorders()
         ->setBorderStyle(
+
             Border::BORDER_THIN
+
         );
+
+
 
 
 
@@ -300,8 +415,11 @@ WithColumnWidths
 
 
         $logo = public_path(
+
             'images/logo-cv.png'
+
         );
+
 
 
 
@@ -313,27 +431,41 @@ WithColumnWidths
 
 
             $drawing->setName(
+
                 'Logo'
+
             );
+
 
 
             $drawing->setPath(
+
                 $logo
+
             );
+
 
 
             $drawing->setHeight(
+
                 45
+
             );
+
 
 
             $drawing->setCoordinates(
+
                 'A1'
+
             );
 
 
+
             $drawing->setWorksheet(
+
                 $sheet
+
             );
 
 
@@ -345,22 +477,32 @@ WithColumnWidths
 
 
 
+
+
         /*
         |--------------------------------------------------------------------------
-        | FREEZE
+        | FREEZE & FILTER
         |--------------------------------------------------------------------------
         */
 
 
         $sheet->freezePane(
+
             'A5'
+
         );
+
 
 
 
         $sheet->setAutoFilter(
-            'A4:D'.($lastRow-1)
+
+            'A4:E'.($lastRow-1)
+
         );
+
+
+
 
 
 
@@ -377,25 +519,34 @@ WithColumnWidths
 
 
 
-    public function columnWidths():array
+
+    public function columnWidths(): array
     {
 
 
         return [
 
+
             'A'=>18,
+
 
             'B'=>35,
 
-            'C'=>25,
 
-            'D'=>30,
+            'C'=>18,
+
+
+            'D'=>25,
+
+
+            'E'=>30,
 
 
         ];
 
 
     }
+
 
 
 }

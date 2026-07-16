@@ -393,7 +393,123 @@ Sisa dana tersedia
 
 
 
+<!-- SALDO BANK -->
 
+
+<div class="glass-panel">
+
+
+<div class="panel-title">
+
+🏦 Saldo Rekening Bank
+
+</div>
+
+
+<div class="bank-grid">
+
+
+
+@forelse($banks as $bank)
+
+
+
+<div class="bank-card">
+
+
+<div class="bank-header">
+
+
+<div class="bank-icon">
+
+🏦
+
+</div>
+
+
+<div>
+
+
+<h3>
+
+{{$bank->nama_bank}}
+
+</h3>
+
+
+<small>
+
+{{$bank->nomor_rekening}}
+
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="bank-owner">
+
+{{$bank->nama_pemilik}}
+
+</div>
+
+
+
+
+
+
+<div class="bank-balance">
+
+
+<label>
+
+Saldo Tersedia
+
+</label>
+
+
+<h2>
+
+Rp {{number_format($bank->saldo,0,',','.')}}
+
+</h2>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+@empty
+
+
+<div class="empty">
+
+Belum ada rekening bank
+
+</div>
+
+
+
+@endforelse
+
+
+
+
+</div>
+
+
+</div>
 
 
 <!-- EXPORT -->
@@ -646,6 +762,13 @@ Divisi
 
 <th>
 
+Bank
+
+</th>
+
+
+<th>
+
 Nominal
 
 </th>
@@ -655,6 +778,8 @@ Nominal
 
 
 </thead>
+
+
 
 
 
@@ -711,6 +836,39 @@ Nominal
 
 
 
+<td>
+
+
+@if($expense->bank)
+
+
+<span class="bank-badge">
+
+🏦 {{$expense->bank->nama_bank}}
+
+</span>
+
+
+@else
+
+
+<span class="no-bank">
+
+Belum dipilih
+
+</span>
+
+
+@endif
+
+
+
+</td>
+
+
+
+
+
 <td class="expense">
 
 -
@@ -731,7 +889,7 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 <tr>
 
-<td colspan="5" class="empty">
+<td colspan="6" class="empty">
 
 Belum ada pengeluaran
 
@@ -755,14 +913,6 @@ Belum ada pengeluaran
 
 
 </div>
-
-
-
-
-
-
-
-
 
 <style>
 
@@ -1325,10 +1475,228 @@ color:#94a3b8;
 
 
 
+.bank-grid{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:18px;
+
+}
 
 
+
+
+
+.bank-card{
+
+
+background:white;
+
+
+padding:20px;
+
+
+border-radius:20px;
+
+
+box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+
+}
+
+
+
+
+
+.bank-header{
+
+
+display:flex;
+
+
+align-items:center;
+
+
+gap:12px;
+
+
+}
+
+
+
+
+
+.bank-icon{
+
+
+width:45px;
+
+
+height:45px;
+
+
+border-radius:15px;
+
+
+background:#dcfce7;
+
+
+display:flex;
+
+
+align-items:center;
+
+
+justify-content:center;
+
+
+font-size:20px;
+
+
+}
+
+
+
+
+
+.bank-header h3{
+
+
+font-size:16px;
+
+
+color:#166534;
+
+
+}
+
+
+
+.bank-header small{
+
+
+font-size:12px;
+
+
+color:#64748b;
+
+
+}
+
+
+
+
+
+.bank-owner{
+
+
+margin-top:15px;
+
+
+font-size:12px;
+
+
+color:#64748b;
+
+
+}
+
+
+
+
+
+.bank-balance{
+
+
+margin-top:15px;
+
+
+}
+
+
+
+
+
+.bank-balance label{
+
+
+font-size:12px;
+
+
+color:#94a3b8;
+
+
+}
+
+
+
+
+
+.bank-balance h2{
+
+
+font-size:20px;
+
+
+color:#166534;
+
+
+margin-top:5px;
+
+
+}
+.bank-badge{
+
+
+background:#dcfce7;
+
+
+color:#166534;
+
+
+padding:6px 12px;
+
+
+border-radius:20px;
+
+
+font-size:12px;
+
+
+font-weight:600;
+
+
+}
+
+
+
+.no-bank{
+
+
+background:#f1f5f9;
+
+
+color:#64748b;
+
+
+padding:6px 12px;
+
+
+border-radius:20px;
+
+
+font-size:12px;
+
+
+}
 @media(max-width:900px){
+.bank-grid{
 
+grid-template-columns:1fr;
+
+}
 
 .finance-grid{
 

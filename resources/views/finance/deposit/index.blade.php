@@ -43,7 +43,9 @@ Finance Active
 
 
 
+
 <!-- FORM INPUT -->
+
 
 <div class="glass-panel">
 
@@ -57,6 +59,7 @@ Finance Active
 
 
 
+
 <form method="POST"
 action="{{route('finance.deposit.store')}}">
 
@@ -65,15 +68,23 @@ action="{{route('finance.deposit.store')}}">
 
 
 
+
+
 <div class="form-grid">
+
+
+
+
 
 
 
 <div>
 
+
 <label>
 Project
 </label>
+
 
 
 <select name="project_id"
@@ -102,6 +113,59 @@ required>
 
 
 </div>
+
+
+
+
+
+
+
+
+<div>
+
+
+<label>
+Rekening Bank
+</label>
+
+
+
+<select name="bank_account_id"
+required>
+
+
+<option value="">
+-- Pilih Bank --
+</option>
+
+
+
+@foreach($banks as $bank)
+
+
+<option value="{{$bank->id}}">
+
+
+{{$bank->nama_bank}}
+
+-
+
+{{$bank->nomor_rekening}}
+
+
+</option>
+
+
+@endforeach
+
+
+
+</select>
+
+
+</div>
+
+
 
 
 
@@ -180,6 +244,8 @@ required>
 
 <!-- RIWAYAT -->
 
+
+
 <div class="glass-panel">
 
 
@@ -200,9 +266,11 @@ required>
 
 <tr>
 
+
 <th>
 Tanggal
 </th>
+
 
 
 <th>
@@ -210,15 +278,25 @@ Project
 </th>
 
 
+
+<th>
+Bank
+</th>
+
+
+
 <th>
 Nominal
 </th>
+
 
 
 </tr>
 
 
 </thead>
+
+
 
 
 
@@ -241,6 +319,7 @@ Nominal
 
 
 
+
 <td>
 
 {{$deposit->project->nama_project ?? '-'}}
@@ -250,9 +329,21 @@ Nominal
 
 
 
+
+<td>
+
+{{$deposit->bank->nama_bank ?? '-'}}
+
+</td>
+
+
+
+
+
 <td class="income">
 
-+ Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
++
+Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 </td>
 
@@ -267,7 +358,7 @@ Nominal
 
 <tr>
 
-<td colspan="3">
+<td colspan="4">
 
 Belum ada pembayaran
 
@@ -408,23 +499,39 @@ border-radius:50%;
 
 
 
+
+
 .glass-panel{
 
 
-background:rgba(255,255,255,.65);
+background:
 
-backdrop-filter:blur(15px);
+rgba(255,255,255,.65);
+
+
+backdrop-filter:
+
+blur(15px);
+
 
 border-radius:22px;
 
+
 padding:22px;
+
 
 margin-bottom:20px;
 
-border:1px solid rgba(255,255,255,.8);
+
+border:
+
+1px solid rgba(255,255,255,.8);
 
 
 }
+
+
+
 
 
 
@@ -441,15 +548,18 @@ margin-bottom:18px;
 
 
 
+
 .form-grid{
 
 display:grid;
 
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(4,1fr);
 
 gap:18px;
 
 }
+
+
 
 
 
@@ -471,21 +581,29 @@ margin-bottom:8px;
 
 
 
+
 input,
 select{
 
 
 width:100%;
 
+
 padding:12px;
+
 
 border-radius:12px;
 
+
 border:1px solid #e2e8f0;
+
 
 background:white;
 
+
 }
+
+
 
 
 
@@ -494,19 +612,27 @@ background:white;
 
 margin-top:20px;
 
+
 padding:12px 25px;
+
 
 border:none;
 
+
 border-radius:14px;
+
 
 background:#166534;
 
+
 color:white;
+
 
 font-weight:600;
 
+
 cursor:pointer;
+
 
 }
 
@@ -522,60 +648,108 @@ background:#22c55e;
 
 
 
+
+
+
 table{
+
 
 width:100%;
 
+
 border-collapse:collapse;
 
+
 }
+
+
 
 
 
 th{
 
+
 text-align:left;
+
 
 padding:14px;
 
+
 font-size:12px;
+
 
 color:#64748b;
 
+
+background:#f8fafc;
+
+
 }
+
+
 
 
 
 td{
 
+
 padding:14px;
+
 
 border-top:1px solid #f1f5f9;
 
+
 font-size:13px;
 
+
 }
+
+
 
 
 
 .income{
 
+
 color:#16a34a;
 
+
 font-weight:700;
+
 
 }
 
 
 
 
-@media(max-width:900px){
+
+
+
+@media(max-width:1100px){
+
+
+.form-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:700px){
+
 
 .form-grid{
 
 grid-template-columns:1fr;
 
 }
+
 
 }
 

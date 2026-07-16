@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ProjectController;
 
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\AllocationController;
+use App\Http\Controllers\BankAccountController;
 /*
 |--------------------------------------------------------------------------
 | Public
@@ -118,7 +119,12 @@ Route::middleware(['auth'])->group(function(){
 
 
 
-
+//Bank Accounts
+Route::resource(
+    'finance/bank',
+    BankAccountController::class
+)
+->names('finance.bank');
 
 
     /*

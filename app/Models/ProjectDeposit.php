@@ -8,29 +8,61 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectDeposit extends Model
 {
 
+
     protected $fillable = [
 
         'project_id',
+
+        'bank_account_id',
+
         'jumlah_setoran',
+
         'tanggal_setoran',
 
     ];
 
 
 
+
     public function project()
     {
-        return $this->belongsTo(Project::class);
+
+        return $this->belongsTo(
+            Project::class
+        );
+
     }
+
+
+
+
+
+
+    public function bank()
+    {
+
+        return $this->belongsTo(
+            BankAccount::class,
+            'bank_account_id'
+        );
+
+    }
+
+
+
 
 
 
     public function distributions()
     {
+
         return $this->hasMany(
             DepositDistribution::class,
             'deposit_id'
         );
+
     }
+
+
 
 }

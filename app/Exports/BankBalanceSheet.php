@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\ExpenseTransaction;
+use App\Models\BankAccount;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 
-class ExpenseSheet implements
+class BankBalanceSheet implements
 FromCollection,
 WithTitle,
 WithStyles,
@@ -31,109 +31,49 @@ WithColumnWidths
     {
 
 
-        $data = ExpenseTransaction::with([
-
-            'request.project',
-
-            'request.division',
-
-            'request.user',
-
-            'approver',
-
-            'bank'
-
-        ])
+        $data = BankAccount::where(
+            'status',
+            true
+        )
         ->latest()
         ->get()
-        ->map(function($expense){
+        ->map(function($bank){
 
 
             return [
 
 
-                'Tanggal' => date(
-
-                    'd M Y',
-
-                    strtotime(
-                        $expense->tanggal
-                    )
-
-                ),
-
-
-
-
-                'Pemohon' =>
-
-                    $expense->request->user->name ?? '-',
-
-
-
-
-
-
-                'Project' =>
-
-                    $expense->request->project->nama_project ?? '-',
-
-
-
-
-
-
-                'Divisi' =>
-
-                    $expense->request->division->nama_divisi ?? '-',
-
-
-
-
-
-
                 'Bank' =>
 
-                    $expense->bank->nama_bank ?? '-',
+                $bank->nama_bank,
 
 
 
+                'Nomor Rekening' =>
+
+                $bank->nomor_rekening,
 
 
 
-                'Judul Pengajuan' =>
+                'Nama Pemilik' =>
 
-                    $expense->request->judul ?? '-',
-
-
+                $bank->nama_pemilik,
 
 
 
+                'Saldo Bank' =>
 
-                'Nominal' =>
-
-                    $expense->jumlah,
-
-
-
-
-
-
-
-
-                'Disetujui Oleh' =>
-
-                    $expense->approver->name ?? '-',
-
-
-
-
+                $bank->saldo,
 
 
 
                 'Status' =>
 
-                    'Approved'
+                $bank->saldo > 0
+
+                ? 'Tersedia'
+
+                : 'Kosong'
 
 
             ];
@@ -147,10 +87,9 @@ WithColumnWidths
 
 
 
-
         /*
         |--------------------------------------------------------------------------
-        | TOTAL PENGELUARAN
+        | TOTAL SALDO BANK
         |--------------------------------------------------------------------------
         */
 
@@ -158,41 +97,15 @@ WithColumnWidths
         $data->push([
 
 
-
-            'Tanggal'=>'',
-
-
-
-            'Pemohon'=>'',
-
-
-
-            'Project'=>'',
-
-
-
-            'Divisi'=>'',
-
-
-
             'Bank'=>'',
 
+            'Nomor Rekening'=>'',
 
+            'Nama Pemilik'=>'TOTAL SALDO BANK',
 
-            'Judul Pengajuan'=>'TOTAL PENGELUARAN',
-
-
-
-            'Nominal'=>$data->sum('Nominal'),
-
-
-
-            'Disetujui Oleh'=>'',
-
-
+            'Saldo Bank'=>$data->sum('Saldo Bank'),
 
             'Status'=>'Total'
-
 
 
         ]);
@@ -223,27 +136,18 @@ WithColumnWidths
         return [
 
 
-            'Tanggal',
-
-            'Pemohon',
-
-            'Project',
-
-            'Divisi',
-
             'Bank',
 
-            'Judul Pengajuan',
+            'Nomor Rekening',
 
-            'Nominal',
+            'Nama Pemilik',
 
-            'Disetujui Oleh',
+            'Saldo Bank',
 
             'Status'
 
 
         ];
-
 
     }
 
@@ -259,7 +163,7 @@ WithColumnWidths
     {
 
 
-        return 'Pengeluaran';
+        return 'Saldo Bank';
 
 
     }
@@ -289,10 +193,9 @@ WithColumnWidths
 
 
 
-
         $sheet->mergeCells(
 
-            'A1:I1'
+            'A1:E1'
 
         );
 
@@ -300,9 +203,10 @@ WithColumnWidths
 
         $sheet->mergeCells(
 
-            'A2:I2'
+            'A2:E2'
 
         );
+
 
 
 
@@ -321,11 +225,12 @@ WithColumnWidths
 
 
 
+
         $sheet->setCellValue(
 
             'A2',
 
-            'LAPORAN PENGELUARAN KEUANGAN'
+            'LAPORAN SALDO REKENING BANK'
 
         );
 
@@ -339,7 +244,7 @@ WithColumnWidths
 
         $sheet->getStyle(
 
-            'A1:I2'
+            'A1:E2'
 
         )
         ->getFont()
@@ -352,10 +257,9 @@ WithColumnWidths
 
 
 
-
         $sheet->getStyle(
 
-            'A1:I2'
+            'A1:E2'
 
         )
         ->getAlignment()
@@ -382,7 +286,7 @@ WithColumnWidths
 
         $sheet->getStyle(
 
-            'A4:I4'
+            'A4:E4'
 
         )
         ->getFill()
@@ -404,10 +308,9 @@ WithColumnWidths
 
 
 
-
         $sheet->getStyle(
 
-            'A4:I4'
+            'A4:E4'
 
         )
         ->getFont()
@@ -440,9 +343,10 @@ WithColumnWidths
 
 
 
+
         $sheet->getStyle(
 
-            "G5:G$lastRow"
+            "D5:D$lastRow"
 
         )
         ->getNumberFormat()
@@ -462,6 +366,91 @@ WithColumnWidths
 
         /*
         |--------------------------------------------------------------------------
+        | STATUS COLOR
+        |--------------------------------------------------------------------------
+        */
+
+
+        for($i=5;$i<$lastRow;$i++)
+
+        {
+
+
+            $status =
+
+            $sheet->getCell(
+
+                "E$i"
+
+            )->getValue();
+
+
+
+
+
+
+            if($status=="Tersedia")
+            {
+
+
+                $sheet->getStyle(
+
+                    "E$i"
+
+                )
+                ->getFill()
+                ->setFillType(
+
+                    Fill::FILL_SOLID
+
+                )
+                ->getStartColor()
+                ->setARGB(
+
+                    'DCFCE7'
+
+                );
+
+
+            }
+            else
+            {
+
+
+                $sheet->getStyle(
+
+                    "E$i"
+
+                )
+                ->getFill()
+                ->setFillType(
+
+                    Fill::FILL_SOLID
+
+                )
+                ->getStartColor()
+                ->setARGB(
+
+                    'FEE2E2'
+
+                );
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
         | TOTAL ROW
         |--------------------------------------------------------------------------
         */
@@ -469,7 +458,7 @@ WithColumnWidths
 
         $sheet->getStyle(
 
-            "A$lastRow:I$lastRow"
+            "A$lastRow:E$lastRow"
 
         )
         ->getFill()
@@ -481,7 +470,7 @@ WithColumnWidths
         ->getStartColor()
         ->setARGB(
 
-            'FEE2E2'
+            'DCFCE7'
 
         );
 
@@ -492,7 +481,7 @@ WithColumnWidths
 
         $sheet->getStyle(
 
-            "A$lastRow:I$lastRow"
+            "A$lastRow:E$lastRow"
 
         )
         ->getFont()
@@ -515,7 +504,7 @@ WithColumnWidths
 
         $sheet->getStyle(
 
-            "A4:I$lastRow"
+            "A4:E$lastRow"
 
         )
         ->getBorders()
@@ -525,46 +514,6 @@ WithColumnWidths
             Border::BORDER_THIN
 
         );
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS APPROVED
-        |--------------------------------------------------------------------------
-        */
-
-
-        for($i = 5; $i < $lastRow; $i++)
-        {
-
-
-            $sheet->getStyle(
-
-                "I$i"
-
-            )
-            ->getFill()
-            ->setFillType(
-
-                Fill::FILL_SOLID
-
-            )
-            ->getStartColor()
-            ->setARGB(
-
-                'DCFCE7'
-
-            );
-
-
-        }
 
 
 
@@ -665,7 +614,7 @@ WithColumnWidths
 
         $sheet->setAutoFilter(
 
-            "A4:I".($lastRow-1)
+            "A4:E".($lastRow-1)
 
         );
 
@@ -695,7 +644,7 @@ WithColumnWidths
         return [
 
 
-            'A'=>18,
+            'A'=>20,
 
 
             'B'=>25,
@@ -704,28 +653,17 @@ WithColumnWidths
             'C'=>30,
 
 
-            'D'=>20,
+            'D'=>25,
 
 
             'E'=>18,
-
-
-            'F'=>35,
-
-
-            'G'=>20,
-
-
-            'H'=>25,
-
-
-            'I'=>15,
 
 
         ];
 
 
     }
+
 
 
 }

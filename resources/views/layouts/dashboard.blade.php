@@ -1771,6 +1771,27 @@ Pembayaran
 
 
 
+<a href="{{route('finance.bank.index')}}"
+class="{{request()->routeIs('finance.bank.*')?'active':''}}">
+
+
+<div class="icon">
+
+🏦
+
+</div>
+
+
+<span>
+
+Rekening Bank
+
+</span>
+
+
+</a>
+
+
 <a href="{{route('finance.distribution')}}"
 class="{{request()->routeIs('finance.distribution')?'active':''}}">
 

@@ -4,21 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class ExpenseTransaction extends Model
 {
 
 
     protected $fillable = [
 
+
         'request_id',
 
         'approved_by',
+
+        'bank_account_id',
 
         'jumlah',
 
         'tanggal',
 
+
     ];
+
+
 
 
 
@@ -26,11 +33,15 @@ class ExpenseTransaction extends Model
 
     protected $casts = [
 
+
         'jumlah' => 'integer',
+
 
         'tanggal' => 'date',
 
+
     ];
+
 
 
 
@@ -42,11 +53,15 @@ class ExpenseTransaction extends Model
     {
 
         return $this->belongsTo(
+
             ExpenseRequest::class,
+
             'request_id'
+
         );
 
     }
+
 
 
 
@@ -58,11 +73,35 @@ class ExpenseTransaction extends Model
     {
 
         return $this->belongsTo(
+
             User::class,
+
             'approved_by'
+
         );
 
     }
+
+
+
+
+
+
+
+
+    public function bank()
+    {
+
+        return $this->belongsTo(
+
+            BankAccount::class,
+
+            'bank_account_id'
+
+        );
+
+    }
+
 
 
 

@@ -50,7 +50,7 @@ Kelola permintaan dana dan verifikasi pengeluaran perusahaan.
 
 
 <span>
-✓ Update Saldo
+✓ Update Saldo Bank
 </span>
 
 
@@ -133,6 +133,12 @@ Jumlah
 
 <th>
 Tanggal
+</th>
+
+
+
+<th>
+Rekening Pembayaran
 </th>
 
 
@@ -227,7 +233,7 @@ Karyawan
 
 <strong>
 
-{{$request->project->nama_project ?? '-' }}
+{{$request->project->nama_project ?? '-'}}
 
 </strong>
 
@@ -237,7 +243,7 @@ Karyawan
 
 <span class="division">
 
-{{$request->division->nama_divisi ?? '-'}}
+{{$request->division->nama_divisi ?? '-' }}
 
 </span>
 
@@ -279,14 +285,8 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 
 
+
 <td>
-
-
-
-<div class="action">
-
-
-
 
 
 <form method="POST"
@@ -295,6 +295,66 @@ onsubmit="return confirm('Apakah yakin ingin menyetujui pengajuan ini?')">
 
 
 @csrf
+
+
+
+
+<select 
+name="bank_account_id"
+class="bank-select"
+required>
+
+
+<option value="">
+
+-- Pilih Bank --
+
+</option>
+
+
+
+
+@foreach($banks as $bank)
+
+
+<option value="{{$bank->id}}">
+
+
+{{$bank->nama_bank}}
+
+
+(
+Rp {{number_format($bank->saldo,0,',','.')}}
+)
+
+
+</option>
+
+
+@endforeach
+
+
+
+</select>
+
+
+
+</td>
+
+
+
+
+
+
+
+
+<td>
+
+
+<div class="action">
+
+
+
 
 
 <button class="approve">
@@ -306,8 +366,9 @@ onsubmit="return confirm('Apakah yakin ingin menyetujui pengajuan ini?')">
 </button>
 
 
-</form>
 
+
+</form>
 
 
 
@@ -361,7 +422,7 @@ onsubmit="return confirm('Apakah yakin ingin menolak pengajuan ini?')">
 <tr>
 
 
-<td colspan="6" class="empty">
+<td colspan="7" class="empty">
 
 
 Tidak ada pengajuan menunggu approval
@@ -895,6 +956,51 @@ transform:translateY(-2px);
 }
 
 
+
+
+
+
+
+.bank-select{
+
+
+width:160px;
+
+
+padding:9px;
+
+
+border-radius:12px;
+
+
+border:1px solid #e2e8f0;
+
+
+background:white;
+
+
+font-size:12px;
+
+
+color:#334155;
+
+
+}
+
+
+
+
+
+.bank-select:focus{
+
+
+outline:none;
+
+
+border-color:#22c55e;
+
+
+}
 
 
 
