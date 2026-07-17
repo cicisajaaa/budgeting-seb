@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
@@ -16,18 +17,23 @@ use App\Http\Controllers\ExpenseApprovalController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProjectController;
-
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\AllocationController;
+
 use App\Http\Controllers\BankAccountController;
+
+use App\Http\Controllers\NotificationController;
+
+
+
 /*
 |--------------------------------------------------------------------------
-| Public
+| PUBLIC
 |--------------------------------------------------------------------------
 */
 
 
-Route::get('/', function () {
+Route::get('/', function(){
 
     return view('welcome');
 
@@ -39,7 +45,7 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated User
+| AUTH USER
 |--------------------------------------------------------------------------
 */
 
@@ -48,78 +54,105 @@ Route::middleware(['auth'])->group(function(){
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Dashboard
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| NOTIFICATION
+|--------------------------------------------------------------------------
+*/
 
 
-    Route::get('/dashboard',[
-        DashboardController::class,
+Route::get(
+    '/notification',
+    [
+        NotificationController::class,
         'index'
-    ])
-    ->name('dashboard');
+    ]
+)
+->name('notification.index');
+
+
+
+
+
+Route::get(
+    '/notification/read/{id}',
+    [
+        NotificationController::class,
+        'read'
+    ]
+)
+->name('notification.read');
 
 
 
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | BENDAHARA MODULE
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD
+|--------------------------------------------------------------------------
+*/
 
 
-    // Input pembayaran client
-
-    Route::get('/finance/deposit',[
-        FinanceDepositController::class,
-        'index'
-    ])
-    ->middleware('role:bendahara')
-    ->name('finance.deposit');
-
-
-
-    Route::post('/finance/deposit',[
-        FinanceDepositController::class,
-        'store'
-    ])
-    ->middleware('role:bendahara')
-    ->name('finance.deposit.store');
+Route::get('/dashboard',[
+    DashboardController::class,
+    'index'
+])
+->name('dashboard');
 
 
 
 
 
-    // Distribusi dana
-
-    Route::get('/finance/distribution',[
-        DepositDistributionController::class,
-        'index'
-    ])
-    ->middleware('role:bendahara,owner')
-    ->name('finance.distribution');
 
 
+/*
+|--------------------------------------------------------------------------
+| FINANCE
+|--------------------------------------------------------------------------
+*/
 
 
-
-    // Saldo divisi
-
-    Route::get('/finance/balance',[
-        DivisionBalanceController::class,
-        'index'
-    ])
-    ->middleware('role:bendahara,owner')
-    ->name('finance.balance');
+Route::get('/finance/deposit',[
+    FinanceDepositController::class,
+    'index'
+])
+->middleware('role:bendahara')
+->name('finance.deposit');
 
 
 
-//Bank Accounts
+Route::post('/finance/deposit',[
+    FinanceDepositController::class,
+    'store'
+])
+->middleware('role:bendahara')
+->name('finance.deposit.store');
+
+
+
+
+Route::get('/finance/distribution',[
+    DepositDistributionController::class,
+    'index'
+])
+->middleware('role:bendahara,owner')
+->name('finance.distribution');
+
+
+
+
+Route::get('/finance/balance',[
+    DivisionBalanceController::class,
+    'index'
+])
+->middleware('role:bendahara,owner')
+->name('finance.balance');
+
+
+
+
 Route::resource(
     'finance/bank',
     BankAccountController::class
@@ -127,189 +160,165 @@ Route::resource(
 ->names('finance.bank');
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | REPORT
-    |--------------------------------------------------------------------------
-    */
+Route::get('/finance/report/export',[
+    FinanceReportController::class,
+    'exportExcel'
+])
+->middleware('role:bendahara,owner')
+->name('finance.report.export');
 
 
-    Route::get('/finance/report',[
-        FinanceReportController::class,
-        'index'
-    ])
-    ->middleware('role:bendahara,owner')
-    ->name('finance.report');
+Route::get('/finance/report',[
+    FinanceReportController::class,
+    'index'
+])
+->middleware('role:bendahara,owner')
+->name('finance.report');
 
 
 
-    Route::get('/finance/report/export',[
-        FinanceReportController::class,
-        'exportExcel'
-    ])
-    ->middleware('role:bendahara,owner')
-    ->name('finance.report.export');
 
 
 
+/*
+|--------------------------------------------------------------------------
+| EXPENSE KARYAWAN
+|--------------------------------------------------------------------------
+*/
 
 
+Route::get('/expense/create',[
+    ExpenseRequestController::class,
+    'create'
+])
+->middleware('role:karyawan')
+->name('expense.create');
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | KARYAWAN EXPENSE REQUEST
-    |--------------------------------------------------------------------------
-    */
 
+Route::post('/expense',[
+    ExpenseRequestController::class,
+    'store'
+])
+->middleware('role:karyawan')
+->name('expense.store');
 
-    Route::get('/expense/create',[
-        ExpenseRequestController::class,
-        'create'
-    ])
-    ->middleware('role:karyawan')
-    ->name('expense.create');
 
 
 
-    Route::post('/expense',[
-        ExpenseRequestController::class,
-        'store'
-    ])
-    ->middleware('role:karyawan')
-    ->name('expense.store');
 
+Route::get('/expense/my-history',[
+    ExpenseRequestController::class,
+    'history'
+])
+->middleware('role:karyawan')
+->name('expense.myhistory');
 
 
-    Route::get('/expense/history',[
-        ExpenseRequestController::class,
-        'history'
-    ])
-    ->middleware('role:karyawan')
-    ->name('expense.history');
 
 
 
 
 
+/*
+|--------------------------------------------------------------------------
+| APPROVAL BENDAHARA
+|--------------------------------------------------------------------------
+*/
 
 
+Route::get('/expense/approval',[
+    ExpenseApprovalController::class,
+    'index'
+])
+->middleware('role:bendahara')
+->name('expense.approval');
 
-    /*
-    |--------------------------------------------------------------------------
-    | BENDAHARA APPROVAL
-    |--------------------------------------------------------------------------
-    */
 
 
-    Route::get('/expense/approval',[
-        ExpenseApprovalController::class,
-        'index'
-    ])
-    ->middleware('role:bendahara')
-    ->name('expense.approval');
 
 
+Route::post('/expense/{id}/approve',[
+    ExpenseApprovalController::class,
+    'approve'
+])
+->middleware('role:bendahara')
+->name('expense.approve');
 
-    Route::post('/expense/{id}/approve',[
-        ExpenseApprovalController::class,
-        'approve'
-    ])
-    ->middleware('role:bendahara')
-    ->name('expense.approve');
 
 
 
-    Route::post('/expense/{id}/reject',[
-        ExpenseApprovalController::class,
-        'reject'
-    ])
-    ->middleware('role:bendahara')
-    ->name('expense.reject');
 
+Route::post('/expense/{id}/reject',[
+    ExpenseApprovalController::class,
+    'reject'
+])
+->middleware('role:bendahara')
+->name('expense.reject');
 
 
 
 
 
+Route::get('/expense/approval/history',[
+    ExpenseApprovalController::class,
+    'history'
+])
+->middleware('role:bendahara,owner')
+->name('expense.approval.history');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Notification
-    |--------------------------------------------------------------------------
-    */
 
 
-    Route::get('/notification/read/{id}',function($id){
 
 
-        $notification = auth()
-            ->user()
-            ->notifications()
-            ->find($id);
 
 
 
-        if($notification)
-        {
 
-            $notification->markAsRead();
+/*
+|--------------------------------------------------------------------------
+| PROFILE
+|--------------------------------------------------------------------------
+*/
 
-        }
 
+Route::get('/profile',[
+    ProfileController::class,
+    'edit'
+])
+->name('profile.edit');
 
 
-        return redirect()
-            ->route('expense.approval');
 
+Route::patch('/profile',[
+    ProfileController::class,
+    'update'
+])
+->name('profile.update');
 
 
-    })
-    ->name('notification.read');
 
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROFILE
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::get('/profile',[
-        ProfileController::class,
-        'edit'
-    ])
-    ->name('profile.edit');
-
-
-
-    Route::patch('/profile',[
-        ProfileController::class,
-        'update'
-    ])
-    ->name('profile.update');
-
-
-
-    Route::delete('/profile',[
-        ProfileController::class,
-        'destroy'
-    ])
-    ->name('profile.destroy');
+Route::delete('/profile',[
+    ProfileController::class,
+    'destroy'
+])
+->name('profile.destroy');
 
 
 
 });
 
-   /*
+
+
+
+
+
+
+
+/*
 |--------------------------------------------------------------------------
-| ADMIN MODULE
+| ADMIN
 |--------------------------------------------------------------------------
 */
 
@@ -324,111 +333,74 @@ Route::middleware([
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Admin Dashboard
-    |--------------------------------------------------------------------------
-    */
+Route::get('/dashboard',[
+    AdminDashboardController::class,
+    'index'
+])
+->name('dashboard');
 
 
-    Route::get('/dashboard',[
-        AdminDashboardController::class,
+
+
+Route::resource(
+    'users',
+    UserController::class
+);
+
+
+
+
+Route::resource(
+    'projects',
+    ProjectController::class
+);
+
+
+
+
+Route::resource(
+    'divisions',
+    DivisionController::class
+);
+
+
+
+Route::get(
+    '/projects/{project}/allocation',
+    [
+        AllocationController::class,
         'index'
-    ])
-    ->name('dashboard');
+    ]
+)
+->name('allocation.index');
 
 
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | User Management
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::resource(
-        'users',
-        UserController::class
-    );
+Route::post(
+    '/projects/{project}/allocation',
+    [
+        AllocationController::class,
+        'store'
+    ]
+)
+->name('allocation.store');
 
 
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Project Management
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::resource(
-        'projects',
-        ProjectController::class
-    );
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Division Management
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::resource(
-        'divisions',
-        DivisionController::class
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Allocation Budget
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::get(
-        '/projects/{project}/allocation',
-        [
-            AllocationController::class,
-            'index'
-        ]
-    )
-    ->name('allocation.index');
-
-
-
-    Route::post(
-        '/projects/{project}/allocation',
-        [
-            AllocationController::class,
-            'store'
-        ]
-    )
-    ->name('allocation.store');
-
-
-
-    Route::delete(
-        '/allocation/{allocation}',
-        [
-            AllocationController::class,
-            'destroy'
-        ]
-    )
-    ->name('allocation.destroy');
+Route::delete(
+    '/allocation/{allocation}',
+    [
+        AllocationController::class,
+        'destroy'
+    ]
+)
+->name('allocation.destroy');
 
 
 
 });
-/*
-|--------------------------------------------------------------------------
-| Authentication Routes
-|--------------------------------------------------------------------------
-*/
+
+
+
 
 require __DIR__.'/auth.php';

@@ -3,7 +3,26 @@
 
 @section('content')
 
+@if(session('success'))
 
+<div class="alert success">
+
+✓ {{session('success')}}
+
+</div>
+
+@endif
+
+
+@if(session('error'))
+
+<div class="alert error">
+
+✕ {{session('error')}}
+
+</div>
+
+@endif
 
 <div class="welcome-card">
 
@@ -29,7 +48,7 @@ Persetujuan Dana Karyawan
 
 <p>
 
-Kelola permintaan dana dan verifikasi pengeluaran perusahaan.
+Verifikasi pengajuan dana dan kontrol penggunaan anggaran perusahaan.
 
 </p>
 
@@ -38,21 +57,19 @@ Kelola permintaan dana dan verifikasi pengeluaran perusahaan.
 
 <div class="welcome-tags">
 
-
 <span>
-✓ Verifikasi Dana
+✓ Validasi Dana
 </span>
 
 
 <span>
-✓ Kontrol Pengeluaran
+✓ Approval
 </span>
 
 
 <span>
-✓ Update Saldo Bank
+✓ Update Saldo
 </span>
-
 
 </div>
 
@@ -70,7 +87,6 @@ Kelola permintaan dana dan verifikasi pengeluaran perusahaan.
 Approval Aktif
 
 </div>
-
 
 
 
@@ -97,7 +113,6 @@ Approval Aktif
 
 
 
-
 <table>
 
 
@@ -108,45 +123,38 @@ Approval Aktif
 
 
 <th>
+
 Pemohon
+
 </th>
 
 
-
 <th>
-Detail Pengajuan
+
+Detail
+
 </th>
 
 
-
 <th>
+
 Project
+
 </th>
 
 
-
 <th>
-Jumlah
+
+Nominal
+
 </th>
 
 
-
 <th>
-Tanggal
-</th>
 
-
-
-<th>
-Rekening Pembayaran
-</th>
-
-
-
-<th>
 Aksi
-</th>
 
+</th>
 
 
 </tr>
@@ -159,15 +167,15 @@ Aksi
 
 
 
+
 <tbody>
 
 
 
 @forelse($requests as $request)
 
-
-
 <tr>
+
 
 
 
@@ -184,15 +192,14 @@ Aksi
 <br>
 
 
-<span class="role">
+<small>
 
 Karyawan
 
-</span>
+</small>
 
 
 </td>
-
 
 
 
@@ -243,7 +250,7 @@ Karyawan
 
 <span class="division">
 
-{{$request->division->nama_divisi ?? '-' }}
+{{$request->division->nama_divisi ?? '-'}}
 
 </span>
 
@@ -270,28 +277,23 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 
 
-<td>
-
-
-{{\Carbon\Carbon::parse($request->created_at)->format('d M Y')}}
-
-
-</td>
-
-
-
-
-
-
-
-
 
 <td>
+
+
+
+<div class="action">
+
+
+
+
+
+<!-- APPROVE -->
 
 
 <form method="POST"
-action="{{route('expense.approve',$request->id)}}"
-onsubmit="return confirm('Apakah yakin ingin menyetujui pengajuan ini?')">
+
+action="{{route('expense.approve',$request->id)}}">
 
 
 @csrf
@@ -299,15 +301,15 @@ onsubmit="return confirm('Apakah yakin ingin menyetujui pengajuan ini?')">
 
 
 
-<select 
-name="bank_account_id"
-class="bank-select"
+
+<select name="bank_account_id"
+
 required>
 
 
 <option value="">
 
--- Pilih Bank --
+Pilih Rekening
 
 </option>
 
@@ -322,9 +324,15 @@ required>
 
 {{$bank->nama_bank}}
 
+-
 
-(
+{{$bank->nomor_rekening}}
+
+
+(Saldo:
+
 Rp {{number_format($bank->saldo,0,',','.')}}
+
 )
 
 
@@ -339,32 +347,30 @@ Rp {{number_format($bank->saldo,0,',','.')}}
 
 
 
-</td>
+
+
+
+
+<textarea
+
+name="approval_note"
+
+placeholder="Catatan approval..."
+
+></textarea>
 
 
 
 
 
 
-
-
-<td>
-
-
-<div class="action">
-
-
-
-
-
-<button class="approve">
-
+<button 
+class="approve"
+onclick="return confirm('Setujui pengeluaran ini?')">
 
 ✓ Setujui
 
-
 </button>
-
 
 
 
@@ -376,24 +382,50 @@ Rp {{number_format($bank->saldo,0,',','.')}}
 
 
 
+
+
+<!-- REJECT -->
+
+
 <form method="POST"
-action="{{route('expense.reject',$request->id)}}"
-onsubmit="return confirm('Apakah yakin ingin menolak pengajuan ini?')">
+
+action="{{route('expense.reject',$request->id)}}">
 
 
 @csrf
 
 
-<button class="reject">
 
+
+
+<textarea
+
+name="approval_note"
+
+placeholder="Alasan penolakan..."
+
+required
+
+></textarea>
+
+
+
+
+
+
+<button 
+class="reject"
+onclick="return confirm('Tolak pengajuan ini?')">
 
 ✕ Tolak
-
 
 </button>
 
 
+
 </form>
+
+
 
 
 
@@ -414,7 +446,6 @@ onsubmit="return confirm('Apakah yakin ingin menolak pengajuan ini?')">
 
 
 
-
 @empty
 
 
@@ -422,11 +453,9 @@ onsubmit="return confirm('Apakah yakin ingin menolak pengajuan ini?')">
 <tr>
 
 
-<td colspan="7" class="empty">
-
+<td colspan="5" class="empty">
 
 Tidak ada pengajuan menunggu approval
-
 
 </td>
 
@@ -439,9 +468,7 @@ Tidak ada pengajuan menunggu approval
 
 
 
-
 </tbody>
-
 
 
 </table>
@@ -459,8 +486,8 @@ Tidak ada pengajuan menunggu approval
 
 
 
-<style>
 
+<style>
 
 
 .welcome-card{
@@ -500,9 +527,6 @@ margin-bottom:22px;
 
 
 
-
-
-
 .welcome-label{
 
 
@@ -522,10 +546,6 @@ opacity:.8;
 
 
 
-
-
-
-
 .welcome-card h1{
 
 
@@ -536,10 +556,6 @@ margin:8px 0;
 
 
 }
-
-
-
-
 
 
 
@@ -557,8 +573,6 @@ opacity:.9;
 
 
 
-
-
 .welcome-tags{
 
 
@@ -568,7 +582,7 @@ display:flex;
 gap:10px;
 
 
-margin-top:18px;
+margin-top:15px;
 
 
 }
@@ -576,11 +590,12 @@ margin-top:18px;
 
 
 
-
 .welcome-tags span{
 
 
-background:rgba(255,255,255,.15);
+background:
+
+rgba(255,255,255,.15);
 
 
 padding:7px 12px;
@@ -593,9 +608,6 @@ font-size:11px;
 
 
 }
-
-
-
 
 
 
@@ -619,9 +631,6 @@ border-radius:30px;
 font-weight:700;
 
 
-font-size:13px;
-
-
 display:flex;
 
 
@@ -632,8 +641,6 @@ gap:8px;
 
 
 }
-
-
 
 
 
@@ -653,8 +660,6 @@ border-radius:50%;
 
 
 }
-
-
 
 
 
@@ -712,9 +717,6 @@ margin-bottom:18px;
 
 
 
-
-
-
 table{
 
 
@@ -725,8 +727,6 @@ border-collapse:collapse;
 
 
 }
-
-
 
 
 
@@ -742,15 +742,13 @@ text-align:left;
 font-size:12px;
 
 
-color:#64748b;
-
-
 background:#f8fafc;
 
 
+color:#64748b;
+
+
 }
-
-
 
 
 
@@ -760,22 +758,15 @@ td{
 padding:15px;
 
 
-border-bottom:1px solid #f1f5f9;
+border-bottom:
+
+1px solid #f1f5f9;
 
 
 font-size:13px;
 
 
-}
-
-
-
-
-
-td strong{
-
-
-color:#334155;
+vertical-align:top;
 
 
 }
@@ -783,13 +774,14 @@ color:#334155;
 
 
 
-.role{
 
-
-font-size:11px;
+td small{
 
 
 color:#94a3b8;
+
+
+font-size:11px;
 
 
 }
@@ -813,26 +805,6 @@ color:#16a34a;
 
 
 
-
-
-td small{
-
-
-font-size:11px;
-
-
-color:#94a3b8;
-
-
-}
-
-
-
-
-
-
-
-
 .money{
 
 
@@ -850,18 +822,73 @@ color:#dc2626;
 
 
 
-
 .action{
 
+display:grid;
 
-display:flex;
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+min-width:450px;
+
+}
 
 
-gap:8px;
+
+.action form{
+
+background:#f8fafc;
+
+padding:15px;
+
+border-radius:15px;
+
+}
+
+
+
+
+
+
+
+
+
+select,
+textarea{
+
+
+padding:10px;
+
+
+border-radius:12px;
+
+
+border:1px solid #e2e8f0;
+
+
+font-size:12px;
+
+
+background:white;
 
 
 }
 
+
+
+
+
+textarea{
+
+
+height:70px;
+
+
+resize:none;
+
+
+}
 
 
 
@@ -874,13 +901,10 @@ gap:8px;
 border:none;
 
 
-padding:9px 14px;
+padding:10px;
 
 
 border-radius:12px;
-
-
-font-size:12px;
 
 
 font-weight:700;
@@ -892,13 +916,7 @@ cursor:pointer;
 color:white;
 
 
-transition:.3s;
-
-
 }
-
-
-
 
 
 
@@ -914,20 +932,13 @@ background:#16a34a;
 
 
 
-
 .approve:hover{
 
 
 background:#15803d;
 
 
-transform:translateY(-2px);
-
-
 }
-
-
-
 
 
 
@@ -943,65 +954,13 @@ background:#dc2626;
 
 
 
-
 .reject:hover{
 
 
 background:#b91c1c;
 
 
-transform:translateY(-2px);
-
-
 }
-
-
-
-
-
-
-
-.bank-select{
-
-
-width:160px;
-
-
-padding:9px;
-
-
-border-radius:12px;
-
-
-border:1px solid #e2e8f0;
-
-
-background:white;
-
-
-font-size:12px;
-
-
-color:#334155;
-
-
-}
-
-
-
-
-
-.bank-select:focus{
-
-
-outline:none;
-
-
-border-color:#22c55e;
-
-
-}
-
 
 
 
@@ -1027,8 +986,7 @@ color:#94a3b8;
 
 
 
-
-@media(max-width:900px){
+@media(max-width:1000px){
 
 
 table{
@@ -1064,9 +1022,44 @@ gap:20px;
 
 
 
+
+.alert{
+
+padding:15px 20px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+font-size:13px;
+
+font-weight:600;
+
+}
+
+
+.alert.success{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
+
+
+
+.alert.error{
+
+background:#fee2e2;
+
+color:#dc2626;
+
+}
+
+
+
+
 </style>
-
-
 
 
 

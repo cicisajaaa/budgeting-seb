@@ -289,7 +289,7 @@ class="quick-menu">
 
 
 
-<a href="{{route('expense.history')}}"
+<a href="{{route('expense.myhistory')}}"
 class="quick-menu">
 
 📄 Riwayat Pengajuan

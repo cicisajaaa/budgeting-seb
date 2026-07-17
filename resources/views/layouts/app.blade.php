@@ -132,7 +132,7 @@
                 <h4>Karyawan Area</h4>
                 <a href="{{ route('dashboard') }}">Dashboard</a>
                 <a href="{{ route('expense.create') }}">Pengajuan Dana</a>
-                <a href="{{ route('expense.history') }}">Riwayat Pengajuan</a>
+                <a href="{{route('expense.myhistory')}}">Riwayat Pengajuan</a>
             @endif
 
             @if(auth()->check() && auth()->user()->role == 'admin')

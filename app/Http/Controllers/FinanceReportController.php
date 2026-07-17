@@ -9,6 +9,9 @@ use App\Models\BankAccount;
 
 use App\Exports\FinanceReportExport;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -17,26 +20,74 @@ class FinanceReportController extends Controller
 {
 
 
-    public function index()
+    public function index(Request $request)
     {
 
 
         /*
         |--------------------------------------------------------------------------
-        | DATA PEMASUKAN
+        | FILTER TANGGAL
         |--------------------------------------------------------------------------
         */
 
 
-        $deposits = ProjectDeposit::with([
+        $startDate = $request->start_date;
+
+        $endDate = $request->end_date;
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PEMASUKAN
+        |--------------------------------------------------------------------------
+        */
+
+
+        $depositQuery = ProjectDeposit::with([
 
             'project',
 
             'bank'
 
-        ])
-        ->latest()
-        ->get();
+        ]);
+
+
+
+
+
+        if($startDate && $endDate)
+        {
+
+            $depositQuery->whereBetween(
+
+                'tanggal',
+
+                [
+                    $startDate,
+                    $endDate
+                ]
+
+            );
+
+        }
+
+
+
+
+
+
+
+        $deposits = $depositQuery
+
+            ->latest()
+
+            ->get();
+
 
 
 
@@ -47,24 +98,59 @@ class FinanceReportController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DATA PENGELUARAN
+        | PENGELUARAN
         |--------------------------------------------------------------------------
         */
 
 
-        $expenses = ExpenseTransaction::with([
+        $expenseQuery = ExpenseTransaction::with([
 
             'request.project',
 
             'request.division',
 
+            'request.user',
+
+            'request.approver',
+
             'approver',
 
             'bank'
 
-        ])
-        ->latest()
-        ->get();
+        ]);
+
+
+
+
+
+        if($startDate && $endDate)
+        {
+
+            $expenseQuery->whereBetween(
+
+                'tanggal',
+
+                [
+                    $startDate,
+                    $endDate
+                ]
+
+            );
+
+        }
+
+
+
+
+
+
+
+
+        $expenses = $expenseQuery
+
+            ->latest()
+
+            ->get();
 
 
 
@@ -76,7 +162,7 @@ class FinanceReportController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | TOTAL KEUANGAN
+        | SUMMARY
         |--------------------------------------------------------------------------
         */
 
@@ -103,7 +189,6 @@ class FinanceReportController extends Controller
 
 
 
-
         $balance =
 
             $totalIncome - $totalExpense;
@@ -118,7 +203,27 @@ class FinanceReportController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DATA REKENING BANK AKTIF
+        | JUMLAH TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+
+
+        $totalDepositTransaction = $deposits->count();
+
+
+        $totalExpenseTransaction = $expenses->count();
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SALDO BANK
         |--------------------------------------------------------------------------
         */
 
@@ -156,7 +261,15 @@ class FinanceReportController extends Controller
 
                 'balance',
 
-                'banks'
+                'banks',
+
+                'totalDepositTransaction',
+
+                'totalExpenseTransaction',
+
+                'startDate',
+
+                'endDate'
 
             )
 
@@ -173,13 +286,19 @@ class FinanceReportController extends Controller
 
 
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
 
 
         return Excel::download(
 
-            new FinanceReportExport,
+            new FinanceReportExport(
+
+                $request->start_date,
+
+                $request->end_date
+
+            ),
 
             'Laporan_Keuangan.xlsx'
 

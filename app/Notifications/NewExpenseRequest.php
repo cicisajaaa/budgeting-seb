@@ -2,8 +2,10 @@
 
 namespace App\Notifications;
 
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+
 
 
 class NewExpenseRequest extends Notification
@@ -12,7 +14,9 @@ class NewExpenseRequest extends Notification
     use Queueable;
 
 
+
     public $expense;
+
 
 
 
@@ -25,11 +29,17 @@ class NewExpenseRequest extends Notification
 
 
 
+
+
+
+
     public function via($notifiable)
     {
 
         return [
+
             'database'
+
         ];
 
     }
@@ -37,33 +47,94 @@ class NewExpenseRequest extends Notification
 
 
 
+
+
+
     public function toDatabase($notifiable)
     {
 
+
         return [
 
-            'title' => 'Pengajuan Dana Baru',
+
+            'title' => 
+                'Pengajuan Dana Baru',
+
+
+
 
 
             'message' =>
-                $this->expense->user->name .
-                ' mengajukan dana Rp ' .
+
+                ($this->expense->user->name ?? 'Karyawan')
+
+                .
+
+                ' mengajukan dana sebesar Rp '
+
+                .
+
                 number_format(
-                    $this->expense->jumlah
+                    $this->expense->jumlah,
+                    0,
+                    ',',
+                    '.'
                 ),
 
 
 
-            'url' => route(
-                'expense.approval'
-            ),
 
 
 
-            'expense_id'=>$this->expense->id,
+            'project' =>
+
+                $this->expense->project->nama_project ?? '-',
+
+
+
+
+
+
+            'division' =>
+
+                $this->expense->division->nama_divisi ?? '-',
+
+
+
+
+
+
+            'jumlah' =>
+
+                $this->expense->jumlah,
+
+
+
+
+
+
+            'expense_id' =>
+
+                $this->expense->id,
+
+
+
+
+
+
+
+            'url' =>
+
+                route(
+                    'expense.approval'
+                ),
+
+
+
 
 
         ];
+
 
     }
 

@@ -7,15 +7,24 @@ use App\Models\ExpenseRequest;
 use App\Models\ExpenseTransaction;
 use App\Models\DivisionBalance;
 use App\Models\BankAccount;
+use App\Models\Project;
+use App\Models\Division;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
-
+use App\Notifications\ExpenseStatusNotification;
 class ExpenseApprovalController extends Controller
 {
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN APPROVAL BENDAHARA
+    |--------------------------------------------------------------------------
+    */
 
 
     public function index()
@@ -41,19 +50,11 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
         $banks = BankAccount::where(
-
             'status',
-
             true
-
         )
         ->get();
-
-
 
 
 
@@ -83,15 +84,238 @@ class ExpenseApprovalController extends Controller
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | APPROVE PENGELUARAN
+    |--------------------------------------------------------------------------
+    */
 
-    public function approve(Request $request, $id)
+
+   public function approve(Request $request,$id)
+{
+
+    $request->validate([
+
+        'bank_account_id'=>'required',
+
+        'approval_note'=>'nullable|string'
+
+    ]);
+
+
+
+    try{
+
+
+        $expenseRequest = DB::transaction(function() use($request,$id){
+
+
+
+            $expenseRequest = ExpenseRequest::findOrFail($id);
+
+
+
+            if($expenseRequest->status != 'pending')
+            {
+
+                throw new \Exception(
+                    'Pengajuan sudah diproses sebelumnya'
+                );
+
+            }
+
+
+
+
+
+            $bank = BankAccount::findOrFail(
+                $request->bank_account_id
+            );
+
+
+
+
+
+            if($bank->saldo < $expenseRequest->jumlah)
+            {
+
+                throw new \Exception(
+                    'Saldo rekening tidak mencukupi'
+                );
+
+            }
+
+
+
+
+
+            $expenseRequest->update([
+
+                'status'=>'approved',
+
+                'approved_by'=>Auth::id(),
+
+                'approved_at'=>now(),
+
+                'approval_note'=>$request->approval_note 
+                    ?? 
+                    'Disetujui oleh bendahara'
+
+            ]);
+
+
+
+
+
+
+
+            ExpenseTransaction::create([
+
+                'request_id'=>$expenseRequest->id,
+
+                'approved_by'=>Auth::id(),
+
+                'bank_account_id'=>$bank->id,
+
+                'jumlah'=>$expenseRequest->jumlah,
+
+                'tanggal'=>now(),
+
+            ]);
+
+
+
+
+
+
+
+            $bank->decrement(
+
+                'saldo',
+
+                $expenseRequest->jumlah
+
+            );
+
+
+
+
+
+
+
+            $balance = DivisionBalance::where([
+
+                'project_id'=>$expenseRequest->project_id,
+
+                'division_id'=>$expenseRequest->division_id
+
+            ])
+            ->first();
+
+
+
+            if($balance)
+            {
+
+                $balance->decrement(
+
+                    'saldo',
+
+                    $expenseRequest->jumlah
+
+                );
+
+            }
+
+
+
+
+
+            return $expenseRequest;
+
+
+        });
+
+
+
+
+
+
+        // NOTIFIKASI KE KARYAWAN
+
+        $expenseRequest->user->notify(
+
+            new ExpenseStatusNotification(
+
+                $expenseRequest,
+
+                'approved'
+
+            )
+
+        );
+
+
+
+
+
+        return back()
+
+        ->with(
+
+            'success',
+
+            'Pengajuan berhasil disetujui dan transaksi tercatat'
+
+        );
+
+
+
+    }
+
+
+    catch(\Exception $e)
+    {
+
+
+        return back()
+
+        ->with(
+
+            'error',
+
+            $e->getMessage()
+
+        );
+
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | REJECT PENGELUARAN
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function reject(Request $request,$id)
     {
 
 
         $request->validate([
 
 
-            'bank_account_id'=>'required'
+            'approval_note'=>'required|string'
 
 
         ]);
@@ -102,221 +326,84 @@ class ExpenseApprovalController extends Controller
 
 
 
-        DB::transaction(function () use ($request, $id) {
+        $expenseRequest = ExpenseRequest::findOrFail(
 
+            $id
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | Ambil pengajuan
-            |--------------------------------------------------------------------------
-            */
-
-
-            $requestData = ExpenseRequest::findOrFail(
-
-                $id
-
-            );
+        );
 
 
 
 
 
 
+        if($expenseRequest->status != 'pending')
+        {
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Ambil rekening pembayaran
-            |--------------------------------------------------------------------------
-            */
+            return back()
 
+            ->with(
 
-            $bank = BankAccount::findOrFail(
+                'error',
 
-                $request->bank_account_id
+                'Pengajuan sudah diproses'
 
             );
 
 
+        }
 
 
 
 
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Cek saldo bank
-            |--------------------------------------------------------------------------
-            */
 
 
-            if($bank->saldo < $requestData->jumlah)
-            {
+        $expenseRequest->update([
 
 
-                throw new \Exception(
-                    'Saldo rekening tidak mencukupi'
-                );
 
+            'status'=>'rejected',
 
-            }
 
 
+            'approved_by'=>Auth::id(),
 
 
 
+            'approved_at'=>now(),
 
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Update status pengajuan
-            |--------------------------------------------------------------------------
-            */
+            'approval_note'=>$request->approval_note
 
 
-            $requestData->update([
 
+        ]);
 
-                'status'=>'approved'
 
 
-            ]);
 
 
-
-
-
-
-
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Simpan transaksi pengeluaran
-            |--------------------------------------------------------------------------
-            */
-
-
-            ExpenseTransaction::create([
-
-
-                'request_id'=>$requestData->id,
-
-
-                'approved_by'=>Auth::id(),
-
-
-                'bank_account_id'=>$bank->id,
-
-
-                'jumlah'=>$requestData->jumlah,
-
-
-                'tanggal'=>now(),
-
-
-            ]);
-
-
-
-
-
-
-
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Kurangi saldo bank
-            |--------------------------------------------------------------------------
-            */
-
-
-            $bank->decrement(
-
-                'saldo',
-
-                $requestData->jumlah
-
-            );
-
-
-
-
-
-
-
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Kurangi saldo divisi
-            |--------------------------------------------------------------------------
-            */
-
-
-            $balance = DivisionBalance::where(
-
-                'project_id',
-
-                $requestData->project_id
-
+        $expenseRequest->user->notify(
+            new ExpenseStatusNotification(
+                $expenseRequest,
+                'rejected'
             )
-            ->where(
-
-                'division_id',
-
-                $requestData->division_id
-
-            )
-            ->first();
-
-
-
-
-
-
-
-            if($balance)
-            {
-
-
-                $balance->decrement(
-
-                    'saldo',
-
-                    $requestData->jumlah
-
-                );
-
-
-            }
-
-
-
-        });
-
-
-
-
-
-
-
+        );
 
 
         return back()
 
-            ->with(
+        ->with(
 
-                'success',
+            'success',
 
-                'Pengajuan berhasil disetujui, saldo bank dan divisi diperbarui'
+            'Pengajuan berhasil ditolak'
 
-            );
+        );
 
 
     }
@@ -329,13 +416,45 @@ class ExpenseApprovalController extends Controller
 
 
 
-    public function reject($id)
+    /*
+    |--------------------------------------------------------------------------
+    | HISTORY APPROVAL
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function history(Request $request)
     {
 
 
-        $requestData = ExpenseRequest::findOrFail(
+        $query = ExpenseRequest::with([
 
-            $id
+
+            'project',
+
+
+            'division',
+
+
+            'user',
+
+
+            'approver'
+
+
+        ])
+
+        ->whereIn(
+
+            'status',
+
+            [
+
+                'approved',
+
+                'rejected'
+
+            ]
 
         );
 
@@ -344,30 +463,181 @@ class ExpenseApprovalController extends Controller
 
 
 
-        $requestData->update([
-
-
-            'status'=>'rejected'
-
-
-        ]);
 
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | SEARCH PEMOHON
+        |--------------------------------------------------------------------------
+        */
 
 
+        if($request->search)
+        {
 
 
+            $query->whereHas(
 
-        return back()
+                'user',
 
-            ->with(
+                function($q) use($request){
 
-                'success',
 
-                'Pengajuan berhasil ditolak'
+                    $q->where(
+
+                        'name',
+
+                        'like',
+
+                        '%'.$request->search.'%'
+
+                    );
+
+
+                }
 
             );
+
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER STATUS
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($request->status)
+        {
+
+
+            $query->where(
+
+                'status',
+
+                $request->status
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER PROJECT
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($request->project_id)
+        {
+
+
+            $query->where(
+
+                'project_id',
+
+                $request->project_id
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER DIVISI
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($request->division_id)
+        {
+
+
+            $query->where(
+
+                'division_id',
+
+                $request->division_id
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+
+
+     $requests = $query
+    ->latest()
+    ->get();
+
+
+
+
+
+
+
+
+        $projects = Project::all();
+
+
+        $divisions = Division::all();
+
+
+
+
+
+
+
+
+        return view(
+
+            'expense.approval.history',
+
+            compact(
+
+                'requests',
+
+                'projects',
+
+                'divisions'
+
+            )
+
+        );
 
 
     }

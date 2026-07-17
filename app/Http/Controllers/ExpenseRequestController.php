@@ -2,39 +2,72 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Project;
 use App\Models\Division;
 use App\Models\ExpenseRequest;
 use App\Models\User;
 use App\Notifications\NewExpenseRequest;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class ExpenseRequestController extends Controller
 {
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | FORM PENGAJUAN DANA
+    |--------------------------------------------------------------------------
+    */
+
+
     public function create()
     {
 
+
         $projects = Project::all();
+
 
         $divisions = Division::all();
 
 
+
+
         return view(
+
             'expense.create',
+
             compact(
+
                 'projects',
+
                 'divisions'
+
             )
+
         );
+
 
     }
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN PENGAJUAN DANA
+    |--------------------------------------------------------------------------
+    */
 
 
     public function store(Request $request)
@@ -43,41 +76,71 @@ class ExpenseRequestController extends Controller
 
         $request->validate([
 
-            'project_id' => 'required',
 
-            'division_id' => 'required',
+            'project_id'=>'required|exists:projects,id',
 
-            'judul' => 'required',
 
-            'jumlah' => 'required|numeric',
+            'division_id'=>'required|exists:divisions,id',
+
+
+            'judul'=>'required|string|max:255',
+
+
+            'jumlah'=>'required|numeric|min:1',
+
+
+            'keterangan'=>'nullable|string',
+
+
 
         ]);
 
 
 
 
+
+
+
+
+
         /*
         |--------------------------------------------------------------------------
-        | Simpan Pengajuan Dana
+        | SIMPAN REQUEST
         |--------------------------------------------------------------------------
         */
 
 
         $expense = ExpenseRequest::create([
 
-            'project_id' => $request->project_id,
 
-            'division_id' => $request->division_id,
 
-            'user_id' => Auth::id(),
+            'project_id'=>$request->project_id,
 
-            'judul' => $request->judul,
 
-            'keterangan' => $request->keterangan,
 
-            'jumlah' => $request->jumlah,
+            'division_id'=>$request->division_id,
 
-            'status' => 'pending',
+
+
+            'user_id'=>Auth::id(),
+
+
+
+            'judul'=>$request->judul,
+
+
+
+            'keterangan'=>$request->keterangan,
+
+
+
+            'jumlah'=>$request->jumlah,
+
+
+
+            'status'=>'pending',
+
+
 
         ]);
 
@@ -86,27 +149,42 @@ class ExpenseRequestController extends Controller
 
 
 
+
+
+
         /*
         |--------------------------------------------------------------------------
-        | Kirim Notifikasi ke Bendahara
+        | KIRIM NOTIFIKASI BENDAHARA
         |--------------------------------------------------------------------------
         */
 
 
         $bendahara = User::where(
+
             'role',
+
             'bendahara'
+
         )
-        ->first();
+        ->get();
 
 
 
-        if($bendahara)
+
+
+
+
+
+        foreach($bendahara as $user)
         {
 
-            $bendahara->notify(
+
+            $user->notify(
+
                 new NewExpenseRequest($expense)
+
             );
+
 
         }
 
@@ -114,41 +192,90 @@ class ExpenseRequestController extends Controller
 
 
 
+
+
+
+
         return back()
-            ->with(
-                'success',
-                'Pengajuan berhasil dikirim dan menunggu persetujuan bendahara'
-            );
+
+        ->with(
+
+            'success',
+
+            'Pengajuan dana berhasil dikirim dan menunggu persetujuan bendahara'
+
+        );
 
 
     }
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HISTORY PENGAJUAN KARYAWAN
+    |--------------------------------------------------------------------------
+    */
 
 
     public function history()
     {
 
+
         $requests = ExpenseRequest::with([
+
+
             'project',
-            'division'
+
+
+            'division',
+
+
+            'approver'
+
+
         ])
+
         ->where(
+
             'user_id',
+
             Auth::id()
+
         )
+
         ->latest()
+
         ->get();
 
 
 
+
+
+
+
+
         return view(
+
             'expense.history',
-            compact('requests')
+
+            compact(
+
+                'requests'
+
+            )
+
         );
 
+
     }
+
 
 
 }

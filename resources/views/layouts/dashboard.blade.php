@@ -1,22 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+CV Sahabat Alam
+</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+
 <style>
 
 
 :root{
 
 --primary:#166534;
+
 --green:#22c55e;
---green-light:#4ade80;
 
---glass:rgba(255,255,255,.72);
-
---border:rgba(255,255,255,.5);
+--light:#dcfce7;
 
 --text:#1e293b;
 
 --muted:#64748b;
 
 }
-
 
 
 
@@ -33,195 +49,44 @@ box-sizing:border-box;
 
 
 
-body{
 
+
+body{
 
 font-family:'Inter',sans-serif;
 
-
-
 min-height:100vh;
-
-
 
 color:var(--text);
 
 
-
 background:
 
-
-
 linear-gradient(
-
 135deg,
-
 #ecfdf5,
-
-#f8fafc 45%,
-
+#f8fafc 50%,
 #dcfce7
-
 );
-
 
 
 overflow-x:hidden;
 
-
-
 }
 
 
 
 
 
-
-/* ===========================
-BACKGROUND GLOW
-=========================== */
-
-
-body::before{
-
-
-content:"";
-
-
-position:fixed;
-
-
-width:450px;
-
-
-height:450px;
-
-
-
-background:
-
-radial-gradient(
-
-circle,
-
-rgba(34,197,94,.35),
-
-transparent 70%
-
-);
-
-
-
-top:-150px;
-
-
-right:-100px;
-
-
-
-filter:blur(60px);
-
-
-
-z-index:-1;
-
-
-
-animation:
-
-floatingGlow 10s infinite alternate;
-
-
-
-}
-
-
-
-body::after{
-
-
-content:"";
-
-
-position:fixed;
-
-
-width:400px;
-
-
-height:400px;
-
-
-
-background:
-
-radial-gradient(
-
-circle,
-
-rgba(22,101,52,.18),
-
-transparent 70%
-
-);
-
-
-
-bottom:-150px;
-
-
-left:180px;
-
-
-
-filter:blur(70px);
-
-
-
-z-index:-1;
-
-
-}
-
-
-
-
-
-@keyframes floatingGlow{
-
-
-from{
-
-transform:translate(0,0);
-
-}
-
-
-to{
-
-transform:translate(-60px,40px);
-
-}
-
-
-}
-
-
-
-
-
-
-
-/* ===========================
-SIDEBAR GLASS
-=========================== */
+/* =========================
+SIDEBAR
+========================= */
 
 
 .sidebar{
 
 
 position:fixed;
-
 
 
 top:20px;
@@ -233,65 +98,35 @@ left:20px;
 bottom:20px;
 
 
-
 width:240px;
-
 
 
 background:
 
-
-rgba(255,255,255,.65);
-
+rgba(255,255,255,.75);
 
 
-backdrop-filter:
-
-
-blur(20px);
-
-
-
--webkit-backdrop-filter:
-
-
-blur(20px);
-
+backdrop-filter:blur(20px);
 
 
 border:
 
-
-1px solid rgba(255,255,255,.7);
-
+1px solid rgba(255,255,255,.8);
 
 
-border-radius:
+border-radius:25px;
 
 
-28px;
-
-
-
-padding:
-
-
-25px 16px;
-
+padding:22px 15px;
 
 
 box-shadow:
 
-
-0 25px 70px rgba(15,23,42,.12);
-
+0 20px 50px rgba(15,23,42,.1);
 
 
-z-index:50;
+z-index:100;
 
-
-
-overflow:hidden;
 
 
 }
@@ -300,54 +135,6 @@ overflow:hidden;
 
 
 
-.sidebar::before{
-
-
-content:"";
-
-
-position:absolute;
-
-
-top:0;
-
-
-left:0;
-
-
-right:0;
-
-
-
-height:120px;
-
-
-
-background:
-
-
-linear-gradient(
-
-135deg,
-
-rgba(34,197,94,.15),
-
-transparent
-
-);
-
-
-
-z-index:-1;
-
-
-}
-
-
-
-
-
-/* BRAND */
 
 
 .brand{
@@ -362,20 +149,15 @@ align-items:center;
 gap:12px;
 
 
-
-padding-bottom:25px;
-
+padding-bottom:20px;
 
 
-margin-bottom:25px;
-
+margin-bottom:20px;
 
 
 border-bottom:
 
-
-1px solid rgba(148,163,184,.2);
-
+1px solid #e2e8f0;
 
 
 }
@@ -393,27 +175,16 @@ width:55px;
 height:55px;
 
 
-object-fit:contain;
-
-
-
 padding:8px;
-
-
-
-border-radius:18px;
-
 
 
 background:white;
 
 
+border-radius:18px;
 
-box-shadow:
 
-
-0 10px 25px rgba(34,197,94,.18);
-
+object-fit:contain;
 
 
 }
@@ -434,10 +205,6 @@ font-weight:800;
 color:#166534;
 
 
-
-line-height:1.2;
-
-
 }
 
 
@@ -448,14 +215,13 @@ line-height:1.2;
 display:block;
 
 
-font-size:12px;
-
-
-
-margin-top:4px;
+font-size:11px;
 
 
 color:#22c55e;
+
+
+margin-top:3px;
 
 
 }
@@ -463,8 +229,6 @@ color:#22c55e;
 
 
 
-
-/* MENU */
 
 
 .menu-title{
@@ -476,18 +240,15 @@ font-size:10px;
 font-weight:700;
 
 
-
-letter-spacing:1.3px;
-
+letter-spacing:1px;
 
 
 color:#94a3b8;
 
 
-
 margin:
 
-22px 10px 12px;
+20px 10px 10px;
 
 
 }
@@ -496,61 +257,43 @@ margin:
 
 
 
+
 .sidebar a{
 
 
-height:44px;
-
+height:42px;
 
 
 display:flex;
 
 
-
 align-items:center;
 
 
-
-gap:12px;
-
+gap:10px;
 
 
 padding:
 
-0 14px;
+0 12px;
 
 
-
-border-radius:14px;
-
+border-radius:13px;
 
 
-margin-bottom:7px;
-
-
-
-font-size:13px;
-
-
-
-font-weight:500;
-
-
-
-color:#475569;
-
+margin-bottom:6px;
 
 
 text-decoration:none;
 
 
+color:#475569;
+
+
+font-size:13px;
+
 
 transition:.3s;
-
-
-
-position:relative;
-
 
 
 }
@@ -562,21 +305,13 @@ position:relative;
 .sidebar a:hover{
 
 
-background:
-
-
-rgba(34,197,94,.12);
-
+background:#dcfce7;
 
 
 color:#166534;
 
 
-
-transform:
-
-
-translateX(5px);
+transform:translateX(4px);
 
 
 }
@@ -590,32 +325,22 @@ translateX(5px);
 
 background:
 
-
 linear-gradient(
-
 135deg,
-
 #166534,
-
 #22c55e
-
 );
-
 
 
 color:white;
 
 
-
-font-weight:600;
-
+font-weight:700;
 
 
 box-shadow:
 
-
-0 15px 35px rgba(34,197,94,.35);
-
+0 10px 25px rgba(34,197,94,.3);
 
 
 }
@@ -633,7 +358,6 @@ width:25px;
 height:25px;
 
 
-
 display:flex;
 
 
@@ -643,9 +367,7 @@ align-items:center;
 justify-content:center;
 
 
-
 border-radius:8px;
-
 
 
 background:
@@ -653,13 +375,35 @@ background:
 rgba(255,255,255,.25);
 
 
+}
 
-font-size:14px;
 
+
+
+.menu-badge{
+
+
+margin-left:auto;
+
+
+background:#dc2626;
+
+
+color:white;
+
+
+font-size:10px;
+
+
+padding:
+
+3px 7px;
+
+
+border-radius:20px;
 
 
 }
-
 
 
 
@@ -674,42 +418,29 @@ font-size:14px;
 position:absolute;
 
 
-
-bottom:18px;
-
+bottom:15px;
 
 
-left:16px;
+left:15px;
 
 
-
-right:16px;
-
+right:15px;
 
 
-padding:14px;
+padding:13px;
 
 
-
-border-radius:18px;
-
+border-radius:15px;
 
 
 background:
 
-
-rgba(255,255,255,.55);
-
-
-
-border:
-
-
-1px solid rgba(255,255,255,.7);
-
+rgba(255,255,255,.7);
 
 
 }
+
+
 
 
 
@@ -725,8 +456,9 @@ font-weight:700;
 color:#94a3b8;
 
 
-
 }
+
+
 
 
 
@@ -742,62 +474,49 @@ align-items:center;
 gap:8px;
 
 
-margin-top:8px;
+margin-top:5px;
 
 
 font-size:12px;
 
 
-font-weight:600;
+font-weight:700;
 
 
 color:#166534;
 
 
-
 }
+
+
 
 
 
 .online-dot{
 
 
-width:9px;
+width:8px;
 
 
-height:9px;
-
-
-border-radius:50%;
+height:8px;
 
 
 background:#22c55e;
 
 
-box-shadow:
-
-
-0 0 15px #22c55e;
+border-radius:50%;
 
 
 }
-
-
-
-
-
-
-
-/* ===========================
+/* =========================
 HEADER
-=========================== */
+========================= */
 
 
 .header{
 
 
 position:fixed;
-
 
 
 top:20px;
@@ -809,69 +528,55 @@ left:285px;
 right:20px;
 
 
-
 height:70px;
-
 
 
 background:
 
-
-rgba(255,255,255,.65);
-
+rgba(255,255,255,.75);
 
 
-backdrop-filter:
 
-
-blur(20px);
+backdrop-filter:blur(20px);
 
 
 
 border:
 
-
-1px solid rgba(255,255,255,.7);
-
+1px solid rgba(255,255,255,.8);
 
 
-border-radius:
 
-
-22px;
+border-radius:22px;
 
 
 
 display:flex;
 
 
-
 align-items:center;
-
 
 
 justify-content:space-between;
 
 
 
-padding:
-
-0 25px;
+padding:0 25px;
 
 
 
 box-shadow:
 
-
-0 20px 50px rgba(15,23,42,.08);
-
+0 15px 40px rgba(15,23,42,.08);
 
 
-z-index:40;
+
+z-index:90;
 
 
 
 }
+
 
 
 
@@ -902,6 +607,8 @@ color:#22c55e;
 
 
 
+
+
 .header-sub{
 
 
@@ -921,6 +628,13 @@ margin-top:3px;
 
 
 
+
+
+/* =========================
+PROFILE AREA
+========================= */
+
+
 .profile-area{
 
 
@@ -933,57 +647,45 @@ align-items:center;
 gap:15px;
 
 
-
 }
 
 
 
-.profile{
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:10px;
 
 
 
-padding:
-
-6px 12px;
-
-
-
-border-radius:16px;
+/* =========================
+NOTIFICATION
+========================= */
 
 
+.notification{
 
-transition:.3s;
 
+position:relative;
 
 
 }
 
 
 
-.profile:hover{
+.notification::after{
 
+content:"";
 
-background:
+position:absolute;
 
+top:40px;
 
-rgba(255,255,255,.8);
+right:0;
 
+width:320px;
+
+height:20px;
 
 }
 
-
-
-
-.avatar{
+.notification-btn{
 
 
 width:42px;
@@ -992,307 +694,39 @@ width:42px;
 height:42px;
 
 
-
 border-radius:15px;
 
 
-
-background:
-
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
-
+background:white;
 
 
 display:flex;
 
 
-
 align-items:center;
-
 
 
 justify-content:center;
 
 
+font-size:20px;
 
-color:white;
 
+text-decoration:none;
 
 
-font-weight:700;
-
-
-
-}
-
-
-
-.profile-info b{
-
-
-font-size:13px;
-
-
-display:block;
-
-
-color:#166534;
-
-
-}
-
-
-
-.profile-info span{
-
-
-font-size:11px;
-
-
-color:#64748b;
-
-
-}
-
-
-
-
-
-
-
-.logout{
-
-
-padding:
-
-10px 18px;
-
-
-
-border-radius:14px;
-
-
-
-border:none;
-
-
-
-background:
-
-
-rgba(254,226,226,.8);
-
-
-
-color:#dc2626;
-
-
-
-font-weight:600;
-
-
-
-cursor:pointer;
-
-
-
-transition:.3s;
-
-
-
-}
-
-
-
-.logout:hover{
-
-
-background:#dc2626;
-
-
-color:white;
-
-
-}
-
-
-
-
-
-
-
-/* ===========================
-CONTENT
-=========================== */
-
-
-.content{
-
-
-margin-left:285px;
-
-
-padding:
-
-110px 25px 30px;
-
-
-
-min-height:100vh;
-
-
-}
-
-
-
-
-
-
-.card{
-
-
-background:
-
-
-rgba(255,255,255,.75);
-
-
-
-backdrop-filter:
-
-
-blur(15px);
-
-
-
-border:
-
-
-1px solid rgba(255,255,255,.8);
-
-
-
-border-radius:25px;
-
+position:relative;
 
 
 box-shadow:
 
-
-0 20px 50px rgba(15,23,42,.08);
-
-
-
-}
-
-
-
-
-
-@media(max-width:900px){
-
-
-.sidebar{
-
-
-width:80px;
-
-
-left:10px;
-
-
-}
-
-
-
-.brand-text,
-
-.menu-title,
-
-.system-status{
-
-
-display:none;
-
-
-}
-
-
-
-.sidebar a{
-
-
-justify-content:center;
-
-
-}
-
-
-
-.header{
-
-
-left:110px;
-
-
-}
-
-
-
-.content{
-
-
-margin-left:110px;
-
-
-}
+0 10px 25px rgba(0,0,0,.08);
 
 
 
 }
 
-.notification{
 
-position:relative;
-
-}
-
-
-
-.notification-btn{
-
-width:42px;
-
-height:42px;
-
-border-radius:15px;
-
-background:white;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:20px;
-
-text-decoration:none;
-
-position:relative;
-
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-
-}
 
 
 
@@ -1301,9 +735,20 @@ box-shadow:0 10px 25px rgba(0,0,0,.08);
 
 position:absolute;
 
+
 top:-5px;
 
+
 right:-5px;
+
+
+width:20px;
+
+
+height:20px;
+
+
+border-radius:50%;
 
 
 background:#dc2626;
@@ -1312,28 +757,24 @@ background:#dc2626;
 color:white;
 
 
-width:20px;
-
-height:20px;
-
-
-border-radius:50%;
-
-
-font-size:11px;
-
-
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
 
-font-weight:700;
+font-size:10px;
+
+
+font-weight:800;
 
 
 }
+
+
 
 
 
@@ -1341,50 +782,53 @@ font-weight:700;
 
 .notification-box{
 
-
 position:absolute;
-
 
 right:0;
 
-
-top:55px;
-
+top:45px;
 
 width:320px;
 
+max-height:400px;
+
+overflow-y:auto;
 
 background:white;
 
-
 border-radius:18px;
-
 
 padding:12px;
 
-
-box-shadow:0 20px 50px rgba(0,0,0,.15);
-
+box-shadow:
+0 20px 50px rgba(0,0,0,.15);
 
 display:none;
 
-
-z-index:100;
-
-
+z-index:9999;
 
 }
 
 
 
 
-
-.notification:hover .notification-box{
+.notification:hover .notification-box,
+.notification-box:hover{
 
 
 display:block;
 
 
+}
+
+
+.notification-box{
+    z-index:9999;
+}
+
+
+.notification-item{
+    cursor:pointer;
 }
 
 
@@ -1403,21 +847,19 @@ padding:12px;
 border-radius:12px;
 
 
+background:#f8fafc;
+
+
+margin-bottom:8px;
+
+
 text-decoration:none;
 
 
 color:#334155;
 
 
-margin-bottom:8px;
-
-
-background:#f8fafc;
-
-
 }
-
-
 
 
 
@@ -1445,16 +887,21 @@ color:#166534;
 
 
 
+
 .notification-item p{
 
 
 font-size:12px;
 
 
-margin:5px 0;
+margin-top:5px;
+
+
+line-height:1.4;
 
 
 }
+
 
 
 
@@ -1476,10 +923,10 @@ color:#94a3b8;
 .empty-notif{
 
 
-padding:20px;
-
-
 text-align:center;
+
+
+padding:20px;
 
 
 font-size:12px;
@@ -1490,10 +937,275 @@ color:#94a3b8;
 
 }
 
+
+
+
+
+
+
+
+
+/* =========================
+PROFILE
+========================= */
+
+
+.profile{
+
+
+display:flex;
+
+
+align-items:center;
+
+
+gap:10px;
+
+
+}
+
+
+
+
+.avatar{
+
+
+width:42px;
+
+
+height:42px;
+
+
+border-radius:15px;
+
+
+
+background:
+
+linear-gradient(
+135deg,
+#166534,
+#22c55e
+);
+
+
+
+display:flex;
+
+
+align-items:center;
+
+
+justify-content:center;
+
+
+color:white;
+
+
+font-weight:800;
+
+
+}
+
+
+
+
+
+
+
+.profile-info b{
+
+
+display:block;
+
+
+font-size:13px;
+
+
+color:#166534;
+
+
+}
+
+
+
+
+
+.profile-info span{
+
+
+font-size:11px;
+
+
+color:#64748b;
+
+
+}
+
+
+
+
+
+
+
+
+
+.logout{
+
+
+border:none;
+
+
+padding:
+
+10px 18px;
+
+
+border-radius:14px;
+
+
+background:#fee2e2;
+
+
+color:#dc2626;
+
+
+font-size:12px;
+
+
+font-weight:700;
+
+
+cursor:pointer;
+
+
+}
+
+
+
+.logout:hover{
+
+
+background:#dc2626;
+
+
+color:white;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+CONTENT
+========================= */
+
+.content{
+
+margin-left:285px;
+
+padding:110px 25px 30px;
+
+min-height:100vh;
+
+}
+
+
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+.sidebar{
+
+width:80px;
+
+}
+
+.brand-text,
+.menu-title,
+.system-status,
+.sidebar span{
+
+display:none;
+
+}
+
+.sidebar a{
+
+justify-content:center;
+
+}
+
+.header{
+
+left:110px;
+
+}
+
+.content{
+
+margin-left:110px;
+
+}
+
+}
+
+.alert-success{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:15px 20px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+font-weight:600;
+
+border:1px solid #86efac;
+
+}
+
+
+
+.alert-error{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:15px 20px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+font-weight:600;
+
+border:1px solid #fca5a5;
+
+}
+
 </style>
 
-<body>
 
+</head>
+
+
+<body>
 
 <!-- ================= SIDEBAR ================= -->
 
@@ -1534,6 +1246,9 @@ MAIN
 </div>
 
 
+
+
+
 @if(auth()->user()->role == 'admin')
 
 
@@ -1542,16 +1257,12 @@ class="{{request()->routeIs('admin.dashboard')?'active':''}}">
 
 
 <div class="icon">
-
 ⌂
-
 </div>
 
 
 <span>
-
 Dashboard
-
 </span>
 
 
@@ -1562,21 +1273,18 @@ Dashboard
 @else
 
 
+
 <a href="{{route('dashboard')}}"
 class="{{request()->routeIs('dashboard')?'active':''}}">
 
 
 <div class="icon">
-
 ⌂
-
 </div>
 
 
 <span>
-
 Dashboard
-
 </span>
 
 
@@ -1591,6 +1299,8 @@ Dashboard
 
 
 
+
+<!-- ================= ADMIN ================= -->
 
 
 @if(auth()->user()->role=='admin')
@@ -1610,22 +1320,16 @@ class="{{request()->routeIs('admin.users.*')?'active':''}}">
 
 
 <div class="icon">
-
 👥
-
 </div>
 
 
 <span>
-
 Kelola Pengguna
-
 </span>
 
 
 </a>
-
-
 
 
 
@@ -1636,22 +1340,16 @@ class="{{request()->routeIs('admin.projects.*')?'active':''}}">
 
 
 <div class="icon">
-
 📁
-
 </div>
 
 
 <span>
-
 Kelola Proyek
-
 </span>
 
 
 </a>
-
-
 
 
 
@@ -1662,21 +1360,16 @@ class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
 
 
 <div class="icon">
-
 🏢
-
 </div>
 
 
 <span>
-
 Kelola Divisi
-
 </span>
 
 
 </a>
-
 
 
 
@@ -1686,6 +1379,9 @@ Kelola Divisi
 
 
 
+
+
+<!-- ================= OWNER ================= -->
 
 
 @if(auth()->user()->role=='owner')
@@ -1699,23 +1395,36 @@ REPORT
 
 
 
-
-
 <a href="{{route('finance.report')}}"
 class="{{request()->routeIs('finance.report')?'active':''}}">
 
 
 <div class="icon">
-
 📊
-
 </div>
 
 
 <span>
-
 Laporan Keuangan
+</span>
 
+
+</a>
+
+
+
+
+<a href="{{route('finance.balance')}}"
+class="{{request()->routeIs('finance.balance')?'active':''}}">
+
+
+<div class="icon">
+💳
+</div>
+
+
+<span>
+Saldo Divisi
 </span>
 
 
@@ -1731,8 +1440,10 @@ Laporan Keuangan
 
 
 
-@if(auth()->user()->role=='bendahara')
+<!-- ================= BENDAHARA ================= -->
 
+
+@if(auth()->user()->role=='bendahara')
 
 
 <div class="menu-title">
@@ -1750,22 +1461,16 @@ class="{{request()->routeIs('finance.deposit')?'active':''}}">
 
 
 <div class="icon">
-
 💰
-
 </div>
 
 
 <span>
-
-Pembayaran
-
+Pembayaran Masuk
 </span>
 
 
 </a>
-
-
 
 
 
@@ -1776,20 +1481,20 @@ class="{{request()->routeIs('finance.bank.*')?'active':''}}">
 
 
 <div class="icon">
-
 🏦
-
 </div>
 
 
 <span>
-
 Rekening Bank
-
 </span>
 
 
 </a>
+
+
+
+
 
 
 <a href="{{route('finance.distribution')}}"
@@ -1797,21 +1502,16 @@ class="{{request()->routeIs('finance.distribution')?'active':''}}">
 
 
 <div class="icon">
-
 📤
-
 </div>
 
 
 <span>
-
 Distribusi Dana
-
 </span>
 
 
 </a>
-
 
 
 
@@ -1824,21 +1524,16 @@ class="{{request()->routeIs('finance.balance')?'active':''}}">
 
 
 <div class="icon">
-
 💳
-
 </div>
 
 
 <span>
-
 Saldo Divisi
-
 </span>
 
 
 </a>
-
 
 
 
@@ -1851,21 +1546,31 @@ class="{{request()->routeIs('expense.approval')?'active':''}}">
 
 
 <div class="icon">
-
 ✓
-
 </div>
 
 
 <span>
-
 Persetujuan Pengeluaran
+</span>
+
+
+
+
+@if(auth()->user()->unreadNotifications->count()>0)
+
+
+<span class="menu-badge">
+
+{{auth()->user()->unreadNotifications->count()}}
 
 </span>
 
 
-</a>
+@endif
 
+
+</a>
 
 
 
@@ -1878,21 +1583,16 @@ class="{{request()->routeIs('finance.report')?'active':''}}">
 
 
 <div class="icon">
-
 📈
-
 </div>
 
 
 <span>
-
 Laporan Keuangan
-
 </span>
 
 
 </a>
-
 
 
 
@@ -1904,8 +1604,10 @@ Laporan Keuangan
 
 
 
-@if(auth()->user()->role=='karyawan')
+<!-- ================= KARYAWAN ================= -->
 
+
+@if(auth()->user()->role=='karyawan')
 
 
 <div class="menu-title">
@@ -1919,22 +1621,17 @@ EMPLOYEE
 
 
 
-
 <a href="{{route('expense.create')}}"
 class="{{request()->routeIs('expense.create')?'active':''}}">
 
 
 <div class="icon">
-
 ＋
-
 </div>
 
 
 <span>
-
 Pengajuan Dana
-
 </span>
 
 
@@ -1946,21 +1643,17 @@ Pengajuan Dana
 
 
 
-<a href="{{route('expense.history')}}"
-class="{{request()->routeIs('expense.history')?'active':''}}">
+<a href="{{route('expense.myhistory')}}"
+class="{{request()->routeIs('expense.myhistory')?'active':''}}">
 
 
 <div class="icon">
-
 📄
-
 </div>
 
 
 <span>
-
 Riwayat Pengajuan
-
 </span>
 
 
@@ -1976,8 +1669,6 @@ Riwayat Pengajuan
 
 
 
-<!-- STATUS -->
-
 
 <div class="system-status">
 
@@ -1987,6 +1678,7 @@ Riwayat Pengajuan
 SYSTEM STATUS
 
 </div>
+
 
 
 <div class="system-online">
@@ -2054,24 +1746,27 @@ Financial Management System
 <div class="profile-area">
 
 
-<!-- NOTIFICATION -->
+
+
 
 <div class="notification">
 
 
-<a href="#"
-class="notification-btn">
+<a href="#" class="notification-btn">
+
 
 🔔
 
 
-@if(auth()->user()->unreadNotifications->count() > 0)
+@if(auth()->user()->unreadNotifications->count()>0)
+
 
 <span class="badge">
 
 {{auth()->user()->unreadNotifications->count()}}
 
 </span>
+
 
 @endif
 
@@ -2080,21 +1775,23 @@ class="notification-btn">
 
 
 
+
+
 <div class="notification-box">
 
 
-@if(auth()->user()->unreadNotifications->count() > 0)
-
-
-@foreach(auth()->user()->unreadNotifications as $notification)
+@if(auth()->user()->unreadNotifications->count()>0)
 
 
 
-<a href="{{route(
-'notification.read',
-$notification->id
-)}}"
-class="notification-item">
+@foreach(auth()->user()->unreadNotifications->take(5) as $notification)
+
+
+
+<a 
+href="{{ route('notification.read',$notification->id) }}"
+class="notification-item"
+>
 
 
 <strong>
@@ -2112,9 +1809,7 @@ class="notification-item">
 
 
 <small>
-
-Klik untuk melihat
-
+Klik untuk membuka
 </small>
 
 
@@ -2152,8 +1847,8 @@ Tidak ada notifikasi
 
 
 
-<div class="profile">
 
+<div class="profile">
 
 
 <div class="avatar">
@@ -2163,7 +1858,6 @@ Tidak ada notifikasi
 
 
 </div>
-
 
 
 
@@ -2188,19 +1882,7 @@ Tidak ada notifikasi
 </div>
 
 
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2210,9 +1892,7 @@ Tidak ada notifikasi
 
 <form method="POST" action="{{route('logout')}}">
 
-
 @csrf
-
 
 <button class="logout">
 
@@ -2221,8 +1901,8 @@ Keluar
 </button>
 
 
-
 </form>
+
 
 
 
@@ -2241,17 +1921,42 @@ Keluar
 
 
 
-
 <!-- ================= CONTENT ================= -->
 
 
 <main class="content">
 
 
+@if(session('success'))
+
+<div class="alert-success">
+
+{{ session('success') }}
+
+</div>
+
+@endif
+
+
+
+@if(session('error'))
+
+<div class="alert-error">
+
+{{ session('error') }}
+
+</div>
+
+@endif
+
+
+
 @yield('content')
 
 
 </main>
+
+
 
 
 
