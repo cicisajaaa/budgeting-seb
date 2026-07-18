@@ -11,17 +11,18 @@ class Task extends Model
      * Ini memastikan Laravel mengizinkan data masuk ke kolom-kolom ini.
      */
     protected $fillable = [
-        'project_id',
-        'division_id',
-        'employee_id',
-        'tanggal',
-        'nama_task',
-        'aktivitas',
-        'prioritas',
-        'status',
-        'progress_persen',
-        'catatan'
-    ];
+    'project_id',
+    'division_id',
+    'employee_id',
+    'tanggal',
+    'nama_task',
+    'aktivitas',
+    'prioritas',
+    'deadline',
+    'status',
+    'progress_persen',
+    'catatan',
+];
 
     // --- RELASI (Menghubungkan Task dengan tabel lain) ---
 
@@ -42,4 +43,28 @@ class Task extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    public function activities()
+{
+    return $this->hasMany(TaskActivity::class);
+}
+
+public function updateStatus()
+{
+    if($this->progress_persen >= 100){
+
+        $this->status = 'done';
+
+    }elseif($this->progress_persen > 0){
+
+        $this->status = 'progress';
+
+    }else{
+
+        $this->status = 'todo';
+
+    }
+
+
+    $this->save();
+}
 }

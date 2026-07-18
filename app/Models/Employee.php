@@ -6,5 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',
+        'nama_karyawan',
+        'division_id',
+    ];
+
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+   public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
 }

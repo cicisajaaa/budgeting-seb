@@ -9,6 +9,7 @@ use App\Models\ExpenseTransaction;
 use App\Models\DivisionBalance;
 use App\Models\BankAccount;
 use App\Models\ExpenseRequest;
+use App\Models\Task;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -23,8 +24,6 @@ class DashboardController extends Controller
 
 
         $user = Auth::user();
-
-
 
 
 
@@ -51,6 +50,68 @@ class DashboardController extends Controller
 
 
 
+        $projects = Project::with('tasks')
+            ->latest()
+            ->get();
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA TASK TRACKER
+        |--------------------------------------------------------------------------
+        */
+
+
+        $totalTask = Task::count();
+
+
+
+        $taskDone = Task::where(
+            'status',
+            'done'
+        )
+        ->count();
+
+
+
+
+        $taskProgress = Task::where(
+            'status',
+            'progress'
+        )
+        ->count();
+
+
+
+
+        $taskTodo = Task::where(
+            'status',
+            'todo'
+        )
+        ->count();
+
+
+
+
+
+        $recentTasks = Task::with([
+
+            'project',
+
+            'employee'
+
+        ])
+        ->latest()
+        ->take(5)
+        ->get();
+
+
+
+
 
 
 
@@ -74,12 +135,7 @@ class DashboardController extends Controller
 
 
 
-        $sisaDana =
-
-            $totalDeposit -
-
-            $totalExpense;
-
+        $sisaDana = $totalDeposit - $totalExpense;
 
 
 
@@ -106,7 +162,6 @@ class DashboardController extends Controller
 
 
 
-
         /*
         |--------------------------------------------------------------------------
         | DATA REKENING BANK
@@ -115,11 +170,8 @@ class DashboardController extends Controller
 
 
         $totalSaldoBank = BankAccount::where(
-
             'status',
-
             true
-
         )
         ->sum(
             'saldo'
@@ -129,11 +181,8 @@ class DashboardController extends Controller
 
 
         $totalBankAktif = BankAccount::where(
-
             'status',
-
             true
-
         )
         ->count();
 
@@ -153,15 +202,10 @@ class DashboardController extends Controller
 
 
         $totalApprovalPending = ExpenseRequest::where(
-
             'status',
-
             'pending'
-
         )
         ->count();
-
-
 
 
 
@@ -177,11 +221,8 @@ class DashboardController extends Controller
 
         ])
         ->where(
-
             'status',
-
             'pending'
-
         )
         ->latest()
         ->take(5)
@@ -249,63 +290,94 @@ class DashboardController extends Controller
         $data = [
 
 
+            // PROJECT
+
+            'projects' => $projects,
+
 
             'totalProject' => $totalProject,
-
 
 
             'totalBudget' => $totalBudget,
 
 
+            'totalProjectProgress' => round(
+                $totalProjectProgress ?? 0
+            ),
+
+
+
+
+            // TASK TRACKER
+
+            'totalTask' => $totalTask,
+
+
+            'taskDone' => $taskDone,
+
+
+            'taskProgress' => $taskProgress,
+
+
+            'taskTodo' => $taskTodo,
+
+
+            'recentTasks' => $recentTasks,
+
+
+
+
+
+            // FINANCE
 
             'totalDeposit' => $totalDeposit,
 
 
-
             'totalExpense' => $totalExpense,
-
 
 
             'sisaDana' => $sisaDana,
 
 
 
+
+
+            // DIVISION
+
             'totalSaldoDivisi' => $totalSaldoDivisi,
 
 
 
-            'totalProjectProgress' => round(
-
-                $totalProjectProgress ?? 0
-
-            ),
 
 
-
-
+            // BANK
 
             'totalSaldoBank' => $totalSaldoBank,
-
 
 
             'totalBankAktif' => $totalBankAktif,
 
 
 
-            'totalApprovalPending' => $totalApprovalPending,
 
+
+            // APPROVAL
+
+            'totalApprovalPending' => $totalApprovalPending,
 
 
             'recentApproval' => $recentApproval,
 
 
 
+
+
+            // TRANSACTION
+
             'recentExpenses' => $recentExpenses,
 
 
-
             'recentDeposits' => $recentDeposits,
-
 
 
         ];
@@ -325,13 +397,9 @@ class DashboardController extends Controller
 
             case 'owner':
 
-
                 return view(
-
                     'dashboard.owner',
-
                     $data
-
                 );
 
 
@@ -340,13 +408,9 @@ class DashboardController extends Controller
 
             case 'admin':
 
-
                 return redirect()
-
                     ->route(
-
                         'admin.dashboard'
-
                     );
 
 
@@ -357,13 +421,9 @@ class DashboardController extends Controller
 
             case 'bendahara':
 
-
                 return view(
-
                     'dashboard.bendahara',
-
                     $data
-
                 );
 
 
@@ -375,13 +435,9 @@ class DashboardController extends Controller
 
             case 'karyawan':
 
-
                 return view(
-
                     'dashboard.karyawan',
-
                     $data
-
                 );
 
 
@@ -392,7 +448,6 @@ class DashboardController extends Controller
 
             default:
 
-
                 abort(403);
 
 
@@ -401,6 +456,5 @@ class DashboardController extends Controller
 
 
     }
-
 
 }

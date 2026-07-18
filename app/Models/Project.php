@@ -46,9 +46,6 @@ class Project extends Model
     }
 
 
-
-
-
     /*
     |--------------------------------------------------------------------------
     | Relasi Pembayaran Client

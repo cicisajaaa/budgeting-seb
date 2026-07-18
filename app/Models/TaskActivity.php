@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class TaskActivity extends Model
+{
+    protected $fillable = [
+        'task_id',
+        'employee_id',
+        'tanggal',
+        'aktivitas',
+        'progress',
+        'budget_activity',
+        'catatan',
+    ];
+
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
+
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+}
