@@ -85,25 +85,19 @@ SIDEBAR
 
 .sidebar{
 
-
 position:fixed;
-
 
 top:20px;
 
-
 left:20px;
-
 
 bottom:20px;
 
-
 width:240px;
-
 
 background:
 
-rgba(255,255,255,.75);
+rgba(255,255,255,.95);
 
 
 backdrop-filter:blur(20px);
@@ -125,13 +119,9 @@ box-shadow:
 0 20px 50px rgba(15,23,42,.1);
 
 
-z-index:100;
-
-
+z-index:200;
 
 }
-
-
 
 
 
@@ -319,32 +309,42 @@ transform:translateX(4px);
 
 
 
-
 .sidebar a.active{
 
-
 background:
-
 linear-gradient(
 135deg,
 #166534,
 #22c55e
 );
 
-
-color:white;
-
+color:white !important;
 
 font-weight:700;
 
-
 box-shadow:
-
 0 10px 25px rgba(34,197,94,.3);
-
 
 }
 
+
+
+.sidebar a.active span{
+
+color:white !important;
+
+}
+
+
+
+.sidebar a.active .icon{
+
+background:
+rgba(255,255,255,.25);
+
+color:white;
+
+}
 
 
 
@@ -511,58 +511,38 @@ border-radius:50%;
 /* =========================
 HEADER
 ========================= */
-
-
 .header{
-
 
 position:fixed;
 
-
 top:20px;
 
-
-left:285px;
-
+left:290px;
 
 right:20px;
-
 
 height:70px;
 
 
 background:
 
-rgba(255,255,255,.75);
-
+rgba(255,255,255,.85);
 
 
 backdrop-filter:blur(20px);
 
 
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
-
 border-radius:22px;
-
 
 
 display:flex;
 
-
 align-items:center;
-
 
 justify-content:space-between;
 
 
-
 padding:0 25px;
-
 
 
 box-shadow:
@@ -570,10 +550,7 @@ box-shadow:
 0 15px 40px rgba(15,23,42,.08);
 
 
-
-z-index:90;
-
-
+z-index:150;
 
 }
 
@@ -1105,21 +1082,26 @@ color:white;
 /* =========================
 CONTENT
 ========================= */
-
 .content{
 
-margin-left:285px;
+margin-left:280px;
 
-padding:110px 25px 30px;
+padding:110px 25px 40px;
 
 min-height:100vh;
+
+position:relative;
+
+z-index:1;
+
+width:calc(100% - 300px);
+
+overflow-x:hidden;
 
 }
 
 
-
 /* RESPONSIVE */
-
 @media(max-width:1000px){
 
 .sidebar{
@@ -1127,6 +1109,7 @@ min-height:100vh;
 width:80px;
 
 }
+
 
 .brand-text,
 .menu-title,
@@ -1137,11 +1120,13 @@ display:none;
 
 }
 
+
 .sidebar a{
 
 justify-content:center;
 
 }
+
 
 .header{
 
@@ -1149,9 +1134,12 @@ left:110px;
 
 }
 
+
 .content{
 
 margin-left:110px;
+
+padding-left:20px;
 
 }
 
@@ -1620,7 +1608,6 @@ EMPLOYEE
 
 
 
-
 <a href="{{route('expense.create')}}"
 class="{{request()->routeIs('expense.create')?'active':''}}">
 
@@ -1636,7 +1623,6 @@ Pengajuan Dana
 
 
 </a>
-
 
 
 
@@ -1661,10 +1647,50 @@ Riwayat Pengajuan
 
 
 
+
+
+
+<a href="{{route('employee.project.index')}}"
+class="{{request()->routeIs('employee.project.*')?'active':''}}">
+
+
+<div class="icon">
+📁
+</div>
+
+
+<span>
+Project Saya
+</span>
+
+
+</a>
+
+
+
+
+
+
+<a href="{{route('daily-tracker.index')}}"
+class="{{request()->routeIs('daily-tracker.*')?'active':''}}">
+
+
+<div class="icon">
+📝
+</div>
+
+
+<span>
+Daily Tracker
+</span>
+
+
+</a>
+
+
+
+
 @endif
-
-
-
 
 
 

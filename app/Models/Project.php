@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\TaskActivity;
 
 class Project extends Model
 {
@@ -46,6 +46,36 @@ class Project extends Model
     }
 
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Relasi Aktivitas Task
+|--------------------------------------------------------------------------
+*/
+
+public function taskActivities()
+{
+    return $this->hasManyThrough(
+        TaskActivity::class,
+        Task::class
+    );
+}
+
+public function getTotalBudgetActivityAttribute()
+{
+    return $this->taskActivities()
+        ->sum('budget_activity');
+}
+
+
+
+public function getSisaBudgetAttribute()
+{
+    return $this->total_budget -
+           $this->total_budget_activity;
+}
+
     /*
     |--------------------------------------------------------------------------
     | Relasi Pembayaran Client
@@ -61,6 +91,7 @@ class Project extends Model
         );
 
     }
+
 
 
 
@@ -86,6 +117,7 @@ class Project extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
     | Relasi Saldo Divisi
@@ -106,34 +138,46 @@ class Project extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Progress Otomatis Project
+    | Progress Project Otomatis
+    |--------------------------------------------------------------------------
+    |
+    | Menghitung progress berdasarkan rata-rata
+    | progress seluruh task dalam project.
+    |
+    | Contoh:
+    |
+    | Task 1 = 100%
+    | Task 2 = 50%
+    | Task 3 = 0%
+    |
+    | Progress Project = 50%
+    |
     |--------------------------------------------------------------------------
     */
 
 
     public function getProgressKeseluruhanAttribute()
+{
+
+    $totalTask = $this->tasks()
+        ->count();
+
+
+    if($totalTask == 0)
     {
-
-
-        if($this->tasks->count()==0)
-        {
-
-            return 0;
-
-        }
-
-
-
-        return round(
-            $this->tasks
-            ->avg('progress_persen')
-        );
-
-
+        return 0;
     }
 
 
+    return round(
+        $this->tasks()
+        ->avg('progress_persen')
+    );
+
+}
 
 }

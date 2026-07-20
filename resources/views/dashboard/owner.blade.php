@@ -458,13 +458,44 @@ width: {{ $project->progress_keseluruhan }}%;
 
 
 
-<div class="project-detail">
+ <div class="project-detail">
 
 
 <span>
 Total Task:
 {{ $project->tasks->count() }}
 </span>
+
+
+
+<span>
+Terpakai:
+
+Rp {{number_format(
+$project->total_budget_activity,
+0,
+',',
+'.'
+)}}
+
+</span>
+
+
+
+
+<span>
+Sisa Budget:
+
+Rp {{number_format(
+$project->sisa_budget,
+0,
+',',
+'.'
+)}}
+
+</span>
+
+
 
 
 <span>

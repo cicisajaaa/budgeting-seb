@@ -67,4 +67,63 @@ public function updateStatus()
 
     $this->save();
 }
+public function deadlineStatus()
+{
+
+    if(!$this->deadline){
+
+        return [
+            'label'=>'Tidak Ada Deadline',
+            'color'=>'secondary'
+        ];
+
+    }
+
+
+    $today = now();
+
+    $deadline = \Carbon\Carbon::parse(
+        $this->deadline
+    );
+
+
+    if($today->gt($deadline)){
+
+
+        return [
+
+            'label'=>'Terlambat',
+
+            'color'=>'danger'
+
+        ];
+
+    }
+
+
+
+    if($today->diffInDays($deadline) <= 3){
+
+
+        return [
+
+            'label'=>'Hampir Deadline',
+
+            'color'=>'warning'
+
+        ];
+
+    }
+
+
+
+    return [
+
+        'label'=>'Normal',
+
+        'color'=>'success'
+
+    ];
+
+}
 }
