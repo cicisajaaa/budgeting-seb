@@ -7,7 +7,7 @@ use App\Models\Task;
 use App\Models\TaskActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Helpers\AuditHelper;
 
 
 class DailyTrackerController extends Controller
@@ -318,7 +318,25 @@ if($request->budget_activity > 0)
         ]);
 
 
+// AUDIT LOG
 
+AuditHelper::create(
+
+    'Update Task Activity',
+
+    'Task Management',
+
+    'Menambahkan aktivitas pada task '
+    .
+    $task->nama_task
+    .
+    ' dengan progress '
+    .
+    $request->progress
+    .
+    '%'
+
+);
 
 
 

@@ -10,6 +10,7 @@ use App\Models\DivisionBalance;
 use App\Models\BankAccount;
 use App\Models\ExpenseRequest;
 use App\Models\Task;
+use App\Models\TaskActivity;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -37,6 +38,14 @@ class DashboardController extends Controller
         $totalProject = Project::count();
 
 
+        $totalProjectAktif = Project::where(
+            'progress_keseluruhan',
+            '<',
+            100
+        )
+        ->count();
+
+
 
         $totalBudget = Project::sum(
             'total_budget'
@@ -51,6 +60,7 @@ class DashboardController extends Controller
             return $project->progress_keseluruhan;
 
         });
+
 
 
         $projects = Project::with([
@@ -82,13 +92,11 @@ class DashboardController extends Controller
 
 
 
-
         $taskProgress = Task::where(
             'status',
             'progress'
         )
         ->count();
-
 
 
 
@@ -98,6 +106,11 @@ class DashboardController extends Controller
         )
         ->count();
 
+
+
+        $averageTaskProgress = Task::avg(
+            'progress_persen'
+        );
 
 
 
@@ -120,6 +133,7 @@ class DashboardController extends Controller
 
 
 
+
         /*
         |--------------------------------------------------------------------------
         | DATA KEUANGAN
@@ -133,21 +147,56 @@ class DashboardController extends Controller
 
 
 
-        $totalExpense = ExpenseTransaction::sum('jumlah');
+
+        $totalTransactionExpense = ExpenseTransaction::sum(
+            'jumlah'
+        );
 
 
 
-        $totalBudgetActivity = \App\Models\TaskActivity::sum(
+
+        $totalActivityExpense = TaskActivity::sum(
             'budget_activity'
         );
 
 
 
-        $totalExpense = $totalExpense + $totalBudgetActivity;
+
+        $totalExpense = 
+            $totalTransactionExpense
+            +
+            $totalActivityExpense;
 
 
 
-        $sisaDana = $totalDeposit - $totalExpense;
+
+        $sisaDana = 
+            $totalDeposit 
+            -
+            $totalExpense;
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PRESENTASE PENGGUNAAN BUDGET
+        |--------------------------------------------------------------------------
+        */
+
+
+        $budgetUsage = 0;
+
+
+        if($totalDeposit > 0)
+        {
+
+            $budgetUsage = round(
+                ($totalExpense / $totalDeposit) * 100
+            );
+
+        }
+
 
 
 
@@ -166,6 +215,7 @@ class DashboardController extends Controller
         $totalSaldoDivisi = DivisionBalance::sum(
             'saldo'
         );
+
 
 
 
@@ -222,7 +272,6 @@ class DashboardController extends Controller
 
 
 
-
         $recentApproval = ExpenseRequest::with([
 
             'project',
@@ -273,6 +322,7 @@ class DashboardController extends Controller
 
 
 
+
         $recentDeposits = ProjectDeposit::with([
 
             'project',
@@ -285,250 +335,344 @@ class DashboardController extends Controller
         ->get();
 
 
-/*
-|--------------------------------------------------------------------------
-| DATA KARYAWAN
-|--------------------------------------------------------------------------
-*/
-
-$employeeTasks = collect();
-
-$deadlineTasks = collect();
-
-$projectProgress = collect();
 
 
-$taskChart = [
 
-    'done'=>0,
-
-    'progress'=>0,
-
-    'todo'=>0
-
-];
-
-
-if($user->role == 'karyawan')
-{
-
-    $employee = $user->employee;
-
-
-    if($employee)
-    {
-
-
-        $employeeTasks = $employee
-            ->tasks()
-            ->with([
-                'project',
-                'activities'
-            ])
-            ->latest()
-            ->get();
-$taskChart = [
-
-    'done'=>$employeeTasks
-        ->where('status','done')
-        ->count(),
-
-
-    'progress'=>$employeeTasks
-        ->where('status','progress')
-        ->count(),
-
-
-    'todo'=>$employeeTasks
-        ->where('status','todo')
-        ->count(),
-
-];
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TASK DEADLINE TERDEKAT
-        |--------------------------------------------------------------------------
-        */
-
-
-        $deadlineTasks = $employeeTasks
-            ->whereNotNull('deadline')
-            ->sortBy('deadline')
-            ->take(5);
 
 
 
         /*
         |--------------------------------------------------------------------------
-        | DATA GRAFIK PROJECT
+        | DATA KARYAWAN
         |--------------------------------------------------------------------------
         */
 
 
-        $projectProgress = $employeeTasks
-            ->groupBy(function($task){
+        $employeeTasks = collect();
 
-                return $task->project->nama_project ?? 'Tanpa Project';
+        $deadlineTasks = collect();
 
-            })
-            ->map(function($tasks){
+        $projectProgress = collect();
 
-                return round(
-                    $tasks->avg('progress_persen')
+
+        $taskChart = [
+
+            'done'=>0,
+
+            'progress'=>0,
+
+            'todo'=>0
+
+        ];
+
+
+
+
+
+        if($user->role == 'karyawan')
+        {
+
+
+            $employee = $user->employee;
+
+
+
+            if($employee)
+            {
+
+
+
+                $employeeTasks = $employee
+                    ->tasks()
+                    ->with([
+                        'project',
+                        'activities'
+                    ])
+                    ->latest()
+                    ->get();
+
+
+
+
+
+                $taskChart = [
+
+                    'done'=>$employeeTasks
+                        ->where('status','done')
+                        ->count(),
+
+
+
+                    'progress'=>$employeeTasks
+                        ->where('status','progress')
+                        ->count(),
+
+
+
+                    'todo'=>$employeeTasks
+                        ->where('status','todo')
+                        ->count(),
+
+                ];
+
+
+
+
+
+                $deadlineTasks = $employeeTasks
+                    ->whereNotNull('deadline')
+                    ->sortBy('deadline')
+                    ->take(5);
+
+
+
+
+
+
+
+                $projectProgress = $employeeTasks
+                    ->groupBy(function($task){
+
+                        return $task->project->nama_project 
+                        ?? 
+                        'Tanpa Project';
+
+                    })
+                    ->map(function($tasks){
+
+                        return round(
+                            $tasks->avg('progress_persen')
+                        );
+
+                    });
+
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA DIKIRIM KE VIEW
+        |--------------------------------------------------------------------------
+        */
+
+
+        $data = [
+
+
+
+            'employeeTasks'=>$employeeTasks,
+
+            'deadlineTasks'=>$deadlineTasks,
+
+            'projectProgress'=>$projectProgress,
+
+            'taskChart'=>$taskChart,
+
+
+
+
+
+            // PROJECT
+
+
+            'projects'=>$projects,
+
+
+            'totalProject'=>$totalProject,
+
+
+            'totalProjectAktif'=>$totalProjectAktif,
+
+
+            'totalBudget'=>$totalBudget,
+
+
+
+            'totalProjectProgress'=>round(
+                $totalProjectProgress ?? 0
+            ),
+
+
+
+
+
+
+            // TASK
+
+
+            'totalTask'=>$totalTask,
+
+
+            'taskDone'=>$taskDone,
+
+
+            'taskProgress'=>$taskProgress,
+
+
+            'taskTodo'=>$taskTodo,
+
+
+            'averageTaskProgress'=>round(
+                $averageTaskProgress ?? 0
+            ),
+
+
+
+            'recentTasks'=>$recentTasks,
+
+
+
+
+
+
+
+
+            // FINANCE
+
+
+            'totalDeposit'=>$totalDeposit,
+
+
+            'totalExpense'=>$totalExpense,
+
+
+            'totalBudgetActivity'=>$totalActivityExpense,
+
+
+            'budgetUsage'=>$budgetUsage,
+
+
+            'sisaDana'=>$sisaDana,
+
+
+
+
+
+
+
+
+            // DIVISION
+
+
+            'totalSaldoDivisi'=>$totalSaldoDivisi,
+
+
+
+
+
+
+
+
+            // BANK
+
+
+            'totalSaldoBank'=>$totalSaldoBank,
+
+
+            'totalBankAktif'=>$totalBankAktif,
+
+
+
+
+
+
+
+
+            // APPROVAL
+
+
+            'totalApprovalPending'=>$totalApprovalPending,
+
+
+            'recentApproval'=>$recentApproval,
+
+
+
+
+
+
+
+
+            // TRANSACTION
+
+
+            'recentExpenses'=>$recentExpenses,
+
+
+            'recentDeposits'=>$recentDeposits,
+
+
+
+        ];
+
+
+
+
+
+
+
+
+        switch($user->role)
+
+        {
+
+
+            case 'owner':
+
+                return view(
+                    'dashboard.owner',
+                    $data
                 );
 
-            });
+
+
+            case 'admin':
+
+                return redirect()
+                    ->route(
+                        'admin.dashboard'
+                    );
+
+
+
+            case 'bendahara':
+
+                return view(
+                    'dashboard.bendahara',
+                    $data
+                );
+
+
+
+            case 'karyawan':
+
+                return view(
+                    'dashboard.karyawan',
+                    $data
+                );
+
+
+
+            default:
+
+                abort(403);
+
+        }
+
 
 
     }
 
-}
 
-
-
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| DATA DIKIRIM KE VIEW
-|--------------------------------------------------------------------------
-*/
-
-
-$data = [
-
-    'employeeTasks' => $employeeTasks,
-
-    'deadlineTasks' => $deadlineTasks,
-
-    'projectProgress' => $projectProgress,
-
-
-    // PROJECT
-
-    'projects' => $projects,
-
-    'totalProject' => $totalProject,
-
-    'totalBudget' => $totalBudget,
-
-    'totalProjectProgress' => round(
-        $totalProjectProgress ?? 0
-    ),
-
-
-
-    // TASK
-
-    'totalTask' => $totalTask,
-
-    'taskDone' => $taskDone,
-
-    'taskProgress' => $taskProgress,
-
-    'taskTodo' => $taskTodo,
-
-    'recentTasks' => $recentTasks,
-
-
-
-    // FINANCE
-
-
-    'totalDeposit' => $totalDeposit,
-
-    'totalExpense' => $totalExpense,
-
-    'totalBudgetActivity' => $totalBudgetActivity,
-
-    'sisaDana' => $sisaDana,
-
-
-    // DIVISION
-
-    'totalSaldoDivisi' => $totalSaldoDivisi,
-
-
-
-    // BANK
-
-    'totalSaldoBank' => $totalSaldoBank,
-
-    'totalBankAktif' => $totalBankAktif,
-
-
-
-    // APPROVAL
-
-    'totalApprovalPending' => $totalApprovalPending,
-
-    'recentApproval' => $recentApproval,
-
-
-
-    // TRANSACTION
-
-    'recentExpenses' => $recentExpenses,
-
-    'recentDeposits' => $recentDeposits,
-
-];
-
-
-
-
-
-switch($user->role)
-
-{
-
-
-    case 'owner':
-
-        return view(
-            'dashboard.owner',
-            $data
-        );
-
-
-
-    case 'admin':
-
-        return redirect()
-            ->route(
-                'admin.dashboard'
-            );
-
-
-
-    case 'bendahara':
-
-        return view(
-            'dashboard.bendahara',
-            $data
-        );
-
-
-
-    case 'karyawan':
-
-        return view(
-            'dashboard.karyawan',
-            $data
-        );
-
-
-
-    default:
-
-        abort(403);
-
-}
-
-
-}
 }

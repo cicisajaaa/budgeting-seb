@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\Notifications\ExpenseStatusNotification;
+use App\Helpers\AuditHelper;
 class ExpenseApprovalController extends Controller
 {
 
@@ -240,8 +241,28 @@ class ExpenseApprovalController extends Controller
 
 
 
+// AUDIT LOG
 
-        // NOTIFIKASI KE KARYAWAN
+AuditHelper::create(
+
+    'Approve Expense',
+
+    'Finance',
+
+    'Menyetujui pengajuan dana sebesar Rp ' .
+    number_format(
+        $expenseRequest->jumlah,
+        0,
+        ',',
+        '.'
+    )
+
+);
+
+
+
+
+// NOTIFIKASI KE KARYAWAN
 
         $expenseRequest->user->notify(
 
@@ -254,7 +275,6 @@ class ExpenseApprovalController extends Controller
             )
 
         );
-
 
 
 
@@ -387,13 +407,43 @@ class ExpenseApprovalController extends Controller
 
 
 
-        $expenseRequest->user->notify(
-            new ExpenseStatusNotification(
-                $expenseRequest,
-                'rejected'
-            )
-        );
+// AUDIT LOG
 
+AuditHelper::create(
+
+    'Reject Expense',
+
+    'Finance',
+
+    'Menolak pengajuan dana sebesar Rp ' .
+    number_format(
+        $expenseRequest->jumlah,
+        0,
+        ',',
+        '.'
+    )
+    .
+    ' dengan catatan: '
+    .
+    $request->approval_note
+
+);
+
+
+
+
+
+        $expenseRequest->user->notify(
+
+            new ExpenseStatusNotification(
+
+                $expenseRequest,
+
+                'rejected'
+
+            )
+
+        );
 
         return back()
 
