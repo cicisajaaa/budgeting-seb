@@ -4,29 +4,75 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Employee extends Model
 {
+
+
+    protected $table = 'karyawan';
+
+
+
     protected $fillable = [
-        'user_id',
+
+        'pengguna_id',
+
         'nama_karyawan',
-        'division_id',
+
+        'divisi_id',
+
     ];
 
 
-    public function division()
+
+
+
+    public function divisi()
     {
-        return $this->belongsTo(Division::class);
+
+        return $this->belongsTo(
+
+            Division::class,
+
+            'divisi_id'
+
+        );
+
     }
 
 
-    public function user()
+
+
+
+    public function pengguna()
     {
-        return $this->belongsTo(User::class);
+
+        return $this->belongsTo(
+
+            User::class,
+
+            'pengguna_id'
+
+        );
+
     }
 
 
-   public function tasks()
-{
-    return $this->hasMany(Task::class);
-}
+
+
+
+    public function tugas()
+    {
+
+        return $this->hasMany(
+
+            Task::class,
+
+            'karyawan_id'
+
+        );
+
+    }
+
+
 }

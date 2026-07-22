@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
-use App\Models\Project;
-use App\Models\Division;
+use App\Models\Proyek;
+use App\Models\Divisi;
+use App\Models\Tugas;
 
 
 
@@ -17,27 +18,100 @@ class AdminDashboardController extends Controller
     {
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIK ADMIN
+        |--------------------------------------------------------------------------
+        */
+
+
         $totalUser = User::count();
 
 
-        $totalProject = Project::count();
+
+        $totalProject = Proyek::count();
 
 
-        $totalDivision = Division::count();
 
+        $totalDivision = Divisi::count();
+
+
+
+
+        $totalTask = Tugas::count();
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA TERBARU
+        |--------------------------------------------------------------------------
+        */
+
+
+        $recentUsers = User::latest()
+
+            ->take(5)
+
+            ->get();
+
+
+
+
+
+
+        $recentProjects = Proyek::latest()
+
+            ->take(5)
+
+            ->get();
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
 
 
         return view(
+
             'dashboard.admin',
+
             compact(
+
                 'totalUser',
+
                 'totalProject',
-                'totalDivision'
+
+                'totalDivision',
+
+                'totalTask',
+
+                'recentUsers',
+
+                'recentProjects'
+
             )
+
         );
 
 
     }
+
 
 
 }

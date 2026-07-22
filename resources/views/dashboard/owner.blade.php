@@ -689,7 +689,7 @@ style="width: {{ $project->progress_keseluruhan }}%;">
 
 Total Task:
 
-{{ $project->tasks->count() }}
+{{ $project->tugas->count() }}
 
 </span>
 

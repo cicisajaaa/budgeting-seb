@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 
-use App\Models\AuditLog;
+use App\Models\LogAudit;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -13,34 +13,29 @@ class AuditHelper
 
 
     public static function create(
-        $action,
-        $module,
-        $description
+        $aksi,
+        $modul,
+        $deskripsi
     )
     {
 
 
-        AuditLog::create([
+        LogAudit::create([
 
 
-            'user_id' =>
-                Auth::id(),
+            'pengguna_id' => Auth::id(),
 
 
-            'action' =>
-                $action,
+            'aksi' => $aksi,
 
 
-            'module' =>
-                $module,
+            'modul' => $modul,
 
 
-            'description' =>
-                $description,
+            'deskripsi' => $deskripsi,
 
 
-            'ip_address' =>
-                request()->ip()
+            'alamat_ip' => request()->ip()
 
 
         ]);

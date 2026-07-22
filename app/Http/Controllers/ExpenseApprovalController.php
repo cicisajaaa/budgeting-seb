@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\ExpenseRequest;
-use App\Models\ExpenseTransaction;
-use App\Models\DivisionBalance;
-use App\Models\BankAccount;
-use App\Models\Project;
-use App\Models\Division;
+use App\Models\PengajuanDana;
+use App\Models\TransaksiDana;
+use App\Models\SaldoDivisi;
+use App\Models\RekeningBank;
+use App\Models\Proyek;
+use App\Models\Divisi;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,9 @@ use Illuminate\Support\Facades\DB;
 
 use App\Notifications\ExpenseStatusNotification;
 use App\Helpers\AuditHelper;
+
+
+
 class ExpenseApprovalController extends Controller
 {
 
@@ -32,30 +36,48 @@ class ExpenseApprovalController extends Controller
     {
 
 
-        $requests = ExpenseRequest::with([
+        $requests = PengajuanDana::with([
 
-            'project',
 
-            'division',
+            'proyek',
 
-            'user'
+            'divisi',
+
+            'pengguna'
+
 
         ])
+
         ->where(
+
             'status',
+
             'pending'
+
         )
+
         ->latest()
+
         ->get();
 
 
 
 
-        $banks = BankAccount::where(
+
+
+
+        $banks = RekeningBank::where(
+
             'status',
+
             true
+
         )
+
         ->get();
+
+
+
 
 
 
@@ -85,6 +107,7 @@ class ExpenseApprovalController extends Controller
 
 
 
+
     /*
     |--------------------------------------------------------------------------
     | APPROVE PENGELUARAN
@@ -92,77 +115,71 @@ class ExpenseApprovalController extends Controller
     */
 
 
-   public function approve(Request $request,$id)
-{
-
-    $request->validate([
-
-        'bank_account_id'=>'required',
-
-        'approval_note'=>'nullable|string'
-
-    ]);
+    public function approve(Request $request,$id)
+    {
 
 
+        $request->validate([
 
-    try{
+            'rekening_bank_id'=>'required',
 
+            'catatan_persetujuan'=>'nullable|string'
 
-        $expenseRequest = DB::transaction(function() use($request,$id){
+        ]);
 
 
 
-            $expenseRequest = ExpenseRequest::findOrFail($id);
+
+        try{
+
+
+            $expenseRequest = DB::transaction(function() use($request,$id){
 
 
 
-            if($expenseRequest->status != 'pending')
-            {
+                $expenseRequest = PengajuanDana::findOrFail($id);
 
-                throw new \Exception(
-                    'Pengajuan sudah diproses sebelumnya'
+
+
+
+
+                if($expenseRequest->status != 'pending')
+                {
+
+                    throw new \Exception(
+
+                        'Pengajuan sudah diproses sebelumnya'
+
+                    );
+
+                }
+
+
+
+
+
+
+                $bank = RekeningBank::findOrFail(
+
+                    $request->rekening_bank_id
+
                 );
 
-            }
 
 
 
 
 
-            $bank = BankAccount::findOrFail(
-                $request->bank_account_id
-            );
+                if($bank->saldo < $expenseRequest->jumlah)
+                {
 
+                    throw new \Exception(
 
+                        'Saldo rekening tidak mencukupi'
 
+                    );
 
-
-            if($bank->saldo < $expenseRequest->jumlah)
-            {
-
-                throw new \Exception(
-                    'Saldo rekening tidak mencukupi'
-                );
-
-            }
-
-
-
-
-
-            $expenseRequest->update([
-
-                'status'=>'approved',
-
-                'approved_by'=>Auth::id(),
-
-                'approved_at'=>now(),
-
-                'approval_note'=>$request->approval_note 
-                    ?? 
-                    'Disetujui oleh bendahara'
-
-            ]);
+                }
 
 
 
@@ -170,55 +187,88 @@ class ExpenseApprovalController extends Controller
 
 
 
-            ExpenseTransaction::create([
 
-                'request_id'=>$expenseRequest->id,
-
-                'approved_by'=>Auth::id(),
-
-                'bank_account_id'=>$bank->id,
-
-                'jumlah'=>$expenseRequest->jumlah,
-
-                'tanggal'=>now(),
-
-            ]);
+                $expenseRequest->update([
 
 
 
+                    'status'=>'approved',
 
 
 
-
-            $bank->decrement(
-
-                'saldo',
-
-                $expenseRequest->jumlah
-
-            );
+                    'disetujui_oleh'=>Auth::id(),
 
 
 
+                    'disetujui_pada'=>now(),
+
+
+
+                    'catatan_persetujuan'=>
+
+                        $request->catatan_persetujuan
+
+                        ??
+
+                        'Disetujui oleh bendahara'
+
+
+
+                ]);
 
 
 
 
-            $balance = DivisionBalance::where([
-
-                'project_id'=>$expenseRequest->project_id,
-
-                'division_id'=>$expenseRequest->division_id
-
-            ])
-            ->first();
 
 
 
-            if($balance)
-            {
 
-                $balance->decrement(
+
+                TransaksiDana::create([
+
+
+
+                    'pengajuan_dana_id'=>
+
+                        $expenseRequest->id,
+
+
+
+                    'disetujui_oleh'=>
+
+                        Auth::id(),
+
+
+
+                    'rekening_bank_id'=>
+
+                        $bank->id,
+
+
+
+                    'jumlah'=>
+
+                        $expenseRequest->jumlah,
+
+
+
+                    'tanggal'=>
+
+                        now(),
+
+
+
+                ]);
+
+
+
+
+
+
+
+
+
+                $bank->decrement(
 
                     'saldo',
 
@@ -226,92 +276,163 @@ class ExpenseApprovalController extends Controller
 
                 );
 
-            }
 
 
 
 
 
-            return $expenseRequest;
-
-
-        });
 
 
 
+                $balance = SaldoDivisi::where([
 
 
-// AUDIT LOG
 
-AuditHelper::create(
+                    'proyek_id'=>
 
-    'Approve Expense',
+                        $expenseRequest->proyek_id,
 
-    'Finance',
 
-    'Menyetujui pengajuan dana sebesar Rp ' .
-    number_format(
-        $expenseRequest->jumlah,
-        0,
-        ',',
-        '.'
-    )
 
-);
+                    'divisi_id'=>
+
+                        $expenseRequest->divisi_id
+
+
+
+                ])
+
+                ->first();
 
 
 
 
-// NOTIFIKASI KE KARYAWAN
-
-        $expenseRequest->user->notify(
-
-            new ExpenseStatusNotification(
-
-                $expenseRequest,
-
-                'approved'
-
-            )
-
-        );
 
 
 
 
-        return back()
+                if($balance)
+                {
 
-        ->with(
 
-            'success',
+                    $balance->decrement(
 
-            'Pengajuan berhasil disetujui dan transaksi tercatat'
+                        'saldo',
 
-        );
+                        $expenseRequest->jumlah
 
+                    );
+
+
+                }
+
+
+
+
+
+
+
+
+                return $expenseRequest;
+
+
+            });
+
+
+
+
+
+
+
+
+
+            AuditHelper::create(
+
+                'Approve Expense',
+
+                'Finance',
+
+                'Menyetujui pengajuan dana sebesar Rp ' .
+
+                number_format(
+
+                    $expenseRequest->jumlah,
+
+                    0,
+
+                    ',',
+
+                    '.'
+
+                )
+
+            );
+
+
+
+
+
+
+
+
+
+            $expenseRequest->pengguna->notify(
+
+
+                new ExpenseStatusNotification(
+
+                    $expenseRequest,
+
+                    'approved'
+
+                )
+
+
+            );
+
+
+
+
+
+
+
+
+            return back()
+
+            ->with(
+
+                'success',
+
+                'Pengajuan berhasil disetujui dan transaksi tercatat'
+
+            );
+
+
+
+
+
+        }
+
+
+        catch(\Exception $e)
+        {
+
+
+            return back()
+
+            ->with(
+
+                'error',
+
+                $e->getMessage()
+
+            );
+
+
+        }
 
 
     }
-
-
-    catch(\Exception $e)
-    {
-
-
-        return back()
-
-        ->with(
-
-            'error',
-
-            $e->getMessage()
-
-        );
-
-
-    }
-
-}
 
 
 
@@ -335,7 +456,7 @@ AuditHelper::create(
         $request->validate([
 
 
-            'approval_note'=>'required|string'
+            'catatan_persetujuan'=>'required|string'
 
 
         ]);
@@ -346,11 +467,10 @@ AuditHelper::create(
 
 
 
-        $expenseRequest = ExpenseRequest::findOrFail(
 
-            $id
+        $expenseRequest = PengajuanDana::findOrFail($id);
 
-        );
+
 
 
 
@@ -381,6 +501,7 @@ AuditHelper::create(
 
 
 
+
         $expenseRequest->update([
 
 
@@ -389,15 +510,17 @@ AuditHelper::create(
 
 
 
-            'approved_by'=>Auth::id(),
+            'disetujui_oleh'=>Auth::id(),
 
 
 
-            'approved_at'=>now(),
+            'disetujui_pada'=>now(),
 
 
 
-            'approval_note'=>$request->approval_note
+            'catatan_persetujuan'=>
+
+                $request->catatan_persetujuan
 
 
 
@@ -407,33 +530,51 @@ AuditHelper::create(
 
 
 
-// AUDIT LOG
-
-AuditHelper::create(
-
-    'Reject Expense',
-
-    'Finance',
-
-    'Menolak pengajuan dana sebesar Rp ' .
-    number_format(
-        $expenseRequest->jumlah,
-        0,
-        ',',
-        '.'
-    )
-    .
-    ' dengan catatan: '
-    .
-    $request->approval_note
-
-);
 
 
 
 
+        AuditHelper::create(
 
-        $expenseRequest->user->notify(
+            'Reject Expense',
+
+            'Finance',
+
+            'Menolak pengajuan dana sebesar Rp ' .
+
+            number_format(
+
+                $expenseRequest->jumlah,
+
+                0,
+
+                ',',
+
+                '.'
+
+            )
+
+            .
+
+            ' dengan catatan: '
+
+            .
+
+            $request->catatan_persetujuan
+
+
+        );
+
+
+
+
+
+
+
+
+
+        $expenseRequest->pengguna->notify(
+
 
             new ExpenseStatusNotification(
 
@@ -443,7 +584,16 @@ AuditHelper::create(
 
             )
 
+
         );
+
+
+
+
+
+
+
+
 
         return back()
 
@@ -477,19 +627,19 @@ AuditHelper::create(
     {
 
 
-        $query = ExpenseRequest::with([
+        $query = PengajuanDana::with([
 
 
-            'project',
+            'proyek',
 
 
-            'division',
+            'divisi',
 
 
-            'user',
+            'pengguna',
 
 
-            'approver'
+            'penyetuju'
 
 
         ])
@@ -516,20 +666,13 @@ AuditHelper::create(
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | SEARCH PEMOHON
-        |--------------------------------------------------------------------------
-        */
-
-
         if($request->search)
         {
 
 
             $query->whereHas(
 
-                'user',
+                'pengguna',
 
                 function($q) use($request){
 
@@ -560,13 +703,6 @@ AuditHelper::create(
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER STATUS
-        |--------------------------------------------------------------------------
-        */
-
-
         if($request->status)
         {
 
@@ -590,22 +726,15 @@ AuditHelper::create(
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER PROJECT
-        |--------------------------------------------------------------------------
-        */
-
-
-        if($request->project_id)
+        if($request->proyek_id)
         {
 
 
             $query->where(
 
-                'project_id',
+                'proyek_id',
 
-                $request->project_id
+                $request->proyek_id
 
             );
 
@@ -620,22 +749,15 @@ AuditHelper::create(
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER DIVISI
-        |--------------------------------------------------------------------------
-        */
-
-
-        if($request->division_id)
+        if($request->divisi_id)
         {
 
 
             $query->where(
 
-                'division_id',
+                'divisi_id',
 
-                $request->division_id
+                $request->divisi_id
 
             );
 
@@ -650,9 +772,11 @@ AuditHelper::create(
 
 
 
-     $requests = $query
-    ->latest()
-    ->get();
+        $requests = $query
+
+        ->latest()
+
+        ->get();
 
 
 
@@ -661,10 +785,12 @@ AuditHelper::create(
 
 
 
-        $projects = Project::all();
+
+        $projects = Proyek::all();
 
 
-        $divisions = Division::all();
+        $divisions = Divisi::all();
+
 
 
 

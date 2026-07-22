@@ -3,10 +3,10 @@
 namespace App\Exports;
 
 
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseTransaction;
-use App\Models\Project;
-use App\Models\BankAccount;
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
+use App\Models\Proyek;
+use App\Models\RekeningBank;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -43,53 +43,69 @@ WithColumnWidths
     {
 
 
-        $income = ProjectDeposit::sum(
+        $income = SetoranProyek::sum(
+
             'jumlah_setoran'
+
         );
 
 
 
-        $expense = ExpenseTransaction::sum(
+        $expense = TransaksiDana::sum(
+
             'jumlah'
+
         );
 
 
 
-        $balance = $income - $expense;
+
+
+        $balance =
+
+            $income
+
+            -
+
+            $expense;
 
 
 
 
 
-        $bankBalance = BankAccount::where(
+        $bankBalance = RekeningBank::where(
 
             'status',
 
             true
 
         )
+
         ->sum(
+
             'saldo'
+
         );
 
 
 
 
 
-        $bankCount = BankAccount::where(
+        $bankCount = RekeningBank::where(
 
             'status',
 
             true
 
         )
+
         ->count();
 
 
 
 
 
-        $projectCount = Project::count();
+        $projectCount = Proyek::count();
 
 
 
@@ -97,11 +113,11 @@ WithColumnWidths
 
         $transactionCount =
 
-            ProjectDeposit::count()
+            SetoranProyek::count()
 
             +
 
-            ExpenseTransaction::count();
+            TransaksiDana::count();
 
 
 
@@ -369,17 +385,23 @@ WithColumnWidths
 
 
         $sheet->mergeCells(
+
             'B1:E1'
+
         );
 
 
         $sheet->mergeCells(
+
             'B2:E2'
+
         );
 
 
         $sheet->mergeCells(
+
             'B3:C3'
+
         );
 
 
@@ -393,8 +415,11 @@ WithColumnWidths
             'B1:E2'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->setSize(18);
 
 
@@ -408,7 +433,9 @@ WithColumnWidths
             'B1:E3'
 
         )
+
         ->getAlignment()
+
         ->setHorizontal(
 
             'center'
@@ -435,13 +462,17 @@ WithColumnWidths
             'A5:C5'
 
         )
+
         ->getFill()
+
         ->setFillType(
 
             Fill::FILL_SOLID
 
         )
+
         ->getStartColor()
+
         ->setARGB(
 
             '166534'
@@ -459,9 +490,13 @@ WithColumnWidths
             'A5:C5'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->getColor()
+
         ->setARGB(
 
             'FFFFFF'
@@ -487,7 +522,9 @@ WithColumnWidths
             'B6:B9'
 
         )
+
         ->getNumberFormat()
+
         ->setFormatCode(
 
             '"Rp" #,##0'
@@ -514,8 +551,11 @@ WithColumnWidths
             'A5:C12'
 
         )
+
         ->getBorders()
+
         ->getAllBorders()
+
         ->setBorderStyle(
 
             Border::BORDER_THIN
@@ -614,17 +654,27 @@ WithColumnWidths
         $labels = [
 
             new DataSeriesValues(
+
                 'String',
+
                 'Dashboard!$A$6',
+
                 null,
+
                 1
+
             ),
 
             new DataSeriesValues(
+
                 'String',
+
                 'Dashboard!$A$7',
+
                 null,
+
                 1
+
             )
 
         ];
@@ -638,10 +688,15 @@ WithColumnWidths
         $categories = [
 
             new DataSeriesValues(
+
                 'String',
+
                 'Dashboard!$A$6:$A$7',
+
                 null,
+
                 2
+
             )
 
         ];
@@ -655,10 +710,15 @@ WithColumnWidths
         $values = [
 
             new DataSeriesValues(
+
                 'Number',
+
                 'Dashboard!$B$6:$B$7',
+
                 null,
+
                 2
+
             )
 
         ];
@@ -677,8 +737,11 @@ WithColumnWidths
             DataSeries::GROUPING_CLUSTERED,
 
             range(
+
                 0,
+
                 count($values)-1
+
             ),
 
             $labels,

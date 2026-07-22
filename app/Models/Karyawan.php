@@ -2,52 +2,26 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 
-class ExpenseTransaction extends Model
+class Karyawan extends Model
 {
 
 
-    protected $table = 'transaksi_dana';
-
+    protected $table = 'karyawan';
 
 
 
     protected $fillable = [
 
+        'pengguna_id',
 
-        'pengajuan_dana_id',
+        'nama_karyawan',
 
-        'disetujui_oleh',
-
-        'rekening_bank_id',
-
-        'jumlah',
-
-        'tanggal',
-
+        'divisi_id',
 
     ];
-
-
-
-
-
-
-    protected $casts = [
-
-
-        'jumlah'=>'decimal:2',
-
-        'tanggal'=>'date',
-
-
-    ];
-
-
-
 
 
 
@@ -55,19 +29,19 @@ class ExpenseTransaction extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pengajuan Dana
+    | Relasi dengan Divisi
     |--------------------------------------------------------------------------
     */
 
 
-    public function pengajuanDana()
+    public function divisi()
     {
 
         return $this->belongsTo(
 
-            ExpenseRequest::class,
+            Divisi::class,
 
-            'pengajuan_dana_id'
+            'divisi_id'
 
         );
 
@@ -79,22 +53,21 @@ class ExpenseTransaction extends Model
 
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi Penyetuju
+    | Relasi dengan Pengguna
     |--------------------------------------------------------------------------
     */
 
 
-    public function penyetuju()
+    public function pengguna()
     {
 
         return $this->belongsTo(
 
             User::class,
 
-            'disetujui_oleh'
+            'pengguna_id'
 
         );
 
@@ -106,22 +79,21 @@ class ExpenseTransaction extends Model
 
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi Rekening Bank
+    | Relasi dengan Tugas
     |--------------------------------------------------------------------------
     */
 
 
-    public function rekeningBank()
+    public function tugas()
     {
 
-        return $this->belongsTo(
+        return $this->hasMany(
 
-            BankAccount::class,
+            Tugas::class,
 
-            'rekening_bank_id'
+            'karyawan_id'
 
         );
 

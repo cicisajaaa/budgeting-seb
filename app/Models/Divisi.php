@@ -5,29 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class TaskActivity extends Model
+class Divisi extends Model
 {
 
 
-    protected $table = 'aktivitas_tugas';
+    protected $table = 'divisi';
 
 
 
     protected $fillable = [
 
-        'tugas_id',
-
-        'karyawan_id',
-
-        'tanggal',
-
-        'aktivitas',
-
-        'progres',
-
-        'anggaran_aktivitas',
-
-        'catatan',
+        'nama_divisi'
 
     ];
 
@@ -37,23 +25,25 @@ class TaskActivity extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Tugas
+    | Relasi dengan Alokasi Proyek
     |--------------------------------------------------------------------------
     */
 
 
-    public function tugas()
+    public function alokasiProyekDivisi()
     {
 
-        return $this->belongsTo(
+        return $this->hasMany(
 
-            Task::class,
+            AlokasiProyekDivisi::class,
 
-            'tugas_id'
+            'divisi_id'
 
         );
 
     }
+
+
 
 
 
@@ -61,7 +51,7 @@ class TaskActivity extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Karyawan
+    | Relasi dengan Karyawan
     |--------------------------------------------------------------------------
     */
 
@@ -69,15 +59,16 @@ class TaskActivity extends Model
     public function karyawan()
     {
 
-        return $this->belongsTo(
+        return $this->hasMany(
 
-            Employee::class,
+            Karyawan::class,
 
-            'karyawan_id'
+            'divisi_id'
 
         );
 
     }
+
 
 
 }

@@ -2,52 +2,28 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 
-class ExpenseTransaction extends Model
+class SetoranProyek extends Model
 {
 
 
-    protected $table = 'transaksi_dana';
-
+    protected $table = 'setoran_proyek';
 
 
 
     protected $fillable = [
 
-
-        'pengajuan_dana_id',
-
-        'disetujui_oleh',
+        'proyek_id',
 
         'rekening_bank_id',
 
-        'jumlah',
+        'jumlah_setoran',
 
-        'tanggal',
-
-
-    ];
-
-
-
-
-
-
-    protected $casts = [
-
-
-        'jumlah'=>'decimal:2',
-
-        'tanggal'=>'date',
-
+        'tanggal_setoran',
 
     ];
-
-
-
 
 
 
@@ -55,19 +31,19 @@ class ExpenseTransaction extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pengajuan Dana
+    | Relasi dengan Proyek
     |--------------------------------------------------------------------------
     */
 
 
-    public function pengajuanDana()
+    public function proyek()
     {
 
         return $this->belongsTo(
 
-            ExpenseRequest::class,
+            Proyek::class,
 
-            'pengajuan_dana_id'
+            'proyek_id'
 
         );
 
@@ -79,37 +55,9 @@ class ExpenseTransaction extends Model
 
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi Penyetuju
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function penyetuju()
-    {
-
-        return $this->belongsTo(
-
-            User::class,
-
-            'disetujui_oleh'
-
-        );
-
-    }
-
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Rekening Bank
+    | Relasi dengan Rekening Bank
     |--------------------------------------------------------------------------
     */
 
@@ -119,9 +67,35 @@ class ExpenseTransaction extends Model
 
         return $this->belongsTo(
 
-            BankAccount::class,
+            RekeningBank::class,
 
             'rekening_bank_id'
+
+        );
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Distribusi Dana
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function distribusiSetoran()
+    {
+
+        return $this->hasMany(
+
+            DistribusiSetoran::class,
+
+            'setoran_proyek_id'
 
         );
 

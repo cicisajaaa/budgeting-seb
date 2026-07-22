@@ -12,15 +12,17 @@ class ExpenseStatusNotification extends Notification
     use Queueable;
 
 
-    public $expense;
+    public $pengajuan;
+
     public $status;
 
 
 
-    public function __construct($expense,$status)
+    public function __construct($pengajuan, $status)
     {
 
-        $this->expense = $expense;
+        $this->pengajuan = $pengajuan;
+
         $this->status = $status;
 
     }
@@ -33,7 +35,9 @@ class ExpenseStatusNotification extends Notification
     {
 
         return [
+
             'database'
+
         ];
 
     }
@@ -52,9 +56,15 @@ class ExpenseStatusNotification extends Notification
 
             $title = "Pengajuan Dana Disetujui";
 
+
             $message =
+
                 "Pengajuan dana Rp ".
-                number_format($this->expense->jumlah).
+
+                number_format(
+                    $this->pengajuan->jumlah
+                ).
+
                 " telah disetujui.";
 
         }
@@ -63,9 +73,15 @@ class ExpenseStatusNotification extends Notification
 
             $title = "Pengajuan Dana Ditolak";
 
+
             $message =
+
                 "Pengajuan dana Rp ".
-                number_format($this->expense->jumlah).
+
+                number_format(
+                    $this->pengajuan->jumlah
+                ).
+
                 " ditolak.";
 
         }
@@ -74,16 +90,18 @@ class ExpenseStatusNotification extends Notification
 
         return [
 
-            'title'=>$title,
+            'title' => $title,
 
 
-            'message'=>$message,
+            'message' => $message,
 
 
-            'url'=>route('expense.myhistory'),
+            'url' => route(
+                'expense.myhistory'
+            ),
 
 
-            'expense_id'=>$this->expense->id
+            'pengajuan_id' => $this->pengajuan->id
 
         ];
 

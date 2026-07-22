@@ -119,16 +119,11 @@ Terjadi kesalahan:
 
 
 
-
 <form method="POST"
 
 action="{{ route('admin.projects.store') }}">
 
-
 @csrf
-
-
-
 
 
 
@@ -138,25 +133,22 @@ action="{{ route('admin.projects.store') }}">
 
 
 
-
-
 <div class="form-group">
 
 
 <label>
-
 Nama Project
-
 </label>
+
 
 
 <input
 
 type="text"
 
-name="nama_project"
+name="nama_proyek"
 
-value="{{old('nama_project')}}"
+value="{{old('nama_proyek')}}"
 
 placeholder="Masukkan nama project"
 
@@ -172,24 +164,22 @@ required>
 
 
 
-
 <div class="form-group">
 
 
 <label>
-
 Project Owner
-
 </label>
+
 
 
 <input
 
 type="text"
 
-name="project_owner"
+name="pemilik_proyek"
 
-value="{{old('project_owner')}}"
+value="{{old('pemilik_proyek')}}"
 
 placeholder="Nama pemilik project"
 
@@ -209,9 +199,7 @@ required>
 
 
 <label>
-
-Total Budget
-
+Total Anggaran
 </label>
 
 
@@ -220,26 +208,24 @@ Total Budget
 
 
 <span>
-
 Rp
-
 </span>
+
 
 
 <input
 
 type="number"
 
-name="total_budget"
+name="total_anggaran"
 
-value="{{old('total_budget')}}"
+value="{{old('total_anggaran')}}"
 
 placeholder="0"
 
 required>
 
 
-
 </div>
 
 
@@ -256,22 +242,20 @@ required>
 
 
 <label>
-
 Tanggal Mulai
-
 </label>
+
 
 
 <input
 
 type="date"
 
-name="start_date"
+name="tanggal_mulai"
 
-value="{{old('start_date')}}"
+value="{{old('tanggal_mulai')}}"
 
 required>
-
 
 
 </div>
@@ -287,22 +271,18 @@ required>
 
 
 <label>
-
 Tanggal Selesai
-
 </label>
+
 
 
 <input
 
 type="date"
 
-name="end_date"
+name="tanggal_selesai"
 
-value="{{old('end_date')}}"
-
-required>
-
+value="{{old('tanggal_selesai')}}">
 
 
 </div>
@@ -315,7 +295,6 @@ required>
 
 
 </div>
-
 
 
 
@@ -329,9 +308,7 @@ required>
 
 <button class="btn-save">
 
-
 💾 Simpan Project
-
 
 </button>
 
@@ -343,9 +320,7 @@ required>
 
 
 
-
 </form>
-
 
 
 </div>

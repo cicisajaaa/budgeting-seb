@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\DivisionBalance;
+
 
 
 class DivisionBalanceController extends Controller
@@ -12,22 +14,39 @@ class DivisionBalanceController extends Controller
     public function index()
     {
 
+$balances = DivisionBalance::with([
+    'project',
+    'division'
+])
+->latest()
+->get();
 
-        $balances = DivisionBalance::with([
-            'project',
-            'division'
-        ])
-        ->get();
+
+
+
+        $totalSaldo = $balances->sum('saldo');
+
+
 
 
 
         return view(
+
             'finance.balance.index',
-            compact('balances')
+
+            compact(
+
+                'balances',
+
+                'totalSaldo'
+
+            )
+
         );
 
 
     }
+
 
 
 }

@@ -2,40 +2,33 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Project;
-
+use App\Models\Proyek;
 
 class ProjectController extends Controller
 {
-
-
     public function myProject()
     {
+        $karyawan = auth()->user()->employee;
 
 
-        $employee = auth()->user()->employee;
-
-
-
-        $projects = Project::whereHas(
+        $proyek = Proyek::whereHas(
             'tasks',
-            function($query) use($employee){
+            function ($query) use ($karyawan) {
 
                 $query->where(
                     'employee_id',
-                    $employee->id
+                    $karyawan->id
                 );
 
             }
         )
         ->with([
 
-            'tasks' => function($query) use($employee){
+            'tasks' => function ($query) use ($karyawan) {
 
                 $query->where(
                     'employee_id',
-                    $employee->id
+                    $karyawan->id
                 );
 
             },
@@ -48,15 +41,9 @@ class ProjectController extends Controller
 
 
 
-
-
         return view(
             'project.my-project',
-            compact('projects')
+            compact('proyek')
         );
-
-
     }
-
-
 }

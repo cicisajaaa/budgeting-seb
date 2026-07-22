@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\ProjectDeposit;
+use App\Models\SetoranProyek;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -31,11 +31,11 @@ WithColumnWidths
     {
 
 
-        $data = ProjectDeposit::with([
+        $data = SetoranProyek::with([
 
-            'project',
+            'proyek',
 
-            'bank'
+            'rekeningBank'
 
         ])
         ->latest()
@@ -44,6 +44,7 @@ WithColumnWidths
 
 
             return [
+
 
                 'Tanggal' => date(
 
@@ -56,21 +57,32 @@ WithColumnWidths
                 ),
 
 
+
+
                 'Project' =>
 
-                    $deposit->project->nama_project ?? '-',
+                    $deposit->proyek->nama_proyek ?? '-',
+
+
+
 
 
 
                 'Bank' =>
 
-                    $deposit->bank->nama_bank ?? '-',
+                    $deposit->rekeningBank->nama_bank ?? '-',
+
+
+
 
 
 
                 'Nominal' =>
 
                     $deposit->jumlah_setoran,
+
+
+
 
 
 
@@ -88,9 +100,12 @@ WithColumnWidths
 
 
 
+
+
+
         /*
         |--------------------------------------------------------------------------
-        | Total Dana Masuk
+        | TOTAL DANA MASUK
         |--------------------------------------------------------------------------
         */
 
@@ -120,7 +135,39 @@ WithColumnWidths
 
 
 
+
         return $data;
+
+
+    }
+
+
+
+
+
+
+
+
+
+    public function headings():array
+    {
+
+
+        return [
+
+
+            'Tanggal',
+
+            'Project',
+
+            'Bank',
+
+            'Nominal',
+
+            'Keterangan'
+
+
+        ];
 
 
     }

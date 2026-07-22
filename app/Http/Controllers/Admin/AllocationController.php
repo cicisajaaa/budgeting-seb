@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Project;
-use App\Models\Division;
-use App\Models\ProjectDivisionAllocation;
+use App\Models\Proyek;
+use App\Models\Divisi;
+use App\Models\AlokasiProyekDivisi;
 
 use Illuminate\Http\Request;
 
@@ -17,117 +17,196 @@ class AllocationController extends Controller
 {
 
 
-    public function index(Project $project)
-    {
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN ALOKASI DANA DIVISI
+    |--------------------------------------------------------------------------
+    */
 
 
-        $divisions = Division::all();
+    public function index(Proyek $project)
+{
 
 
-        $allocations = ProjectDivisionAllocation::where(
-            'project_id',
-            $project->id
-        )
-        ->get();
+    $allocations = AlokasiProyekDivisi::with([
 
+        'divisi'
 
+    ])
 
-        return view(
-            'admin.allocations.index',
-            compact(
-                'project',
-                'divisions',
-                'allocations'
-            )
-        );
+    ->where(
 
+        'proyek_id',
 
-    }
+        $project->id
 
-
-
-
-
-
-    public function store(
-        Request $request,
-        Project $project
     )
-    {
 
+    ->get();
+
+
+
+
+    $divisions = Divisi::all();
+
+
+
+
+    return view(
+
+        'admin.allocation.index',
+
+        compact(
+
+            'project',
+
+            'allocations',
+
+            'divisions'
+
+        )
+
+    );
+
+
+}
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN ALOKASI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function store(Request $request, Proyek $project)
+    {
 
 
         $request->validate([
 
-            'division_id'=>'required',
 
-            'persentase'=>'required|numeric|min:1|max:100'
+
+            'divisi_id'=>
+
+                'required|exists:divisi,id',
+
+
+
+
+            'persentase'=>
+
+                'required|numeric|min:0|max:100',
+
+
 
         ]);
 
 
 
 
-$total = ProjectDivisionAllocation::where(
-    'project_id',
-    $project->id
-)
-->sum('persentase');
-
-
-$newTotal = $total + $request->persentase;
 
 
 
-        if($newTotal > 100)
-        {
 
-            return back()
-                ->with(
-                    'error',
-                    'Total pembagian dana tidak boleh lebih dari 100%'
-                );
 
-        }
+        $totalPersentase = AlokasiProyekDivisi::where(
+
+            'proyek_id',
+
+            $project->id
+
+        )
+
+        ->sum(
+
+            'persentase'
+
+        );
+
+
+
+
 
 
 
 
         if(
-            $total + $request->persentase > 100
+
+            ($totalPersentase + $request->persentase)
+
+            >
+
+            100
+
         )
         {
 
+
             return back()
+
             ->with(
+
                 'error',
-                'Total persentase tidak boleh lebih dari 100%'
+
+                'Total alokasi tidak boleh lebih dari 100%'
+
             );
+
 
         }
 
 
 
 
-        ProjectDivisionAllocation::create([
 
-            'project_id'=>$project->id,
 
-            'division_id'=>$request->division_id,
 
-            'persentase'=>$request->persentase,
+
+
+        AlokasiProyekDivisi::create([
+
+
+
+            'proyek_id'=>
+
+                $project->id,
+
+
+
+            'divisi_id'=>
+
+                $request->divisi_id,
+
+
+
+            'persentase'=>
+
+                $request->persentase
+
+
 
         ]);
 
 
 
 
-        return back()
-        ->with(
-            'success',
-            'Pembagian dana berhasil ditambahkan'
-        );
 
+
+
+
+
+        return back()
+
+            ->with(
+
+                'success',
+
+                'Alokasi divisi berhasil ditambahkan'
+
+            );
 
 
     }
@@ -137,9 +216,17 @@ $newTotal = $total + $request->persentase;
 
 
 
-    public function destroy(
-        ProjectDivisionAllocation $allocation
-    )
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS ALOKASI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function destroy(AlokasiProyekDivisi $allocation)
     {
 
 
@@ -147,11 +234,20 @@ $newTotal = $total + $request->persentase;
 
 
 
-        return back();
 
+        return back()
+
+            ->with(
+
+                'success',
+
+                'Alokasi berhasil dihapus'
+
+            );
 
 
     }
+
 
 
 }

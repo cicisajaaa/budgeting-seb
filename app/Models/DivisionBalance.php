@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class DivisionBalance extends Model
 {
 
+    protected $table = 'saldo_divisi';
+
 
     protected $fillable = [
 
-        'project_id',
+        'proyek_id',
 
-        'division_id',
+        'divisi_id',
 
         'saldo',
 
     ];
-
-
 
 
 
@@ -31,20 +31,15 @@ class DivisionBalance extends Model
 
 
 
-
-
-
     public function project()
     {
 
         return $this->belongsTo(
-            Project::class
+            Project::class,
+            'proyek_id'
         );
 
     }
-
-
-
 
 
 
@@ -53,11 +48,10 @@ class DivisionBalance extends Model
     {
 
         return $this->belongsTo(
-            Division::class
+            Division::class,
+            'divisi_id'
         );
 
     }
-
-
 
 }

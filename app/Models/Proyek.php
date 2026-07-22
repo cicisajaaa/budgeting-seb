@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Project extends Model
+class Proyek extends Model
 {
 
 
@@ -14,7 +14,6 @@ class Project extends Model
 
 
     protected $fillable = [
-
 
         'nama_proyek',
 
@@ -28,10 +27,7 @@ class Project extends Model
 
         'progres_keseluruhan',
 
-
     ];
-
-
 
 
 
@@ -49,14 +45,13 @@ class Project extends Model
 
         return $this->hasMany(
 
-            Task::class,
+            Tugas::class,
 
             'proyek_id'
 
         );
 
     }
-
 
 
 
@@ -75,9 +70,9 @@ class Project extends Model
 
         return $this->hasManyThrough(
 
-            TaskActivity::class,
+            AktivitasTugas::class,
 
-            Task::class,
+            Tugas::class,
 
             'proyek_id',
 
@@ -86,7 +81,6 @@ class Project extends Model
         );
 
     }
-
 
 
 
@@ -104,7 +98,6 @@ class Project extends Model
     {
 
         return $this->aktivitasTugas()
-
             ->sum('anggaran_aktivitas');
 
     }
@@ -117,7 +110,7 @@ class Project extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Sisa Anggaran
+    | Sisa Anggaran Proyek
     |--------------------------------------------------------------------------
     */
 
@@ -144,12 +137,12 @@ class Project extends Model
     */
 
 
-    public function setoran()
+    public function setoranProyek()
     {
 
         return $this->hasMany(
 
-            ProjectDeposit::class,
+            SetoranProyek::class,
 
             'proyek_id'
 
@@ -165,7 +158,7 @@ class Project extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pembagian Dana Divisi
+    | Relasi Alokasi Divisi
     |--------------------------------------------------------------------------
     */
 
@@ -175,7 +168,7 @@ class Project extends Model
 
         return $this->hasMany(
 
-            ProjectDivisionAllocation::class,
+            AlokasiProyekDivisi::class,
 
             'proyek_id'
 
@@ -201,7 +194,7 @@ class Project extends Model
 
         return $this->hasMany(
 
-            DivisionBalance::class,
+            SaldoDivisi::class,
 
             'proyek_id'
 
@@ -215,24 +208,24 @@ class Project extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Hitung Progres Otomatis
+    | Progress Proyek Otomatis
     |--------------------------------------------------------------------------
     */
 
 
-    public function getProgresKeseluruhanAttribute($value)
+    public function getProgresKeseluruhanAttribute()
     {
 
 
-        $jumlahTugas = $this->tugas()
-
+        $totalTugas = $this->tugas()
             ->count();
 
 
 
-        if($jumlahTugas == 0)
+        if($totalTugas == 0)
         {
 
             return 0;
@@ -242,11 +235,9 @@ class Project extends Model
 
 
 
-
         return round(
 
             $this->tugas()
-
             ->avg('progres_persen')
 
         );

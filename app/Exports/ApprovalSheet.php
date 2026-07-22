@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\ExpenseRequest;
+use App\Models\PengajuanDana;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -31,68 +31,98 @@ WithColumnWidths
     {
 
 
-        $data = ExpenseRequest::with([
+        $data = PengajuanDana::with([
 
-            'project',
-            'division',
-            'user'
+            'proyek',
+
+            'divisi',
+
+            'pengguna'
 
         ])
+
         ->latest()
+
         ->get()
+
         ->map(function($request){
 
 
             return [
 
 
+
                 'Tanggal' =>
+
                 date(
+
                     'd M Y',
+
                     strtotime(
+
                         $request->created_at
+
                     )
+
                 ),
 
 
 
+
+
                 'Pemohon' =>
-                $request->user->name ?? '-',
+
+                $request->pengguna->name ?? '-',
+
+
 
 
 
 
                 'Project' =>
-                $request->project->nama_project ?? '-',
+
+                $request->proyek->nama_proyek ?? '-',
+
 
 
 
 
 
                 'Divisi' =>
-                $request->division->nama_divisi ?? '-',
+
+                $request->divisi->nama_divisi ?? '-',
+
 
 
 
 
 
                 'Judul Pengajuan' =>
+
                 $request->judul ?? '-',
 
 
 
 
 
+
                 'Nominal' =>
+
                 $request->jumlah,
 
 
 
 
 
+
+
+
                 'Status' =>
+
                 ucfirst(
+
                     $request->status
+
                 )
 
 
@@ -104,20 +134,37 @@ WithColumnWidths
 
 
 
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL PENGAJUAN
+        |--------------------------------------------------------------------------
+        */
+
+
         $data->push([
 
 
             'Tanggal'=>'',
 
+
             'Pemohon'=>'',
+
 
             'Project'=>'',
 
+
             'Divisi'=>'',
+
 
             'Judul Pengajuan'=>'TOTAL PENGAJUAN',
 
+
             'Nominal'=>$data->sum('Nominal'),
+
 
             'Status'=>'Total'
 
@@ -130,6 +177,40 @@ WithColumnWidths
 
 
     }
+
+
+
+
+
+
+
+
+
+    public function headings():array
+    {
+
+
+        return [
+
+            'Tanggal',
+
+            'Pemohon',
+
+            'Project',
+
+            'Divisi',
+
+            'Judul Pengajuan',
+
+            'Nominal',
+
+            'Status'
+
+
+        ];
+
+    }
+
 
 
 
@@ -173,23 +254,31 @@ WithColumnWidths
 
 
         $sheet->mergeCells(
+
             'A1:G1'
+
         );
 
 
         $sheet->mergeCells(
+
             'A2:G2'
+
         );
 
 
 
         $sheet->mergeCells(
+
             'A3:B3'
+
         );
 
 
         $sheet->mergeCells(
+
             'D3:G3'
+
         );
 
 
@@ -198,31 +287,43 @@ WithColumnWidths
 
 
         $sheet->setCellValue(
+
             'A1',
+
             'CV SAHABAT ALAM'
+
         );
 
 
 
 
         $sheet->setCellValue(
+
             'A2',
+
             'LAPORAN APPROVAL PENGAJUAN DANA'
+
         );
 
 
 
 
         $sheet->setCellValue(
+
             'A3',
+
             'Report No : FIN-'.date('Y').'-001'
+
         );
 
 
 
         $sheet->setCellValue(
+
             'D3',
+
             'Periode : '.date('F Y')
+
         );
 
 
@@ -233,27 +334,41 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A1:G3'
+
         )
+
         ->getFont()
+
         ->setBold(true);
 
 
 
         $sheet->getStyle(
+
             'A1:G2'
+
         )
+
         ->getFont()
+
         ->setSize(16);
 
 
 
         $sheet->getStyle(
+
             'A1:G3'
+
         )
+
         ->getAlignment()
+
         ->setHorizontal(
+
             'center'
+
         );
 
 
@@ -272,28 +387,46 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A5:G5'
+
         )
+
         ->getFill()
+
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
+
         ->getStartColor()
+
         ->setARGB(
+
             '166534'
+
         );
 
 
 
 
         $sheet->getStyle(
+
             'A5:G5'
+
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->getColor()
+
         ->setARGB(
+
             'FFFFFF'
+
         );
 
 
@@ -316,11 +449,17 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "F6:F$lastRow"
+
         )
+
         ->getNumberFormat()
+
         ->setFormatCode(
+
             '"Rp" #,##0'
+
         );
 
 
@@ -344,9 +483,13 @@ WithColumnWidths
 
 
             $status = strtolower(
+
                 $sheet->getCell(
+
                     "G$i"
+
                 )->getValue()
+
             );
 
 
@@ -373,15 +516,25 @@ WithColumnWidths
 
 
             $sheet->getStyle(
+
                 "G$i"
+
             )
+
             ->getFill()
+
             ->setFillType(
+
                 Fill::FILL_SOLID
+
             )
+
             ->getStartColor()
+
             ->setARGB(
+
                 $color
+
             );
 
 
@@ -404,23 +557,37 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "A$lastRow:G$lastRow"
+
         )
+
         ->getFill()
+
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
+
         ->getStartColor()
+
         ->setARGB(
+
             'DCFCE7'
+
         );
 
 
 
         $sheet->getStyle(
+
             "A$lastRow:G$lastRow"
+
         )
+
         ->getFont()
+
         ->setBold(true);
 
 
@@ -440,12 +607,19 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "A5:G$lastRow"
+
         )
+
         ->getBorders()
+
         ->getAllBorders()
+
         ->setBorderStyle(
+
             Border::BORDER_THIN
+
         );
 
 
@@ -464,7 +638,9 @@ WithColumnWidths
 
 
         $logo = public_path(
+
             'images/logo-cv.png'
+
         );
 
 
@@ -477,27 +653,37 @@ WithColumnWidths
 
 
             $drawing->setName(
+
                 'Logo'
+
             );
 
 
             $drawing->setPath(
+
                 $logo
+
             );
 
 
             $drawing->setHeight(
+
                 45
+
             );
 
 
             $drawing->setCoordinates(
+
                 'A1'
+
             );
 
 
             $drawing->setWorksheet(
+
                 $sheet
+
             );
 
 
@@ -513,7 +699,7 @@ WithColumnWidths
 
         /*
         |--------------------------------------------------------------------------
-        | FOOTER TANDA TANGAN
+        | FOOTER
         |--------------------------------------------------------------------------
         */
 
@@ -523,39 +709,41 @@ WithColumnWidths
 
 
         $sheet->setCellValue(
+
             "A$signRow",
+
             "Mengetahui,"
+
         );
 
 
 
         $sheet->setCellValue(
+
             "E$signRow",
+
             "Bendahara,"
+
         );
 
 
 
         $sheet->setCellValue(
+
             "A".($signRow+3),
+
             "(........................)"
+
         );
 
 
 
         $sheet->setCellValue(
+
             "E".($signRow+3),
+
             "(........................)"
-        );
 
-
-
-        $sheet->getStyle(
-            "A$signRow:G".($signRow+3)
-        )
-        ->getAlignment()
-        ->setHorizontal(
-            'center'
         );
 
 
@@ -574,13 +762,17 @@ WithColumnWidths
 
 
         $sheet->freezePane(
+
             'A6'
+
         );
 
 
 
         $sheet->setAutoFilter(
+
             "A5:G".($lastRow-1)
+
         );
 
 

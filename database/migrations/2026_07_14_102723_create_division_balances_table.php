@@ -8,24 +8,43 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
+
     public function up(): void
     {
 
-        Schema::create('division_balances', function (Blueprint $table) {
+
+        Schema::create('saldo_divisi', function (Blueprint $table) {
 
 
             $table->id();
 
 
-            $table->foreignId('project_id')
-                ->constrained()
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi Proyek
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->foreignId('proyek_id')
+                ->constrained('proyek')
                 ->cascadeOnDelete();
 
 
 
-            $table->foreignId('division_id')
-                ->constrained()
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi Divisi
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->foreignId('divisi_id')
+                ->constrained('divisi')
                 ->cascadeOnDelete();
+
 
 
 
@@ -38,25 +57,41 @@ return new class extends Migration
 
 
 
+
             $table->timestamps();
 
 
+
+
             $table->unique([
-                'project_id',
-                'division_id'
+
+                'proyek_id',
+
+                'divisi_id'
+
             ]);
+
 
 
         });
 
+
     }
+
+
+
+
+
 
 
     public function down(): void
     {
 
-        Schema::dropIfExists('division_balances');
+
+        Schema::dropIfExists('saldo_divisi');
+
 
     }
+
 
 };

@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\ExpenseTransaction;
+use App\Models\TransaksiDana;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -31,25 +31,36 @@ WithColumnWidths
     {
 
 
-        $data = ExpenseTransaction::with([
+        $data = TransaksiDana::with([
 
-            'request.project',
 
-            'request.division',
+            'pengajuanDana.proyek',
 
-            'request.user',
 
-            'approver',
+            'pengajuanDana.divisi',
 
-            'bank'
+
+            'pengajuanDana.pengguna',
+
+
+            'penyetuju',
+
+
+            'rekeningBank'
+
 
         ])
+
         ->latest()
+
         ->get()
+
         ->map(function($expense){
 
 
+
             return [
+
 
 
                 'Tanggal' => date(
@@ -57,7 +68,9 @@ WithColumnWidths
                     'd M Y',
 
                     strtotime(
+
                         $expense->tanggal
+
                     )
 
                 ),
@@ -65,9 +78,17 @@ WithColumnWidths
 
 
 
+
                 'Pemohon' =>
 
-                    $expense->request->user->name ?? '-',
+
+                    $expense
+
+                    ->pengajuanDana
+
+                    ->pengguna
+
+                    ->name ?? '-',
 
 
 
@@ -76,7 +97,14 @@ WithColumnWidths
 
                 'Project' =>
 
-                    $expense->request->project->nama_project ?? '-',
+
+                    $expense
+
+                    ->pengajuanDana
+
+                    ->proyek
+
+                    ->nama_proyek ?? '-',
 
 
 
@@ -85,7 +113,14 @@ WithColumnWidths
 
                 'Divisi' =>
 
-                    $expense->request->division->nama_divisi ?? '-',
+
+                    $expense
+
+                    ->pengajuanDana
+
+                    ->divisi
+
+                    ->nama_divisi ?? '-',
 
 
 
@@ -94,7 +129,12 @@ WithColumnWidths
 
                 'Bank' =>
 
-                    $expense->bank->nama_bank ?? '-',
+
+                    $expense
+
+                    ->rekeningBank
+
+                    ->nama_bank ?? '-',
 
 
 
@@ -103,7 +143,12 @@ WithColumnWidths
 
                 'Judul Pengajuan' =>
 
-                    $expense->request->judul ?? '-',
+
+                    $expense
+
+                    ->pengajuanDana
+
+                    ->judul ?? '-',
 
 
 
@@ -111,6 +156,7 @@ WithColumnWidths
 
 
                 'Nominal' =>
+
 
                     $expense->jumlah,
 
@@ -123,8 +169,12 @@ WithColumnWidths
 
                 'Disetujui Oleh' =>
 
-                    $expense->approver->name ?? '-',
 
+                    $expense
+
+                    ->penyetuju
+
+                    ->name ?? '-',
 
 
 
@@ -133,13 +183,17 @@ WithColumnWidths
 
                 'Status' =>
 
+
                     'Approved'
+
 
 
             ];
 
 
+
         });
+
 
 
 
@@ -342,8 +396,11 @@ WithColumnWidths
             'A1:I2'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->setSize(16);
 
 
@@ -358,7 +415,9 @@ WithColumnWidths
             'A1:I2'
 
         )
+
         ->getAlignment()
+
         ->setHorizontal(
 
             'center'
@@ -385,13 +444,17 @@ WithColumnWidths
             'A4:I4'
 
         )
+
         ->getFill()
+
         ->setFillType(
 
             Fill::FILL_SOLID
 
         )
+
         ->getStartColor()
+
         ->setARGB(
 
             '166534'
@@ -410,9 +473,13 @@ WithColumnWidths
             'A4:I4'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->getColor()
+
         ->setARGB(
 
             'FFFFFF'
@@ -445,7 +512,9 @@ WithColumnWidths
             "G5:G$lastRow"
 
         )
+
         ->getNumberFormat()
+
         ->setFormatCode(
 
             '"Rp" #,##0'
@@ -472,13 +541,17 @@ WithColumnWidths
             "A$lastRow:I$lastRow"
 
         )
+
         ->getFill()
+
         ->setFillType(
 
             Fill::FILL_SOLID
 
         )
+
         ->getStartColor()
+
         ->setARGB(
 
             'FEE2E2'
@@ -495,7 +568,9 @@ WithColumnWidths
             "A$lastRow:I$lastRow"
 
         )
+
         ->getFont()
+
         ->setBold(true);
 
 
@@ -518,8 +593,11 @@ WithColumnWidths
             "A4:I$lastRow"
 
         )
+
         ->getBorders()
+
         ->getAllBorders()
+
         ->setBorderStyle(
 
             Border::BORDER_THIN
@@ -536,12 +614,13 @@ WithColumnWidths
 
         /*
         |--------------------------------------------------------------------------
-        | STATUS APPROVED
+        | STATUS
         |--------------------------------------------------------------------------
         */
 
 
         for($i = 5; $i < $lastRow; $i++)
+
         {
 
 
@@ -550,13 +629,17 @@ WithColumnWidths
                 "I$i"
 
             )
+
             ->getFill()
+
             ->setFillType(
 
                 Fill::FILL_SOLID
 
             )
+
             ->getStartColor()
+
             ->setARGB(
 
                 'DCFCE7'

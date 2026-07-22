@@ -1,37 +1,30 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
+<div class="page-wrapper">
 
-<!-- HEADER -->
 
+{{-- ================= HEADER ================= --}}
 
 <div class="page-header">
 
 
 <div>
 
-
 <div class="page-label">
-
 PROJECT MANAGEMENT
-
 </div>
 
 
 <h1>
-
 Edit Project
-
 </h1>
 
 
 <p>
-
 Perbarui informasi project, anggaran, dan periode pelaksanaan.
-
 </p>
 
 
@@ -39,13 +32,9 @@ Perbarui informasi project, anggaran, dan periode pelaksanaan.
 
 
 
-
 <a href="{{route('admin.projects.index')}}" class="btn-back">
-
 ← Kembali
-
 </a>
-
 
 
 </div>
@@ -54,44 +43,32 @@ Perbarui informasi project, anggaran, dan periode pelaksanaan.
 
 
 
-
-
+{{-- ================= ERROR ================= --}}
 
 
 @if($errors->any())
 
-
 <div class="alert-error">
 
-
 <strong>
-
 Terjadi kesalahan:
-
 </strong>
 
 
 <ul>
 
-
 @foreach($errors->all() as $error)
 
-
 <li>
-
-{{ $error }}
-
+{{$error}}
 </li>
 
-
 @endforeach
-
 
 </ul>
 
 
 </div>
-
 
 @endif
 
@@ -101,14 +78,13 @@ Terjadi kesalahan:
 
 
 
-<!-- FORM -->
+{{-- ================= FORM ================= --}}
 
 
-<div class="glass-panel form-card">
+<div class="form-card">
 
 
-
-<div class="panel-title">
+<div class="card-title">
 
 📁 Informasi Project
 
@@ -118,10 +94,8 @@ Terjadi kesalahan:
 
 
 
-
 <form method="POST"
-
-action="{{ route('admin.projects.update',$project->id) }}">
+action="{{route('admin.projects.update',$project->id)}}">
 
 
 @csrf
@@ -138,29 +112,26 @@ action="{{ route('admin.projects.update',$project->id) }}">
 
 
 
-
+{{-- NAMA PROJECT --}}
 
 <div class="form-group">
 
-
 <label>
-
 Nama Project
-
 </label>
-
 
 
 <input
 
 type="text"
 
-name="nama_project"
+name="nama_proyek"
 
-value="{{old('nama_project',$project->nama_project)}}"
+value="{{old('nama_proyek',$project->nama_proyek)}}"
 
-required>
+required
 
+>
 
 
 </div>
@@ -171,28 +142,28 @@ required>
 
 
 
+{{-- OWNER --}}
+
 
 <div class="form-group">
 
 
 <label>
-
 Project Owner
-
 </label>
-
 
 
 <input
 
 type="text"
 
-name="project_owner"
+name="pemilik_proyek"
 
-value="{{old('project_owner',$project->project_owner)}}"
+value="{{old('pemilik_proyek',$project->pemilik_proyek)}}"
 
-required>
+required
 
+>
 
 
 </div>
@@ -204,74 +175,74 @@ required>
 
 
 
+
+{{-- ANGGARAN --}}
+
+
 <div class="form-group">
 
 
 <label>
-
-Total Budget
-
+Total Anggaran
 </label>
 
 
-
-<div class="input-money">
+<div class="money-input">
 
 
 <span>
-
 Rp
-
 </span>
-
 
 
 <input
 
 type="number"
 
-name="total_budget"
+name="total_anggaran"
 
-value="{{old('total_budget',$project->total_budget)}}"
+value="{{old('total_anggaran',$project->total_anggaran)}}"
 
-required>
+required
 
+>
+
+
+</div>
 
 
 </div>
 
 
 
-</div>
 
 
 
 
 
 
+{{-- TANGGAL MULAI --}}
 
 
 <div class="form-group">
 
 
 <label>
-
 Tanggal Mulai
-
 </label>
-
 
 
 <input
 
 type="date"
 
-name="start_date"
+name="tanggal_mulai"
 
-value="{{old('start_date',$project->start_date)}}"
+value="{{old('tanggal_mulai',$project->tanggal_mulai)}}"
 
-required>
+required
 
+>
 
 
 </div>
@@ -281,33 +252,34 @@ required>
 
 
 
+
+
+
+{{-- TANGGAL SELESAI --}}
 
 
 <div class="form-group">
 
 
 <label>
-
 Tanggal Selesai
-
 </label>
-
 
 
 <input
 
 type="date"
 
-name="end_date"
+name="tanggal_selesai"
 
-value="{{old('end_date',$project->end_date)}}"
+value="{{old('tanggal_selesai',$project->tanggal_selesai)}}"
 
-required>
+required
 
+>
 
 
 </div>
-
 
 
 
@@ -349,6 +321,8 @@ required>
 
 
 
+</div>
+
 
 
 
@@ -356,26 +330,27 @@ required>
 <style>
 
 
-/* =========================
-HEADER
-========================= */
+.page-wrapper{
+
+width:100%;
+
+}
+
+
+
+
+/* HEADER */
 
 
 .page-header{
 
-
 display:flex;
-
 
 justify-content:space-between;
 
-
 align-items:center;
 
-
-
-margin-bottom:22px;
-
+margin-bottom:25px;
 
 }
 
@@ -383,18 +358,13 @@ margin-bottom:22px;
 
 .page-label{
 
-
-font-size:10px;
-
+font-size:11px;
 
 letter-spacing:2px;
 
-
 font-weight:800;
 
-
 color:#94a3b8;
-
 
 }
 
@@ -402,15 +372,11 @@ color:#94a3b8;
 
 .page-header h1{
 
-
-font-size:26px;
-
-
-color:#166534;
-
-
 margin:5px 0;
 
+font-size:28px;
+
+color:#166534;
 
 }
 
@@ -418,47 +384,34 @@ margin:5px 0;
 
 .page-header p{
 
+margin:0;
 
 font-size:13px;
 
-
 color:#64748b;
 
-
 }
-
 
 
 
 
 .btn-back{
 
-
 background:white;
 
+padding:10px 18px;
 
-border:1px solid #e5e7eb;
-
-
-padding:
-
-10px 18px;
-
-
-border-radius:12px;
-
-
-font-size:13px;
-
-
-font-weight:600;
-
+border-radius:14px;
 
 text-decoration:none;
 
-
 color:#475569;
 
+font-size:13px;
+
+font-weight:700;
+
+border:1px solid #e2e8f0;
 
 }
 
@@ -468,33 +421,22 @@ color:#475569;
 
 
 
-
-
-/* =========================
-ERROR
-========================= */
+/* ERROR */
 
 
 .alert-error{
 
-
 background:#fee2e2;
-
 
 color:#991b1b;
 
-
-padding:15px 18px;
-
+padding:15px 20px;
 
 border-radius:15px;
 
-
-margin-bottom:18px;
-
+margin-bottom:20px;
 
 font-size:13px;
-
 
 }
 
@@ -502,12 +444,7 @@ font-size:13px;
 
 .alert-error ul{
 
-
-margin-top:8px;
-
-
-padding-left:20px;
-
+margin-bottom:0;
 
 }
 
@@ -518,52 +455,43 @@ padding-left:20px;
 
 
 
-/* =========================
-FORM CARD
-========================= */
+/* CARD */
 
 
 .form-card{
 
 
-max-width:900px;
+background:white;
 
 
-}
+padding:28px;
 
 
+border-radius:25px;
 
 
-
-.glass-panel{
-
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
-
-
-border-radius:22px;
-
-
-padding:25px;
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
+max-width:850px;
 
 
 box-shadow:
 
-0 15px 35px rgba(15,23,42,.06);
+0 15px 40px rgba(15,23,42,.08);
 
+
+}
+
+
+
+.card-title{
+
+
+font-size:17px;
+
+font-weight:800;
+
+margin-bottom:25px;
+
+color:#1e293b;
 
 }
 
@@ -571,34 +499,10 @@ box-shadow:
 
 
 
-.panel-title{
-
-
-font-size:16px;
-
-
-font-weight:700;
-
-
-margin-bottom:22px;
-
-
-color:#111827;
-
-
-}
 
 
 
-
-
-
-
-
-
-/* =========================
-FORM
-========================= */
+/* FORM */
 
 
 .form-grid{
@@ -612,8 +516,7 @@ grid-template-columns:
 repeat(2,1fr);
 
 
-
-gap:18px;
+gap:20px;
 
 
 }
@@ -624,7 +527,6 @@ gap:18px;
 
 
 display:flex;
-
 
 flex-direction:column;
 
@@ -638,18 +540,13 @@ flex-direction:column;
 
 font-size:12px;
 
-
-font-weight:600;
-
+font-weight:700;
 
 color:#475569;
 
-
-margin-bottom:7px;
-
+margin-bottom:8px;
 
 }
-
 
 
 
@@ -663,26 +560,19 @@ height:45px;
 border-radius:12px;
 
 
-border:
-
-1px solid #e2e8f0;
+border:1px solid #e2e8f0;
 
 
 background:#f8fafc;
 
 
-padding:
-
-0 14px;
+padding:0 14px;
 
 
 font-size:13px;
 
 
 outline:none;
-
-
-transition:.25s;
 
 
 }
@@ -698,10 +588,9 @@ background:white;
 border-color:#22c55e;
 
 
-
 box-shadow:
 
-0 0 0 4px rgba(34,197,94,.12);
+0 0 0 4px rgba(34,197,94,.15);
 
 
 }
@@ -712,10 +601,11 @@ box-shadow:
 
 
 
-/* MONEY INPUT */
+
+/* MONEY */
 
 
-.input-money{
+.money-input{
 
 
 display:flex;
@@ -730,12 +620,10 @@ height:45px;
 border-radius:12px;
 
 
-border:
-
-1px solid #e2e8f0;
-
-
 background:#f8fafc;
+
+
+border:1px solid #e2e8f0;
 
 
 overflow:hidden;
@@ -745,40 +633,34 @@ overflow:hidden;
 
 
 
-.input-money span{
+.money-input span{
 
 
-padding:
+padding:0 15px;
 
-0 12px;
+
+font-weight:800;
 
 
 color:#166534;
 
 
-font-weight:700;
-
-
-font-size:13px;
-
-
 }
 
 
 
-.input-money input{
+.money-input input{
 
 
 border:none;
 
-
 height:100%;
-
 
 flex:1;
 
-
 }
+
+
 
 
 
@@ -792,17 +674,16 @@ flex:1;
 .form-action{
 
 
-margin-top:25px;
-
-
 display:flex;
 
 
 justify-content:flex-end;
 
 
-}
+margin-top:30px;
 
+
+}
 
 
 
@@ -812,12 +693,10 @@ justify-content:flex-end;
 border:none;
 
 
-padding:
-
-12px 25px;
+padding:13px 28px;
 
 
-border-radius:14px;
+border-radius:15px;
 
 
 background:
@@ -833,23 +712,13 @@ linear-gradient(
 );
 
 
-
 color:white;
 
 
-font-size:13px;
-
-
-font-weight:700;
+font-weight:800;
 
 
 cursor:pointer;
-
-
-
-box-shadow:
-
-0 10px 25px rgba(34,197,94,.25);
 
 
 }
@@ -858,11 +727,7 @@ box-shadow:
 
 .btn-update:hover{
 
-
-transform:
-
-translateY(-2px);
-
+transform:translateY(-2px);
 
 }
 
@@ -877,9 +742,7 @@ translateY(-2px);
 
 .form-grid{
 
-
 grid-template-columns:1fr;
-
 
 }
 
@@ -887,15 +750,11 @@ grid-template-columns:1fr;
 
 .page-header{
 
-
 flex-direction:column;
-
 
 align-items:flex-start;
 
-
 gap:15px;
-
 
 }
 
@@ -905,7 +764,6 @@ gap:15px;
 
 
 </style>
-
 
 
 @endsection

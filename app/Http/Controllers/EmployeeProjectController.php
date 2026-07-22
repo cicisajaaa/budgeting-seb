@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Project;
+use App\Models\Proyek;
+
 use Illuminate\Support\Facades\Auth;
+
 
 
 class EmployeeProjectController extends Controller
@@ -15,48 +17,72 @@ class EmployeeProjectController extends Controller
     {
 
 
-        $employee = Auth::user()->employee;
+        $karyawan = Auth::user()->karyawan;
 
 
 
-        $projects = Project::whereHas(
 
-            'tasks',
+        if(!$karyawan)
+        {
 
-            function($query) use($employee){
+            abort(403);
+
+        }
+
+
+
+
+
+
+        $proyek = Proyek::whereHas(
+
+
+            'tugas',
+
+
+            function ($query) use ($karyawan) {
 
 
                 $query->where(
 
-                    'employee_id',
+                    'karyawan_id',
 
-                    $employee->id
+                    $karyawan->id
 
                 );
 
 
             }
 
+
         )
 
         ->with([
 
 
-            'tasks' => function($query) use($employee){
+
+            'tugas' => function ($query) use ($karyawan) {
 
 
                 $query
+
                 ->where(
-                    'employee_id',
-                    $employee->id
+
+                    'karyawan_id',
+
+                    $karyawan->id
+
                 )
 
                 ->with([
-                    'activities'
+
+                    'aktivitasTugas'
+
                 ]);
 
 
             }
+
 
 
         ])
@@ -69,16 +95,24 @@ class EmployeeProjectController extends Controller
 
 
 
+
+
+
         return view(
 
             'employee.projects.index',
 
-            compact('projects')
+            compact(
+
+                'proyek'
+
+            )
 
         );
 
 
     }
+
 
 
 }

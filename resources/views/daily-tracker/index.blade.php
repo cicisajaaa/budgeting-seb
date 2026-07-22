@@ -294,9 +294,7 @@ Simpan Update
 Riwayat Aktivitas
 </h3>
 
-
-
-@forelse($task->activities as $activity)
+@forelse($task->aktivitasTugas ?? [] as $activity)
 
 
 

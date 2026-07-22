@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\BankAccount;
+use App\Models\RekeningBank;
+
 use Illuminate\Http\Request;
 
 
@@ -12,18 +13,34 @@ class BankAccountController extends Controller
 {
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | LIST REKENING BANK
+    |--------------------------------------------------------------------------
+    */
+
+
     public function index()
     {
 
 
-        $banks = BankAccount::latest()
+        $banks = RekeningBank::latest()
+
             ->get();
 
 
 
+
         return view(
+
             'finance.bank.index',
-            compact('banks')
+
+            compact(
+
+                'banks'
+
+            )
+
         );
 
 
@@ -33,6 +50,15 @@ class BankAccountController extends Controller
 
 
 
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM TAMBAH BANK
+    |--------------------------------------------------------------------------
+    */
 
 
     public function create()
@@ -40,7 +66,9 @@ class BankAccountController extends Controller
 
 
         return view(
+
             'finance.bank.create'
+
         );
 
 
@@ -51,6 +79,14 @@ class BankAccountController extends Controller
 
 
 
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN BANK
+    |--------------------------------------------------------------------------
+    */
 
 
     public function store(Request $request)
@@ -60,14 +96,24 @@ class BankAccountController extends Controller
         $request->validate([
 
 
-            'nama_bank'=>'required',
+
+            'nama_bank'=>'required|string|max:255',
 
 
-            'nomor_rekening'=>'required|unique:bank_accounts',
+
+            'nomor_rekening'=>'required|string|max:255',
 
 
-            'nama_pemilik'=>'required',
 
+            'nama_pemilik'=>'required|string|max:255',
+
+
+
+            'saldo'=>'required|numeric',
+
+
+
+            'status'=>'required'
 
         ]);
 
@@ -75,25 +121,37 @@ class BankAccountController extends Controller
 
 
 
-        BankAccount::create([
+
+
+
+
+        RekeningBank::create([
+
 
 
             'nama_bank'=>$request->nama_bank,
 
 
+
             'nomor_rekening'=>$request->nomor_rekening,
+
 
 
             'nama_pemilik'=>$request->nama_pemilik,
 
 
-            'saldo'=>0,
+
+            'saldo'=>$request->saldo,
 
 
-            'status'=>true,
+
+            'status'=>$request->status
+
 
 
         ]);
+
+
 
 
 
@@ -101,10 +159,19 @@ class BankAccountController extends Controller
 
 
         return redirect()
-            ->route('finance.bank.index')
+
+            ->route(
+
+                'finance.bank.index'
+
+            )
+
             ->with(
+
                 'success',
+
                 'Rekening bank berhasil ditambahkan'
+
             );
 
 
@@ -118,17 +185,27 @@ class BankAccountController extends Controller
 
 
 
-    public function edit($id)
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL BANK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function show(RekeningBank $bank)
     {
 
 
-        $bank = BankAccount::findOrFail($id);
-
-
-
         return view(
-            'finance.bank.edit',
-            compact('bank')
+
+            'finance.bank.show',
+
+            compact(
+
+                'bank'
+
+            )
+
         );
 
 
@@ -142,27 +219,78 @@ class BankAccountController extends Controller
 
 
 
-    public function update(Request $request,$id)
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT BANK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function edit(RekeningBank $bank)
     {
 
 
-        $bank = BankAccount::findOrFail($id);
+        return view(
 
+            'finance.bank.edit',
+
+            compact(
+
+                'bank'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE BANK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function update(Request $request, RekeningBank $bank)
+    {
 
 
         $request->validate([
 
 
-            'nama_bank'=>'required',
+
+            'nama_bank'=>'required|string|max:255',
 
 
-            'nomor_rekening'=>'required',
+
+            'nomor_rekening'=>'required|string|max:255',
 
 
-            'nama_pemilik'=>'required',
 
+            'nama_pemilik'=>'required|string|max:255',
+
+
+
+            'saldo'=>'required|numeric',
+
+
+
+            'status'=>'required'
 
         ]);
+
+
+
+
 
 
 
@@ -171,13 +299,25 @@ class BankAccountController extends Controller
         $bank->update([
 
 
+
             'nama_bank'=>$request->nama_bank,
+
 
 
             'nomor_rekening'=>$request->nomor_rekening,
 
 
+
             'nama_pemilik'=>$request->nama_pemilik,
+
+
+
+            'saldo'=>$request->saldo,
+
+
+
+            'status'=>$request->status
+
 
 
         ]);
@@ -187,11 +327,22 @@ class BankAccountController extends Controller
 
 
 
+
+
         return redirect()
-            ->route('finance.bank.index')
+
+            ->route(
+
+                'finance.bank.index'
+
+            )
+
             ->with(
+
                 'success',
-                'Rekening berhasil diperbarui'
+
+                'Rekening bank berhasil diperbarui'
+
             );
 
 
@@ -205,12 +356,15 @@ class BankAccountController extends Controller
 
 
 
-    public function destroy($id)
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS BANK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function destroy(RekeningBank $bank)
     {
-
-
-        $bank = BankAccount::findOrFail($id);
-
 
 
         $bank->delete();
@@ -218,10 +372,20 @@ class BankAccountController extends Controller
 
 
 
-        return back()
+        return redirect()
+
+            ->route(
+
+                'finance.bank.index'
+
+            )
+
             ->with(
+
                 'success',
-                'Rekening berhasil dihapus'
+
+                'Rekening bank berhasil dihapus'
+
             );
 
 

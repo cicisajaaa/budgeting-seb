@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 
 use Illuminate\Console\Command;
-use App\Models\Task;
+use App\Models\Tugas;
 use App\Notifications\TaskDeadlineReminder;
 
 
@@ -19,25 +19,36 @@ class SendTaskDeadlineReminder extends Command
 
 
     protected $description =
-    'Send reminder notification for upcoming task deadlines';
+    'Mengirim notifikasi pengingat tenggat tugas yang akan datang';
 
 
     public function handle()
     {
 
 
-       $tasks = Task::whereNotNull('deadline')
-->whereDate(
-    'deadline',
-    '<=',
-    now()->addDays(7)
-)
-->whereDate(
-    'deadline',
-    '>=',
-    now()
-)
-->get();
+        $tasks = Tugas::whereNotNull('deadline')
+
+            ->whereDate(
+
+                'deadline',
+
+                '<=',
+
+                now()->addDays(7)
+
+            )
+
+            ->whereDate(
+
+                'deadline',
+
+                '>=',
+
+                now()
+
+            )
+
+            ->get();
 
 
 
@@ -47,17 +58,23 @@ class SendTaskDeadlineReminder extends Command
         {
 
 
-            if($task->employee 
-                && 
-               $task->employee->user)
+            if(
+                $task->karyawan
+                &&
+                $task->karyawan->pengguna
+            )
             {
 
 
 
-                $task->employee
-                ->user
+                $task->karyawan
+
+                ->pengguna
+
                 ->notify(
+
                     new TaskDeadlineReminder($task)
+
                 );
 
 
@@ -72,7 +89,9 @@ class SendTaskDeadlineReminder extends Command
 
 
         $this->info(
-            'Deadline reminder sent'
+
+            'Pengingat deadline berhasil dikirim'
+
         );
 
 

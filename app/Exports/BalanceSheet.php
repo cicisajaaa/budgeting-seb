@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\DivisionBalance;
+use App\Models\SaldoDivisi;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -31,36 +31,44 @@ WithColumnWidths
     {
 
 
-        $data = DivisionBalance::with([
+        $data = SaldoDivisi::with([
 
-            'project',
+            'proyek',
 
-            'division'
+            'divisi'
 
         ])
+
         ->get()
+
         ->map(function($balance){
 
 
             return [
 
 
+
                 'Project' =>
 
-                $balance->project->nama_project ?? '-',
+                    $balance->proyek->nama_proyek ?? '-',
+
+
 
 
 
                 'Divisi' =>
 
-                $balance->division->nama_divisi ?? '-',
+                    $balance->divisi->nama_divisi ?? '-',
+
 
 
 
 
                 'Saldo Divisi' =>
 
-                $balance->saldo,
+                    $balance->saldo,
+
+
 
 
 
@@ -69,11 +77,12 @@ WithColumnWidths
                 'Status Dana' =>
 
 
-                $balance->saldo > 0
+                    $balance->saldo > 0
 
-                ? 'Tersedia'
+                    ? 'Tersedia'
 
-                : 'Habis'
+                    : 'Habis'
+
 
 
             ];
@@ -86,22 +95,38 @@ WithColumnWidths
 
 
 
-        // TOTAL SALDO
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL SALDO
+        |--------------------------------------------------------------------------
+        */
 
 
         $data->push([
 
 
+
             'Project'=>'',
+
+
 
             'Divisi'=>'TOTAL SALDO',
 
+
+
             'Saldo Divisi'=>$data->sum('Saldo Divisi'),
+
+
 
             'Status Dana'=>'Total'
 
 
+
         ]);
+
+
+
 
 
 
@@ -124,6 +149,7 @@ WithColumnWidths
 
 
         return [
+
 
             'Project',
 
@@ -180,27 +206,37 @@ WithColumnWidths
 
 
         $sheet->mergeCells(
+
             'A1:D1'
+
         );
 
 
         $sheet->mergeCells(
+
             'A2:D2'
+
         );
 
 
 
 
         $sheet->setCellValue(
+
             'A1',
+
             'CV SAHABAT ALAM'
+
         );
 
 
 
         $sheet->setCellValue(
+
             'A2',
+
             'LAPORAN SALDO DIVISI'
+
         );
 
 
@@ -208,10 +244,15 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A1:D2'
+
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->setSize(16);
 
 
@@ -219,11 +260,17 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A1:D2'
+
         )
+
         ->getAlignment()
+
         ->setHorizontal(
+
             'center'
+
         );
 
 
@@ -243,15 +290,25 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A4:D4'
+
         )
+
         ->getFill()
+
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
+
         ->getStartColor()
+
         ->setARGB(
+
             '166534'
+
         );
 
 
@@ -259,13 +316,21 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             'A4:D4'
+
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->getColor()
+
         ->setARGB(
+
             'FFFFFF'
+
         );
 
 
@@ -288,11 +353,17 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "C5:C$lastRow"
+
         )
+
         ->getNumberFormat()
+
         ->setFormatCode(
+
             '"Rp" #,##0'
+
         );
 
 
@@ -316,8 +387,11 @@ WithColumnWidths
 
 
             $status =
+
             $sheet->getCell(
+
                 "D$i"
+
             )->getValue();
 
 
@@ -328,33 +402,55 @@ WithColumnWidths
 
 
                 $sheet->getStyle(
+
                     "D$i"
+
                 )
+
                 ->getFill()
+
                 ->setFillType(
+
                     Fill::FILL_SOLID
+
                 )
+
                 ->getStartColor()
+
                 ->setARGB(
+
                     'DCFCE7'
+
                 );
 
 
             }
-            else
+
+            elseif($status=="Habis")
+
             {
 
 
                 $sheet->getStyle(
+
                     "D$i"
+
                 )
+
                 ->getFill()
+
                 ->setFillType(
+
                     Fill::FILL_SOLID
+
                 )
+
                 ->getStartColor()
+
                 ->setARGB(
+
                     'FEE2E2'
+
                 );
 
 
@@ -378,24 +474,38 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "A$lastRow:D$lastRow"
+
         )
+
         ->getFill()
+
         ->setFillType(
+
             Fill::FILL_SOLID
+
         )
+
         ->getStartColor()
+
         ->setARGB(
+
             'DCFCE7'
+
         );
 
 
 
 
         $sheet->getStyle(
+
             "A$lastRow:D$lastRow"
+
         )
+
         ->getFont()
+
         ->setBold(true);
 
 
@@ -414,12 +524,19 @@ WithColumnWidths
 
 
         $sheet->getStyle(
+
             "A4:D$lastRow"
+
         )
+
         ->getBorders()
+
         ->getAllBorders()
+
         ->setBorderStyle(
+
             Border::BORDER_THIN
+
         );
 
 
@@ -438,7 +555,9 @@ WithColumnWidths
 
 
         $logo = public_path(
+
             'images/logo-cv.png'
+
         );
 
 
@@ -451,27 +570,37 @@ WithColumnWidths
 
 
             $drawing->setName(
+
                 'Logo'
+
             );
 
 
             $drawing->setPath(
+
                 $logo
+
             );
 
 
             $drawing->setHeight(
+
                 45
+
             );
 
 
             $drawing->setCoordinates(
+
                 'A1'
+
             );
 
 
             $drawing->setWorksheet(
+
                 $sheet
+
             );
 
 
@@ -492,13 +621,17 @@ WithColumnWidths
 
 
         $sheet->freezePane(
+
             'A5'
+
         );
 
 
 
         $sheet->setAutoFilter(
+
             "A4:D".($lastRow-1)
+
         );
 
 

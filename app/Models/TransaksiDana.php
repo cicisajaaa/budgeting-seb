@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 
-class ExpenseTransaction extends Model
+class TransaksiDana extends Model
 {
 
 
     protected $table = 'transaksi_dana';
-
 
 
 
@@ -36,12 +34,14 @@ class ExpenseTransaction extends Model
 
 
 
+
     protected $casts = [
 
 
-        'jumlah'=>'decimal:2',
+        'jumlah' => 'integer',
 
-        'tanggal'=>'date',
+
+        'tanggal' => 'date',
 
 
     ];
@@ -53,9 +53,10 @@ class ExpenseTransaction extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pengajuan Dana
+    | Relasi dengan Pengajuan Dana
     |--------------------------------------------------------------------------
     */
 
@@ -65,7 +66,7 @@ class ExpenseTransaction extends Model
 
         return $this->belongsTo(
 
-            ExpenseRequest::class,
+            PengajuanDana::class,
 
             'pengajuan_dana_id'
 
@@ -80,9 +81,10 @@ class ExpenseTransaction extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Penyetuju
+    | Relasi dengan Penyetuju
     |--------------------------------------------------------------------------
     */
 
@@ -107,9 +109,10 @@ class ExpenseTransaction extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Rekening Bank
+    | Relasi dengan Rekening Bank
     |--------------------------------------------------------------------------
     */
 
@@ -119,13 +122,14 @@ class ExpenseTransaction extends Model
 
         return $this->belongsTo(
 
-            BankAccount::class,
+            RekeningBank::class,
 
             'rekening_bank_id'
 
         );
 
     }
+
 
 
 

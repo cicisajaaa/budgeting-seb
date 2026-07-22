@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\BankAccount;
+use App\Models\RekeningBank;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -31,49 +31,66 @@ WithColumnWidths
     {
 
 
-        $data = BankAccount::where(
+        $data = RekeningBank::where(
+
             'status',
+
             true
+
         )
+
         ->latest()
+
         ->get()
+
         ->map(function($bank){
 
 
             return [
 
 
+
                 'Bank' =>
 
-                $bank->nama_bank,
+                    $bank->nama_bank,
+
+
 
 
 
                 'Nomor Rekening' =>
 
-                $bank->nomor_rekening,
+                    $bank->nomor_rekening,
+
+
 
 
 
                 'Nama Pemilik' =>
 
-                $bank->nama_pemilik,
+                    $bank->nama_pemilik,
+
+
 
 
 
                 'Saldo Bank' =>
 
-                $bank->saldo,
+                    $bank->saldo,
+
+
 
 
 
                 'Status' =>
 
-                $bank->saldo > 0
 
-                ? 'Tersedia'
+                    $bank->saldo > 0
 
-                : 'Kosong'
+                    ? 'Tersedia'
+
+                    : 'Kosong'
+
 
 
             ];
@@ -97,15 +114,25 @@ WithColumnWidths
         $data->push([
 
 
+
             'Bank'=>'',
+
+
 
             'Nomor Rekening'=>'',
 
+
+
             'Nama Pemilik'=>'TOTAL SALDO BANK',
+
+
 
             'Saldo Bank'=>$data->sum('Saldo Bank'),
 
+
+
             'Status'=>'Total'
+
 
 
         ]);
@@ -247,8 +274,11 @@ WithColumnWidths
             'A1:E2'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->setSize(16);
 
 
@@ -262,7 +292,9 @@ WithColumnWidths
             'A1:E2'
 
         )
+
         ->getAlignment()
+
         ->setHorizontal(
 
             'center'
@@ -289,13 +321,17 @@ WithColumnWidths
             'A4:E4'
 
         )
+
         ->getFill()
+
         ->setFillType(
 
             Fill::FILL_SOLID
 
         )
+
         ->getStartColor()
+
         ->setARGB(
 
             '166534'
@@ -313,9 +349,13 @@ WithColumnWidths
             'A4:E4'
 
         )
+
         ->getFont()
+
         ->setBold(true)
+
         ->getColor()
+
         ->setARGB(
 
             'FFFFFF'
@@ -349,7 +389,9 @@ WithColumnWidths
             "D5:D$lastRow"
 
         )
+
         ->getNumberFormat()
+
         ->setFormatCode(
 
             '"Rp" #,##0'
@@ -398,13 +440,17 @@ WithColumnWidths
                     "E$i"
 
                 )
+
                 ->getFill()
+
                 ->setFillType(
 
                     Fill::FILL_SOLID
 
                 )
+
                 ->getStartColor()
+
                 ->setARGB(
 
                     'DCFCE7'
@@ -413,7 +459,7 @@ WithColumnWidths
 
 
             }
-            else
+            elseif($status=="Kosong")
             {
 
 
@@ -422,13 +468,17 @@ WithColumnWidths
                     "E$i"
 
                 )
+
                 ->getFill()
+
                 ->setFillType(
 
                     Fill::FILL_SOLID
 
                 )
+
                 ->getStartColor()
+
                 ->setARGB(
 
                     'FEE2E2'
@@ -461,13 +511,17 @@ WithColumnWidths
             "A$lastRow:E$lastRow"
 
         )
+
         ->getFill()
+
         ->setFillType(
 
             Fill::FILL_SOLID
 
         )
+
         ->getStartColor()
+
         ->setARGB(
 
             'DCFCE7'
@@ -484,7 +538,9 @@ WithColumnWidths
             "A$lastRow:E$lastRow"
 
         )
+
         ->getFont()
+
         ->setBold(true);
 
 
@@ -507,8 +563,11 @@ WithColumnWidths
             "A4:E$lastRow"
 
         )
+
         ->getBorders()
+
         ->getAllBorders()
+
         ->setBorderStyle(
 
             Border::BORDER_THIN

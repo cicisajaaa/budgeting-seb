@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectDivisionAllocation extends Model
 {
-
+protected $table = 'alokasi_proyek_divisi';
 
     protected $fillable = [
 

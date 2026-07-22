@@ -8,24 +8,57 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
+
     public function up(): void
     {
 
-        Schema::create('expense_transactions', function (Blueprint $table) {
+
+        Schema::create('transaksi_dana', function (Blueprint $table) {
 
 
             $table->id();
 
 
-            $table->foreignId('request_id')
-                ->constrained('expense_requests')
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi Pengajuan Dana
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->foreignId('pengajuan_dana_id')
+                ->constrained('pengajuan_dana')
                 ->cascadeOnDelete();
 
 
 
-            $table->foreignId('approved_by')
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi Penyetuju
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->foreignId('disetujui_oleh')
                 ->nullable()
-                ->constrained('users');
+                ->constrained('users')
+                ->nullOnDelete();
+
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi Rekening Bank
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->unsignedBigInteger('rekening_bank_id')
+                ->nullable();
+
 
 
 
@@ -37,7 +70,9 @@ return new class extends Migration
 
 
 
+
             $table->date('tanggal');
+
 
 
 
@@ -46,14 +81,23 @@ return new class extends Migration
 
         });
 
+
     }
+
+
+
+
+
 
 
     public function down(): void
     {
 
-        Schema::dropIfExists('expense_transactions');
+
+        Schema::dropIfExists('transaksi_dana');
+
 
     }
+
 
 };

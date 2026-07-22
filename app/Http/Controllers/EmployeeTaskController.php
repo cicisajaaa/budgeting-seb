@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Task;
+use App\Models\Tugas;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -12,16 +13,32 @@ class EmployeeTaskController extends Controller
 {
 
 
-    public function show(Task $task)
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL TASK KARYAWAN
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function show(Tugas $task)
     {
 
 
-        $employee = Auth::user()->employee;
+        $karyawan = Auth::user()->karyawan;
 
 
 
-        // keamanan
-        if($task->employee_id != $employee->id){
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | KEAMANAN AKSES
+        |--------------------------------------------------------------------------
+        */
+
+
+        if(!$karyawan)
+        {
 
             abort(403);
 
@@ -30,11 +47,35 @@ class EmployeeTaskController extends Controller
 
 
 
+
+
+        if($task->karyawan_id != $karyawan->id)
+        {
+
+            abort(403);
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOAD DATA TASK
+        |--------------------------------------------------------------------------
+        */
+
+
         $task->load([
 
-            'project',
+            'proyek',
 
-            'activities'
+            'aktivitasTugas'
 
         ]);
 
@@ -52,6 +93,7 @@ class EmployeeTaskController extends Controller
 
 
     }
+
 
 
 }

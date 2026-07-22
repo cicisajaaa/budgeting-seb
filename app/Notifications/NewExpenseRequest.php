@@ -15,15 +15,15 @@ class NewExpenseRequest extends Notification
 
 
 
-    public $expense;
+    public $pengajuan;
 
 
 
 
-    public function __construct($expense)
+    public function __construct($pengajuan)
     {
 
-        $this->expense = $expense;
+        $this->pengajuan = $pengajuan;
 
     }
 
@@ -57,7 +57,8 @@ class NewExpenseRequest extends Notification
         return [
 
 
-            'title' => 
+            'title' =>
+
                 'Pengajuan Dana Baru',
 
 
@@ -66,7 +67,8 @@ class NewExpenseRequest extends Notification
 
             'message' =>
 
-                ($this->expense->user->name ?? 'Karyawan')
+
+                ($this->pengajuan->pengguna->name ?? 'Karyawan')
 
                 .
 
@@ -75,10 +77,15 @@ class NewExpenseRequest extends Notification
                 .
 
                 number_format(
-                    $this->expense->jumlah,
+
+                    $this->pengajuan->jumlah,
+
                     0,
+
                     ',',
+
                     '.'
+
                 ),
 
 
@@ -88,7 +95,8 @@ class NewExpenseRequest extends Notification
 
             'project' =>
 
-                $this->expense->project->nama_project ?? '-',
+
+                $this->pengajuan->proyek->nama_proyek ?? '-',
 
 
 
@@ -97,7 +105,8 @@ class NewExpenseRequest extends Notification
 
             'division' =>
 
-                $this->expense->division->nama_divisi ?? '-',
+
+                $this->pengajuan->divisi->nama_divisi ?? '-',
 
 
 
@@ -106,7 +115,8 @@ class NewExpenseRequest extends Notification
 
             'jumlah' =>
 
-                $this->expense->jumlah,
+
+                $this->pengajuan->jumlah,
 
 
 
@@ -115,7 +125,8 @@ class NewExpenseRequest extends Notification
 
             'expense_id' =>
 
-                $this->expense->id,
+
+                $this->pengajuan->id,
 
 
 
@@ -126,7 +137,9 @@ class NewExpenseRequest extends Notification
             'url' =>
 
                 route(
+
                     'expense.approval'
+
                 ),
 
 

@@ -4,50 +4,63 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-       Schema::create('audit_logs', function (Blueprint $table) {
 
-    $table->id();
-
-
-    $table->foreignId('user_id')
-        ->nullable()
-        ->constrained()
-        ->nullOnDelete();
+        Schema::create('log_audit', function (Blueprint $table) {
 
 
-    $table->string('action');
-
-
-    $table->string('module');
-
-
-    $table->text('description')
-        ->nullable();
+            $table->id();
 
 
 
-    $table->string('ip_address')
-        ->nullable();
+            $table->foreignId('pengguna_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
 
 
-    $table->timestamps();
 
-});
+            $table->string('aksi');
+
+
+
+            $table->string('modul');
+
+
+
+            $table->text('deskripsi')
+                ->nullable();
+
+
+
+
+            $table->string('alamat_ip')
+                ->nullable();
+
+
+
+
+            $table->timestamps();
+
+
+        });
+
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
+
+
     public function down(): void
     {
-        Schema::dropIfExists('audit_logs');
+
+        Schema::dropIfExists('log_audit');
+
     }
+
 };

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Division;
+
+use App\Models\Divisi;
+
 use Illuminate\Http\Request;
 
 
@@ -13,16 +15,42 @@ class DivisionController extends Controller
 {
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | LIST DIVISI
+    |--------------------------------------------------------------------------
+    */
+
+
     public function index()
     {
 
 
-        $divisions = Division::latest()->get();
+        $divisions = Divisi::with(
+
+            'karyawan'
+
+        )
+
+        ->latest()
+
+        ->get();
+
+
+
+
 
 
         return view(
+
             'admin.divisions.index',
-            compact('divisions')
+
+            compact(
+
+                'divisions'
+
+            )
+
         );
 
 
@@ -30,6 +58,17 @@ class DivisionController extends Controller
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM TAMBAH DIVISI
+    |--------------------------------------------------------------------------
+    */
 
 
     public function create()
@@ -37,7 +76,9 @@ class DivisionController extends Controller
 
 
         return view(
+
             'admin.divisions.create'
+
         );
 
 
@@ -45,6 +86,17 @@ class DivisionController extends Controller
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN DIVISI
+    |--------------------------------------------------------------------------
+    */
 
 
     public function store(Request $request)
@@ -53,27 +105,57 @@ class DivisionController extends Controller
 
         $request->validate([
 
-            'nama_divisi'=>'required'
+
+
+            'nama_divisi'=>
+
+                'required|string|max:255'
+
+
 
         ]);
 
 
 
-        Division::create([
 
-            'nama_divisi'=>$request->nama_divisi
+
+
+
+
+        Divisi::create([
+
+
+
+            'nama_divisi'=>
+
+                $request->nama_divisi
+
+
 
         ]);
+
+
+
+
+
+
 
 
 
         return redirect()
 
-            ->route('admin.divisions.index')
+            ->route(
+
+                'admin.divisions.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Divisi berhasil ditambahkan'
+
             );
 
 
@@ -84,13 +166,42 @@ class DivisionController extends Controller
 
 
 
-    public function edit(Division $division)
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL DIVISI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function show(Divisi $division)
     {
 
 
+        $division->load([
+
+            'karyawan',
+
+            'alokasiProyekDivisi'
+
+        ]);
+
+
+
+
+
         return view(
-            'admin.divisions.edit',
-            compact('division')
+
+            'admin.divisions.show',
+
+            compact(
+
+                'division'
+
+            )
+
         );
 
 
@@ -101,36 +212,107 @@ class DivisionController extends Controller
 
 
 
-    public function update(
-        Request $request,
-        Division $division
-    )
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT DIVISI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function edit(Divisi $division)
+    {
+
+
+        return view(
+
+            'admin.divisions.edit',
+
+            compact(
+
+                'division'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE DIVISI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function update(Request $request, Divisi $division)
     {
 
 
         $request->validate([
 
-            'nama_divisi'=>'required'
+
+
+            'nama_divisi'=>
+
+                'required|string|max:255'
+
+
 
         ]);
+
+
+
+
+
 
 
 
         $division->update([
 
-            'nama_divisi'=>$request->nama_divisi
+
+
+            'nama_divisi'=>
+
+                $request->nama_divisi
+
+
 
         ]);
 
 
 
+
+
+
+
+
+
         return redirect()
 
-            ->route('admin.divisions.index')
+            ->route(
+
+                'admin.divisions.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Divisi berhasil diperbarui'
+
             );
 
 
@@ -141,7 +323,17 @@ class DivisionController extends Controller
 
 
 
-    public function destroy(Division $division)
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS DIVISI
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function destroy(Divisi $division)
     {
 
 
@@ -149,15 +341,26 @@ class DivisionController extends Controller
 
 
 
-        return back()
+
+        return redirect()
+
+            ->route(
+
+                'admin.divisions.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Divisi berhasil dihapus'
+
             );
 
 
     }
+
 
 
 }

@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
+
     public function up(): void
     {
 
-        Schema::create('bank_accounts', function (Blueprint $table) {
+        Schema::create('rekening_bank', function (Blueprint $table) {
 
 
             $table->id();
@@ -22,6 +23,7 @@ return new class extends Migration
 
             $table->string('nomor_rekening')
                 ->unique();
+
 
 
             $table->string('nama_pemilik');
@@ -51,10 +53,11 @@ return new class extends Migration
 
 
 
+
     public function down(): void
     {
 
-        Schema::dropIfExists('bank_accounts');
+        Schema::dropIfExists('rekening_bank');
 
     }
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Project;
-use App\Models\ProjectDeposit;
-use App\Models\DepositDistribution;
-use App\Models\DivisionBalance;
-use App\Models\BankAccount;
+use App\Models\Proyek;
+use App\Models\SetoranProyek;
+use App\Models\DistribusiSetoran;
+use App\Models\SaldoDivisi;
+use App\Models\RekeningBank;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,28 +22,34 @@ class FinanceDepositController extends Controller
     {
 
 
-        $projects = Project::all();
+        $projects = Proyek::all();
 
 
 
-        $banks = BankAccount::where(
+        $banks = RekeningBank::where(
+
             'status',
+
             true
+
         )
+
         ->get();
 
 
 
 
 
-        $deposits = ProjectDeposit::with([
+        $deposits = SetoranProyek::with([
 
-            'project',
+            'proyek',
 
-            'bank'
+            'rekeningBank'
 
         ])
+
         ->latest()
+
         ->get();
 
 
@@ -82,14 +88,13 @@ class FinanceDepositController extends Controller
     {
 
 
-
         $request->validate([
 
 
-            'project_id' => 'required',
+            'proyek_id' => 'required|exists:proyek,id',
 
 
-            'bank_account_id' => 'required',
+            'rekening_bank_id' => 'required|exists:rekening_bank,id',
 
 
             'jumlah_setoran' => 'required|numeric',
@@ -111,18 +116,18 @@ class FinanceDepositController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Simpan pembayaran masuk
+            | SIMPAN SETORAN PROYEK
             |--------------------------------------------------------------------------
             */
 
 
-            $deposit = ProjectDeposit::create([
+            $deposit = SetoranProyek::create([
 
 
-                'project_id' => $request->project_id,
+                'proyek_id' => $request->proyek_id,
 
 
-                'bank_account_id' => $request->bank_account_id,
+                'rekening_bank_id' => $request->rekening_bank_id,
 
 
                 'jumlah_setoran' => $request->jumlah_setoran,
@@ -141,14 +146,14 @@ class FinanceDepositController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Update saldo rekening bank
+            | UPDATE SALDO BANK
             |--------------------------------------------------------------------------
             */
 
 
-            $bank = BankAccount::findOrFail(
+            $bank = RekeningBank::findOrFail(
 
-                $request->bank_account_id
+                $request->rekening_bank_id
 
             );
 
@@ -172,14 +177,16 @@ class FinanceDepositController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Ambil aturan pembagian dana project
+            | AMBIL ALOKASI DIVISI PROYEK
             |--------------------------------------------------------------------------
             */
 
 
             $allocations = $deposit
-                ->project
-                ->allocations;
+
+                ->proyek
+
+                ->alokasiDivisi;
 
 
 
@@ -191,7 +198,7 @@ class FinanceDepositController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Distribusi dana + update saldo divisi
+            | DISTRIBUSI DANA
             |--------------------------------------------------------------------------
             */
 
@@ -203,31 +210,36 @@ class FinanceDepositController extends Controller
 
                 $nominal =
 
-                    $deposit->jumlah_setoran *
 
-                    ($allocation->persentase / 100);
+                    $deposit->jumlah_setoran
 
+                    *
 
+                    (
 
+                        $allocation->persentase
 
+                        /
 
+                        100
 
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | Simpan histori distribusi
-                |--------------------------------------------------------------------------
-                */
+                    );
 
 
-                DepositDistribution::create([
 
 
-                    'deposit_id' => $deposit->id,
 
 
-                    'division_id' => $allocation->division_id,
+
+
+
+                DistribusiSetoran::create([
+
+
+                    'setoran_proyek_id' => $deposit->id,
+
+
+                    'divisi_id' => $allocation->divisi_id,
 
 
                     'nominal_diterima' => $nominal,
@@ -245,22 +257,22 @@ class FinanceDepositController extends Controller
 
                 /*
                 |--------------------------------------------------------------------------
-                | Update saldo divisi
+                | UPDATE SALDO DIVISI
                 |--------------------------------------------------------------------------
                 */
 
 
-                $balance = DivisionBalance::firstOrCreate(
+                $balance = SaldoDivisi::firstOrCreate(
 
 
 
                     [
 
 
-                        'project_id' => $deposit->project_id,
+                        'proyek_id' => $deposit->proyek_id,
 
 
-                        'division_id' => $allocation->division_id,
+                        'divisi_id' => $allocation->divisi_id,
 
 
                     ],

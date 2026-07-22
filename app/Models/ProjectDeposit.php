@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectDeposit extends Model
 {
-
+protected $table = 'setoran_proyek';
 
     protected $fillable = [
 

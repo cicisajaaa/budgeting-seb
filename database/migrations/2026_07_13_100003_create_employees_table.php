@@ -11,12 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_karyawan');
-            $table->foreignId('division_id')->constrained('divisions')->onDelete('cascade');
-            $table->timestamps();
-        });
+Schema::create('karyawan', function(Blueprint $table){
+
+    $table->id();
+
+
+    $table->foreignId('pengguna_id')
+        ->constrained('users')
+        ->cascadeOnDelete();
+
+
+    $table->string('nama_karyawan');
+
+
+    $table->foreignId('divisi_id')
+        ->constrained('divisi')
+        ->cascadeOnDelete();
+
+
+    $table->timestamps();
+
+});
     }
 
     public function down(): void

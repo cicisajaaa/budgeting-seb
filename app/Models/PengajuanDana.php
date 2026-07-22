@@ -7,33 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 
 
 
-class ExpenseRequest extends Model
+class PengajuanDana extends Model
 {
-protected $table = 'pengajuan_dana';
 
-protected $fillable = [
 
-    'pengguna_id',
+    protected $table = 'pengajuan_dana';
 
-    'proyek_id',
 
-    'divisi_id',
 
-    'judul',
+    protected $fillable = [
 
-    'keterangan',
 
-    'jumlah',
+        'pengguna_id',
 
-    'status',
+        'proyek_id',
 
-    'disetujui_oleh',
+        'divisi_id',
 
-    'disetujui_pada',
+        'judul',
 
-    'catatan_persetujuan'
+        'keterangan',
 
-];
+        'jumlah',
+
+        'status',
+
+        'disetujui_oleh',
+
+        'disetujui_pada',
+
+        'catatan_persetujuan'
+
+
+    ];
 
 
 
@@ -44,10 +50,10 @@ protected $fillable = [
     protected $casts = [
 
 
-        'jumlah'=>'integer',
+        'jumlah' => 'integer',
 
 
-        'approved_at'=>'datetime'
+        'disetujui_pada' => 'datetime'
 
 
     ];
@@ -62,96 +68,12 @@ protected $fillable = [
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi User Pemohon
+    | Relasi dengan Pengguna Pemohon
     |--------------------------------------------------------------------------
     */
 
 
-    public function user()
-    {
-
-
-        return $this->belongsTo(
-
-            User::class
-
-        );
-
-
-    }
-
-
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Project
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function project()
-    {
-
-
-        return $this->belongsTo(
-
-            Project::class
-
-        );
-
-
-    }
-
-
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Division
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function division()
-    {
-
-
-        return $this->belongsTo(
-
-            Division::class
-
-        );
-
-
-    }
-
-
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Approver
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function approver()
+    public function pengguna()
     {
 
 
@@ -159,7 +81,97 @@ protected $fillable = [
 
             User::class,
 
-            'approved_by'
+            'pengguna_id'
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Proyek
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function proyek()
+    {
+
+
+        return $this->belongsTo(
+
+            Proyek::class,
+
+            'proyek_id'
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Divisi
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function divisi()
+    {
+
+
+        return $this->belongsTo(
+
+            Divisi::class,
+
+            'divisi_id'
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Penyetuju
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function penyetuju()
+    {
+
+
+        return $this->belongsTo(
+
+            User::class,
+
+            'disetujui_oleh'
 
         );
 

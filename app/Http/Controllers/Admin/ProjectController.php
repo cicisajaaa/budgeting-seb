@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Project;
+
+use App\Models\Proyek;
+
 use Illuminate\Http\Request;
 
 
@@ -13,34 +15,81 @@ class ProjectController extends Controller
 {
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | LIST PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
     public function index()
     {
 
-        $projects = Project::latest()->get();
+
+        $projects = Proyek::latest()
+
+            ->get();
+
+
+
 
 
         return view(
+
             'admin.projects.index',
-            compact('projects')
+
+            compact(
+
+                'projects'
+
+            )
+
         );
+
 
     }
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM TAMBAH PROJECT
+    |--------------------------------------------------------------------------
+    */
 
 
     public function create()
     {
 
+
         return view(
+
             'admin.projects.create'
+
         );
+
 
     }
 
 
 
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN PROJECT
+    |--------------------------------------------------------------------------
+    */
 
 
     public function store(Request $request)
@@ -49,54 +98,96 @@ class ProjectController extends Controller
 
         $request->validate([
 
-            'nama_project'=>'required',
 
-            'project_owner'=>'required',
 
-            'total_budget'=>'required|numeric',
+            'nama_proyek'=>'required|string|max:255',
 
-            'start_date'=>'required|date',
 
-            'end_date'=>'required|date',
+
+            'tanggal_mulai'=>'required|date',
+
+
+
+            'tanggal_selesai'=>'nullable|date',
+
+
+
+            'pemilik_proyek'=>'nullable|string|max:255',
+
+
+
+            'total_anggaran'=>'required|numeric|min:0',
+
+
+
+        ]);
+
+
+
+
+
+
+
+
+
+        Proyek::create([
+
+
+
+            'nama_proyek'=>
+
+                $request->nama_proyek,
+
+
+
+            'tanggal_mulai'=>
+
+                $request->tanggal_mulai,
+
+
+
+            'tanggal_selesai'=>
+
+                $request->tanggal_selesai,
+
+
+
+            'pemilik_proyek'=>
+
+                $request->pemilik_proyek,
+
+
+
+            'total_anggaran'=>
+
+                $request->total_anggaran,
+
+
 
         ]);
 
 
 
 
-        Project::create([
 
-
-            'nama_project'=>$request->nama_project,
-
-
-            'project_owner'=>$request->project_owner,
-
-
-            'total_budget'=>$request->total_budget,
-
-
-            'start_date'=>$request->start_date,
-
-
-            'end_date'=>$request->end_date,
-
-
-            'progress_keseluruhan'=>0,
-
-
-        ]);
 
 
 
 
         return redirect()
 
-            ->route('admin.projects.index')
+            ->route(
+
+                'admin.projects.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Project berhasil ditambahkan'
+
             );
 
 
@@ -107,13 +198,42 @@ class ProjectController extends Controller
 
 
 
-    public function edit(Project $project)
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function show(Proyek $project)
     {
 
 
+        $project->load([
+
+            'tugas',
+
+            'alokasiDivisi'
+
+        ]);
+
+
+
+
+
         return view(
-            'admin.projects.edit',
-            compact('project')
+
+            'admin.projects.show',
+
+            compact(
+
+                'project'
+
+            )
+
         );
 
 
@@ -124,26 +244,84 @@ class ProjectController extends Controller
 
 
 
-    public function update(
-        Request $request,
-        Project $project
-    )
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM EDIT PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function edit(Proyek $project)
+    {
+
+
+        return view(
+
+            'admin.projects.edit',
+
+            compact(
+
+                'project'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function update(Request $request, Proyek $project)
     {
 
 
         $request->validate([
 
-            'nama_project'=>'required',
 
-            'project_owner'=>'required',
 
-            'total_budget'=>'required|numeric',
+            'nama_proyek'=>'required|string|max:255',
 
-            'start_date'=>'required|date',
 
-            'end_date'=>'required|date',
+
+            'tanggal_mulai'=>'required|date',
+
+
+
+            'tanggal_selesai'=>'nullable|date',
+
+
+
+            'pemilik_proyek'=>'nullable|string|max:255',
+
+
+
+            'total_anggaran'=>'required|numeric|min:0',
+
+
 
         ]);
+
+
+
+
+
 
 
 
@@ -151,32 +329,61 @@ class ProjectController extends Controller
         $project->update([
 
 
-            'nama_project'=>$request->nama_project,
+
+            'nama_proyek'=>
+
+                $request->nama_proyek,
 
 
-            'project_owner'=>$request->project_owner,
+
+            'tanggal_mulai'=>
+
+                $request->tanggal_mulai,
 
 
-            'total_budget'=>$request->total_budget,
+
+            'tanggal_selesai'=>
+
+                $request->tanggal_selesai,
 
 
-            'start_date'=>$request->start_date,
+
+            'pemilik_proyek'=>
+
+                $request->pemilik_proyek,
 
 
-            'end_date'=>$request->end_date,
+
+            'total_anggaran'=>
+
+                $request->total_anggaran,
+
 
 
         ]);
 
 
 
+
+
+
+
+
+
         return redirect()
 
-            ->route('admin.projects.index')
+            ->route(
+
+                'admin.projects.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Project berhasil diperbarui'
+
             );
 
 
@@ -187,7 +394,17 @@ class ProjectController extends Controller
 
 
 
-    public function destroy(Project $project)
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function destroy(Proyek $project)
     {
 
 
@@ -195,15 +412,26 @@ class ProjectController extends Controller
 
 
 
-        return back()
+
+        return redirect()
+
+            ->route(
+
+                'admin.projects.index'
+
+            )
 
             ->with(
+
                 'success',
+
                 'Project berhasil dihapus'
+
             );
 
 
     }
+
 
 
 }

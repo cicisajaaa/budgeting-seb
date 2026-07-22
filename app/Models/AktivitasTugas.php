@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TaskActivity extends Model
+
+class AktivitasTugas extends Model
 {
 
 
@@ -26,7 +27,7 @@ class TaskActivity extends Model
 
         'anggaran_aktivitas',
 
-        'catatan'
+        'catatan',
 
     ];
 
@@ -34,12 +35,19 @@ class TaskActivity extends Model
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Tugas
+    |--------------------------------------------------------------------------
+    */
+
+
     public function tugas()
     {
 
         return $this->belongsTo(
 
-            Task::class,
+            Tugas::class,
 
             'tugas_id'
 
@@ -51,18 +59,28 @@ class TaskActivity extends Model
 
 
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Karyawan
+    |--------------------------------------------------------------------------
+    */
+
+
     public function karyawan()
     {
 
         return $this->belongsTo(
 
-            Employee::class,
+            Karyawan::class,
 
             'karyawan_id'
 
         );
 
     }
+
 
 
 }

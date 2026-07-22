@@ -39,7 +39,6 @@ use App\Http\Controllers\EmployeeTaskController;
 |--------------------------------------------------------------------------
 */
 
-
 Route::get('/', function(){
 
     return view('welcome');
@@ -52,10 +51,9 @@ Route::get('/', function(){
 
 /*
 |--------------------------------------------------------------------------
-| AUTH USER
+| AUTH
 |--------------------------------------------------------------------------
 */
-
 
 Route::middleware(['auth'])->group(function(){
 
@@ -78,6 +76,9 @@ Route::get('/dashboard',[
 
 
 
+
+
+
 /*
 |--------------------------------------------------------------------------
 | NOTIFICATION
@@ -92,7 +93,6 @@ Route::get('/notification',[
 ->name('notification.index');
 
 
-
 Route::get('/notification/read/{id}',[
     NotificationController::class,
     'read'
@@ -105,20 +105,24 @@ Route::get('/notification/read/{id}',[
 
 
 
+
+
 /*
 |--------------------------------------------------------------------------
-| KARYAWAN DAILY TRACKER
+| EMPLOYEE
 |--------------------------------------------------------------------------
 */
+
+
+Route::middleware('role:karyawan')->group(function(){
+
 
 
 Route::get('/daily-tracker',[
     DailyTrackerController::class,
     'index'
 ])
-->middleware('role:karyawan')
 ->name('daily-tracker.index');
-
 
 
 
@@ -126,9 +130,7 @@ Route::get('/daily-tracker/{task}',[
     DailyTrackerController::class,
     'show'
 ])
-->middleware('role:karyawan')
 ->name('daily-tracker.show');
-
 
 
 
@@ -136,58 +138,35 @@ Route::post('/daily-tracker',[
     DailyTrackerController::class,
     'store'
 ])
-->middleware('role:karyawan')
 ->name('daily-tracker.store');
 
 
 
 
 
-
-
-
-/*
-|--------------------------------------------------------------------------
-| PROJECT KARYAWAN
-|--------------------------------------------------------------------------
-*/
-
-
 Route::get('/my-project',[
     EmployeeProjectController::class,
     'index'
 ])
-->middleware('role:karyawan')
 ->name('employee.project.index');
 
 
 
 
 
-/*
-|--------------------------------------------------------------------------
-| DETAIL TASK KARYAWAN
-|--------------------------------------------------------------------------
-*/
-
-
 Route::get('/my-task/{task}',[
     EmployeeTaskController::class,
     'show'
 ])
-->middleware('role:karyawan')
 ->name('employee.task.show');
 
 
 
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
-| EXPENSE KARYAWAN
+| EXPENSE REQUEST EMPLOYEE
 |--------------------------------------------------------------------------
 */
 
@@ -196,7 +175,6 @@ Route::get('/expense/create',[
     ExpenseRequestController::class,
     'create'
 ])
-->middleware('role:karyawan')
 ->name('expense.create');
 
 
@@ -205,7 +183,6 @@ Route::post('/expense',[
     ExpenseRequestController::class,
     'store'
 ])
-->middleware('role:karyawan')
 ->name('expense.store');
 
 
@@ -214,8 +191,11 @@ Route::get('/expense/my-history',[
     ExpenseRequestController::class,
     'history'
 ])
-->middleware('role:karyawan')
 ->name('expense.myhistory');
+
+
+
+});
 
 
 
@@ -230,13 +210,13 @@ Route::get('/expense/my-history',[
 | FINANCE
 |--------------------------------------------------------------------------
 */
+Route::middleware('role:keuangan')->group(function(){
 
 
 Route::get('/finance/deposit',[
     FinanceDepositController::class,
     'index'
 ])
-->middleware('role:bendahara')
 ->name('finance.deposit');
 
 
@@ -245,8 +225,10 @@ Route::post('/finance/deposit',[
     FinanceDepositController::class,
     'store'
 ])
-->middleware('role:bendahara')
 ->name('finance.deposit.store');
+
+
+
 
 
 
@@ -254,8 +236,9 @@ Route::get('/finance/distribution',[
     DepositDistributionController::class,
     'index'
 ])
-->middleware('role:bendahara,owner')
 ->name('finance.distribution');
+
+
 
 
 
@@ -263,8 +246,12 @@ Route::get('/finance/balance',[
     DivisionBalanceController::class,
     'index'
 ])
-->middleware('role:bendahara,owner')
+->middleware('role:keuangan')
 ->name('finance.balance');
+
+
+
+
 
 
 
@@ -276,21 +263,45 @@ Route::resource(
 
 
 
-Route::get('/finance/report/export',[
-    FinanceReportController::class,
-    'exportExcel'
-])
-->middleware('role:bendahara,owner')
-->name('finance.report.export');
 
 
 
-Route::get('/finance/report',[
-    FinanceReportController::class,
+
+/*
+|--------------------------------------------------------------------------
+| APPROVAL EXPENSE
+|--------------------------------------------------------------------------
+*/
+
+
+Route::get('/expense/approval',[
+    ExpenseApprovalController::class,
     'index'
 ])
-->middleware('role:bendahara,owner')
-->name('finance.report');
+->name('expense.approval');
+
+
+
+Route::post('/expense/{id}/approve',[
+    ExpenseApprovalController::class,
+    'approve'
+])
+->name('expense.approve');
+
+
+
+Route::post('/expense/{id}/reject',[
+    ExpenseApprovalController::class,
+    'reject'
+])
+->name('expense.reject');
+
+
+
+
+
+});
+
 
 
 
@@ -302,35 +313,34 @@ Route::get('/finance/report',[
 
 /*
 |--------------------------------------------------------------------------
-| APPROVAL BENDAHARA
+| FINANCE + OWNER REPORT
 |--------------------------------------------------------------------------
 */
 
 
-Route::get('/expense/approval',[
-    ExpenseApprovalController::class,
+Route::middleware('role:bendahara,keuangan,owner')->group(function(){
+
+
+
+
+
+Route::get('/finance/report',[
+    FinanceReportController::class,
     'index'
 ])
-->middleware('role:bendahara')
-->name('expense.approval');
+->name('finance.report');
 
 
 
-Route::post('/expense/{id}/approve',[
-    ExpenseApprovalController::class,
-    'approve'
+
+
+Route::get('/finance/report/export',[
+    FinanceReportController::class,
+    'exportExcel'
 ])
-->middleware('role:bendahara')
-->name('expense.approve');
+->name('finance.report.export');
 
 
-
-Route::post('/expense/{id}/reject',[
-    ExpenseApprovalController::class,
-    'reject'
-])
-->middleware('role:bendahara')
-->name('expense.reject');
 
 
 
@@ -338,9 +348,12 @@ Route::get('/expense/approval/history',[
     ExpenseApprovalController::class,
     'history'
 ])
-->middleware('role:bendahara,owner')
 ->name('expense.approval.history');
 
+
+
+
+});
 
 
 
@@ -381,6 +394,7 @@ Route::delete('/profile',[
 
 
 
+
 });
 
 
@@ -408,11 +422,6 @@ Route::middleware([
 
 
 
-Route::resource(
-    'tasks',
-    TaskController::class
-);
-
 
 
 Route::get('/dashboard',[
@@ -423,10 +432,15 @@ Route::get('/dashboard',[
 
 
 
+
+
+
 Route::resource(
     'users',
     UserController::class
 );
+
+
 
 
 
@@ -437,10 +451,24 @@ Route::resource(
 
 
 
+
+
 Route::resource(
     'divisions',
     DivisionController::class
 );
+
+
+
+
+
+Route::resource(
+    'tasks',
+    TaskController::class
+);
+
+
+
 
 
 
@@ -456,6 +484,9 @@ Route::get(
 
 
 
+
+
+
 Route::post(
     '/projects/{project}/allocation',
     [
@@ -467,6 +498,10 @@ Route::post(
 
 
 
+
+
+
+
 Route::delete(
     '/allocation/{allocation}',
     [
@@ -475,6 +510,7 @@ Route::delete(
     ]
 )
 ->name('allocation.destroy');
+
 
 
 

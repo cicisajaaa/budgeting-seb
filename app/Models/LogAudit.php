@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 
-class AuditLog extends Model
+
+class LogAudit extends Model
 {
 
 
@@ -23,7 +25,7 @@ class AuditLog extends Model
 
         'deskripsi',
 
-        'alamat_ip',
+        'alamat_ip'
 
     ];
 
@@ -31,9 +33,11 @@ class AuditLog extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pengguna
+    | Relasi dengan Pengguna
     |--------------------------------------------------------------------------
     */
 
@@ -50,6 +54,7 @@ class AuditLog extends Model
         );
 
     }
+
 
 
 }

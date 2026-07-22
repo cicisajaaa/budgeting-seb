@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Project;
-use App\Models\Division;
-use App\Models\ExpenseRequest;
+use App\Models\Proyek;
+use App\Models\Divisi;
+use App\Models\PengajuanDana;
 use App\Models\User;
+
 use App\Notifications\NewExpenseRequest;
 
 
@@ -30,10 +31,10 @@ class ExpenseRequestController extends Controller
     {
 
 
-        $projects = Project::all();
+        $projects = Proyek::all();
 
 
-        $divisions = Division::all();
+        $divisions = Divisi::all();
 
 
 
@@ -77,16 +78,21 @@ class ExpenseRequestController extends Controller
         $request->validate([
 
 
-            'project_id'=>'required|exists:projects,id',
+
+            'proyek_id'=>'required|exists:proyek,id',
 
 
-            'division_id'=>'required|exists:divisions,id',
+
+            'divisi_id'=>'required|exists:divisi,id',
+
 
 
             'judul'=>'required|string|max:255',
 
 
+
             'jumlah'=>'required|numeric|min:1',
+
 
 
             'keterangan'=>'nullable|string',
@@ -102,27 +108,26 @@ class ExpenseRequestController extends Controller
 
 
 
-
         /*
         |--------------------------------------------------------------------------
-        | SIMPAN REQUEST
+        | SIMPAN PENGAJUAN
         |--------------------------------------------------------------------------
         */
 
 
-        $expense = ExpenseRequest::create([
+        $expense = PengajuanDana::create([
 
 
 
-            'project_id'=>$request->project_id,
+            'proyek_id'=>$request->proyek_id,
 
 
 
-            'division_id'=>$request->division_id,
+            'divisi_id'=>$request->divisi_id,
 
 
 
-            'user_id'=>Auth::id(),
+            'pengguna_id'=>Auth::id(),
 
 
 
@@ -154,7 +159,7 @@ class ExpenseRequestController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | KIRIM NOTIFIKASI BENDAHARA
+        | NOTIFIKASI BENDAHARA
         |--------------------------------------------------------------------------
         */
 
@@ -166,6 +171,7 @@ class ExpenseRequestController extends Controller
             'bendahara'
 
         )
+
         ->get();
 
 
@@ -228,23 +234,23 @@ class ExpenseRequestController extends Controller
     {
 
 
-        $requests = ExpenseRequest::with([
+        $requests = PengajuanDana::with([
 
 
-            'project',
+            'proyek',
 
 
-            'division',
+            'divisi',
 
 
-            'approver'
+            'penyetuju'
 
 
         ])
 
         ->where(
 
-            'user_id',
+            'pengguna_id',
 
             Auth::id()
 

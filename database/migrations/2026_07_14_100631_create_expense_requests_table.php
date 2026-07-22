@@ -8,38 +8,47 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
+
     public function up(): void
     {
 
-        Schema::create('expense_requests', function (Blueprint $table) {
+
+        Schema::create('pengajuan_dana', function (Blueprint $table) {
 
 
             $table->id();
 
 
-            $table->foreignId('project_id')
-                ->constrained()
+
+            $table->foreignId('proyek_id')
+                ->constrained('proyek')
                 ->cascadeOnDelete();
 
 
 
-            $table->foreignId('division_id')
-                ->constrained()
+
+            $table->foreignId('divisi_id')
+                ->constrained('divisi')
                 ->cascadeOnDelete();
 
 
 
-            $table->foreignId('user_id')
-                ->constrained()
+
+            $table->foreignId('pengguna_id')
+                ->constrained('users')
                 ->cascadeOnDelete();
+
 
 
 
             $table->string('judul');
 
 
+
+
             $table->text('keterangan')
                 ->nullable();
+
 
 
 
@@ -48,6 +57,7 @@ return new class extends Migration
                 15,
                 2
             );
+
 
 
 
@@ -63,18 +73,56 @@ return new class extends Migration
 
 
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | Informasi Persetujuan
+            |--------------------------------------------------------------------------
+            */
+
+
+            $table->foreignId('disetujui_oleh')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+
+
+
+            $table->timestamp('disetujui_pada')
+                ->nullable();
+
+
+
+
+            $table->text('catatan_persetujuan')
+                ->nullable();
+
+
+
+
             $table->timestamps();
+
 
         });
 
+
     }
+
+
+
+
+
 
 
     public function down(): void
     {
 
-        Schema::dropIfExists('expense_requests');
+
+        Schema::dropIfExists('pengajuan_dana');
+
 
     }
+
 
 };

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Task extends Model
+class Tugas extends Model
 {
 
 
@@ -45,7 +45,7 @@ class Task extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Proyek (Bahasa Indonesia)
+    | Relasi Proyek
     |--------------------------------------------------------------------------
     */
 
@@ -55,31 +55,7 @@ class Task extends Model
 
         return $this->belongsTo(
 
-            Project::class,
-
-            'proyek_id'
-
-        );
-
-    }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Proyek Lama (Kompatibilitas Blade)
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function project()
-    {
-
-        return $this->belongsTo(
-
-            Project::class,
+            Proyek::class,
 
             'proyek_id'
 
@@ -105,31 +81,7 @@ class Task extends Model
 
         return $this->belongsTo(
 
-            Division::class,
-
-            'divisi_id'
-
-        );
-
-    }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Divisi Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function division()
-    {
-
-        return $this->belongsTo(
-
-            Division::class,
+            Divisi::class,
 
             'divisi_id'
 
@@ -155,38 +107,13 @@ class Task extends Model
 
         return $this->belongsTo(
 
-            Employee::class,
+            Karyawan::class,
 
             'karyawan_id'
 
         );
 
     }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Karyawan Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function employee()
-    {
-
-        return $this->belongsTo(
-
-            Employee::class,
-
-            'karyawan_id'
-
-        );
-
-    }
-
 
 
 
@@ -206,41 +133,13 @@ class Task extends Model
 
         return $this->hasMany(
 
-            TaskActivity::class,
+            AktivitasTugas::class,
 
             'tugas_id'
 
         );
 
     }
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Aktivitas Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function activities()
-    {
-
-        return $this->hasMany(
-
-            TaskActivity::class,
-
-            'tugas_id'
-
-        );
-
-    }
-
-
 
 
 
@@ -269,7 +168,7 @@ class Task extends Model
         elseif($this->progres_persen > 0)
         {
 
-            $this->status = 'sedang_dikerjakan';
+            $this->status = 'berjalan';
 
         }
 
@@ -293,8 +192,6 @@ class Task extends Model
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Status Deadline
@@ -311,7 +208,7 @@ class Task extends Model
 
             return [
 
-                'label'=>'Tidak Ada Deadline',
+                'label'=>'Tidak Ada Tenggat',
 
                 'color'=>'secondary'
 
@@ -321,11 +218,13 @@ class Task extends Model
 
 
 
-        $today = now();
 
 
 
-        $deadline = \Carbon\Carbon::parse(
+        $hariIni = now();
+
+
+        $tenggat = \Carbon\Carbon::parse(
 
             $this->deadline
 
@@ -336,7 +235,8 @@ class Task extends Model
 
 
 
-        if($today->gt($deadline))
+
+        if($hariIni->gt($tenggat))
         {
 
             return [
@@ -354,18 +254,20 @@ class Task extends Model
 
 
 
-        if($today->diffInDays($deadline) <= 3)
+
+        if($hariIni->diffInDays($tenggat) <= 3)
         {
 
             return [
 
-                'label'=>'Mendekati Deadline',
+                'label'=>'Mendekati Tenggat',
 
                 'color'=>'warning'
 
             ];
 
         }
+
 
 
 

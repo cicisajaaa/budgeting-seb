@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseTransaction;
-use App\Models\BankAccount;
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
+use App\Models\RekeningBank;
 
 use App\Exports\FinanceReportExport;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -48,11 +47,11 @@ class FinanceReportController extends Controller
         */
 
 
-        $depositQuery = ProjectDeposit::with([
+        $depositQuery = SetoranProyek::with([
 
-            'project',
+            'proyek',
 
-            'bank'
+            'rekeningBank'
 
         ]);
 
@@ -63,16 +62,21 @@ class FinanceReportController extends Controller
         if($startDate && $endDate)
         {
 
+
             $depositQuery->whereBetween(
 
-                'tanggal',
+                'tanggal_setoran',
 
                 [
+
                     $startDate,
+
                     $endDate
+
                 ]
 
             );
+
 
         }
 
@@ -103,19 +107,23 @@ class FinanceReportController extends Controller
         */
 
 
-        $expenseQuery = ExpenseTransaction::with([
+        $expenseQuery = TransaksiDana::with([
 
-            'request.project',
 
-            'request.division',
+            'pengajuanDana.proyek',
 
-            'request.user',
 
-            'request.approver',
+            'pengajuanDana.divisi',
 
-            'approver',
 
-            'bank'
+            'pengajuanDana.pengguna',
+
+
+            'penyetuju',
+
+
+            'rekeningBank'
+
 
         ]);
 
@@ -126,16 +134,21 @@ class FinanceReportController extends Controller
         if($startDate && $endDate)
         {
 
+
             $expenseQuery->whereBetween(
 
                 'tanggal',
 
                 [
+
                     $startDate,
+
                     $endDate
+
                 ]
 
             );
+
 
         }
 
@@ -191,7 +204,11 @@ class FinanceReportController extends Controller
 
         $balance =
 
-            $totalIncome - $totalExpense;
+            $totalIncome
+
+            -
+
+            $totalExpense;
 
 
 
@@ -208,10 +225,15 @@ class FinanceReportController extends Controller
         */
 
 
-        $totalDepositTransaction = $deposits->count();
+        $totalDepositTransaction =
+
+            $deposits->count();
 
 
-        $totalExpenseTransaction = $expenses->count();
+
+        $totalExpenseTransaction =
+
+            $expenses->count();
 
 
 
@@ -228,13 +250,14 @@ class FinanceReportController extends Controller
         */
 
 
-        $banks = BankAccount::where(
+        $banks = RekeningBank::where(
 
             'status',
 
             true
 
         )
+
         ->get();
 
 

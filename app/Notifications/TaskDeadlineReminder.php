@@ -12,14 +12,14 @@ class TaskDeadlineReminder extends Notification
     use Queueable;
 
 
-    public $task;
+    public $tugas;
 
 
 
-    public function __construct($task)
+    public function __construct($tugas)
     {
 
-        $this->task = $task;
+        $this->tugas = $tugas;
 
     }
 
@@ -30,7 +30,9 @@ class TaskDeadlineReminder extends Notification
     {
 
         return [
+
             'database'
+
         ];
 
     }
@@ -47,37 +49,53 @@ class TaskDeadlineReminder extends Notification
 
 
             'title' =>
-                'Deadline Task Mendekati',
+
+                'Deadline Tugas Mendekati',
 
 
 
             'message' =>
 
-                'Task '.
-                $this->task->nama_task.
+
+                'Tugas '.
+
+                $this->tugas->nama_tugas.
+
                 ' akan deadline pada '.
+
                 date(
+
                     'd M Y',
-                    strtotime($this->task->deadline)
+
+                    strtotime(
+                        $this->tugas->deadline
+                    )
+
                 ),
 
 
 
 
-            'task_id'=>
-                $this->task->id,
+            'task_id' =>
+
+                $this->tugas->id,
 
 
 
-            'project'=>
-                $this->task->project->nama_project ?? '-',
+            'project' =>
+
+                $this->tugas->proyek->nama_proyek ?? '-',
 
 
 
-            'url'=>
+            'url' =>
+
                 route(
+
                     'employee.task.show',
-                    $this->task->id
+
+                    $this->tugas->id
+
                 )
 
 

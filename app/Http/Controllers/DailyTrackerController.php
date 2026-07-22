@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Task;
-use App\Models\TaskActivity;
+use App\Models\Tugas;
+use App\Models\AktivitasTugas;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Helpers\AuditHelper;
+
 
 
 class DailyTrackerController extends Controller
@@ -24,18 +27,45 @@ class DailyTrackerController extends Controller
     public function index()
     {
 
-        $employee = Auth::user()->employee;
+
+        $karyawan = Auth::user()->karyawan;
 
 
 
-        $tasks = $employee
-            ->tasks()
+
+
+        if(!$karyawan)
+        {
+
+            abort(403);
+
+        }
+
+
+
+
+
+
+
+        $tasks = $karyawan
+
+            ->tugas()
+
             ->with([
-                'project',
-                'activities'
+
+                'proyek',
+
+                'aktivitasTugas'
+
             ])
+
             ->latest()
+
             ->get();
+
+
+
+
 
 
 
@@ -66,17 +96,20 @@ class DailyTrackerController extends Controller
     */
 
 
-    public function show(Task $task)
+    public function show(Tugas $task)
     {
 
 
-        $employee = Auth::user()->employee;
+        $karyawan = Auth::user()->karyawan;
 
 
 
-        // keamanan task milik karyawan
 
-        if($task->employee_id != $employee->id){
+
+
+
+        if(!$karyawan)
+        {
 
             abort(403);
 
@@ -86,13 +119,32 @@ class DailyTrackerController extends Controller
 
 
 
+
+
+        if($task->karyawan_id != $karyawan->id)
+        {
+
+            abort(403);
+
+        }
+
+
+
+
+
+
+
+
         $task->load([
 
-            'project',
+            'proyek',
 
-            'activities'
+            'aktivitasTugas'
 
         ]);
+
+
+
 
 
 
@@ -131,17 +183,19 @@ class DailyTrackerController extends Controller
         $request->validate([
 
 
-            'task_id' => [
+
+            'task_id'=>[
 
                 'required',
 
-                'exists:tasks,id'
+                'exists:tugas,id'
 
             ],
 
 
 
-            'aktivitas' => [
+
+            'aktivitas'=>[
 
                 'required'
 
@@ -149,7 +203,8 @@ class DailyTrackerController extends Controller
 
 
 
-            'progress' => [
+
+            'progres'=>[
 
                 'required',
 
@@ -163,7 +218,8 @@ class DailyTrackerController extends Controller
 
 
 
-            'budget_activity' => [
+
+            'anggaran_aktivitas'=>[
 
                 'nullable',
 
@@ -173,11 +229,12 @@ class DailyTrackerController extends Controller
 
 
 
-            'catatan' => [
+
+            'catatan'=>[
 
                 'nullable'
 
-            ],
+            ]
 
 
 
@@ -189,7 +246,8 @@ class DailyTrackerController extends Controller
 
 
 
-        $employee = Auth::user()->employee;
+
+        $karyawan = Auth::user()->karyawan;
 
 
 
@@ -197,58 +255,11 @@ class DailyTrackerController extends Controller
 
 
 
-
-        $task = Task::findOrFail(
+        $task = Tugas::findOrFail(
 
             $request->task_id
 
         );
-        $project = $task->project;
-
-
-/*
-|--------------------------------------------------------------------------
-| VALIDASI BUDGET ACTIVITY
-|--------------------------------------------------------------------------
-*/
-
-
-if($request->budget_activity > 0)
-{
-
-
-    $totalUsed = $project
-        ->tasks()
-        ->with('activities')
-        ->get()
-        ->flatMap(function($task){
-
-            return $task->activities;
-
-        })
-        ->sum('budget_activity');
-
-
-
-    $sisaBudget = $project->total_budget - $totalUsed;
-
-
-
-    if($request->budget_activity > $sisaBudget)
-    {
-
-        return back()
-        ->withInput()
-        ->with(
-            'error',
-            'Budget aktivitas melebihi sisa anggaran project. Sisa budget: Rp '.number_format($sisaBudget,0,',','.')
-        );
-
-
-    }
-
-
-}
 
 
 
@@ -256,14 +267,109 @@ if($request->budget_activity > 0)
 
 
 
-
-        // cek task milik karyawan login
-
-
-        if($task->employee_id != $employee->id){
-
+        if($task->karyawan_id != $karyawan->id)
+        {
 
             abort(403);
+
+        }
+
+
+
+
+
+
+
+        $proyek = $task->proyek;
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK ANGGARAN PROYEK
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($request->anggaran_aktivitas > 0)
+        {
+
+
+            $totalUsed = $proyek
+
+                ->tugas()
+
+                ->with('aktivitasTugas')
+
+                ->get()
+
+                ->flatMap(function($task){
+
+                    return $task->aktivitasTugas;
+
+                })
+
+                ->sum('anggaran_aktivitas');
+
+
+
+
+
+
+
+
+
+            $sisaAnggaran =
+
+                $proyek->total_anggaran
+
+                -
+
+                $totalUsed;
+
+
+
+
+
+
+
+
+            if($request->anggaran_aktivitas > $sisaAnggaran)
+            {
+
+
+                return back()
+
+                ->withInput()
+
+                ->with(
+
+                    'error',
+
+                    'Anggaran aktivitas melebihi sisa anggaran proyek. Sisa anggaran: Rp '.
+
+                    number_format(
+
+                        $sisaAnggaran,
+
+                        0,
+
+                        ',',
+
+                        '.'
+
+                    )
+
+                );
+
+
+            }
 
 
         }
@@ -278,65 +384,73 @@ if($request->budget_activity > 0)
 
         /*
         |--------------------------------------------------------------------------
-        | SIMPAN HISTORY AKTIVITAS
+        | SIMPAN AKTIVITAS
         |--------------------------------------------------------------------------
         */
 
 
-
-        TaskActivity::create([
-
-
-            'task_id' => $task->id,
+        AktivitasTugas::create([
 
 
 
-            'employee_id' => $employee->id,
+            'tugas_id'=>$task->id,
 
 
 
-            'tanggal' => now(),
+            'karyawan_id'=>$karyawan->id,
 
 
 
-            'aktivitas' => $request->aktivitas,
+            'tanggal'=>now(),
 
 
 
-            'progress' => $request->progress,
+            'aktivitas'=>$request->aktivitas,
 
 
 
-            'budget_activity' => $request->budget_activity ?? 0,
+            'progres'=>$request->progres,
 
 
 
-            'catatan' => $request->catatan,
+            'anggaran_aktivitas'=>$request->anggaran_aktivitas ?? 0,
+
+
+
+            'catatan'=>$request->catatan
 
 
 
         ]);
 
 
-// AUDIT LOG
 
-AuditHelper::create(
 
-    'Update Task Activity',
 
-    'Task Management',
 
-    'Menambahkan aktivitas pada task '
-    .
-    $task->nama_task
-    .
-    ' dengan progress '
-    .
-    $request->progress
-    .
-    '%'
 
-);
+
+
+        AuditHelper::create(
+
+            'Update Task Activity',
+
+            'Manajemen Tugas',
+
+            'Menambahkan aktivitas pada tugas '.
+
+            $task->nama_tugas.
+
+            ' dengan progres '.
+
+            $request->progres.
+
+            '%'
+
+        );
+
+
+
 
 
 
@@ -345,16 +459,15 @@ AuditHelper::create(
 
         /*
         |--------------------------------------------------------------------------
-        | UPDATE PROGRESS TASK
+        | UPDATE PROGRES TASK
         |--------------------------------------------------------------------------
         */
-
 
 
         $task->update([
 
 
-            'progress_persen' => $request->progress,
+            'progres_persen'=>$request->progres,
 
 
         ]);
@@ -364,14 +477,6 @@ AuditHelper::create(
 
 
 
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE STATUS OTOMATIS
-        |--------------------------------------------------------------------------
-        */
 
 
         $task->updateStatus();
@@ -382,13 +487,6 @@ AuditHelper::create(
 
 
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | REDIRECT KE DETAIL TASK
-        |--------------------------------------------------------------------------
-        */
 
 
         return redirect()
@@ -411,7 +509,6 @@ AuditHelper::create(
 
 
     }
-
 
 
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DepositDistribution extends Model
 {
-
+protected $table = 'distribusi_setoran';
     protected $fillable = [
 
         'deposit_id',

@@ -4,10 +4,6 @@
 @section('content')
 
 
-
-<!-- HEADER -->
-
-
 <div class="page-header">
 
 
@@ -15,29 +11,21 @@
 
 
 <div class="page-label">
-
 PROJECT MANAGEMENT
-
 </div>
 
 
 <h1>
-
 Kelola Project
-
 </h1>
 
 
 <p>
-
 Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
-
 </p>
 
 
 </div>
-
-
 
 
 
@@ -48,7 +36,6 @@ Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
 </a>
 
 
-
 </div>
 
 
@@ -58,8 +45,7 @@ Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
 
 
 
-
-<!-- STATISTIC -->
+{{-- STATISTIC --}}
 
 
 <div class="project-stat-grid">
@@ -70,33 +56,24 @@ Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
 
 
 <div class="stat-icon green">
-
 📁
-
 </div>
 
 
 <div>
 
-
 <span>
-
 Total Project
-
 </span>
 
 
 <h3>
-
-{{count($projects)}}
-
+{{$projects->count()}}
 </h3>
 
 
 <small>
-
 Project terdaftar
-
 </small>
 
 
@@ -104,6 +81,7 @@ Project terdaftar
 
 
 </div>
+
 
 
 
@@ -115,33 +93,26 @@ Project terdaftar
 
 
 <div class="stat-icon blue">
-
 🚀
-
 </div>
 
 
 <div>
 
-
 <span>
-
 Project Aktif
-
 </span>
 
 
 <h3>
 
-{{$projects->where('progress_keseluruhan','<',100)->count()}}
+{{$projects->where('progres_keseluruhan','<',100)->count()}}
 
 </h3>
 
 
 <small>
-
 Sedang berjalan
-
 </small>
 
 
@@ -149,6 +120,7 @@ Sedang berjalan
 
 
 </div>
+
 
 
 
@@ -160,33 +132,31 @@ Sedang berjalan
 
 
 <div class="stat-icon orange">
-
 💰
-
 </div>
 
 
 <div>
 
-
 <span>
-
 Total Budget
-
 </span>
 
 
 <h3>
 
-Rp {{number_format($projects->sum('total_budget'),0,',','.')}}
+Rp {{number_format(
+$projects->sum('total_anggaran'),
+0,
+',',
+'.'
+)}}
 
 </h3>
 
 
 <small>
-
 Nilai keseluruhan
-
 </small>
 
 
@@ -194,7 +164,6 @@ Nilai keseluruhan
 
 
 </div>
-
 
 
 
@@ -215,9 +184,7 @@ Nilai keseluruhan
 
 
 <div>
-
 ✓
-
 </div>
 
 
@@ -235,7 +202,6 @@ Nilai keseluruhan
 
 
 
-<!-- TABLE -->
 
 
 <div class="glass-panel">
@@ -247,18 +213,13 @@ Nilai keseluruhan
 
 <div>
 
-
 <h3>
-
 Daftar Project
-
 </h3>
 
 
 <p>
-
 Monitoring seluruh project perusahaan.
-
 </p>
 
 
@@ -266,17 +227,14 @@ Monitoring seluruh project perusahaan.
 
 
 
-
 <div class="total-project">
 
-{{count($projects)}} Project
+{{$projects->count()}} Project
 
 </div>
 
 
-
 </div>
-
 
 
 
@@ -296,53 +254,38 @@ Monitoring seluruh project perusahaan.
 
 <tr>
 
-
 <th>
-
 No
-
 </th>
 
 
 <th>
-
 Project
-
 </th>
 
 
 <th>
-
 Owner
-
 </th>
 
 
 <th>
-
 Budget
-
 </th>
 
 
 <th>
-
 Periode
-
 </th>
 
 
 <th>
-
 Progress
-
 </th>
 
 
 <th>
-
 Aksi
-
 </th>
 
 
@@ -355,11 +298,13 @@ Aksi
 
 
 
+
+
 <tbody>
 
 
-@forelse($projects as $project)
 
+@forelse($projects as $project)
 
 
 <tr>
@@ -378,6 +323,7 @@ Aksi
 
 
 
+
 <td>
 
 
@@ -385,9 +331,7 @@ Aksi
 
 
 <div class="project-icon">
-
 📁
-
 </div>
 
 
@@ -397,10 +341,9 @@ Aksi
 
 <strong>
 
-{{$project->nama_project}}
+{{$project->nama_proyek}}
 
 </strong>
-
 
 
 <small>
@@ -413,9 +356,7 @@ Project Perusahaan
 </div>
 
 
-
 </div>
-
 
 
 </td>
@@ -428,9 +369,10 @@ Project Perusahaan
 
 <td>
 
-{{$project->project_owner}}
+{{$project->pemilik_proyek ?? '-'}}
 
 </td>
+
 
 
 
@@ -445,7 +387,7 @@ Project Perusahaan
 
 
 Rp {{number_format(
-$project->total_budget,
+$project->total_anggaran,
 0,
 ',',
 '.'
@@ -463,38 +405,49 @@ $project->total_budget,
 
 
 
+
 <td>
 
 
 <div class="date">
 
 
-{{$project->start_date}}
+{{\Carbon\Carbon::parse(
+$project->tanggal_mulai
+)->format('d M Y')}}
+
+
 
 <br>
+
 
 <span>
-
 s/d
-
 </span>
+
 
 <br>
 
-{{$project->end_date}}
+
+
+@if($project->tanggal_selesai)
+
+{{\Carbon\Carbon::parse(
+$project->tanggal_selesai
+)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
 
 
 </div>
 
 
 </td>
-
-
-
-
-
-
-
 <td>
 
 
@@ -505,15 +458,13 @@ s/d
 
 
 <span>
-
 Progress
-
 </span>
 
 
 <b>
 
-{{$project->progress_keseluruhan ?? 0}}%
+{{$project->progres_keseluruhan ?? 0}}%
 
 </b>
 
@@ -523,10 +474,11 @@ Progress
 
 
 
+
 <div class="progress-track">
 
 
-<div style="width:{{$project->progress_keseluruhan ?? 0}}%">
+<div style="width:{{$project->progres_keseluruhan ?? 0}}%">
 
 </div>
 
@@ -536,10 +488,10 @@ Progress
 
 
 </div>
-
 
 
 </td>
+
 
 
 
@@ -567,7 +519,6 @@ Edit
 
 
 
-
 <a href="{{route('admin.allocation.index',['project'=>$project->id])}}"
 
 class="allocation">
@@ -575,7 +526,6 @@ class="allocation">
 Dana
 
 </a>
-
 
 
 
@@ -609,9 +559,7 @@ Hapus
 </div>
 
 
-
 </td>
-
 
 
 
@@ -624,15 +572,14 @@ Hapus
 
 <tr>
 
-
 <td colspan="7" class="empty">
 
 Belum ada project
 
 </td>
 
-
 </tr>
+
 
 
 @endforelse
@@ -642,18 +589,13 @@ Belum ada project
 </tbody>
 
 
-
 </table>
 
 
-
 </div>
 
 
-
 </div>
-
-
 
 
 
@@ -662,9 +604,6 @@ Belum ada project
 
 
 <style>
-
-
-/* HEADER */
 
 
 .page-header{
@@ -717,18 +656,16 @@ color:#64748b;
 
 
 
+
+
 .btn-primary{
 
 background:
 
 linear-gradient(
-
 135deg,
-
 #166534,
-
 #22c55e
-
 );
 
 
@@ -747,10 +684,6 @@ font-weight:700;
 
 text-decoration:none;
 
-box-shadow:
-
-0 12px 30px rgba(34,197,94,.25);
-
 }
 
 
@@ -759,12 +692,11 @@ box-shadow:
 
 
 
-/* STAT */
-
-
 .project-stat-grid{
 
+
 display:grid;
+
 
 grid-template-columns:
 
@@ -773,7 +705,9 @@ repeat(3,1fr);
 
 gap:18px;
 
+
 margin-bottom:22px;
+
 
 }
 
@@ -782,14 +716,7 @@ margin-bottom:22px;
 .project-stat{
 
 
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
+background:white;
 
 
 border-radius:20px;
@@ -807,9 +734,10 @@ align-items:center;
 gap:15px;
 
 
-border:
+box-shadow:
 
-1px solid rgba(255,255,255,.8);
+0 10px 30px rgba(15,23,42,.08);
+
 
 }
 
@@ -820,6 +748,7 @@ border:
 
 width:45px;
 
+
 height:45px;
 
 
@@ -828,11 +757,15 @@ border-radius:15px;
 
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
+
 font-size:20px;
+
 
 }
 
@@ -862,13 +795,12 @@ background:#fef3c7;
 
 
 
+
 .project-stat span{
 
-font-size:11px;
+font-size:12px;
 
 color:#64748b;
-
-display:block;
 
 }
 
@@ -876,64 +808,40 @@ display:block;
 
 .project-stat h3{
 
+margin:5px 0;
+
 font-size:22px;
 
 color:#166534;
 
-margin-top:3px;
-
-}
-
-
-
-.project-stat small{
-
-font-size:11px;
-
-color:#94a3b8;
-
 }
 
 
 
 
 
-
-
-
-/* CARD */
 
 
 .glass-panel{
 
 
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
-
-
-border-radius:22px;
+background:white;
 
 
 padding:22px;
 
 
-border:
-
-1px solid rgba(255,255,255,.8);
+border-radius:22px;
 
 
 box-shadow:
 
-0 15px 35px rgba(15,23,42,.06);
+0 10px 30px rgba(15,23,42,.08);
 
 
 }
+
+
 
 
 
@@ -958,7 +866,7 @@ margin-bottom:18px;
 
 .table-header h3{
 
-font-size:16px;
+margin:0;
 
 }
 
@@ -974,6 +882,7 @@ color:#64748b;
 
 
 
+
 .total-project{
 
 
@@ -983,9 +892,7 @@ background:#dcfce7;
 color:#166534;
 
 
-padding:
-
-7px 15px;
+padding:7px 15px;
 
 
 border-radius:20px;
@@ -1004,15 +911,14 @@ font-weight:700;
 
 
 
-
-/* TABLE */
-
-
 table{
+
 
 width:100%;
 
+
 border-collapse:collapse;
+
 
 }
 
@@ -1020,15 +926,21 @@ border-collapse:collapse;
 
 th{
 
+
 padding:14px;
+
+
+font-size:12px;
+
 
 text-align:left;
 
-font-size:11px;
+
+background:#f8fafc;
+
 
 color:#64748b;
 
-background:#f8fafc;
 
 }
 
@@ -1036,23 +948,26 @@ background:#f8fafc;
 
 td{
 
+
 padding:14px;
+
 
 font-size:13px;
 
+
 border-bottom:1px solid #f1f5f9;
 
-}
 
+}
 
 
 
 
 tr:hover{
 
-background:
 
-rgba(220,252,231,.35);
+background:#f8fafc;
+
 
 }
 
@@ -1061,17 +976,17 @@ rgba(220,252,231,.35);
 
 
 
-
-/* PROJECT NAME */
-
-
 .project-name{
+
 
 display:flex;
 
+
 align-items:center;
 
+
 gap:10px;
+
 
 }
 
@@ -1081,6 +996,7 @@ gap:10px;
 
 
 width:36px;
+
 
 height:36px;
 
@@ -1093,7 +1009,9 @@ background:#dcfce7;
 
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
@@ -1104,11 +1022,12 @@ justify-content:center;
 
 .project-name strong{
 
+
 display:block;
 
-font-size:13px;
 
 color:#166534;
+
 
 }
 
@@ -1116,9 +1035,12 @@ color:#166534;
 
 .project-name small{
 
+
 font-size:11px;
 
+
 color:#94a3b8;
+
 
 }
 
@@ -1128,14 +1050,14 @@ color:#94a3b8;
 
 
 
-/* BUDGET */
-
-
 .budget-text{
+
 
 font-weight:700;
 
+
 color:#166534;
+
 
 }
 
@@ -1145,9 +1067,12 @@ color:#166534;
 
 .date{
 
+
 font-size:12px;
 
+
 color:#475569;
+
 
 }
 
@@ -1155,7 +1080,9 @@ color:#475569;
 
 .date span{
 
+
 color:#94a3b8;
+
 
 }
 
@@ -1163,15 +1090,11 @@ color:#94a3b8;
 
 
 
-
-
-
-/* PROGRESS */
-
-
 .progress-box{
 
+
 width:130px;
+
 
 }
 
@@ -1179,13 +1102,18 @@ width:130px;
 
 .progress-label{
 
+
 display:flex;
+
 
 justify-content:space-between;
 
+
 font-size:11px;
 
+
 margin-bottom:5px;
+
 
 }
 
@@ -1193,7 +1121,9 @@ margin-bottom:5px;
 
 .progress-label b{
 
+
 color:#166534;
+
 
 }
 
@@ -1201,13 +1131,18 @@ color:#166534;
 
 .progress-track{
 
+
 height:7px;
+
 
 background:#e2e8f0;
 
+
 border-radius:20px;
 
+
 overflow:hidden;
+
 
 }
 
@@ -1215,21 +1150,18 @@ overflow:hidden;
 
 .progress-track div{
 
+
 height:100%;
+
 
 background:
 
 linear-gradient(
-
 90deg,
-
 #166534,
-
 #22c55e
-
 );
 
-border-radius:20px;
 
 }
 
@@ -1239,14 +1171,14 @@ border-radius:20px;
 
 
 
-/* ACTION */
-
-
 .action{
+
 
 display:flex;
 
+
 gap:6px;
+
 
 }
 
@@ -1254,24 +1186,21 @@ gap:6px;
 
 .action form{
 
+
 display:inline;
+
 
 }
 
 
 
+
 .edit,
-
 .allocation,
-
 .delete{
 
 
-border:none;
-
-padding:
-
-7px 10px;
+padding:7px 10px;
 
 
 border-radius:10px;
@@ -1281,6 +1210,9 @@ font-size:11px;
 
 
 font-weight:600;
+
+
+border:none;
 
 
 cursor:pointer;
@@ -1295,9 +1227,12 @@ text-decoration:none;
 
 .edit{
 
+
 background:#dcfce7;
 
+
 color:#166534;
+
 
 }
 
@@ -1305,9 +1240,12 @@ color:#166534;
 
 .allocation{
 
+
 background:#dbeafe;
 
+
 color:#1d4ed8;
+
 
 }
 
@@ -1315,21 +1253,29 @@ color:#1d4ed8;
 
 .delete{
 
+
 background:#fee2e2;
 
+
 color:#dc2626;
+
 
 }
 
 
 
+
 .empty{
+
 
 text-align:center;
 
+
 padding:30px;
 
+
 color:#64748b;
+
 
 }
 
@@ -1338,28 +1284,29 @@ color:#64748b;
 
 .success-alert{
 
-display:flex;
-
-gap:10px;
-
-align-items:center;
 
 background:#dcfce7;
 
+
 color:#166534;
 
-padding:13px 16px;
+
+padding:13px;
+
 
 border-radius:15px;
 
+
 margin-bottom:18px;
+
 
 font-size:13px;
 
+
 font-weight:600;
 
-}
 
+}
 
 
 
@@ -1369,7 +1316,9 @@ font-weight:600;
 
 .project-stat-grid{
 
+
 grid-template-columns:1fr;
+
 
 }
 
@@ -1377,22 +1326,33 @@ grid-template-columns:1fr;
 
 .page-header{
 
+
 flex-direction:column;
+
 
 align-items:flex-start;
 
+
 gap:15px;
 
-}
-
-
 
 }
 
+
+
+table{
+
+
+font-size:12px;
+
+
+}
+
+
+}
 
 
 </style>
-
 
 
 @endsection

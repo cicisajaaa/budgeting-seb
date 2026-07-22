@@ -2,28 +2,58 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\DepositDistribution;
+
 
 
 class DepositDistributionController extends Controller
 {
 
+
     public function index()
     {
 
+
         $distributions = DepositDistribution::with([
-            'deposit.project',
+
+            'project',
+
             'division'
+
         ])
+
         ->latest()
+
         ->get();
 
 
+
+
+
+        $totalDistribution = $distributions->sum('jumlah');
+
+
+
+
+
         return view(
+
             'finance.distribution.index',
-            compact('distributions')
+
+            compact(
+
+                'distributions',
+
+                'totalDistribution'
+
+            )
+
         );
 
+
     }
+
+
 
 }

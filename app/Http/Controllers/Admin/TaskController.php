@@ -2,131 +2,601 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
-use App\Models\Task;
-use App\Models\Project;
-use App\Models\Division;
-use App\Models\Employee;
+
+
+use App\Models\Proyek;
+use App\Models\Tugas;
+use App\Models\Divisi;
+use App\Models\Karyawan;
+
+
 use Illuminate\Http\Request;
+
 
 
 class TaskController extends Controller
 {
 
-    public function index()
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIST TASK PROJECT
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function index(Proyek $project)
     {
-        $tasks = Task::with([
-            'project',
-            'division',
-            'employee'
+
+
+        $tasks = Tugas::with([
+
+            'divisi',
+
+            'karyawan'
+
         ])
+
+        ->where(
+
+            'proyek_id',
+
+            $project->id
+
+        )
+
         ->latest()
+
         ->get();
 
 
+
+
+
+
+
         return view(
+
             'admin.tasks.index',
-            compact('tasks')
+
+            compact(
+
+                'project',
+
+                'tasks'
+
+            )
+
         );
+
+
     }
 
 
 
-    public function create()
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM TAMBAH TASK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function create(Proyek $project)
     {
 
-        $projects = Project::all();
 
-        $divisions = Division::all();
+        $divisi = Divisi::all();
 
-        $employees = Employee::all();
+
+        $karyawan = Karyawan::all();
+
+
+
+
+
 
 
         return view(
+
             'admin.tasks.create',
+
             compact(
-                'projects',
-                'divisions',
-                'employees'
+
+                'project',
+
+                'divisi',
+
+                'karyawan'
+
             )
+
         );
+
 
     }
 
 
 
-    public function store(Request $request)
-{
-
-    $request->validate([
-
-        'project_id'=>'required',
-
-        'employee_id'=>'required',
-
-        'nama_task'=>'required',
-
-        'prioritas'=>'required',
-
-        'deadline'=>'nullable|date'
-
-    ]);
 
 
 
-    $task = Task::create([
-
-        'project_id'=>$request->project_id,
-
-        'division_id'=>$request->division_id,
-
-        'employee_id'=>$request->employee_id,
-
-        'tanggal'=>now(),
-
-        'nama_task'=>$request->nama_task,
-
-        'aktivitas'=>$request->aktivitas,
-
-        'prioritas'=>$request->prioritas,
-
-        'deadline'=>$request->deadline,
-
-        'status'=>'todo',
-
-        'progress_persen'=>0,
-
-        'catatan'=>$request->catatan,
-
-    ]);
 
 
 
-    // Update progress project otomatis
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN TASK
+    |--------------------------------------------------------------------------
+    */
 
-    $task->project->updateProgress();
+
+    public function store(Request $request, Proyek $project)
+    {
+
+
+        $request->validate([
 
 
 
-    return redirect()
-        ->route('admin.tasks.index')
-        ->with(
-            'success',
-            'Task berhasil dibuat'
+            'divisi_id'=>
+
+                'required|exists:divisi,id',
+
+
+
+            'karyawan_id'=>
+
+                'nullable|exists:karyawan,id',
+
+
+
+            'tanggal'=>
+
+                'required|date',
+
+
+
+            'nama_tugas'=>
+
+                'required|string|max:255',
+
+
+
+            'aktivitas'=>
+
+                'required|string',
+
+
+
+            'prioritas'=>
+
+                'required|in:Low,Medium,High',
+
+
+
+            'status'=>
+
+                'required|string',
+
+
+
+            'progres_persen'=>
+
+                'required|numeric|min:0|max:100',
+
+
+
+        ]);
+
+
+
+
+
+
+
+
+
+        Tugas::create([
+
+
+
+            'proyek_id'=>
+
+                $project->id,
+
+
+
+            'divisi_id'=>
+
+                $request->divisi_id,
+
+
+
+            'karyawan_id'=>
+
+                $request->karyawan_id,
+
+
+
+            'tanggal'=>
+
+                $request->tanggal,
+
+
+
+            'nama_tugas'=>
+
+                $request->nama_tugas,
+
+
+
+            'aktivitas'=>
+
+                $request->aktivitas,
+
+
+
+            'prioritas'=>
+
+                $request->prioritas,
+
+
+
+            'status'=>
+
+                $request->status,
+
+
+
+            'progres_persen'=>
+
+                $request->progres_persen,
+
+
+
+            'catatan'=>
+
+                $request->catatan,
+
+
+
+        ]);
+
+
+
+
+
+
+
+
+
+        return redirect()
+
+            ->route(
+
+                'admin.tasks.index',
+
+                $project->id
+
+            )
+
+            ->with(
+
+                'success',
+
+                'Tugas berhasil ditambahkan'
+
+            );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL TASK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function show(Tugas $task)
+    {
+
+
+        $task->load([
+
+            'proyek',
+
+            'divisi',
+
+            'karyawan',
+
+            'aktivitasTugas'
+
+        ]);
+
+
+
+
+
+
+        return view(
+
+            'admin.tasks.show',
+
+            compact(
+
+                'task'
+
+            )
+
         );
 
-}
+
+    }
 
 
-    public function destroy(Task $task)
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT TASK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function edit(Tugas $task)
     {
+
+
+        $divisi = Divisi::all();
+
+
+        $karyawan = Karyawan::all();
+
+
+
+
+
+
+        return view(
+
+            'admin.tasks.edit',
+
+            compact(
+
+                'task',
+
+                'divisi',
+
+                'karyawan'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE TASK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function update(Request $request, Tugas $task)
+    {
+
+
+        $request->validate([
+
+
+
+            'divisi_id'=>
+
+                'required|exists:divisi,id',
+
+
+
+            'karyawan_id'=>
+
+                'nullable|exists:karyawan,id',
+
+
+
+            'nama_tugas'=>
+
+                'required|string|max:255',
+
+
+
+            'prioritas'=>
+
+                'required|in:Low,Medium,High',
+
+
+
+            'status'=>
+
+                'required|string',
+
+
+
+            'progres_persen'=>
+
+                'required|numeric|min:0|max:100',
+
+
+
+        ]);
+
+
+
+
+
+
+
+
+
+        $task->update([
+
+
+
+            'divisi_id'=>
+
+                $request->divisi_id,
+
+
+
+            'karyawan_id'=>
+
+                $request->karyawan_id,
+
+
+
+            'nama_tugas'=>
+
+                $request->nama_tugas,
+
+
+
+            'prioritas'=>
+
+                $request->prioritas,
+
+
+
+            'status'=>
+
+                $request->status,
+
+
+
+            'progres_persen'=>
+
+                $request->progres_persen,
+
+
+
+            'catatan'=>
+
+                $request->catatan,
+
+
+
+        ]);
+
+
+
+
+
+
+
+
+
+        return redirect()
+
+            ->route(
+
+                'admin.tasks.index',
+
+                $task->proyek_id
+
+            )
+
+            ->with(
+
+                'success',
+
+                'Tugas berhasil diperbarui'
+
+            );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS TASK
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function destroy(Tugas $task)
+    {
+
+
+        $projectId = $task->proyek_id;
+
+
+
+
 
         $task->delete();
 
 
-        return back();
+
+
+
+
+        return redirect()
+
+            ->route(
+
+                'admin.tasks.index',
+
+                $projectId
+
+            )
+
+            ->with(
+
+                'success',
+
+                'Tugas berhasil dihapus'
+
+            );
+
 
     }
+
 
 
 }
