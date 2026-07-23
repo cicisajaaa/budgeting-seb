@@ -155,39 +155,32 @@ class Tugas extends Model
 
 
     public function updateStatus()
+{
+
+
+    if($this->progres_persen >= 100)
     {
 
+        $this->status = 'selesai';
 
-        if($this->progres_persen >= 100)
-        {
+    }
+    elseif($this->progres_persen > 0)
+    {
 
-            $this->status = 'selesai';
+        $this->status = 'berjalan';
 
-        }
+    }
+    else
+    {
 
-        elseif($this->progres_persen > 0)
-        {
-
-            $this->status = 'berjalan';
-
-        }
-
-        else
-        {
-
-            $this->status = 'belum_dikerjakan';
-
-        }
-
-
-
-        $this->save();
-
+        $this->status = 'belum_dikerjakan';
 
     }
 
 
+    $this->save();
 
+}
 
 
 

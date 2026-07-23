@@ -49,13 +49,13 @@ Update progress pekerjaan dan aktivitas harian kamu
 <div>
 
 <h2>
-{{$task->nama_task}}
+{{$task->nama_tugas}}
 </h2>
 
 
 <p>
 Project :
-{{$task->project->nama_project ?? '-'}}
+{{$task->proyek->nama_proyek ?? '-'}}
 </p>
 
 
@@ -76,6 +76,7 @@ Project :
 
 
 
+
 <div class="task-info">
 
 
@@ -91,6 +92,7 @@ Prioritas
 
 
 </div>
+
 
 
 
@@ -119,7 +121,7 @@ Progress
 
 
 <strong>
-{{$task->progress_persen}}%
+{{$task->progres_persen}}%
 
 </strong>
 
@@ -134,6 +136,8 @@ Progress
 
 
 
+
+
 <div class="progress-wrapper">
 
 
@@ -142,7 +146,7 @@ Progress
 Progress Pekerjaan
 
 <span>
-{{$task->progress_persen}}%
+{{$task->progres_persen}}%
 </span>
 
 </div>
@@ -153,9 +157,8 @@ Progress Pekerjaan
 
 
 <div class="progress-fill"
-style="
-width:{{$task->progress_persen}}%
-">
+
+style="width:{{$task->progres_persen}}%">
 
 </div>
 
@@ -164,6 +167,9 @@ width:{{$task->progress_persen}}%
 
 
 </div>
+
+
+
 
 
 
@@ -179,16 +185,24 @@ Update Aktivitas
 </h3>
 
 
+
+
 <form method="POST"
+
 action="{{route('daily-tracker.store')}}">
 
 
 @csrf
 
 
+
 <input type="hidden"
+
 name="task_id"
+
 value="{{$task->id}}">
+
+
 
 
 
@@ -198,9 +212,15 @@ Aktivitas Hari Ini
 
 
 <textarea
+
 name="aktivitas"
+
 placeholder="Tuliskan aktivitas hari ini..."
+
 required></textarea>
+
+
+
 
 
 
@@ -211,20 +231,26 @@ required></textarea>
 
 <div>
 
+
 <label>
 Progress (%)
 </label>
 
 
 <input
-type="number"
-name="progress"
-min="0"
-max="100"
-value="{{$task->progress_persen}}">
 
+type="number"
+
+name="progres"
+
+min="0"
+
+max="100"
+
+placeholder="Masukkan progress">
 
 </div>
+
 
 
 
@@ -232,22 +258,29 @@ value="{{$task->progress_persen}}">
 
 <div>
 
+
 <label>
 Budget Activity
 </label>
 
 
 <input
+
 type="number"
-name="budget_activity"
-value="0">
 
+name="anggaran_aktivitas"
+
+value="0"
+
+min="0">
 
 </div>
 
 
 
 </div>
+
+
 
 
 
@@ -259,8 +292,12 @@ Catatan
 
 
 <textarea
+
 name="catatan"
+
 placeholder="Catatan tambahan..."></textarea>
+
+
 
 
 
@@ -287,12 +324,17 @@ Simpan Update
 
 
 
+
 <div class="history">
 
 
 <h3>
 Riwayat Aktivitas
 </h3>
+
+
+
+
 
 @forelse($task->aktivitasTugas ?? [] as $activity)
 
@@ -303,9 +345,10 @@ Riwayat Aktivitas
 
 <strong>
 
-{{$activity->tanggal}}
+{{\Carbon\Carbon::parse($activity->tanggal)->format('d M Y')}}
 
 </strong>
+
 
 
 <p>
@@ -315,14 +358,32 @@ Riwayat Aktivitas
 </p>
 
 
+
 <span>
 
-Progress {{$activity->progress}}%
+Progress {{$activity->progres}}%
 
 </span>
 
 
+
+@if($activity->anggaran_aktivitas > 0)
+
+<br>
+
+<small>
+
+Budget :
+Rp {{number_format($activity->anggaran_aktivitas,0,',','.')}}
+
+</small>
+
+@endif
+
+
+
 </div>
+
 
 
 
@@ -337,7 +398,10 @@ Belum ada aktivitas.
 @endforelse
 
 
+
 </div>
+
+
 
 
 
@@ -407,7 +471,6 @@ font-weight:700;
 
 
 
-
 .welcome-card h1{
 
 font-size:28px;
@@ -415,7 +478,6 @@ font-size:28px;
 margin:10px 0;
 
 }
-
 
 
 
@@ -490,6 +552,7 @@ color:#64748b;
 
 
 
+
 .status-badge{
 
 background:#dcfce7;
@@ -558,6 +621,8 @@ color:#166534;
 
 
 
+
+
 .progress-text{
 
 display:flex;
@@ -573,6 +638,7 @@ font-weight:600;
 
 
 
+
 .progress-bar{
 
 height:12px;
@@ -584,6 +650,8 @@ border-radius:20px;
 overflow:hidden;
 
 }
+
+
 
 
 
@@ -639,7 +707,6 @@ margin:8px 0 15px;
 
 
 
-
 .form-grid{
 
 display:grid;
@@ -649,7 +716,6 @@ grid-template-columns:1fr 1fr;
 gap:20px;
 
 }
-
 
 
 
@@ -665,6 +731,7 @@ border-radius:12px;
 border:1px solid #e2e8f0;
 
 }
+
 
 
 
@@ -685,7 +752,10 @@ border-radius:15px;
 
 font-weight:700;
 
+cursor:pointer;
+
 }
+
 
 
 
@@ -695,6 +765,7 @@ font-weight:700;
 margin-top:25px;
 
 }
+
 
 
 
@@ -708,6 +779,7 @@ border-bottom:1px solid #e2e8f0;
 
 
 
+
 .history-item span{
 
 color:#166534;
@@ -716,6 +788,29 @@ font-weight:700;
 
 }
 
+
+
+@media(max-width:700px){
+
+.task-info,
+.form-grid{
+
+grid-template-columns:1fr;
+
+}
+
+
+.task-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+}
 
 
 </style>

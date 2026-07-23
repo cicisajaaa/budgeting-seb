@@ -765,59 +765,7 @@ Aktif
 
 
 
-@php
-
-
-$activities = $employeeTasks
-
-->flatMap(function($task){
-
-
-return $task->aktivitasTugas
-
-->map(function($activity) use($task){
-
-
-return [
-
-
-'task'=>$task->nama_tugas,
-
-
-'aktivitas'=>$activity->aktivitas,
-
-
-'progress'=>$activity->progres ?? 0,
-
-
-'tanggal'=>$activity->tanggal
-
-
-];
-
-
-});
-
-
-})
-
-
-->sortByDesc('tanggal')
-
-->take(5);
-
-
-
-@endphp
-
-
-
-
-
-
-
-
-@forelse($activities as $activity)
+@forelse($recentActivities as $activity)
 
 
 
@@ -843,6 +791,7 @@ return [
 
 
 
+
 <p>
 
 {{$activity['aktivitas']}}
@@ -857,7 +806,7 @@ return [
 
 {{\Carbon\Carbon::parse(
 $activity['tanggal']
-)->format('d M Y H:i')}}
+)->diffForHumans()}}
 
 </small>
 
@@ -878,7 +827,9 @@ $activity['tanggal']
 
 
 
+
 </div>
+
 
 
 
@@ -900,18 +851,7 @@ Belum ada aktivitas
 
 
 </div>
-
-
-
-
-
-
-
-
-
 {{-- ================= CHART SCRIPT ================= --}}
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

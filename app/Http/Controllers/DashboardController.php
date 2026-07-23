@@ -12,7 +12,6 @@ use App\Models\PengajuanDana;
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
 
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -30,9 +29,10 @@ class DashboardController extends Controller
 
 
 
+
         /*
         |--------------------------------------------------------------------------
-        | DATA PROYEK
+        | DATA PROJECT
         |--------------------------------------------------------------------------
         */
 
@@ -42,34 +42,24 @@ class DashboardController extends Controller
 
 
         $totalProjectAktif = Proyek::where(
-
             'progres_keseluruhan',
-
             '<',
-
             100
-
         )->count();
 
 
 
 
         $totalBudget = Proyek::sum(
-
             'total_anggaran'
-
         );
-
 
 
 
 
         $totalProjectProgress = Proyek::avg(
-
             'progres_keseluruhan'
-
         );
-
 
 
 
@@ -94,7 +84,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DATA TUGAS
+        | DATA TASK
         |--------------------------------------------------------------------------
         */
 
@@ -103,44 +93,30 @@ class DashboardController extends Controller
 
 
 
-
         $taskDone = Tugas::where(
-
             'status',
-
             'selesai'
-
         )->count();
-
 
 
 
         $taskProgress = Tugas::where(
-
             'status',
-
             'berjalan'
-
         )->count();
 
 
 
-
         $taskTodo = Tugas::where(
-
             'status',
-
             'belum_dikerjakan'
-
         )->count();
 
 
 
 
         $averageTaskProgress = Tugas::avg(
-
             'progres_persen'
-
         );
 
 
@@ -177,31 +153,22 @@ class DashboardController extends Controller
 
 
         $totalDeposit = SetoranProyek::sum(
-
             'jumlah_setoran'
-
         );
-
 
 
 
 
         $totalTransactionExpense = TransaksiDana::sum(
-
             'jumlah'
-
         );
-
 
 
 
 
         $totalActivityExpense = AktivitasTugas::sum(
-
             'anggaran_aktivitas'
-
         );
-
 
 
 
@@ -217,7 +184,6 @@ class DashboardController extends Controller
 
 
 
-
         $sisaDana =
 
             $totalDeposit
@@ -225,7 +191,6 @@ class DashboardController extends Controller
             -
 
             $totalExpense;
-
 
 
 
@@ -248,49 +213,44 @@ class DashboardController extends Controller
             );
 
         }
-                /*
+
+
+
+
+
+
+
+
+
+        /*
         |--------------------------------------------------------------------------
-        | SALDO
+        | DATA SALDO
         |--------------------------------------------------------------------------
         */
 
 
         $totalSaldoDivisi = SaldoDivisi::sum(
-
             'saldo'
-
         );
-
 
 
 
 
         $totalSaldoBank = RekeningBank::where(
-
             'status',
-
             true
-
         )
-
         ->sum(
-
             'saldo'
-
         );
 
 
 
 
-
         $totalBankAktif = RekeningBank::where(
-
             'status',
-
             true
-
         )
-
         ->count();
 
 
@@ -303,21 +263,16 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | APPROVAL
+        | DATA APPROVAL
         |--------------------------------------------------------------------------
         */
 
 
         $totalApprovalPending = PengajuanDana::where(
-
             'status',
-
             'pending'
-
         )
-
         ->count();
-
 
 
 
@@ -333,11 +288,8 @@ class DashboardController extends Controller
         ])
 
         ->where(
-
             'status',
-
             'pending'
-
         )
 
         ->latest()
@@ -372,10 +324,6 @@ class DashboardController extends Controller
         ->take(5)
 
         ->get();
-
-
-
-
 
 
 
@@ -418,20 +366,21 @@ class DashboardController extends Controller
         $projectProgress = collect();
 
 
+        $recentActivities = collect();
+
+
+
 
         $taskChart = [
 
-
             'done'=>0,
-
 
             'progress'=>0,
 
-
             'todo'=>0
 
-
         ];
+
 
 
 
@@ -448,27 +397,31 @@ class DashboardController extends Controller
 
 
 
-
-
             if($employee)
             {
 
 
-                $employeeTasks = $employee
+                $employeeTasks = Tugas::where(
 
-                    ->tugas()
+                    'karyawan_id',
 
-                    ->with([
+                    $employee->id
 
-                        'proyek',
+                )
 
-                        'aktivitasTugas'
+                ->with([
 
-                    ])
+                    'proyek',
 
-                    ->latest()
+                    'aktivitasTugas'
 
-                    ->get();
+                ])
+
+                ->latest()
+
+                ->get();
+
+
 
 
 
@@ -478,17 +431,21 @@ class DashboardController extends Controller
 
                 $taskChart = [
 
-
-
                     'done'=>
 
                         $employeeTasks
 
-                        ->where(
+                        ->whereIn(
 
                             'status',
 
-                            'selesai'
+                            [
+
+                                'selesai',
+
+                                'done'
+
+                            ]
 
                         )
 
@@ -502,11 +459,17 @@ class DashboardController extends Controller
 
                         $employeeTasks
 
-                        ->where(
+                        ->whereIn(
 
                             'status',
 
-                            'berjalan'
+                            [
+
+                                'berjalan',
+
+                                'progress'
+
+                            ]
 
                         )
 
@@ -520,19 +483,25 @@ class DashboardController extends Controller
 
                         $employeeTasks
 
-                        ->where(
+                        ->whereIn(
 
                             'status',
 
-                            'belum_dikerjakan'
+                            [
+
+                                'belum_dikerjakan',
+
+                                'todo'
+
+                            ]
 
                         )
 
                         ->count(),
 
-
-
                 ];
+
+
 
 
 
@@ -543,18 +512,16 @@ class DashboardController extends Controller
                 $deadlineTasks = $employeeTasks
 
                     ->whereNotNull(
-
                         'deadline'
-
                     )
 
                     ->sortBy(
-
                         'deadline'
-
                     )
 
                     ->take(5);
+
+
 
 
 
@@ -593,7 +560,50 @@ class DashboardController extends Controller
                     });
 
 
+
+
+
+
+
+
+
+                $recentActivities = $employeeTasks
+
+                    ->flatMap(function($task){
+
+
+                        return $task->aktivitasTugas
+
+                            ->map(function($activity) use($task){
+
+
+                              return [
+
+                                    'task'=>$task->nama_tugas,
+
+                                    'aktivitas'=>$activity->aktivitas,
+
+                                    'progress'=>$activity->progres,
+
+                                    'tanggal'=>$activity->created_at
+
+                                ];
+
+
+                            });
+
+
+                    })
+
+                    ->sortByDesc(
+                        'tanggal'
+                    )
+
+                    ->take(5);
+
+
             }
+
 
         }
 
@@ -606,159 +616,185 @@ class DashboardController extends Controller
 
 
         /*
-|--------------------------------------------------------------------------
-| DATA KE VIEW
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | DATA KE VIEW
+        |--------------------------------------------------------------------------
+        */
 
-$data = [
 
-    'employeeTasks'=>$employeeTasks,
+        $data = [
 
-    'deadlineTasks'=>$deadlineTasks,
 
-    'projectProgress'=>$projectProgress,
+            'employeeTasks'=>$employeeTasks,
 
-    'taskChart'=>$taskChart,
 
+            'deadlineTasks'=>$deadlineTasks,
 
-    'tugasKaryawan'=>$employeeTasks,
 
-    'deadlineTugas'=>$deadlineTasks,
+            'projectProgress'=>$projectProgress,
 
-    'progresProyekKaryawan'=>$projectProgress,
 
-    'grafikTugas'=>$taskChart,
+            'recentActivities'=>$recentActivities,
 
 
-    'projects'=>$projects,
+            'taskChart'=>$taskChart,
 
 
-    'totalProject'=>$totalProject,
 
-    'totalProjectAktif'=>$totalProjectAktif,
+            'projects'=>$projects,
 
-    'totalBudget'=>$totalBudget,
 
+            'totalProject'=>$totalProject,
 
-    'totalProjectProgress'=>round(
-        $totalProjectProgress ?? 0
-    ),
 
+            'totalProjectAktif'=>$totalProjectAktif,
 
-    'totalTask'=>$totalTask,
 
-    'taskDone'=>$taskDone,
+            'totalBudget'=>$totalBudget,
 
-    'taskProgress'=>$taskProgress,
 
-    'taskTodo'=>$taskTodo,
+            'totalProjectProgress'=>round(
+                $totalProjectProgress ?? 0
+            ),
 
 
-    'averageTaskProgress'=>round(
-        $averageTaskProgress ?? 0
-    ),
 
+            'totalTask'=>$totalTask,
 
-    'recentTasks'=>$recentTasks,
 
+            'taskDone'=>$taskDone,
 
-    'totalDeposit'=>$totalDeposit,
 
-    'totalExpense'=>$totalExpense,
+            'taskProgress'=>$taskProgress,
 
-    'totalBudgetActivity'=>$totalActivityExpense,
 
-    'budgetUsage'=>$budgetUsage,
+            'taskTodo'=>$taskTodo,
 
-    'sisaDana'=>$sisaDana,
 
+            'averageTaskProgress'=>round(
+                $averageTaskProgress ?? 0
+            ),
 
-    'totalSaldoDivisi'=>$totalSaldoDivisi,
 
-    'totalSaldoBank'=>$totalSaldoBank,
 
-    'totalBankAktif'=>$totalBankAktif,
+            'recentTasks'=>$recentTasks,
 
 
-    'totalApprovalPending'=>$totalApprovalPending,
 
-    'recentApproval'=>$recentApproval,
+            'totalDeposit'=>$totalDeposit,
 
 
-    'recentExpenses'=>$recentExpenses,
+            'totalExpense'=>$totalExpense,
 
-    'recentDeposits'=>$recentDeposits,
 
-];
+            'totalBudgetActivity'=>$totalActivityExpense,
 
 
+            'budgetUsage'=>$budgetUsage,
 
 
+            'sisaDana'=>$sisaDana,
 
-/*
-|--------------------------------------------------------------------------
-| ROLE DASHBOARD
-|--------------------------------------------------------------------------
-*/
 
 
-switch($user->role)
+            'totalSaldoDivisi'=>$totalSaldoDivisi,
 
-{
 
+            'totalSaldoBank'=>$totalSaldoBank,
 
-    case 'owner':
 
-        return view(
-            'dashboard.owner',
-            $data
-        );
+            'totalBankAktif'=>$totalBankAktif,
 
 
 
-    case 'keuangan':
+            'totalApprovalPending'=>$totalApprovalPending,
 
-        return view(
-            'dashboard.keuangan',
-            $data
-        );
 
+            'recentApproval'=>$recentApproval,
 
 
-    // optional kalau masih ada user lama
-    case 'bendahara':
+            'recentExpenses'=>$recentExpenses,
 
-        return view(
-            'dashboard.keuangan',
-            $data
-        );
 
+            'recentDeposits'=>$recentDeposits,
 
 
-    case 'karyawan':
+        ];
 
-        return view(
-            'dashboard.karyawan',
-            $data
-        );
 
 
 
-    case 'admin':
 
-        return redirect()
-            ->route(
-                'admin.dashboard'
-            );
 
 
 
-    default:
 
-        abort(403);
+        /*
+        |--------------------------------------------------------------------------
+        | ROLE DASHBOARD
+        |--------------------------------------------------------------------------
+        */
+
+
+        switch($user->role)
+
+        {
+
+
+            case 'owner':
+
+                return view(
+                    'dashboard.owner',
+                    $data
+                );
+
+
+
+            case 'keuangan':
+
+                return view(
+                    'dashboard.keuangan',
+                    $data
+                );
+
+
+
+            case 'bendahara':
+
+                return view(
+                    'dashboard.keuangan',
+                    $data
+                );
+
+
+
+            case 'karyawan':
+
+                return view(
+                    'dashboard.karyawan',
+                    $data
+                );
+
+
+
+            case 'admin':
+
+                return redirect()
+                    ->route(
+                        'admin.dashboard'
+                    );
+
+
+
+            default:
+
+                abort(403);
 
 
         }
 
-    }}
+
+    }
+
+
+}

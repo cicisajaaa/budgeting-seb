@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use App\Helpers\AuditHelper;
-
 
 
 class DailyTrackerController extends Controller
@@ -23,67 +19,37 @@ class DailyTrackerController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
     public function index()
     {
-
 
         $karyawan = Auth::user()->karyawan;
 
 
-
-
-
         if(!$karyawan)
         {
-
             abort(403);
-
         }
 
 
-
-
-
-
-
-        $tasks = $karyawan
-
-            ->tugas()
-
-            ->with([
-
-                'proyek',
-
-                'aktivitasTugas'
-
-            ])
-
-            ->latest()
-
-            ->get();
-
-
-
-
-
+        $tasks = Tugas::where(
+            'karyawan_id',
+            $karyawan->id
+        )
+        ->with([
+            'proyek',
+            'aktivitasTugas'
+        ])
+        ->latest()
+        ->get();
 
 
 
         return view(
-
             'daily-tracker.index',
-
             compact('tasks')
-
         );
 
-
     }
-
-
-
-
 
 
 
@@ -91,79 +57,43 @@ class DailyTrackerController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL UPDATE TASK
+    | DETAIL TASK
     |--------------------------------------------------------------------------
     */
-
 
     public function show(Tugas $task)
     {
 
-
         $karyawan = Auth::user()->karyawan;
-
-
-
-
-
 
 
         if(!$karyawan)
         {
-
             abort(403);
-
         }
-
-
-
-
 
 
 
         if($task->karyawan_id != $karyawan->id)
         {
-
             abort(403);
-
         }
 
 
 
-
-
-
-
-
         $task->load([
-
             'proyek',
-
             'aktivitasTugas'
-
         ]);
 
 
 
-
-
-
-
-
         return view(
-
             'employee.tracker.show',
-
             compact('task')
-
         );
 
-
     }
-
-
-
-
 
 
 
@@ -175,7 +105,6 @@ class DailyTrackerController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
     public function store(Request $request)
     {
 
@@ -183,65 +112,38 @@ class DailyTrackerController extends Controller
         $request->validate([
 
 
-
             'task_id'=>[
-
                 'required',
-
                 'exists:tugas,id'
-
             ],
-
-
 
 
             'aktivitas'=>[
-
                 'required'
-
             ],
-
-
 
 
             'progres'=>[
-
                 'required',
-
                 'integer',
-
                 'min:0',
-
                 'max:100'
-
             ],
-
-
 
 
             'anggaran_aktivitas'=>[
-
                 'nullable',
-
-                'numeric'
-
+                'numeric',
+                'min:0'
             ],
 
 
-
-
             'catatan'=>[
-
                 'nullable'
-
             ]
 
 
-
         ]);
-
-
-
 
 
 
@@ -251,38 +153,25 @@ class DailyTrackerController extends Controller
 
 
 
+        if(!$karyawan)
+        {
+            abort(403);
+        }
 
 
 
 
         $task = Tugas::findOrFail(
-
             $request->task_id
-
         );
-
-
-
 
 
 
 
         if($task->karyawan_id != $karyawan->id)
         {
-
             abort(403);
-
         }
-
-
-
-
-
-
-
-        $proyek = $task->proyek;
-
-
 
 
 
@@ -292,143 +181,47 @@ class DailyTrackerController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | CEK ANGGARAN PROYEK
-        |--------------------------------------------------------------------------
-        */
-
-
-        if($request->anggaran_aktivitas > 0)
-        {
-
-
-            $totalUsed = $proyek
-
-                ->tugas()
-
-                ->with('aktivitasTugas')
-
-                ->get()
-
-                ->flatMap(function($task){
-
-                    return $task->aktivitasTugas;
-
-                })
-
-                ->sum('anggaran_aktivitas');
-
-
-
-
-
-
-
-
-
-            $sisaAnggaran =
-
-                $proyek->total_anggaran
-
-                -
-
-                $totalUsed;
-
-
-
-
-
-
-
-
-            if($request->anggaran_aktivitas > $sisaAnggaran)
-            {
-
-
-                return back()
-
-                ->withInput()
-
-                ->with(
-
-                    'error',
-
-                    'Anggaran aktivitas melebihi sisa anggaran proyek. Sisa anggaran: Rp '.
-
-                    number_format(
-
-                        $sisaAnggaran,
-
-                        0,
-
-                        ',',
-
-                        '.'
-
-                    )
-
-                );
-
-
-            }
-
-
-        }
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SIMPAN AKTIVITAS
+        | SIMPAN AKTIVITAS TUGAS
         |--------------------------------------------------------------------------
         */
 
 
         AktivitasTugas::create([
 
-
-
             'tugas_id'=>$task->id,
-
-
 
             'karyawan_id'=>$karyawan->id,
 
-
-
             'tanggal'=>now(),
-
-
 
             'aktivitas'=>$request->aktivitas,
 
-
-
             'progres'=>$request->progres,
-
-
 
             'anggaran_aktivitas'=>$request->anggaran_aktivitas ?? 0,
 
-
-
             'catatan'=>$request->catatan
-
-
 
         ]);
 
 
 
 
+        // refresh data aktivitas terbaru
+        $task->refresh();
 
 
 
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIT LOG
+        |--------------------------------------------------------------------------
+        */
 
 
         AuditHelper::create(
@@ -438,13 +231,9 @@ class DailyTrackerController extends Controller
             'Manajemen Tugas',
 
             'Menambahkan aktivitas pada tugas '.
-
             $task->nama_tugas.
-
             ' dengan progres '.
-
             $request->progres.
-
             '%'
 
         );
@@ -459,24 +248,31 @@ class DailyTrackerController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | UPDATE PROGRES TASK
+        | UPDATE PROGRESS TASK
         |--------------------------------------------------------------------------
         */
 
 
+        $progressBaru = $task
+            ->aktivitasTugas()
+            ->max('progres');
+
+
+
         $task->update([
 
-
-            'progres_persen'=>$request->progres,
-
+            'progres_persen'=>$progressBaru ?? 0
 
         ]);
 
 
 
 
-
-
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE STATUS OTOMATIS
+        |--------------------------------------------------------------------------
+        */
 
 
         $task->updateStatus();
@@ -488,23 +284,15 @@ class DailyTrackerController extends Controller
 
 
 
-
         return redirect()
 
             ->route(
-
-                'employee.task.show',
-
-                $task->id
-
+                'daily-tracker.index'
             )
 
             ->with(
-
                 'success',
-
                 'Aktivitas berhasil diperbarui'
-
             );
 
 
