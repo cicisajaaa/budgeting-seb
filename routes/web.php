@@ -33,11 +33,14 @@ use App\Http\Controllers\EmployeeTaskController;
 
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | PUBLIC
 |--------------------------------------------------------------------------
 */
+
 
 Route::get('/', function(){
 
@@ -49,13 +52,20 @@ Route::get('/', function(){
 
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | AUTH
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware(['auth'])->group(function(){
+
+
+
+
 
 
 
@@ -93,6 +103,7 @@ Route::get('/notification',[
 ->name('notification.index');
 
 
+
 Route::get('/notification/read/{id}',[
     NotificationController::class,
     'read'
@@ -118,80 +129,82 @@ Route::middleware('role:karyawan')->group(function(){
 
 
 
-Route::get('/daily-tracker',[
-    DailyTrackerController::class,
-    'index'
-])
-->name('daily-tracker.index');
+    Route::get('/daily-tracker',[
+        DailyTrackerController::class,
+        'index'
+    ])
+    ->name('daily-tracker.index');
 
 
 
-Route::get('/daily-tracker/{task}',[
-    DailyTrackerController::class,
-    'show'
-])
-->name('daily-tracker.show');
+    Route::get('/daily-tracker/{task}',[
+        DailyTrackerController::class,
+        'show'
+    ])
+    ->name('daily-tracker.show');
 
 
 
-Route::post('/daily-tracker',[
-    DailyTrackerController::class,
-    'store'
-])
-->name('daily-tracker.store');
-
-
-
-
-
-Route::get('/my-project',[
-    EmployeeProjectController::class,
-    'index'
-])
-->name('employee.project.index');
+    Route::post('/daily-tracker',[
+        DailyTrackerController::class,
+        'store'
+    ])
+    ->name('daily-tracker.store');
 
 
 
 
 
-Route::get('/my-task/{task}',[
-    EmployeeTaskController::class,
-    'show'
-])
-->name('employee.task.show');
+    Route::get('/my-project',[
+        EmployeeProjectController::class,
+        'index'
+    ])
+    ->name('employee.project.index');
 
 
 
 
 
-/*
-|--------------------------------------------------------------------------
-| EXPENSE REQUEST EMPLOYEE
-|--------------------------------------------------------------------------
-*/
-
-
-Route::get('/expense/create',[
-    ExpenseRequestController::class,
-    'create'
-])
-->name('expense.create');
+    Route::get('/my-task/{task}',[
+        EmployeeTaskController::class,
+        'show'
+    ])
+    ->name('employee.task.show');
 
 
 
-Route::post('/expense',[
-    ExpenseRequestController::class,
-    'store'
-])
-->name('expense.store');
 
 
 
-Route::get('/expense/my-history',[
-    ExpenseRequestController::class,
-    'history'
-])
-->name('expense.myhistory');
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPENSE REQUEST EMPLOYEE
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/expense/create',[
+        ExpenseRequestController::class,
+        'create'
+    ])
+    ->name('expense.create');
+
+
+
+    Route::post('/expense',[
+        ExpenseRequestController::class,
+        'store'
+    ])
+    ->name('expense.store');
+
+
+
+    Route::get('/expense/my-history',[
+        ExpenseRequestController::class,
+        'history'
+    ])
+    ->name('expense.myhistory');
 
 
 
@@ -204,50 +217,42 @@ Route::get('/expense/my-history',[
 
 
 
-
 /*
 |--------------------------------------------------------------------------
-| FINANCE
+| FINANCE MANAGEMENT
+| KHUSUS KEUANGAN
 |--------------------------------------------------------------------------
 */
+
+
 Route::middleware('role:keuangan')->group(function(){
 
 
-Route::get('/finance/deposit',[
-    FinanceDepositController::class,
-    'index'
-])
-->name('finance.deposit');
+
+    Route::get('/finance/deposit',[
+        FinanceDepositController::class,
+        'index'
+    ])
+    ->name('finance.deposit');
 
 
 
-Route::post('/finance/deposit',[
-    FinanceDepositController::class,
-    'store'
-])
-->name('finance.deposit.store');
-
-
-
-
-
-
-Route::get('/finance/distribution',[
-    DepositDistributionController::class,
-    'index'
-])
-->name('finance.distribution');
+    Route::post('/finance/deposit',[
+        FinanceDepositController::class,
+        'store'
+    ])
+    ->name('finance.deposit.store');
 
 
 
 
 
-Route::get('/finance/balance',[
-    DivisionBalanceController::class,
-    'index'
-])
-->middleware('role:keuangan')
-->name('finance.balance');
+
+    Route::get('/finance/distribution',[
+        DepositDistributionController::class,
+        'index'
+    ])
+    ->name('finance.distribution');
 
 
 
@@ -255,48 +260,82 @@ Route::get('/finance/balance',[
 
 
 
-Route::resource(
-    'finance/bank',
-    BankAccountController::class
-)
-->names('finance.bank');
+    Route::resource(
+        'finance/bank',
+        BankAccountController::class
+    )
+    ->names('finance.bank');
 
 
 
-
-
-
-
+});
 /*
 |--------------------------------------------------------------------------
 | APPROVAL EXPENSE
+|    KEUANGAN
 |--------------------------------------------------------------------------
 */
 
 
-Route::get('/expense/approval',[
-    ExpenseApprovalController::class,
-    'index'
-])
-->name('expense.approval');
+Route::middleware('role:bendahara,keuangan')->group(function(){
 
 
 
-Route::post('/expense/{id}/approve',[
-    ExpenseApprovalController::class,
-    'approve'
-])
-->name('expense.approve');
+    Route::get('/expense/approval',[
+        ExpenseApprovalController::class,
+        'index'
+    ])
+    ->name('expense.approval');
 
 
 
-Route::post('/expense/{id}/reject',[
-    ExpenseApprovalController::class,
-    'reject'
-])
-->name('expense.reject');
+    Route::post('/expense/{id}/approve',[
+        ExpenseApprovalController::class,
+        'approve'
+    ])
+    ->name('expense.approve');
 
 
+
+    Route::post('/expense/{id}/reject',[
+        ExpenseApprovalController::class,
+        'reject'
+    ])
+    ->name('expense.reject');
+
+
+
+});
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | APPROVAL EXPENSE
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/expense/approval',[
+        ExpenseApprovalController::class,
+        'index'
+    ])
+    ->name('expense.approval');
+
+
+
+    Route::post('/expense/{id}/approve',[
+        ExpenseApprovalController::class,
+        'approve'
+    ])
+    ->name('expense.approve');
+
+
+
+    Route::post('/expense/{id}/reject',[
+        ExpenseApprovalController::class,
+        'reject'
+    ])
+    ->name('expense.reject');
 
 
 
@@ -310,10 +349,40 @@ Route::post('/expense/{id}/reject',[
 
 
 
+/*
+|--------------------------------------------------------------------------
+| FINANCE BALANCE
+| OWNER + KEUANGAN
+|--------------------------------------------------------------------------
+*/
+
+
+Route::middleware('role:owner,keuangan')->group(function(){
+
+
+
+    Route::get('/finance/balance',[
+        DivisionBalanceController::class,
+        'index'
+    ])
+    ->name('finance.balance');
+
+
+
+});
+
+
+
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
-| FINANCE + OWNER REPORT
+| FINANCE REPORT
+| OWNER + KEUANGAN + BENDAHARA
 |--------------------------------------------------------------------------
 */
 
@@ -322,34 +391,31 @@ Route::middleware('role:bendahara,keuangan,owner')->group(function(){
 
 
 
-
-
-Route::get('/finance/report',[
-    FinanceReportController::class,
-    'index'
-])
-->name('finance.report');
-
-
-
-
-
-Route::get('/finance/report/export',[
-    FinanceReportController::class,
-    'exportExcel'
-])
-->name('finance.report.export');
+    Route::get('/finance/report',[
+        FinanceReportController::class,
+        'index'
+    ])
+    ->name('finance.report');
 
 
 
 
 
-Route::get('/expense/approval/history',[
-    ExpenseApprovalController::class,
-    'history'
-])
-->name('expense.approval.history');
+    Route::get('/finance/report/export',[
+        FinanceReportController::class,
+        'exportExcel'
+    ])
+    ->name('finance.report.export');
 
+
+
+
+
+    Route::get('/expense/approval/history',[
+        ExpenseApprovalController::class,
+        'history'
+    ])
+    ->name('expense.approval.history');
 
 
 
@@ -395,7 +461,6 @@ Route::delete('/profile',[
 
 
 
-});
 
 
 
@@ -424,77 +489,11 @@ Route::middleware([
 
 
 
-Route::get('/dashboard',[
-    AdminDashboardController::class,
-    'index'
-])
-->name('dashboard');
-
-
-
-
-
-
-Route::resource(
-    'users',
-    UserController::class
-);
-
-
-
-
-
-Route::resource(
-    'projects',
-    AdminProjectController::class
-);
-
-
-
-
-
-Route::resource(
-    'divisions',
-    DivisionController::class
-);
-
-
-
-
-
-Route::resource(
-    'tasks',
-    TaskController::class
-);
-
-
-
-
-
-
-
-Route::get(
-    '/projects/{project}/allocation',
-    [
-        AllocationController::class,
+    Route::get('/dashboard',[
+        AdminDashboardController::class,
         'index'
-    ]
-)
-->name('allocation.index');
-
-
-
-
-
-
-Route::post(
-    '/projects/{project}/allocation',
-    [
-        AllocationController::class,
-        'store'
-    ]
-)
-->name('allocation.store');
+    ])
+    ->name('dashboard');
 
 
 
@@ -502,14 +501,82 @@ Route::post(
 
 
 
-Route::delete(
-    '/allocation/{allocation}',
-    [
-        AllocationController::class,
-        'destroy'
-    ]
-)
-->name('allocation.destroy');
+    Route::resource(
+        'users',
+        UserController::class
+    );
+
+
+
+
+
+    Route::resource(
+        'projects',
+        AdminProjectController::class
+    );
+
+
+
+
+
+    Route::resource(
+        'divisions',
+        DivisionController::class
+    );
+
+
+
+
+
+    Route::resource(
+        'tasks',
+        TaskController::class
+    );
+
+
+
+
+
+
+
+    Route::get(
+        '/projects/{project}/allocation',
+        [
+            AllocationController::class,
+            'index'
+        ]
+    )
+    ->name('allocation.index');
+
+
+
+
+
+
+
+    Route::post(
+        '/projects/{project}/allocation',
+        [
+            AllocationController::class,
+            'store'
+        ]
+    )
+    ->name('allocation.store');
+
+
+
+
+
+
+
+    Route::delete(
+        '/allocation/{allocation}',
+        [
+            AllocationController::class,
+            'destroy'
+        ]
+    )
+    ->name('allocation.destroy');
 
 
 

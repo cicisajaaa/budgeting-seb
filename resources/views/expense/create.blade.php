@@ -6,48 +6,36 @@
 
 <div class="welcome-card">
 
+    <div>
 
-<div>
-
-<div class="welcome-label">
-
-PENGAJUAN DANA
-
-</div>
+        <div class="welcome-label">
+            PENGAJUAN DANA
+        </div>
 
 
-<h1>
-
-Ajukan Dana Project
-
-</h1>
+        <h1>
+            Ajukan Dana Project
+        </h1>
 
 
-<p>
+        <p>
+            Isi form berikut untuk mengajukan kebutuhan dana kepada keuangan.
+        </p>
 
-Isi form berikut untuk mengajukan kebutuhan dana kepada bendahara.
-
-</p>
-
-
-</div>
+    </div>
 
 
 
-<div class="system-status">
+    <div class="system-status">
 
-<span></span>
+        <span></span>
 
-Employee
+        Employee
 
-</div>
-
+    </div>
 
 
 </div>
-
-
-
 
 
 
@@ -57,7 +45,32 @@ Employee
 
 <div class="success-box">
 
-{{session('success')}}
+    {{ session('success') }}
+
+</div>
+
+@endif
+
+
+
+
+
+
+@if($errors->any())
+
+<div class="error-box">
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>
+{{ $error }}
+</li>
+
+@endforeach
+
+</ul>
 
 </div>
 
@@ -82,12 +95,11 @@ Employee
 
 
 
-
-<form method="POST"
-action="{{route('expense.store')}}">
-
+<form method="POST" action="{{ route('expense.store') }}">
 
 @csrf
+
+
 
 
 
@@ -99,22 +111,17 @@ action="{{route('expense.store')}}">
 
 <div>
 
-
 <label>
-
 Project
-
 </label>
 
 
 
-<select name="project_id" required>
+<select name="proyek_id" required>
 
 
 <option value="">
-
 -- Pilih Project --
-
 </option>
 
 
@@ -122,9 +129,9 @@ Project
 @foreach($projects as $project)
 
 
-<option value="{{$project->id}}">
+<option value="{{ $project->id }}">
 
-{{$project->nama_project}}
+{{ $project->nama_proyek }}
 
 </option>
 
@@ -145,24 +152,21 @@ Project
 
 
 
+
 <div>
 
 
 <label>
-
 Divisi
-
 </label>
 
 
 
-<select name="division_id" required>
+<select name="divisi_id" required>
 
 
 <option value="">
-
 -- Pilih Divisi --
-
 </option>
 
 
@@ -170,9 +174,9 @@ Divisi
 @foreach($divisions as $division)
 
 
-<option value="{{$division->id}}">
+<option value="{{ $division->id }}">
 
-{{$division->nama_divisi}}
+{{ $division->nama_divisi }}
 
 </option>
 
@@ -192,18 +196,18 @@ Divisi
 
 
 
+
 <div>
 
 
 <label>
-
 Jumlah Dana
-
 </label>
 
 
 
-<input type="number"
+<input 
+type="number"
 name="jumlah"
 placeholder="Masukkan nominal"
 required>
@@ -214,9 +218,9 @@ required>
 
 
 
-
-
 </div>
+
+
 
 
 
@@ -228,15 +232,19 @@ required>
 
 
 <label>
-
 Judul Pengeluaran
-
 </label>
 
 
-<input type="text"
+
+<input 
+
+type="text"
+
 name="judul"
+
 placeholder="Contoh: Pembelian alat kerja"
+
 required>
 
 
@@ -253,20 +261,21 @@ required>
 
 
 <label>
-
 Keterangan
-
 </label>
 
 
+
 <textarea
+
 name="keterangan"
+
 rows="4"
+
 placeholder="Jelaskan kebutuhan dana"></textarea>
 
 
 </div>
-
 
 
 
@@ -287,9 +296,7 @@ placeholder="Jelaskan kebutuhan dana"></textarea>
 </form>
 
 
-
 </div>
-
 
 
 
@@ -304,7 +311,6 @@ placeholder="Jelaskan kebutuhan dana"></textarea>
 
 .welcome-card{
 
-
 background:
 linear-gradient(
 135deg,
@@ -312,27 +318,19 @@ linear-gradient(
 #22c55e
 );
 
-
 padding:30px;
-
 
 border-radius:24px;
 
-
 color:white;
-
 
 display:flex;
 
-
 justify-content:space-between;
-
 
 align-items:center;
 
-
 margin-bottom:22px;
-
 
 }
 
@@ -352,6 +350,7 @@ opacity:.8;
 
 
 
+
 .welcome-card h1{
 
 font-size:28px;
@@ -359,6 +358,7 @@ font-size:28px;
 margin:8px 0;
 
 }
+
 
 
 
@@ -372,8 +372,8 @@ opacity:.9;
 
 
 
-.system-status{
 
+.system-status{
 
 background:white;
 
@@ -395,6 +395,7 @@ gap:8px;
 
 
 
+
 .system-status span{
 
 width:9px;
@@ -410,9 +411,7 @@ border-radius:50%;
 
 
 
-
 .success-box{
-
 
 background:#dcfce7;
 
@@ -424,10 +423,24 @@ border-radius:14px;
 
 margin-bottom:20px;
 
-font-size:13px;
-
 font-weight:600;
 
+}
+
+
+
+
+.error-box{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:15px;
+
+border-radius:14px;
+
+margin-bottom:20px;
 
 }
 
@@ -437,8 +450,8 @@ font-weight:600;
 
 .glass-panel{
 
-
-background:rgba(255,255,255,.65);
+background:
+rgba(255,255,255,.65);
 
 backdrop-filter:blur(15px);
 
@@ -448,13 +461,13 @@ padding:22px;
 
 border:1px solid rgba(255,255,255,.8);
 
-
 }
 
 
 
-.panel-title{
 
+
+.panel-title{
 
 font-size:16px;
 
@@ -462,21 +475,19 @@ font-weight:700;
 
 margin-bottom:20px;
 
-
 }
+
 
 
 
 
 .form-grid{
 
-
 display:grid;
 
 grid-template-columns:repeat(3,1fr);
 
 gap:18px;
-
 
 }
 
@@ -485,7 +496,6 @@ gap:18px;
 
 
 label{
-
 
 display:block;
 
@@ -497,9 +507,7 @@ color:#475569;
 
 margin-bottom:8px;
 
-
 }
-
 
 
 
@@ -521,10 +529,7 @@ background:white;
 
 margin-bottom:15px;
 
-
 }
-
-
 
 
 
@@ -533,6 +538,8 @@ textarea{
 resize:none;
 
 }
+
+
 
 
 
@@ -555,7 +562,9 @@ font-weight:600;
 
 cursor:pointer;
 
+
 }
+
 
 
 
@@ -567,7 +576,10 @@ background:#22c55e;
 
 
 
+
+
 @media(max-width:900px){
+
 
 .form-grid{
 
@@ -575,11 +587,24 @@ grid-template-columns:1fr;
 
 }
 
+
+
+.welcome-card{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
 }
 
 
-</style>
+}
 
+
+
+</style>
 
 
 @endsection

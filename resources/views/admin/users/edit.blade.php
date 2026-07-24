@@ -235,11 +235,11 @@ Owner
 
 
 
-<option value="bendahara"
+<option value="keuangan"
 
-{{$user->role=='bendahara'?'selected':''}}>
+{{$user->role=='keuangan'?'selected':''}}>
 
-Bendahara
+keuangan
 
 </option>
 

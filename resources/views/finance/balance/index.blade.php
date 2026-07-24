@@ -227,7 +227,7 @@ Saldo
 <td>
 
 
-{{$balance->project->nama_project ?? '-'}}
+{{$balance->proyek->nama_proyek ?? '-'}}
 
 
 </td>
@@ -237,7 +237,7 @@ Saldo
 <td>
 
 
-{{$balance->division->nama_divisi ?? '-'}}
+{{$balance->divisi->nama_divisi ?? '-'}}
 
 
 </td>

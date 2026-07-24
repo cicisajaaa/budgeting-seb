@@ -17,89 +17,107 @@ class AllocationController extends Controller
 {
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | HALAMAN ALOKASI DANA DIVISI
-    |--------------------------------------------------------------------------
-    */
+    public function index($project)
+    {
 
 
-    public function index(Proyek $project)
-{
-
-
-    $allocations = AlokasiProyekDivisi::with([
-
-        'divisi'
-
-    ])
-
-    ->where(
-
-        'proyek_id',
-
-        $project->id
-
-    )
-
-    ->get();
+        $project = Proyek::findOrFail($project);
 
 
 
+        $allocations = AlokasiProyekDivisi::with([
 
-    $divisions = Divisi::all();
+            'divisi'
 
+        ])
 
+        ->where(
 
+            'proyek_id',
 
-    return view(
-
-        'admin.allocation.index',
-
-        compact(
-
-            'project',
-
-            'allocations',
-
-            'divisions'
+            $project->id
 
         )
 
-    );
+        ->latest()
+
+        ->get();
 
 
-}
+
+
+
+        $divisions = Divisi::latest()->get();
 
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | SIMPAN ALOKASI
-    |--------------------------------------------------------------------------
-    */
+
+        return view(
+
+            'admin.allocation.index',
+
+            compact(
+
+                'project',
+
+                'allocations',
+
+                'divisions'
+
+            )
+
+        );
 
 
-    public function store(Request $request, Proyek $project)
+    }
+
+
+
+
+
+
+
+
+    public function store(Request $request,$project)
     {
+
+
+        $project = Proyek::findOrFail($project);
+
+
+
 
 
         $request->validate([
 
 
-
             'divisi_id'=>
 
-                'required|exists:divisi,id',
+            [
+
+                'required',
+
+                'exists:divisi,id',
+
+            ],
 
 
 
 
             'persentase'=>
 
-                'required|numeric|min:0|max:100',
+            [
 
+                'required',
+
+                'numeric',
+
+                'min:1',
+
+                'max:100'
+
+            ]
 
 
         ]);
@@ -111,37 +129,24 @@ class AllocationController extends Controller
 
 
 
+        $cekDivisi = AlokasiProyekDivisi::where([
 
-        $totalPersentase = AlokasiProyekDivisi::where(
 
-            'proyek_id',
+            'proyek_id'=>$project->id,
 
-            $project->id
 
-        )
+            'divisi_id'=>$request->divisi_id
 
-        ->sum(
 
-            'persentase'
+        ])
 
-        );
+        ->exists();
 
 
 
 
 
-
-
-
-        if(
-
-            ($totalPersentase + $request->persentase)
-
-            >
-
-            100
-
-        )
+        if($cekDivisi)
         {
 
 
@@ -151,7 +156,7 @@ class AllocationController extends Controller
 
                 'error',
 
-                'Total alokasi tidak boleh lebih dari 100%'
+                'Divisi tersebut sudah memiliki alokasi dana'
 
             );
 
@@ -166,26 +171,61 @@ class AllocationController extends Controller
 
 
 
+        $total = AlokasiProyekDivisi::where(
+
+            'proyek_id',
+
+            $project->id
+
+        )
+
+        ->sum('persentase');
+
+
+
+
+
+
+
+
+        if(
+
+            $total + $request->persentase > 100
+
+        )
+        {
+
+
+            return back()
+
+            ->with(
+
+                'error',
+
+                'Total pembagian dana melebihi 100%'
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+
         AlokasiProyekDivisi::create([
 
 
-
-            'proyek_id'=>
-
-                $project->id,
+            'proyek_id'=>$project->id,
 
 
-
-            'divisi_id'=>
-
-                $request->divisi_id,
+            'divisi_id'=>$request->divisi_id,
 
 
-
-            'persentase'=>
-
-                $request->persentase
-
+            'persentase'=>$request->persentase,
 
 
         ]);
@@ -197,16 +237,15 @@ class AllocationController extends Controller
 
 
 
-
         return back()
 
-            ->with(
+        ->with(
 
-                'success',
+            'success',
 
-                'Alokasi divisi berhasil ditambahkan'
+            'Pembagian dana berhasil ditambahkan'
 
-            );
+        );
 
 
     }
@@ -218,16 +257,12 @@ class AllocationController extends Controller
 
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS ALOKASI
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function destroy(AlokasiProyekDivisi $allocation)
+    public function destroy($allocation)
     {
+
+
+        $allocation = AlokasiProyekDivisi::findOrFail($allocation);
+
 
 
         $allocation->delete();
@@ -235,15 +270,16 @@ class AllocationController extends Controller
 
 
 
+
         return back()
 
-            ->with(
+        ->with(
 
-                'success',
+            'success',
 
-                'Alokasi berhasil dihapus'
+            'Alokasi berhasil dihapus'
 
-            );
+        );
 
 
     }

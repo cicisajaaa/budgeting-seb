@@ -2,17 +2,19 @@
 
 
 @section('content')
+
 @if(session('error'))
 
 <div class="alert-error">
-
-{{session('error')}}
-
+    {{session('error')}}
 </div>
 
 @endif
 
+
+
 <div class="tracker-card">
+
 
 
 <div class="header-task">
@@ -25,12 +27,12 @@ UPDATE PROGRESS
 
 
 <h1>
-{{ $task->nama_task }}
+{{ $task->nama_tugas }}
 </h1>
 
 
 <p>
-📁 {{ $task->project->nama_project ?? '-' }}
+📁 {{ $task->proyek->nama_proyek ?? '-' }}
 </p>
 
 
@@ -48,13 +50,17 @@ UPDATE PROGRESS
 
 
 
+
 <div class="info-grid">
 
 
+
 <div>
+
 <label>
 Status
 </label>
+
 
 <strong>
 {{strtoupper($task->status)}}
@@ -64,10 +70,14 @@ Status
 
 
 
+
+
 <div>
+
 <label>
 Deadline
 </label>
+
 
 <strong>
 {{$task->deadline ?? '-'}}
@@ -77,19 +87,26 @@ Deadline
 
 
 
+
+
 <div>
+
 <label>
 Progress Saat Ini
 </label>
 
+
 <strong>
-{{$task->progress_persen}}%
+{{$task->progres_persen ?? 0}}%
 </strong>
 
 </div>
 
 
+
 </div>
+
+
 
 
 
@@ -99,9 +116,12 @@ Progress Saat Ini
 
 
 
+
+
 <form action="{{route('daily-tracker.store')}}" method="POST">
 
 @csrf
+
 
 
 <input type="hidden"
@@ -126,6 +146,7 @@ required></textarea>
 
 
 
+
 <label>
 Progress (%)
 </label>
@@ -133,11 +154,14 @@ Progress (%)
 
 <input 
 type="number"
-name="progress"
+name="progres"
 min="0"
 max="100"
-value="{{$task->progress_persen}}"
+value="{{$task->progres_persen ?? 0}}"
+required
 >
+
+
 
 
 
@@ -155,7 +179,8 @@ placeholder="Catatan tambahan"></textarea>
 
 
 
-<button>
+
+<button type="submit">
 Simpan Update
 </button>
 
@@ -171,7 +196,10 @@ Simpan Update
 
 
 
+
+
 <style>
+
 
 .alert-error{
 
@@ -188,130 +216,212 @@ margin-bottom:20px;
 font-weight:600;
 
 }
+
+
+
+
+
 .tracker-card{
+
 
 background:white;
 
+
 padding:30px;
+
 
 border-radius:25px;
 
-box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.08);
+
+
 
 }
+
+
+
 
 
 
 .header-task{
 
+
 display:flex;
+
 
 justify-content:space-between;
 
+
 align-items:center;
 
-background:linear-gradient(
+
+background:
+linear-gradient(
 135deg,
 #166534,
 #22c55e
 );
 
+
 padding:25px;
+
 
 border-radius:20px;
 
+
 color:white;
+
 
 margin-bottom:25px;
 
+
+
 }
+
+
 
 
 
 .label{
 
+
 font-size:11px;
+
 
 letter-spacing:2px;
 
+
 }
+
+
 
 
 
 .header-task h1{
 
+
 margin:8px 0;
+
 
 font-size:28px;
 
+
+
 }
+
+
 
 
 
 .back{
 
+
 background:white;
+
 
 color:#166534;
 
+
 padding:12px 20px;
+
 
 border-radius:20px;
 
+
 text-decoration:none;
+
 
 font-weight:bold;
 
+
+
 }
+
+
+
 
 
 
 
 .info-grid{
 
+
 display:grid;
 
-grid-template-columns:repeat(3,1fr);
+
+grid-template-columns:
+repeat(3,1fr);
+
+
 
 gap:20px;
 
+
 margin-bottom:25px;
 
+
+
 }
+
+
+
 
 
 
 .info-grid div{
 
+
 background:#f8fafc;
+
 
 padding:20px;
 
+
 border-radius:15px;
 
+
+
 }
+
+
+
 
 
 
 .info-grid label{
 
+
 display:block;
+
 
 font-size:12px;
 
+
 color:#64748b;
+
 
 margin-bottom:8px;
 
+
+
 }
+
+
+
 
 
 
 .info-grid strong{
 
+
 color:#166534;
 
+
+
 }
+
 
 
 
@@ -319,15 +429,22 @@ color:#166534;
 
 form label{
 
+
 display:block;
+
 
 font-weight:700;
 
+
 margin-top:15px;
+
 
 margin-bottom:8px;
 
+
+
 }
+
 
 
 
@@ -339,15 +456,23 @@ input{
 
 width:100%;
 
+
 padding:15px;
+
 
 border-radius:15px;
 
-border:1px solid #e2e8f0;
+
+border:
+1px solid #e2e8f0;
+
 
 font-family:inherit;
 
+
+
 }
+
 
 
 
@@ -355,11 +480,16 @@ font-family:inherit;
 
 textarea{
 
+
 height:120px;
+
 
 resize:none;
 
+
+
 }
+
 
 
 
@@ -370,30 +500,44 @@ button{
 
 margin-top:20px;
 
+
 background:#166534;
+
 
 color:white;
 
+
 border:none;
+
 
 padding:14px 30px;
 
+
 border-radius:15px;
 
+
 font-weight:bold;
+
 
 cursor:pointer;
 
 
+
 }
+
+
 
 
 
 button:hover{
 
+
 background:#22c55e;
 
+
+
 }
+
 
 
 
@@ -401,26 +545,40 @@ background:#22c55e;
 
 @media(max-width:900px){
 
+
 .info-grid{
+
 
 grid-template-columns:1fr;
 
+
+
 }
+
+
 
 .header-task{
 
+
 flex-direction:column;
+
 
 align-items:flex-start;
 
+
 gap:20px;
 
+
+
 }
+
+
 
 }
 
 
 </style>
+
 
 
 @endsection

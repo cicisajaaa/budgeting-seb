@@ -1137,7 +1137,7 @@ color:#6d28d9;
 
 
 
-.role.bendahara{
+.role.keuangan{
 
 
 background:#fef3c7;

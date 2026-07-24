@@ -27,7 +27,7 @@ class ExpenseApprovalController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | HALAMAN APPROVAL BENDAHARA
+    | HALAMAN APPROVAL KEUANGAN
     |--------------------------------------------------------------------------
     */
 
@@ -38,29 +38,22 @@ class ExpenseApprovalController extends Controller
 
         $requests = PengajuanDana::with([
 
-
             'proyek',
 
             'divisi',
 
             'pengguna'
 
-
         ])
 
         ->where(
-
             'status',
-
             'pending'
-
         )
 
         ->latest()
 
         ->get();
-
-
 
 
 
@@ -75,9 +68,6 @@ class ExpenseApprovalController extends Controller
         )
 
         ->get();
-
-
-
 
 
 
@@ -121,11 +111,16 @@ class ExpenseApprovalController extends Controller
 
         $request->validate([
 
+
             'rekening_bank_id'=>'required',
+
 
             'catatan_persetujuan'=>'nullable|string'
 
+
         ]);
+
+
 
 
 
@@ -159,6 +154,16 @@ class ExpenseApprovalController extends Controller
 
 
 
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | CEK REKENING BANK
+                |--------------------------------------------------------------------------
+                */
+
+
                 $bank = RekeningBank::findOrFail(
 
                     $request->rekening_bank_id
@@ -188,6 +193,81 @@ class ExpenseApprovalController extends Controller
 
 
 
+
+                /*
+                |--------------------------------------------------------------------------
+                | CEK SALDO DIVISI PROJECT
+                |--------------------------------------------------------------------------
+                */
+
+
+                $balance = SaldoDivisi::where([
+
+
+                    'proyek_id'=>$expenseRequest->proyek_id,
+
+
+                    'divisi_id'=>$expenseRequest->divisi_id
+
+
+
+                ])
+
+                ->first();
+
+
+
+
+
+
+
+
+
+                if(!$balance)
+                {
+
+                    throw new \Exception(
+
+                        'Saldo divisi project belum tersedia'
+
+                    );
+
+                }
+
+
+
+
+
+
+
+
+
+                if($balance->saldo < $expenseRequest->jumlah)
+                {
+
+                    throw new \Exception(
+
+                        'Saldo divisi tidak mencukupi'
+
+                    );
+
+                }
+
+
+
+
+
+
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | UPDATE PENGAJUAN
+                |--------------------------------------------------------------------------
+                */
+
+
                 $expenseRequest->update([
 
 
@@ -210,7 +290,7 @@ class ExpenseApprovalController extends Controller
 
                         ??
 
-                        'Disetujui oleh bendahara'
+                        'Disetujui oleh Keuangan'
 
 
 
@@ -222,6 +302,13 @@ class ExpenseApprovalController extends Controller
 
 
 
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | SIMPAN TRANSAKSI
+                |--------------------------------------------------------------------------
+                */
 
 
                 TransaksiDana::create([
@@ -268,6 +355,13 @@ class ExpenseApprovalController extends Controller
 
 
 
+                /*
+                |--------------------------------------------------------------------------
+                | KURANGI SALDO BANK
+                |--------------------------------------------------------------------------
+                */
+
+
                 $bank->decrement(
 
                     'saldo',
@@ -284,47 +378,21 @@ class ExpenseApprovalController extends Controller
 
 
 
-                $balance = SaldoDivisi::where([
+                /*
+                |--------------------------------------------------------------------------
+                | KURANGI SALDO DIVISI
+                |--------------------------------------------------------------------------
+                */
 
 
+                $balance->decrement(
 
-                    'proyek_id'=>
+                    'saldo',
 
-                        $expenseRequest->proyek_id,
+                    $expenseRequest->jumlah
 
+                );
 
-
-                    'divisi_id'=>
-
-                        $expenseRequest->divisi_id
-
-
-
-                ])
-
-                ->first();
-
-
-
-
-
-
-
-
-                if($balance)
-                {
-
-
-                    $balance->decrement(
-
-                        'saldo',
-
-                        $expenseRequest->jumlah
-
-                    );
-
-
-                }
 
 
 
@@ -344,6 +412,13 @@ class ExpenseApprovalController extends Controller
 
 
 
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | AUDIT
+            |--------------------------------------------------------------------------
+            */
 
 
             AuditHelper::create(
@@ -376,6 +451,13 @@ class ExpenseApprovalController extends Controller
 
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | NOTIFIKASI
+            |--------------------------------------------------------------------------
+            */
+
+
             $expenseRequest->pengguna->notify(
 
 
@@ -397,13 +479,14 @@ class ExpenseApprovalController extends Controller
 
 
 
+
             return back()
 
             ->with(
 
                 'success',
 
-                'Pengajuan berhasil disetujui dan transaksi tercatat'
+                'Pengajuan berhasil disetujui dan saldo berhasil diperbarui'
 
             );
 

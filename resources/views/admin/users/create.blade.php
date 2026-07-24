@@ -226,9 +226,9 @@ Owner
 </option>
 
 
-<option value="bendahara">
+<option value="keuangan">
 
-Bendahara
+Keuangan
 
 </option>
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\DivisionBalance;
+use App\Models\SaldoDivisi;
 
 
 
@@ -14,12 +14,18 @@ class DivisionBalanceController extends Controller
     public function index()
     {
 
-$balances = DivisionBalance::with([
-    'project',
-    'division'
-])
-->latest()
-->get();
+
+        $balances = SaldoDivisi::with([
+
+            'proyek',
+
+            'divisi'
+
+        ])
+
+        ->latest()
+
+        ->get();
 
 
 
@@ -46,7 +52,6 @@ $balances = DivisionBalance::with([
 
 
     }
-
 
 
 }

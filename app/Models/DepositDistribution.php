@@ -7,36 +7,98 @@ use Illuminate\Database\Eloquent\Model;
 
 class DepositDistribution extends Model
 {
-protected $table = 'distribusi_setoran';
+
+
+    protected $table = 'distribusi_setoran';
+
+
+
     protected $fillable = [
 
-        'deposit_id',
-        'division_id',
+        'setoran_proyek_id',
+
+        'divisi_id',
+
         'nominal_diterima',
 
     ];
 
 
 
-    public function deposit()
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Setoran Proyek
+    |--------------------------------------------------------------------------
+    */
+
+    public function setoranProyek()
     {
 
         return $this->belongsTo(
-            ProjectDeposit::class,
-            'deposit_id'
+
+            SetoranProyek::class,
+
+            'setoran_proyek_id'
+
         );
 
     }
 
 
 
-    public function division()
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Divisi
+    |--------------------------------------------------------------------------
+    */
+
+    public function divisi()
     {
 
         return $this->belongsTo(
-            Division::class
+
+            Divisi::class,
+
+            'divisi_id'
+
         );
 
     }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Project melalui Setoran
+    |--------------------------------------------------------------------------
+    */
+
+    public function proyek()
+    {
+
+        return $this->hasOneThrough(
+
+            Proyek::class,
+
+            SetoranProyek::class,
+
+            'id',
+
+            'id',
+
+            'setoran_proyek_id',
+
+            'proyek_id'
+
+        );
+
+    }
+
 
 }

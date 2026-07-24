@@ -46,9 +46,9 @@ class DepositController extends Controller
 
                 return [
 
-                    'division_id' => $allocation->division_id,
+                    'division_id' => $allocation->divisi_id,
 
-                    'nama_divisi' => $allocation->division->nama_divisi,
+                    'nama_divisi' => $allocation->divisi->nama_divisi,
 
                     'nominal' =>
                         ($allocation->persentase / 100)

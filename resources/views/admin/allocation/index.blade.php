@@ -85,7 +85,7 @@ Project
 
 <h2>
 
-{{$project->nama_project}}
+{{$project->nama_proyek}}
 
 </h2>
 
@@ -257,11 +257,15 @@ Pilih Divisi
 </label>
 
 
+<select name="divisi_id" required>
 
-<select name="division_id">
+
+<option value="">
+-- Pilih Divisi --
+</option>
 
 
-@foreach($divisions as $division)
+@forelse($divisions as $division)
 
 
 <option value="{{$division->id}}">
@@ -271,7 +275,17 @@ Pilih Divisi
 </option>
 
 
-@endforeach
+@empty
+
+
+<option disabled>
+
+Belum ada divisi
+
+</option>
+
+
+@endforelse
 
 
 </select>
@@ -476,8 +490,7 @@ Aksi
 
 </div>
 
-
-{{$allocation->division->nama_divisi}}
+{{$allocation->divisi->nama_divisi ?? '-'}}
 
 
 </div>

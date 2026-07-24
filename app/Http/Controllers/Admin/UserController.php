@@ -133,7 +133,7 @@ class UserController extends Controller
 
 
 
-            'role'=>'required|in:owner,admin,bendahara,karyawan',
+            'role'=>'required|in:owner,admin,keuangan,karyawan',
 
 
 
@@ -374,7 +374,7 @@ class UserController extends Controller
 
 
 
-            'role'=>'required|in:owner,admin,bendahara,karyawan',
+            'role'=>'required|in:owner,admin,keuangan,karyawan',
 
 
 

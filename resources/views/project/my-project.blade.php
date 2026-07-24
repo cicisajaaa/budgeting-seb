@@ -53,7 +53,7 @@ Daftar project yang menjadi tanggung jawab kamu.
 
 
 <p>
-{{$project->project_owner ?? '-'}}
+{{$project->pemilik_proyek ?? '-'}}
 </p>
 
 

@@ -19,7 +19,7 @@ class AlokasiProyekDivisi extends Model
 
         'divisi_id',
 
-        'persentase',
+        'persentase'
 
     ];
 
@@ -27,9 +27,10 @@ class AlokasiProyekDivisi extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Proyek
+    | Relasi Proyek Indonesia
     |--------------------------------------------------------------------------
     */
 
@@ -52,15 +53,67 @@ class AlokasiProyekDivisi extends Model
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Proyek Lama (Compatibility)
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function project()
+    {
+
+        return $this->belongsTo(
+
+            Proyek::class,
+
+            'proyek_id'
+
+        );
+
+    }
+
+
+
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Divisi
+    | Relasi Divisi Indonesia
     |--------------------------------------------------------------------------
     */
 
 
     public function divisi()
+    {
+
+        return $this->belongsTo(
+
+            Divisi::class,
+
+            'divisi_id'
+
+        );
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Divisi Lama (Compatibility)
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function division()
     {
 
         return $this->belongsTo(

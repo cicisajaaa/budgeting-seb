@@ -4,39 +4,27 @@
 @section('content')
 
 
-
-<!-- HEADER -->
-
-
 <div class="page-header">
 
 
 <div>
 
-
 <div class="page-label">
-
 ORGANIZATION MANAGEMENT
-
 </div>
 
 
 <h1>
-
 Tambah Divisi
-
 </h1>
 
 
 <p>
-
-Buat unit organisasi baru untuk mendukung struktur perusahaan.
-
+Tambahkan unit organisasi baru perusahaan.
 </p>
 
 
 </div>
-
 
 
 
@@ -47,10 +35,7 @@ Buat unit organisasi baru untuk mendukung struktur perusahaan.
 </a>
 
 
-
 </div>
-
-
 
 
 
@@ -65,27 +50,19 @@ Buat unit organisasi baru untuk mendukung struktur perusahaan.
 
 
 <strong>
-
 Terjadi kesalahan:
-
 </strong>
 
 
 <ul>
 
-
 @foreach($errors->all() as $error)
 
-
 <li>
-
 {{$error}}
-
 </li>
 
-
 @endforeach
-
 
 </ul>
 
@@ -101,18 +78,72 @@ Terjadi kesalahan:
 
 
 
-<!-- FORM -->
+@if(session('success'))
 
 
-<div class="glass-panel form-card">
+<div class="alert-success">
+
+✓ {{session('success')}}
+
+</div>
+
+
+@endif
+
+
+
+
+
+
+
+<div class="glass-panel">
+
+
+
+<div class="info-box">
+
+
+<div class="info-icon">
+
+🏢
+
+</div>
+
+
+
+<div>
+
+
+<strong>
+Manajemen Divisi
+</strong>
+
+
+<p>
+Divisi ini akan digunakan untuk alokasi dana project,
+pengajuan biaya, dan monitoring saldo divisi.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 
 
 
 <div class="panel-title">
 
-🏢 Informasi Divisi Baru
+🏢 Form Tambah Divisi
 
 </div>
+
+
 
 
 
@@ -130,15 +161,13 @@ action="{{route('admin.divisions.store')}}">
 
 
 
+
 <div class="form-group">
 
 
 <label>
-
 Nama Divisi
-
 </label>
-
 
 
 <input
@@ -149,14 +178,12 @@ name="nama_divisi"
 
 value="{{old('nama_divisi')}}"
 
-placeholder="Contoh: Keuangan, Operasional, IT"
+placeholder="Contoh: IT, Keuangan, Marketing"
 
 required>
 
 
-
 </div>
-
 
 
 
@@ -180,8 +207,8 @@ required>
 
 
 
-
 </form>
+
 
 
 
@@ -198,23 +225,15 @@ required>
 <style>
 
 
-/* HEADER */
-
-
 .page-header{
-
 
 display:flex;
 
-
 justify-content:space-between;
-
 
 align-items:center;
 
-
-margin-bottom:22px;
-
+margin-bottom:25px;
 
 }
 
@@ -222,18 +241,13 @@ margin-bottom:22px;
 
 .page-label{
 
-
 font-size:10px;
-
 
 letter-spacing:2px;
 
-
 font-weight:800;
 
-
 color:#94a3b8;
-
 
 }
 
@@ -241,15 +255,11 @@ color:#94a3b8;
 
 .page-header h1{
 
-
-font-size:26px;
-
+font-size:28px;
 
 color:#166534;
 
-
 margin:5px 0;
-
 
 }
 
@@ -257,16 +267,11 @@ margin:5px 0;
 
 .page-header p{
 
-
 font-size:13px;
-
 
 color:#64748b;
 
-
 }
-
-
 
 
 
@@ -274,77 +279,21 @@ color:#64748b;
 
 .btn-back{
 
-
 background:white;
-
 
 border:1px solid #e5e7eb;
 
+padding:12px 18px;
 
-padding:10px 18px;
-
-
-border-radius:12px;
-
-
-font-size:13px;
-
-
-font-weight:600;
-
+border-radius:14px;
 
 text-decoration:none;
 
-
 color:#475569;
-
-
-}
-
-
-
-
-
-
-
-
-
-/* ERROR */
-
-
-.alert-error{
-
-
-background:#fee2e2;
-
-
-color:#991b1b;
-
-
-padding:15px 18px;
-
-
-border-radius:15px;
-
-
-margin-bottom:18px;
-
 
 font-size:13px;
 
-
-}
-
-
-
-.alert-error ul{
-
-
-padding-left:20px;
-
-
-margin-top:8px;
-
+font-weight:600;
 
 }
 
@@ -353,54 +302,95 @@ margin-top:8px;
 
 
 
-
-
-
-/* CARD */
-
-
-.form-card{
-
-
-max-width:700px;
-
-
-}
 
 
 
 .glass-panel{
 
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
-
-
+background:white;
 
 border-radius:22px;
 
-
-padding:25px;
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
+padding:30px;
 
 box-shadow:
 
-0 15px 35px rgba(15,23,42,.06);
+0 10px 30px rgba(15,23,42,.08);
 
+max-width:700px;
 
 }
+
+
+
+
+
+
+
+.info-box{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+background:#f0fdf4;
+
+padding:18px;
+
+border-radius:18px;
+
+margin-bottom:25px;
+
+}
+
+
+
+.info-icon{
+
+width:45px;
+
+height:45px;
+
+border-radius:15px;
+
+background:#dcfce7;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:20px;
+
+}
+
+
+
+.info-box strong{
+
+font-size:14px;
+
+color:#166534;
+
+}
+
+
+
+.info-box p{
+
+font-size:12px;
+
+color:#64748b;
+
+margin-top:5px;
+
+}
+
+
+
 
 
 
@@ -408,18 +398,13 @@ box-shadow:
 
 .panel-title{
 
-
-font-size:16px;
-
+font-size:18px;
 
 font-weight:700;
 
+color:#166534;
 
-margin-bottom:22px;
-
-
-color:#111827;
-
+margin-bottom:25px;
 
 }
 
@@ -430,17 +415,13 @@ color:#111827;
 
 
 
-/* FORM */
-
-
 .form-group{
-
 
 display:flex;
 
-
 flex-direction:column;
 
+gap:8px;
 
 }
 
@@ -448,102 +429,65 @@ flex-direction:column;
 
 .form-group label{
 
+font-size:13px;
 
-font-size:12px;
-
-
-font-weight:600;
-
+font-weight:700;
 
 color:#475569;
 
-
-margin-bottom:8px;
-
-
 }
 
 
 
+input{
 
+height:50px;
 
-.form-group input{
+border-radius:14px;
 
-
-height:48px;
-
-
-border-radius:12px;
-
-
-border:
-
-1px solid #e2e8f0;
-
+border:1px solid #e2e8f0;
 
 background:#f8fafc;
 
+padding:0 15px;
 
-padding:
-
-0 15px;
-
-
-font-size:13px;
-
-
-outline:none;
-
-
-transition:.25s;
-
+font-size:14px;
 
 }
 
 
 
+input:focus{
 
-
-.form-group input:focus{
-
+outline:none;
 
 background:white;
 
-
 border-color:#22c55e;
-
 
 box-shadow:
 
 0 0 0 4px rgba(34,197,94,.12);
 
-
 }
 
 
 
 
 
-
-
-
-
-/* BUTTON */
 
 
 .form-action{
 
-
 margin-top:25px;
-
 
 display:flex;
 
-
 justify-content:flex-end;
 
-
 }
+
+
 
 
 
@@ -551,46 +495,30 @@ justify-content:flex-end;
 .btn-save{
 
 
-border:none;
-
-
-padding:12px 25px;
-
-
-border-radius:14px;
-
-
 background:
 
 linear-gradient(
-
 135deg,
-
 #166534,
-
 #22c55e
-
 );
-
 
 
 color:white;
 
+border:none;
 
-font-size:13px;
+padding:13px 25px;
 
+border-radius:14px;
 
 font-weight:700;
 
-
 cursor:pointer;
-
-
 
 box-shadow:
 
 0 10px 25px rgba(34,197,94,.25);
-
 
 }
 
@@ -598,11 +526,60 @@ box-shadow:
 
 .btn-save:hover{
 
+transform:translateY(-2px);
 
-transform:
+}
 
-translateY(-2px);
 
+
+
+
+
+
+.alert-error{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+font-size:13px;
+
+}
+
+
+
+.alert-error ul{
+
+margin:8px 0 0;
+
+padding-left:20px;
+
+}
+
+
+
+
+.alert-success{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+font-size:13px;
+
+font-weight:600;
 
 }
 
@@ -617,23 +594,21 @@ translateY(-2px);
 
 .page-header{
 
-
 flex-direction:column;
-
 
 align-items:flex-start;
 
-
 gap:15px;
 
-
 }
 
 
-}
 
+}
 
 
 </style>
 
 
+
+@endsection

@@ -11,6 +11,7 @@ use App\Models\RekeningBank;
 use App\Models\PengajuanDana;
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
+use App\Models\Divisi;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -102,9 +103,8 @@ class DashboardController extends Controller
 
         $taskProgress = Tugas::where(
             'status',
-            'berjalan'
+            'sedang_dikerjakan'
         )->count();
-
 
 
         $taskTodo = Tugas::where(
@@ -120,6 +120,41 @@ class DashboardController extends Controller
         );
 
 
+/*
+|--------------------------------------------------------------------------
+| TASK ANALYTICS PROJECT TRACKER
+|--------------------------------------------------------------------------
+*/
+
+
+$taskByPriority = Tugas::selectRaw(
+    'prioritas, COUNT(*) as total'
+)
+->groupBy(
+    'prioritas'
+)
+->get();
+
+
+
+$taskByProject = Proyek::withCount(
+    'tugas'
+)
+->get();
+
+
+
+$taskByEmployee = \App\Models\Karyawan::withCount(
+    'tugas'
+)
+->get();
+
+
+
+$taskByDivision = Divisi::withCount(
+    'tugas'
+)
+->get();
 
 
 
@@ -680,7 +715,16 @@ class DashboardController extends Controller
             'recentTasks'=>$recentTasks,
 
 
+            'taskByPriority'=>$taskByPriority,
 
+
+            'taskByProject'=>$taskByProject,
+
+
+            'taskByEmployee'=>$taskByEmployee,
+
+
+            'taskByDivision'=>$taskByDivision,
             'totalDeposit'=>$totalDeposit,
 
 
@@ -728,7 +772,6 @@ class DashboardController extends Controller
 
 
 
-
         /*
         |--------------------------------------------------------------------------
         | ROLE DASHBOARD
@@ -759,7 +802,7 @@ class DashboardController extends Controller
 
 
 
-            case 'bendahara':
+            case 'keuangan':
 
                 return view(
                     'dashboard.keuangan',

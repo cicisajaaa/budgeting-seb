@@ -555,7 +555,7 @@ Saldo Divisi
 @if(
 auth()->user()->role=='keuangan'
 ||
-auth()->user()->role=='bendahara'
+auth()->user()->role=='keuangan'
 )
 
 
@@ -1026,7 +1026,7 @@ Tidak ada notifikasi
 @if(
 auth()->user()->role=='keuangan'
 ||
-auth()->user()->role=='bendahara'
+auth()->user()->role=='keuangan'
 )
 
 Keuangan

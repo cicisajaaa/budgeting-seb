@@ -21,11 +21,11 @@ protected $table = 'alokasi_proyek_divisi';
 
 
 
-    public function project()
+    public function proyek()
     {
 
         return $this->belongsTo(
-            Project::class
+            Proyek::class
         );
 
     }

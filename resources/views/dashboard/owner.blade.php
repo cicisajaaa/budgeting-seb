@@ -462,6 +462,286 @@ Belum dikerjakan
 
 
 </div>
+
+{{-- ================= PROJECT TRACKER ANALYTICS ================= --}}
+
+
+<div class="section-title">
+
+📈 Project Tracker Analytics
+
+</div>
+
+
+
+<div class="content-grid">
+
+
+<div class="panel">
+
+
+<h3>
+📌 Task Berdasarkan Priority
+</h3>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Priority
+</th>
+
+<th>
+Jumlah Task
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+@foreach($taskByPriority ?? [] as $priority)
+
+
+<tr>
+
+<td>
+{{ $priority->prioritas }}
+</td>
+
+
+<td>
+{{ $priority->total }}
+</td>
+
+
+</tr>
+
+
+@endforeach
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+👤 Task Berdasarkan PIC
+</h3>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Karyawan
+</th>
+
+<th>
+Jumlah Task
+</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
+
+
+@foreach($taskByEmployee ?? [] as $employee)
+
+
+<tr>
+
+<td>
+{{ $employee->nama_karyawan }}
+</td>
+
+
+<td>
+{{ $employee->tugas_count }}
+</td>
+
+
+</tr>
+
+
+@endforeach
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="content-grid">
+
+
+<div class="panel">
+
+
+<h3>
+📂 Task Berdasarkan Project
+</h3>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Project
+</th>
+
+<th>
+Task
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+@foreach($taskByProject ?? [] as $project)
+
+
+<tr>
+
+<td>
+{{ $project->nama_proyek }}
+</td>
+
+
+<td>
+{{ $project->tugas_count }}
+</td>
+
+
+</tr>
+
+
+@endforeach
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+🏢 Task Berdasarkan Division
+</h3>
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Division
+</th>
+
+<th>
+Task
+</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+@foreach($taskByDivision ?? [] as $division)
+
+
+<tr>
+
+<td>
+{{ $division->nama_divisi }}
+</td>
+
+
+<td>
+{{ $division->tugas_count }}
+</td>
+
+
+</tr>
+
+
+@endforeach
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+</div>
 {{-- ================= CONTENT ================= --}}
 
 
@@ -638,7 +918,7 @@ Lihat Laporan Keuangan
 
 <strong>
 
-{{ $project->nama_project }}
+{{ $project->nama_proyekt }}
 
 </strong>
 
@@ -647,7 +927,7 @@ Lihat Laporan Keuangan
 
 <span>
 
-{{ $project->progress_keseluruhan }}%
+{{ $project->progres_keseluruhan }}%
 
 </span>
 
@@ -667,7 +947,7 @@ Lihat Laporan Keuangan
 
 <div class="progress-fill"
 
-style="width: {{ $project->progress_keseluruhan }}%;">
+style="width: {{ $project->progres_keseluruhan }}%;">
 
 </div>
 
@@ -870,30 +1150,34 @@ Status
 
 <td>
 
-
-
 <strong>
 
-{{ $task->nama_task }}
+{{ $task->nama_tugas }}
 
 </strong>
-
 
 
 <br>
 
 
-
 <small>
 
-{{ $task->project->nama_project ?? '-' }}
+{{ $task->proyek->nama_proyek ?? '-' }}
 
 </small>
 
 
-
 </td>
 
+
+
+
+
+<td>
+
+{{ $task->karyawan->nama_karyawan ?? '-' }}
+
+</td>
 
 
 
@@ -902,26 +1186,9 @@ Status
 
 <td>
 
-
-{{ $task->employee->nama_karyawan ?? '-' }}
-
+{{ $task->progres_persen }}%
 
 </td>
-
-
-
-
-
-
-
-<td>
-
-
-{{ $task->progress_persen }}%
-
-
-</td>
-
 
 
 
@@ -1201,268 +1468,110 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 
 </div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
 
 <script>
 
+    const financeCanvas = document.getElementById('financeChart');
 
-const financeCtx = document.getElementById('financeChart');
+if(financeCanvas){
 
-
-
-new Chart(financeCtx, {
-
+new Chart(financeCanvas, {
 
     type:'doughnut',
 
-
-
     data:{
 
-
         labels:[
-
             'Dana Masuk',
-
             'Pengeluaran',
-
             'Sisa Dana'
-
         ],
-
-
 
         datasets:[{
 
-
             data:[
-
-
                 {{$totalDeposit ?? 0}},
-
-
                 {{$totalExpense ?? 0}},
-
-
                 {{$sisaDana ?? 0}}
-
-
-
             ]
 
-
-
         }]
-
-
 
     },
 
-
-
     options:{
-
 
         responsive:true,
 
-
-        maintainAspectRatio:false,
-
-
-        cutout:'65%',
-
-
-
-        plugins:{
-
-
-            legend:{
-
-
-                position:'bottom',
-
-
-
-                labels:{
-
-
-                    padding:15
-
-
-                }
-
-
-            }
-
-
-        }
-
-
+        maintainAspectRatio:false
 
     }
 
-
-
-
 });
 
+}
 
+const taskCanvas = document.getElementById('taskChart');
 
+if(taskCanvas){
 
+    new Chart(taskCanvas, {
 
+        type:'bar',
 
+        data:{
 
-
-
-const taskCtx = document.getElementById('taskChart');
-
-
-
-new Chart(taskCtx, {
-
-
-    type:'bar',
-
-
-
-
-    data:{
-
-
-
-        labels:[
-
-
-            'Selesai',
-
-            'Progress',
-
-            'Todo'
-
-
-        ],
-
-
-
-
-        datasets:[{
-
-
-            label:'Jumlah Task',
-
-
-
-            data:[
-
-
-
-                {{$taskDone ?? 0}},
-
-
-                {{$taskProgress ?? 0}},
-
-
-                {{$taskTodo ?? 0}}
-
-
-
+            labels:[
+                'Selesai',
+                'Progress',
+                'Todo'
             ],
+datasets:[{
 
+label:'Jumlah Task',
 
+data:[
+    {{$taskDone ?? 0}},
+    {{$taskProgress ?? 0}},
+    {{$taskTodo ?? 0}}
+],
 
+backgroundColor:[
+    '#16a34a',
+    '#2563eb',
+    '#f59e0b'
+]
 
-            maxBarThickness:45
-
-
-
-        }]
-
-
-
-
-    },
-
-
-
-
-
-
-    options:{
-
-
-
-        responsive:true,
-
-
-
-        maintainAspectRatio:false,
-
-
-
-
-
-        plugins:{
-
-
-
-            legend:{
-
-
-                display:false
-
-
-            }
-
-
-
+}]
         },
 
+        options:{
 
+            responsive:true,
 
+            maintainAspectRatio:false,
 
+            scales:{
 
+                y:{
 
-
-        scales:{
-
-
-
-            y:{
-
-
-                beginAtZero:true,
-
-
-                ticks:{
-
-
-                    precision:0
-
+                    beginAtZero:true
 
                 }
 
-
-
             }
-
-
 
         }
 
+    });
 
-
-
-    }
-
-
-
-});
-
-
+}
 
 </script>
+
 
 
 
@@ -1877,36 +1986,23 @@ margin:25px 0 15px;
 
 .analytics-grid{
 
-
 display:grid;
 
-
 grid-template-columns:
-1fr 1fr;
-
-
+350px 1fr;
 
 gap:20px;
 
-
-
 margin-bottom:20px;
-
-
 
 }
 
 
 
 
-
-
 .chart-panel{
 
-
-height:330px;
-
-
+    height:320px;
 
 }
 

@@ -5,9 +5,6 @@
 
 
 
-<!-- HEADER -->
-
-
 <div class="page-header">
 
 
@@ -15,23 +12,17 @@
 
 
 <div class="page-label">
-
 ORGANIZATION MANAGEMENT
-
 </div>
 
 
 <h1>
-
 Kelola Divisi
-
 </h1>
 
 
 <p>
-
 Kelola struktur organisasi dan unit kerja perusahaan.
-
 </p>
 
 
@@ -79,23 +70,17 @@ Kelola struktur organisasi dan unit kerja perusahaan.
 
 
 <span>
-
 Total Divisi
-
 </span>
 
 
 <h3>
-
-{{count($divisions)}}
-
+{{$divisions->count()}}
 </h3>
 
 
 <small>
-
 Unit organisasi
-
 </small>
 
 
@@ -116,7 +101,7 @@ Unit organisasi
 
 <div class="stat-icon blue">
 
-👥
+📁
 
 </div>
 
@@ -125,23 +110,17 @@ Unit organisasi
 
 
 <span>
-
-Status
-
+Penggunaan
 </span>
 
 
 <h3>
-
-Aktif
-
+Project
 </h3>
 
 
 <small>
-
-Struktur berjalan
-
+Terhubung dengan project perusahaan
 </small>
 
 
@@ -162,7 +141,7 @@ Struktur berjalan
 
 <div class="stat-icon orange">
 
-📊
+💰
 
 </div>
 
@@ -171,23 +150,17 @@ Struktur berjalan
 
 
 <span>
-
-Alokasi Dana
-
+Fungsi
 </span>
 
 
 <h3>
-
-{{$divisions->count()}}
-
+Dana
 </h3>
 
 
 <small>
-
-Divisi tersedia
-
+Digunakan untuk alokasi keuangan
 </small>
 
 
@@ -214,9 +187,7 @@ Divisi tersedia
 <div class="success-alert">
 
 <div>
-
 ✓
-
 </div>
 
 
@@ -248,16 +219,12 @@ Divisi tersedia
 
 
 <h3>
-
 Daftar Divisi
-
 </h3>
 
 
 <p>
-
-Manajemen unit organisasi perusahaan.
-
+Daftar unit organisasi perusahaan.
 </p>
 
 
@@ -268,7 +235,7 @@ Manajemen unit organisasi perusahaan.
 
 <div class="total-data">
 
-{{count($divisions)}} Divisi
+{{$divisions->count()}} Divisi
 
 </div>
 
@@ -296,30 +263,22 @@ Manajemen unit organisasi perusahaan.
 
 
 <th>
-
 No
-
 </th>
 
 
 <th>
-
 Nama Divisi
-
 </th>
 
 
 <th>
-
-Status
-
+Dibuat
 </th>
 
 
 <th>
-
 Aksi
-
 </th>
 
 
@@ -374,16 +333,12 @@ Aksi
 
 
 <strong>
-
 {{$division->nama_divisi}}
-
 </strong>
 
 
 <small>
-
 Unit perusahaan
-
 </small>
 
 
@@ -406,17 +361,11 @@ Unit perusahaan
 <td>
 
 
-<span class="status">
-
-
-<span></span>
-
-Aktif
-
-</span>
+{{\Carbon\Carbon::parse($division->created_at)->format('d M Y')}}
 
 
 </td>
+
 
 
 
@@ -497,7 +446,20 @@ Hapus
 <td colspan="4" class="empty">
 
 
+<div class="empty-icon">
+🏢
+</div>
+
+
 Belum ada divisi
+
+
+<br>
+
+
+<small>
+Tambahkan unit organisasi baru.
+</small>
 
 
 </td>
@@ -534,23 +496,15 @@ Belum ada divisi
 <style>
 
 
-/* HEADER */
-
-
 .page-header{
-
 
 display:flex;
 
-
 justify-content:space-between;
-
 
 align-items:center;
 
-
 margin-bottom:22px;
-
 
 }
 
@@ -558,18 +512,13 @@ margin-bottom:22px;
 
 .page-label{
 
-
 font-size:10px;
-
 
 letter-spacing:2px;
 
-
 font-weight:800;
 
-
 color:#94a3b8;
-
 
 }
 
@@ -577,15 +526,11 @@ color:#94a3b8;
 
 .page-header h1{
 
-
 font-size:26px;
-
 
 color:#166534;
 
-
 margin:5px 0;
-
 
 }
 
@@ -593,14 +538,12 @@ margin:5px 0;
 
 .page-header p{
 
-
 font-size:13px;
-
 
 color:#64748b;
 
-
 }
+
 
 
 
@@ -611,42 +554,24 @@ color:#64748b;
 background:
 
 linear-gradient(
-
 135deg,
-
 #166534,
-
 #22c55e
-
 );
 
 
 
 color:white;
 
-
-padding:
-
-12px 20px;
-
-
+padding:12px 20px;
 
 border-radius:14px;
 
-
 font-size:13px;
-
 
 font-weight:700;
 
-
 text-decoration:none;
-
-
-box-shadow:
-
-0 12px 30px rgba(34,197,94,.25);
-
 
 }
 
@@ -657,23 +582,15 @@ box-shadow:
 
 
 
-/* STAT */
-
 
 .division-stat-grid{
 
 
 display:grid;
 
-
-grid-template-columns:
-
-repeat(3,1fr);
-
-
+grid-template-columns:repeat(3,1fr);
 
 gap:18px;
-
 
 margin-bottom:22px;
 
@@ -687,42 +604,23 @@ margin-bottom:22px;
 .division-stat{
 
 
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
-
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
+background:white;
 
 border-radius:20px;
 
-
-
 padding:18px;
-
-
 
 display:flex;
 
-
 align-items:center;
-
 
 gap:15px;
 
+box-shadow:
+
+0 10px 30px rgba(15,23,42,.08);
 
 }
-
 
 
 
@@ -731,24 +629,17 @@ gap:15px;
 
 width:45px;
 
-
 height:45px;
-
 
 border-radius:15px;
 
-
 display:flex;
-
 
 align-items:center;
 
-
 justify-content:center;
 
-
 font-size:20px;
-
 
 }
 
@@ -756,31 +647,25 @@ font-size:20px;
 
 .stat-icon.green{
 
-
 background:#dcfce7;
 
-
 }
-
 
 
 .stat-icon.blue{
 
-
 background:#dbeafe;
 
-
 }
-
 
 
 .stat-icon.orange{
 
-
 background:#fef3c7;
 
-
 }
+
+
 
 
 
@@ -788,47 +673,33 @@ background:#fef3c7;
 
 .division-stat span{
 
-
 font-size:11px;
-
 
 color:#64748b;
 
-
 display:block;
 
-
 }
-
 
 
 
 .division-stat h3{
 
-
-font-size:23px;
-
+font-size:22px;
 
 color:#166534;
 
-
-margin-top:3px;
-
+margin:5px 0;
 
 }
-
-
 
 
 
 .division-stat small{
 
-
 font-size:11px;
 
-
 color:#94a3b8;
-
 
 }
 
@@ -838,43 +709,23 @@ color:#94a3b8;
 
 
 
-
-
-/* CARD */
 
 
 .glass-panel{
 
 
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:
-
-blur(15px);
-
+background:white;
 
 border-radius:22px;
 
-
 padding:22px;
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
 
 box-shadow:
 
-0 15px 35px rgba(15,23,42,.06);
-
-
+0 10px 30px rgba(15,23,42,.08);
 
 }
+
 
 
 
@@ -883,12 +734,9 @@ box-shadow:
 
 display:flex;
 
-
 justify-content:space-between;
 
-
 align-items:center;
-
 
 margin-bottom:18px;
 
@@ -899,9 +747,7 @@ margin-bottom:18px;
 
 .table-header h3{
 
-
-font-size:16px;
-
+margin:0;
 
 }
 
@@ -909,14 +755,13 @@ font-size:16px;
 
 .table-header p{
 
-
 font-size:12px;
-
 
 color:#64748b;
 
-
 }
+
+
 
 
 
@@ -925,23 +770,15 @@ color:#64748b;
 
 background:#dcfce7;
 
-
 color:#166534;
 
-
-padding:
-
-7px 15px;
-
+padding:7px 15px;
 
 border-radius:20px;
 
-
 font-size:12px;
 
-
 font-weight:700;
-
 
 }
 
@@ -952,18 +789,11 @@ font-weight:700;
 
 
 
-
-/* TABLE */
-
-
 table{
-
 
 width:100%;
 
-
 border-collapse:collapse;
-
 
 }
 
@@ -971,21 +801,15 @@ border-collapse:collapse;
 
 th{
 
-
 padding:14px;
-
 
 background:#f8fafc;
 
-
-font-size:11px;
-
+font-size:12px;
 
 color:#64748b;
 
-
 text-align:left;
-
 
 }
 
@@ -993,17 +817,11 @@ text-align:left;
 
 td{
 
-
 padding:14px;
-
 
 font-size:13px;
 
-
-border-bottom:
-
-1px solid #f1f5f9;
-
+border-bottom:1px solid #f1f5f9;
 
 }
 
@@ -1013,11 +831,7 @@ border-bottom:
 
 tr:hover{
 
-
-background:
-
-rgba(220,252,231,.35);
-
+background:#f0fdf4;
 
 }
 
@@ -1027,7 +841,6 @@ rgba(220,252,231,.35);
 
 
 
-/* DIVISION */
 
 
 .division-name{
@@ -1035,12 +848,9 @@ rgba(220,252,231,.35);
 
 display:flex;
 
-
 align-items:center;
 
-
 gap:12px;
-
 
 }
 
@@ -1051,24 +861,17 @@ gap:12px;
 
 width:38px;
 
-
 height:38px;
-
 
 border-radius:12px;
 
-
 background:#dcfce7;
-
 
 display:flex;
 
-
 align-items:center;
 
-
 justify-content:center;
-
 
 }
 
@@ -1076,15 +879,9 @@ justify-content:center;
 
 .division-name strong{
 
-
 display:block;
 
-
-font-size:13px;
-
-
 color:#166534;
-
 
 }
 
@@ -1092,13 +889,10 @@ color:#166534;
 
 .division-name small{
 
-
 font-size:11px;
-
 
 color:#94a3b8;
 
-
 }
 
 
@@ -1107,61 +901,6 @@ color:#94a3b8;
 
 
 
-
-
-/* STATUS */
-
-
-.status{
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:7px;
-
-
-font-size:12px;
-
-
-font-weight:600;
-
-
-color:#166534;
-
-
-}
-
-
-
-.status span{
-
-
-width:8px;
-
-
-height:8px;
-
-
-border-radius:50%;
-
-
-background:#22c55e;
-
-
-}
-
-
-
-
-
-
-
-
-/* ACTION */
 
 
 .action{
@@ -1169,9 +908,7 @@ background:#22c55e;
 
 display:flex;
 
-
 gap:8px;
-
 
 }
 
@@ -1179,55 +916,41 @@ gap:8px;
 
 .action form{
 
-
 display:inline;
 
-
 }
+
 
 
 
 .edit,
-
-
 .delete{
 
 
-padding:
-
-7px 13px;
-
+padding:8px 14px;
 
 border-radius:10px;
 
-
 font-size:12px;
-
 
 font-weight:600;
 
-
 border:none;
-
 
 cursor:pointer;
 
-
 text-decoration:none;
 
-
 }
+
 
 
 
 .edit{
 
-
 background:#dcfce7;
 
-
 color:#166534;
-
 
 }
 
@@ -1235,16 +958,41 @@ color:#166534;
 
 .delete{
 
-
 background:#fee2e2;
 
-
 color:#dc2626;
-
 
 }
 
 
+
+
+
+
+
+
+.success-alert{
+
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+display:flex;
+
+gap:10px;
+
+font-size:13px;
+
+font-weight:600;
+
+}
 
 
 
@@ -1252,19 +1000,31 @@ color:#dc2626;
 
 .empty{
 
-
 text-align:center;
 
-
-padding:30px;
-
+padding:40px;
 
 color:#64748b;
-
 
 }
 
 
+
+.empty-icon{
+
+font-size:30px;
+
+margin-bottom:10px;
+
+}
+
+
+
+.empty small{
+
+color:#94a3b8;
+
+}
 
 
 
@@ -1275,9 +1035,7 @@ color:#64748b;
 
 .division-stat-grid{
 
-
 grid-template-columns:1fr;
-
 
 }
 
@@ -1285,25 +1043,30 @@ grid-template-columns:1fr;
 
 .page-header{
 
-
 flex-direction:column;
-
 
 align-items:flex-start;
 
-
 gap:15px;
 
-
 }
 
 
 
+table{
+
+display:block;
+
+overflow-x:auto;
+
 }
+
+
+}
+
 
 
 </style>
-
 
 
 @endsection

@@ -17,9 +17,9 @@ class DepositDistributionController extends Controller
 
         $distributions = DepositDistribution::with([
 
-            'project',
+            'setoranProyek.proyek',
 
-            'division'
+            'divisi'
 
         ])
 
@@ -30,8 +30,9 @@ class DepositDistributionController extends Controller
 
 
 
-
-        $totalDistribution = $distributions->sum('jumlah');
+        $totalDistribution = $distributions->sum(
+            'nominal_diterima'
+        );
 
 
 
@@ -53,7 +54,6 @@ class DepositDistributionController extends Controller
 
 
     }
-
 
 
 }

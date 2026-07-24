@@ -24,11 +24,11 @@ protected $table = 'setoran_proyek';
 
 
 
-    public function project()
+    public function proyek()
     {
 
         return $this->belongsTo(
-            Project::class
+            Proyek::class
         );
 
     }

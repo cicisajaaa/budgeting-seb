@@ -159,16 +159,16 @@ class ExpenseRequestController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | NOTIFIKASI BENDAHARA
+        | NOTIFIKASI KEUANGAN
         |--------------------------------------------------------------------------
         */
 
 
-        $bendahara = User::where(
+        $keuangan = User::where(
 
             'role',
 
-            'bendahara'
+            'keuangan'
 
         )
 
@@ -181,7 +181,7 @@ class ExpenseRequestController extends Controller
 
 
 
-        foreach($bendahara as $user)
+        foreach($keuangan as $user)
         {
 
 
@@ -208,7 +208,7 @@ class ExpenseRequestController extends Controller
 
             'success',
 
-            'Pengajuan dana berhasil dikirim dan menunggu persetujuan bendahara'
+            'Pengajuan dana berhasil dikirim dan menunggu persetujuan keuangan'
 
         );
 

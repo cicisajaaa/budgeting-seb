@@ -260,67 +260,48 @@ class BankAccountController extends Controller
     */
 
 
-    public function update(Request $request, RekeningBank $bank)
-    {
+   public function update(Request $request, RekeningBank $bank)
+{
 
 
-        $request->validate([
+    $request->validate([
 
 
-
-            'nama_bank'=>'required|string|max:255',
-
+        'nama_bank'=>'required|string|max:255',
 
 
-            'nomor_rekening'=>'required|string|max:255',
+        'nomor_rekening'=>'required|string|max:255',
 
 
-
-            'nama_pemilik'=>'required|string|max:255',
-
+        'nama_pemilik'=>'required|string|max:255',
 
 
-            'saldo'=>'required|numeric',
+        'status'=>'required'
 
 
-
-            'status'=>'required'
-
-        ]);
+    ]);
 
 
 
 
 
 
+    $bank->update([
 
 
-
-        $bank->update([
-
+        'nama_bank'=>$request->nama_bank,
 
 
-            'nama_bank'=>$request->nama_bank,
+        'nomor_rekening'=>$request->nomor_rekening,
 
 
-
-            'nomor_rekening'=>$request->nomor_rekening,
-
+        'nama_pemilik'=>$request->nama_pemilik,
 
 
-            'nama_pemilik'=>$request->nama_pemilik,
+        'status'=>$request->status
 
 
-
-            'saldo'=>$request->saldo,
-
-
-
-            'status'=>$request->status
-
-
-
-        ]);
+    ]);
 
 
 
@@ -328,26 +309,20 @@ class BankAccountController extends Controller
 
 
 
+    return redirect()
 
-        return redirect()
+        ->route('finance.bank.index')
 
-            ->route(
+        ->with(
 
-                'finance.bank.index'
+            'success',
 
-            )
+            'Rekening bank berhasil diperbarui'
 
-            ->with(
-
-                'success',
-
-                'Rekening bank berhasil diperbarui'
-
-            );
+        );
 
 
-    }
-
+}
 
 
 

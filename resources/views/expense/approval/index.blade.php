@@ -240,7 +240,7 @@ Karyawan
 
 <strong>
 
-{{$request->project->nama_project ?? '-'}}
+{{$request->proyek->nama_proyek ?? '-'}}
 
 </strong>
 
@@ -250,7 +250,7 @@ Karyawan
 
 <span class="division">
 
-{{$request->division->nama_divisi ?? '-'}}
+{{$request->divisi->nama_divisi ?? '-'}}
 
 </span>
 
@@ -302,9 +302,11 @@ action="{{route('expense.approve',$request->id)}}">
 
 
 
-<select name="bank_account_id"
+<select name="rekening_bank_id"
 
 required>
+
+
 
 
 <option value="">
@@ -350,10 +352,9 @@ Rp {{number_format($bank->saldo,0,',','.')}}
 
 
 
-
 <textarea
 
-name="approval_note"
+name="catatan_persetujuan"
 
 placeholder="Catatan approval..."
 
@@ -397,17 +398,15 @@ action="{{route('expense.reject',$request->id)}}">
 
 
 
-
 <textarea
 
-name="approval_note"
+name="catatan_persetujuan"
 
 placeholder="Alasan penolakan..."
 
 required
 
 ></textarea>
-
 
 
 

@@ -9,32 +9,22 @@
 
 <div>
 
-
 <div class="welcome-label">
-
 DISTRIBUSI DANA
-
 </div>
 
 
-
 <h1>
-
 Monitoring Distribusi Keuangan
-
 </h1>
 
 
-
 <p>
-
 Melihat penyebaran dana project ke setiap divisi.
-
 </p>
 
 
 </div>
-
 
 
 
@@ -76,7 +66,6 @@ Finance Active
 
 <tr>
 
-
 <th>
 Tanggal
 </th>
@@ -99,8 +88,8 @@ Nominal
 
 </tr>
 
-
 </thead>
+
 
 
 
@@ -118,9 +107,19 @@ Nominal
 
 <td>
 
-
 {{\Carbon\Carbon::parse($distribution->created_at)->format('d M Y')}}
 
+</td>
+
+
+
+
+
+<td>
+
+{{ 
+$distribution->setoranProyek->proyek->nama_proyek ?? '-'
+}}
 
 </td>
 
@@ -130,21 +129,9 @@ Nominal
 
 <td>
 
-
-{{$distribution->deposit->project->nama_project ?? '-'}}
-
-
-</td>
-
-
-
-
-
-<td>
-
-
-{{$distribution->division->nama_divisi ?? '-'}}
-
+{{
+$distribution->divisi->nama_divisi ?? '-'
+}}
 
 </td>
 
@@ -154,9 +141,12 @@ Nominal
 
 <td class="money">
 
-
-Rp {{number_format($distribution->nominal_diterima,0,',','.') }}
-
+Rp {{number_format(
+$distribution->nominal_diterima,
+0,
+',',
+'.'
+)}}
 
 </td>
 
@@ -167,21 +157,16 @@ Rp {{number_format($distribution->nominal_diterima,0,',','.') }}
 
 
 
-
 @empty
 
 
 <tr>
 
-
 <td colspan="4" class="empty">
-
 
 Belum ada distribusi dana
 
-
 </td>
-
 
 </tr>
 
@@ -238,7 +223,12 @@ Total Distribusi
 
 <b>
 
-Rp {{number_format($distributions->sum('nominal_diterima'),0,',','.')}}
+Rp {{number_format(
+$totalDistribution,
+0,
+',',
+'.'
+)}}
 
 </b>
 

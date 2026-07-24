@@ -27,6 +27,7 @@ Input pembayaran project dan distribusi dana otomatis ke divisi.
 </div>
 
 
+
 <div class="system-status">
 
 <span></span>
@@ -44,7 +45,46 @@ Finance Active
 
 
 
-<!-- FORM INPUT -->
+@if(session('success'))
+
+<div class="success-box">
+
+{{session('success')}}
+
+</div>
+
+@endif
+
+
+
+
+
+
+
+@if($errors->any())
+
+<div class="error-box">
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>
+{{$error}}
+</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
+
+
+
+
+
 
 
 <div class="glass-panel">
@@ -60,8 +100,9 @@ Finance Active
 
 
 
-<form method="POST"
-action="{{route('finance.deposit.store')}}">
+
+
+<form method="POST" action="{{route('finance.deposit.store')}}">
 
 @csrf
 
@@ -87,8 +128,7 @@ Project
 
 
 
-<select name="project_id"
-required>
+<select name="proyek_id" required>
 
 
 <option value="">
@@ -96,12 +136,13 @@ required>
 </option>
 
 
+
 @foreach($projects as $project)
 
 
 <option value="{{$project->id}}">
 
-{{$project->nama_project}}
+{{$project->nama_proyek}}
 
 </option>
 
@@ -121,6 +162,7 @@ required>
 
 
 
+
 <div>
 
 
@@ -130,8 +172,7 @@ Rekening Bank
 
 
 
-<select name="bank_account_id"
-required>
+<select name="rekening_bank_id" required>
 
 
 <option value="">
@@ -172,6 +213,7 @@ required>
 
 
 
+
 <div>
 
 
@@ -180,14 +222,20 @@ Jumlah Pembayaran
 </label>
 
 
-<input 
+<input
+
 type="number"
+
 name="jumlah_setoran"
+
 placeholder="Masukkan nominal"
+
 required>
 
 
 </div>
+
+
 
 
 
@@ -204,8 +252,11 @@ Tanggal Pembayaran
 
 
 <input
+
 type="date"
+
 name="tanggal_setoran"
+
 required>
 
 
@@ -213,7 +264,11 @@ required>
 
 
 
+
+
 </div>
+
+
 
 
 
@@ -228,8 +283,9 @@ required>
 
 
 
-</form>
 
+
+</form>
 
 
 </div>
@@ -239,10 +295,6 @@ required>
 
 
 
-
-
-
-<!-- RIWAYAT -->
 
 
 
@@ -254,6 +306,8 @@ required>
 📄 Riwayat Pembayaran
 
 </div>
+
+
 
 
 
@@ -272,11 +326,9 @@ Tanggal
 </th>
 
 
-
 <th>
 Project
 </th>
-
 
 
 <th>
@@ -284,11 +336,9 @@ Bank
 </th>
 
 
-
 <th>
 Nominal
 </th>
-
 
 
 </tr>
@@ -300,7 +350,10 @@ Nominal
 
 
 
+
+
 <tbody>
+
 
 
 @forelse($deposits as $deposit)
@@ -322,7 +375,7 @@ Nominal
 
 <td>
 
-{{$deposit->project->nama_project ?? '-'}}
+{{$deposit->proyek->nama_proyek ?? '-'}}
 
 </td>
 
@@ -332,7 +385,7 @@ Nominal
 
 <td>
 
-{{$deposit->bank->nama_bank ?? '-'}}
+{{$deposit->rekeningBank->nama_bank ?? '-'}}
 
 </td>
 
@@ -343,9 +396,11 @@ Nominal
 <td class="income">
 
 +
+
 Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 </td>
+
 
 
 
@@ -353,7 +408,9 @@ Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 
 
+
 @empty
+
 
 
 <tr>
@@ -364,11 +421,12 @@ Belum ada pembayaran
 
 </td>
 
-
 </tr>
 
 
+
 @endforelse
+
 
 
 
@@ -405,15 +463,21 @@ linear-gradient(
 
 padding:30px;
 
+
 border-radius:24px;
+
 
 color:white;
 
+
 display:flex;
+
 
 justify-content:space-between;
 
+
 align-items:center;
+
 
 margin-bottom:22px;
 
@@ -422,38 +486,56 @@ margin-bottom:22px;
 
 
 
+
+
 .welcome-label{
+
 
 font-size:10px;
 
+
 letter-spacing:2px;
+
 
 font-weight:700;
 
+
 opacity:.8;
 
+
 }
+
 
 
 
 
 .welcome-card h1{
 
+
 font-size:28px;
+
 
 margin:8px 0;
 
+
 }
+
+
 
 
 
 .welcome-card p{
 
+
 font-size:13px;
+
 
 opacity:.9;
 
+
 }
+
+
 
 
 
@@ -461,41 +543,109 @@ opacity:.9;
 
 .system-status{
 
+
 background:white;
+
 
 color:#166534;
 
+
 padding:12px 18px;
+
 
 border-radius:30px;
 
+
 font-weight:700;
+
 
 font-size:13px;
 
+
 display:flex;
+
 
 gap:8px;
 
+
 align-items:center;
 
+
 }
+
+
 
 
 
 .system-status span{
 
+
 width:9px;
+
 
 height:9px;
 
+
 background:#22c55e;
 
+
 border-radius:50%;
+
 
 }
 
 
+
+
+
+
+
+.success-box{
+
+
+background:#dcfce7;
+
+
+color:#166534;
+
+
+padding:15px;
+
+
+border-radius:14px;
+
+
+margin-bottom:20px;
+
+
+font-weight:600;
+
+
+}
+
+
+
+
+
+.error-box{
+
+
+background:#fee2e2;
+
+
+color:#991b1b;
+
+
+padding:15px;
+
+
+border-radius:14px;
+
+
+margin-bottom:20px;
+
+
+}
 
 
 
@@ -509,9 +659,7 @@ background:
 rgba(255,255,255,.65);
 
 
-backdrop-filter:
-
-blur(15px);
+backdrop-filter:blur(15px);
 
 
 border-radius:22px;
@@ -534,14 +682,17 @@ border:
 
 
 
-
 .panel-title{
+
 
 font-size:16px;
 
+
 font-weight:700;
 
+
 margin-bottom:18px;
+
 
 }
 
@@ -551,11 +702,15 @@ margin-bottom:18px;
 
 .form-grid{
 
+
 display:grid;
+
 
 grid-template-columns:repeat(4,1fr);
 
+
 gap:18px;
+
 
 }
 
@@ -563,18 +718,23 @@ gap:18px;
 
 
 
-
 label{
+
 
 display:block;
 
+
 font-size:12px;
+
 
 font-weight:600;
 
+
 color:#475569;
 
+
 margin-bottom:8px;
+
 
 }
 
@@ -639,13 +799,14 @@ cursor:pointer;
 
 
 
+
 .btn-submit:hover{
+
 
 background:#22c55e;
 
+
 }
-
-
 
 
 
@@ -723,14 +884,14 @@ font-weight:700;
 
 
 
-
-
 @media(max-width:1100px){
 
 
 .form-grid{
 
+
 grid-template-columns:repeat(2,1fr);
+
 
 }
 
@@ -746,9 +907,28 @@ grid-template-columns:repeat(2,1fr);
 
 .form-grid{
 
+
 grid-template-columns:1fr;
 
+
 }
+
+
+
+.welcome-card{
+
+
+flex-direction:column;
+
+
+align-items:flex-start;
+
+
+gap:15px;
+
+
+}
+
 
 
 }

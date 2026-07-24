@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
 
-
     protected $table = 'tugas';
 
 
@@ -45,41 +44,16 @@ class Task extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Proyek (Bahasa Indonesia)
+    | Relasi Proyek
     |--------------------------------------------------------------------------
     */
-
 
     public function proyek()
     {
 
         return $this->belongsTo(
 
-            Project::class,
-
-            'proyek_id'
-
-        );
-
-    }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Proyek Lama (Kompatibilitas Blade)
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function project()
-    {
-
-        return $this->belongsTo(
-
-            Project::class,
+            Proyek::class,
 
             'proyek_id'
 
@@ -99,37 +73,12 @@ class Task extends Model
     |--------------------------------------------------------------------------
     */
 
-
     public function divisi()
     {
 
         return $this->belongsTo(
 
-            Division::class,
-
-            'divisi_id'
-
-        );
-
-    }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Divisi Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function division()
-    {
-
-        return $this->belongsTo(
-
-            Division::class,
+            Divisi::class,
 
             'divisi_id'
 
@@ -149,44 +98,18 @@ class Task extends Model
     |--------------------------------------------------------------------------
     */
 
-
     public function karyawan()
     {
 
         return $this->belongsTo(
 
-            Employee::class,
+            User::class,
 
             'karyawan_id'
 
         );
 
     }
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Karyawan Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function employee()
-    {
-
-        return $this->belongsTo(
-
-            Employee::class,
-
-            'karyawan_id'
-
-        );
-
-    }
-
 
 
 
@@ -200,34 +123,7 @@ class Task extends Model
     |--------------------------------------------------------------------------
     */
 
-
     public function aktivitasTugas()
-    {
-
-        return $this->hasMany(
-
-            TaskActivity::class,
-
-            'tugas_id'
-
-        );
-
-    }
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Aktivitas Lama
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function activities()
     {
 
         return $this->hasMany(
@@ -253,7 +149,6 @@ class Task extends Model
     | Update Status Otomatis
     |--------------------------------------------------------------------------
     */
-
 
     public function updateStatus()
     {
@@ -301,7 +196,6 @@ class Task extends Model
     |--------------------------------------------------------------------------
     */
 
-
     public function statusDeadline()
     {
 
@@ -330,7 +224,6 @@ class Task extends Model
             $this->deadline
 
         );
-
 
 
 
@@ -381,10 +274,7 @@ class Task extends Model
         ];
 
 
-
     }
-
-
 
 
 }

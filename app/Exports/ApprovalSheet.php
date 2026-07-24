@@ -722,7 +722,7 @@ WithColumnWidths
 
             "E$signRow",
 
-            "Bendahara,"
+            "Keuangan,"
 
         );
 

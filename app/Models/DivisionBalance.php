@@ -31,11 +31,11 @@ class DivisionBalance extends Model
 
 
 
-    public function project()
+    public function proyek()
     {
 
         return $this->belongsTo(
-            Project::class,
+            Proyek::class,
             'proyek_id'
         );
 

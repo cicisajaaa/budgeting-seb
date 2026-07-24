@@ -6,29 +6,21 @@
 
 <div class="welcome-card">
 
-
 <div>
 
 <div class="welcome-label">
-
 FINANCE REPORT
-
 </div>
 
 
 <h1>
-
 Laporan Keuangan
-
 </h1>
 
 
 <p>
-
 Monitoring pemasukan, pengeluaran, dan kondisi saldo perusahaan.
-
 </p>
-
 
 
 <div class="welcome-tags">
@@ -37,22 +29,17 @@ Monitoring pemasukan, pengeluaran, dan kondisi saldo perusahaan.
 ✓ Dana Masuk
 </span>
 
-
 <span>
 ✓ Pengeluaran
 </span>
-
 
 <span>
 ✓ Audit Keuangan
 </span>
 
-
 </div>
 
-
 </div>
-
 
 
 
@@ -73,13 +60,10 @@ Report Aktif
 
 
 
-
-
 <!-- SUMMARY -->
 
 
 <div class="summary-grid">
-
 
 
 <div class="summary-card">
@@ -95,17 +79,13 @@ Report Aktif
 Total Dana Masuk
 </small>
 
-
 <h2>
 Rp {{number_format($totalIncome,0,',','.')}}
 </h2>
 
-
 </div>
 
-
 </div>
-
 
 
 
@@ -126,17 +106,13 @@ Rp {{number_format($totalIncome,0,',','.')}}
 Total Pengeluaran
 </small>
 
-
 <h2>
 Rp {{number_format($totalExpense,0,',','.')}}
 </h2>
 
-
 </div>
 
-
 </div>
-
 
 
 
@@ -157,18 +133,13 @@ Rp {{number_format($totalExpense,0,',','.')}}
 Saldo Akhir
 </small>
 
-
 <h2>
 Rp {{number_format($balance,0,',','.')}}
 </h2>
 
-
 </div>
 
-
 </div>
-
-
 
 
 
@@ -199,14 +170,10 @@ Jumlah Transaksi
 
 </div>
 
-
 </div>
 
 
-
-
 </div>
-
 
 
 
@@ -237,23 +204,17 @@ class="filter-grid">
 
 
 
-
-
 <div>
 
 <label>
-
 Tanggal Awal
-
 </label>
 
 
 <input 
 type="date"
 name="start_date"
-value="{{$startDate}}"
->
-
+value="{{$startDate}}">
 
 </div>
 
@@ -264,21 +225,16 @@ value="{{$startDate}}"
 <div>
 
 <label>
-
 Tanggal Akhir
-
 </label>
 
 
 <input 
 type="date"
 name="end_date"
-value="{{$endDate}}"
->
-
+value="{{$endDate}}">
 
 </div>
-
 
 
 
@@ -287,17 +243,15 @@ value="{{$endDate}}"
 
 
 <button>
-
 🔎 Tampilkan
-
 </button>
 
 
+
 <a href="{{route('finance.report')}}">
-
 Reset
-
 </a>
+
 
 
 <a href="{{route('finance.report.export')}}?start_date={{$startDate}}&end_date={{$endDate}}"
@@ -311,217 +265,7 @@ class="excel">
 </div>
 
 
-
-
 </form>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- PEMASUKAN -->
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
-💰 Riwayat Dana Masuk
-
-</div>
-
-
-
-
-
-<table>
-
-
-<thead>
-
-
-<tr>
-
-<th>
-Tanggal
-</th>
-
-<th>
-Project
-</th>
-
-<th>
-Bank
-</th>
-
-<th>
-Jumlah
-</th>
-
-<th>
-Bank
-</th>
-
-<th>
-Disetujui Oleh
-</th>
-
-<th>
-Catatan
-</th>
-
-</tr>
-
-
-</thead>
-
-
-
-
-
-<tbody>
-
-
-@forelse($expenses as $expense)
-
-<tr>
-
-
-<td>
-
-{{\Carbon\Carbon::parse($expense->tanggal)->format('d M Y')}}
-
-</td>
-
-
-
-
-<td>
-
-{{$expense->request->user->name ?? '-'}}
-
-<br>
-
-<small>
-{{$expense->request->judul}}
-</small>
-
-</td>
-
-
-
-
-<td>
-
-{{$expense->request->project->nama_project ?? '-' }}
-
-</td>
-
-
-
-
-<td>
-
-{{$expense->request->division->nama_divisi ?? '-'}}
-
-</td>
-
-
-
-
-
-<td class="money">
-
-Rp {{number_format($expense->jumlah,0,',','.')}}
-
-</td>
-
-
-
-
-<td>
-
-{{$expense->bank->nama_bank ?? '-'}}
-
-<br>
-
-<small>
-
-{{$expense->bank->nomor_rekening ?? ''}}
-
-</small>
-
-</td>
-
-
-
-
-<td>
-
-{{$expense->approver->name ?? '-'}}
-
-<br>
-
-<small>
-
-@if($expense->request->approved_at)
-
-{{\Carbon\Carbon::parse($expense->request->approved_at)
-->format('d M Y H:i')}}
-
-@endif
-
-</small>
-
-</td>
-
-
-
-
-
-<td>
-
-{{$expense->request->approval_note ?? '-'}}
-
-</td>
-
-
-
-</tr>
-
-
-@empty
-
-
-<tr>
-
-<td colspan="8" class="empty">
-
-Belum ada pengeluaran
-
-</td>
-
-</tr>
-
-
-@endforelse
-
-
-
-</tbody>
-
-
-</table>
-
 
 
 </div>
@@ -555,48 +299,35 @@ Belum ada pengeluaran
 
 <thead>
 
-
-<tr>
-
-
-<thead>
-
 <tr>
 
 <th>
 Tanggal
 </th>
 
-
 <th>
 Pemohon
 </th>
-
 
 <th>
 Project
 </th>
 
-
 <th>
 Divisi
 </th>
-
 
 <th>
 Jumlah
 </th>
 
-
 <th>
 Bank
 </th>
 
-
 <th>
 Disetujui Oleh
 </th>
-
 
 <th>
 Catatan
@@ -604,7 +335,9 @@ Catatan
 
 </tr>
 
+
 </thead>
+
 
 
 
@@ -612,8 +345,8 @@ Catatan
 <tbody>
 
 
-
 @forelse($expenses as $expense)
+
 
 <tr>
 
@@ -627,37 +360,49 @@ Catatan
 
 
 
+
+
 <td>
 
-{{$expense->request->user->name ?? '-'}}
+
+{{$expense->pengajuanDana->pengguna->name ?? '-'}}
+
 
 <br>
 
+
 <small>
 
-{{$expense->request->judul ?? ''}}
+{{$expense->pengajuanDana->judul ?? '-'}}
 
 </small>
 
+
 </td>
+
+
 
 
 
 
 <td>
 
-{{$expense->request->project->nama_project ?? '-'}}
+{{$expense->pengajuanDana->proyek->nama_proyek ?? '-'}}
 
 </td>
+
+
 
 
 
 
 <td>
 
-{{$expense->request->division->nama_divisi ?? '-'}}
+{{$expense->pengajuanDana->divisi->nama_divisi ?? '-'}}
 
 </td>
+
+
 
 
 
@@ -672,17 +417,23 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 
 
+
+
 <td>
 
-{{$expense->bank->nama_bank ?? '-'}}
+
+{{$expense->rekeningBank->nama_bank ?? '-'}}
+
 
 <br>
 
+
 <small>
 
-{{$expense->bank->nomor_rekening ?? ''}}
+{{$expense->rekeningBank->nomor_rekening ?? ''}}
 
 </small>
+
 
 </td>
 
@@ -690,22 +441,32 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 
 
+
+
+
 <td>
 
-{{$expense->approver->name ?? '-'}}
+
+{{$expense->penyetuju->name ?? '-'}}
+
 
 <br>
 
+
 <small>
 
-@if($expense->request->approved_at)
 
-{{\Carbon\Carbon::parse($expense->request->approved_at)
-->format('d M Y H:i')}}
+@if($expense->pengajuanDana->disetujui_pada)
+
+
+{{\Carbon\Carbon::parse($expense->pengajuanDana->disetujui_pada)->format('d M Y H:i')}}
+
 
 @endif
 
+
 </small>
+
 
 </td>
 
@@ -713,14 +474,19 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 
 
+
+
 <td>
 
-{{$expense->request->approval_note ?? '-'}}
+
+{{$expense->pengajuanDana->catatan_persetujuan ?? '-'}}
+
 
 </td>
 
 
 </tr>
+
 
 
 @empty
@@ -737,7 +503,6 @@ Belum ada pengeluaran
 </tr>
 
 
-
 @endforelse
 
 
@@ -746,6 +511,7 @@ Belum ada pengeluaran
 
 
 </table>
+
 
 
 </div>
@@ -787,7 +553,6 @@ margin-bottom:20px;
 }
 
 
-
 .welcome-label{
 
 font-size:10px;
@@ -801,7 +566,6 @@ opacity:.8;
 }
 
 
-
 .welcome-card h1{
 
 font-size:28px;
@@ -811,14 +575,11 @@ margin:8px 0;
 }
 
 
-
 .welcome-card p{
 
 font-size:13px;
 
 }
-
-
 
 
 
@@ -833,12 +594,9 @@ margin-top:15px;
 }
 
 
-
-
 .welcome-tags span{
 
-background:
-rgba(255,255,255,.2);
+background:rgba(255,255,255,.2);
 
 padding:7px 12px;
 
@@ -847,8 +605,6 @@ border-radius:20px;
 font-size:11px;
 
 }
-
-
 
 
 
@@ -866,12 +622,11 @@ font-weight:700;
 
 display:flex;
 
-align-items:center;
-
 gap:8px;
 
-}
+align-items:center;
 
+}
 
 
 .system-status span{
@@ -880,14 +635,11 @@ width:9px;
 
 height:9px;
 
-border-radius:50%;
-
 background:#22c55e;
 
+border-radius:50%;
+
 }
-
-
-
 
 
 
@@ -907,8 +659,8 @@ margin-bottom:20px;
 
 
 
-.summary-card{
 
+.summary-card{
 
 background:white;
 
@@ -922,9 +674,7 @@ gap:15px;
 
 align-items:center;
 
-box-shadow:
-
-0 10px 30px rgba(0,0,0,.06);
+box-shadow:0 10px 30px rgba(0,0,0,.06);
 
 }
 
@@ -934,8 +684,6 @@ box-shadow:
 
 color:#64748b;
 
-font-size:11px;
-
 }
 
 
@@ -944,13 +692,9 @@ font-size:11px;
 
 font-size:20px;
 
-margin-top:5px;
-
 color:#166534;
 
 }
-
-
 
 
 
@@ -970,8 +714,6 @@ justify-content:center;
 
 background:#dcfce7;
 
-font-size:22px;
-
 }
 
 
@@ -983,13 +725,11 @@ background:#fee2e2;
 }
 
 
-
 .summary-icon.blue{
 
 background:#dbeafe;
 
 }
-
 
 
 .summary-icon.purple{
@@ -1001,17 +741,9 @@ background:#ede9fe;
 
 
 
-
-
-
-
 .glass-panel{
 
-background:
-
-rgba(255,255,255,.7);
-
-backdrop-filter:blur(15px);
+background:white;
 
 padding:22px;
 
@@ -1020,6 +752,8 @@ border-radius:22px;
 margin-bottom:20px;
 
 }
+
+
 
 
 
@@ -1057,15 +791,15 @@ flex:1;
 
 
 
-.filter-grid label{
+label{
 
 display:block;
 
 font-size:12px;
 
-margin-bottom:7px;
-
 font-weight:600;
+
+margin-bottom:7px;
 
 }
 
@@ -1087,8 +821,6 @@ padding:0 12px;
 
 
 
-
-
 .filter-action{
 
 display:flex;
@@ -1102,22 +834,15 @@ gap:8px;
 .filter-action button,
 .filter-action a{
 
-
-height:40px;
-
-padding:0 15px;
-
-border:none;
+padding:10px 15px;
 
 border-radius:10px;
+
+border:none;
 
 background:#166534;
 
 color:white;
-
-display:flex;
-
-align-items:center;
 
 text-decoration:none;
 
@@ -1146,8 +871,6 @@ background:#22c55e;
 color:white;
 
 }
-
-
 
 
 
@@ -1191,19 +914,21 @@ border-bottom:1px solid #f1f5f9;
 
 
 
-.money{
+td small{
 
-font-weight:700;
+font-size:11px;
 
-color:#dc2626;
+color:#94a3b8;
 
 }
 
 
 
-.green{
+.money{
 
-color:#16a34a;
+font-weight:700;
+
+color:#dc2626;
 
 }
 
@@ -1224,20 +949,17 @@ color:#94a3b8;
 
 @media(max-width:1100px){
 
-
 .summary-grid{
 
 grid-template-columns:repeat(2,1fr);
 
 }
 
-
 }
 
 
 
 @media(max-width:700px){
-
 
 .summary-grid{
 
@@ -1251,14 +973,6 @@ grid-template-columns:1fr;
 flex-direction:column;
 
 }
-
-
-}
-td small{
-
-font-size:11px;
-
-color:#94a3b8;
 
 }
 

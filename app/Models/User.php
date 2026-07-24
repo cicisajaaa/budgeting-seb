@@ -78,10 +78,10 @@ class User extends Authenticatable
 
 
 
-    public function isBendahara(): bool
+    public function isKeuangan(): bool
     {
 
-        return $this->role === 'bendahara';
+        return $this->role === 'keuangan';
 
     }
 

@@ -442,15 +442,15 @@ Catatan
 <td>
 
 
-{{$request->project->nama_project ?? '-'}}
+{{$request->proyek->nama_proyek ?? '-'}}
 
 
 <br>
 
 
-<span class="division">
+<span class="divisi">
 
-{{$request->division->nama_divisi ?? '-'}}
+{{$request->divisi->nama_divisi ?? '-'}}
 
 </span>
 

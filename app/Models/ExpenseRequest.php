@@ -95,13 +95,13 @@ protected $fillable = [
     */
 
 
-    public function project()
+    public function proyek()
     {
 
 
         return $this->belongsTo(
 
-            Project::class
+            proyek::class
 
         );
 

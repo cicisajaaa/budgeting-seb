@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-
+use App\Models\Tugas;
 class Divisi extends Model
 {
 
 
     protected $table = 'divisi';
 
-
+public function tugas()
+{
+    return $this->hasMany(
+        Tugas::class,
+        'divisi_id'
+    );
+}
 
     protected $fillable = [
 

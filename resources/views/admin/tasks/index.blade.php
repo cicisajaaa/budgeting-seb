@@ -85,7 +85,7 @@ class="btn btn-primary mb-3">
 
 
 <td>
-{{ $task->project->nama_project ?? '-' }}
+{{ $task->proyek->nama_proyek ?? '-' }}
 </td>
 
 

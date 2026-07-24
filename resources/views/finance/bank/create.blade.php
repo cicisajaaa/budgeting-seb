@@ -4,53 +4,82 @@
 @section('content')
 
 
-
 <div class="welcome-card">
 
 
-<div>
+    <div>
+
+        <div class="welcome-label">
+            TAMBAH REKENING BANK
+        </div>
 
 
-<div class="welcome-label">
-
-TAMBAH REKENING BANK
-
-</div>
+        <h1>
+            Tambah Rekening Perusahaan
+        </h1>
 
 
-<h1>
-
-Tambah Rekening Perusahaan
-
-</h1>
+        <p>
+            Tambahkan rekening bank yang digunakan untuk transaksi keuangan.
+        </p>
 
 
-<p>
-
-Tambahkan rekening bank yang digunakan untuk transaksi keuangan.
-
-</p>
+    </div>
 
 
 
-</div>
+    <div class="system-status">
 
+        <span></span>
 
+        Bank Setup
 
-
-
-<div class="system-status">
-
-<span></span>
-
-Bank Setup
-
-</div>
-
+    </div>
 
 
 </div>
 
+
+
+
+
+
+
+@if(session('success'))
+
+<div class="success-box">
+
+{{ session('success') }}
+
+</div>
+
+@endif
+
+
+
+
+
+
+
+@if($errors->any())
+
+<div class="error-box">
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>
+{{ $error }}
+</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
 
 
 
@@ -71,8 +100,8 @@ Bank Setup
 
 
 
-<form method="POST"
-action="{{route('finance.bank.store')}}">
+
+<form method="POST" action="{{ route('finance.bank.store') }}">
 
 @csrf
 
@@ -91,16 +120,18 @@ action="{{route('finance.bank.store')}}">
 
 
 <label>
-
 Nama Bank
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nama_bank"
+
 placeholder="Contoh: BCA"
+
 required>
 
 
@@ -113,24 +144,29 @@ required>
 
 
 
+
 <div>
 
 
 <label>
-
 Nomor Rekening
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nomor_rekening"
+
 placeholder="Contoh: 1234567890"
+
 required>
 
 
 </div>
+
+
 
 
 
@@ -142,16 +178,18 @@ required>
 
 
 <label>
-
 Nama Pemilik
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nama_pemilik"
+
 placeholder="Contoh: CV Sahabat Alam"
+
 required>
 
 
@@ -160,7 +198,81 @@ required>
 
 
 
+
+
+
+
+
+<div>
+
+
+<label>
+Saldo Awal
+</label>
+
+
+<input
+
+type="number"
+
+name="saldo"
+
+value="0"
+
+min="0"
+
+required>
+
+
 </div>
+
+
+
+
+
+
+
+
+
+<div>
+
+
+<label>
+Status Rekening
+</label>
+
+
+<select name="status" required>
+
+
+<option value="1">
+
+Aktif
+
+</option>
+
+
+
+<option value="0">
+
+Tidak Aktif
+
+</option>
+
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
 
 
 
@@ -176,7 +288,10 @@ required>
 
 
 
-<a href="{{route('finance.bank.index')}}"
+
+
+<a href="{{ route('finance.bank.index') }}"
+
 class="btn-back">
 
 Kembali
@@ -186,7 +301,9 @@ Kembali
 
 
 
+
 </form>
+
 
 
 
@@ -207,7 +324,6 @@ Kembali
 
 
 background:
-
 linear-gradient(
 135deg,
 #166534,
@@ -217,15 +333,21 @@ linear-gradient(
 
 padding:30px;
 
+
 border-radius:24px;
+
 
 color:white;
 
+
 display:flex;
+
 
 justify-content:space-between;
 
+
 align-items:center;
+
 
 margin-bottom:22px;
 
@@ -235,15 +357,17 @@ margin-bottom:22px;
 
 
 
-
 .welcome-label{
 
 
 font-size:10px;
 
+
 font-weight:700;
 
+
 letter-spacing:2px;
+
 
 opacity:.8;
 
@@ -259,6 +383,7 @@ opacity:.8;
 
 font-size:28px;
 
+
 margin:8px 0;
 
 
@@ -272,6 +397,7 @@ margin:8px 0;
 
 
 font-size:13px;
+
 
 opacity:.9;
 
@@ -287,17 +413,24 @@ opacity:.9;
 
 background:white;
 
+
 color:#166534;
+
 
 padding:12px 18px;
 
+
 border-radius:30px;
+
 
 font-weight:700;
 
+
 display:flex;
 
+
 align-items:center;
+
 
 gap:8px;
 
@@ -313,11 +446,68 @@ gap:8px;
 
 width:9px;
 
+
 height:9px;
+
 
 background:#22c55e;
 
+
 border-radius:50%;
+
+
+}
+
+
+
+
+
+
+
+.success-box{
+
+
+background:#dcfce7;
+
+
+color:#166534;
+
+
+padding:15px;
+
+
+border-radius:14px;
+
+
+margin-bottom:20px;
+
+
+font-weight:600;
+
+
+}
+
+
+
+
+
+
+.error-box{
+
+
+background:#fee2e2;
+
+
+color:#991b1b;
+
+
+padding:15px;
+
+
+border-radius:14px;
+
+
+margin-bottom:20px;
 
 
 }
@@ -356,14 +546,14 @@ border:
 
 
 
-
-
 .panel-title{
 
 
 font-size:17px;
 
+
 font-weight:700;
+
 
 margin-bottom:25px;
 
@@ -379,7 +569,9 @@ margin-bottom:25px;
 
 display:grid;
 
+
 grid-template-columns:repeat(3,1fr);
+
 
 gap:20px;
 
@@ -390,18 +582,20 @@ gap:20px;
 
 
 
-
-
 label{
 
 
 display:block;
 
+
 font-size:12px;
+
 
 font-weight:600;
 
+
 color:#475569;
+
 
 margin-bottom:8px;
 
@@ -412,7 +606,8 @@ margin-bottom:8px;
 
 
 
-input{
+input,
+select{
 
 
 width:100%;
@@ -436,10 +631,12 @@ background:white;
 
 
 
-input:focus{
+input:focus,
+select:focus{
 
 
 outline:none;
+
 
 border-color:#22c55e;
 
@@ -497,8 +694,6 @@ background:#22c55e;
 
 
 
-
-
 .btn-back{
 
 
@@ -539,6 +734,22 @@ font-weight:600;
 
 
 grid-template-columns:1fr;
+
+
+}
+
+
+
+.welcome-card{
+
+
+flex-direction:column;
+
+
+align-items:flex-start;
+
+
+gap:15px;
 
 
 }

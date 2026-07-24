@@ -225,7 +225,7 @@ Status
 <td>
 
 
-{{$request->project->nama_project ?? '-'}}
+{{$request->proyek->nama_proyek ?? '-'}}
 
 
 </td>
@@ -239,7 +239,7 @@ Status
 <td>
 
 
-{{$request->division->nama_divisi ?? '-'}}
+{{$request->divisi->nama_divisi ?? '-'}}
 
 
 </td>

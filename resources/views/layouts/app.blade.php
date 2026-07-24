@@ -118,8 +118,8 @@
                 <a href="{{ route('finance.report') }}">Laporan Keuangan</a>
             @endif
 
-            @if(auth()->check() && auth()->user()->role == 'bendahara')
-                <h4>Bendahara Area</h4>
+            @if(auth()->check() && auth()->user()->role == 'keuangan')
+                <h4>Keuangan Area</h4>
                 <a href="{{ route('dashboard') }}">Dashboard</a>
                 <a href="{{ route('finance.deposit') }}">Input Pembayaran</a>
                 <a href="{{ route('finance.distribution') }}">Distribusi Dana</a>

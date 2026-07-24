@@ -167,7 +167,7 @@ class Tugas extends Model
     elseif($this->progres_persen > 0)
     {
 
-        $this->status = 'berjalan';
+        $this->status = 'sedang_dikerjakan';
 
     }
     else
@@ -181,8 +181,6 @@ class Tugas extends Model
     $this->save();
 
 }
-
-
 
 
     /*
