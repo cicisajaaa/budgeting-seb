@@ -2,47 +2,40 @@
 
 namespace App\Helpers;
 
-
 use App\Models\LogAudit;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class AuditHelper
 {
 
-
     public static function create(
         $aksi,
         $modul,
-        $deskripsi
+        $deskripsi,
+        $pengajuanDanaId = null
     )
     {
 
 
         LogAudit::create([
 
+            'pengguna_id'=>Auth::id(),
 
-            'pengguna_id' => Auth::id(),
+            'pengajuan_dana_id'=>$pengajuanDanaId,
 
+            'aksi'=>$aksi,
 
-            'aksi' => $aksi,
+            'modul'=>$modul,
 
+            'deskripsi'=>$deskripsi,
 
-            'modul' => $modul,
-
-
-            'deskripsi' => $deskripsi,
-
-
-            'alamat_ip' => request()->ip()
-
+            'alamat_ip'=>request()->ip()
 
         ]);
 
 
     }
-
 
 
 }

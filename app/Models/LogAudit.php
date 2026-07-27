@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class LogAudit extends Model
 {
 
-
     protected $table = 'log_audit';
-
 
 
     protected $fillable = [
 
         'pengguna_id',
+
+        'pengajuan_dana_id',
 
         'aksi',
 
@@ -32,15 +30,11 @@ class LogAudit extends Model
 
 
 
-
-
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Pengguna
+    | Relasi User / Pengguna yang melakukan aktivitas
     |--------------------------------------------------------------------------
     */
-
 
     public function pengguna()
     {
@@ -55,6 +49,28 @@ class LogAudit extends Model
 
     }
 
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi dengan Pengajuan Dana
+    |--------------------------------------------------------------------------
+    */
+
+    public function pengajuanDana()
+    {
+
+        return $this->belongsTo(
+
+            PengajuanDana::class,
+
+            'pengajuan_dana_id'
+
+        );
+
+    }
 
 
 }

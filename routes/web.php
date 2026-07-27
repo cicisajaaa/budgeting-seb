@@ -344,7 +344,12 @@ Route::middleware('role:bendahara,keuangan')->group(function(){
 
 
 
-
+Route::get('/expense/{id}/detail',
+[
+    ExpenseRequestController::class,
+    'detail'
+])
+->name('expense.detail');
 
 
 

@@ -5,7 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
+use App\Models\LogAudit;
 
 class PengajuanDana extends Model
 {
@@ -14,35 +14,33 @@ class PengajuanDana extends Model
     protected $table = 'pengajuan_dana';
 
 
-
-    protected $fillable = [
-
-
-        'pengguna_id',
-
-        'proyek_id',
-
-        'divisi_id',
-
-        'judul',
-
-        'keterangan',
-
-        'jumlah',
-
-        'status',
-
-        'disetujui_oleh',
-
-        'disetujui_pada',
-
-        'catatan_persetujuan'
+protected $fillable = [
 
 
-    ];
+    'pengguna_id',
+
+    'proyek_id',
+
+    'divisi_id',
+
+    'judul',
+
+    'keterangan',
+
+    'bukti_pengajuan',
+
+    'jumlah',
+
+    'status',
+
+    'disetujui_oleh',
+
+    'disetujui_pada',
+
+    'catatan_persetujuan'
 
 
-
+];
 
 
 
@@ -180,5 +178,20 @@ class PengajuanDana extends Model
 
 
 
+public function auditLogs()
+{
 
+    return $this->hasMany(
+
+        LogAudit::class,
+
+        'pengajuan_dana_id'
+
+    )
+
+    ->with('pengguna')
+
+    ->latest();
+
+}
 }

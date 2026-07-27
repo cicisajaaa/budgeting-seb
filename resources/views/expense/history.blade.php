@@ -4,7 +4,6 @@
 @section('content')
 
 
-
 <div class="welcome-card">
 
 
@@ -90,6 +89,113 @@ Employee Active
 
 
 
+<!-- FILTER -->
+
+<div class="glass-panel filter-panel">
+
+
+
+<div class="panel-title">
+
+🔎 Filter Pengajuan Dana
+
+</div>
+
+
+
+
+<form method="GET" action="{{ route('expense.myhistory') }}">
+
+
+
+<div class="filter-box">
+
+
+<div>
+
+
+<label>
+
+Status Pengajuan
+
+</label>
+
+
+
+<select name="status">
+
+
+<option value="">
+
+Semua Status
+
+</option>
+
+
+
+<option value="pending"
+{{ request('status') == 'pending' ? 'selected' : '' }}>
+
+Menunggu
+
+</option>
+
+
+
+<option value="approved"
+{{ request('status') == 'approved' ? 'selected' : '' }}>
+
+Disetujui
+
+</option>
+
+
+
+<option value="rejected"
+{{ request('status') == 'rejected' ? 'selected' : '' }}>
+
+Ditolak
+
+</option>
+
+
+
+</select>
+
+
+
+</div>
+
+
+
+
+
+<button type="submit">
+
+Filter
+
+</button>
+
+
+
+</div>
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <div class="glass-panel">
 
 
@@ -152,11 +258,12 @@ Jumlah
 </th>
 
 
+<th>
+Status
+</th>
 
 <th>
-
-Status
-
+Aksi
 </th>
 
 
@@ -258,61 +365,52 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 </td>
 
-
-
-
-
-
-
 <td>
-
 
 
 @if($request->status == 'pending')
 
-
 <span class="status pending">
-
 Menunggu
-
 </span>
-
 
 
 @elseif($request->status == 'approved')
 
-
 <span class="status approved">
-
 Disetujui
-
 </span>
-
 
 
 @else
 
-
 <span class="status rejected">
-
 Ditolak
-
 </span>
 
 
-
 @endif
-
 
 
 </td>
 
 
 
+<td>
+
+
+<a href="{{ route('expense.detail',$request->id) }}"
+class="detail-btn">
+
+Lihat Detail
+
+</a>
+
+
+</td>
+
 
 </tr>
-
-
 
 
 
@@ -572,6 +670,9 @@ padding:22px;
 border:1px solid rgba(255,255,255,.8);
 
 
+margin-bottom:20px;
+
+
 }
 
 
@@ -588,6 +689,92 @@ font-weight:700;
 
 
 margin-bottom:18px;
+
+
+}
+
+
+
+
+
+
+.filter-box{
+
+
+display:flex;
+
+
+gap:15px;
+
+
+align-items:end;
+
+
+}
+
+
+
+
+.filter-box label{
+
+
+display:block;
+
+
+font-size:12px;
+
+
+color:#64748b;
+
+
+margin-bottom:5px;
+
+
+}
+
+
+
+
+.filter-box select{
+
+
+padding:10px 15px;
+
+
+border-radius:10px;
+
+
+border:1px solid #e2e8f0;
+
+
+}
+
+
+
+
+
+.filter-box button{
+
+
+background:#166534;
+
+
+color:white;
+
+
+border:none;
+
+
+padding:10px 20px;
+
+
+border-radius:12px;
+
+
+font-weight:700;
+
+
+cursor:pointer;
 
 
 }
@@ -799,10 +986,153 @@ overflow-x:auto;
 }
 
 
+
+.filter-box{
+
+
+flex-direction:column;
+
+
+align-items:flex-start;
+
+
+}
+
+
+}
+.timeline{
+
+margin-top:15px;
+
+padding-left:5px;
+
+}
+
+
+.step{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+font-size:11px;
+
+color:#94a3b8;
+
+margin-bottom:8px;
+
 }
 
 
 
+.step span{
+
+width:20px;
+
+height:20px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#e2e8f0;
+
+font-size:11px;
+
+font-weight:bold;
+
+}
+
+
+
+.step.active{
+
+color:#166534;
+
+font-weight:600;
+
+}
+
+
+
+.step.active span{
+
+background:#22c55e;
+
+color:white;
+
+}
+.approval-note{
+
+margin-top:15px;
+
+background:#f8fafc;
+
+border-left:4px solid #166534;
+
+padding:12px;
+
+border-radius:12px;
+
+font-size:12px;
+
+}
+
+
+
+.approval-note strong{
+
+display:block;
+
+color:#166534;
+
+margin-bottom:5px;
+
+}
+
+
+
+.approval-note p{
+
+margin:0;
+
+color:#475569;
+
+line-height:1.5;
+
+}
+.detail-btn{
+
+background:#166534;
+
+color:white;
+
+padding:8px 15px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+display:inline-block;
+
+}
+
+
+.detail-btn:hover{
+
+background:#22c55e;
+
+}
 </style>
 
 

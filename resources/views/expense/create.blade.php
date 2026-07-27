@@ -95,7 +95,9 @@
 
 
 
-<form method="POST" action="{{ route('expense.store') }}">
+<form method="POST" 
+action="{{ route('expense.store') }}"
+enctype="multipart/form-data">
 
 @csrf
 
@@ -276,9 +278,101 @@ placeholder="Jelaskan kebutuhan dana"></textarea>
 
 
 </div>
+<div class="upload-section">
+
+
+<label>
+Bukti Pengajuan
+</label>
 
 
 
+<div class="upload-box">
+
+
+<input
+
+type="file"
+
+name="bukti_pengajuan"
+
+id="bukti_pengajuan"
+
+accept=".jpg,.jpeg,.png,.webp,.pdf"
+
+>
+
+
+
+<label for="bukti_pengajuan" class="upload-button">
+
+📎 Pilih File
+
+</label>
+
+
+
+<span id="file-name">
+
+Belum ada file dipilih
+
+</span>
+
+
+</div>
+
+
+
+
+
+<small class="upload-info">
+
+Format: JPG, PNG, WEBP, PDF. Maksimal 2MB.
+
+</small>
+
+
+
+
+
+<div id="file-message"
+
+class="file-message">
+
+</div>
+
+
+
+
+
+<div id="preview-container"
+
+class="preview-card">
+
+
+<div class="preview-title">
+
+Preview Bukti Pengajuan
+
+</div>
+
+
+
+<img
+
+id="image-preview"
+
+class="preview-image"
+
+>
+
+
+
+</div>
+
+
+
+</div>
 
 
 
@@ -603,8 +697,358 @@ gap:15px;
 }
 
 
+#file-info{
 
+padding:8px 0;
+
+}
+
+
+#preview-container{
+
+animation:fade .3s ease;
+
+}
+
+
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(5px);
+
+}
+
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+
+
+.upload-section{
+
+margin-top:15px;
+
+}
+
+
+
+.upload-box{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+background:white;
+
+border:1px solid #e2e8f0;
+
+padding:10px;
+
+border-radius:12px;
+
+}
+
+
+
+.upload-box input[type="file"]{
+
+display:none;
+
+}
+
+
+
+.upload-button{
+
+background:#166534;
+
+color:white;
+
+padding:8px 15px;
+
+border-radius:10px;
+
+font-size:12px;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+
+
+#file-name{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+
+.upload-info{
+
+display:block;
+
+margin-top:8px;
+
+color:#64748b;
+
+font-size:11px;
+
+}
+
+
+
+
+.file-message{
+
+margin-top:10px;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+
+
+.preview-card{
+
+display:none;
+
+margin-top:15px;
+
+background:#f8fafc;
+
+padding:15px;
+
+border-radius:18px;
+
+width:340px;
+
+border:1px solid #e2e8f0;
+
+}
+
+
+
+
+
+.preview-title{
+
+font-size:12px;
+
+font-weight:700;
+
+color:#475569;
+
+margin-bottom:12px;
+
+}
+
+
+
+
+.preview-image{
+
+width:300px;
+
+height:380px;
+
+object-fit:contain;
+
+background:white;
+
+padding:10px;
+
+border-radius:15px;
+
+border:1px solid #e2e8f0;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
 </style>
+<script>
 
 
+const fileInput = document.getElementById('bukti_pengajuan');
+
+const fileName = document.getElementById('file-name');
+
+const message = document.getElementById('file-message');
+
+const previewBox = document.getElementById('preview-container');
+
+const previewImage = document.getElementById('image-preview');
+
+
+
+fileInput.addEventListener('change', function(){
+
+
+let file = this.files[0];
+
+
+
+if(!file){
+
+fileName.innerHTML="Belum ada file dipilih";
+
+previewBox.style.display="none";
+
+message.innerHTML="";
+
+return;
+
+}
+
+
+
+
+
+let size = file.size / 1024 / 1024;
+
+
+
+
+if(size > 2)
+
+{
+
+message.style.color="#dc2626";
+
+message.innerHTML=
+"⚠ File terlalu besar. Maksimal 2MB";
+
+
+this.value="";
+
+previewBox.style.display="none";
+
+return;
+
+}
+
+
+
+
+
+let allowed = [
+
+'image/jpeg',
+
+'image/png',
+
+'image/webp',
+
+'application/pdf'
+
+];
+
+
+
+
+if(!allowed.includes(file.type))
+
+{
+
+message.style.color="#dc2626";
+
+message.innerHTML=
+"⚠ Format file tidak didukung";
+
+
+this.value="";
+
+previewBox.style.display="none";
+
+return;
+
+}
+
+
+
+
+
+fileName.innerHTML=file.name;
+
+
+message.style.color="#166534";
+
+
+message.innerHTML=
+
+"✓ File valid ("+
+
+size.toFixed(2)
+
++" MB)";
+
+
+
+
+
+if(file.type.startsWith('image/'))
+
+{
+
+
+let reader = new FileReader();
+
+
+
+reader.onload=function(e){
+
+
+previewImage.src=e.target.result;
+
+
+previewBox.style.display="block";
+
+
+}
+
+
+
+reader.readAsDataURL(file);
+
+
+
+}
+
+else
+
+{
+
+previewBox.style.display="none";
+
+}
+
+
+
+});
+
+
+
+</script>
 @endsection

@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-
+use Illuminate\Http\Request;
 use App\Models\Proyek;
 use App\Models\Divisi;
 use App\Models\PengajuanDana;
 use App\Models\User;
+use App\Models\SaldoDivisi;
+use App\Models\LogAudit;
+
 
 use App\Notifications\NewExpenseRequest;
 
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePengajuanDanaRequest;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -71,36 +74,50 @@ class ExpenseRequestController extends Controller
     */
 
 
-    public function store(Request $request)
+    public function store(StorePengajuanDanaRequest $request)
     {
+$balance = SaldoDivisi::where([
+
+    'proyek_id' => $request->proyek_id,
+
+    'divisi_id' => $request->divisi_id
+
+])->first();
 
 
-        $request->validate([
+if(!$balance)
+{
+
+    return back()
+
+    ->withErrors([
+
+        'jumlah' => 'Saldo divisi belum tersedia'
+
+    ])
+
+    ->withInput();
+
+}
 
 
 
-            'proyek_id'=>'required|exists:proyek,id',
+if($balance->saldo < $request->jumlah)
+{
 
+    return back()
 
+    ->withErrors([
 
-            'divisi_id'=>'required|exists:divisi,id',
+        'jumlah' => 'Saldo divisi tidak mencukupi'
 
+    ])
 
+    ->withInput();
 
-            'judul'=>'required|string|max:255',
+}
 
-
-
-            'jumlah'=>'required|numeric|min:1',
-
-
-
-            'keterangan'=>'nullable|string',
-
-
-
-        ]);
-
+       
 
 
 
@@ -113,7 +130,27 @@ class ExpenseRequestController extends Controller
         | SIMPAN PENGAJUAN
         |--------------------------------------------------------------------------
         */
+$filename = null;
 
+
+if($request->hasFile('bukti_pengajuan'))
+{
+
+    $file = $request->file('bukti_pengajuan');
+
+
+    $filename = time().'_'.$file->getClientOriginalName();
+
+
+    $file->move(
+
+        public_path('uploads/pengajuan'),
+
+        $filename
+
+    );
+
+}
 
         $expense = PengajuanDana::create([
 
@@ -145,10 +182,24 @@ class ExpenseRequestController extends Controller
 
             'status'=>'pending',
 
-
+            'bukti_pengajuan'=>$filename,
 
         ]);
+LogAudit::create([
 
+    'pengguna_id' => Auth::id(),
+
+    'pengajuan_dana_id' => $expense->id,
+
+    'aksi' => 'CREATE',
+
+    'modul' => 'Pengajuan Dana',
+
+    'deskripsi' => 'Membuat pengajuan dana: '.$expense->judul,
+
+    'alamat_ip' => request()->ip(),
+
+]);
 
 
 
@@ -230,31 +281,44 @@ class ExpenseRequestController extends Controller
     */
 
 
-    public function history()
+   public function history(Request $request)
+{
+
+    $query = PengajuanDana::with([
+
+        'proyek',
+
+        'divisi',
+
+        'penyetuju'
+
+    ])
+
+    ->where(
+
+        'pengguna_id',
+
+        Auth::id()
+
+    );
+
+
+    if($request->filled('status'))
     {
 
+        $query->where(
 
-        $requests = PengajuanDana::with([
+            'status',
 
+            $request->status
 
-            'proyek',
+        );
 
-
-            'divisi',
-
-
-            'penyetuju'
+    }
 
 
-        ])
 
-        ->where(
-
-            'pengguna_id',
-
-            Auth::id()
-
-        )
+    $requests = $query
 
         ->latest()
 
@@ -262,26 +326,54 @@ class ExpenseRequestController extends Controller
 
 
 
+    return view(
+
+        'expense.history',
+
+        compact(
+
+            'requests'
+
+        )
+
+    );
+
+}
+public function detail($id)
+{
+
+    $request = PengajuanDana::with([
+
+        'proyek',
+
+        'divisi',
+
+        'penyetuju',
+
+        'auditLogs'
+
+    ])
+
+    ->where(
+
+        'pengguna_id',
+
+        Auth::id()
+
+    )
+
+    ->findOrFail($id);
 
 
 
+    return view(
 
+        'expense.detail',
 
-        return view(
+        compact('request')
 
-            'expense.history',
+    );
 
-            compact(
-
-                'requests'
-
-            )
-
-        );
-
-
-    }
-
-
+}
 
 }

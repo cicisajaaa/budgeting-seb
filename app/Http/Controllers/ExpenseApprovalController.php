@@ -10,11 +10,9 @@ use App\Models\RekeningBank;
 use App\Models\Proyek;
 use App\Models\Divisi;
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 
 use App\Notifications\ExpenseStatusNotification;
 use App\Helpers\AuditHelper;
@@ -25,31 +23,18 @@ class ExpenseApprovalController extends Controller
 {
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | HALAMAN APPROVAL KEUANGAN
-    |--------------------------------------------------------------------------
-    */
-
-
     public function index()
     {
-
 
         $requests = PengajuanDana::with([
 
             'proyek',
-
             'divisi',
-
             'pengguna'
 
         ])
 
-        ->where(
-            'status',
-            'pending'
-        )
+        ->where('status','pending')
 
         ->latest()
 
@@ -57,36 +42,20 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
         $banks = RekeningBank::where(
-
             'status',
-
             true
-
-        )
-
-        ->get();
-
-
+        )->get();
 
 
 
         return view(
-
             'expense.approval.index',
-
             compact(
-
                 'requests',
-
                 'banks'
-
             )
-
         );
-
 
     }
 
@@ -96,31 +65,17 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | APPROVE PENGELUARAN
-    |--------------------------------------------------------------------------
-    */
-
-
     public function approve(Request $request,$id)
     {
 
 
         $request->validate([
 
-
             'rekening_bank_id'=>'required',
-
 
             'catatan_persetujuan'=>'nullable|string'
 
-
         ]);
-
-
 
 
 
@@ -131,10 +86,7 @@ class ExpenseApprovalController extends Controller
             $expenseRequest = DB::transaction(function() use($request,$id){
 
 
-
                 $expenseRequest = PengajuanDana::findOrFail($id);
-
-
 
 
 
@@ -142,26 +94,12 @@ class ExpenseApprovalController extends Controller
                 {
 
                     throw new \Exception(
-
                         'Pengajuan sudah diproses sebelumnya'
-
                     );
 
                 }
 
 
-
-
-
-
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | CEK REKENING BANK
-                |--------------------------------------------------------------------------
-                */
 
 
                 $bank = RekeningBank::findOrFail(
@@ -173,15 +111,11 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
                 if($bank->saldo < $expenseRequest->jumlah)
                 {
 
                     throw new \Exception(
-
                         'Saldo rekening tidak mencukupi'
-
                     );
 
                 }
@@ -189,27 +123,11 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | CEK SALDO DIVISI PROJECT
-                |--------------------------------------------------------------------------
-                */
-
-
                 $balance = SaldoDivisi::where([
-
 
                     'proyek_id'=>$expenseRequest->proyek_id,
 
-
                     'divisi_id'=>$expenseRequest->divisi_id
-
-
 
                 ])
 
@@ -219,25 +137,14 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
                 if(!$balance)
                 {
 
                     throw new \Exception(
-
                         'Saldo divisi project belum tersedia'
-
                     );
 
                 }
-
-
-
-
-
 
 
 
@@ -246,9 +153,7 @@ class ExpenseApprovalController extends Controller
                 {
 
                     throw new \Exception(
-
                         'Saldo divisi tidak mencukupi'
-
                     );
 
                 }
@@ -258,40 +163,25 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | UPDATE PENGAJUAN
-                |--------------------------------------------------------------------------
-                */
-
-
                 $expenseRequest->update([
-
 
 
                     'status'=>'approved',
 
 
-
                     'disetujui_oleh'=>Auth::id(),
-
 
 
                     'disetujui_pada'=>now(),
 
 
-
                     'catatan_persetujuan'=>
 
-                        $request->catatan_persetujuan
+                    $request->catatan_persetujuan
 
-                        ??
+                    ??
 
-                        'Disetujui oleh Keuangan'
-
+                    'Disetujui oleh Keuangan'
 
 
                 ]);
@@ -299,50 +189,24 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | SIMPAN TRANSAKSI
-                |--------------------------------------------------------------------------
-                */
 
 
                 TransaksiDana::create([
 
 
-
-                    'pengajuan_dana_id'=>
-
-                        $expenseRequest->id,
+                    'pengajuan_dana_id'=>$expenseRequest->id,
 
 
-
-                    'disetujui_oleh'=>
-
-                        Auth::id(),
+                    'disetujui_oleh'=>Auth::id(),
 
 
-
-                    'rekening_bank_id'=>
-
-                        $bank->id,
+                    'rekening_bank_id'=>$bank->id,
 
 
-
-                    'jumlah'=>
-
-                        $expenseRequest->jumlah,
+                    'jumlah'=>$expenseRequest->jumlah,
 
 
-
-                    'tanggal'=>
-
-                        now(),
-
+                    'tanggal'=>now()
 
 
                 ]);
@@ -351,15 +215,6 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | KURANGI SALDO BANK
-                |--------------------------------------------------------------------------
-                */
 
 
                 $bank->decrement(
@@ -374,17 +229,6 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | KURANGI SALDO DIVISI
-                |--------------------------------------------------------------------------
-                */
-
-
                 $balance->decrement(
 
                     'saldo',
@@ -392,10 +236,6 @@ class ExpenseApprovalController extends Controller
                     $expenseRequest->jumlah
 
                 );
-
-
-
-
 
 
 
@@ -412,11 +252,9 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
             /*
             |--------------------------------------------------------------------------
-            | AUDIT
+            | AUDIT APPROVE
             |--------------------------------------------------------------------------
             */
 
@@ -425,9 +263,13 @@ class ExpenseApprovalController extends Controller
 
                 'Approve Expense',
 
-                'Finance',
+                'Pengajuan Dana',
 
-                'Menyetujui pengajuan dana sebesar Rp ' .
+                'Menyetujui pengajuan dana "' .
+
+                $expenseRequest->judul .
+
+                '" sebesar Rp ' .
 
                 number_format(
 
@@ -439,7 +281,9 @@ class ExpenseApprovalController extends Controller
 
                     '.'
 
-                )
+                ),
+
+                $expenseRequest->id
 
             );
 
@@ -449,17 +293,7 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NOTIFIKASI
-            |--------------------------------------------------------------------------
-            */
-
-
             $expenseRequest->pengguna->notify(
-
 
                 new ExpenseStatusNotification(
 
@@ -469,7 +303,6 @@ class ExpenseApprovalController extends Controller
 
                 )
 
-
             );
 
 
@@ -478,39 +311,29 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-            return back()
-
-            ->with(
+            return back()->with(
 
                 'success',
 
-                'Pengajuan berhasil disetujui dan saldo berhasil diperbarui'
+                'Pengajuan berhasil disetujui'
 
             );
-
-
 
 
 
         }
 
-
         catch(\Exception $e)
+
         {
 
-
-            return back()
-
-            ->with(
+            return back()->with(
 
                 'error',
 
                 $e->getMessage()
 
             );
-
 
         }
 
@@ -525,27 +348,15 @@ class ExpenseApprovalController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | REJECT PENGELUARAN
-    |--------------------------------------------------------------------------
-    */
-
-
     public function reject(Request $request,$id)
     {
 
 
         $request->validate([
 
-
             'catatan_persetujuan'=>'required|string'
 
-
         ]);
-
-
-
 
 
 
@@ -558,15 +369,10 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
         if($expenseRequest->status != 'pending')
         {
 
-
-            return back()
-
-            ->with(
+            return back()->with(
 
                 'error',
 
@@ -574,10 +380,7 @@ class ExpenseApprovalController extends Controller
 
             );
 
-
         }
-
-
 
 
 
@@ -588,23 +391,18 @@ class ExpenseApprovalController extends Controller
         $expenseRequest->update([
 
 
-
             'status'=>'rejected',
-
 
 
             'disetujui_oleh'=>Auth::id(),
 
 
-
             'disetujui_pada'=>now(),
-
 
 
             'catatan_persetujuan'=>
 
-                $request->catatan_persetujuan
-
+            $request->catatan_persetujuan
 
 
         ]);
@@ -616,14 +414,24 @@ class ExpenseApprovalController extends Controller
 
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIT REJECT
+        |--------------------------------------------------------------------------
+        */
+
 
         AuditHelper::create(
 
             'Reject Expense',
 
-            'Finance',
+            'Pengajuan Dana',
 
-            'Menolak pengajuan dana sebesar Rp ' .
+            'Menolak pengajuan dana "' .
+
+            $expenseRequest->judul .
+
+            '" sebesar Rp ' .
 
             number_format(
 
@@ -643,11 +451,11 @@ class ExpenseApprovalController extends Controller
 
             .
 
-            $request->catatan_persetujuan
+            $request->catatan_persetujuan,
 
+            $expenseRequest->id
 
         );
-
 
 
 
@@ -658,7 +466,6 @@ class ExpenseApprovalController extends Controller
 
         $expenseRequest->pengguna->notify(
 
-
             new ExpenseStatusNotification(
 
                 $expenseRequest,
@@ -666,7 +473,6 @@ class ExpenseApprovalController extends Controller
                 'rejected'
 
             )
-
 
         );
 
@@ -676,11 +482,7 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-        return back()
-
-        ->with(
+        return back()->with(
 
             'success',
 
@@ -699,31 +501,19 @@ class ExpenseApprovalController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | HISTORY APPROVAL
-    |--------------------------------------------------------------------------
-    */
-
-
     public function history(Request $request)
     {
 
 
         $query = PengajuanDana::with([
 
-
             'proyek',
-
 
             'divisi',
 
-
             'pengguna',
 
-
             'penyetuju'
-
 
         ])
 
@@ -747,18 +537,14 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
         if($request->search)
         {
-
 
             $query->whereHas(
 
                 'pengguna',
 
                 function($q) use($request){
-
 
                     $q->where(
 
@@ -770,15 +556,11 @@ class ExpenseApprovalController extends Controller
 
                     );
 
-
                 }
 
             );
 
-
         }
-
-
 
 
 
@@ -789,7 +571,6 @@ class ExpenseApprovalController extends Controller
         if($request->status)
         {
 
-
             $query->where(
 
                 'status',
@@ -798,10 +579,7 @@ class ExpenseApprovalController extends Controller
 
             );
 
-
         }
-
-
 
 
 
@@ -812,7 +590,6 @@ class ExpenseApprovalController extends Controller
         if($request->proyek_id)
         {
 
-
             $query->where(
 
                 'proyek_id',
@@ -821,10 +598,7 @@ class ExpenseApprovalController extends Controller
 
             );
 
-
         }
-
-
 
 
 
@@ -835,7 +609,6 @@ class ExpenseApprovalController extends Controller
         if($request->divisi_id)
         {
 
-
             $query->where(
 
                 'divisi_id',
@@ -844,9 +617,7 @@ class ExpenseApprovalController extends Controller
 
             );
 
-
         }
-
 
 
 
@@ -866,15 +637,9 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
         $projects = Proyek::all();
 
-
         $divisions = Divisi::all();
-
-
 
 
 
