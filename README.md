@@ -1,58 +1,470 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 💰 Budget Tracker
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+
+<img src="https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel">
+<img src="https://img.shields.io/badge/PHP-8.x-777BB4?style=for-the-badge&logo=php">
+<img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql">
+<img src="https://img.shields.io/badge/Status-Development-success?style=for-the-badge">
+
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<h3 align="center">
+Sistem Manajemen Keuangan dan Monitoring Anggaran Perusahaan
+</h3>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<p align="center">
+Budget Tracker merupakan aplikasi berbasis web yang membantu perusahaan dalam mengelola anggaran, pengajuan dana, transaksi keuangan, monitoring proyek, serta pencatatan aktivitas pengguna secara terintegrasi.
+</p>
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 📌 Tentang Sistem
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Budget Tracker dikembangkan untuk membantu proses administrasi keuangan perusahaan agar lebih:
 
-## Agentic Development
+✅ Terstruktur  
+✅ Transparan  
+✅ Mudah dipantau  
+✅ Memiliki histori aktivitas yang jelas  
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
-```bash
-composer require laravel/boost --dev
+Sistem menyediakan mekanisme approval keuangan, pengelolaan saldo, monitoring proyek, serta audit trail untuk mencatat setiap aktivitas penting pengguna.
 
-php artisan boost:install
+
+---
+
+# 🚀 Fitur Utama
+
+
+<table>
+
+<tr>
+
+<td width="50%">
+
+## 📁 Manajemen Proyek
+
+Fitur:
+
+- Pengelolaan data proyek
+- Pengaturan divisi proyek
+- Alokasi anggaran
+- Monitoring penggunaan dana
+
+
+</td>
+
+<td width="50%">
+
+## 💸 Pengajuan Dana
+
+Fitur:
+
+- Membuat pengajuan dana
+- Upload bukti transaksi
+- Tracking status pengajuan
+- Riwayat pengajuan
+
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+
+## ✅ Approval Finance
+
+Fitur:
+
+- Verifikasi pengajuan
+- Approve dana
+- Reject dengan catatan
+- Update saldo otomatis
+
+
+</td>
+
+
+<td>
+
+## 📊 Monitoring Keuangan
+
+Fitur:
+
+- Saldo rekening bank
+- Saldo divisi
+- Transaksi dana
+- Riwayat penggunaan
+
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+
+## 👥 Employee Tracker
+
+Fitur:
+
+- Pengelolaan tugas
+- Aktivitas harian
+- Monitoring pekerjaan
+
+
+</td>
+
+
+<td>
+
+## 🔎 Audit Trail
+
+Fitur:
+
+- Login
+- Logout
+- Create data
+- Approval
+- Reject
+
+
+</td>
+
+</tr>
+
+</table>
+
+
+---
+
+# 👤 Hak Akses Pengguna
+
+
+| Role | Akses |
+|---|---|
+| 👨‍💼 Administrator | Mengelola data utama sistem |
+| 👷 Karyawan | Membuat pengajuan dana dan aktivitas pekerjaan |
+| 💼 Finance | Melakukan approval dan monitoring transaksi |
+
+
+---
+
+# 🔄 Alur Sistem
+
+
+```
+                PROJECT MANAGEMENT
+
+                       |
+                       ↓
+
+              Alokasi Anggaran
+
+                       |
+                       ↓
+
+              Karyawan Mengajukan Dana
+
+                       |
+                       ↓
+
+              Status Pending
+
+                       |
+                       ↓
+
+              Finance Melakukan Review
+
+              /                    \
+
+             ↓                      ↓
+
+        Approved              Rejected
+
+             |
+
+             ↓
+
+      Transaksi Dana Dibuat
+
+             |
+
+             ↓
+
+       Saldo Diperbarui
+
+             |
+
+             ↓
+
+        Audit Trail Tersimpan
+
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 🖥️ Tampilan Sistem
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Dashboard
 
-## Security Vulnerabilities
+```
+Tambahkan screenshot dashboard disini
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## Pengajuan Dana
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+Tambahkan screenshot pengajuan dana disini
+```
+
+
+## Approval Finance
+
+```
+Tambahkan screenshot approval disini
+```
+
+
+## Audit Trail
+
+```
+Tambahkan screenshot audit trail disini
+```
+
+
+---
+
+# 🛠️ Teknologi
+
+
+| Teknologi | Penggunaan |
+|-|-|
+| Laravel | Backend Framework |
+| PHP | Programming Language |
+| MySQL | Database |
+| Blade Template | Frontend View |
+| CSS | Styling Interface |
+| JavaScript | Interactive Component |
+
+
+---
+
+# 📂 Struktur Project
+
+
+```
+budget-tracker
+
+├── app
+
+│   ├── Models
+
+│   ├── Controllers
+
+│   ├── Notifications
+
+│   └── Helpers
+
+
+├── database
+
+│   └── migrations
+
+
+├── resources
+
+│   └── views
+
+
+├── routes
+
+│   └── web.php
+
+
+└── public
+
+```
+
+
+---
+
+# 🗄️ Database Utama
+
+
+| Table | Deskripsi |
+|-|-|
+| users | Data pengguna |
+| proyek | Data proyek |
+| divisi | Data divisi |
+| pengajuan_dana | Data permintaan dana |
+| transaksi_dana | Riwayat transaksi |
+| rekening_bank | Data rekening |
+| saldo_divisi | Saldo divisi |
+| log_audit | Histori aktivitas |
+| tasks | Data pekerjaan |
+| task_activities | Aktivitas tugas |
+
+
+---
+
+# ⚙️ Instalasi
+
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/username/budget-tracker.git
+```
+
+
+## 2. Masuk Folder Project
+
+```bash
+cd budget-tracker
+```
+
+
+## 3. Install Dependency
+
+```bash
+composer install
+```
+
+
+## 4. Konfigurasi Environment
+
+```bash
+cp .env.example .env
+```
+
+
+Generate key:
+
+```bash
+php artisan key:generate
+```
+
+
+---
+
+## 5. Konfigurasi Database
+
+
+Edit file:
+
+```
+.env
+```
+
+
+Contoh:
+
+
+```env
+DB_DATABASE=budget_tracker
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+
+---
+
+## 6. Jalankan Migration
+
+
+```bash
+php artisan migrate
+```
+
+
+---
+
+## 7. Jalankan Storage
+
+
+```bash
+php artisan storage:link
+```
+
+
+---
+
+## 8. Jalankan Server
+
+
+```bash
+php artisan serve
+```
+
+
+Akses:
+
+
+```
+http://127.0.0.1:8000
+```
+
+
+---
+
+# 🔐 Keamanan Sistem
+
+
+Implementasi keamanan:
+
+- Laravel Authentication
+- Role Middleware
+- Request Validation
+- Database Transaction
+- Audit Logging
+- Permission Control
+
+
+---
+
+# 📈 Pengembangan Selanjutnya
+
+
+Rencana pengembangan:
+
+- Dashboard grafik keuangan
+- Export laporan PDF
+- Approval bertingkat
+- Email notification
+- Real-time monitoring
+
+
+---
+
+# 👨‍💻 Developer
+
+
+**Budget Tracker System**
+
+Developed using:
+
+- Laravel Framework
+- MySQL Database
+- Web Technology
+
+
+---
+
+<p align="center">
+
+⭐ Jika project ini membantu, berikan star pada repository ini.
+
+</p>
