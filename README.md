@@ -1,326 +1,379 @@
-# 💰 Budget Tracker
+# 💰 Budget Tracker System
 
 <p align="center">
 
 <img src="https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel">
 <img src="https://img.shields.io/badge/PHP-8.x-777BB4?style=for-the-badge&logo=php">
 <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql">
-<img src="https://img.shields.io/badge/Status-Development-success?style=for-the-badge">
+<img src="https://img.shields.io/badge/Project-Financial%20Management-success?style=for-the-badge">
 
 </p>
 
 
-<h3 align="center">
-Sistem Manajemen Keuangan dan Monitoring Anggaran Perusahaan
-</h3>
+<h2 align="center">
+Sistem Informasi Manajemen Anggaran dan Pengajuan Dana Perusahaan
+</h2>
 
 
 <p align="center">
-Budget Tracker merupakan aplikasi berbasis web yang membantu perusahaan dalam mengelola anggaran, pengajuan dana, transaksi keuangan, monitoring proyek, serta pencatatan aktivitas pengguna secara terintegrasi.
+Aplikasi berbasis web untuk mengelola anggaran perusahaan, pengajuan dana, approval keuangan, transaksi, monitoring saldo, serta pencatatan aktivitas pengguna secara terintegrasi.
 </p>
 
 
 ---
 
-# 📌 Tentang Sistem
+# 📌 Overview Sistem
 
-Budget Tracker dikembangkan untuk membantu proses administrasi keuangan perusahaan agar lebih:
-
-✅ Terstruktur  
-✅ Transparan  
-✅ Mudah dipantau  
-✅ Memiliki histori aktivitas yang jelas  
+**Budget Tracker System** merupakan aplikasi berbasis web yang digunakan untuk membantu perusahaan dalam melakukan pengelolaan keuangan secara lebih efektif, transparan, dan terstruktur.
 
 
-Sistem menyediakan mekanisme approval keuangan, pengelolaan saldo, monitoring proyek, serta audit trail untuk mencatat setiap aktivitas penting pengguna.
+Sistem ini mencakup proses:
+
+```
+Perencanaan Anggaran
+        ↓
+Manajemen Proyek
+        ↓
+Pengajuan Dana
+        ↓
+Verifikasi Keuangan
+        ↓
+Approval / Reject
+        ↓
+Transaksi Dana
+        ↓
+Update Saldo
+        ↓
+Audit Trail
+```
 
 
 ---
 
-# 🚀 Fitur Utama
+# 🎯 Tujuan Sistem
+
+Sistem ini dikembangkan untuk:
+
+- Mempermudah proses pengajuan dana
+- Mengurangi proses administrasi manual
+- Meningkatkan transparansi penggunaan anggaran
+- Mempermudah monitoring keuangan perusahaan
+- Menyediakan histori aktivitas pengguna
 
 
-<table>
+---
 
-<tr>
+# 🚀 Modul Sistem
 
-<td width="50%">
 
-## 📁 Manajemen Proyek
+## 📁 1. Project Management
+
+Modul ini digunakan untuk mengelola data proyek dan anggaran.
+
 
 Fitur:
 
-- Pengelolaan data proyek
-- Pengaturan divisi proyek
-- Alokasi anggaran
-- Monitoring penggunaan dana
+- Membuat proyek
+- Mengelola divisi proyek
+- Mengatur alokasi dana proyek
+- Monitoring penggunaan anggaran
 
 
-</td>
+---
 
-<td width="50%">
+## 💸 2. Expense Request Management
 
-## 💸 Pengajuan Dana
+Modul pengajuan dana digunakan oleh karyawan untuk mengajukan kebutuhan biaya.
+
+
+Informasi pengajuan:
+
+- Judul pengajuan
+- Proyek
+- Divisi
+- Jumlah dana
+- Keterangan
+- Bukti transaksi
+
+
+Alur proses:
+
+```
+Karyawan
+
+    ↓
+
+Membuat Pengajuan Dana
+
+    ↓
+
+Status Pending
+
+    ↓
+
+Finance Melakukan Verifikasi
+
+    ↓
+
+Approved / Rejected
+```
+
+
+---
+
+## ✅ 3. Financial Approval
+
+Modul approval digunakan oleh bagian keuangan.
+
 
 Fitur:
 
-- Membuat pengajuan dana
-- Upload bukti transaksi
-- Tracking status pengajuan
-- Riwayat pengajuan
+- Melihat pengajuan pending
+- Mengecek saldo rekening
+- Mengecek saldo divisi
+- Approve pengajuan
+- Reject pengajuan dengan catatan
 
 
-</td>
-
-</tr>
+Ketika pengajuan disetujui:
 
 
-<tr>
+```
+Pengajuan Approved
 
-<td>
+        ↓
 
-## ✅ Approval Finance
+Transaksi Dana Dibuat
 
-Fitur:
+        ↓
 
-- Verifikasi pengajuan
-- Approve dana
-- Reject dengan catatan
-- Update saldo otomatis
+Saldo Bank Berkurang
+
+        ↓
+
+Saldo Divisi Berkurang
+
+        ↓
+
+Audit Log Tersimpan
+```
 
 
-</td>
+---
+
+## 💰 4. Financial Monitoring
 
 
-<td>
+Sistem menyediakan monitoring:
 
-## 📊 Monitoring Keuangan
-
-Fitur:
 
 - Saldo rekening bank
-- Saldo divisi
-- Transaksi dana
-- Riwayat penggunaan
+- Saldo divisi proyek
+- Riwayat transaksi
+- Penggunaan anggaran
 
 
-</td>
+---
 
-</tr>
+## 👥 5. Employee Activity Tracker
 
 
-<tr>
+Modul aktivitas karyawan digunakan untuk monitoring pekerjaan.
 
-<td>
-
-## 👥 Employee Tracker
 
 Fitur:
 
-- Pengelolaan tugas
-- Aktivitas harian
-- Monitoring pekerjaan
+- Membuat aktivitas harian
+- Menghubungkan aktivitas dengan tugas
+- Menyimpan histori pekerjaan
 
 
-</td>
+---
+
+## 🔎 6. Audit Trail System
 
 
-<td>
+Audit trail digunakan untuk mencatat aktivitas penting pengguna.
 
-## 🔎 Audit Trail
 
-Fitur:
+Aktivitas yang dicatat:
+
 
 - Login
 - Logout
-- Create data
-- Approval
-- Reject
+- Membuat pengajuan dana
+- Approval dana
+- Reject dana
+- Aktivitas sistem
 
 
-</td>
-
-</tr>
-
-</table>
+Informasi audit:
 
 
----
-
-# 👤 Hak Akses Pengguna
-
-
-| Role | Akses |
-|---|---|
-| 👨‍💼 Administrator | Mengelola data utama sistem |
-| 👷 Karyawan | Membuat pengajuan dana dan aktivitas pekerjaan |
-| 💼 Finance | Melakukan approval dan monitoring transaksi |
+| Data | Keterangan |
+|-|-|
+| User | Pengguna yang melakukan aktivitas |
+| Action | Jenis aktivitas |
+| Module | Modul yang digunakan |
+| Description | Detail aktivitas |
+| IP Address | Alamat perangkat |
+| Timestamp | Waktu aktivitas |
 
 
----
-
-# 🔄 Alur Sistem
+Contoh:
 
 
 ```
-                PROJECT MANAGEMENT
+CREATE
 
-                       |
-                       ↓
+Membuat pengajuan dana: Laptop
 
-              Alokasi Anggaran
+User:
+Shahreva
 
-                       |
-                       ↓
-
-              Karyawan Mengajukan Dana
-
-                       |
-                       ↓
-
-              Status Pending
-
-                       |
-                       ↓
-
-              Finance Melakukan Review
-
-              /                    \
-
-             ↓                      ↓
-
-        Approved              Rejected
-
-             |
-
-             ↓
-
-      Transaksi Dana Dibuat
-
-             |
-
-             ↓
-
-       Saldo Diperbarui
-
-             |
-
-             ↓
-
-        Audit Trail Tersimpan
-
+Tanggal:
+27 Juli 2026
 ```
 
 
 ---
 
-# 🖥️ Tampilan Sistem
+# 👤 Role dan Hak Akses
+
+
+| Role | Deskripsi | Hak Akses |
+|-|-|-|
+| 👷 Karyawan | Pengguna operasional | Membuat pengajuan dana, upload bukti, melihat status pengajuan |
+| 💼 Keuangan | Pengelola keuangan | Verifikasi, approve/reject pengajuan, transaksi dana |
+| 🛠️ Admin | Pengelola sistem | Mengelola user, proyek, divisi, rekening |
+| 👑 Owner | Monitoring perusahaan | Melihat laporan, monitoring keuangan, melihat aktivitas sistem |
+
+
+---
+
+# 🔐 Role Permission Matrix
+
+
+| Fitur | Karyawan | Keuangan | Admin | Owner |
+|-|-|-|-|-|
+| Login Sistem | ✅ | ✅ | ✅ | ✅ |
+| Membuat Pengajuan Dana | ✅ | ❌ | ❌ | ❌ |
+| Approval Dana | ❌ | ✅ | ❌ | ❌ |
+| Kelola User | ❌ | ❌ | ✅ | ❌ |
+| Kelola Project | ❌ | ❌ | ✅ | ❌ |
+| Monitoring Keuangan | ❌ | ✅ | ✅ | ✅ |
+| Audit Trail | ❌ | ✅ | ✅ | ✅ |
+
+
+---
+
+# 🏗️ System Architecture
+
+
+```
+              User
+
+                |
+
+                ↓
+
+        Laravel Application
+
+                |
+
+        ----------------
+
+        Controller
+
+                |
+
+        ----------------
+
+              Model
+
+                |
+
+                ↓
+
+             MySQL
+
+             Database
+
+```
+
+
+---
+
+# 🗄️ Database Structure
+
+
+| Table | Fungsi |
+|-|-|
+| users | Data pengguna |
+| proyek | Data proyek |
+| divisi | Data divisi |
+| pengajuan_dana | Data pengajuan dana |
+| transaksi_dana | Riwayat transaksi dana |
+| rekening_bank | Data rekening |
+| saldo_divisi | Saldo divisi |
+| log_audit | Riwayat aktivitas pengguna |
+| tasks | Data pekerjaan |
+| task_activities | Aktivitas pekerjaan |
+
+
+---
+
+# 🖥️ Application Preview
 
 
 ## Dashboard
 
+Tambahkan screenshot:
+
 ```
-Tambahkan screenshot dashboard disini
+screenshots/dashboard.png
 ```
 
 
 ## Pengajuan Dana
 
 ```
-Tambahkan screenshot pengajuan dana disini
+screenshots/pengajuan.png
 ```
 
 
 ## Approval Finance
 
 ```
-Tambahkan screenshot approval disini
+screenshots/approval.png
 ```
 
 
 ## Audit Trail
 
 ```
-Tambahkan screenshot audit trail disini
+screenshots/audit.png
 ```
 
 
 ---
 
-# 🛠️ Teknologi
+# 🛠️ Technology Stack
 
 
-| Teknologi | Penggunaan |
+| Teknologi | Fungsi |
 |-|-|
 | Laravel | Backend Framework |
 | PHP | Programming Language |
 | MySQL | Database |
-| Blade Template | Frontend View |
-| CSS | Styling Interface |
-| JavaScript | Interactive Component |
+| Blade Template | User Interface |
+| CSS | Styling |
+| JavaScript | Interactive Feature |
 
 
 ---
 
-# 📂 Struktur Project
-
-
-```
-budget-tracker
-
-├── app
-
-│   ├── Models
-
-│   ├── Controllers
-
-│   ├── Notifications
-
-│   └── Helpers
-
-
-├── database
-
-│   └── migrations
-
-
-├── resources
-
-│   └── views
-
-
-├── routes
-
-│   └── web.php
-
-
-└── public
-
-```
-
-
----
-
-# 🗄️ Database Utama
-
-
-| Table | Deskripsi |
-|-|-|
-| users | Data pengguna |
-| proyek | Data proyek |
-| divisi | Data divisi |
-| pengajuan_dana | Data permintaan dana |
-| transaksi_dana | Riwayat transaksi |
-| rekening_bank | Data rekening |
-| saldo_divisi | Saldo divisi |
-| log_audit | Histori aktivitas |
-| tasks | Data pekerjaan |
-| task_activities | Aktivitas tugas |
-
-
----
-
-# ⚙️ Instalasi
+# ⚙️ Installation
 
 
 ## 1. Clone Repository
@@ -330,21 +383,29 @@ git clone https://github.com/username/budget-tracker.git
 ```
 
 
-## 2. Masuk Folder Project
+Masuk folder:
 
 ```bash
 cd budget-tracker
 ```
 
 
-## 3. Install Dependency
+---
+
+## 2. Install Dependency
 
 ```bash
 composer install
 ```
 
 
-## 4. Konfigurasi Environment
+---
+
+## 3. Environment Setup
+
+
+Copy file:
+
 
 ```bash
 cp .env.example .env
@@ -353,6 +414,7 @@ cp .env.example .env
 
 Generate key:
 
+
 ```bash
 php artisan key:generate
 ```
@@ -360,10 +422,11 @@ php artisan key:generate
 
 ---
 
-## 5. Konfigurasi Database
+## 4. Database Configuration
 
 
 Edit file:
+
 
 ```
 .env
@@ -374,6 +437,9 @@ Contoh:
 
 
 ```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=budget_tracker
 DB_USERNAME=root
 DB_PASSWORD=
@@ -382,7 +448,10 @@ DB_PASSWORD=
 
 ---
 
-## 6. Jalankan Migration
+## 5. Migration Database
+
+
+Jalankan:
 
 
 ```bash
@@ -392,7 +461,7 @@ php artisan migrate
 
 ---
 
-## 7. Jalankan Storage
+## 6. Storage Setup
 
 
 ```bash
@@ -402,7 +471,7 @@ php artisan storage:link
 
 ---
 
-## 8. Jalankan Server
+## 7. Run Application
 
 
 ```bash
@@ -420,30 +489,34 @@ http://127.0.0.1:8000
 
 ---
 
-# 🔐 Keamanan Sistem
+# 🛡️ Security Implementation
 
 
-Implementasi keamanan:
+Sistem menerapkan:
+
 
 - Laravel Authentication
-- Role Middleware
+- Role Based Access Control
+- Middleware Authorization
 - Request Validation
 - Database Transaction
 - Audit Logging
-- Permission Control
+- Notification System
 
 
 ---
 
-# 📈 Pengembangan Selanjutnya
+# 📈 Future Development
 
 
-Rencana pengembangan:
+Pengembangan selanjutnya:
+
 
 - Dashboard grafik keuangan
 - Export laporan PDF
 - Approval bertingkat
 - Email notification
+- Mobile application
 - Real-time monitoring
 
 
@@ -452,19 +525,26 @@ Rencana pengembangan:
 # 👨‍💻 Developer
 
 
-**Budget Tracker System**
+## Budget Tracker System
 
-Developed using:
 
-- Laravel Framework
-- MySQL Database
-- Web Technology
+Built With:
+
+
+```
+Laravel Framework
+
+MySQL Database
+
+Web Technology
+```
 
 
 ---
 
 <p align="center">
 
-⭐ Jika project ini membantu, berikan star pada repository ini.
+⭐ Budget Tracker System  
+Financial Management & Expense Monitoring Platform
 
 </p>
