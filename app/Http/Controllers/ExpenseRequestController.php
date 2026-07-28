@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+
 use App\Models\Proyek;
 use App\Models\Divisi;
 use App\Models\PengajuanDana;
 use App\Models\User;
 use App\Models\SaldoDivisi;
-use App\Models\LogAudit;
+
+
+use App\Helpers\AuditHelper;
 
 
 use App\Notifications\NewExpenseRequest;
 
 
 use App\Http\Requests\StorePengajuanDanaRequest;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -29,16 +34,13 @@ class ExpenseRequestController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
     public function create()
     {
-
 
         $projects = Proyek::all();
 
 
         $divisions = Divisi::all();
-
 
 
 
@@ -56,10 +58,7 @@ class ExpenseRequestController extends Controller
 
         );
 
-
     }
-
-
 
 
 
@@ -73,51 +72,113 @@ class ExpenseRequestController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
     public function store(StorePengajuanDanaRequest $request)
     {
-$balance = SaldoDivisi::where([
-
-    'proyek_id' => $request->proyek_id,
-
-    'divisi_id' => $request->divisi_id
-
-])->first();
 
 
-if(!$balance)
-{
+        $balance = SaldoDivisi::where([
 
-    return back()
 
-    ->withErrors([
+            'proyek_id' => $request->proyek_id,
 
-        'jumlah' => 'Saldo divisi belum tersedia'
 
-    ])
+            'divisi_id' => $request->divisi_id
 
-    ->withInput();
 
-}
+        ])
+
+        ->first();
 
 
 
-if($balance->saldo < $request->jumlah)
-{
 
-    return back()
 
-    ->withErrors([
+        if(!$balance)
+        {
 
-        'jumlah' => 'Saldo divisi tidak mencukupi'
 
-    ])
+            return back()
 
-    ->withInput();
+            ->withErrors([
 
-}
 
-       
+                'jumlah' => 'Saldo divisi belum tersedia'
+
+
+            ])
+
+            ->withInput();
+
+
+        }
+
+
+
+
+
+
+
+        if($balance->saldo < $request->jumlah)
+        {
+
+
+            return back()
+
+            ->withErrors([
+
+
+                'jumlah' => 'Saldo divisi tidak mencukupi'
+
+
+            ])
+
+            ->withInput();
+
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPLOAD BUKTI
+        |--------------------------------------------------------------------------
+        */
+
+
+        $filename = null;
+
+
+
+        if($request->hasFile('bukti_pengajuan'))
+        {
+
+
+            $file = $request->file('bukti_pengajuan');
+
+
+            $filename = time().'_'.$file->getClientOriginalName();
+
+
+
+            $file->move(
+
+                public_path('uploads/pengajuan'),
+
+                $filename
+
+            );
+
+
+        }
+
+
 
 
 
@@ -130,76 +191,71 @@ if($balance->saldo < $request->jumlah)
         | SIMPAN PENGAJUAN
         |--------------------------------------------------------------------------
         */
-$filename = null;
 
-
-if($request->hasFile('bukti_pengajuan'))
-{
-
-    $file = $request->file('bukti_pengajuan');
-
-
-    $filename = time().'_'.$file->getClientOriginalName();
-
-
-    $file->move(
-
-        public_path('uploads/pengajuan'),
-
-        $filename
-
-    );
-
-}
 
         $expense = PengajuanDana::create([
 
 
 
-            'proyek_id'=>$request->proyek_id,
+            'proyek_id' => $request->proyek_id,
 
 
-
-            'divisi_id'=>$request->divisi_id,
-
+            'divisi_id' => $request->divisi_id,
 
 
-            'pengguna_id'=>Auth::id(),
+            'pengguna_id' => Auth::id(),
 
 
-
-            'judul'=>$request->judul,
-
+            'judul' => $request->judul,
 
 
-            'keterangan'=>$request->keterangan,
+            'keterangan' => $request->keterangan,
 
 
-
-            'jumlah'=>$request->jumlah,
-
+            'jumlah' => $request->jumlah,
 
 
-            'status'=>'pending',
+            'status' => 'pending',
 
-            'bukti_pengajuan'=>$filename,
+
+            'bukti_pengajuan' => $filename
+
+
 
         ]);
-LogAudit::create([
 
-    'pengguna_id' => Auth::id(),
 
-    'pengajuan_dana_id' => $expense->id,
 
-    'aksi' => 'CREATE',
 
-    'modul' => 'Pengajuan Dana',
 
-    'deskripsi' => 'Membuat pengajuan dana: '.$expense->judul,
 
-    'alamat_ip' => request()->ip(),
 
-]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIT CREATE
+        |--------------------------------------------------------------------------
+        */
+
+
+        AuditHelper::create(
+
+
+            'CREATE',
+
+
+            'Pengajuan Dana',
+
+
+            'Membuat pengajuan dana: '.$expense->judul,
+
+
+            $expense->id
+
+
+        );
+
 
 
 
@@ -217,15 +273,16 @@ LogAudit::create([
 
         $keuangan = User::where(
 
+
             'role',
 
+
             'keuangan'
+
 
         )
 
         ->get();
-
-
 
 
 
@@ -257,9 +314,12 @@ LogAudit::create([
 
         ->with(
 
+
             'success',
 
+
             'Pengajuan dana berhasil dikirim dan menunggu persetujuan keuangan'
+
 
         );
 
@@ -281,44 +341,65 @@ LogAudit::create([
     */
 
 
-   public function history(Request $request)
-{
-
-    $query = PengajuanDana::with([
-
-        'proyek',
-
-        'divisi',
-
-        'penyetuju'
-
-    ])
-
-    ->where(
-
-        'pengguna_id',
-
-        Auth::id()
-
-    );
-
-
-    if($request->filled('status'))
+    public function history(Request $request)
     {
 
-        $query->where(
 
-            'status',
+        $query = PengajuanDana::with([
 
-            $request->status
+
+            'proyek',
+
+
+            'divisi',
+
+
+            'penyetuju'
+
+
+        ])
+
+        ->where(
+
+
+            'pengguna_id',
+
+
+            Auth::id()
+
 
         );
 
-    }
 
 
 
-    $requests = $query
+
+
+        if($request->filled('status'))
+        {
+
+
+            $query->where(
+
+
+                'status',
+
+
+                $request->status
+
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+        $requests = $query
 
         ->latest()
 
@@ -326,54 +407,97 @@ LogAudit::create([
 
 
 
-    return view(
 
-        'expense.history',
 
-        compact(
 
-            'requests'
+        return view(
+
+            'expense.history',
+
+            compact(
+
+                'requests'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL PENGAJUAN
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function detail($id)
+    {
+
+
+        $request = PengajuanDana::with([
+
+
+            'proyek',
+
+
+            'divisi',
+
+
+            'penyetuju',
+
+
+            'auditLogs'
+
+
+        ])
+
+        ->where(
+
+
+            'pengguna_id',
+
+
+            Auth::id()
+
 
         )
 
-    );
-
-}
-public function detail($id)
-{
-
-    $request = PengajuanDana::with([
-
-        'proyek',
-
-        'divisi',
-
-        'penyetuju',
-
-        'auditLogs'
-
-    ])
-
-    ->where(
-
-        'pengguna_id',
-
-        Auth::id()
-
-    )
-
-    ->findOrFail($id);
+        ->findOrFail($id);
 
 
 
-    return view(
 
-        'expense.detail',
 
-        compact('request')
 
-    );
 
-}
+        return view(
+
+
+            'expense.detail',
+
+
+            compact(
+
+                'request'
+
+            )
+
+
+        );
+
+
+    }
+
+
 
 }

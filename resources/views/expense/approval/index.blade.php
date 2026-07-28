@@ -185,7 +185,7 @@ Aksi
 
 <strong>
 
-{{$request->user->name ?? '-'}}
+{{$request->pengguna->name ?? '-'}}
 
 </strong>
 
@@ -371,19 +371,20 @@ Tidak ada
 
 
 </td>
-
-
-
-
-
-
-
-
 <td>
 
 
-
 <div class="action">
+
+
+
+<a 
+href="{{ route('expense.approval.detail',$request->id) }}"
+class="detail-btn">
+
+👁 Lihat Detail
+
+</a>
 
 
 
@@ -666,7 +667,6 @@ margin-top:15px;
 .welcome-tags span{
 
 background:
-
 rgba(255,255,255,.15);
 
 padding:7px 12px;
@@ -722,7 +722,6 @@ border-radius:50%;
 .glass-panel{
 
 background:
-
 rgba(255,255,255,.65);
 
 backdrop-filter:blur(15px);
@@ -732,7 +731,6 @@ border-radius:22px;
 padding:22px;
 
 border:
-
 1px solid rgba(255,255,255,.8);
 
 }
@@ -786,7 +784,6 @@ td{
 padding:15px;
 
 border-bottom:
-
 1px solid #f1f5f9;
 
 font-size:13px;
@@ -835,11 +832,11 @@ color:#dc2626;
 
 display:grid;
 
-grid-template-columns:1fr 1fr;
+grid-template-columns:1fr;
 
-gap:15px;
+gap:12px;
 
-min-width:450px;
+min-width:300px;
 
 }
 
@@ -939,6 +936,40 @@ background:#b91c1c;
 }
 
 
+
+
+
+.detail-btn{
+
+background:#2563eb;
+
+color:white;
+
+padding:10px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.detail-btn:hover{
+
+background:#1d4ed8;
+
+}
 
 
 

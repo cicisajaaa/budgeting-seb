@@ -60,6 +60,7 @@ linear-gradient(
 
 overflow-x:hidden;
 
+font-size: 14px;
 }
 
 
@@ -76,13 +77,13 @@ left:20px;
 
 bottom:20px;
 
-width:240px;
+width:220px;
 
 background:white;
 
-border-radius:25px;
+border-radius:20px;
 
-padding:22px 15px;
+padding:18px 12px;
 
 box-shadow:
 
@@ -115,15 +116,15 @@ border-bottom:1px solid #e2e8f0;
 
 .brand img{
 
-width:55px;
+width:45px;
 
-height:55px;
+height:45px;
 
 padding:8px;
 
 background:white;
 
-border-radius:18px;
+border-radius:14px;
 
 object-fit:contain;
 
@@ -174,7 +175,7 @@ margin:20px 10px 10px;
 
 .sidebar a{
 
-height:42px;
+height:38px;
 
 display:flex;
 
@@ -192,7 +193,7 @@ text-decoration:none;
 
 color:#475569;
 
-font-size:13px;
+font-size:12px;
 
 }
 
@@ -1146,7 +1147,7 @@ left:290px;
 
 right:20px;
 
-height:70px;
+height:60px;
 
 background:white;
 
@@ -1158,7 +1159,7 @@ align-items:center;
 
 justify-content:space-between;
 
-padding:0 25px;
+padding:0 20px;
 
 box-shadow:
 0 15px 40px rgba(15,23,42,.08);
@@ -1171,7 +1172,7 @@ z-index:150;
 
 .system-name{
 
-font-size:20px;
+font-size:17px;
 
 font-weight:800;
 
@@ -1225,11 +1226,11 @@ gap:10px;
 
 .avatar{
 
-width:42px;
+width:36px;
 
-height:42px;
+height:36px;
 
-border-radius:15px;
+border-radius:12px;
 
 background:linear-gradient(
 135deg,
@@ -1277,9 +1278,11 @@ color:#64748b;
 
 border:none;
 
-padding:10px 18px;
+padding:8px 14px;
 
 border-radius:14px;
+
+font-size: 12px;
 
 background:#fee2e2;
 
@@ -1297,7 +1300,7 @@ cursor:pointer;
 
 margin-left:280px;
 
-padding:110px 25px 40px;
+padding:90px 20px 30px;
 
 min-height:100vh;
 
@@ -1451,7 +1454,9 @@ background:#dcfce7;
 
 color:#166534;
 
-padding:15px;
+padding:10px 14px;
+
+font-size: 13px;
 
 border-radius:15px;
 

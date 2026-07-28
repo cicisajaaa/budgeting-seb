@@ -237,7 +237,36 @@ class ExpenseApprovalController extends Controller
 
                 );
 
+            /*
+            |--------------------------------------------------------------------------
+            | AUDIT UPDATE SALDO
+            |--------------------------------------------------------------------------
+            */
 
+
+            AuditHelper::create(
+
+                'UPDATE SALDO',
+
+                'Keuangan',
+
+                'Mengurangi saldo divisi sebesar Rp ' .
+
+                number_format(
+
+                    $expenseRequest->jumlah,
+
+                    0,
+
+                    ',',
+
+                    '.'
+
+                ),
+
+                $expenseRequest->id
+
+            );
 
 
 
@@ -261,7 +290,7 @@ class ExpenseApprovalController extends Controller
 
             AuditHelper::create(
 
-                'Approve Expense',
+                'APPROVE',
 
                 'Pengajuan Dana',
 
@@ -423,39 +452,39 @@ class ExpenseApprovalController extends Controller
 
         AuditHelper::create(
 
-            'Reject Expense',
+        'REJECT',
 
-            'Pengajuan Dana',
+        'Pengajuan Dana',
 
-            'Menolak pengajuan dana "' .
+        'Menolak pengajuan dana "' .
 
-            $expenseRequest->judul .
+        $expenseRequest->judul .
 
-            '" sebesar Rp ' .
+        '" sebesar Rp ' .
 
-            number_format(
+        number_format(
 
-                $expenseRequest->jumlah,
+            $expenseRequest->jumlah,
 
-                0,
+            0,
 
-                ',',
+            ',',
 
-                '.'
+            '.'
 
-            )
+        )
 
-            .
+        .
 
-            ' dengan catatan: '
+        ' dengan catatan: '
 
-            .
+        .
 
-            $request->catatan_persetujuan,
+        $request->catatan_persetujuan,
 
-            $expenseRequest->id
+        $expenseRequest->id
 
-        );
+    );
 
 
 
@@ -666,6 +695,74 @@ class ExpenseApprovalController extends Controller
 
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL APPROVAL FINANCE
+    |--------------------------------------------------------------------------
+    */
 
+    public function detail($id)
+    {
+
+
+        $expense = PengajuanDana::with([
+
+
+            'proyek',
+
+            'divisi',
+
+            'pengguna',
+
+            'penyetuju',
+
+            'auditLogs'
+
+
+        ])
+
+        ->findOrFail($id);
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIT VIEW
+        |--------------------------------------------------------------------------
+        */
+
+
+        AuditHelper::create(
+
+            'VIEW',
+
+            'Pengajuan Dana',
+
+            'Melihat detail pengajuan dana: '.$expense->judul,
+
+            $expense->id
+
+        );
+
+
+
+
+
+
+
+        return view(
+
+        'expense.detail',
+
+        [
+            'request' => $expense
+        ]
+
+    );
+
+    }
 
 }

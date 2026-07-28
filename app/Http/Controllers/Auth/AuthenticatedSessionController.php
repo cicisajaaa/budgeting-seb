@@ -37,7 +37,7 @@ public function store(LoginRequest $request): RedirectResponse
 
     AuditHelper::create(
 
-        'Login',
+        'LOGIN',
 
         'Security',
 
@@ -59,7 +59,7 @@ public function store(LoginRequest $request): RedirectResponse
     {
         AuditHelper::create(
 
-    'Logout',
+    'LOGOUT',
 
     'Security',
 
