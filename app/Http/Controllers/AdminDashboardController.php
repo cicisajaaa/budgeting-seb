@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Proyek;
 use App\Models\Divisi;
 use App\Models\Tugas;
+use App\Models\PengajuanDana;
+use App\Models\LogAudit;
 
 
 
@@ -37,8 +39,57 @@ class AdminDashboardController extends Controller
 
 
 
-
         $totalTask = Tugas::count();
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIK PENGAJUAN DANA
+        |--------------------------------------------------------------------------
+        */
+
+
+        $totalExpenseRequest = PengajuanDana::count();
+
+
+
+        $totalPendingExpense = PengajuanDana::where(
+
+            'status',
+
+            'pending'
+
+        )
+        ->count();
+
+
+
+
+        $totalApprovedExpense = PengajuanDana::where(
+
+            'status',
+
+            'approved'
+
+        )
+        ->count();
+
+
+
+
+        $totalRejectedExpense = PengajuanDana::where(
+
+            'status',
+
+            'rejected'
+
+        )
+        ->count();
 
 
 
@@ -82,6 +133,33 @@ class AdminDashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | AUDIT TRAIL TERBARU
+        |--------------------------------------------------------------------------
+        */
+
+
+        $recentAudit = LogAudit::with(
+
+            'pengguna'
+
+        )
+
+        ->latest()
+
+        ->take(10)
+
+        ->get();
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
         | RETURN VIEW
         |--------------------------------------------------------------------------
         */
@@ -101,9 +179,21 @@ class AdminDashboardController extends Controller
 
                 'totalTask',
 
+
+                'totalExpenseRequest',
+
+                'totalPendingExpense',
+
+                'totalApprovedExpense',
+
+                'totalRejectedExpense',
+
+
                 'recentUsers',
 
-                'recentProjects'
+                'recentProjects',
+
+                'recentAudit'
 
             )
 

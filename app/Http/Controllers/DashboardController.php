@@ -12,6 +12,7 @@ use App\Models\PengajuanDana;
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
 use App\Models\Divisi;
+use App\Models\LogAudit;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,6 @@ class DashboardController extends Controller
 
 
         $user = Auth::user();
-
 
 
 
@@ -65,6 +65,7 @@ class DashboardController extends Controller
 
 
 
+
         $projects = Proyek::with([
 
             'tugas.aktivitasTugas'
@@ -73,8 +74,9 @@ class DashboardController extends Controller
 
         ->latest()
 
-        ->get();
+        ->take(5)
 
+        ->get();
 
 
 
@@ -101,10 +103,13 @@ class DashboardController extends Controller
 
 
 
+
         $taskProgress = Tugas::where(
             'status',
             'sedang_dikerjakan'
         )->count();
+
+
 
 
         $taskTodo = Tugas::where(
@@ -120,41 +125,54 @@ class DashboardController extends Controller
         );
 
 
-/*
-|--------------------------------------------------------------------------
-| TASK ANALYTICS PROJECT TRACKER
-|--------------------------------------------------------------------------
-*/
-
-
-$taskByPriority = Tugas::selectRaw(
-    'prioritas, COUNT(*) as total'
-)
-->groupBy(
-    'prioritas'
-)
-->get();
 
 
 
-$taskByProject = Proyek::withCount(
-    'tugas'
-)
-->get();
+        $taskByPriority = Tugas::selectRaw(
+
+            'prioritas, COUNT(*) as total'
+
+        )
+
+        ->groupBy(
+
+            'prioritas'
+
+        )
+
+        ->get();
 
 
 
-$taskByEmployee = \App\Models\Karyawan::withCount(
-    'tugas'
-)
-->get();
+
+
+        $taskByProject = Proyek::withCount(
+            'tugas'
+        )
+
+        ->get();
 
 
 
-$taskByDivision = Divisi::withCount(
-    'tugas'
-)
-->get();
+
+
+        $taskByEmployee = \App\Models\Karyawan::withCount(
+            'tugas'
+        )
+
+        ->get();
+
+
+
+
+
+        $taskByDivision = Divisi::withCount(
+            'tugas'
+        )
+
+        ->get();
+
+
 
 
 
@@ -171,220 +189,264 @@ $taskByDivision = Divisi::withCount(
         ->take(5)
 
         ->get();
+        $recentTasks = Tugas::with([
 
+    'proyek',
 
+    'karyawan'
 
+])
 
+->latest()
 
+->take(5)
 
+->get();
 
+/*
+|--------------------------------------------------------------------------
+| DATA KEUANGAN
+|--------------------------------------------------------------------------
+*/
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DATA KEUANGAN
-        |--------------------------------------------------------------------------
-        */
+$totalDeposit = SetoranProyek::sum(
+    'jumlah_setoran'
+);
 
 
-        $totalDeposit = SetoranProyek::sum(
-            'jumlah_setoran'
-        );
+$totalTransactionExpense = TransaksiDana::sum(
+    'jumlah'
+);
 
 
+$totalActivityExpense = AktivitasTugas::sum(
+    'anggaran_aktivitas'
+);
 
 
-        $totalTransactionExpense = TransaksiDana::sum(
-            'jumlah'
-        );
+$totalExpense = 
+    $totalTransactionExpense 
+    +
+    $totalActivityExpense;
 
 
 
+$sisaDana = max(
+    $totalDeposit - $totalExpense,
+    0
+);
 
-        $totalActivityExpense = AktivitasTugas::sum(
-            'anggaran_aktivitas'
-        );
 
 
+$budgetUsage = 0;
 
 
-        $totalExpense =
+if($totalDeposit > 0)
+{
 
-            $totalTransactionExpense
+    $budgetUsage = round(
+        ($totalExpense / $totalDeposit) * 100
+    );
 
-            +
+}
 
-            $totalActivityExpense;
 
 
 
 
-        $sisaDana =
 
-            $totalDeposit
+/*
+|--------------------------------------------------------------------------
+| DATA SALDO
+|--------------------------------------------------------------------------
+*/
 
-            -
 
-            $totalExpense;
+$totalSaldoDivisi = SaldoDivisi::sum(
+    'saldo'
+);
 
 
 
+$totalSaldoBank = RekeningBank::where(
+    'status',
+    true
+)
 
-        $budgetUsage = 0;
+->sum(
+    'saldo'
+);
 
 
 
-        if($totalDeposit > 0)
-        {
+$totalBankAktif = RekeningBank::where(
+    'status',
+    true
+)
 
-            $budgetUsage = round(
+->count();
 
-                ($totalExpense / $totalDeposit)
 
-                *
 
-                100
 
-            );
 
-        }
 
 
+/*
+|--------------------------------------------------------------------------
+| DATA APPROVAL
+|--------------------------------------------------------------------------
+*/
 
 
+$totalApprovalPending = PengajuanDana::where(
+    'status',
+    'pending'
+)
 
+->count();
 
 
 
+$totalApprovalApproved = PengajuanDana::where(
+    'status',
+    'approved'
+)
 
-        /*
-        |--------------------------------------------------------------------------
-        | DATA SALDO
-        |--------------------------------------------------------------------------
-        */
+->count();
 
 
-        $totalSaldoDivisi = SaldoDivisi::sum(
-            'saldo'
-        );
 
+$totalApprovalRejected = PengajuanDana::where(
+    'status',
+    'rejected'
+)
 
+->count();
 
 
-        $totalSaldoBank = RekeningBank::where(
-            'status',
-            true
-        )
-        ->sum(
-            'saldo'
-        );
 
 
 
+$recentApproval = PengajuanDana::with([
 
-        $totalBankAktif = RekeningBank::where(
-            'status',
-            true
-        )
-        ->count();
+    'proyek',
+    'divisi',
+    'pengguna'
 
+])
 
+->where(
+    'status',
+    'pending'
+)
 
+->latest()
 
+->take(5)
 
+->get();
 
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DATA APPROVAL
-        |--------------------------------------------------------------------------
-        */
 
 
-        $totalApprovalPending = PengajuanDana::where(
-            'status',
-            'pending'
-        )
-        ->count();
 
+/*
+|--------------------------------------------------------------------------
+| TRANSAKSI TERBARU
+|--------------------------------------------------------------------------
+*/
 
 
+$recentExpenses = TransaksiDana::with(
 
-        $recentApproval = PengajuanDana::with([
+    'pengajuanDana'
 
-            'proyek',
+)
 
-            'divisi',
+->latest()
 
-            'pengguna'
+->take(5)
 
-        ])
+->get();
 
-        ->where(
-            'status',
-            'pending'
-        )
 
-        ->latest()
 
-        ->take(5)
+$recentDeposits = SetoranProyek::with([
 
-        ->get();
+    'proyek',
+    'rekeningBank'
 
+])
 
+->latest()
 
+->take(5)
 
+->get();
 
 
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | TRANSAKSI TERBARU
-        |--------------------------------------------------------------------------
-        */
 
 
-        $recentExpenses = TransaksiDana::with([
+/*
+|--------------------------------------------------------------------------
+| PENGELUARAN BULAN INI
+|--------------------------------------------------------------------------
+*/
 
-            'pengajuanDana'
 
-        ])
+$expenseThisMonth = TransaksiDana::whereMonth(
 
-        ->latest()
+    'tanggal',
 
-        ->take(5)
+    now()->month
 
-        ->get();
+)
 
+->whereYear(
 
+    'tanggal',
 
+    now()->year
 
-        $recentDeposits = SetoranProyek::with([
+)
 
-            'proyek',
+->sum(
 
-            'rekeningBank'
+    'jumlah'
 
-        ])
+);
 
-        ->latest()
 
-        ->take(5)
 
-        ->get();
 
 
 
 
+/*
+|--------------------------------------------------------------------------
+| AUDIT TRAIL
+|--------------------------------------------------------------------------
+*/
 
 
+$recentAudit = LogAudit::with(
 
+    'pengguna'
 
+)
 
+->latest()
+
+->take(5)
+
+->get();
         /*
         |--------------------------------------------------------------------------
         | DASHBOARD KARYAWAN
@@ -415,7 +477,6 @@ $taskByDivision = Divisi::withCount(
             'todo'=>0
 
         ];
-
 
 
 
@@ -462,77 +523,71 @@ $taskByDivision = Divisi::withCount(
 
 
 
-
-
                 $taskChart = [
 
-                    'done'=>
 
-                        $employeeTasks
+                    'done'=>$employeeTasks
 
-                        ->whereIn(
+                    ->whereIn(
 
-                            'status',
+                        'status',
 
-                            [
+                        [
 
-                                'selesai',
+                            'selesai',
 
-                                'done'
+                            'done'
 
-                            ]
+                        ]
 
-                        )
+                    )
 
-                        ->count(),
-
-
-
-
-
-                    'progress'=>
-
-                        $employeeTasks
-
-                        ->whereIn(
-
-                            'status',
-
-                            [
-
-                                'berjalan',
-
-                                'progress'
-
-                            ]
-
-                        )
-
-                        ->count(),
+                    ->count(),
 
 
 
 
 
-                    'todo'=>
+                    'progress'=>$employeeTasks
 
-                        $employeeTasks
+                    ->whereIn(
 
-                        ->whereIn(
+                        'status',
 
-                            'status',
+                        [
 
-                            [
+                            'berjalan',
 
-                                'belum_dikerjakan',
+                            'progress'
 
-                                'todo'
+                        ]
 
-                            ]
+                    )
 
-                        )
+                    ->count(),
 
-                        ->count(),
+
+
+
+
+                    'todo'=>$employeeTasks
+
+                    ->whereIn(
+
+                        'status',
+
+                        [
+
+                            'belum_dikerjakan',
+
+                            'todo'
+
+                        ]
+
+                    )
+
+                    ->count(),
+
 
                 ];
 
@@ -542,21 +597,21 @@ $taskByDivision = Divisi::withCount(
 
 
 
-
-
                 $deadlineTasks = $employeeTasks
 
-                    ->whereNotNull(
-                        'deadline'
-                    )
+                ->whereNotNull(
 
-                    ->sortBy(
-                        'deadline'
-                    )
+                    'deadline'
 
-                    ->take(5);
+                )
 
+                ->sortBy(
 
+                    'deadline'
+
+                )
+
+                ->take(5);
 
 
 
@@ -566,34 +621,33 @@ $taskByDivision = Divisi::withCount(
 
                 $projectProgress = $employeeTasks
 
-                    ->groupBy(function($task){
+                ->groupBy(function($task){
 
 
-                        return $task->proyek->nama_proyek
+                    return $task->proyek->nama_proyek
 
-                        ??
+                    ??
 
-                        'Tanpa Proyek';
-
-
-                    })
-
-                    ->map(function($tasks){
+                    'Tanpa Proyek';
 
 
-                        return round(
+                })
 
-                            $tasks->avg(
-
-                                'progres_persen'
-
-                            )
-
-                        );
+                ->map(function($tasks){
 
 
-                    });
+                    return round(
 
+                        $tasks->avg(
+
+                            'progres_persen'
+
+                        )
+
+                    );
+
+
+                });
 
 
 
@@ -604,43 +658,46 @@ $taskByDivision = Divisi::withCount(
 
                 $recentActivities = $employeeTasks
 
-                    ->flatMap(function($task){
+                ->flatMap(function($task){
 
 
-                        return $task->aktivitasTugas
+                    return $task->aktivitasTugas
 
-                            ->map(function($activity) use($task){
-
-
-                              return [
-
-                                    'task'=>$task->nama_tugas,
-
-                                    'aktivitas'=>$activity->aktivitas,
-
-                                    'progress'=>$activity->progres,
-
-                                    'tanggal'=>$activity->created_at
-
-                                ];
+                    ->map(function($activity) use($task){
 
 
-                            });
+                        return [
+
+                            'task'=>$task->nama_tugas,
+
+                            'aktivitas'=>$activity->aktivitas,
+
+                            'progress'=>$activity->progres,
+
+                            'tanggal'=>$activity->created_at
+
+                        ];
 
 
-                    })
+                    });
 
-                    ->sortByDesc(
-                        'tanggal'
-                    )
 
-                    ->take(5);
+                })
+
+                ->sortByDesc(
+
+                    'tanggal'
+
+                )
+
+                ->take(5);
 
 
             }
 
 
         }
+
 
 
 
@@ -676,6 +733,8 @@ $taskByDivision = Divisi::withCount(
 
 
 
+
+
             'projects'=>$projects,
 
 
@@ -689,8 +748,13 @@ $taskByDivision = Divisi::withCount(
 
 
             'totalProjectProgress'=>round(
+
                 $totalProjectProgress ?? 0
+
             ),
+
+
+
 
 
 
@@ -707,8 +771,11 @@ $taskByDivision = Divisi::withCount(
 
 
             'averageTaskProgress'=>round(
+
                 $averageTaskProgress ?? 0
+
             ),
+
 
 
 
@@ -725,6 +792,12 @@ $taskByDivision = Divisi::withCount(
 
 
             'taskByDivision'=>$taskByDivision,
+
+
+
+
+
+
             'totalDeposit'=>$totalDeposit,
 
 
@@ -740,6 +813,12 @@ $taskByDivision = Divisi::withCount(
             'sisaDana'=>$sisaDana,
 
 
+            'expenseThisMonth'=>$expenseThisMonth,
+
+
+
+
+
 
             'totalSaldoDivisi'=>$totalSaldoDivisi,
 
@@ -751,10 +830,24 @@ $taskByDivision = Divisi::withCount(
 
 
 
+
+
+
             'totalApprovalPending'=>$totalApprovalPending,
 
 
+            'totalApprovalApproved'=>$totalApprovalApproved,
+
+
+            'totalApprovalRejected'=>$totalApprovalRejected,
+
+
             'recentApproval'=>$recentApproval,
+
+
+
+
+
 
 
             'recentExpenses'=>$recentExpenses,
@@ -763,7 +856,16 @@ $taskByDivision = Divisi::withCount(
             'recentDeposits'=>$recentDeposits,
 
 
+
+
+
+
+            'recentAudit'=>$recentAudit,
+
+
         ];
+
+
 
 
 
@@ -787,45 +889,56 @@ $taskByDivision = Divisi::withCount(
             case 'owner':
 
                 return view(
+
                     'dashboard.owner',
+
                     $data
+
                 );
+
+
 
 
 
             case 'keuangan':
 
                 return view(
+
                     'dashboard.keuangan',
+
                     $data
+
                 );
 
 
-
-            case 'keuangan':
-
-                return view(
-                    'dashboard.keuangan',
-                    $data
-                );
 
 
 
             case 'karyawan':
 
                 return view(
+
                     'dashboard.karyawan',
+
                     $data
+
                 );
+
+
 
 
 
             case 'admin':
 
                 return redirect()
-                    ->route(
-                        'admin.dashboard'
-                    );
+
+                ->route(
+
+                    'admin.dashboard'
+
+                );
+
+
 
 
 

@@ -16,9 +16,7 @@ CV Sahabat Alam
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 
-
 <style>
-
 
 :root{
 
@@ -29,6 +27,7 @@ CV Sahabat Alam
 --muted:#64748b;
 
 }
+
 
 
 *{
@@ -60,12 +59,16 @@ linear-gradient(
 
 overflow-x:hidden;
 
-font-size: 14px;
+font-size:14px;
+
 }
 
 
 
-/* SIDEBAR */
+
+
+/* ================= SIDEBAR ================= */
+
 
 .sidebar{
 
@@ -89,9 +92,12 @@ box-shadow:
 
 0 20px 50px rgba(15,23,42,.1);
 
-z-index:200;
+z-index:1000;
+
+overflow:hidden;
 
 }
+
 
 
 
@@ -108,9 +114,13 @@ padding-bottom:20px;
 
 margin-bottom:20px;
 
-border-bottom:1px solid #e2e8f0;
+border-bottom:
+
+1px solid #e2e8f0;
 
 }
+
+
 
 
 
@@ -132,6 +142,8 @@ object-fit:contain;
 
 
 
+
+
 .brand-text{
 
 font-size:16px;
@@ -141,6 +153,8 @@ font-weight:800;
 color:#166534;
 
 }
+
+
 
 
 
@@ -156,6 +170,8 @@ color:#22c55e;
 
 
 
+
+
 .menu-title{
 
 font-size:10px;
@@ -166,9 +182,12 @@ letter-spacing:1px;
 
 color:#94a3b8;
 
-margin:20px 10px 10px;
+margin:
+
+20px 10px 10px;
 
 }
+
 
 
 
@@ -195,7 +214,11 @@ color:#475569;
 
 font-size:12px;
 
+transition:.2s;
+
 }
+
+
 
 
 
@@ -210,9 +233,12 @@ color:#166534;
 
 
 
+
 .sidebar a.active{
 
-background:linear-gradient(
+background:
+
+linear-gradient(
 135deg,
 #166534,
 #22c55e
@@ -223,6 +249,7 @@ color:white;
 font-weight:700;
 
 }
+
 
 
 
@@ -245,6 +272,8 @@ border-radius:8px;
 
 
 
+
+
 .menu-badge{
 
 margin-left:auto;
@@ -255,11 +284,14 @@ color:white;
 
 font-size:10px;
 
-padding:3px 7px;
+padding:
+
+3px 7px;
 
 border-radius:20px;
 
 }
+
 
 
 
@@ -284,6 +316,8 @@ background:#f8fafc;
 
 
 
+
+
 .system-status-title{
 
 font-size:10px;
@@ -293,6 +327,8 @@ font-weight:700;
 color:#94a3b8;
 
 }
+
+
 
 
 
@@ -316,6 +352,8 @@ margin-top:5px;
 
 
 
+
+
 .online-dot{
 
 width:8px;
@@ -327,9 +365,11 @@ background:#22c55e;
 border-radius:50%;
 
 }
-{{-- ================= SIDEBAR ================= --}}
+
+
 
 </style>
+
 
 </head>
 
@@ -338,7 +378,6 @@ border-radius:50%;
 
 
 <aside class="sidebar">
-
 
 
 <div class="brand">
@@ -356,69 +395,53 @@ Sahabat Alam
 Financial Management
 </span>
 
-
 </div>
 
 
 </div>
-
-
 
 
 
 <div class="menu-title">
+
 MAIN
+
 </div>
-
-
-
-
-
 @if(auth()->user()->role == 'admin')
 
 
 <a href="{{route('admin.dashboard')}}"
 class="{{request()->routeIs('admin.dashboard')?'active':''}}">
 
-
 <div class="icon">
 ⌂
 </div>
-
 
 <span>
 Dashboard
 </span>
 
-
 </a>
-
 
 
 @else
 
 
-
 <a href="{{route('dashboard')}}"
 class="{{request()->routeIs('dashboard')?'active':''}}">
-
 
 <div class="icon">
 ⌂
 </div>
 
-
 <span>
 Dashboard
 </span>
 
-
 </a>
 
 
-
 @endif
-
 
 
 
@@ -453,6 +476,7 @@ Kelola Pengguna
 
 
 
+
 <a href="{{route('admin.projects.index')}}"
 class="{{request()->routeIs('admin.projects.*')?'active':''}}">
 
@@ -465,6 +489,7 @@ Kelola Proyek
 </span>
 
 </a>
+
 
 
 
@@ -541,8 +566,8 @@ Saldo Divisi
 </a>
 
 
-
 @endif
+
 
 
 
@@ -553,12 +578,7 @@ Saldo Divisi
 {{-- ================= KEUANGAN ================= --}}
 
 
-@if(
-auth()->user()->role=='keuangan'
-||
-auth()->user()->role=='keuangan'
-)
-
+@if(auth()->user()->role=='keuangan')
 
 
 <div class="menu-title">
@@ -590,6 +610,7 @@ Pembayaran Masuk
 
 
 
+
 <a href="{{route('finance.bank.index')}}"
 class="{{request()->routeIs('finance.bank.*')?'active':''}}">
 
@@ -611,6 +632,7 @@ Rekening Bank
 
 
 
+
 <a href="{{route('finance.distribution')}}"
 class="{{request()->routeIs('finance.distribution')?'active':''}}">
 
@@ -626,6 +648,7 @@ Distribusi Dana
 
 
 </a>
+
 
 
 
@@ -668,8 +691,6 @@ Persetujuan Pengeluaran
 </span>
 
 
-
-
 @if(auth()->user()->unreadNotifications->count()>0)
 
 <span class="menu-badge">
@@ -681,8 +702,8 @@ Persetujuan Pengeluaran
 @endif
 
 
-
 </a>
+
 
 
 
@@ -706,9 +727,7 @@ Laporan Keuangan
 </a>
 
 
-
 @endif
-
 {{-- ================= KARYAWAN ================= --}}
 
 
@@ -744,6 +763,7 @@ Pengajuan Dana
 
 
 
+
 <a href="{{route('expense.myhistory')}}"
 class="{{request()->routeIs('expense.myhistory')?'active':''}}">
 
@@ -759,6 +779,7 @@ Riwayat Pengajuan
 
 
 </a>
+
 
 
 
@@ -786,6 +807,7 @@ Project Saya
 
 
 
+
 <a href="{{route('daily-tracker.index')}}"
 class="{{request()->routeIs('daily-tracker.*')?'active':''}}">
 
@@ -803,8 +825,8 @@ Daily Tracker
 </a>
 
 
-
 @endif
+
 
 
 
@@ -828,9 +850,12 @@ SYSTEM STATUS
 
 <div class="system-online">
 
+
 <div class="online-dot"></div>
 
+
 System Online
+
 
 </div>
 
@@ -856,6 +881,8 @@ System Online
 
 
 
+
+
 <div>
 
 
@@ -864,6 +891,7 @@ System Online
 CV Sahabat <span>Alam</span>
 
 </div>
+
 
 
 
@@ -888,6 +916,8 @@ Financial Management System
 
 
 
+
+
 {{-- NOTIFICATION --}}
 
 
@@ -895,6 +925,7 @@ Financial Management System
 
 
 <a href="#" class="notification-btn">
+
 
 🔔
 
@@ -919,7 +950,9 @@ Financial Management System
 
 
 
+
 <div class="notification-box">
+
 
 
 @if(auth()->user()->unreadNotifications->count()>0)
@@ -934,11 +967,14 @@ Financial Management System
 class="notification-item">
 
 
+
 <strong>
 
 {{$notification->data['title']}}
 
 </strong>
+
+
 
 
 <p>
@@ -948,11 +984,14 @@ class="notification-item">
 </p>
 
 
+
+
 <small>
 
 Klik untuk membuka
 
 </small>
+
 
 
 </a>
@@ -963,7 +1002,9 @@ Klik untuk membuka
 
 
 
+
 @else
+
 
 
 <div class="empty-notif">
@@ -971,6 +1012,7 @@ Klik untuk membuka
 Tidak ada notifikasi
 
 </div>
+
 
 
 @endif
@@ -991,8 +1033,8 @@ Tidak ada notifikasi
 
 
 
-
 {{-- PROFILE --}}
+
 
 
 <div class="profile">
@@ -1024,29 +1066,17 @@ Tidak ada notifikasi
 <span>
 
 
-@if(
-auth()->user()->role=='keuangan'
-||
-auth()->user()->role=='keuangan'
-)
-
-Keuangan
-
-@else
-
 {{ucfirst(auth()->user()->role)}}
-
-@endif
 
 
 </span>
 
 
-</div>
-
 
 </div>
 
+
+</div>
 
 
 
@@ -1055,6 +1085,7 @@ Keuangan
 
 
 <form method="POST" action="{{route('logout')}}">
+
 
 @csrf
 
@@ -1075,8 +1106,8 @@ Keluar
 </div>
 
 
-</header>
 
+</header>
 
 
 
@@ -1091,16 +1122,13 @@ Keluar
 <main class="content">
 
 
-
 @if(session('success'))
-
 
 <div class="alert-success">
 
 {{session('success')}}
 
 </div>
-
 
 @endif
 
@@ -1109,17 +1137,13 @@ Keluar
 
 @if(session('error'))
 
-
 <div class="alert-error">
 
 {{session('error')}}
 
 </div>
 
-
 @endif
-
-
 
 
 
@@ -1128,13 +1152,10 @@ Keluar
 
 
 </main>
-
-
-
-
-
-
 <style>
+
+
+/* ================= HEADER ================= */
 
 
 .header{
@@ -1143,7 +1164,7 @@ position:fixed;
 
 top:20px;
 
-left:290px;
+left:260px;
 
 right:20px;
 
@@ -1151,7 +1172,7 @@ height:60px;
 
 background:white;
 
-border-radius:22px;
+border-radius:20px;
 
 display:flex;
 
@@ -1162,11 +1183,13 @@ justify-content:space-between;
 padding:0 20px;
 
 box-shadow:
+
 0 15px 40px rgba(15,23,42,.08);
 
-z-index:150;
+z-index:999;
 
 }
+
 
 
 
@@ -1182,11 +1205,14 @@ color:#166534;
 
 
 
+
 .system-name span{
 
 color:#22c55e;
 
 }
+
+
 
 
 
@@ -1197,6 +1223,8 @@ font-size:11px;
 color:#64748b;
 
 }
+
+
 
 
 
@@ -1212,6 +1240,8 @@ gap:15px;
 
 
 
+
+
 .profile{
 
 display:flex;
@@ -1224,6 +1254,8 @@ gap:10px;
 
 
 
+
+
 .avatar{
 
 width:36px;
@@ -1232,7 +1264,9 @@ height:36px;
 
 border-radius:12px;
 
-background:linear-gradient(
+background:
+
+linear-gradient(
 135deg,
 #166534,
 #22c55e
@@ -1252,6 +1286,8 @@ font-weight:800;
 
 
 
+
+
 .profile-info b{
 
 display:block;
@@ -1261,6 +1297,8 @@ font-size:13px;
 color:#166534;
 
 }
+
+
 
 
 
@@ -1274,6 +1312,8 @@ color:#64748b;
 
 
 
+
+
 .logout{
 
 border:none;
@@ -1282,13 +1322,13 @@ padding:8px 14px;
 
 border-radius:14px;
 
-font-size: 12px;
-
 background:#fee2e2;
 
 color:#dc2626;
 
 font-weight:700;
+
+font-size:12px;
 
 cursor:pointer;
 
@@ -1296,19 +1336,41 @@ cursor:pointer;
 
 
 
+
+
+
+
+/* ================= CONTENT ================= */
+
+
+
 .content{
 
-margin-left:280px;
+margin-left:260px;
 
-padding:90px 20px 30px;
+padding:
+
+105px 20px 40px;
+
+width:
+
+calc(100% - 280px);
 
 min-height:100vh;
 
-width:calc(100% - 300px);
+position:relative;
+
+z-index:1;
 
 }
 
 
+
+
+
+
+
+/* ================= NOTIFICATION ================= */
 
 
 
@@ -1320,15 +1382,17 @@ position:relative;
 
 
 
+
+
 .notification-btn{
 
-width:42px;
+width:40px;
 
-height:42px;
+height:40px;
 
-border-radius:15px;
+border-radius:14px;
 
-background:white;
+background:#f8fafc;
 
 display:flex;
 
@@ -1336,11 +1400,13 @@ align-items:center;
 
 justify-content:center;
 
+font-size:18px;
+
 text-decoration:none;
 
-font-size:20px;
-
 }
+
+
 
 
 
@@ -1352,13 +1418,13 @@ top:-5px;
 
 right:-5px;
 
+width:18px;
+
+height:18px;
+
 background:#dc2626;
 
 color:white;
-
-width:20px;
-
-height:20px;
 
 border-radius:50%;
 
@@ -1374,6 +1440,8 @@ justify-content:center;
 
 
 
+
+
 .notification-box{
 
 display:none;
@@ -1384,7 +1452,7 @@ right:0;
 
 top:45px;
 
-width:320px;
+width:300px;
 
 background:white;
 
@@ -1393,9 +1461,12 @@ padding:12px;
 border-radius:18px;
 
 box-shadow:
+
 0 20px 50px rgba(0,0,0,.15);
 
 }
+
+
 
 
 
@@ -1407,17 +1478,19 @@ display:block;
 
 
 
+
+
 .notification-item{
 
 display:block;
 
-padding:12px;
-
-border-radius:12px;
-
 background:#f8fafc;
 
+padding:12px;
+
 margin-bottom:8px;
+
+border-radius:12px;
 
 text-decoration:none;
 
@@ -1427,11 +1500,39 @@ color:#334155;
 
 
 
+
+
 .notification-item strong{
 
 color:#166534;
 
 }
+
+
+
+
+
+.notification-item p{
+
+font-size:12px;
+
+margin-top:5px;
+
+}
+
+
+
+
+
+.notification-item small{
+
+font-size:10px;
+
+color:#94a3b8;
+
+}
+
+
 
 
 
@@ -1448,21 +1549,31 @@ color:#94a3b8;
 
 
 
+
+
+
+
+/* ================= ALERT ================= */
+
+
+
 .alert-success{
 
 background:#dcfce7;
 
 color:#166534;
 
-padding:10px 14px;
-
-font-size: 13px;
+padding:12px 15px;
 
 border-radius:15px;
 
 margin-bottom:20px;
 
+font-size:13px;
+
 }
+
+
 
 
 
@@ -1472,11 +1583,13 @@ background:#fee2e2;
 
 color:#991b1b;
 
-padding:15px;
+padding:12px 15px;
 
 border-radius:15px;
 
 margin-bottom:20px;
+
+font-size:13px;
 
 }
 
@@ -1484,7 +1597,15 @@ margin-bottom:20px;
 
 
 
+
+
+
+
+/* ================= RESPONSIVE ================= */
+
+
 @media(max-width:1000px){
+
 
 
 .sidebar{
@@ -1496,8 +1617,11 @@ width:80px;
 
 
 .brand-text,
+
 .menu-title,
+
 .system-status,
+
 .sidebar span{
 
 display:none;
@@ -1520,16 +1644,16 @@ margin-left:110px;
 
 width:auto;
 
+padding-top:100px;
+
 }
 
 
+
 }
+
+
+
 
 
 </style>
-
-
-
-</body>
-
-</html>
