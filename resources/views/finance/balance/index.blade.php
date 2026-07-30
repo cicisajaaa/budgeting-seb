@@ -4,32 +4,213 @@
 @section('content')
 
 
-
 <div class="welcome-card">
 
 
 <div>
 
-
 <div class="welcome-label">
-
 SALDO DIVISI
+</div>
+
+
+<h1>
+Monitoring Saldo Keuangan Divisi
+</h1>
+
+
+<p>
+Melihat distribusi dana dan saldo yang diterima setiap divisi perusahaan.
+</p>
+
+
+<div class="welcome-tags">
+
+<span>
+✓ Distribusi Otomatis
+</span>
+
+
+<span>
+✓ Monitoring Dana
+</span>
+
+
+<span>
+✓ Finance Control
+</span>
+
+
+</div>
+
+
+</div>
+
 
 </div>
 
 
 
-<h1>
 
-Monitoring Saldo Keuangan Divisi
 
-</h1>
 
+
+{{-- SUMMARY --}}
+
+
+<div class="summary-grid">
+
+
+<div class="summary-card">
+
+
+<div class="summary-icon">
+💰
+</div>
+
+
+<div>
+
+
+<label>
+Total Saldo Divisi
+</label>
+
+
+<h2>
+Rp {{number_format($balances->sum('saldo'),0,',','.')}}
+</h2>
+
+
+<small>
+Dana seluruh divisi
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+
+<div class="summary-icon">
+🏢
+</div>
+
+
+<div>
+
+
+<label>
+Jumlah Divisi
+</label>
+
+
+<h2>
+{{$balances->count()}}
+</h2>
+
+
+<small>
+Divisi menerima dana
+</small>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="glass-panel">
+
+
+<div class="panel-header">
+
+
+<div>
+
+
+<div class="panel-title">
+
+🏢 Detail Saldo Divisi
+
+</div>
+
+
+<small>
+
+Distribusi dana project
+
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="balance-grid">
+
+
+
+@forelse($balances as $balance)
+
+
+
+<div class="balance-card">
+
+
+
+
+
+<div class="balance-header">
+
+
+<div class="division-icon">
+🏢
+</div>
+
+
+<div>
+
+
+<h3>
+
+{{$balance->divisi->nama_divisi ?? '-'}}
+
+</h3>
 
 
 <p>
 
-Melihat saldo dana yang telah diterima setiap divisi.
+{{$balance->proyek->nama_proyek ?? '-'}}
 
 </p>
 
@@ -37,17 +218,6 @@ Melihat saldo dana yang telah diterima setiap divisi.
 </div>
 
 
-
-
-<div class="system-status">
-
-<span></span>
-
-Finance Active
-
-</div>
-
-
 </div>
 
 
@@ -56,222 +226,100 @@ Finance Active
 
 
 
-<!-- SUMMARY -->
-
-
-<div class="finance-grid">
-
-
-<div class="finance-card">
-
-
-<div class="finance-icon green">
-
-💰
-
-</div>
-
-
-
-<div>
+<div class="saldo-box">
 
 
 <label>
-
-Total Saldo Divisi
-
+Saldo Diterima
 </label>
 
 
 <h2>
-
-Rp {{number_format($balances->sum('saldo'),0,',','.')}}
-
-</h2>
-
-
-<small>
-
-Dana tersedia seluruh divisi
-
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="finance-card">
-
-
-<div class="finance-icon blue">
-
-🏢
-
-</div>
-
-
-<div>
-
-
-<label>
-
-Jumlah Divisi
-
-</label>
-
-
-<h2>
-
-{{$balances->count()}}
-
-</h2>
-
-
-<small>
-
-Divisi aktif
-
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- TABLE -->
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
-🏦 Detail Saldo Divisi
-
-</div>
-
-
-
-
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-
-<th>
-
-Project
-
-</th>
-
-
-<th>
-
-Divisi
-
-</th>
-
-
-<th>
-
-Saldo
-
-</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-
-
-<tbody>
-
-
-@forelse($balances as $balance)
-
-
-
-<tr>
-
-
-<td>
-
-
-{{$balance->proyek->nama_proyek ?? '-'}}
-
-
-</td>
-
-
-
-<td>
-
-
-{{$balance->divisi->nama_divisi ?? '-'}}
-
-
-</td>
-
-
-
-<td class="money">
-
 
 Rp {{number_format($balance->saldo,0,',','.')}}
 
-
-</td>
-
+</h2>
 
 
-</tr>
+</div>
+
+
+
+
+
+
+
+<div class="info-box">
+
+
+<div>
+
+<span>
+Project
+</span>
+
+
+<b>
+{{$balance->proyek->nama_proyek ?? '-'}}
+</b>
+
+
+</div>
+
+
+
+
+
+<div>
+
+<span>
+Divisi
+</span>
+
+
+<b>
+{{$balance->divisi->nama_divisi ?? '-'}}
+</b>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<br>
+
+<div class="status">
+
+<span class="active">
+
+● Aktif
+
+</span>
+</div>
+
+
+
+
+
+
+</div>
 
 
 
 @empty
 
 
-<tr>
-
-
-<td colspan="3" class="empty">
+<div class="empty">
 
 Belum ada saldo divisi
 
-</td>
-
-
-</tr>
+</div>
 
 
 
@@ -279,16 +327,12 @@ Belum ada saldo divisi
 
 
 
-</tbody>
-
-
-
-</table>
-
+</div>
 
 
 
 </div>
+
 
 
 
@@ -302,29 +346,15 @@ Belum ada saldo divisi
 
 .welcome-card{
 
+background:white;
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+padding:28px;
 
+border-radius:18px;
 
-padding:30px;
+border:1px solid #e2e8f0;
 
-border-radius:24px;
-
-color:white;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:22px;
-
+margin-bottom:20px;
 
 }
 
@@ -332,13 +362,13 @@ margin-bottom:22px;
 
 .welcome-label{
 
-font-size:10px;
-
-letter-spacing:2px;
+font-size:11px;
 
 font-weight:700;
 
-opacity:.8;
+letter-spacing:2px;
+
+color:#64748b;
 
 }
 
@@ -350,6 +380,8 @@ font-size:28px;
 
 margin:8px 0;
 
+color:#6b4f1d;
+
 }
 
 
@@ -358,86 +390,71 @@ margin:8px 0;
 
 font-size:13px;
 
-opacity:.9;
+color:#64748b;
 
 }
 
 
 
 
-.system-status{
 
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-font-weight:700;
-
-font-size:13px;
+.welcome-tags{
 
 display:flex;
 
-align-items:center;
+gap:10px;
 
-gap:8px;
+margin-top:15px;
 
+}
+
+
+
+.welcome-tags span{
+
+background:#fff7db;
+
+color:#6b4f1d;
+
+padding:7px 14px;
+
+border-radius:20px;
+
+font-size:11px;
+
+font-weight:600;
 
 }
 
 
 
 
-.system-status span{
-
-
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
-
-
-}
 
 
 
-
-
-
-
-.finance-grid{
-
+.summary-grid{
 
 display:grid;
 
 grid-template-columns:repeat(2,1fr);
 
-gap:18px;
+gap:20px;
 
-margin-bottom:22px;
-
+margin-bottom:20px;
 
 }
 
 
 
-
-
-.finance-card{
-
+.summary-card{
 
 background:white;
 
-border-radius:20px;
+border:1px solid #e2e8f0;
 
-padding:18px;
+padding:20px;
+
+border-radius:18px;
 
 display:flex;
 
@@ -445,21 +462,19 @@ align-items:center;
 
 gap:15px;
 
-box-shadow:0 10px 30px rgba(0,0,0,.06);
-
-
 }
 
 
 
+.summary-icon{
 
+width:50px;
 
-.finance-icon{
+height:50px;
 
+border-radius:15px;
 
-width:45px;
-
-height:45px;
+background:#fff7db;
 
 display:flex;
 
@@ -467,57 +482,32 @@ align-items:center;
 
 justify-content:center;
 
-border-radius:15px;
-
-font-size:20px;
-
-
-}
-
-
-
-.green{
-
-background:#dcfce7;
-
-}
-
-
-
-.blue{
-
-background:#dbeafe;
+font-size:22px;
 
 }
 
 
 
 
-
-.finance-card label{
-
+.summary-card label{
 
 font-size:12px;
 
 color:#64748b;
 
-
 }
 
 
 
+.summary-card h2{
 
-.finance-card h2{
-
-
-font-size:20px;
-
-color:#166534;
+color:#6b4f1d;
 
 margin-top:5px;
 
-
 }
+
+
 
 
 
@@ -525,32 +515,51 @@ margin-top:5px;
 
 .glass-panel{
 
-
-background:rgba(255,255,255,.65);
-
-backdrop-filter:blur(15px);
-
-border-radius:22px;
+background:white;
 
 padding:22px;
 
-border:1px solid rgba(255,255,255,.8);
+border-radius:18px;
 
+border:1px solid #e2e8f0;
 
 }
 
+
+
+
+
+.panel-header{
+
+margin-bottom:20px;
+
+}
 
 
 
 .panel-title{
 
-
 font-size:16px;
 
 font-weight:700;
 
-margin-bottom:18px;
+color:#1e293b;
 
+}
+
+
+
+
+
+
+
+.balance-grid{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:18px;
 
 }
 
@@ -558,48 +567,81 @@ margin-bottom:18px;
 
 
 
-table{
 
 
-width:100%;
+.balance-card{
 
-border-collapse:collapse;
+background:white;
 
+padding:22px;
+
+border-radius:20px;
+
+border:1px solid #f1f5f9;
+
+box-shadow:0 10px 25px rgba(0,0,0,.05);
 
 }
 
 
 
 
-th{
 
 
-padding:14px;
 
-text-align:left;
+.balance-header{
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+}
+
+
+
+
+
+.division-icon{
+
+width:50px;
+
+height:50px;
+
+background:#fff7db;
+
+border-radius:15px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:22px;
+
+}
+
+
+
+.balance-header h3{
+
+font-size:17px;
+
+color:#6b4f1d;
+
+}
+
+
+
+.balance-header p{
 
 font-size:12px;
 
 color:#64748b;
 
-background:#f8fafc;
-
-
-}
-
-
-
-
-
-td{
-
-
-padding:14px;
-
-border-bottom:1px solid #f1f5f9;
-
-font-size:13px;
-
+margin-top:5px;
 
 }
 
@@ -607,13 +649,118 @@ font-size:13px;
 
 
 
-.money{
 
+
+.saldo-box{
+
+margin-top:20px;
+
+}
+
+
+
+.saldo-box label{
+
+font-size:12px;
+
+color:#94a3b8;
+
+}
+
+
+
+.saldo-box h2{
+
+color:#6b4f1d;
+
+font-size:22px;
+
+margin-top:5px;
+
+}
+
+
+
+
+
+
+
+.info-box{
+
+background:#faf7ef;
+
+padding:12px;
+
+border-radius:12px;
+
+margin-top:15px;
+
+}
+
+
+
+.info-box div{
+
+display:flex;
+
+justify-content:space-between;
+
+font-size:12px;
+
+margin-bottom:8px;
+
+}
+
+
+
+.info-box div:last-child{
+
+margin-bottom:0;
+
+}
+
+
+
+.info-box span{
+
+color:#64748b;
+
+}
+
+
+
+.info-box b{
+
+color:#6b4f1d;
+
+}
+
+
+
+
+
+
+.active{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-size:12px;
 
 font-weight:700;
 
-color:#16a34a;
+display:inline-flex;
 
+align-items:center;
+
+gap:6px;
+
+border:1px solid #bbf7d0;
 
 }
 
@@ -623,20 +770,32 @@ color:#16a34a;
 
 .empty{
 
-
 text-align:center;
 
-color:#94a3b8;
+padding:35px;
 
+color:#94a3b8;
 
 }
 
 
 
-@media(max-width:700px){
 
 
-.finance-grid{
+
+
+@media(max-width:1000px){
+
+
+.balance-grid{
+
+grid-template-columns:1fr;
+
+}
+
+
+
+.summary-grid{
 
 grid-template-columns:1fr;
 
@@ -646,8 +805,8 @@ grid-template-columns:1fr;
 }
 
 
-</style>
 
+</style>
 
 
 

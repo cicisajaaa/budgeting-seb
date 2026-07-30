@@ -1,40 +1,30 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
-
 
 
 <div class="welcome-card">
 
-
 <div>
 
-
 <div class="welcome-label">
-
 REKENING BANK
-
 </div>
 
 
 <h1>
-
 Manajemen Rekening Perusahaan
-
 </h1>
 
 
 <p>
-
-Kelola rekening bank yang digunakan untuk transaksi keuangan perusahaan.
-
+Kelola seluruh rekening bank perusahaan,
+pantau saldo aktif dan transaksi keuangan.
 </p>
 
 
 
 <div class="welcome-tags">
-
 
 <span>
 ✓ Multi Bank
@@ -54,28 +44,10 @@ Kelola rekening bank yang digunakan untuk transaksi keuangan perusahaan.
 </div>
 
 
-
 </div>
 
 
-
-
-
-<div class="system-status">
-
-<span></span>
-
-Bank Active
-
 </div>
-
-
-
-</div>
-
-
-
-
 
 
 
@@ -84,13 +56,91 @@ Bank Active
 @if(session('success'))
 
 <div class="alert-success">
-
 {{session('success')}}
-
 </div>
 
 @endif
 
+
+
+
+
+
+
+{{-- SUMMARY --}}
+
+<div class="summary-grid">
+
+
+<div class="summary-card">
+
+
+<div class="summary-icon">
+🏦
+</div>
+
+
+<div>
+
+<label>
+Total Rekening
+</label>
+
+
+<h2>
+{{count($banks)}}
+</h2>
+
+
+<small>
+Rekening perusahaan
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+
+<div class="summary-icon">
+💰
+</div>
+
+
+<div>
+
+<label>
+Total Saldo Bank
+</label>
+
+
+<h2>
+Rp {{number_format($banks->sum('saldo'),0,',','.')}}
+</h2>
+
+
+<small>
+Dana tersedia perusahaan
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
 
 
 
@@ -102,6 +152,7 @@ Bank Active
 <div class="glass-panel">
 
 
+
 <div class="panel-header">
 
 
@@ -109,21 +160,16 @@ Bank Active
 
 
 <div class="panel-title">
-
 🏦 Daftar Rekening Bank
-
 </div>
 
 
 <small>
-
 Rekening aktif perusahaan
-
 </small>
 
 
 </div>
-
 
 
 
@@ -138,6 +184,9 @@ class="add-btn">
 
 
 </div>
+
+
+
 
 
 
@@ -162,9 +211,7 @@ class="add-btn">
 
 
 <div class="bank-icon">
-
 🏦
-
 </div>
 
 
@@ -172,16 +219,12 @@ class="add-btn">
 
 
 <h3>
-
 {{$bank->nama_bank}}
-
 </h3>
 
 
 <p>
-
 {{$bank->nomor_rekening}}
-
 </p>
 
 
@@ -208,14 +251,54 @@ class="add-btn">
 
 
 
+<div class="bank-info">
+
+
+<div>
+
+<span>
+Nomor Rekening
+</span>
+
+
+<b>
+{{$bank->nomor_rekening}}
+</b>
+
+
+</div>
+
+
+<div>
+
+<span>
+Status
+</span>
+
+
+<b>
+{{$bank->status ? 'Aktif':'Nonaktif'}}
+</b>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
 
 <div class="saldo-box">
 
 
 <label>
-
 Saldo Rekening
-
 </label>
 
 
@@ -234,27 +317,20 @@ Rp {{number_format($bank->saldo,0,',','.')}}
 
 
 
-
 <div class="status">
 
 
 @if($bank->status)
 
-
 <span class="active">
-
 Aktif
-
 </span>
 
 
 @else
 
-
 <span class="inactive">
-
 Nonaktif
-
 </span>
 
 
@@ -262,6 +338,7 @@ Nonaktif
 
 
 </div>
+
 
 
 
@@ -301,7 +378,6 @@ Hapus
 </form>
 
 
-
 </div>
 
 
@@ -317,13 +393,11 @@ Hapus
 @empty
 
 
-
 <div class="empty">
 
 Belum ada rekening bank
 
 </div>
-
 
 
 @endforelse
@@ -340,201 +414,28 @@ Belum ada rekening bank
 
 
 
-
-
-
-
 <style>
+    <style>
+
+
+.finance-wrapper{
+    width:100%;
+}
+
+
+
+/* ================= WELCOME ================= */
 
 
 .welcome-card{
 
-
-background:
-
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
-
-
-padding:30px;
-
-border-radius:24px;
-
-color:white;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:22px;
-
-
-}
-
-
-
-
-
-.welcome-label{
-
-
-font-size:10px;
-
-font-weight:700;
-
-letter-spacing:2px;
-
-opacity:.8;
-
-
-}
-
-
-
-
-
-.welcome-card h1{
-
-
-font-size:28px;
-
-margin:8px 0;
-
-
-}
-
-
-
-
-
-.welcome-card p{
-
-
-font-size:13px;
-
-opacity:.9;
-
-
-}
-
-
-
-
-
-.welcome-tags{
-
-
-display:flex;
-
-gap:10px;
-
-margin-top:18px;
-
-
-}
-
-
-
-
-.welcome-tags span{
-
-
-background:rgba(255,255,255,.15);
-
-padding:7px 12px;
-
-border-radius:20px;
-
-font-size:11px;
-
-
-}
-
-
-
-
-
-
-
-.system-status{
-
-
 background:white;
 
-color:#166534;
+padding:28px;
 
-padding:12px 18px;
+border-radius:18px;
 
-border-radius:30px;
-
-font-weight:700;
-
-display:flex;
-
-gap:8px;
-
-align-items:center;
-
-
-}
-
-
-
-
-
-.system-status span{
-
-
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
-
-
-}
-
-
-
-
-
-
-
-.glass-panel{
-
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:blur(15px);
-
-
-border-radius:22px;
-
-
-padding:22px;
-
-
-border:1px solid rgba(255,255,255,.8);
-
-
-}
-
-
-
-
-
-.panel-header{
-
+border:1px solid #e2e8f0;
 
 display:flex;
 
@@ -544,20 +445,229 @@ align-items:center;
 
 margin-bottom:20px;
 
+}
+
+
+
+
+.welcome-label{
+
+font-size:11px;
+
+font-weight:700;
+
+letter-spacing:2px;
+
+color:#64748b;
 
 }
 
 
+
+.welcome-card h1{
+
+font-size:28px;
+
+margin:8px 0;
+
+color:#6b4f1d;
+
+}
+
+
+
+.welcome-card p{
+
+font-size:13px;
+
+color:#64748b;
+
+}
+
+
+
+
+
+.welcome-tags{
+
+display:flex;
+
+gap:10px;
+
+margin-top:18px;
+
+}
+
+
+
+
+.welcome-tags span{
+
+background:#fff7db;
+
+color:#6b4f1d;
+
+padding:7px 14px;
+
+border-radius:20px;
+
+font-size:11px;
+
+font-weight:600;
+
+}
+
+
+
+
+
+/* ================= SUMMARY ================= */
+
+
+.summary-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:20px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.summary-card{
+
+background:white;
+
+padding:20px;
+
+border-radius:18px;
+
+border:1px solid #e2e8f0;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+
+
+.summary-icon{
+
+width:50px;
+
+height:50px;
+
+border-radius:15px;
+
+background:#fff7db;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:22px;
+
+}
+
+
+
+
+
+.summary-card label{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.summary-card h2{
+
+margin-top:5px;
+
+font-size:22px;
+
+color:#6b4f1d;
+
+}
+
+
+
+.summary-card small{
+
+color:#94a3b8;
+
+}
+
+
+
+
+
+/* ================= PANEL ================= */
+
+
+
+.glass-panel{
+
+background:white;
+
+border-radius:18px;
+
+padding:22px;
+
+border:1px solid #e2e8f0;
+
+margin-bottom:20px;
+
+}
+
+
+
+
+.panel-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
 
 
 
 .panel-title{
 
-
 font-size:16px;
 
 font-weight:700;
 
+color:#1e293b;
+
+}
+
+
+
+
+.panel-header small{
+
+color:#94a3b8;
+
+font-size:12px;
 
 }
 
@@ -565,10 +675,13 @@ font-weight:700;
 
 
 
+
+/* ================= BUTTON ================= */
+
+
 .add-btn{
 
-
-background:#166534;
+background:#6b4f1d;
 
 color:white;
 
@@ -582,18 +695,13 @@ font-size:13px;
 
 font-weight:600;
 
-
 }
-
-
 
 
 
 .add-btn:hover{
 
-
-background:#22c55e;
-
+background:#8b6b2e;
 
 }
 
@@ -603,8 +711,10 @@ background:#22c55e;
 
 
 
-.bank-grid{
+/* ================= BANK CARD ================= */
 
+
+.bank-grid{
 
 display:grid;
 
@@ -612,32 +722,24 @@ grid-template-columns:repeat(3,1fr);
 
 gap:18px;
 
-
 }
-
-
-
 
 
 
 
 .bank-card{
 
+background:#ffffff;
 
-background:white;
-
-border-radius:22px;
+border-radius:20px;
 
 padding:22px;
 
-box-shadow:
+border:1px solid #f1f5f9;
 
-0 10px 30px rgba(0,0,0,.06);
-
+box-shadow:0 10px 25px rgba(0,0,0,.05);
 
 }
-
-
 
 
 
@@ -645,13 +747,11 @@ box-shadow:
 
 .bank-top{
 
-
 display:flex;
 
 align-items:center;
 
 gap:15px;
-
 
 }
 
@@ -661,51 +761,44 @@ gap:15px;
 
 .bank-icon{
 
+width:52px;
 
-width:50px;
-
-height:50px;
+height:52px;
 
 border-radius:16px;
 
-background:#dcfce7;
+background:#fff7db;
 
 display:flex;
 
-align-items:center;
-
 justify-content:center;
+
+align-items:center;
 
 font-size:22px;
 
-
 }
-
 
 
 
 
 .bank-top h3{
 
-
-color:#166534;
-
 font-size:18px;
 
+color:#6b4f1d;
 
 }
 
 
 
-
-
 .bank-top p{
-
 
 font-size:12px;
 
 color:#64748b;
 
+margin-top:3px;
 
 }
 
@@ -716,13 +809,13 @@ color:#64748b;
 
 .owner{
 
-
 margin-top:15px;
 
 font-size:13px;
 
-color:#64748b;
+font-weight:600;
 
+color:#334155;
 
 }
 
@@ -730,43 +823,93 @@ color:#64748b;
 
 
 
+
+
+
+.bank-info{
+
+margin-top:15px;
+
+padding:12px;
+
+background:#faf7ef;
+
+border-radius:12px;
+
+}
+
+
+
+.bank-info div{
+
+display:flex;
+
+justify-content:space-between;
+
+font-size:12px;
+
+margin-bottom:8px;
+
+}
+
+
+
+.bank-info div:last-child{
+
+margin-bottom:0;
+
+}
+
+
+
+.bank-info span{
+
+color:#64748b;
+
+}
+
+
+
+.bank-info b{
+
+color:#6b4f1d;
+
+}
+
+
+
+
+
+
+
+/* ================= SALDO ================= */
 
 
 .saldo-box{
 
-
 margin-top:20px;
 
-
 }
-
-
 
 
 
 .saldo-box label{
 
-
 font-size:12px;
 
 color:#94a3b8;
 
-
 }
-
-
 
 
 
 .saldo-box h2{
 
-
 font-size:22px;
-
-color:#166534;
 
 margin-top:5px;
 
+color:#6b4f1d;
 
 }
 
@@ -774,26 +917,24 @@ margin-top:5px;
 
 
 
+
+
+/* ================= STATUS ================= */
 
 
 .status{
 
-
 margin-top:15px;
 
-
 }
-
-
 
 
 
 .active{
 
+background:#fff7db;
 
-background:#dcfce7;
-
-color:#166534;
+color:#6b4f1d;
 
 padding:6px 12px;
 
@@ -801,16 +942,13 @@ border-radius:20px;
 
 font-size:12px;
 
-font-weight:600;
-
+font-weight:700;
 
 }
 
 
 
-
 .inactive{
-
 
 background:#fee2e2;
 
@@ -822,8 +960,7 @@ border-radius:20px;
 
 font-size:12px;
 
-font-weight:600;
-
+font-weight:700;
 
 }
 
@@ -833,8 +970,10 @@ font-weight:600;
 
 
 
-.action{
+/* ================= ACTION ================= */
 
+
+.action{
 
 display:flex;
 
@@ -842,15 +981,12 @@ gap:10px;
 
 margin-top:20px;
 
-
 }
-
 
 
 
 .action a,
 .action button{
-
 
 border:none;
 
@@ -868,20 +1004,26 @@ background:#f1f5f9;
 
 color:#334155;
 
-
 }
 
 
+
+
+.action a:hover{
+
+background:#fff7db;
+
+color:#6b4f1d;
+
+}
 
 
 
 .action button:hover{
 
-
 background:#fee2e2;
 
 color:#dc2626;
-
 
 }
 
@@ -891,12 +1033,14 @@ color:#dc2626;
 
 
 
+/* ================= ALERT ================= */
+
+
 .alert-success{
 
+background:#fff7db;
 
-background:#dcfce7;
-
-color:#166534;
+color:#6b4f1d;
 
 padding:15px;
 
@@ -908,7 +1052,6 @@ font-size:13px;
 
 font-weight:600;
 
-
 }
 
 
@@ -919,13 +1062,11 @@ font-weight:600;
 
 .empty{
 
-
 text-align:center;
 
-padding:30px;
+padding:35px;
 
 color:#94a3b8;
-
 
 }
 
@@ -933,25 +1074,62 @@ color:#94a3b8;
 
 
 
-@media(max-width:1000px){
+
+
+/* ================= RESPONSIVE ================= */
+
+
+@media(max-width:1100px){
 
 
 .bank-grid{
 
+grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+
+@media(max-width:700px){
+
+
+.bank-grid{
 
 grid-template-columns:1fr;
 
+}
+
+
+
+.summary-grid{
+
+grid-template-columns:1fr;
 
 }
 
 
 
+
+.welcome-card{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
 }
+
+
+}
+
 
 
 
 </style>
-
-
 
 @endsection

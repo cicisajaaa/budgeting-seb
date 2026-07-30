@@ -34,6 +34,7 @@ use App\Http\Controllers\EmployeeTaskController;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | PUBLIC
@@ -274,10 +275,7 @@ Route::middleware('role:bendahara,keuangan')->group(function(){
 | FINANCE MANAGEMENT
 |--------------------------------------------------------------------------
 */
-
-
 Route::middleware('role:keuangan')->group(function(){
-
 
 
     Route::get('/finance/deposit',[
@@ -285,6 +283,14 @@ Route::middleware('role:keuangan')->group(function(){
         'index'
     ])
     ->name('finance.deposit');
+
+
+
+    Route::get('/finance/deposit/create',[
+        FinanceDepositController::class,
+        'create'
+    ])
+    ->name('finance.deposit.create');
 
 
 
@@ -296,13 +302,11 @@ Route::middleware('role:keuangan')->group(function(){
 
 
 
-
     Route::get('/finance/distribution',[
         DepositDistributionController::class,
         'index'
     ])
     ->name('finance.distribution');
-
 
 
 
@@ -314,7 +318,6 @@ Route::middleware('role:keuangan')->group(function(){
 
 
 });
-
 
 
 

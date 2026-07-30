@@ -7,27 +7,25 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <title>
-CV Sahabat Alam
+Sahabat Eksplorasi Banua
 </title>
 
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
 <style>
 
 :root{
 
---primary:#166534;
---green:#22c55e;
---light:#dcfce7;
---text:#1e293b;
---muted:#64748b;
+--primary:#6b4f1d;     
+--primary-dark:#3b2a0f; 
+--gold:#a67c2e;         
+--cream:#f8f3e8;       
+--sidebar:#0f172a;     
 
 }
-
 
 
 *{
@@ -44,26 +42,13 @@ body{
 
 font-family:'Inter',sans-serif;
 
-min-height:100vh;
+background:var(--background);
 
 color:var(--text);
-
-background:
-
-linear-gradient(
-135deg,
-#ecfdf5,
-#f8fafc 50%,
-#dcfce7
-);
-
-overflow-x:hidden;
 
 font-size:14px;
 
 }
-
-
 
 
 
@@ -74,31 +59,21 @@ font-size:14px;
 
 position:fixed;
 
-top:20px;
+top:0;
 
-left:20px;
+left:0;
 
-bottom:20px;
+bottom:0;
 
-width:220px;
+width:230px;
 
-background:white;
+background:var(--sidebar);
 
-border-radius:20px;
-
-padding:18px 12px;
-
-box-shadow:
-
-0 20px 50px rgba(15,23,42,.1);
+padding:20px 15px;
 
 z-index:1000;
 
-overflow:hidden;
-
 }
-
-
 
 
 
@@ -112,29 +87,23 @@ gap:12px;
 
 padding-bottom:20px;
 
-margin-bottom:20px;
-
-border-bottom:
-
-1px solid #e2e8f0;
+border-bottom:1px solid rgba(255,255,255,.1);
 
 }
 
 
 
-
-
 .brand img{
 
-width:45px;
+width:42px;
 
-height:45px;
-
-padding:8px;
+height:42px;
 
 background:white;
 
-border-radius:14px;
+padding:5px;
+
+border-radius:8px;
 
 object-fit:contain;
 
@@ -142,19 +111,17 @@ object-fit:contain;
 
 
 
-
-
 .brand-text{
 
-font-size:16px;
+font-size:14px;
 
-font-weight:800;
+font-weight:700;
 
-color:#166534;
+color:white;
+
+line-height:1.3;
 
 }
-
-
 
 
 
@@ -164,7 +131,7 @@ display:block;
 
 font-size:11px;
 
-color:#22c55e;
+color:#94a3b8;
 
 }
 
@@ -178,13 +145,11 @@ font-size:10px;
 
 font-weight:700;
 
-letter-spacing:1px;
-
 color:#94a3b8;
 
-margin:
+margin:25px 10px 10px;
 
-20px 10px 10px;
+letter-spacing:1px;
 
 }
 
@@ -192,29 +157,39 @@ margin:
 
 
 
+/* MENU SIDEBAR */
+
 .sidebar a{
 
-height:38px;
+    display:flex;
 
-display:flex;
+    align-items:center;
 
-align-items:center;
+    gap:10px;
 
-gap:10px;
+    height:40px;
 
-padding:0 12px;
+    padding:0 12px;
 
-border-radius:13px;
+    margin-bottom:6px;
 
-margin-bottom:6px;
+    border-radius:7px;
 
-text-decoration:none;
+    text-decoration:none;
 
-color:#475569;
+    color:#cbd5e1;
 
-font-size:12px;
+    font-size:13px;
 
-transition:.2s;
+    border:none;
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+    transition:.2s;
+
+    -webkit-tap-highlight-color:transparent;
 
 }
 
@@ -224,9 +199,9 @@ transition:.2s;
 
 .sidebar a:hover{
 
-background:#dcfce7;
+    background:#241f15;
 
-color:#166534;
+    color:white;
 
 }
 
@@ -234,19 +209,53 @@ color:#166534;
 
 
 
+/* MENU AKTIF */
+
 .sidebar a.active{
 
-background:
+    background:#2b2415;
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    color:white;
 
-color:white;
+    font-weight:600;
 
-font-weight:700;
+    border-left:4px solid #8b6b2e;
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+}
+
+
+
+
+
+/* HILANGKAN EFEK HIJAU BROWSER */
+
+.sidebar a:focus,
+
+.sidebar a:focus-visible,
+
+.sidebar a:active{
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+    border-color:transparent;
+
+}
+
+
+
+
+
+.sidebar a.active:focus,
+
+.sidebar a.active:focus-visible{
+
+    border-left:4px solid #8b6b2e;
 
 }
 
@@ -256,21 +265,39 @@ font-weight:700;
 
 .icon{
 
-width:25px;
+    width:25px;
 
-height:25px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:8px;
+    text-align:center;
 
 }
 
 
+
+
+
+.menu-badge{
+
+    margin-left:auto;
+
+    background:#dc2626;
+
+    color:white;
+
+    padding:3px 7px;
+
+    border-radius:20px;
+
+    font-size:10px;
+
+}
+
+.icon{
+
+width:25px;
+
+text-align:center;
+
+}
 
 
 
@@ -282,39 +309,40 @@ background:#dc2626;
 
 color:white;
 
-font-size:10px;
-
-padding:
-
-3px 7px;
+padding:3px 7px;
 
 border-radius:20px;
+
+font-size:10px;
 
 }
 
 
 
+/* STATUS */
 
 
 .system-status{
 
-position:absolute;
+position:fixed;
 
-bottom:15px;
+bottom:20px;
 
 left:15px;
 
-right:15px;
+width:200px;
 
-padding:13px;
+background:#111827;
 
-border-radius:15px;
+padding:12px;
 
-background:#f8fafc;
+border-radius:10px;
+
+border:1px solid rgba(255,255,255,.05);
+
+z-index:1001;
 
 }
-
-
 
 
 
@@ -322,13 +350,9 @@ background:#f8fafc;
 
 font-size:10px;
 
-font-weight:700;
-
 color:#94a3b8;
 
 }
-
-
 
 
 
@@ -340,17 +364,15 @@ align-items:center;
 
 gap:8px;
 
+margin-top:8px;
+
 font-size:12px;
 
-font-weight:700;
+font-weight:600;
 
-color:#166534;
-
-margin-top:5px;
+color:#d7b787;
 
 }
-
-
 
 
 
@@ -360,16 +382,14 @@ width:8px;
 
 height:8px;
 
-background:#22c55e;
+background:#8b6b2e;
 
 border-radius:50%;
 
 }
 
 
-
 </style>
-
 
 </head>
 
@@ -382,17 +402,15 @@ border-radius:50%;
 
 <div class="brand">
 
-
 <img src="{{asset('images/logo-cv.png')}}">
-
 
 
 <div class="brand-text">
 
-Sahabat Alam
+Sahabat Eksplorasi Banua
 
 <span>
-Financial Management
+Financial System
 </span>
 
 </div>
@@ -403,52 +421,24 @@ Financial Management
 
 
 <div class="menu-title">
-
 MAIN
-
 </div>
-@if(auth()->user()->role == 'admin')
-
-
-<a href="{{route('admin.dashboard')}}"
-class="{{request()->routeIs('admin.dashboard')?'active':''}}">
-
-<div class="icon">
-⌂
-</div>
-
-<span>
-Dashboard
-</span>
-
-</a>
-
-
-@else
 
 
 <a href="{{route('dashboard')}}"
 class="{{request()->routeIs('dashboard')?'active':''}}">
 
+
 <div class="icon">
 ⌂
 </div>
 
-<span>
+
 Dashboard
-</span>
+
 
 </a>
 
-
-@endif
-
-
-
-
-
-
-{{-- ================= ADMIN ================= --}}
 
 
 @if(auth()->user()->role=='admin')
@@ -459,123 +449,42 @@ MANAGEMENT
 </div>
 
 
-
-<a href="{{route('admin.users.index')}}"
-class="{{request()->routeIs('admin.users.*')?'active':''}}">
+<a href="{{route('admin.users.index')}}">
 
 <div class="icon">
 👥
 </div>
 
-<span>
-Kelola Pengguna
-</span>
+Pengguna
 
 </a>
 
 
 
-
-
-<a href="{{route('admin.projects.index')}}"
-class="{{request()->routeIs('admin.projects.*')?'active':''}}">
+<a href="{{route('admin.projects.index')}}">
 
 <div class="icon">
 📁
 </div>
 
-<span>
-Kelola Proyek
-</span>
+Project
 
 </a>
 
 
 
-
-
-<a href="{{route('admin.divisions.index')}}"
-class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
+<a href="{{route('admin.divisions.index')}}">
 
 <div class="icon">
 🏢
 </div>
 
-<span>
-Kelola Divisi
-</span>
+Divisi
 
 </a>
 
 
 @endif
-
-
-
-
-
-
-
-{{-- ================= OWNER ================= --}}
-
-
-@if(auth()->user()->role=='owner')
-
-
-<div class="menu-title">
-REPORT
-</div>
-
-
-
-
-<a href="{{route('finance.report')}}"
-class="{{request()->routeIs('finance.report')?'active':''}}">
-
-
-<div class="icon">
-📊
-</div>
-
-
-<span>
-Laporan Keuangan
-</span>
-
-
-</a>
-
-
-
-
-
-<a href="{{route('finance.balance')}}"
-class="{{request()->routeIs('finance.balance')?'active':''}}">
-
-
-<div class="icon">
-💳
-</div>
-
-
-<span>
-Saldo Divisi
-</span>
-
-
-</a>
-
-
-@endif
-
-
-
-
-
-
-
-
-{{-- ================= KEUANGAN ================= --}}
 
 
 @if(auth()->user()->role=='keuangan')
@@ -586,112 +495,53 @@ FINANCE
 </div>
 
 
-
-
-
 <a href="{{route('finance.deposit')}}"
 class="{{request()->routeIs('finance.deposit')?'active':''}}">
-
 
 <div class="icon">
 💰
 </div>
 
-
-<span>
 Pembayaran Masuk
-</span>
-
 
 </a>
-
-
-
-
 
 
 
 <a href="{{route('finance.bank.index')}}"
 class="{{request()->routeIs('finance.bank.*')?'active':''}}">
 
-
 <div class="icon">
 🏦
 </div>
 
-
-<span>
 Rekening Bank
-</span>
-
 
 </a>
-
-
-
-
-
-
-
-<a href="{{route('finance.distribution')}}"
-class="{{request()->routeIs('finance.distribution')?'active':''}}">
-
-
-<div class="icon">
-📤
-</div>
-
-
-<span>
-Distribusi Dana
-</span>
-
-
-</a>
-
-
-
-
-
-
-
 <a href="{{route('finance.balance')}}"
 class="{{request()->routeIs('finance.balance')?'active':''}}">
-
 
 <div class="icon">
 💳
 </div>
 
-
-<span>
 Saldo Divisi
-</span>
-
 
 </a>
-
-
-
-
 
 
 
 <a href="{{route('expense.approval')}}"
 class="{{request()->routeIs('expense.approval')?'active':''}}">
 
-
 <div class="icon">
 ✓
 </div>
 
-
-<span>
-Persetujuan Pengeluaran
-</span>
+Approval Dana
 
 
-@if(auth()->user()->unreadNotifications->count()>0)
+@if(auth()->user()->unreadNotifications->count())
 
 <span class="menu-badge">
 
@@ -706,26 +556,16 @@ Persetujuan Pengeluaran
 
 
 
-
-
-
-
 <a href="{{route('finance.report')}}"
 class="{{request()->routeIs('finance.report')?'active':''}}">
 
-
 <div class="icon">
-📈
+📊
 </div>
 
-
-<span>
-Laporan Keuangan
-</span>
-
+Laporan
 
 </a>
-
 
 @endif
 {{-- ================= KARYAWAN ================= --}}
@@ -739,88 +579,49 @@ EMPLOYEE
 </div>
 
 
-
-
-
-<a href="{{route('expense.create')}}"
-class="{{request()->routeIs('expense.create')?'active':''}}">
-
+<a href="{{route('expense.create')}}">
 
 <div class="icon">
 ＋
 </div>
 
-
-<span>
 Pengajuan Dana
-</span>
-
 
 </a>
 
 
 
-
-
-
-
-<a href="{{route('expense.myhistory')}}"
-class="{{request()->routeIs('expense.myhistory')?'active':''}}">
-
+<a href="{{route('expense.myhistory')}}">
 
 <div class="icon">
 📄
 </div>
 
-
-<span>
 Riwayat Pengajuan
-</span>
-
 
 </a>
 
 
 
-
-
-
-
-<a href="{{route('employee.project.index')}}"
-class="{{request()->routeIs('employee.project.*')?'active':''}}">
-
+<a href="{{route('employee.project.index')}}">
 
 <div class="icon">
 📁
 </div>
 
-
-<span>
 Project Saya
-</span>
-
 
 </a>
 
 
 
-
-
-
-
-<a href="{{route('daily-tracker.index')}}"
-class="{{request()->routeIs('daily-tracker.*')?'active':''}}">
-
+<a href="{{route('daily-tracker.index')}}">
 
 <div class="icon">
 📝
 </div>
 
-
-<span>
 Daily Tracker
-</span>
-
 
 </a>
 
@@ -829,12 +630,6 @@ Daily Tracker
 
 
 
-
-
-
-
-
-{{-- SYSTEM STATUS --}}
 
 
 <div class="system-status">
@@ -847,21 +642,16 @@ SYSTEM STATUS
 </div>
 
 
-
 <div class="system-online">
-
 
 <div class="online-dot"></div>
 
-
 System Online
 
-
 </div>
 
 
 </div>
-
 
 
 </aside>
@@ -871,39 +661,28 @@ System Online
 
 
 
-
-
-
 {{-- ================= HEADER ================= --}}
+
 
 
 <header class="header">
 
 
-
-
-
 <div>
-
-
 <div class="system-name">
-
-CV Sahabat <span>Alam</span>
-
-</div>
-
-
-
-
-<div class="header-sub">
 
 Financial Management System
 
 </div>
 
 
+<div class="header-sub">
+
+Dashboard Keuangan
+
 </div>
 
+</div>
 
 
 
@@ -914,24 +693,14 @@ Financial Management System
 
 
 
-
-
-
-
-{{-- NOTIFICATION --}}
-
-
 <div class="notification">
 
 
 <a href="#" class="notification-btn">
 
-
 🔔
 
-
-@if(auth()->user()->unreadNotifications->count()>0)
-
+@if(auth()->user()->unreadNotifications->count())
 
 <span class="badge">
 
@@ -939,14 +708,9 @@ Financial Management System
 
 </span>
 
-
 @endif
 
-
 </a>
-
-
-
 
 
 
@@ -954,18 +718,14 @@ Financial Management System
 <div class="notification-box">
 
 
-
-@if(auth()->user()->unreadNotifications->count()>0)
-
+@if(auth()->user()->unreadNotifications->count())
 
 
 @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
 
 
-
-<a href="{{route('notification.read',$notification->id)}}"
-class="notification-item">
-
+<a class="notification-item"
+href="{{route('notification.read',$notification->id)}}">
 
 
 <strong>
@@ -975,8 +735,6 @@ class="notification-item">
 </strong>
 
 
-
-
 <p>
 
 {{$notification->data['message']}}
@@ -984,27 +742,14 @@ class="notification-item">
 </p>
 
 
-
-
-<small>
-
-Klik untuk membuka
-
-</small>
-
-
-
 </a>
-
 
 
 @endforeach
 
 
 
-
 @else
-
 
 
 <div class="empty-notif">
@@ -1014,7 +759,6 @@ Tidak ada notifikasi
 </div>
 
 
-
 @endif
 
 
@@ -1022,18 +766,12 @@ Tidak ada notifikasi
 </div>
 
 
-
 </div>
 
 
 
 
 
-
-
-
-
-{{-- PROFILE --}}
 
 
 
@@ -1042,14 +780,9 @@ Tidak ada notifikasi
 
 <div class="avatar">
 
-
 {{strtoupper(substr(auth()->user()->name,0,1))}}
 
-
 </div>
-
-
-
 
 
 <div class="profile-info">
@@ -1062,22 +795,17 @@ Tidak ada notifikasi
 </b>
 
 
-
 <span>
 
-
 {{ucfirst(auth()->user()->role)}}
-
 
 </span>
 
 
-
 </div>
 
 
 </div>
-
 
 
 
@@ -1085,7 +813,6 @@ Tidak ada notifikasi
 
 
 <form method="POST" action="{{route('logout')}}">
-
 
 @csrf
 
@@ -1101,10 +828,7 @@ Keluar
 
 
 
-
-
 </div>
-
 
 
 </header>
@@ -1116,7 +840,9 @@ Keluar
 
 
 
+
 {{-- ================= CONTENT ================= --}}
+
 
 
 <main class="content">
@@ -1152,27 +878,36 @@ Keluar
 
 
 </main>
+
+
+
+
+
+
+
+
+
 <style>
 
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 
 .header{
 
 position:fixed;
 
-top:20px;
+top:0;
 
-left:260px;
+left:230px;
 
-right:20px;
+right:0;
 
-height:60px;
+height:65px;
 
 background:white;
 
-border-radius:20px;
+border-bottom:1px solid #e2e8f0;
 
 display:flex;
 
@@ -1180,39 +915,29 @@ align-items:center;
 
 justify-content:space-between;
 
-padding:0 20px;
-
-box-shadow:
-
-0 15px 40px rgba(15,23,42,.08);
+padding:0 25px;
 
 z-index:999;
 
 }
 
 
-
-
 .system-name{
 
-font-size:17px;
+font-size:18px;
 
-font-weight:800;
+font-weight:700;
 
-color:#166534;
+color:#6b4f1d;
 
 }
-
-
 
 
 .system-name span{
 
-color:#22c55e;
+color:#16a34a;
 
 }
-
-
 
 
 
@@ -1223,8 +948,6 @@ font-size:11px;
 color:#64748b;
 
 }
-
-
 
 
 
@@ -1240,8 +963,6 @@ gap:15px;
 
 
 
-
-
 .profile{
 
 display:flex;
@@ -1253,24 +974,15 @@ gap:10px;
 }
 
 
-
-
-
 .avatar{
 
-width:36px;
+width:38px;
 
-height:36px;
+height:38px;
 
-border-radius:12px;
+border-radius:50%;
 
-background:
-
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+background:#6b4f1d;
 
 display:flex;
 
@@ -1280,13 +992,9 @@ justify-content:center;
 
 color:white;
 
-font-weight:800;
+font-weight:700;
 
 }
-
-
-
-
 
 .profile-info b{
 
@@ -1294,11 +1002,7 @@ display:block;
 
 font-size:13px;
 
-color:#166534;
-
 }
-
-
 
 
 
@@ -1312,23 +1016,19 @@ color:#64748b;
 
 
 
-
-
 .logout{
 
 border:none;
-
-padding:8px 14px;
-
-border-radius:14px;
 
 background:#fee2e2;
 
 color:#dc2626;
 
-font-weight:700;
+padding:8px 15px;
 
-font-size:12px;
+border-radius:6px;
+
+font-weight:600;
 
 cursor:pointer;
 
@@ -1338,29 +1038,18 @@ cursor:pointer;
 
 
 
-
-
-/* ================= CONTENT ================= */
-
+/* CONTENT */
 
 
 .content{
 
-margin-left:260px;
+margin-left:230px;
 
 padding:
 
-105px 20px 40px;
-
-width:
-
-calc(100% - 280px);
+90px 25px 30px;
 
 min-height:100vh;
-
-position:relative;
-
-z-index:1;
 
 }
 
@@ -1368,10 +1057,7 @@ z-index:1;
 
 
 
-
-
-/* ================= NOTIFICATION ================= */
-
+/* NOTIFICATION */
 
 
 .notification{
@@ -1382,51 +1068,42 @@ position:relative;
 
 
 
-
-
 .notification-btn{
 
-width:40px;
+width:38px;
 
-height:40px;
+height:38px;
 
-border-radius:14px;
+border-radius:12px;
 
 background:#f8fafc;
 
 display:flex;
 
-align-items:center;
-
 justify-content:center;
 
-font-size:18px;
+align-items:center;
 
 text-decoration:none;
 
 }
 
 
-
-
-
 .badge{
 
 position:absolute;
 
-top:-5px;
+right:-3px;
 
-right:-5px;
-
-width:18px;
-
-height:18px;
+top:-3px;
 
 background:#dc2626;
 
 color:white;
 
-border-radius:50%;
+width:18px;
+
+height:18px;
 
 font-size:10px;
 
@@ -1436,9 +1113,9 @@ align-items:center;
 
 justify-content:center;
 
+border-radius:50%;
+
 }
-
-
 
 
 
@@ -1456,17 +1133,13 @@ width:300px;
 
 background:white;
 
-padding:12px;
+padding:10px;
 
-border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
 
-box-shadow:
-
-0 20px 50px rgba(0,0,0,.15);
+border-radius:8px;
 
 }
-
-
 
 
 
@@ -1475,8 +1148,6 @@ box-shadow:
 display:block;
 
 }
-
-
 
 
 
@@ -1490,7 +1161,7 @@ padding:12px;
 
 margin-bottom:8px;
 
-border-radius:12px;
+border-radius:6px;
 
 text-decoration:none;
 
@@ -1500,15 +1171,11 @@ color:#334155;
 
 
 
-
-
 .notification-item strong{
 
-color:#166534;
+color:#2563eb;
 
 }
-
-
 
 
 
@@ -1519,20 +1186,6 @@ font-size:12px;
 margin-top:5px;
 
 }
-
-
-
-
-
-.notification-item small{
-
-font-size:10px;
-
-color:#94a3b8;
-
-}
-
-
 
 
 
@@ -1550,30 +1203,19 @@ color:#94a3b8;
 
 
 
-
-
-
-/* ================= ALERT ================= */
-
-
-
 .alert-success{
 
 background:#dcfce7;
 
 color:#166534;
 
-padding:12px 15px;
+padding:12px;
 
-border-radius:15px;
+border-radius:6px;
 
 margin-bottom:20px;
 
-font-size:13px;
-
 }
-
-
 
 
 
@@ -1583,45 +1225,28 @@ background:#fee2e2;
 
 color:#991b1b;
 
-padding:12px 15px;
+padding:12px;
 
-border-radius:15px;
+border-radius:6px;
 
 margin-bottom:20px;
-
-font-size:13px;
 
 }
 
 
-
-
-
-
-
-
-
-/* ================= RESPONSIVE ================= */
-
-
-@media(max-width:1000px){
-
+@media(max-width:900px){
 
 
 .sidebar{
 
-width:80px;
+width:70px;
 
 }
 
 
-
 .brand-text,
-
 .menu-title,
-
 .system-status,
-
 .sidebar span{
 
 display:none;
@@ -1629,31 +1254,27 @@ display:none;
 }
 
 
-
 .header{
 
-left:110px;
+left:70px;
 
 }
-
 
 
 .content{
 
-margin-left:110px;
-
-width:auto;
-
-padding-top:100px;
+margin-left:70px;
 
 }
 
 
-
 }
-
-
 
 
 
 </style>
+
+
+</body>
+
+</html>

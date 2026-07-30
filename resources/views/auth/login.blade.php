@@ -9,7 +9,7 @@
 
 
 <title>
-CV Sahabat Alam | Project System
+Sahabat Eksplorasi Banua| Project System
 </title>
 
 
@@ -1044,7 +1044,7 @@ class="logo-main"
 
 <div class="company">
 
-CV Sahabat <span>Alam</span>
+Sahabat Eksplorasi<span>Banua</span>
 
 </div>
 
@@ -1052,7 +1052,7 @@ CV Sahabat <span>Alam</span>
 
 <div class="system-name">
 
-Sahabat Alam Project System
+Sahabat Eksplorasi Banua Project System
 
 </div>
 
@@ -1139,7 +1139,7 @@ class="logo-login"
 
 <div class="company-login">
 
-CV Sahabat Alam
+Sahabat Eksplorasi Banua
 
 </div>
 
@@ -1309,7 +1309,7 @@ MASUK
 
 <div class="footer">
 
-© {{date('Y')}} CV Sahabat Alam
+© {{date('Y')}} Sahabat Eksplorasi Banua
 
 </div>
 

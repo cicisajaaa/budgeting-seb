@@ -4,34 +4,28 @@
 @section('content')
 
 
-
 <div class="welcome-card">
 
 
 <div>
 
-
 <div class="welcome-label">
-
-EDIT REKENING BANK
-
+REKENING BANK
 </div>
 
 
 <h1>
-
-Perbarui Data Rekening
-
+Edit Rekening Perusahaan
 </h1>
 
 
 <p>
-
-Ubah informasi rekening bank perusahaan.
-
+Perbarui informasi rekening bank yang digunakan dalam sistem keuangan perusahaan.
 </p>
 
 
+</div>
+
 
 </div>
 
@@ -39,19 +33,27 @@ Ubah informasi rekening bank perusahaan.
 
 
 
-<div class="system-status">
 
-<span></span>
 
-Bank Update
+@if($errors->any())
+
+<div class="alert-error">
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>
+{{$error}}
+</li>
+
+@endforeach
+
+</ul>
 
 </div>
 
-
-
-</div>
-
-
+@endif
 
 
 
@@ -64,10 +66,9 @@ Bank Update
 
 <div class="panel-title">
 
-🏦 Form Edit Rekening
+🏦 Perbarui Data Rekening
 
 </div>
-
 
 
 
@@ -86,7 +87,6 @@ action="{{route('finance.bank.update',$bank->id)}}">
 
 
 
-
 <div class="form-grid">
 
 
@@ -95,18 +95,19 @@ action="{{route('finance.bank.update',$bank->id)}}">
 
 <div>
 
-
 <label>
-
 Nama Bank
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nama_bank"
+
 value="{{$bank->nama_bank}}"
+
 required>
 
 
@@ -121,22 +122,24 @@ required>
 
 <div>
 
-
 <label>
-
 Nomor Rekening
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nomor_rekening"
+
 value="{{$bank->nomor_rekening}}"
+
 required>
 
 
 </div>
+
 
 
 
@@ -146,18 +149,19 @@ required>
 
 <div>
 
-
 <label>
-
 Nama Pemilik
-
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 name="nama_pemilik"
+
 value="{{$bank->nama_pemilik}}"
+
 required>
 
 
@@ -167,6 +171,27 @@ required>
 
 
 
+
+
+
+<div>
+
+<label>
+Saldo Rekening
+</label>
+
+
+<input
+
+type="number"
+
+name="saldo"
+
+value="{{$bank->saldo}}"
+
+required>
+
+
 </div>
 
 
@@ -176,25 +201,19 @@ required>
 
 
 
-<div class="status-area">
-
+<div>
 
 <label>
-
 Status Rekening
-
 </label>
 
 
-
-<select name="status">
+<select name="status" required>
 
 
 <option value="1"
-@if($bank->status)
-selected
-@endif
->
+
+{{$bank->status == 1 ? 'selected':''}}>
 
 Aktif
 
@@ -203,10 +222,8 @@ Aktif
 
 
 <option value="0"
-@if(!$bank->status)
-selected
-@endif
->
+
+{{$bank->status == 0 ? 'selected':''}}>
 
 Nonaktif
 
@@ -217,6 +234,12 @@ Nonaktif
 </select>
 
 
+</div>
+
+
+
+
+
 
 </div>
 
@@ -227,22 +250,29 @@ Nonaktif
 
 
 
-<button class="btn-submit">
+<div class="button-area">
 
-💾 Simpan Perubahan
+
+<a href="{{route('finance.bank.index')}}"
+class="back-btn">
+
+Kembali
+
+</a>
+
+
+
+
+
+<button class="save-btn">
+
+✓ Update Rekening
 
 </button>
 
 
 
-
-
-<a href="{{route('finance.bank.index')}}"
-class="btn-back">
-
-Kembali
-
-</a>
+</div>
 
 
 
@@ -268,141 +298,51 @@ Kembali
 
 .welcome-card{
 
+background:white;
 
-background:
+padding:28px;
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+border-radius:18px;
 
+border:1px solid #e2e8f0;
 
-padding:30px;
-
-
-border-radius:24px;
-
-
-color:white;
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-margin-bottom:22px;
-
+margin-bottom:20px;
 
 }
-
-
 
 
 
 .welcome-label{
 
-
-font-size:10px;
-
+font-size:11px;
 
 font-weight:700;
 
-
 letter-spacing:2px;
 
-
-opacity:.8;
-
+color:#64748b;
 
 }
-
-
 
 
 
 .welcome-card h1{
 
-
 font-size:28px;
-
 
 margin:8px 0;
 
+color:#6b4f1d;
 
 }
-
-
 
 
 
 .welcome-card p{
 
-
 font-size:13px;
 
-
-opacity:.9;
-
-
-}
-
-
-
-
-
-.system-status{
-
-
-background:white;
-
-
-color:#166534;
-
-
-padding:12px 18px;
-
-
-border-radius:30px;
-
-
-font-weight:700;
-
-
-display:flex;
-
-
-gap:8px;
-
-
-align-items:center;
-
-
-}
-
-
-
-
-
-.system-status span{
-
-
-width:9px;
-
-
-height:9px;
-
-
-background:#22c55e;
-
-
-border-radius:50%;
-
+color:#64748b;
 
 }
 
@@ -414,28 +354,15 @@ border-radius:50%;
 
 .glass-panel{
 
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:blur(15px);
-
-
-border-radius:22px;
-
+background:white;
 
 padding:25px;
 
+border-radius:18px;
 
-border:
-
-1px solid rgba(255,255,255,.8);
-
+border:1px solid #e2e8f0;
 
 }
-
 
 
 
@@ -444,15 +371,13 @@ border:
 
 .panel-title{
 
-
 font-size:17px;
-
 
 font-weight:700;
 
+margin-bottom:20px;
 
-margin-bottom:25px;
-
+color:#1e293b;
 
 }
 
@@ -464,19 +389,13 @@ margin-bottom:25px;
 
 .form-grid{
 
-
 display:grid;
 
-
-grid-template-columns:repeat(3,1fr);
-
+grid-template-columns:repeat(2,1fr);
 
 gap:20px;
 
-
 }
-
-
 
 
 
@@ -484,25 +403,17 @@ gap:20px;
 
 label{
 
-
 display:block;
-
 
 font-size:12px;
 
-
 font-weight:600;
-
 
 color:#475569;
 
-
 margin-bottom:8px;
 
-
 }
-
-
 
 
 
@@ -511,21 +422,30 @@ margin-bottom:8px;
 input,
 select{
 
-
 width:100%;
-
 
 padding:13px;
 
-
-border-radius:14px;
-
+border-radius:12px;
 
 border:1px solid #e2e8f0;
 
-
 background:white;
 
+font-size:13px;
+
+}
+
+
+
+
+
+input:focus,
+select:focus{
+
+outline:none;
+
+border-color:#8b6b2e;
 
 }
 
@@ -535,96 +455,46 @@ background:white;
 
 
 
-.status-area{
 
+.button-area{
 
-width:33%;
+display:flex;
 
+justify-content:flex-end;
 
-margin-top:20px;
-
-
-}
-
-
-
-
-
-
-
-.btn-submit{
-
+gap:12px;
 
 margin-top:25px;
 
-
-padding:12px 22px;
-
-
-border:none;
+}
 
 
-border-radius:14px;
 
 
-background:#166534;
 
+.save-btn{
+
+background:#6b4f1d;
 
 color:white;
 
-
-font-weight:600;
-
-
-cursor:pointer;
-
-
-}
-
-
-
-
-
-.btn-submit:hover{
-
-
-background:#22c55e;
-
-
-}
-
-
-
-
-
-
-
-.btn-back{
-
-
-display:inline-block;
-
-
-margin-left:10px;
-
+border:none;
 
 padding:12px 22px;
 
-
 border-radius:14px;
-
-
-background:#f1f5f9;
-
-
-color:#334155;
-
-
-text-decoration:none;
-
 
 font-weight:600;
 
+cursor:pointer;
+
+}
+
+
+
+.save-btn:hover{
+
+background:#8b6b2e;
 
 }
 
@@ -633,23 +503,70 @@ font-weight:600;
 
 
 
-@media(max-width:900px){
+
+.back-btn{
+
+background:#f1f5f9;
+
+color:#334155;
+
+padding:12px 22px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-size:13px;
+
+font-weight:600;
+
+}
+
+
+
+.back-btn:hover{
+
+background:#e2e8f0;
+
+}
+
+
+
+
+
+
+
+.alert-error{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:15px;
+
+border-radius:14px;
+
+margin-bottom:20px;
+
+}
+
+
+
+
+
+@media(max-width:800px){
 
 
 .form-grid{
 
-
 grid-template-columns:1fr;
-
 
 }
 
 
-.status-area{
+.button-area{
 
-
-width:100%;
-
+flex-direction:column;
 
 }
 

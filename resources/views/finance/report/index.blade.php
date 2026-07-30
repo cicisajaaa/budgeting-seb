@@ -1,176 +1,55 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
+<div class="report-wrapper">
+
+
+{{-- HEADER --}}
+
 <div class="welcome-card">
 
-<div>
+
+ <div>
+
 
 <div class="welcome-label">
-FINANCE REPORT
+FINANCIAL REPORT
 </div>
 
 
 <h1>
-Laporan Keuangan
+Laporan Keuangan Perusahaan
 </h1>
 
 
 <p>
-Monitoring pemasukan, pengeluaran, dan kondisi saldo perusahaan.
+Monitoring pemasukan, pengeluaran, saldo dan aktivitas transaksi perusahaan.
 </p>
 
 
 <div class="welcome-tags">
 
 <span>
-✓ Dana Masuk
+✓ Finance Monitoring
 </span>
 
 <span>
-✓ Pengeluaran
+✓ Transaction Report
 </span>
 
 <span>
-✓ Audit Keuangan
+✓ Audit Ready
 </span>
 
 </div>
 
-</div>
-
-
-
-<div class="system-status">
-
-<span></span>
-
-Report Aktif
-
-</div>
-
 
 </div>
 
 
 
-
-
-
-
-<!-- SUMMARY -->
-
-
-<div class="summary-grid">
-
-
-<div class="summary-card">
-
-<div class="summary-icon">
-💰
-</div>
-
-
-<div>
-
-<small>
-Total Dana Masuk
-</small>
-
-<h2>
-Rp {{number_format($totalIncome,0,',','.')}}
-</h2>
-
-</div>
-
-</div>
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<div class="summary-icon red">
-📤
-</div>
-
-
-<div>
-
-<small>
-Total Pengeluaran
-</small>
-
-<h2>
-Rp {{number_format($totalExpense,0,',','.')}}
-</h2>
-
-</div>
-
-</div>
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<div class="summary-icon blue">
-💳
-</div>
-
-
-<div>
-
-<small>
-Saldo Akhir
-</small>
-
-<h2>
-Rp {{number_format($balance,0,',','.')}}
-</h2>
-
-</div>
-
-</div>
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<div class="summary-icon purple">
-📊
-</div>
-
-
-<div>
-
-<small>
-Jumlah Transaksi
-</small>
-
-
-<h2>
-
-{{$totalDepositTransaction + $totalExpenseTransaction}}
-
-</h2>
-
-
-</div>
-
-</div>
 
 
 </div>
@@ -183,7 +62,23 @@ Jumlah Transaksi
 
 
 
-<!-- FILTER -->
+@if(session('success'))
+
+<div class="success-box">
+
+{{session('success')}}
+
+</div>
+
+@endif
+
+
+
+
+
+
+
+{{-- FILTER --}}
 
 
 <div class="glass-panel">
@@ -191,7 +86,7 @@ Jumlah Transaksi
 
 <div class="panel-title">
 
-🔎 Filter Laporan
+🔎 Filter Periode Laporan
 
 </div>
 
@@ -200,19 +95,17 @@ Jumlah Transaksi
 
 <form method="GET"
 action="{{route('finance.report')}}"
-class="filter-grid">
+class="filter-area">
 
 
 
 <div>
 
 <label>
-Tanggal Awal
+Tanggal Mulai
 </label>
 
-
-<input 
-type="date"
+<input type="date"
 name="start_date"
 value="{{$startDate}}">
 
@@ -228,9 +121,7 @@ value="{{$startDate}}">
 Tanggal Akhir
 </label>
 
-
-<input 
-type="date"
+<input type="date"
 name="end_date"
 value="{{$endDate}}">
 
@@ -239,30 +130,23 @@ value="{{$endDate}}">
 
 
 
-<div class="filter-action">
 
+<button class="btn-filter">
 
-<button>
-🔎 Tampilkan
+Tampilkan
+
 </button>
 
 
 
-<a href="{{route('finance.report')}}">
-Reset
-</a>
 
-
-
-<a href="{{route('finance.report.export')}}?start_date={{$startDate}}&end_date={{$endDate}}"
-class="excel">
+<a href="{{route('finance.report.export')}}"
+class="btn-export">
 
 ⬇ Export Excel
 
 </a>
 
-
-</div>
 
 
 </form>
@@ -278,7 +162,160 @@ class="excel">
 
 
 
-<!-- PENGELUARAN -->
+{{-- SUMMARY --}}
+
+
+<div class="summary-grid">
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon green">
+💰
+</div>
+
+
+<div>
+
+<label>
+Total Pemasukan
+</label>
+
+
+<h2>
+Rp {{number_format($totalIncome,0,',','.')}}
+</h2>
+
+
+<small>
+Pembayaran client
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon red">
+💸
+</div>
+
+
+<div>
+
+<label>
+Total Pengeluaran
+</label>
+
+
+<h2>
+Rp {{number_format($totalExpense,0,',','.')}}
+</h2>
+
+
+<small>
+Dana digunakan
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon gold">
+🏦
+</div>
+
+
+<div>
+
+<label>
+Saldo Bersih
+</label>
+
+
+<h2>
+Rp {{number_format($balance,0,',','.')}}
+</h2>
+
+
+<small>
+Keuangan tersedia
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon navy">
+📄
+</div>
+
+
+<div>
+
+<label>
+Total Transaksi
+</label>
+
+
+<h2>
+{{$totalDepositTransaction + $totalExpenseTransaction}}
+</h2>
+
+
+<small>
+Aktivitas keuangan
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- ANALYSIS --}}
 
 
 <div class="glass-panel">
@@ -286,10 +323,148 @@ class="excel">
 
 <div class="panel-title">
 
-📤 Riwayat Pengeluaran
+📊 Financial Overview
 
 </div>
 
+
+
+<div class="overview-grid">
+
+
+
+<div class="overview-item">
+
+<span>
+Dana Masuk
+</span>
+
+
+<strong class="income-text">
+
+Rp {{number_format($totalIncome,0,',','.')}}
+</strong>
+
+
+</div>
+
+
+
+
+
+<div class="overview-item">
+
+<span>
+Dana Keluar
+</span>
+
+
+<strong class="expense-text">
+
+Rp {{number_format($totalExpense,0,',','.')}}
+</strong>
+
+
+</div>
+
+
+
+
+
+<div class="overview-item">
+
+<span>
+Saldo Bank Aktif
+</span>
+
+
+<strong>
+
+Rp {{number_format($totalBankSaldo ?? 0,0,',','.')}}
+</strong>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+@php
+
+$usage = $totalIncome > 0 
+? ($totalExpense/$totalIncome)*100 
+: 0;
+
+@endphp
+
+
+
+
+
+<div class="usage-box">
+
+
+<div class="usage-header">
+
+<span>
+Penggunaan Dana
+</span>
+
+
+<b>
+{{round($usage)}}%
+</b>
+
+
+</div>
+
+
+
+<div class="progress">
+
+<div style="width:{{$usage}}%"></div>
+
+</div>
+
+
+
+<small>
+Persentase penggunaan dana berdasarkan transaksi.
+</small>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- DEPOSIT --}}
+
+
+<div class="glass-panel">
+
+
+<div class="panel-title">
+
+💰 Riwayat Pembayaran Masuk
+
+</div>
 
 
 
@@ -305,182 +480,62 @@ class="excel">
 Tanggal
 </th>
 
-<th>
-Pemohon
-</th>
 
 <th>
 Project
 </th>
 
-<th>
-Divisi
-</th>
-
-<th>
-Jumlah
-</th>
 
 <th>
 Bank
 </th>
 
-<th>
-Disetujui Oleh
-</th>
 
 <th>
-Catatan
+Nominal
 </th>
+
 
 </tr>
 
-
 </thead>
-
-
 
 
 
 <tbody>
 
 
-@forelse($expenses as $expense)
+@forelse($deposits as $deposit)
+
 
 
 <tr>
 
-
 <td>
 
-{{\Carbon\Carbon::parse($expense->tanggal)->format('d M Y')}}
+{{\Carbon\Carbon::parse($deposit->tanggal_setoran)->format('d M Y')}}
 
 </td>
 
 
-
-
-
-
 <td>
 
-
-{{$expense->pengajuanDana->pengguna->name ?? '-'}}
-
-
-<br>
-
-
-<small>
-
-{{$expense->pengajuanDana->judul ?? '-'}}
-
-</small>
-
+{{$deposit->proyek->nama_proyek ?? '-'}}
 
 </td>
 
 
-
-
-
-
 <td>
 
-{{$expense->pengajuanDana->proyek->nama_proyek ?? '-'}}
+{{$deposit->rekeningBank->nama_bank ?? '-'}}
 
 </td>
 
 
+<td class="income-text">
 
-
-
-
-<td>
-
-{{$expense->pengajuanDana->divisi->nama_divisi ?? '-'}}
-
-</td>
-
-
-
-
-
-
-<td class="money">
-
-Rp {{number_format($expense->jumlah,0,',','.')}}
-
-</td>
-
-
-
-
-
-
-
-<td>
-
-
-{{$expense->rekeningBank->nama_bank ?? '-'}}
-
-
-<br>
-
-
-<small>
-
-{{$expense->rekeningBank->nomor_rekening ?? ''}}
-
-</small>
-
-
-</td>
-
-
-
-
-
-
-
-
-<td>
-
-
-{{$expense->penyetuju->name ?? '-'}}
-
-
-<br>
-
-
-<small>
-
-
-@if($expense->pengajuanDana->disetujui_pada)
-
-
-{{\Carbon\Carbon::parse($expense->pengajuanDana->disetujui_pada)->format('d M Y H:i')}}
-
-
-@endif
-
-
-</small>
-
-
-</td>
-
-
-
-
-
-
-
-<td>
-
-
-{{$expense->pengajuanDana->catatan_persetujuan ?? '-'}}
-
++
+Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 </td>
 
@@ -494,9 +549,10 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 <tr>
 
-<td colspan="8" class="empty">
+<td colspan="4"
+class="empty">
 
-Belum ada pengeluaran
+Belum ada pembayaran
 
 </td>
 
@@ -504,7 +560,6 @@ Belum ada pengeluaran
 
 
 @endforelse
-
 
 
 </tbody>
@@ -524,49 +579,196 @@ Belum ada pengeluaran
 
 
 
+{{-- EXPENSE --}}
+
+
+<div class="glass-panel">
+
+
+<div class="panel-title">
+
+💸 Riwayat Pengeluaran
+
+</div>
+
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Tanggal
+</th>
+
+
+<th>
+Pemohon
+</th>
+
+
+<th>
+Project
+</th>
+
+
+<th>
+Divisi
+</th>
+
+
+<th>
+Nominal
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+@forelse($expenses as $expense)
+
+
+<tr>
+
+
+<td>
+
+{{\Carbon\Carbon::parse($expense->tanggal)->format('d M Y')}}
+
+</td>
+
+
+<td>
+
+{{$expense->pengajuanDana->pengguna->name ?? '-'}}
+
+</td>
+
+
+<td>
+
+{{$expense->pengajuanDana->proyek->nama_proyek ?? '-'}}
+
+</td>
+
+
+<td>
+
+{{$expense->pengajuanDana->divisi->nama_divisi ?? '-'}}
+
+</td>
+
+
+<td class="expense-text">
+
+-
+Rp {{number_format($expense->jumlah,0,',','.')}}
+
+</td>
+
+
+</tr>
+
+
+@empty
+
+
+<tr>
+
+<td colspan="5"
+class="empty">
+
+Belum ada pengeluaran
+
+</td>
+
+</tr>
+
+
+@endforelse
+
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <style>
+
+
+.report-wrapper{
+
+width:100%;
+
+}
+
 
 
 .welcome-card{
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+background:white;
 
-padding:30px;
+padding:28px;
 
-border-radius:24px;
+border-radius:20px;
 
-color:white;
+border:1px solid #e2e8f0;
 
 display:flex;
 
 justify-content:space-between;
-
-align-items:center;
 
 margin-bottom:20px;
 
 }
 
 
+
 .welcome-label{
 
-font-size:10px;
+font-size:11px;
 
 letter-spacing:2px;
 
 font-weight:700;
 
-opacity:.8;
+color:#64748b;
 
 }
 
 
+
 .welcome-card h1{
+
+color:#6b4f1d;
 
 font-size:28px;
 
@@ -575,7 +777,10 @@ margin:8px 0;
 }
 
 
+
 .welcome-card p{
+
+color:#64748b;
 
 font-size:13px;
 
@@ -594,9 +799,10 @@ margin-top:15px;
 }
 
 
+
 .welcome-tags span{
 
-background:rgba(255,255,255,.2);
+background:#fff7db;
 
 padding:7px 12px;
 
@@ -604,139 +810,50 @@ border-radius:20px;
 
 font-size:11px;
 
-}
+color:#6b4f1d;
 
-
-
-.system-status{
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-font-weight:700;
-
-display:flex;
-
-gap:8px;
-
-align-items:center;
-
-}
-
-
-.system-status span{
-
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
+font-weight:600;
 
 }
 
 
 
+.report-status{
 
+background:#fff7db;
 
-.summary-grid{
-
-display:grid;
-
-grid-template-columns:repeat(4,1fr);
-
-gap:18px;
-
-margin-bottom:20px;
-
-}
-
-
-
-
-.summary-card{
-
-background:white;
-
-padding:20px;
+padding:10px 18px;
 
 border-radius:20px;
 
-display:flex;
+height:max-content;
 
-gap:15px;
+color:#6b4f1d;
 
-align-items:center;
+font-weight:700;
 
-box-shadow:0 10px 30px rgba(0,0,0,.06);
-
-}
-
-
-
-.summary-card small{
-
-color:#64748b;
+font-size:13px;
 
 }
 
 
 
-.summary-card h2{
+.report-status span{
 
-font-size:20px;
+display:inline-block;
 
-color:#166534;
+width:8px;
 
-}
+height:8px;
 
+background:#16a34a;
 
+border-radius:50%;
 
-.summary-icon{
-
-width:45px;
-
-height:45px;
-
-border-radius:15px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-background:#dcfce7;
+margin-right:8px;
 
 }
 
-
-
-.summary-icon.red{
-
-background:#fee2e2;
-
-}
-
-
-.summary-icon.blue{
-
-background:#dbeafe;
-
-}
-
-
-.summary-icon.purple{
-
-background:#ede9fe;
-
-}
 
 
 
@@ -747,13 +864,13 @@ background:white;
 
 padding:22px;
 
-border-radius:22px;
+border-radius:20px;
+
+border:1px solid #e2e8f0;
 
 margin-bottom:20px;
 
 }
-
-
 
 
 
@@ -770,8 +887,7 @@ margin-bottom:18px;
 
 
 
-
-.filter-grid{
+.filter-area{
 
 display:flex;
 
@@ -783,23 +899,15 @@ align-items:end;
 
 
 
-.filter-grid div{
-
-flex:1;
-
-}
-
-
-
 label{
-
-display:block;
 
 font-size:12px;
 
-font-weight:600;
+color:#64748b;
 
-margin-bottom:7px;
+display:block;
+
+margin-bottom:6px;
 
 }
 
@@ -807,46 +915,214 @@ margin-bottom:7px;
 
 input{
 
-width:100%;
+padding:11px;
 
-height:40px;
-
-border-radius:10px;
+border-radius:12px;
 
 border:1px solid #e2e8f0;
 
-padding:0 12px;
-
 }
 
 
 
-.filter-action{
+.btn-filter,
+.btn-export{
 
-display:flex;
-
-gap:8px;
-
-}
-
-
-
-.filter-action button,
-.filter-action a{
-
-padding:10px 15px;
+padding:8px 14px;
 
 border-radius:10px;
 
 border:none;
 
-background:#166534;
+font-size:12px;
 
-color:white;
+font-weight:600;
 
 text-decoration:none;
 
+cursor:pointer;
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+height:38px;
+
+}
+
+
+.btn-filter{
+
+background:#6b4f1d;
+
+color:white;
+
+}
+
+
+
+.btn-export{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:8px 13px;
+
+}
+
+
+
+
+
+.summary-grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.summary-card{
+
+background:white;
+
+border:1px solid #e2e8f0;
+
+padding:18px;
+
+border-radius:18px;
+
+display:flex;
+
+gap:12px;
+
+align-items:center;
+
+}
+
+
+
+.summary-icon{
+
+width:45px;
+
+height:45px;
+
+border-radius:14px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.green{
+
+background:#dcfce7;
+
+}
+
+
+
+.red{
+
+background:#fee2e2;
+
+}
+
+
+
+.gold{
+
+background:#fff7db;
+
+}
+
+
+
+.navy{
+
+background:#e0e7ff;
+
+}
+
+
+
+
+.summary-card h2{
+
+font-size:18px;
+
+color:#6b4f1d;
+
+}
+
+
+
+
+
+.overview-grid{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:15px;
+
+}
+
+
+
+.overview-item{
+
+background:#faf7ef;
+
+padding:15px;
+
+border-radius:15px;
+
+}
+
+
+
+.overview-item span{
+
+display:block;
+
 font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.overview-item strong{
+
+font-size:18px;
+
+}
+
+
+
+
+
+.income-text{
+
+color:#16a34a;
 
 font-weight:700;
 
@@ -854,21 +1130,55 @@ font-weight:700;
 
 
 
-.filter-action a{
+.expense-text{
 
-background:#f1f5f9;
+color:#dc2626;
 
-color:#475569;
+font-weight:700;
 
 }
 
 
 
-.filter-action .excel{
+.usage-box{
 
-background:#22c55e;
+margin-top:20px;
 
-color:white;
+}
+
+
+
+.usage-header{
+
+display:flex;
+
+justify-content:space-between;
+
+}
+
+
+
+.progress{
+
+height:10px;
+
+background:#f1f5f9;
+
+border-radius:20px;
+
+margin:10px 0;
+
+}
+
+
+
+.progress div{
+
+height:100%;
+
+background:#6b4f1d;
+
+border-radius:20px;
 
 }
 
@@ -888,15 +1198,13 @@ border-collapse:collapse;
 
 th{
 
+background:#faf7ef;
+
 padding:14px;
 
-background:#f8fafc;
+text-align:left;
 
 font-size:12px;
-
-color:#64748b;
-
-text-align:left;
 
 }
 
@@ -906,29 +1214,9 @@ td{
 
 padding:14px;
 
-font-size:13px;
-
 border-bottom:1px solid #f1f5f9;
 
-}
-
-
-
-td small{
-
-font-size:11px;
-
-color:#94a3b8;
-
-}
-
-
-
-.money{
-
-font-weight:700;
-
-color:#dc2626;
+font-size:13px;
 
 }
 
@@ -947,7 +1235,8 @@ color:#94a3b8;
 
 
 
-@media(max-width:1100px){
+
+@media(max-width:1000px){
 
 .summary-grid{
 
@@ -955,29 +1244,19 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
-}
 
-
-
-@media(max-width:700px){
-
-.summary-grid{
+.overview-grid{
 
 grid-template-columns:1fr;
 
 }
 
-
-.filter-grid{
-
-flex-direction:column;
-
 }
 
-}
 
 
 </style>
+
 
 
 @endsection

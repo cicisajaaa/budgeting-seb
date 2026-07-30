@@ -20,7 +20,7 @@ Kelola Pembayaran Client
 
 
 <p>
-Input pembayaran project dan distribusi dana otomatis ke divisi.
+Monitoring pembayaran project yang masuk dan transaksi keuangan perusahaan.
 </p>
 
 
@@ -28,16 +28,18 @@ Input pembayaran project dan distribusi dana otomatis ke divisi.
 
 
 
-<div class="system-status">
 
-<span></span>
+<a href="{{route('finance.deposit.create')}}" class="btn-add">
 
-Finance Active
++ Tambah Pembayaran
+
+</a>
+
+
 
 </div>
 
 
-</div>
 
 
 
@@ -87,70 +89,39 @@ Finance Active
 
 
 
-<div class="glass-panel">
+{{-- SUMMARY --}}
 
 
-<div class="panel-title">
+<div class="summary-grid">
 
-💰 Input Pembayaran Baru
 
+
+<div class="summary-card">
+
+
+<div class="summary-icon">
+💰
 </div>
-
-
-
-
-
-
-
-<form method="POST" action="{{route('finance.deposit.store')}}">
-
-@csrf
-
-
-
-
-
-
-<div class="form-grid">
-
-
-
-
-
 
 
 <div>
 
-
 <label>
-Project
+Total Dana Masuk
 </label>
 
 
-
-<select name="proyek_id" required>
-
-
-<option value="">
--- Pilih Project --
-</option>
+<h2>
+Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
+</h2>
 
 
-
-@foreach($projects as $project)
-
-
-<option value="{{$project->id}}">
-
-{{$project->nama_proyek}}
-
-</option>
+<small>
+Seluruh pembayaran
+</small>
 
 
-@endforeach
-
-
-</select>
+</div>
 
 
 </div>
@@ -161,47 +132,32 @@ Project
 
 
 
+<div class="summary-card">
+
+
+<div class="summary-icon">
+📄
+</div>
 
 
 <div>
 
-
 <label>
-Rekening Bank
+Total Transaksi
 </label>
 
 
-
-<select name="rekening_bank_id" required>
-
-
-<option value="">
--- Pilih Bank --
-</option>
+<h2>
+{{$totalTransaction ?? 0}}
+</h2>
 
 
-
-@foreach($banks as $bank)
-
-
-<option value="{{$bank->id}}">
+<small>
+Pembayaran masuk
+</small>
 
 
-{{$bank->nama_bank}}
-
--
-
-{{$bank->nomor_rekening}}
-
-
-</option>
-
-
-@endforeach
-
-
-
-</select>
+</div>
 
 
 </div>
@@ -212,25 +168,32 @@ Rekening Bank
 
 
 
+<div class="summary-card">
+
+
+<div class="summary-icon">
+📁
+</div>
 
 
 <div>
 
-
 <label>
-Jumlah Pembayaran
+Project Terbayar
 </label>
 
 
-<input
+<h2>
+{{$totalProject ?? 0}}
+</h2>
 
-type="number"
 
-name="jumlah_setoran"
+<small>
+Project aktif
+</small>
 
-placeholder="Masukkan nominal"
 
-required>
+</div>
 
 
 </div>
@@ -241,51 +204,36 @@ required>
 
 
 
+<div class="summary-card">
+
+
+<div class="summary-icon">
+🏦
+</div>
 
 
 <div>
 
-
 <label>
-Tanggal Pembayaran
+Rekening Digunakan
 </label>
 
 
-<input
-
-type="date"
-
-name="tanggal_setoran"
-
-required>
+<h2>
+{{$totalBank ?? 0}}
+</h2>
 
 
-</div>
-
-
-
+<small>
+Bank penerima
+</small>
 
 
 </div>
 
 
+</div>
 
-
-
-
-
-
-<button class="btn-submit">
-
-+ Simpan Pembayaran
-
-</button>
-
-
-
-
-
-</form>
 
 
 </div>
@@ -295,15 +243,39 @@ required>
 
 
 
+
+
+
+{{-- TABLE --}}
 
 
 
 <div class="glass-panel">
+
+
+<div class="panel-header">
+
+
+<div>
 
 
 <div class="panel-title">
 
 📄 Riwayat Pembayaran
+
+</div>
+
+
+<small>
+Daftar seluruh pembayaran client
+</small>
+
+
+</div>
+
+
+
+
 
 </div>
 
@@ -341,6 +313,11 @@ Nominal
 </th>
 
 
+<th>
+Status
+</th>
+
+
 </tr>
 
 
@@ -375,7 +352,11 @@ Nominal
 
 <td>
 
+<strong>
+
 {{$deposit->proyek->nama_proyek ?? '-'}}
+
+</strong>
 
 </td>
 
@@ -404,6 +385,19 @@ Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 
 
+
+<td>
+
+<span class="status-success">
+
+Berhasil
+
+</span>
+
+</td>
+
+
+
 </tr>
 
 
@@ -415,9 +409,9 @@ Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 <tr>
 
-<td colspan="4">
+<td colspan="5" class="empty">
 
-Belum ada pembayaran
+Belum ada pembayaran masuk
 
 </td>
 
@@ -450,88 +444,62 @@ Belum ada pembayaran
 <style>
 
 
+/* HEADER */
+
+
 .welcome-card{
 
+background:white;
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+padding:28px;
 
-
-padding:30px;
-
-
-border-radius:24px;
-
-
-color:white;
-
+border-radius:12px;
 
 display:flex;
 
-
 justify-content:space-between;
-
 
 align-items:center;
 
+margin-bottom:20px;
 
-margin-bottom:22px;
-
+border:1px solid #e2e8f0;
 
 }
-
-
 
 
 
 .welcome-label{
 
-
-font-size:10px;
-
-
-letter-spacing:2px;
-
+font-size:11px;
 
 font-weight:700;
 
+letter-spacing:2px;
 
-opacity:.8;
-
+color:#64748b;
 
 }
-
-
 
 
 
 .welcome-card h1{
 
-
 font-size:28px;
 
+color:#5b3a16;
 
 margin:8px 0;
 
-
 }
-
-
 
 
 
 .welcome-card p{
 
-
 font-size:13px;
 
-
-opacity:.9;
-
+color:#64748b;
 
 }
 
@@ -539,37 +507,31 @@ opacity:.9;
 
 
 
+.btn-add,
+.btn-small{
 
+background:#6b4f1d;
 
-.system-status{
-
-
-background:white;
-
-
-color:#166534;
-
+color:white;
 
 padding:12px 18px;
 
+border-radius:10px;
 
-border-radius:30px;
-
-
-font-weight:700;
-
+text-decoration:none;
 
 font-size:13px;
 
+font-weight:600;
 
-display:flex;
-
-
-gap:8px;
+}
 
 
-align-items:center;
 
+.btn-add:hover,
+.btn-small:hover{
+
+background:#8b6b2e;
 
 }
 
@@ -577,306 +539,283 @@ align-items:center;
 
 
 
-.system-status span{
-
-
-width:9px;
-
-
-height:9px;
-
-
-background:#22c55e;
-
-
-border-radius:50%;
-
-
-}
 
 
 
 
-
+/* ALERT */
 
 
 .success-box{
 
+background:#fff7db;
 
-background:#dcfce7;
-
-
-color:#166534;
-
+color:#6b4f1d;
 
 padding:15px;
 
-
-border-radius:14px;
-
+border-radius:12px;
 
 margin-bottom:20px;
 
-
 font-weight:600;
 
-
 }
-
-
 
 
 
 .error-box{
 
-
 background:#fee2e2;
-
 
 color:#991b1b;
 
-
 padding:15px;
 
-
-border-radius:14px;
-
+border-radius:12px;
 
 margin-bottom:20px;
-
 
 }
 
 
 
+
+
+
+
+
+
+/* SUMMARY */
+
+
+.summary-grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.summary-card{
+
+background:white;
+
+padding:20px;
+
+border-radius:12px;
+
+border:1px solid #e2e8f0;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+
+.summary-icon{
+
+width:45px;
+
+height:45px;
+
+background:#fff7db;
+
+border-radius:12px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:22px;
+
+}
+
+
+
+.summary-card label{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.summary-card h2{
+
+font-size:18px;
+
+color:#5b3a16;
+
+margin-top:5px;
+
+}
+
+
+
+.summary-card small{
+
+color:#94a3b8;
+
+font-size:11px;
+
+}
+
+
+
+
+
+
+
+
+
+/* PANEL */
 
 
 .glass-panel{
 
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:blur(15px);
-
-
-border-radius:22px;
-
+background:white;
 
 padding:22px;
 
+border-radius:12px;
 
-margin-bottom:20px;
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
+border:1px solid #e2e8f0;
 
 }
 
 
+
+.panel-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:18px;
+
+}
 
 
 
 .panel-title{
 
-
 font-size:16px;
-
 
 font-weight:700;
 
-
-margin-bottom:18px;
-
-
 }
 
 
 
+.panel-header small{
 
-
-.form-grid{
-
-
-display:grid;
-
-
-grid-template-columns:repeat(4,1fr);
-
-
-gap:18px;
-
-
-}
-
-
-
-
-
-label{
-
-
-display:block;
-
+color:#94a3b8;
 
 font-size:12px;
 
-
-font-weight:600;
-
-
-color:#475569;
-
-
-margin-bottom:8px;
-
-
 }
 
 
 
 
 
-input,
-select{
-
-
-width:100%;
-
-
-padding:12px;
-
-
-border-radius:12px;
-
-
-border:1px solid #e2e8f0;
-
-
-background:white;
-
-
-}
 
 
 
 
-
-.btn-submit{
-
-
-margin-top:20px;
-
-
-padding:12px 25px;
-
-
-border:none;
-
-
-border-radius:14px;
-
-
-background:#166534;
-
-
-color:white;
-
-
-font-weight:600;
-
-
-cursor:pointer;
-
-
-}
-
-
-
-
-
-.btn-submit:hover{
-
-
-background:#22c55e;
-
-
-}
-
-
-
+/* TABLE */
 
 
 table{
 
-
 width:100%;
-
 
 border-collapse:collapse;
 
-
 }
-
-
 
 
 
 th{
 
-
-text-align:left;
-
-
 padding:14px;
-
-
-font-size:12px;
-
-
-color:#64748b;
-
 
 background:#f8fafc;
 
+text-align:left;
+
+font-size:12px;
+
+color:#64748b;
 
 }
-
-
 
 
 
 td{
 
-
 padding:14px;
 
-
-border-top:1px solid #f1f5f9;
-
+border-bottom:1px solid #f1f5f9;
 
 font-size:13px;
 
-
 }
-
-
 
 
 
 .income{
 
-
 color:#16a34a;
-
 
 font-weight:700;
 
+}
+
+
+
+.status-success{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:6px 12px;
+
+border-radius:20px;
+
+font-size:11px;
+
+font-weight:600;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+padding:30px;
+
+color:#94a3b8;
 
 }
 
@@ -884,32 +823,30 @@ font-weight:700;
 
 
 
-@media(max-width:1100px){
 
 
-.form-grid{
 
+
+@media(max-width:1000px){
+
+
+.summary-grid{
 
 grid-template-columns:repeat(2,1fr);
 
-
 }
 
 
 }
-
-
 
 
 
 @media(max-width:700px){
 
 
-.form-grid{
-
+.summary-grid{
 
 grid-template-columns:1fr;
-
 
 }
 
@@ -917,18 +854,13 @@ grid-template-columns:1fr;
 
 .welcome-card{
 
-
 flex-direction:column;
-
 
 align-items:flex-start;
 
-
 gap:15px;
 
-
 }
-
 
 
 }
@@ -936,7 +868,6 @@ gap:15px;
 
 
 </style>
-
 
 
 @endsection

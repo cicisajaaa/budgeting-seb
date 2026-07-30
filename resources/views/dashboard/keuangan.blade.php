@@ -6,59 +6,27 @@
 
 
 {{-- ================= WELCOME ================= --}}
+<div class="dashboard-title">
 
-<div class="welcome-card">
+<div>
 
-    <div>
+<div class="welcome-label">
+DASHBOARD KEUANGAN
+</div>
 
-        <div class="welcome-label">
-            DASHBOARD KEUANGAN
-        </div>
+<h1>
+Selamat Datang, 
+<span>{{auth()->user()->name}}</span>
+</h1>
 
-
-        <h1>
-            Selamat Datang, {{auth()->user()->name}}
-        </h1>
-
-
-        <p>
-            Kelola transaksi, saldo, approval, dan aktivitas keuangan perusahaan.
-        </p>
-
-
-
-        <div class="welcome-tags">
-
-            <span>
-                ✓ Monitoring Dana
-            </span>
-
-            <span>
-                ✓ Approval
-            </span>
-
-            <span>
-                ✓ Audit Trail
-            </span>
-
-        </div>
-
-
-    </div>
-
-
-
-
-    <div class="system-status">
-
-        <span></span>
-
-        Keuangan Aktif
-
-    </div>
-
+<p>
+Kelola transaksi, saldo, approval dan laporan keuangan perusahaan.
+</p>
 
 </div>
+
+</div>
+
 
 
 
@@ -228,10 +196,9 @@ Bank aktif
 
 
 
-
 <div class="finance-card">
 
-<div class="finance-icon green">
+<div class="finance-icon yellow">
 ⏳
 </div>
 
@@ -243,7 +210,7 @@ Pending Approval
 </label>
 
 
-<h2>
+<h2 class="pending-number">
 {{$totalApprovalPending ?? 0}}
 </h2>
 
@@ -256,7 +223,6 @@ Menunggu proses
 </div>
 
 </div>
-
 
 
 
@@ -1205,33 +1171,44 @@ Audit Monitoring Berjalan
 <style>
 
 .finance-wrapper{
-width:100%;
+    width:100%;
 }
 
+/* ================= WELCOME ================= */
 
-/* WELCOME */
+.dashboard-title{
 
-.welcome-card{
-
-background:linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+background:white;
 
 padding:25px;
 
-border-radius:24px;
+border-radius:12px;
 
-color:white;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
+border:1px solid #e2e8f0;
 
 margin-bottom:20px;
+
+}
+
+.dashboard-title h1{
+
+font-size:24px;
+color:#1e293b;
+margin:8px 0;
+}
+
+
+.dashboard-title h1 span{
+
+color:#43380b;
+
+}
+
+.dashboard-title p{
+
+color:#64748b;
+
+font-size:13px;
 
 }
 
@@ -1240,18 +1217,33 @@ margin-bottom:20px;
 
 font-size:11px;
 
-letter-spacing:2px;
-
 font-weight:700;
+
+letter-spacing:1px;
+
+color:#64748b;
 
 }
 
 
+
+.welcome-label{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+}
+
+
+
 .welcome-card h1{
 
-font-size:26px;
+    font-size:26px;
 
-margin:8px 0;
+    margin:8px 0;
 
 }
 
@@ -1259,18 +1251,19 @@ margin:8px 0;
 
 .welcome-card p{
 
-font-size:13px;
+    font-size:13px;
 
 }
 
 
+
 .welcome-tags{
 
-display:flex;
+    display:flex;
 
-gap:10px;
+    gap:10px;
 
-margin-top:15px;
+    margin-top:15px;
 
 }
 
@@ -1278,67 +1271,64 @@ margin-top:15px;
 
 .welcome-tags span{
 
-background:rgba(255,255,255,.2);
+    background:rgba(255,255,255,.2);
 
-padding:7px 14px;
+    padding:7px 14px;
 
-border-radius:20px;
+    border-radius:20px;
 
-font-size:11px;
-
-}
-
-
-
-.system-status{
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-font-weight:700;
-
-display:flex;
-
-gap:8px;
-
-align-items:center;
+    font-size:11px;
 
 }
 
 
 
-.system-status span{
+.finance-status{
 
-width:9px;
+    background:white;
 
-height:9px;
+    color:#166534;
 
-background:#22c55e;
+    padding:10px 18px;
 
-border-radius:50%;
+    border-radius:30px;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
 
 }
 
 
 
+.finance-status span{
 
-/* CARD */
+    width:9px;
+
+    height:9px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+}
+
+/* STAT CARD */
 
 
 .finance-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:15px;
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
 
@@ -1346,20 +1336,21 @@ margin-bottom:20px;
 
 .finance-card{
 
-background:white;
+    background:white;
 
-padding:18px;
+    padding:18px;
 
-border-radius:18px;
+    border-radius:8px;
 
-display:flex;
+    border:1px solid #e2e8f0;
 
-gap:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
 
-align-items:center;
+    display:flex;
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.06);
+    gap:12px;
+
+    align-items:center;
 
 }
 
@@ -1367,34 +1358,68 @@ box-shadow:
 
 .finance-icon{
 
-width:45px;
+    width:42px;
 
-height:45px;
+    height:42px;
 
-border-radius:14px;
+    border-radius:6px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
-
-font-size:20px;
+    align-items:center;
 
 }
 
 
-.green{background:#dcfce7;}
-.red{background:#fee2e2;}
-.blue{background:#dbeafe;}
-.orange{background:#fef3c7;}
-.purple{background:#ede9fe;}
+.green{
+background:#dcfce7;
+}
+
+.red{
+background:#fee2e2;
+}
+
+.blue{
+background:#dbeafe;
+}
+
+.orange{
+background:#fef3c7;
+}
+
+.purple{
+background:#ede9fe;
+}
+
+.yellow{
+    background:#fef3c7 !important;
+}
 
 
 
 .finance-card label{
 
-font-size:11px;
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+.finance-card h2{
+
+    font-size:18px;
+
+    color:#6b4f1d;
+
+    margin:4px 0;
+
+}
+
+
+ .finance-card small{
 
 color:#64748b;
 
@@ -1402,38 +1427,18 @@ color:#64748b;
 
 
 
-.finance-card h2{
-
-font-size:18px;
-
-color:#166534;
-
-margin:4px 0;
-
-}
 
 
-
-.finance-card small{
-
-font-size:10px;
-
-color:#94a3b8;
-
-}
-
-
-
-/* MAIN */
+/* CONTENT */
 
 
 .dashboard-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:2fr 1fr;
+    grid-template-columns:2fr 1fr;
 
-gap:20px;
+    gap:20px;
 
 }
 
@@ -1441,47 +1446,41 @@ gap:20px;
 
 .glass-panel{
 
-background:white;
+    background:white;
 
-padding:20px;
+    padding:20px;
 
-border-radius:22px;
+    border-radius:8px;
 
-margin-bottom:18px;
+    border:1px solid #e2e8f0;
 
-box-shadow:
-
-0 10px 30px rgba(15,23,42,.08);
+    margin-bottom:20px;
 
 }
-
 
 
 .panel-title{
 
 font-weight:700;
 
-font-size:15px;
-
 margin-bottom:15px;
+
+color:#1e293b;
 
 }
 
 
 
-/* SUMMARY */
-
-
 .finance-summary div,
 .quick-summary div{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding:12px 0;
+    padding:12px 0;
 
-border-bottom:1px solid #f1f5f9;
+    border-bottom:1px solid #f1f5f9;
 
 }
 
@@ -1489,61 +1488,18 @@ border-bottom:1px solid #f1f5f9;
 .finance-summary span,
 .quick-summary span{
 
-color:#64748b;
+    color:#64748b;
 
 }
+
 
 
 .finance-summary b,
 .quick-summary b{
 
-color:#166534;
+    color:#166534;
 
 }
-
-
-
-/* PROGRESS */
-
-
-.progress-head{
-
-display:flex;
-
-justify-content:space-between;
-
-margin-bottom:8px;
-
-}
-
-
-
-.progress-track{
-
-height:10px;
-
-background:#e2e8f0;
-
-border-radius:20px;
-
-overflow:hidden;
-
-}
-
-
-
-.progress-fill{
-
-height:100%;
-
-background:linear-gradient(
-90deg,
-#166534,
-#22c55e
-);
-
-}
-
 
 
 
@@ -1559,43 +1515,33 @@ border-collapse:collapse;
 
 }
 
-
 th{
+
+background:#f8fafc;
 
 padding:12px;
 
 font-size:12px;
 
-background:#f8fafc;
+color:#64748b;
 
 }
-
 
 
 td{
 
 padding:12px;
 
-font-size:13px;
-
 border-bottom:1px solid #f1f5f9;
 
-}
-
-
-
-.pending{
-
-color:#d97706;
-
-font-weight:700;
+font-size:13px;
 
 }
 
 
 
 
-/* TRANSACTION */
+/* TRANSAKSI */
 
 
 .transaction-grid{
@@ -1608,7 +1554,18 @@ gap:20px;
 
 }
 
+.transaction-item strong{
 
+color:#1e293b;
+
+}
+
+
+.transaction-item small{
+
+color:#64748b;
+
+}
 
 .transaction-item{
 
@@ -1631,13 +1588,11 @@ color:#dc2626;
 }
 
 
-
 .income-value{
 
 color:#16a34a;
 
 }
-
 
 
 
@@ -1650,8 +1605,6 @@ color:#16a34a;
 display:flex;
 
 justify-content:space-between;
-
-align-items:center;
 
 padding:12px 0;
 
@@ -1671,15 +1624,16 @@ color:#94a3b8;
 
 
 
+
 .badge-success{
 
-background:#dcfce7;
+background:#f8f3e8;
 
-color:#166534;
+color:#6b4f1d;
 
-padding:7px 12px;
+padding:6px 12px;
 
-border-radius:20px;
+border-radius:6px;
 
 }
 
@@ -1691,9 +1645,9 @@ background:#fef3c7;
 
 color:#92400e;
 
-padding:7px 12px;
+padding:6px 12px;
 
-border-radius:20px;
+border-radius:6px;
 
 }
 
@@ -1710,14 +1664,11 @@ color:#166534;
 
 
 
-/* AUDIT */
-
-
 .activity-item{
 
 display:flex;
 
-gap:12px;
+gap:10px;
 
 padding:12px 0;
 
@@ -1729,85 +1680,38 @@ border-bottom:1px solid #f1f5f9;
 
 .activity-dot{
 
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
+width:8px;
+height:8px;
+background:#a67c2e;
 border-radius:50%;
-
-margin-top:5px;
-
-}
-
-
-
-.activity-content{
-
-flex:1;
+box-shadow:0 0 6px rgba(166,124,46,.5);
 
 }
-
-
-
-.activity-content p{
-
-font-size:12px;
-
-color:#64748b;
-
-}
-
-
-
-.activity-content small{
-
-font-size:11px;
-
-color:#94a3b8;
-
-}
-
 
 
 
 .system-row{
 
-display:flex;
+color:#334155;
 
-align-items:center;
+display:flex;
 
 gap:10px;
 
 padding:10px 0;
 
-}
+align-items:center;
 
+}
 
 
 .system-row span{
 
 width:8px;
-
 height:8px;
-
-background:#22c55e;
-
+background:#a67c2e;
 border-radius:50%;
-
-}
-
-
-
-
-.empty-data{
-
-text-align:center;
-
-padding:20px;
-
-color:#94a3b8;
+box-shadow:0 0 6px rgba(166,124,46,.5);
 
 }
 
@@ -1832,35 +1736,52 @@ grid-template-columns:1fr;
 }
 
 
-@media(max-width:700px){
+/* KONDISI DANA */
 
-.finance-grid{
-
-grid-template-columns:1fr;
-
+.progress-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
 }
 
 
-.transaction-grid{
-
-grid-template-columns:1fr;
-
+.progress-head span{
+    font-size:14px;
+    color:#64748b;
 }
 
 
-.welcome-card{
-
-flex-direction:column;
-
-gap:20px;
-
-align-items:flex-start;
-
+.progress-head b{
+    color:#6b4f1d;
+    font-size:16px;
 }
 
+
+.progress-track{
+    width:100%;
+    height:10px;
+    background:#eee7d8;
+    border-radius:20px;
+    overflow:hidden;
+    margin:10px 0;
 }
+
+
+.progress-fill{
+    height:100%;
+    background:#a67c2e;
+    border-radius:20px;
+}
+
+
+.description{
+    font-size:13px;
+    color:#64748b;
+}
+
+
 
 </style>
-
 
 @endsection

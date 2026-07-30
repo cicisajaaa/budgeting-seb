@@ -7,53 +7,27 @@
 <div class="welcome-card">
 
 
-    <div>
+<div>
 
-        <div class="welcome-label">
-            TAMBAH REKENING BANK
-        </div>
-
-
-        <h1>
-            Tambah Rekening Perusahaan
-        </h1>
+<div class="welcome-label">
+REKENING BANK
+</div>
 
 
-        <p>
-            Tambahkan rekening bank yang digunakan untuk transaksi keuangan.
-        </p>
+<h1>
+Tambah Rekening Perusahaan
+</h1>
 
 
-    </div>
-
-
-
-    <div class="system-status">
-
-        <span></span>
-
-        Bank Setup
-
-    </div>
+<p>
+Tambahkan rekening bank yang digunakan untuk transaksi keuangan perusahaan.
+</p>
 
 
 </div>
 
 
-
-
-
-
-
-@if(session('success'))
-
-<div class="success-box">
-
-{{ session('success') }}
-
 </div>
-
-@endif
 
 
 
@@ -63,14 +37,14 @@
 
 @if($errors->any())
 
-<div class="error-box">
+<div class="alert-error">
 
 <ul>
 
 @foreach($errors->all() as $error)
 
 <li>
-{{ $error }}
+{{$error}}
 </li>
 
 @endforeach
@@ -92,7 +66,7 @@
 
 <div class="panel-title">
 
-🏦 Form Rekening Baru
+🏦 Form Rekening Bank Baru
 
 </div>
 
@@ -100,12 +74,11 @@
 
 
 
+<form method="POST"
+action="{{route('finance.bank.store')}}">
 
-<form method="POST" action="{{ route('finance.bank.store') }}">
 
 @csrf
-
-
 
 
 
@@ -118,7 +91,6 @@
 
 <div>
 
-
 <label>
 Nama Bank
 </label>
@@ -130,7 +102,7 @@ type="text"
 
 name="nama_bank"
 
-placeholder="Contoh: BCA"
+placeholder="Contoh: Bank BCA"
 
 required>
 
@@ -144,9 +116,7 @@ required>
 
 
 
-
 <div>
-
 
 <label>
 Nomor Rekening
@@ -159,7 +129,7 @@ type="text"
 
 name="nomor_rekening"
 
-placeholder="Contoh: 1234567890"
+placeholder="Masukkan nomor rekening"
 
 required>
 
@@ -173,9 +143,7 @@ required>
 
 
 
-
 <div>
-
 
 <label>
 Nama Pemilik
@@ -188,7 +156,7 @@ type="text"
 
 name="nama_pemilik"
 
-placeholder="Contoh: CV Sahabat Alam"
+placeholder="Nama pemilik rekening"
 
 required>
 
@@ -202,9 +170,7 @@ required>
 
 
 
-
 <div>
-
 
 <label>
 Saldo Awal
@@ -217,9 +183,7 @@ type="number"
 
 name="saldo"
 
-value="0"
-
-min="0"
+placeholder="0"
 
 required>
 
@@ -232,10 +196,7 @@ required>
 
 
 
-
-
 <div>
-
 
 <label>
 Status Rekening
@@ -246,19 +207,13 @@ Status Rekening
 
 
 <option value="1">
-
 Aktif
-
 </option>
-
 
 
 <option value="0">
-
-Tidak Aktif
-
+Nonaktif
 </option>
-
 
 
 </select>
@@ -278,25 +233,27 @@ Tidak Aktif
 
 
 
+<div class="button-area">
 
 
-<button class="btn-submit">
+<a href="{{route('finance.bank.index')}}"
+class="back-btn">
+
+Kembali
+
+</a>
+
+
+
+
+<button class="save-btn">
 
 + Simpan Rekening
 
 </button>
 
 
-
-
-
-<a href="{{ route('finance.bank.index') }}"
-
-class="btn-back">
-
-Kembali
-
-</a>
+</div>
 
 
 
@@ -306,9 +263,7 @@ Kembali
 
 
 
-
 </div>
-
 
 
 
@@ -322,197 +277,53 @@ Kembali
 
 .welcome-card{
 
+background:white;
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+padding:28px;
 
+border-radius:18px;
 
-padding:30px;
+border:1px solid #e2e8f0;
 
-
-border-radius:24px;
-
-
-color:white;
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-margin-bottom:22px;
-
+margin-bottom:20px;
 
 }
-
 
 
 
 .welcome-label{
 
-
-font-size:10px;
-
+font-size:11px;
 
 font-weight:700;
 
-
 letter-spacing:2px;
 
-
-opacity:.8;
-
+color:#64748b;
 
 }
-
-
 
 
 
 .welcome-card h1{
 
-
 font-size:28px;
 
+color:#6b4f1d;
 
 margin:8px 0;
 
-
 }
-
-
 
 
 
 .welcome-card p{
 
-
 font-size:13px;
 
-
-opacity:.9;
-
+color:#64748b;
 
 }
-
-
-
-
-
-.system-status{
-
-
-background:white;
-
-
-color:#166534;
-
-
-padding:12px 18px;
-
-
-border-radius:30px;
-
-
-font-weight:700;
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:8px;
-
-
-}
-
-
-
-
-
-.system-status span{
-
-
-width:9px;
-
-
-height:9px;
-
-
-background:#22c55e;
-
-
-border-radius:50%;
-
-
-}
-
-
-
-
-
-
-
-.success-box{
-
-
-background:#dcfce7;
-
-
-color:#166534;
-
-
-padding:15px;
-
-
-border-radius:14px;
-
-
-margin-bottom:20px;
-
-
-font-weight:600;
-
-
-}
-
-
-
-
-
-
-.error-box{
-
-
-background:#fee2e2;
-
-
-color:#991b1b;
-
-
-padding:15px;
-
-
-border-radius:14px;
-
-
-margin-bottom:20px;
-
-
-}
-
-
 
 
 
@@ -520,27 +331,16 @@ margin-bottom:20px;
 
 .glass-panel{
 
-
-background:
-
-rgba(255,255,255,.65);
-
-
-backdrop-filter:blur(15px);
-
-
-border-radius:22px;
-
+background:white;
 
 padding:25px;
 
+border-radius:18px;
 
-border:
-
-1px solid rgba(255,255,255,.8);
-
+border:1px solid #e2e8f0;
 
 }
+
 
 
 
@@ -548,15 +348,13 @@ border:
 
 .panel-title{
 
-
 font-size:17px;
-
 
 font-weight:700;
 
+color:#1e293b;
 
-margin-bottom:25px;
-
+margin-bottom:20px;
 
 }
 
@@ -564,17 +362,15 @@ margin-bottom:25px;
 
 
 
-.form-grid{
 
+
+.form-grid{
 
 display:grid;
 
-
-grid-template-columns:repeat(3,1fr);
-
+grid-template-columns:repeat(2,1fr);
 
 gap:20px;
-
 
 }
 
@@ -584,24 +380,17 @@ gap:20px;
 
 label{
 
-
 display:block;
-
 
 font-size:12px;
 
-
 font-weight:600;
-
 
 color:#475569;
 
-
 margin-bottom:8px;
 
-
 }
-
 
 
 
@@ -609,21 +398,17 @@ margin-bottom:8px;
 input,
 select{
 
-
 width:100%;
-
 
 padding:13px;
 
-
-border-radius:14px;
-
+border-radius:12px;
 
 border:1px solid #e2e8f0;
 
+font-size:13px;
 
 background:white;
-
 
 }
 
@@ -634,12 +419,9 @@ background:white;
 input:focus,
 select:focus{
 
-
 outline:none;
 
-
-border-color:#22c55e;
-
+border-color:#8b6b2e;
 
 }
 
@@ -648,78 +430,36 @@ border-color:#22c55e;
 
 
 
+.button-area{
 
-.btn-submit{
+display:flex;
 
+justify-content:flex-end;
+
+gap:12px;
 
 margin-top:25px;
 
-
-padding:12px 22px;
-
-
-border:none;
+}
 
 
-border-radius:14px;
 
 
-background:#166534;
+.save-btn{
 
+background:#6b4f1d;
 
 color:white;
 
-
-font-weight:600;
-
-
-cursor:pointer;
-
-
-}
-
-
-
-
-
-.btn-submit:hover{
-
-
-background:#22c55e;
-
-
-}
-
-
-
-
-
-.btn-back{
-
-
-display:inline-block;
-
-
-margin-left:10px;
-
+border:none;
 
 padding:12px 22px;
 
-
 border-radius:14px;
-
-
-background:#f1f5f9;
-
-
-color:#334155;
-
-
-text-decoration:none;
-
 
 font-weight:600;
 
+cursor:pointer;
 
 }
 
@@ -727,33 +467,83 @@ font-weight:600;
 
 
 
-@media(max-width:900px){
+.save-btn:hover{
+
+background:#8b6b2e;
+
+}
+
+
+
+
+
+.back-btn{
+
+background:#f1f5f9;
+
+color:#334155;
+
+padding:12px 22px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-size:13px;
+
+font-weight:600;
+
+}
+
+
+
+
+
+.back-btn:hover{
+
+background:#e2e8f0;
+
+}
+
+
+
+
+
+.alert-error{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:15px;
+
+border-radius:14px;
+
+margin-bottom:20px;
+
+font-size:13px;
+
+}
+
+
+
+
+
+@media(max-width:800px){
 
 
 .form-grid{
 
-
 grid-template-columns:1fr;
-
 
 }
 
 
-
-.welcome-card{
-
+.button-area{
 
 flex-direction:column;
 
-
-align-items:flex-start;
-
-
-gap:15px;
-
-
 }
-
 
 
 }

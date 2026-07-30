@@ -9,6 +9,7 @@ use App\Models\DistribusiSetoran;
 use App\Models\SaldoDivisi;
 use App\Models\RekeningBank;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,70 +18,100 @@ use Illuminate\Support\Facades\DB;
 class FinanceDepositController extends Controller
 {
 
-
-    public function index()
-    {
-
-
-        $projects = Proyek::all();
+public function index()
+{
 
 
+    $deposits = SetoranProyek::with([
 
-        $banks = RekeningBank::where(
+        'proyek',
 
-            'status',
+        'rekeningBank'
 
-            true
+    ])
+
+    ->latest()
+
+    ->get();
+
+
+
+    // TOTAL PEMBAYARAN MASUK
+
+    $totalDeposit = $deposits->sum('jumlah_setoran');
+
+
+
+    // JUMLAH TRANSAKSI
+
+    $totalTransaction = $deposits->count();
+
+
+
+    // JUMLAH PROJECT YANG SUDAH BAYAR
+
+    $totalProject = $deposits
+
+        ->pluck('proyek_id')
+
+        ->unique()
+
+        ->count();
+
+
+
+    // JUMLAH BANK YANG DIGUNAKAN
+
+    $totalBank = $deposits
+
+        ->pluck('rekening_bank_id')
+
+        ->unique()
+
+        ->count();
+
+
+
+
+
+    return view(
+
+        'finance.deposit.index',
+
+        compact(
+
+            'deposits',
+
+            'totalDeposit',
+
+            'totalTransaction',
+
+            'totalProject',
+
+            'totalBank'
 
         )
 
-        ->get();
+    );
 
 
+}
 
 
+    public function create()
+    {
+        $projects = Proyek::all();
 
-        $deposits = SetoranProyek::with([
+        $banks = RekeningBank::where(
+            'status',
+            true
+        )->get();
 
-            'proyek',
-
-            'rekeningBank'
-
-        ])
-
-        ->latest()
-
-        ->get();
-
-
-
-
-
-
-        return view(
-
-            'finance.deposit.index',
-
-            compact(
-
-                'projects',
-
-                'banks',
-
-                'deposits'
-
-            )
-
-        );
-
-
+        return view('finance.deposit.create', compact(
+            'projects',
+            'banks'
+        ));
     }
-
-
-
-
-
-
 
 
 

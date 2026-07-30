@@ -4,75 +4,40 @@
 @section('content')
 
 
-@if(session('success'))
-
-<div class="alert success">
-✓ {{session('success')}}
-</div>
-
-@endif
-
-
-
-@if(session('error'))
-
-<div class="alert error">
-✕ {{session('error')}}
-</div>
-
-@endif
-
-
-
-
-
-
-
 <div class="welcome-card">
 
 
 <div>
 
-
 <div class="welcome-label">
-
-APPROVAL PENGELUARAN
-
+APPROVAL DANA
 </div>
 
 
-
 <h1>
-
-Persetujuan Dana Karyawan
-
+Persetujuan Pengajuan Dana
 </h1>
 
 
-
 <p>
-
-Verifikasi pengajuan dana dan kontrol penggunaan anggaran perusahaan.
-
+Kelola pengajuan dana karyawan dan lakukan proses persetujuan keuangan perusahaan.
 </p>
-
-
 
 
 <div class="welcome-tags">
 
 <span>
-✓ Validasi Dana
+✓ Finance Control
 </span>
 
 
 <span>
-✓ Approval
+✓ Audit Approval
 </span>
 
 
 <span>
-✓ Update Saldo
+✓ Monitoring Dana
 </span>
 
 
@@ -82,17 +47,104 @@ Verifikasi pengajuan dana dan kontrol penggunaan anggaran perusahaan.
 </div>
 
 
+</div>
 
 
 
-<div class="system-status">
 
-<span></span>
 
-Approval Aktif
+
+
+@if(session('success'))
+
+<div class="success-box">
+{{session('success')}}
+</div>
+
+@endif
+
+
+
+
+@if(session('error'))
+
+<div class="error-box">
+{{session('error')}}
+</div>
+
+@endif
+
+
+
+
+
+
+
+{{-- SUMMARY --}}
+
+
+<div class="summary-grid">
+
+
+<div class="summary-card">
+
+<div class="summary-icon">
+⏳
+</div>
+
+
+<div>
+
+<label>
+Menunggu Approval
+</label>
+
+<h2>
+{{$requests->count()}}
+</h2>
+
+<small>
+Pengajuan pending
+</small>
+
 
 </div>
 
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon">
+💰
+</div>
+
+
+<div>
+
+<label>
+Total Dana Diajukan
+</label>
+
+<h2>
+Rp {{number_format($requests->sum('jumlah'),0,',','.')}}
+</h2>
+
+<small>
+Nominal pending
+</small>
+
+
+</div>
+
+
+</div>
 
 
 </div>
@@ -110,12 +162,22 @@ Approval Aktif
 
 <div class="panel-title">
 
-🔔 Pengajuan Menunggu Persetujuan
+📋 Daftar Pengajuan Dana
 
 </div>
 
 
+<small class="subtitle">
+Pengajuan yang membutuhkan keputusan keuangan
+</small>
 
+
+
+
+
+
+
+<div class="table-wrapper">
 
 
 <table>
@@ -123,34 +185,27 @@ Approval Aktif
 
 <thead>
 
-
 <tr>
-
 
 <th>
 Pemohon
 </th>
 
-
-<th>
-Detail
-</th>
-
-
 <th>
 Project
 </th>
 
+<th>
+Divisi
+</th>
 
 <th>
 Nominal
 </th>
 
-
 <th>
-Bukti
+Tanggal
 </th>
-
 
 <th>
 Aksi
@@ -165,28 +220,21 @@ Aksi
 
 
 
-
-
-
 <tbody>
-
 
 
 @forelse($requests as $request)
 
 
+
 <tr>
 
 
-
-
 <td>
 
 
 <strong>
-
 {{$request->pengguna->name ?? '-'}}
-
 </strong>
 
 
@@ -194,37 +242,7 @@ Aksi
 
 
 <small>
-
-Karyawan
-
-</small>
-
-
-</td>
-
-
-
-
-
-
-
-<td>
-
-
-<strong>
-
 {{$request->judul}}
-
-</strong>
-
-
-<br>
-
-
-<small>
-
-{{$request->keterangan ?? '-'}}
-
 </small>
 
 
@@ -234,37 +252,28 @@ Karyawan
 
 
 
-
-
 <td>
-
-
-<strong>
 
 {{$request->proyek->nama_proyek ?? '-'}}
 
-</strong>
-
-
-<br>
-
-
-<span class="division">
-
-{{$request->divisi->nama_divisi ?? '-'}}
-
-</span>
-
-
 </td>
 
 
+
+
+
+<td>
+
+{{$request->divisi->nama_divisi ?? '-'}}
+
+</td>
 
 
 
 
 
 <td class="money">
+
 
 Rp {{number_format($request->jumlah,0,',','.')}}
 
@@ -274,115 +283,29 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 
 
-
-
 <td>
 
-
-@if($request->bukti_pengajuan)
-
-
-@php
-
-$extension = strtolower(
-pathinfo(
-$request->bukti_pengajuan,
-PATHINFO_EXTENSION
-)
-);
-
-@endphp
-
-
-
-
-
-@if(
-in_array(
-$extension,
-[
-'jpg',
-'jpeg',
-'png',
-'webp'
-]
-)
-)
-
-
-<a
-
-href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
-
-target="_blank"
-
->
-
-
-<img
-
-src="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
-
-class="preview-image"
-
->
-
-
-</a>
-
-
-
-@else
-
-
-
-<a
-
-href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
-
-target="_blank"
-
-class="btn-file"
-
->
-
-📄 Lihat PDF
-
-</a>
-
-
-
-@endif
-
-
-
-@else
-
-
-<span class="no-file">
-
-Tidak ada
-
-</span>
-
-
-@endif
-
-
+{{\Carbon\Carbon::parse($request->created_at)->format('d M Y')}}
 
 </td>
+
+
+
+
+
+
+
 <td>
 
 
-<div class="action">
+<div class="action-group">
 
 
 
-<a 
-href="{{ route('expense.approval.detail',$request->id) }}"
+<a href="{{route('expense.approval.detail',$request->id)}}"
 class="detail-btn">
 
-👁 Lihat Detail
+Detail
 
 </a>
 
@@ -390,10 +313,7 @@ class="detail-btn">
 
 
 
-<!-- APPROVE -->
-
 <form method="POST"
-
 action="{{route('expense.approve',$request->id)}}">
 
 
@@ -401,78 +321,18 @@ action="{{route('expense.approve',$request->id)}}">
 
 
 
-
-
-<select name="rekening_bank_id"
-
-required>
-
-
-<option value="">
-
-Pilih Rekening
-
-</option>
+<input type="hidden"
+name="rekening_bank_id"
+value="{{$banks->first()->id ?? ''}}">
 
 
 
-@foreach($banks as $bank)
+<button class="approve-btn"
+onclick="return confirm('Setujui pengajuan ini?')">
 
-
-<option value="{{$bank->id}}">
-
-
-{{$bank->nama_bank}}
-
--
-
-{{$bank->nomor_rekening}}
-
-
-(Saldo:
-
-Rp {{number_format($bank->saldo,0,',','.')}}
-
-)
-
-
-</option>
-
-
-@endforeach
-
-
-
-</select>
-
-
-
-
-
-
-<textarea
-
-name="catatan_persetujuan"
-
-placeholder="Catatan approval..."
-
-></textarea>
-
-
-
-
-
-
-<button
-
-class="approve"
-
-onclick="return confirm('Setujui pengeluaran ini?')">
-
-✓ Setujui
+Setujui
 
 </button>
-
 
 
 </form>
@@ -483,51 +343,28 @@ onclick="return confirm('Setujui pengeluaran ini?')">
 
 
 
-
-
-<!-- REJECT -->
-
-
 <form method="POST"
-
 action="{{route('expense.reject',$request->id)}}">
 
 
 @csrf
 
 
-
-
-<textarea
-
+<input type="hidden"
 name="catatan_persetujuan"
-
-placeholder="Alasan penolakan..."
-
-required
-
-></textarea>
+value="Ditolak oleh keuangan">
 
 
 
-
-
-<button
-
-class="reject"
-
+<button class="reject-btn"
 onclick="return confirm('Tolak pengajuan ini?')">
 
-✕ Tolak
+Tolak
 
 </button>
 
 
-
 </form>
-
-
-
 
 
 
@@ -550,19 +387,16 @@ onclick="return confirm('Tolak pengajuan ini?')">
 @empty
 
 
-
 <tr>
 
-
-<td colspan="6" class="empty">
+<td colspan="6"
+class="empty">
 
 Tidak ada pengajuan menunggu approval
 
 </td>
 
-
 </tr>
-
 
 
 @endforelse
@@ -575,10 +409,11 @@ Tidak ada pengajuan menunggu approval
 </table>
 
 
+</div>
+
 
 
 </div>
-
 
 
 
@@ -593,26 +428,15 @@ Tidak ada pengajuan menunggu approval
 
 .welcome-card{
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+background:white;
 
-padding:30px;
+padding:28px;
 
-border-radius:24px;
+border-radius:18px;
 
-color:white;
+border:1px solid #e2e8f0;
 
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:22px;
+margin-bottom:20px;
 
 }
 
@@ -620,13 +444,13 @@ margin-bottom:22px;
 
 .welcome-label{
 
-font-size:10px;
-
-letter-spacing:2px;
+font-size:11px;
 
 font-weight:700;
 
-opacity:.8;
+letter-spacing:2px;
+
+color:#64748b;
 
 }
 
@@ -635,6 +459,8 @@ opacity:.8;
 .welcome-card h1{
 
 font-size:28px;
+
+color:#6b4f1d;
 
 margin:8px 0;
 
@@ -646,9 +472,11 @@ margin:8px 0;
 
 font-size:13px;
 
-opacity:.9;
+color:#64748b;
 
 }
+
+
 
 
 
@@ -666,54 +494,101 @@ margin-top:15px;
 
 .welcome-tags span{
 
-background:
-rgba(255,255,255,.15);
+background:#fff7db;
 
-padding:7px 12px;
+color:#6b4f1d;
+
+padding:7px 14px;
 
 border-radius:20px;
 
 font-size:11px;
 
+font-weight:600;
+
 }
 
 
 
 
 
-.system-status{
+
+
+.summary-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:20px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.summary-card{
 
 background:white;
 
-color:#166534;
+padding:20px;
 
-padding:12px 18px;
+border-radius:18px;
 
-border-radius:30px;
-
-font-weight:700;
+border:1px solid #e2e8f0;
 
 display:flex;
 
+gap:15px;
+
 align-items:center;
 
-gap:8px;
+}
+
+
+
+.summary-icon{
+
+width:50px;
+
+height:50px;
+
+border-radius:15px;
+
+background:#fff7db;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:22px;
 
 }
 
 
 
-.system-status span{
+.summary-card label{
 
-width:9px;
+font-size:12px;
 
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
+color:#64748b;
 
 }
+
+
+
+.summary-card h2{
+
+margin-top:5px;
+
+color:#6b4f1d;
+
+}
+
+
 
 
 
@@ -721,35 +596,45 @@ border-radius:50%;
 
 .glass-panel{
 
-background:
-rgba(255,255,255,.65);
-
-backdrop-filter:blur(15px);
-
-border-radius:22px;
+background:white;
 
 padding:22px;
 
-border:
-1px solid rgba(255,255,255,.8);
+border-radius:18px;
+
+border:1px solid #e2e8f0;
 
 }
-
-
 
 
 
 .panel-title{
 
-font-size:16px;
+font-size:17px;
 
 font-weight:700;
-
-margin-bottom:18px;
 
 }
 
 
+
+.subtitle{
+
+color:#64748b;
+
+}
+
+
+
+
+
+.table-wrapper{
+
+margin-top:20px;
+
+overflow-x:auto;
+
+}
 
 
 
@@ -765,13 +650,13 @@ border-collapse:collapse;
 
 th{
 
-padding:15px;
+background:#faf7ef;
+
+padding:14px;
 
 text-align:left;
 
 font-size:12px;
-
-background:#f8fafc;
 
 color:#64748b;
 
@@ -781,34 +666,11 @@ color:#64748b;
 
 td{
 
-padding:15px;
+padding:14px;
 
-border-bottom:
-1px solid #f1f5f9;
+border-bottom:1px solid #f1f5f9;
 
 font-size:13px;
-
-vertical-align:top;
-
-}
-
-
-
-td small{
-
-color:#94a3b8;
-
-font-size:11px;
-
-}
-
-
-
-.division{
-
-font-size:11px;
-
-color:#16a34a;
 
 }
 
@@ -818,7 +680,7 @@ color:#16a34a;
 
 font-weight:700;
 
-color:#dc2626;
+color:#6b4f1d;
 
 }
 
@@ -826,148 +688,42 @@ color:#dc2626;
 
 
 
+.action-group{
 
+display:flex;
 
-.action{
-
-display:grid;
-
-grid-template-columns:1fr;
-
-gap:12px;
-
-min-width:300px;
+gap:8px;
 
 }
 
 
 
-.action form{
-
-background:#f8fafc;
-
-padding:15px;
-
-border-radius:15px;
-
-}
-
-
-
-select,
-textarea{
-
-padding:10px;
-
-border-radius:12px;
-
-border:1px solid #e2e8f0;
-
-font-size:12px;
-
-background:white;
-
-width:100%;
-
-}
-
-
-
-textarea{
-
-height:70px;
-
-resize:none;
-
-}
-
-
-
-
-
-.action button{
+.action-group a,
+.action-group button{
 
 border:none;
 
-padding:10px;
+padding:8px 12px;
 
-border-radius:12px;
+border-radius:10px;
 
-font-weight:700;
+font-size:12px;
 
 cursor:pointer;
 
-color:white;
+text-decoration:none;
 
-width:100%;
-
-}
-
-
-
-.approve{
-
-background:#16a34a;
+font-weight:600;
 
 }
-
-
-
-.reject{
-
-background:#dc2626;
-
-}
-
-
-
-.approve:hover{
-
-background:#15803d;
-
-}
-
-
-
-.reject:hover{
-
-background:#b91c1c;
-
-}
-
-
 
 
 
 .detail-btn{
 
-background:#2563eb;
+background:#f1f5f9;
 
-color:white;
-
-padding:10px;
-
-border-radius:12px;
-
-font-size:12px;
-
-font-weight:700;
-
-text-decoration:none;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-}
-
-
-
-.detail-btn:hover{
-
-background:#1d4ed8;
+color:#334155;
 
 }
 
@@ -975,60 +731,23 @@ background:#1d4ed8;
 
 
 
-.preview-image{
+.approve-btn{
 
-width:80px;
+background:#dcfce7;
 
-height:80px;
-
-object-fit:cover;
-
-border-radius:12px;
-
-border:1px solid #e2e8f0;
-
-cursor:pointer;
-
-}
-
-
-
-.preview-image:hover{
-
-transform:scale(1.05);
+color:#166534;
 
 }
 
 
 
 
-.btn-file{
 
-background:#166534;
+.reject-btn{
 
-color:white;
+background:#fee2e2;
 
-padding:8px 14px;
-
-border-radius:12px;
-
-font-size:12px;
-
-font-weight:700;
-
-text-decoration:none;
-
-display:inline-block;
-
-}
-
-
-
-.no-file{
-
-color:#94a3b8;
-
-font-size:12px;
+color:#dc2626;
 
 }
 
@@ -1040,7 +759,7 @@ font-size:12px;
 
 text-align:center;
 
-padding:35px;
+padding:30px;
 
 color:#94a3b8;
 
@@ -1050,71 +769,51 @@ color:#94a3b8;
 
 
 
-.alert{
-
-padding:15px 20px;
-
-border-radius:15px;
-
-margin-bottom:20px;
-
-font-size:13px;
-
-font-weight:600;
-
-}
-
-
-
-.alert.success{
+.success-box{
 
 background:#dcfce7;
 
 color:#166534;
 
+padding:15px;
+
+border-radius:12px;
+
+margin-bottom:20px;
+
 }
 
 
 
-.alert.error{
+.error-box{
 
 background:#fee2e2;
 
-color:#dc2626;
+color:#991b1b;
+
+padding:15px;
+
+border-radius:12px;
+
+margin-bottom:20px;
 
 }
 
 
 
-@media(max-width:1000px){
+@media(max-width:900px){
 
+.summary-grid{
 
-table{
-
-display:block;
-
-overflow-x:auto;
+grid-template-columns:1fr;
 
 }
 
-
-
-.welcome-card{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:20px;
-
 }
 
-
-}
 
 
 </style>
-
 
 
 @endsection
