@@ -19,11 +19,11 @@ Sahabat Eksplorasi Banua
 
 :root{
 
---primary:#6b4f1d;     
---primary-dark:#3b2a0f; 
---gold:#a67c2e;         
---cream:#f8f3e8;       
---sidebar:#0f172a;     
+--primary:#334155;
+--primary-dark:#1e293b;
+--gold:#64748b;
+--cream:#f8fafc;
+--sidebar:#0f172a;
 
 }
 
@@ -196,12 +196,11 @@ letter-spacing:1px;
 
 
 
-
 .sidebar a:hover{
 
-    background:#241f15;
+background:rgba(166,124,46,.15);
 
-    color:white;
+color:white;
 
 }
 
@@ -382,7 +381,9 @@ width:8px;
 
 height:8px;
 
-background:#8b6b2e;
+background:#22c55e;
+
+box-shadow:0 0 8px #22c55e;
 
 border-radius:50%;
 
@@ -410,7 +411,7 @@ border-radius:50%;
 Sahabat Eksplorasi Banua
 
 <span>
-Financial System
+Enterprise Management System
 </span>
 
 </div>
@@ -419,6 +420,7 @@ Financial System
 </div>
 
 
+@if(auth()->user()->role!='owner')
 
 <div class="menu-title">
 MAIN
@@ -439,8 +441,7 @@ Dashboard
 
 </a>
 
-
-
+@endif
 @if(auth()->user()->role=='admin')
 
 
@@ -448,8 +449,8 @@ Dashboard
 MANAGEMENT
 </div>
 
-
-<a href="{{route('admin.users.index')}}">
+<a href="{{route('admin.users.index')}}"
+class="{{request()->routeIs('admin.users.*')?'active':''}}">
 
 <div class="icon">
 👥
@@ -461,7 +462,8 @@ Pengguna
 
 
 
-<a href="{{route('admin.projects.index')}}">
+<a href="{{route('admin.projects.index')}}"
+class="{{request()->routeIs('admin.projects.*')?'active':''}}">
 
 <div class="icon">
 📁
@@ -472,8 +474,8 @@ Project
 </a>
 
 
-
-<a href="{{route('admin.divisions.index')}}">
+<a href="{{route('admin.divisions.index')}}"
+class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
 
 <div class="icon">
 🏢
@@ -485,8 +487,86 @@ Divisi
 
 
 @endif
+@if(auth()->user()->role=='owner')
 
 
+<div class="menu-title">
+PEMILIK
+</div>
+
+
+<a href="{{route('dashboard')}}"
+class="{{request()->routeIs('dashboard')?'active':''}}">
+
+<div class="icon">
+⌂
+</div>
+
+Dashboard Utama
+
+</a>
+
+
+
+
+<a href="{{route('owner.projects')}}"
+class="{{request()->routeIs('owner.projects')?'active':''}}">
+
+<div class="icon">
+📁
+</div>
+
+Pemantauan Proyek
+
+</a>
+
+
+
+
+
+<a href="{{route('owner.reports')}}"
+class="{{request()->routeIs('owner.reports')?'active':''}}">
+
+<div class="icon">
+📊
+</div>
+
+Laporan Perusahaan
+
+</a>
+
+
+
+
+
+<a href="{{route('owner.approval')}}"
+class="{{request()->routeIs('owner.approval')?'active':''}}">
+
+<div class="icon">
+✓
+</div>
+
+Persetujuan Dana
+
+</a>
+
+
+
+
+
+<a href="{{route('owner.audit')}}"
+class="{{request()->routeIs('owner.audit')?'active':''}}">
+
+<div class="icon">
+📝
+</div>
+
+Riwayat Aktivitas
+
+</a>
+
+
+@endif
 @if(auth()->user()->role=='keuangan')
 
 
@@ -670,15 +750,29 @@ System Online
 
 <div>
 <div class="system-name">
-
-Financial Management System
+Sistem Manajemen Keuangan
 
 </div>
 
-
 <div class="header-sub">
 
+@if(auth()->user()->role=='owner')
+
+Dashboard
+
+@elseif(auth()->user()->role=='keuangan')
+
 Dashboard Keuangan
+
+@elseif(auth()->user()->role=='admin')
+
+Dashboard Administrator
+
+@else
+
+Dashboard Karyawan
+
+@endif
 
 </div>
 

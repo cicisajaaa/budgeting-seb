@@ -2,13 +2,16 @@
 <html lang="id">
 
 <head>
-
+<link 
+rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 <title>
-Sahabat Eksplorasi Banua  | Project System
+Sahabat Eksplorasi Banua | Financial Management System
 </title>
 
 
@@ -18,167 +21,300 @@ Sahabat Eksplorasi Banua  | Project System
 <style>
 
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+:root{
+
+--primary:#6b4f1d;
+
+--gold:#a67c2e;
+
+--gold-light:#d7b787;
+
+--dark:#0f172a;
+
+--white:#ffffff;
+
+--soft:#f8f3e8;
+
 }
+
+
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+}
+
 
 
 body{
 
-height:100vh;
-
-overflow:hidden;
+min-height:100vh;
 
 font-family:'Inter',sans-serif;
 
+overflow-x:hidden;
 
 background:
 
 linear-gradient(
-135deg,
-rgba(3,46,30,.85),
-rgba(15,23,42,.90)
+
+90deg,
+
+rgba(15,23,42,.94),
+
+rgba(15,23,42,.75)
+
 ),
 
 url('{{asset("images/company-bg.png")}}');
 
 
-background-size:cover;
+background-size:100% auto;
+background-position:center center;
 
-background-position:center;
-
-}
-
-
-/* ambient light */
-
-
-body::before,
-body::after{
-
-content:"";
-
-position:absolute;
-
-border-radius:50%;
-
-filter:blur(120px);
-
-z-index:-1;
-
-}
-
-
-body::before{
-
-width:450px;
-
-height:450px;
-
-background:#22c55e;
-
-top:-150px;
-
-left:-150px;
-
-opacity:.25;
-
-}
-
-
-body::after{
-
-width:400px;
-
-height:400px;
-
-background:#16a34a;
-
-bottom:-150px;
-
-right:-100px;
-
-opacity:.15;
 
 }
 
 
 
 
-/* ======================
-WELCOME
-====================== */
 
+/* ================= NAVBAR ================= */
 
-.welcome{
+.navbar{
 
-height:100vh;
+position:fixed;
+
+top:0;
+left:0;
+right:0;
+
+height:80px;
 
 display:flex;
-
-justify-content:center;
-
 align-items:center;
+justify-content:space-between;
 
-text-align:center;
+padding:0 70px;
 
 color:white;
 
+z-index:999;
 
-transition:
 
-1s cubic-bezier(.77,0,.18,1);
+background:
+
+rgba(15,23,42,.35);
+
+
+backdrop-filter:blur(12px);
+
+
+border-bottom:
+
+1px solid rgba(255,255,255,.1);
+
 
 }
 
 
-.welcome.move{
+.brand{
 
-transform:
+display:flex;
 
-translateX(-100px)
-scale(.92);
+align-items:center;
+
+gap:12px;
+
+}
 
 
-opacity:0;
+.brand img{
 
-filter:blur(20px);
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+object-fit:contain;
+
+background:white;
+
+padding:4px;
+
+}
+
+
+.brand-text{
+
+font-size:15px;
+
+font-weight:700;
+
+line-height:1.3;
 
 }
 
 
 
-.logo-main{
-
-width:140px;
-
-margin-bottom:30px;
+.brand-text span{
 
 
-filter:
+display:block;
 
-drop-shadow(
-0 20px 35px rgba(0,0,0,.5)
-);
+font-size:11px;
 
+color:#d7b787;
 
-animation:
-
-floating 4s ease-in-out infinite;
 
 }
+
+
+
+
+
+.nav-menu{
+
+
+display:flex;
+
+gap:35px;
+
+
+}
+
+
+
+.nav-menu a{
+
+
+color:white;
+
+text-decoration:none;
+
+font-size:13px;
+
+
+opacity:.8;
+
+
+}
+
+
+
+.nav-menu a:hover{
+
+
+opacity:1;
+
+color:#d7b787;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ================= HERO ================= */
+
+
+.hero{
+
+min-height:100vh;
+
+display:flex;
+
+align-items:center;
+
+padding:130px 80px 80px;
+
+color:white;
+
+}
+
+
+
+.hero-left{
+
+
+width:55%;
+
+
+}
+
+
+
+
+.logo-box{
+
+width:110px;
+height:110px;
+
+background:white;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:8px;
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,.35);
+
+margin-bottom:25px;
+
+}
+
+
+.logo-box img{
+
+width:100%;
+
+height:100%;
+
+object-fit:contain;
+
+border-radius:50%;
+
+}
+
+
+
+
+
 
 
 
 .company{
 
-font-size:58px;
+
+font-size:46px;
+
 
 font-weight:800;
 
-letter-spacing:-2px;
+
+line-height:1.15;
+
+
+letter-spacing:-1px;
+
 
 }
 
@@ -186,410 +322,106 @@ letter-spacing:-2px;
 
 .company span{
 
-color:#4ade80;
+
+color:#d7b787;
+
 
 }
 
 
 
-.system-title{
 
-margin-top:15px;
+.system{
 
-font-size:20px;
+
+margin-top:18px;
+
+
+font-size:21px;
+
 
 font-weight:600;
 
-color:#dcfce7;
+
+color:#f8f3e8;
+
 
 }
 
 
 
-.tagline{
+
+.description{
+
 
 margin-top:20px;
 
-font-size:16px;
+
+font-size:15px;
+
 
 line-height:1.8;
 
-color:#d1fae5;
+
+color:#cbd5e1;
+
+
+max-width:500px;
+
 
 }
 
 
 
-.enter-btn{
 
 
-margin-top:40px;
 
-padding:16px 65px;
+.btn-login{
+
+
+margin-top:35px;
+
+
+display:inline-block;
+
+
+
+padding:18px 75px;
+
+font-size:15px;
 
 
 border-radius:50px;
-
-border:none;
 
 
 background:
 
 linear-gradient(
+
 135deg,
-#15803d,
-#4ade80
+
+#6b4f1d,
+
+#a67c2e
+
 );
 
 
 color:white;
 
-font-size:15px;
 
 font-weight:700;
+
+
+text-decoration:none;
+
 
 cursor:pointer;
 
 
 box-shadow:
 
-0 15px 40px rgba(34,197,94,.35);
-
-
-transition:.35s;
-
-}
-
-
-.enter-btn:hover{
-
-
-transform:
-
-translateY(-5px)
-scale(1.05);
-
-
-box-shadow:
-
-0 25px 60px rgba(34,197,94,.55);
-
-
-}
-
-
-
-
-.system-online{
-
-
-margin-top:30px;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-gap:10px;
-
-font-size:13px;
-
-}
-
-
-
-.system-online span{
-
-
-width:10px;
-
-height:10px;
-
-border-radius:50%;
-
-background:#22c55e;
-
-
-box-shadow:
-
-0 0 20px #22c55e;
-
-
-animation:pulse 1.5s infinite;
-
-}
-
-
-
-
-
-/* ======================
-LOGIN
-====================== */
-
-
-
-.login-panel{
-
-
-position:absolute;
-
-inset:0;
-
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-
-
-background:
-
-rgba(15,23,42,.45);
-
-
-
-backdrop-filter:
-
-blur(18px);
-
-
-
-opacity:0;
-
-pointer-events:none;
-
-
-transition:.8s;
-
-}
-
-
-
-.login-panel.show{
-
-opacity:1;
-
-pointer-events:auto;
-
-}
-
-
-
-
-
-.login-box{
-
-
-width:420px;
-
-
-padding:45px;
-
-
-border-radius:32px;
-
-
-
-background:
-
-rgba(255,255,255,.96);
-
-
-
-box-shadow:
-
-0 40px 100px rgba(0,0,0,.45);
-
-
-
-transform:
-
-translateY(80px)
-scale(.85);
-
-
-
-opacity:0;
-
-
-transition:
-
-.8s cubic-bezier(.34,1.56,.64,1);
-
-}
-
-
-
-
-.login-panel.show .login-box{
-
-
-transform:
-
-translateY(0)
-scale(1);
-
-
-opacity:1;
-
-
-}
-
-
-
-
-
-.logo-login{
-
-
-width:95px;
-
-display:block;
-
-margin:auto;
-
-
-}
-
-
-
-.company-login{
-
-
-margin-top:18px;
-
-text-align:center;
-
-
-font-size:22px;
-
-font-weight:800;
-
-
-color:#166534;
-
-}
-
-
-
-
-
-.badge{
-
-
-margin:20px auto;
-
-width:max-content;
-
-padding:7px 18px;
-
-border-radius:30px;
-
-
-background:#dcfce7;
-
-color:#15803d;
-
-
-font-size:12px;
-
-font-weight:700;
-
-
-}
-
-
-
-
-.login-box h2{
-
-
-text-align:center;
-
-font-size:27px;
-
-margin-top:25px;
-
-color:#111827;
-
-
-}
-
-
-
-.login-desc{
-
-
-text-align:center;
-
-margin:12px 0 35px;
-
-
-font-size:14px;
-
-color:#64748b;
-
-
-}
-
-
-
-
-
-.group{
-
-margin-bottom:22px;
-
-}
-
-
-
-label{
-
-
-display:block;
-
-margin-bottom:8px;
-
-
-font-size:13px;
-
-font-weight:600;
-
-
-color:#374151;
-
-}
-
-
-
-
-
-input{
-
-
-width:100%;
-
-height:52px;
-
-
-border-radius:14px;
-
-
-border:1px solid #d1d5db;
-
-
-background:#f8fafc;
-
-
-padding:0 16px;
-
-
-font-size:14px;
+0 20px 40px rgba(107,79,29,.4);
 
 
 transition:.3s;
@@ -599,21 +431,10 @@ transition:.3s;
 
 
 
-input:focus{
+.btn-login:hover{
 
 
-outline:none;
-
-
-background:white;
-
-
-border-color:#22c55e;
-
-
-box-shadow:
-
-0 0 0 5px rgba(34,197,94,.15);
+transform:translateY(-5px);
 
 
 }
@@ -622,74 +443,139 @@ box-shadow:
 
 
 
-.remember{
+.status{
+
+
+margin-top:25px;
 
 
 display:flex;
 
+
 align-items:center;
+
 
 gap:10px;
 
 
 font-size:13px;
 
-color:#64748b;
-
-
-}
-
-
-.remember input{
-
-width:auto;
-
-height:auto;
 
 }
 
 
 
+.status-dot{
 
 
-.login-btn{
+width:10px;
+
+height:10px;
 
 
-width:100%;
+border-radius:50%;
 
 
-height:54px;
+background:#22c55e;
 
 
-margin-top:25px;
+box-shadow:
+
+0 0 15px #22c55e;
 
 
-border:none;
+}
 
 
-border-radius:15px;
+
+
+
+
+
+
+/* ================= FEATURE ================= */
+
+
+
+.features{
+
+
+display:flex;
+
+
+gap:15px;
+
+
+margin-top:35px;
+
+
+}
+
+
+
+.feature{
+
+width:170px;
+
+padding:22px;
 
 
 background:
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+rgba(255,255,255,.12);
+
+
+border-radius:18px;
+
+
+border:
+
+1px solid rgba(255,255,255,.2);
+
+
+backdrop-filter:blur(12px);
+
+
+}
 
 
 
-color:white;
+.feature-icon{
+
+
+font-size:25px;
+
+
+}
+
+
+
+.feature-title{
+
+
+margin-top:10px;
+
+
+font-size:12px;
 
 
 font-weight:700;
 
 
-cursor:pointer;
+}
 
 
-transition:.35s;
+
+.feature-text{
+
+
+margin-top:5px;
+
+
+font-size:11px;
+
+
+color:#cbd5e1;
 
 
 }
@@ -698,71 +584,937 @@ transition:.35s;
 
 
 
-.login-btn:hover{
+/* ================= RIGHT PANEL ================= */
 
 
-transform:
+.hero-right{
 
-translateY(-4px);
+
+width:45%;
+
+
+display:flex;
+
+
+justify-content:center;
+
+
+}
+
+
+
+.dashboard-preview{
+
+
+width:390px;
+
+
+padding:25px;
+
+
+border-radius:25px;
+
+
+background:
+
+rgba(255,255,255,.12);
+
+
+border:
+
+1px solid rgba(255,255,255,.25);
+
+
+backdrop-filter:blur(15px);
 
 
 box-shadow:
 
-0 20px 40px rgba(34,197,94,.4);
+0 30px 80px rgba(0,0,0,.4);
 
 
 }
 
 
 
+.preview-title{
 
 
-.back{
+font-weight:700;
+
+font-size:16px;
 
 
-margin-top:25px;
+margin-bottom:20px;
 
 
-text-align:center;
+}
 
 
-font-size:13px;
+
+.preview-card{
+
+
+background:white;
+
+
+color:#334155;
+
+
+padding:18px;
+
+
+border-radius:15px;
+
+
+margin-bottom:12px;
+
+
+}
+
+
+
+.preview-label{
+
+
+font-size:12px;
 
 
 color:#64748b;
 
 
-cursor:pointer;
+}
 
+
+
+.preview-value{
+
+
+font-size:25px;
+
+
+font-weight:800;
+
+
+color:#6b4f1d;
+
+
+}
+/* ================= LOGIN MODAL ================= */
+
+
+
+.login-overlay{
+
+position:fixed;
+inset:0;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+rgba(15,23,42,.70);
+
+backdrop-filter:blur(12px);
+
+opacity:0;
+
+pointer-events:none;
+
+transition:.4s;
+
+z-index:1000;
+
+}
+
+
+.login-overlay.show{
+
+opacity:1;
+
+pointer-events:auto;
+
+}
+
+
+
+.login-box{
+
+width:850px;
+
+height:460px;
+
+display:flex;
+
+overflow:hidden;
+
+background:white;
+
+border-radius:28px;
+
+box-shadow:
+0 40px 100px rgba(0,0,0,.5);
+
+animation:loginShow .5s ease;
+
+}
+
+
+
+@keyframes loginShow{
+
+from{
+
+opacity:0;
+
+transform:translateY(30px) scale(.95);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+
+
+/* LEFT IMAGE */
+
+.login-left > div{
+
+transform:translateY(-20px);
+
+}
+
+
+.login-left{
+
+background:
+
+linear-gradient(
+rgba(15,23,42,.35),
+rgba(15,23,42,.65)
+),
+url('{{asset("images/company-bg.png")}}');
+
+background-size:cover;
+
+background-position:center;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+color:white;
+
+text-align:center;
+
+padding:0 20px;
+
+}
+
+
+
+.login-logo{
+
+width:120px;
+
+height:120px;
+
+background:white;
+
+padding:10px;
+
+border-radius:50%;
+
+margin-bottom:18px;
+
+}
+
+
+.login-company{
+
+font-size:21px;
+
+font-weight:800;
+
+padding:0 20px;
+
+}
+
+
+.login-left p{
+
+margin-top:8px;
+
+font-size:13px;
+
+opacity:.8;
 
 }
 
 
 
 
+/* RIGHT FORM */
+
+.login-right{
+
+width:55%;
+
+padding:45px 55px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+
+
+.login-badge{
+
+width:max-content;
+
+padding:7px 15px;
+
+border-radius:20px;
+
+background:#f8f3e8;
+
+color:#8b6b2e;
+
+font-size:11px;
+
+font-weight:700;
+
+margin-bottom:18px;
+
+}
+
+
+
+.login-right h2{
+
+font-size:32px;
+
+font-weight:800;
+
+color:#172033;
+
+line-height:1.2;
+
+white-space:nowrap;
+
+margin-bottom:12px;
+
+}
+.login-header{
+    margin-bottom:25px;
+}
+
+
+.login-title-small{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:#f8f3e8;
+
+    color:#8b6b2e;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.login-right h2{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    line-height:1.2;
+
+    margin-bottom:12px;
+
+}
+
+
+
+.login-desc{
+
+    font-size:14px;
+
+    color:#64748b;
+
+    line-height:1.6;
+
+}
+
+
+
+
+.form-group{
+
+margin-bottom:20px;
+
+}
+
+
+
+.form-group label{
+
+display:block;
+
+font-size:13px;
+
+font-weight:700;
+
+color:#334155;
+
+margin-bottom:8px;
+
+}
+
+
+
+
+.form-group input{
+
+width:100%;
+
+height:52px;
+
+border-radius:14px;
+
+border:1px solid #d8dee8;
+
+background:#f8fafc;
+
+padding:0 18px;
+
+font-size:14px;
+
+transition:.3s;
+
+}
+
+
+
+.form-group input:focus{
+
+outline:none;
+
+background:white;
+
+border-color:#a67c2e;
+
+box-shadow:
+0 0 0 4px rgba(166,124,46,.15);
+
+}
+
+
+
+
+.password-box{
+
+position:relative;
+
+}
+
+
+
+.password-box input{
+
+padding-right:50px;
+
+}
+
+.toggle-password{
+
+position:absolute;
+
+right:18px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+font-size:16px;
+
+color:#94a3b8;
+
+transition:.3s;
+
+}
+
+
+.toggle-password:hover{
+
+color:#a67c2e;
+
+}nter;
+
+font-size:18px;
+
+}
+
+
+
+
+.remember{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+font-size:13px;
+
+color:#64748b;
+
+}
+
+
+
+.remember input{
+
+width:16px;
+
+height:16px;
+
+accent-color:#a67c2e;
+
+}
+
+
+
+.submit-btn{
+
+height:50px;
+
+border-radius:12px;
+
+width:92%;
+
+margin-left:auto;
+
+margin-right:auto;
+
+border:none;
+
+margin-top:25px;
+
+margin-bottom:10px;
+
+background:
+
+linear-gradient(
+135deg,
+#6b4f1d,
+#a67c2e
+);
+
+
+color:white;
+
+font-size:14px;
+
+font-weight:700;
+
+letter-spacing:.8px;
+
+cursor:pointer;
+
+
+box-shadow:
+
+0 15px 35px rgba(166,124,46,.25);
+
+transition:.3s;
+
+}
+
+
+.submit-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+
+0 20px 45px rgba(166,124,46,.4);
+
+}
+
+
+
+.close-login{
+
+margin-top:25px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:10px;
+
+font-size:13px;
+
+font-weight:600;
+
+color:#64748b;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+
+.close-login{
+
+margin-top:15px;
+
+padding-bottom:8px;
+
+font-size:13px;
+
+}
+
+
+.close-login:hover{
+
+color:#a67c2e;
+
+}
+
+
+
+.close-login i{
+
+font-size:12px;
+
+
+}
+
+
+.close-login span{
+    border-bottom:1px solid transparent;
+}
+
+
+.close-login:hover span{
+    border-bottom:1px solid #a67c2e;
+}
 
 .footer{
 
-
-margin-top:30px;
+margin-top:18px;
 
 text-align:center;
-
 
 font-size:12px;
 
 color:#94a3b8;
 
+}
+
+
+/* ================= SYSTEM SECTION ================= */
+
+
+.system-section{
+
+
+padding:90px 70px;
+
+
+background:#f8f3e8;
+
+
+color:#1e293b;
+
+
+min-height:500px;
+
+
+}
+
+
+
+.system-container{
+
+
+max-width:1100px;
+
+
+margin:auto;
+
+
+text-align:center;
+
+
+}
+
+
+
+.system-container h2{
+
+
+font-size:35px;
+
+
+color:#6b4f1d;
+
+
+}
+
+
+
+.system-container p{
+
+
+margin-top:15px;
+
+
+color:#64748b;
+
+
+}
+
+
+
+.system-grid{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:25px;
+
+margin-top:45px;
+
+}
+
+
+.system-card{
+
+
+width:280px;
+
+
+background:white;
+
+
+padding:30px;
+
+
+border-radius:20px;
+
+
+box-shadow:
+
+0 15px 40px rgba(0,0,0,.08);
+
+
+text-align:left;
+
+
+}
+
+
+.system-icon{
+
+width:42px;
+height:42px;
+
+border-radius:12px;
+
+background:#f8f3e8;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:22px;
+
+margin-bottom:15px;
+
+}
+
+.system-card h3{
+
+margin-bottom:12px;
+
+}
+
+
+.system-card p{
+
+font-size:13px;
+
+line-height:1.7;
+
+margin-bottom:12px;
+
+}
+
+
+.system-card ul{
+
+padding-left:18px;
+
+margin-top:10px;
+
+}
+
+
+.system-card li{
+
+font-size:13px;
+
+line-height:1.7;
+
+color:#334155;
+
+}
+
+
+.section-label{
+
+font-size:12px;
+
+font-weight:800;
+
+letter-spacing:3px;
+
+color:#a67c2e;
+
+margin-bottom:15px;
+
+}
+
+
+.section-desc{
+
+max-width:700px;
+
+margin:20px auto;
+
+line-height:1.8;
+
+color:#64748b;
+
+}
+.system-section{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+
+.system-section::before{
+
+content:"";
+
+position:absolute;
+
+width:300px;
+
+height:300px;
+
+background:#d7b787;
+
+opacity:.15;
+
+border-radius:50%;
+
+top:-100px;
+
+right:-100px;
+
+filter:blur(80px);
+
+}
+
+
+.system-card h3{
+
+
+color:#6b4f1d;
+
+
+font-size:18px;
+
+
+}
+
+
+
+.system-card p{
+
+
+font-size:13px;
+
+
+line-height:1.6;
+
 
 }
 
 
 
 
+html{
+
+
+scroll-behavior:smooth;
+
+
+}
+.dashboard-preview{
+
+animation:
+
+floating 5s ease-in-out infinite;
+
+}
 
 
 @keyframes floating{
-
 
 0%,100%{
 
@@ -773,7 +1525,7 @@ transform:translateY(0);
 
 50%{
 
-transform:translateY(-12px);
+transform:translateY(-15px);
 
 }
 
@@ -781,72 +1533,250 @@ transform:translateY(-12px);
 
 
 
-@keyframes pulse{
+@media(max-width:900px){
 
 
-50%{
 
-opacity:.4;
+.hero{
 
-transform:scale(1.5);
+
+padding:100px 30px;
+
 
 }
 
+
+
+.hero-left{
+
+
+width:100%;
+
+
 }
 
 
 
+.hero-right{
 
-@media(max-width:600px){
+
+display:none;
+
+
+}
+
+.system-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.system-section{
+    scroll-margin-top:100px;
+}
+.navbar{
+
+
+padding:0 30px;
+
+
+}
+
+
+
+.nav-menu{
+
+
+display:none;
+
+
+}
+
 
 
 .company{
 
-font-size:40px;
 
-}
-
-
-.login-box{
-
-width:90%;
-
-padding:35px 25px;
-
-}
-
-
-.logo-main{
-
-width:110px;
-
-}
+font-size:36px;
 
 
 }
 
 
 
+.features{
+
+
+flex-direction:column;
+
+
+}
+
+.brand img{
+
+width:52px;
+
+height:52px;
+
+object-fit:contain;
+
+background:white;
+
+border-radius:50%;
+
+padding:5px;
+
+box-shadow:
+
+0 5px 15px rgba(0,0,0,.25);
+
+}
+
+
+.section-label{
+
+font-size:12px;
+
+font-weight:700;
+
+letter-spacing:3px;
+
+color:#a67c2e;
+
+margin-bottom:15px;
+
+}
+
+
+.section-desc{
+
+max-width:700px;
+
+margin:20px auto;
+
+line-height:1.8;
+
+color:#64748b;
+
+}
+.system-card{
+
+background:white;
+
+padding:35px;
+
+border-radius:24px;
+
+text-align:left;
+
+box-shadow:
+0 15px 40px rgba(107,79,29,.08);
+
+border:1px solid #eee;
+
+transition:.35s;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+
+
+.system-card::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:5px;
+
+background:#a67c2e;
+
+}
+
+
+
+.system-card:hover{
+
+transform:translateY(-10px);
+
+box-shadow:
+
+0 25px 60px rgba(0,0,0,.15);
+
+}
+}
 </style>
-
 
 </head>
 
+<body id="home">
+<!-- NAVBAR -->
 
-<body>
+<div class="navbar">
+<div class="brand">
+
+<img src="{{asset('images/logo-cv.png')}}">
 
 
-<div class="welcome" id="welcome">
+<div class="brand-text">
+
+Sahabat Eksplorasi Banua
+
+<span>
+Sistem Manajemen Keuangan
+</span>
+
+</div>
+
+</div>
+<div class="nav-menu">
+
+<a href="#" onclick="goHome(); return false;">
+Beranda
+</a>
+
+<a href="#system" onclick="goSystem(); return false;">
+Fitur Sistem
+</a>
 
 
-<div>
+<a href="javascript:void(0)" onclick="openLogin()">
+Masuk
+</a>
+
+</div>
+</div>
 
 
-<img
 
-src="{{asset('images/logo-cv.png')}}"
 
-class="logo-main">
+
+
+<!-- HERO -->
+
+
+<section class="hero" id="home">
+
+
+<div class="hero-left">
+
+
+<div class="logo-box">
+
+<img src="{{asset('images/logo-cv.png')}}">
+
+</div>
+
+
 
 
 <div class="company">
@@ -857,44 +1787,111 @@ Sahabat Eksplorasi<span>Banua</span>
 
 
 
-<div class="system-title">
 
-Sahabat Eksplorasi Banua Project System
+<div class="system">
 
-</div>
-
-
-
-<div class="tagline">
-
-Sistem informasi perusahaan untuk mengelola
-
-<br>
-
-project, keuangan, dan aktivitas operasional.
+Sistem Manajemen Keuangan & Proyek
 
 </div>
 
 
 
-<button class="enter-btn" onclick="openLogin()">
+<div class="description">
 
-Masuk Sistem
+
+Platform digital perusahaan untuk mengelola proyek,
+keuangan, persetujuan dana, dan aktivitas operasional
+secara terintegrasi dalam satu sistem.
+
+</div>
+
+
+
+
+
+
+<div class="features">
+
+
+<div class="feature">
+
+<div class="feature-icon">
+📁
+</div>
+
+<div class="feature-title">
+Manajemen Proyek
+</div>
+
+<div class="feature-text">
+Pemantauan proyek perusahaan
+</div>
+
+</div>
+
+
+
+
+<div class="feature">
+
+<div class="feature-icon">
+💰
+</div>
+
+<div class="feature-title">
+Kontrol Keuangan
+</div>
+
+<div class="feature-text">
+Transaksi dan laporan keuangan
+</div>
+
+</div>
+
+
+
+
+
+<div class="feature">
+
+<div class="feature-icon">
+👥
+</div>
+
+<div class="feature-title">
+Hak Akses Pengguna
+</div>
+
+<div class="feature-text">
+Pengaturan akses pengguna
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<button class="btn-login" onclick="openLogin()">
+
+Masuk Ke Sistem
 
 </button>
 
 
 
-<div class="system-online">
 
-<span></span>
-
-System Online
-
-</div>
+<div class="status">
 
 
-</div>
+<div class="status-dot"></div>
+
+
+Sistem Berjalan Normal
 
 
 </div>
@@ -902,136 +1899,486 @@ System Online
 
 
 
-<div class="login-panel" id="login">
-
-
-<div class="login-box">
-
-
-<img
-
-src="{{asset('images/logo-cv.png')}}"
-
-class="logo-login">
+</div>
 
 
 
-<div class="company-login">
 
-Sahabat Eksplorasi Banua
+
+
+
+<div class="hero-right">
+
+
+<div class="dashboard-preview">
+
+
+<div class="preview-title">
+
+Ringkasan Sistem
 
 </div>
 
 
-<div class="badge">
+<div class="preview-card">
 
-PROJECT MANAGEMENT SYSTEM
+<div class="preview-label">
+
+Pemantauan Keuangan
 
 </div>
 
+
+<div class="preview-value">
+
+Aktif
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="preview-card">
+
+<div class="preview-label">
+
+Proyek Aktif
+
+</div>
+
+
+<div class="preview-value">
+
+12 Proyek
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="preview-card">
+
+<div class="preview-label">
+
+Status Sistem
+
+</div>
+
+
+<div class="preview-value">
+
+Terhubung
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</section>
+<section class="system-section" id="system">
+
+
+<div class="system-container">
+
+
+<div class="section-label">
+FITUR SISTEM
+</div>
 
 
 <h2>
-
-Masuk Sistem
-
+Platform Manajemen Perusahaan Terintegrasi
 </h2>
 
 
+<p class="section-desc">
 
-<div class="login-desc">
+Sistem digital perusahaan yang membantu pengelolaan
+proyek, keuangan, pengguna, dan laporan operasional
+secara terintegrasi.
 
-Gunakan akun resmi perusahaan
+</p>
+
+
+
+
+<div class="system-grid">
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+📁
+</div>
+
+
+<h3>
+Project Management
+</h3>
+
+
+<p>
+Mengelola data project perusahaan,
+monitoring aktivitas pekerjaan,
+dan melihat perkembangan project secara real-time.
+</p>
+
+
+<ul>
+
+<li>Data project</li>
+
+<li>Monitoring progres</li>
+
+<li>Manajemen divisi</li>
+
+</ul>
+
 
 </div>
 
+
+
+
+
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+💰
+</div>
+
+
+<h3>
+Financial Management
+</h3>
+
+
+<p>
+Mengelola transaksi keuangan perusahaan
+mulai dari pemasukan, pengeluaran,
+hingga saldo keuangan.
+</p>
+
+
+<ul>
+
+<li>Pembayaran masuk</li>
+
+<li>Pengeluaran dana</li>
+
+<li>Laporan keuangan</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+✓
+</div>
+
+
+<h3>
+Approval Workflow
+</h3>
+
+
+<p>
+Mendukung proses persetujuan dana
+secara terstruktur berdasarkan
+hak akses pengguna.
+</p>
+
+
+<ul>
+
+<li>Pengajuan dana</li>
+
+<li>Approval keuangan</li>
+
+<li>Riwayat persetujuan</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+🏦
+</div>
+
+
+<h3>
+Bank Monitoring
+</h3>
+
+
+<p>
+Melakukan monitoring rekening bank
+dan ketersediaan saldo perusahaan.
+</p>
+
+
+<ul>
+
+<li>Multi rekening</li>
+
+<li>Saldo bank</li>
+
+<li>Status rekening</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+👥
+</div>
+
+
+<h3>
+Role Management
+</h3>
+
+
+<p>
+Mengatur akses sistem berdasarkan
+peran pengguna agar keamanan data terjaga.
+</p>
+
+
+<ul>
+
+<li>Admin</li>
+
+<li>Keuangan</li>
+
+<li>Karyawan</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="system-card">
+
+
+<div class="system-icon">
+📊
+</div>
+
+
+<h3>
+Reporting System
+</h3>
+
+
+<p>
+Menyediakan laporan yang informatif
+dengan export data untuk kebutuhan perusahaan.
+</p>
+
+
+<ul>
+
+<li>Dashboard laporan</li>
+
+<li>Export Excel</li>
+
+<li>Analisis data</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+</section>
+<div class="login-overlay" id="login">
+
+<div class="login-box">
+<div class="login-left">
+
+<div>
+
+<img 
+src="{{asset('images/logo-cv.png')}}"
+class="login-logo">
+
+
+<div class="login-company">
+Sahabat Eksplorasi Banua
+</div>
+
+
+<p>
+Sistem Manajemen Keuangan & Proyek
+</p>
+
+
+</div>
+
+</div>
+<div class="login-right">
+
+<div class="login-header">
+
+<span class="login-title-small">
+PORTAL PERUSAHAAN
+</span>
+
+<h2>
+Selamat Datang Kembali
+</h2>
+
+<div class="login-desc">
+Masuk menggunakan akun resmi perusahaan
+</div>
+
+</div>
 
 
 <form method="POST" action="{{route('login')}}">
 
-
 @csrf
 
 
-<div class="group">
+<div class="form-group">
 
 <label>Email</label>
 
-<input
-
+<input 
 type="email"
-
 name="email"
-
-placeholder="nama@email.com"
-
-autocomplete="email"
-
-required>
-
+required
+placeholder="Email perusahaan">
 
 </div>
 
 
-
-
-<div class="group">
-
+<div class="form-group">
 
 <label>Password</label>
 
+<div class="password-box">
 
 <input
-
+id="password"
 type="password"
-
 name="password"
+required
+placeholder="Masukkan password">
 
-placeholder="Masukkan password"
 
-autocomplete="current-password"
+<span 
+class="toggle-password"
+onclick="togglePassword()">
 
-required>
+<i class="fa-solid fa-eye"></i>
 
+</span>
 
 </div>
 
+</div>
 
 
 
 <div class="remember">
 
-
 <input type="checkbox" name="remember">
 
-
-Ingat saya
-
+Ingat akun saya
 
 </div>
 
 
 
 
-<button class="login-btn">
+<button class="submit-btn">
 
-MASUK KE SISTEM
+MASUK
 
 </button>
 
 
 </form>
 
+<div class="close-login" onclick="closeLogin()">
 
+<i class="fa-solid fa-arrow-left"></i>
 
-<div class="back" onclick="back()">
-
-← Kembali
+<span>Kembali ke halaman utama</span>
 
 </div>
-
-
-
 <div class="footer">
 
 © {{date('Y')}} Sahabat Eksplorasi Banua
@@ -1039,69 +2386,111 @@ MASUK KE SISTEM
 </div>
 
 
+</div> 
 </div>
-
-
 </div>
-
-
-
-
-
 <script>
 
 
 function openLogin(){
 
-
-document
-.getElementById('welcome')
-.classList.add('move');
-
-
-setTimeout(()=>{
-
-
 document
 .getElementById('login')
 .classList.add('show');
 
-
-},500);
-
-
 }
 
 
+function goSystem(){
 
-function back(){
+document
+.getElementById('system')
+.scrollIntoView({
 
+behavior:'smooth'
+
+});
+
+history.pushState("", document.title, window.location.pathname);
+
+}
+function closeLogin(){
 
 document
 .getElementById('login')
 .classList.remove('show');
 
+}
+ function goHome(){
+
+history.pushState("", document.title, window.location.pathname);
+
+window.scrollTo({
+
+top:0,
+
+behavior:'smooth'
+
+});
+
+}
+
+window.addEventListener("scroll",function(){
+
+const nav=document.querySelector(".navbar");
 
 
-setTimeout(()=>{
+if(window.scrollY > 50){
 
+nav.style.background="rgba(15,23,42,.85)";
 
-document
-.getElementById('welcome')
-.classList.remove('move');
+}else{
 
-
-},500);
-
-
+nav.style.background="rgba(15,23,42,.35)";
 
 }
 
 
+});
+
+window.addEventListener("load",function(){
+
+if(window.location.hash){
+
+history.replaceState(null,null,window.location.pathname);
+
+window.scrollTo(0,0);
+
+}
+
+});
+function togglePassword(){
+
+const password = document.getElementById("password");
+
+const icon = document.querySelector(".toggle-password i");
+
+
+if(password.type === "password"){
+
+password.type = "text";
+
+icon.classList.remove("fa-eye");
+
+icon.classList.add("fa-eye-slash");
+
+
+}else{
+
+
+password.type = "password";
+
+icon.classList.remove("fa-eye-slash");
+
+icon.classList.add("fa-eye");
+
+
+}
+
+}
 </script>
-
-
-
-</body>
-
-</html>

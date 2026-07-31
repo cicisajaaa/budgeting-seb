@@ -4,38 +4,22 @@
 @section('content')
 
 
-
-{{-- ================= HEADER ================= --}}
-
-
-<div class="welcome-card">
-
-    <div>
-
-        <div class="welcome-label">
-            DASHBOARD OWNER
-        </div>
+<div class="dashboard-header">
 
 
-        <h1>
-            Selamat Datang, {{auth()->user()->name}}
-        </h1>
+<span class="label">
+DASHBOARD UTAMA
+</span>
 
 
-        <p>
-            Monitoring perkembangan project, task, dan kondisi keuangan perusahaan.
-        </p>
+<h1>
+Selamat Datang, {{auth()->user()->name}}
+</h1>
 
 
-    </div>
-
-
-
-    <div class="date-box">
-
-        {{date('d M Y')}}
-
-    </div>
+<p>
+Pemantauan kondisi proyek, keuangan, dan aktivitas perusahaan secara menyeluruh.
+</p>
 
 
 </div>
@@ -46,17 +30,16 @@
 
 
 
-{{-- ================= FINANCE SUMMARY ================= --}}
+{{-- RINGKASAN UTAMA --}}
 
 
-<div class="finance-grid">
+<div class="summary-grid">
 
 
-<div class="finance-card">
-
+<div class="summary-card">
 
 <span>
-Total Project
+Total Proyek
 </span>
 
 
@@ -66,7 +49,7 @@ Total Project
 
 
 <p>
-Project terdaftar
+Jumlah proyek perusahaan
 </p>
 
 
@@ -76,21 +59,27 @@ Project terdaftar
 
 
 
-<div class="finance-card">
 
+
+<div class="summary-card">
 
 <span>
-Total Budget
+Total Anggaran
 </span>
 
 
 <h2>
-Rp {{number_format($totalBudget ?? 0,0,',','.')}}
+Rp {{number_format(
+$totalBudget ?? 0,
+0,
+',',
+'.'
+)}}
 </h2>
 
 
 <p>
-Nilai seluruh project
+Nilai keseluruhan proyek
 </p>
 
 
@@ -100,8 +89,9 @@ Nilai seluruh project
 
 
 
-<div class="finance-card">
 
+
+<div class="summary-card">
 
 <span>
 Dana Masuk
@@ -109,12 +99,17 @@ Dana Masuk
 
 
 <h2>
-Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
+Rp {{number_format(
+$totalDeposit ?? 0,
+0,
+',',
+'.'
+)}}
 </h2>
 
 
 <p>
-Pembayaran client
+Pembayaran dari pelanggan
 </p>
 
 
@@ -124,21 +119,27 @@ Pembayaran client
 
 
 
-<div class="finance-card">
 
+
+<div class="summary-card">
 
 <span>
-Pengeluaran
+Total Pengeluaran
 </span>
 
 
 <h2>
-Rp {{number_format($totalExpense ?? 0,0,',','.')}}
+Rp {{number_format(
+$totalExpense ?? 0,
+0,
+',',
+'.'
+)}}
 </h2>
 
 
 <p>
-Dana digunakan
+Dana yang telah digunakan
 </p>
 
 
@@ -156,29 +157,34 @@ Dana digunakan
 
 
 
-<div class="finance-grid-three">
+{{-- RINGKASAN TAMBAHAN --}}
+
+
+<div class="summary-grid">
 
 
 
-<div class="finance-card">
-
+<div class="summary-card">
 
 <span>
-Saldo Akhir
+Saldo Perusahaan
 </span>
 
 
+<h2 class="green">
 
-<h2 class="blue-text">
+Rp {{number_format(
+$sisaDana ?? 0,
+0,
+',',
+'.'
+)}}
 
-Rp {{number_format($sisaDana ?? 0,0,',','.')}}
-    
 </h2>
 
 
-
 <p>
-Dana tersedia
+Dana yang tersedia
 </p>
 
 
@@ -190,25 +196,23 @@ Dana tersedia
 
 
 
-<div class="finance-card">
 
+<div class="summary-card">
 
 <span>
-Progress Project
+Persentase Penyelesaian Proyek
 </span>
-
 
 
 <h2>
 
-{{$totalProjectProgress ?? 0}}%
+{{$progressProject ?? 0}}%
 
 </h2>
 
 
-
 <p>
-Rata-rata penyelesaian
+Rata-rata progres proyek
 </p>
 
 
@@ -220,78 +224,23 @@ Rata-rata penyelesaian
 
 
 
-<div class="finance-card">
 
+<div class="summary-card">
 
 <span>
-Saldo Divisi
+Persetujuan Tertunda
 </span>
-
 
 
 <h2>
 
-Rp {{number_format($totalSaldoDivisi ?? 0,0,',','.')}}
-    
+{{$pendingApproval ?? 0}}
+
 </h2>
 
 
-
 <p>
-Dana tersedia divisi
-</p>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- ================= TASK TRACKER ================= --}}
-
-
-<div class="section-title">
-
-📌 Project Task Tracker
-
-</div>
-
-
-
-
-
-<div class="finance-grid">
-
-
-
-
-
-<div class="finance-card">
-
-
-<span>
-Total Task
-</span>
-
-
-
-<h2>
-{{$totalTask ?? 0}}
-</h2>
-
-
-
-<p>
-Seluruh task project
+Menunggu keputusan pemilik
 </p>
 
 
@@ -304,87 +253,22 @@ Seluruh task project
 
 
 
-<div class="finance-card">
-
-
-<span>
-Task Selesai
-</span>
-
-
-
-<h2 class="success">
-
-{{$taskDone ?? 0}}
-
-</h2>
-
-
-
-<p>
-Status selesai
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="finance-card">
-
+<div class="summary-card">
 
 <span>
-Task Progress
+Aktivitas Sistem
 </span>
-
-
-
-<h2 class="blue-text">
-
-{{$taskProgress ?? 0}}
-
-</h2>
-
-
-
-<p>
-Sedang berjalan
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="finance-card">
-
-
-<span>
-Task Todo
-</span>
-
 
 
 <h2>
 
-{{$taskTodo ?? 0}}
+{{$totalActivity ?? 0}}
 
 </h2>
 
 
-
 <p>
-Belum dikerjakan
+Riwayat aktivitas terbaru
 </p>
 
 
@@ -392,9 +276,6 @@ Belum dikerjakan
 
 
 
-
-
-
 </div>
 
 
@@ -405,344 +286,7 @@ Belum dikerjakan
 
 
 
-{{-- ================= ANALYTICS CHART ================= --}}
-
-
-<div class="analytics-grid">
-
-
-
-<div class="panel chart-panel">
-
-
-<h3>
-📊 Financial Overview
-</h3>
-
-
-<div class="chart-box">
-
-
-<canvas id="financeChart"></canvas>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="panel chart-panel">
-
-
-<h3>
-📌 Task Monitoring
-</h3>
-
-
-<div class="chart-box">
-
-
-<canvas id="taskChart"></canvas>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-</div>
-
-{{-- ================= PROJECT TRACKER ANALYTICS ================= --}}
-
-
-<div class="section-title">
-
-📈 Project Tracker Analytics
-
-</div>
-
-
-
-<div class="content-grid">
-
-
-<div class="panel">
-
-
-<h3>
-📌 Task Berdasarkan Priority
-</h3>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>
-Priority
-</th>
-
-<th>
-Jumlah Task
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-@foreach($taskByPriority ?? [] as $priority)
-
-
-<tr>
-
-<td>
-{{ $priority->prioritas }}
-</td>
-
-
-<td>
-{{ $priority->total }}
-</td>
-
-
-</tr>
-
-
-@endforeach
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-<div class="panel">
-
-
-<h3>
-👤 Task Berdasarkan PIC
-</h3>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>
-Karyawan
-</th>
-
-<th>
-Jumlah Task
-</th>
-
-</tr>
-
-
-</thead>
-
-
-<tbody>
-
-
-@foreach($taskByEmployee ?? [] as $employee)
-
-
-<tr>
-
-<td>
-{{ $employee->nama_karyawan }}
-</td>
-
-
-<td>
-{{ $employee->tugas_count }}
-</td>
-
-
-</tr>
-
-
-@endforeach
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<div class="content-grid">
-
-
-<div class="panel">
-
-
-<h3>
-📂 Task Berdasarkan Project
-</h3>
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Project
-</th>
-
-<th>
-Task
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-@foreach($taskByProject ?? [] as $project)
-
-
-<tr>
-
-<td>
-{{ $project->nama_proyek }}
-</td>
-
-
-<td>
-{{ $project->tugas_count }}
-</td>
-
-
-</tr>
-
-
-@endforeach
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-
-<div class="panel">
-
-
-<h3>
-🏢 Task Berdasarkan Division
-</h3>
-
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Division
-</th>
-
-<th>
-Task
-</th>
-
-</tr>
-
-
-</thead>
-
-
-
-<tbody>
-
-
-@foreach($taskByDivision ?? [] as $division)
-
-
-<tr>
-
-<td>
-{{ $division->nama_divisi }}
-</td>
-
-
-<td>
-{{ $division->tugas_count }}
-</td>
-
-
-</tr>
-
-
-@endforeach
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-</div>
-{{-- ================= CONTENT ================= --}}
+{{-- KONDISI KEUANGAN --}}
 
 
 
@@ -762,19 +306,21 @@ Task
 
 <div class="finance-row">
 
-
 <span>
 Dana Masuk
 </span>
 
 
+<strong class="green">
 
-<strong class="success">
-
-Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
+Rp {{number_format(
+$totalDeposit ?? 0,
+0,
+',',
+'.'
+)}}
 
 </strong>
-
 
 
 </div>
@@ -783,28 +329,26 @@ Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
 
 
 
-
-
 <div class="finance-row">
-
 
 <span>
 Pengeluaran
 </span>
 
 
+<strong class="red">
 
-<strong class="danger">
-
-Rp {{number_format($totalExpense ?? 0,0,',','.')}}
+Rp {{number_format(
+$totalExpense ?? 0,
+0,
+',',
+'.'
+)}}
 
 </strong>
 
 
-
 </div>
-
-
 
 
 
@@ -812,27 +356,30 @@ Rp {{number_format($totalExpense ?? 0,0,',','.')}}
 
 <div class="finance-row">
 
-
 <span>
-Saldo Akhir
+Saldo Tersedia
 </span>
 
 
+<strong class="green">
 
-<strong class="success">
-
-Rp {{number_format($sisaDana ?? 0,0,',','.')}}
+Rp {{number_format(
+$sisaDana ?? 0,
+0,
+',',
+'.'
+)}}
 
 </strong>
 
 
-
 </div>
 
 
 
-
 </div>
+
+
 
 
 
@@ -844,30 +391,64 @@ Rp {{number_format($sisaDana ?? 0,0,',','.')}}
 
 
 <h3>
-⚡ Akses Owner
+📌 Kondisi Perusahaan
 </h3>
 
 
 
 
-<p>
-Owner dapat melihat laporan keuangan dan perkembangan project.
-</p>
+
+<div class="health-item">
+
+<span>
+Arus Keuangan
+</span>
+
+
+<b>
+Stabil
+</b>
+
+</div>
 
 
 
 
-<br>
+
+<div class="health-item">
+
+<span>
+Jumlah Proyek Aktif
+</span>
+
+
+<b>
+{{$totalProject ?? 0}} Proyek
+</b>
+
+</div>
 
 
 
 
-<a href="{{route('finance.report')}}" class="btn">
 
-Lihat Laporan Keuangan
 
-</a>
+<div class="health-item">
 
+<span>
+Persetujuan Dana
+</span>
+
+
+<b>
+{{$pendingApproval ?? 0}} Menunggu
+</b>
+
+</div>
+
+
+
+</div>
 
 
 
@@ -878,238 +459,42 @@ Lihat Laporan Keuangan
 
 
 
-</div>
 
 
 
-
-
-
-
-
-
-{{-- ================= PROGRESS PROJECT ================= --}}
+{{-- PEMANTAUAN PROYEK --}}
 
 
 
 <div class="panel">
 
 
-
 <h3>
-📊 Progress Project
+📁 Pemantauan Proyek
 </h3>
-
-
-
-
-
-@foreach($projects ?? [] as $project)
-
-
-
-<div class="project-box">
-
-
-
-<div class="project-header">
-
-
-
-<strong>
-
-{{ $project->nama_proyekt }}
-
-</strong>
-
-
-
-
-<span>
-
-{{ $project->progres_keseluruhan }}%
-
-</span>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="progress">
-
-
-
-<div class="progress-fill"
-
-style="width: {{ $project->progres_keseluruhan }}%;">
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="project-detail">
-
-
-
-<span>
-
-Total Task:
-
-{{ $project->tugas->count() }}
-
-</span>
-
-
-
-
-
-
-
-<span>
-
-Terpakai:
-
-Rp {{number_format(
-
-$project->total_budget_activity,
-
-0,
-
-',',
-
-'.'
-
-)}}
-
-</span>
-
-
-
-
-
-
-
-<span>
-
-Sisa Budget:
-
-Rp {{number_format(
-
-$project->sisa_budget,
-
-0,
-
-',',
-
-'.'
-
-)}}
-
-</span>
-
-
-
-
-
-
-
-<span>
-
-Deadline:
-
-{{ $project->end_date }}
-
-</span>
-
-
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-@endforeach
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- ================= RECENT TASK ================= --}}
-
-
-
-<div class="panel">
-
-
-
-<h3>
-📝 Task Terbaru
-</h3>
-
-
-
-
 
 
 
 <table>
 
 
-
 <thead>
-
-
 
 <tr>
 
 
 <th>
-Task
+Nama Proyek
 </th>
 
 
 <th>
-PIC
+Progres
 </th>
 
 
 <th>
-Progress
+Anggaran
 </th>
 
 
@@ -1118,16 +503,10 @@ Status
 </th>
 
 
-
 </tr>
 
 
-
 </thead>
-
-
-
-
 
 
 
@@ -1136,36 +515,30 @@ Status
 
 
 
-
-
-
-@foreach($recentTasks ?? [] as $task)
+@forelse($projects ?? [] as $project)
 
 
 
 <tr>
 
 
-
-
 <td>
 
 <strong>
 
-{{ $task->nama_tugas }}
+{{$project->nama_proyek}}
 
 </strong>
 
+</td>
 
-<br>
 
 
-<small>
 
-{{ $task->proyek->nama_proyek ?? '-' }}
 
-</small>
+<td>
 
+{{$project->progres_keseluruhan ?? 0}}%
 
 </td>
 
@@ -1175,18 +548,12 @@ Status
 
 <td>
 
-{{ $task->karyawan->nama_karyawan ?? '-' }}
-
-</td>
-
-
-
-
-
-
-<td>
-
-{{ $task->progres_persen }}%
+Rp {{number_format(
+$project->total_anggaran ?? 0,
+0,
+',',
+'.'
+)}}
 
 </td>
 
@@ -1198,18 +565,31 @@ Status
 <td>
 
 
-<span class="status">
+@if(($project->progres_keseluruhan ?? 0) >= 100)
 
-{{ strtoupper($task->status) }}
+
+<span class="status selesai">
+
+Selesai
 
 </span>
 
 
+@else
+
+
+<span class="status berjalan">
+
+Berjalan
+
+</span>
+
+
+@endif
+
+
+
 </td>
-
-
-
-
 
 
 
@@ -1218,22 +598,29 @@ Status
 
 
 
-
-@endforeach
-
+@empty
 
 
+<tr>
+
+<td colspan="4" align="center">
+
+Belum terdapat data proyek
+
+</td>
+
+
+</tr>
+
+
+@endforelse
 
 
 
 </tbody>
 
 
-
-
 </table>
-
-
 
 
 </div>
@@ -1246,21 +633,16 @@ Status
 
 
 
-{{-- ================= TRANSAKSI TERBARU ================= --}}
-
+{{-- AKTIVITAS TERBARU --}}
 
 
 
 <div class="panel">
 
 
-
 <h3>
-📌 Transaksi Terbaru
+📝 Aktivitas Terbaru
 </h3>
-
-
-
 
 
 
@@ -1268,45 +650,24 @@ Status
 <table>
 
 
-
 <thead>
 
 
 <tr>
 
-
-
 <th>
-Jenis
+Aktivitas
 </th>
-
-
 
 
 <th>
 Tanggal
 </th>
 
-
-
-
-<th>
-Nominal
-</th>
-
-
-
-
 </tr>
 
 
-
 </thead>
-
-
-
-
-
 
 
 
@@ -1314,59 +675,29 @@ Nominal
 
 
 
-
-
-
-
-
-@foreach($recentDeposits ?? [] as $deposit)
-
+@forelse($activities ?? [] as $activity)
 
 
 
 <tr>
 
 
-
-
 <td>
 
-Dana Masuk
+{{$activity->description ?? '-'}}
 
 </td>
-
 
 
 
 
 <td>
 
-
-{{\Carbon\Carbon::parse($deposit->tanggal_setoran)->format('d M Y')}}
-
-
-</td>
-
-
-
-
-
-
-
-<td class="success">
-
-
-+
-
-Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
-
+{{$activity->created_at
+? $activity->created_at->format('d M Y')
+: '-'}}
 
 </td>
-
-
-
-
-
 
 
 </tr>
@@ -1374,86 +705,22 @@ Rp {{number_format($deposit->jumlah_setoran,0,',','.')}}
 
 
 
-
-@endforeach
-
-
-
-
-
-
-
-
-
-
-
-
-@foreach($recentExpenses ?? [] as $expense)
-
-
-
+@empty
 
 
 <tr>
 
+<td colspan="2">
 
-
-
-
-<td>
-
-Pengeluaran
+Belum ada aktivitas
 
 </td>
-
-
-
-
-
-
-
-<td>
-
-
-{{\Carbon\Carbon::parse($expense->tanggal)->format('d M Y')}}
-
-
-</td>
-
-
-
-
-
-
-
-<td class="danger">
-
-
--
-
-Rp {{number_format($expense->jumlah,0,',','.')}}
-
-
-</td>
-
-
-
-
-
 
 
 </tr>
 
 
-
-
-
-
-@endforeach
-
-
-
-
+@endforelse
 
 
 
@@ -1461,119 +728,11 @@ Rp {{number_format($expense->jumlah,0,',','.')}}
 
 
 
-
 </table>
 
 
 
-
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-    const financeCanvas = document.getElementById('financeChart');
-
-if(financeCanvas){
-
-new Chart(financeCanvas, {
-
-    type:'doughnut',
-
-    data:{
-
-        labels:[
-            'Dana Masuk',
-            'Pengeluaran',
-            'Sisa Dana'
-        ],
-
-        datasets:[{
-
-            data:[
-                {{$totalDeposit ?? 0}},
-                {{$totalExpense ?? 0}},
-                {{$sisaDana ?? 0}}
-            ]
-
-        }]
-
-    },
-
-    options:{
-
-        responsive:true,
-
-        maintainAspectRatio:false
-
-    }
-
-});
-
-}
-
-const taskCanvas = document.getElementById('taskChart');
-
-if(taskCanvas){
-
-    new Chart(taskCanvas, {
-
-        type:'bar',
-
-        data:{
-
-            labels:[
-                'Selesai',
-                'Progress',
-                'Todo'
-            ],
-datasets:[{
-
-label:'Jumlah Task',
-
-data:[
-    {{$taskDone ?? 0}},
-    {{$taskProgress ?? 0}},
-    {{$taskTodo ?? 0}}
-],
-
-backgroundColor:[
-    '#16a34a',
-    '#2563eb',
-    '#f59e0b'
-]
-
-}]
-        },
-
-        options:{
-
-            responsive:true,
-
-            maintainAspectRatio:false,
-
-            scales:{
-
-                y:{
-
-                    beginAtZero:true
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
-
-</script>
-
-
-
 
 
 
@@ -1584,135 +743,56 @@ backgroundColor:[
 <style>
 
 
-
-/* ================= HEADER ================= */
-
-
-
-.welcome-card{
-
-
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
-
-
-
-padding:28px;
-
-
-
-border-radius:24px;
-
-
-
-color:white;
-
-
-
-display:flex;
-
-
-
-justify-content:space-between;
-
-
-
-align-items:center;
-
-
-
-margin-bottom:20px;
-
-
-
-box-shadow:
-0 15px 40px rgba(34,197,94,.25);
-
-
-
-}
-
-
-
-
-
-
-.welcome-label{
-
-
-font-size:10px;
-
-
-letter-spacing:2px;
-
-
-font-weight:700;
-
-
-opacity:.8;
-
-
-
-}
-
-
-
-
-
-.welcome-card h1{
-
-
-font-size:26px;
-
-
-margin:8px 0;
-
-
-
-}
-
-
-
-
-
-.welcome-card p{
-
-
-font-size:13px;
-
-
-opacity:.9;
-
-
-
-}
-
-
-
-
-
-.date-box{
+.dashboard-header{
 
 
 background:white;
 
+padding:28px;
 
-color:#166534;
+border-radius:18px;
+
+border:1px solid #e2e8f0;
+
+margin-bottom:25px;
+
+box-shadow:
+0 5px 20px rgba(15,23,42,.05);
 
 
-padding:12px 18px;
+}
 
 
-border-radius:30px;
 
+.label{
+
+font-size:11px;
 
 font-weight:700;
 
+letter-spacing:2px;
 
+color:#a67c2e;
+
+}
+
+
+
+.dashboard-header h1{
+
+margin:10px 0;
+
+font-size:28px;
+
+color:#1e293b;
+
+}
+
+
+
+.dashboard-header p{
+
+color:#64748b;
 
 }
 
@@ -1721,208 +801,72 @@ font-weight:700;
 
 
 
-
-
-
-/* ================= CARD ================= */
-
-
-
-.finance-grid{
+.summary-grid{
 
 
 display:grid;
-
 
 grid-template-columns:
 repeat(4,1fr);
 
-
-
-gap:18px;
-
+gap:20px;
 
 margin-bottom:20px;
 
 
-
 }
 
 
 
 
+.summary-card{
 
 
-
-.finance-grid-three{
-
-
-display:grid;
-
-
-grid-template-columns:
-repeat(3,1fr);
-
-
-
-gap:18px;
-
-
-margin-bottom:20px;
-
-
-
-}
-
-
-
-
-
-
-.finance-card{
-
-
-background:
-rgba(255,255,255,.75);
-
-
-
-backdrop-filter:blur(15px);
-
-
-
-padding:20px;
-
-
-
-border-radius:20px;
-
-
-
-box-shadow:
-0 10px 30px rgba(15,23,42,.08);
-
-
-
-}
-
-
-
-
-
-
-
-.finance-card span{
-
-
-font-size:12px;
-
-
-color:#64748b;
-
-
-
-}
-
-
-
-
-
-
-.finance-card h2{
-
-
-font-size:22px;
-
-
-color:#166534;
-
-
-margin:8px 0;
-
-
-
-}
-
-
-
-
-
-.finance-card p{
-
-
-font-size:11px;
-
-
-color:#94a3b8;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-/* ================= PANEL ================= */
-
-
-
-.panel{
-
-
-background:
-rgba(255,255,255,.7);
-
-
-
-backdrop-filter:blur(15px);
-
-
+background:white;
 
 padding:22px;
 
+border-radius:18px;
 
-
-border-radius:22px;
-
-
-
-margin-bottom:20px;
-
-
+border:1px solid #e2e8f0;
 
 box-shadow:
-0 10px 30px rgba(15,23,42,.08);
+0 5px 20px rgba(15,23,42,.05);
 
 
+}
+
+
+
+.summary-card span{
+
+font-size:12px;
+
+color:#64748b;
 
 }
 
 
 
+.summary-card h2{
 
+margin-top:10px;
 
+font-size:24px;
 
-
-.panel h3{
-
-
-font-size:16px;
-
-
-margin-bottom:18px;
-
-
+color:#6b4f1d;
 
 }
 
+
+
+.summary-card p{
+
+font-size:12px;
+
+color:#94a3b8;
+
+}
 
 
 
@@ -1930,66 +874,9 @@ margin-bottom:18px;
 
 .content-grid{
 
-
 display:grid;
 
-
-grid-template-columns:
-2fr 1fr;
-
-
-
-gap:20px;
-
-
-
-margin-bottom:20px;
-
-
-
-}
-
-
-
-
-
-
-
-.section-title{
-
-
-font-size:18px;
-
-
-font-weight:700;
-
-
-margin:25px 0 15px;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-/* ================= CHART ================= */
-
-
-
-.analytics-grid{
-
-display:grid;
-
-grid-template-columns:
-350px 1fr;
+grid-template-columns:2fr 1fr;
 
 gap:20px;
 
@@ -1999,331 +886,87 @@ margin-bottom:20px;
 
 
 
+.panel{
 
-.chart-panel{
+background:white;
 
-    height:320px;
+padding:25px;
+
+border-radius:18px;
+
+border:1px solid #e2e8f0;
+
+margin-bottom:20px;
 
 }
 
 
 
 
-
-
-.chart-box{
-
-
-position:relative;
-
-
-
-height:240px;
-
-
-
-width:100%;
-
-
+.finance-row,
+.health-item{
 
 display:flex;
-
-
-
-justify-content:center;
-
-
-
-align-items:center;
-
-
-
-}
-
-
-
-
-
-
-.chart-box canvas{
-
-
-max-height:240px!important;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/* ================= FINANCE ================= */
-
-
-
-.finance-row{
-
-
-display:flex;
-
 
 justify-content:space-between;
 
+padding:15px 0;
 
-padding:12px 0;
-
-
-
-border-bottom:
-1px solid #f1f5f9;
-
-
-
-font-size:13px;
-
-
+border-bottom:1px solid #f1f5f9;
 
 }
 
 
 
+.green{
 
-
-
-
-.success{
-
-
-color:#16a34a!important;
-
-
-font-weight:700;
-
-
+color:#15803d!important;
 
 }
 
 
 
-
-
-
-
-.danger{
-
+.red{
 
 color:#dc2626!important;
 
-
-font-weight:700;
-
-
-
 }
 
 
-
-
-
-
-
-.blue-text{
-
-
-color:#2563eb!important;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/* ================= PROJECT ================= */
-
-
-
-.project-box{
-
-
-margin-bottom:25px;
-
-
-
-}
-
-
-
-
-
-
-
-.project-header{
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-margin-bottom:10px;
-
-
-
-}
-
-
-
-
-
-
-.progress{
-
-
-height:14px;
-
-
-
-background:#e2e8f0;
-
-
-
-border-radius:20px;
-
-
-
-overflow:hidden;
-
-
-
-}
-
-
-
-
-
-
-.progress-fill{
-
-
-height:100%;
-
-
-
-background:#22c55e;
-
-
-
-}
-
-
-
-
-
-
-.project-detail{
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-margin-top:8px;
-
-
-font-size:12px;
-
-
-color:#64748b;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/* ================= TABLE ================= */
 
 
 
 table{
 
-
 width:100%;
-
 
 border-collapse:collapse;
 
-
-
 }
-
-
-
-
 
 
 
 th{
 
+padding:14px;
 
 text-align:left;
 
-
-padding:12px;
-
-
 font-size:12px;
-
 
 color:#64748b;
 
-
-
 }
-
-
-
-
 
 
 
 td{
 
+padding:14px;
 
-padding:12px;
-
-
-border-bottom:
-1px solid #f1f5f9;
-
-
-
-font-size:13px;
-
-
+border-bottom:1px solid #f1f5f9;
 
 }
-
 
 
 
@@ -2331,216 +974,59 @@ font-size:13px;
 
 .status{
 
-
-font-size:11px;
-
-
-
-font-weight:700;
-
-
-
-padding:5px 10px;
-
-
+padding:6px 12px;
 
 border-radius:20px;
 
+font-size:12px;
 
+font-weight:700;
+
+}
+
+
+
+.berjalan{
 
 background:#dcfce7;
 
-
-
 color:#166534;
 
+}
 
+
+
+.selesai{
+
+background:#dbeafe;
+
+color:#1d4ed8;
 
 }
 
 
 
+@media(max-width:1000px){
 
 
+.summary-grid{
 
-
-.btn{
-
-
-display:inline-block;
-
-
-
-background:#166534;
-
-
-
-color:white;
-
-
-
-padding:12px 20px;
-
-
-
-border-radius:14px;
-
-
-
-text-decoration:none;
-
-
-
-font-size:13px;
-
-
-
-font-weight:600;
-
-
+grid-template-columns:repeat(2,1fr);
 
 }
-
-
-
-
-
-
-
-.btn:hover{
-
-
-background:#22c55e;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/* ================= RESPONSIVE ================= */
-
-
-
-@media(max-width:1100px){
-
-
-
-.finance-grid{
-
-
-grid-template-columns:
-repeat(2,1fr);
-
-
-
-}
-
-
-
-
-
-.finance-grid-three{
-
-
-grid-template-columns:
-1fr;
-
-
-
-}
-
-
-
-
 
 
 .content-grid{
 
-
 grid-template-columns:1fr;
 
-
-
 }
 
 
-
-
-
-.analytics-grid{
-
-
-grid-template-columns:1fr;
-
-
-
 }
-
-
-
-}
-
-
-
-
-
-
-
-
-
-@media(max-width:700px){
-
-
-
-.finance-grid{
-
-
-grid-template-columns:
-1fr;
-
-
-
-}
-
-
-
-
-
-.welcome-card{
-
-
-flex-direction:column;
-
-
-
-gap:15px;
-
-
-
-align-items:flex-start;
-
-
-
-}
-
-
-
-}
-
-
-
 
 
 </style>
-
-
 
 
 

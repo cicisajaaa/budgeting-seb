@@ -9,14 +9,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Models\Karyawan;
-use App\Models\PengajuanDana;
+use App\Models\ExpenseRequest;
 use App\Models\LogAudit;
 
 
 class User extends Authenticatable
 {
 
+protected $table = 'users';
 
+protected $primaryKey = 'id';
     use HasFactory, Notifiable;
 
 
@@ -154,19 +156,18 @@ class User extends Authenticatable
     */
 
 
-    public function pengajuanDana()
-    {
+public function pengajuanDana()
+{
 
-        return $this->hasMany(
+    return $this->hasMany(
 
-            PengajuanDana::class,
+        ExpenseRequest::class,
 
-            'pengguna_id'
+        'pengguna_id'
 
-        );
+    );
 
-    }
-
+}
 
 
 
@@ -180,19 +181,18 @@ class User extends Authenticatable
     */
 
 
-    public function persetujuanDana()
-    {
+public function persetujuanDana()
+{
 
-        return $this->hasMany(
+    return $this->hasMany(
 
-            PengajuanDana::class,
+        ExpenseRequest::class,
 
-            'disetujui_oleh'
+        'disetujui_oleh'
 
-        );
+    );
 
-    }
-
+}
 
 
 

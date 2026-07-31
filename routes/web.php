@@ -32,6 +32,11 @@ use App\Http\Controllers\EmployeeProjectController;
 use App\Http\Controllers\EmployeeTaskController;
 
 
+use App\Http\Controllers\Owner\OwnerDashboardController;
+use App\Http\Controllers\Owner\OwnerProjectController;
+use App\Http\Controllers\Owner\OwnerApprovalController;
+use App\Http\Controllers\Owner\OwnerAuditController;
+use App\Http\Controllers\Owner\OwnerReportController;
 
 
 
@@ -343,7 +348,6 @@ Route::middleware('role:owner,keuangan')->group(function(){
     ])
     ->name('finance.balance');
 
-
 });
 
 
@@ -536,5 +540,192 @@ Route::middleware([
 });
 
 
+// ================= OWNER =================
+
+
+Route::middleware([
+    'auth',
+    'role:owner'
+])
+->prefix('owner')
+->name('owner.')
+->group(function(){
+
+
+Route::get('/dashboard',[
+    OwnerDashboardController::class,
+    'index'
+])
+->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | PROJECT MONITORING
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/projects',
+
+    [OwnerProjectController::class,'index'])
+
+    ->name('projects');
+
+
+
+    Route::get('/projects/{project}',
+
+    [OwnerProjectController::class,'show'])
+
+    ->name('project.detail');
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| APPROVAL DANA
+|--------------------------------------------------------------------------
+*/
+
+
+Route::get('/approval',
+[
+    OwnerApprovalController::class,
+    'index'
+])
+
+->name('approval');
+
+Route::get('/approval/{id}',
+[
+    OwnerApprovalController::class,
+    'detail'
+])
+->name('approval.detail');
+
+
+// APPROVE PENGAJUAN OWNER
+
+Route::post('/approval/{id}/approve',
+[
+    OwnerApprovalController::class,
+    'approve'
+])
+->name('approval.approve');
+
+
+
+// REJECT PENGAJUAN OWNER
+
+Route::post('/approval/{id}/reject',
+[
+    OwnerApprovalController::class,
+    'reject'
+])
+->name('approval.reject');
+    /*
+    |--------------------------------------------------------------------------
+    | AUDIT AKTIVITAS
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/audit',
+    [
+        OwnerAuditController::class,
+        'index'
+    ])
+    ->name('audit');
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LAPORAN OWNER
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/reports',
+
+    [OwnerReportController::class,'index'])
+
+    ->name('reports');
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PDF REPORT
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/reports/finance/pdf',
+
+    [OwnerReportController::class,'financePdf'])
+
+    ->name('report.finance.pdf');
+
+
+
+    Route::get('/reports/project/pdf',
+
+    [OwnerReportController::class,'projectPdf'])
+
+    ->name('report.project.pdf');
+
+
+
+    Route::get('/reports/performance/pdf',
+
+    [OwnerReportController::class,'performancePdf'])
+
+    ->name('report.performance.pdf');
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXCEL REPORT
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/reports/finance/excel',
+
+    [OwnerReportController::class,'financeExcel'])
+
+    ->name('report.finance.excel');
+
+
+
+    Route::get('/reports/project/excel',
+
+    [OwnerReportController::class,'projectExcel'])
+
+    ->name('report.project.excel');
+
+
+
+    Route::get('/reports/performance/excel',
+
+    [OwnerReportController::class,'performanceExcel'])
+
+    ->name('report.performance.excel');
+
+
+
+});
 
 require __DIR__.'/auth.php';

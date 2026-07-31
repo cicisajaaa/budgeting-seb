@@ -3,6 +3,9 @@
 namespace App\Models;
 
 
+use App\Models\User;
+use App\Models\Project;
+use App\Models\Division;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -66,19 +69,14 @@ protected $fillable = [
     |--------------------------------------------------------------------------
     */
 
-
-    public function user()
-    {
-
-
-        return $this->belongsTo(
-
-            User::class
-
-        );
-
-
-    }
+public function user()
+{
+    return $this->belongsTo(
+        \App\Models\User::class,
+        'pengguna_id',
+        'id'
+    );
+}
 
 
 
@@ -95,19 +93,14 @@ protected $fillable = [
     */
 
 
-    public function proyek()
-    {
 
-
-        return $this->belongsTo(
-
-            proyek::class
-
-        );
-
-
-    }
-
+public function proyek()
+{
+    return $this->belongsTo(
+        Project::class,
+        'proyek_id'
+    );
+}
 
 
 
@@ -151,20 +144,13 @@ protected $fillable = [
     */
 
 
-    public function approver()
-    {
-
-
-        return $this->belongsTo(
-
-            User::class,
-
-            'approved_by'
-
-        );
-
-
-    }
+public function approver()
+{
+    return $this->belongsTo(
+        User::class,
+        'disetujui_oleh'
+    );
+}
 
 
 

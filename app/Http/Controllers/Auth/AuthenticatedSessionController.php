@@ -49,8 +49,31 @@ public function store(LoginRequest $request): RedirectResponse
 
 
 
-    return redirect()->intended(route('dashboard', absolute: false));
+        $user = auth()->user();
 
+
+if($user->role == 'owner'){
+
+    return redirect()->route('owner.dashboard');
+
+}
+
+
+if($user->role == 'admin'){
+
+    return redirect('/admin/dashboard');
+
+}
+
+
+if($user->role == 'keuangan'){
+
+    return redirect('/finance/dashboard');
+
+}
+
+
+return redirect()->route('dashboard');
 }
     /**
      * Destroy an authenticated session.

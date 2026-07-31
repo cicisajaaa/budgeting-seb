@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Task;
+use App\Models\TaskActivity;
+use App\Models\ProjectDeposit;
+use App\Models\ProjectDivisionAllocation;
+use App\Models\DivisionBalance;
 
 class Project extends Model
 {

@@ -31,32 +31,33 @@ box-sizing:border-box;
 
 body{
 
-
 height:100vh;
 
-
 overflow:hidden;
-
 
 font-family:'Inter',sans-serif;
 
 
-
 background:
-
 
 linear-gradient(
 
 120deg,
 
-rgba(2,44,34,.70),
+rgba(15,23,42,.85),
 
-rgba(15,23,42,.70)
+rgba(107,79,29,.65)
 
 ),
 
-
 url('{{asset("images/company-bg.png")}}');
+
+
+background-size:cover;
+
+background-position:center;
+
+}
 
 
 
@@ -70,24 +71,28 @@ background-position:center;
 
 
 
-
-
 body::before{
-
 
 content:"";
 
-
 position:absolute;
-
 
 width:500px;
 
-
 height:500px;
 
+background:#d7b787;
 
-background:#22c55e;
+filter:blur(180px);
+
+opacity:.18;
+
+top:-180px;
+
+left:-150px;
+
+}
+
 
 
 filter:blur(180px);
@@ -172,12 +177,23 @@ filter:blur(12px);
 
 
 
-
 .logo-main{
 
+width:170px;
 
-width:150px;
+padding:15px;
 
+background:
+
+rgba(255,255,255,.12);
+
+border-radius:35px;
+
+backdrop-filter:blur(10px);
+
+border:
+
+1px solid rgba(255,255,255,.25);
 
 
 filter:
@@ -188,16 +204,11 @@ drop-shadow(
 
 );
 
-
-
 animation:
 
 floating 5s infinite ease-in-out;
 
-
 }
-
-
 
 
 
@@ -221,15 +232,11 @@ letter-spacing:-1px;
 }
 
 
-
 .company span{
 
-
-color:#4ade80;
-
+color:#d7b787;
 
 }
-
 
 
 
@@ -276,53 +283,24 @@ color:#d1fae5;
 
 
 
-
-
 .enter-btn{
 
-
-margin-top:38px;
-
-
-padding:15px 55px;
-
-
-border:none;
-
-
-border-radius:50px;
-
-
 background:
-
 
 linear-gradient(
 
 135deg,
 
-#15803d,
+#6b4f1d,
 
-#22c55e
+#a67c2e
 
 );
 
 
+box-shadow:
 
-color:white;
-
-
-font-size:15px;
-
-
-font-weight:600;
-
-
-cursor:pointer;
-
-
-transition:.3s;
-
-
+0 20px 40px rgba(166,124,46,.35);
 
 }
 
@@ -476,47 +454,21 @@ pointer-events:auto;
 
 
 
-
 .login-box{
 
+background:white;
 
-width:420px;
-
-
-padding:40px 45px;
+border-radius:30px;
 
 
+border:
 
-background:
-
-rgba(255,255,255,.96);
-
-
-
-border-radius:28px;
-
+1px solid rgba(166,124,46,.15);
 
 
 box-shadow:
 
-
-0 30px 80px rgba(0,0,0,.35);
-
-
-
-transform:
-
-scale(.85);
-
-
-
-opacity:0;
-
-
-
-transition:
-
-.6s ease;
+0 40px 100px rgba(0,0,0,.45);
 
 
 }
@@ -591,7 +543,7 @@ font-size:22px;
 font-weight:700;
 
 
-color:#166534;
+color:#6b4f1d;
 
 
 }
@@ -635,10 +587,13 @@ padding:6px 15px;
 border-radius:30px;
 
 
-background:#dcfce7;
+background:#f8f3e8;
 
+color:#a67c2e;
 
-color:#15803d;
+border:
+
+1px solid #d7b787;
 
 
 font-size:12px;
@@ -779,22 +734,53 @@ outline:none;
 background:white;
 
 
-border-color:#22c55e;
-
+border-color:#a67c2e;
 
 box-shadow:
 
-
-0 0 0 4px rgba(34,197,94,.15);
-
+0 0 0 4px rgba(166,124,46,.15);
 
 
 }
 
+.password-box{
+
+position:relative;
+
+}
 
 
+.password-box input{
+
+padding-right:45px;
+
+}
 
 
+.toggle-password{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+font-size:18px;
+
+color:#64748b;
+
+}
+
+
+.toggle-password:hover{
+
+color:#a67c2e;
+
+}
 
 
 .remember{
@@ -1095,7 +1081,7 @@ Masuk Sistem
 
 <span></span>
 
-Sistem Online
+Sistem Berjalan Normal
 
 </div>
 
@@ -1140,6 +1126,7 @@ class="logo-login"
 <div class="company-login">
 
 Sahabat Eksplorasi Banua
+Sistem Informasi Perusahaan
 
 </div>
 
@@ -1225,19 +1212,18 @@ autofocus
 
 
 
-
-
 <div class="group">
 
-
 <label>
-
 Password
-
 </label>
 
 
+<div class="password-box">
+
 <input
+
+id="password"
 
 type="password"
 
@@ -1245,11 +1231,20 @@ name="password"
 
 required
 
->
+placeholder="Masukkan password">
+
+
+<span 
+class="toggle-password"
+onclick="togglePassword()">
+👁
+</span>
 
 
 </div>
 
+
+</div>
 
 
 
@@ -1387,7 +1382,31 @@ document
 
 
 },500);
+function togglePassword(){
 
+const password = document.getElementById("password");
+
+const icon = document.querySelector(".toggle-password");
+
+
+if(password.type === "password"){
+
+password.type = "text";
+
+icon.textContent = "🙈";
+
+
+}else{
+
+
+password.type = "password";
+
+icon.textContent = "👁";
+
+
+}
+
+}
 
 
 }
