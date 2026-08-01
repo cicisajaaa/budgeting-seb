@@ -61,184 +61,207 @@ Monitoring pekerjaan, progress project dan aktivitas harian.
 
 
 
-
-
-
-
 {{-- ================= STATISTIC ================= --}}
-
 
 <div class="employee-stats">
 
 
+    {{-- TOTAL TASK --}}
+    <div class="stat-card">
 
-<div class="stat-card">
+        <div class="stat-icon green">
+            📁
+        </div>
+
+        <div>
+
+            <label>
+                Total Task
+            </label>
+
+            <h2>
+                {{$employeeTasks->count()}}
+            </h2>
+
+            <small>
+                Task diberikan
+            </small>
+
+        </div>
+
+    </div>
 
 
-<div class="stat-icon green">
-📁
+
+
+    {{-- TASK SELESAI --}}
+    <div class="stat-card">
+
+        <div class="stat-icon blue">
+            ✔
+        </div>
+
+
+        <div>
+
+            <label>
+                Task Selesai
+            </label>
+
+
+            <h2>
+
+                {{$employeeTasks
+                ->whereIn('status',['selesai','done'])
+                ->count()}}
+
+            </h2>
+
+
+            <small>
+                Selesai dikerjakan
+            </small>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    {{-- TASK PROGRESS --}}
+    <div class="stat-card">
+
+
+        <div class="stat-icon orange">
+
+            ⚡
+
+        </div>
+
+
+        <div>
+
+
+            <label>
+                Sedang Progress
+            </label>
+
+
+            <h2>
+
+                {{$employeeTasks
+                ->whereIn('status',['berjalan','progress'])
+                ->count()}}
+
+            </h2>
+
+
+            <small>
+                Sedang berjalan
+            </small>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    {{-- AKTIVITAS --}}
+    <div class="stat-card">
+
+
+        <div class="stat-icon purple">
+
+            📝
+
+        </div>
+
+
+
+        <div>
+
+
+            <label>
+                Aktivitas
+            </label>
+
+
+
+            <h2>
+
+            {{$employeeTasks->sum(function($task){
+
+                return $task->aktivitasTugas->count();
+
+            })}}
+
+            </h2>
+
+
+
+            <small>
+                Update pekerjaan
+            </small>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    {{-- PENGAJUAN DANA --}}
+    <div class="stat-card">
+
+
+        <div class="stat-icon purple">
+
+            💰
+
+        </div>
+
+
+
+        <div>
+
+
+            <label>
+                Pengajuan Dana
+            </label>
+
+
+
+            <h2>
+
+                {{$totalExpenseRequest ?? 0}}
+
+            </h2>
+
+
+
+            <small>
+                Total pengajuan
+            </small>
+
+
+        </div>
+
+
+    </div>
+
+
+
 </div>
-
-
-
-<div>
-
-<label>
-Total Task
-</label>
-
-
-<h2>
-{{$employeeTasks->count()}}
-</h2>
-
-
-<small>
-Task diberikan
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="stat-card">
-
-
-<div class="stat-icon blue">
-✔
-</div>
-
-
-
-<div>
-
-<label>
-Task Selesai
-</label>
-
-
-<h2>
-
-{{$employeeTasks
-->whereIn('status',['selesai','done'])
-->count()}}
-
-</h2>
-
-
-<small>
-Selesai dikerjakan
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="stat-card">
-
-
-<div class="stat-icon orange">
-⚡
-</div>
-
-
-
-<div>
-
-<label>
-Sedang Progress
-</label>
-
-
-<h2>
-
-{{$employeeTasks
-->whereIn('status',['berjalan','progress'])
-->count()}}
-
-</h2>
-
-
-<small>
-Sedang berjalan
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="stat-card">
-
-
-<div class="stat-icon purple">
-📝
-</div>
-
-
-
-<div>
-
-<label>
-Aktivitas
-</label>
-
-
-<h2>
-
-{{$employeeTasks->sum(function($task){
-
-return $task->aktivitasTugas->count();
-
-})}}
-
-</h2>
-
-
-<small>
-Update pekerjaan
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
 
 
 {{-- ================= MAIN GRID ================= --}}
@@ -746,7 +769,93 @@ Aktif
 
 
 
+<div class="employee-panel">
 
+
+<div class="panel-header">
+
+💰 Riwayat Pengajuan Dana
+
+</div>
+
+
+
+@forelse($recentExpenseRequest ?? [] as $expense)
+
+
+
+<div class="task-row">
+
+
+<div>
+
+<strong>
+
+{{$expense->judul}}
+
+</strong>
+
+
+<p>
+
+{{$expense->proyek->nama_proyek ?? '-'}}
+
+</p>
+
+
+</div>
+
+
+
+@if($expense->status == 'pending')
+
+<span style="background:#fef3c7;color:#92400e">
+
+Menunggu
+
+</span>
+
+
+@elseif($expense->status == 'approved')
+
+<span style="background:#dcfce7;color:#166534">
+
+Disetujui
+
+</span>
+
+
+@else
+
+<span style="background:#fee2e2;color:#991b1b">
+
+Ditolak
+
+</span>
+
+
+@endif
+
+
+
+</div>
+
+
+
+@empty
+
+
+<div class="empty-data">
+
+Belum ada pengajuan dana
+
+</div>
+
+
+@endforelse
+
+
+</div>
 
 
 {{-- ================= AKTIVITAS TERAKHIR ================= --}}
@@ -983,337 +1092,242 @@ position:'bottom'
 
 <style>
 
-
 /* ===============================
 GLOBAL
 ================================ */
 
 .employee-dashboard{
-
     width:100%;
-
 }
-
 
 
 /* ===============================
 WELCOME
 ================================ */
 
-
 .employee-welcome{
 
+    background:#ffffff;
 
-    background:
+    border:1px solid #e2e8f0;
 
-    linear-gradient(
-        135deg,
-        #166534,
-        #22c55e
-    );
-
-
-    padding:30px;
-
+    padding:32px;
 
     border-radius:24px;
 
-
-    color:white;
-
+    color:#172033;
 
     display:flex;
 
-
     justify-content:space-between;
-
 
     align-items:center;
 
-
     margin-bottom:22px;
 
-
     box-shadow:
-
-    0 15px 35px rgba(22,101,52,.15);
-
+    0 8px 25px rgba(15,23,42,.05);
 
 }
-
 
 
 .welcome-label{
 
-
     font-size:11px;
-
 
     letter-spacing:2px;
 
+    color:#64748b;
 
     font-weight:800;
 
-
-    opacity:.8;
-
-
 }
-
 
 
 .employee-welcome h1{
 
-
-    font-size:28px;
-
+    font-size:30px;
 
     margin:10px 0;
 
+    color:#172033;
 
 }
-
 
 
 .employee-welcome p{
 
+    color:#64748b;
 
     margin:0;
 
-
-    opacity:.9;
-
-
 }
-
 
 
 .welcome-tags{
 
-
     display:flex;
-
 
     gap:10px;
 
-
-    margin-top:15px;
-
+    margin-top:18px;
 
 }
-
 
 
 .welcome-tags span{
 
+    background:#f1f5f9;
 
-    background:
-
-    rgba(255,255,255,.2);
-
+    color:#334155;
 
     padding:8px 15px;
 
-
     border-radius:20px;
-
 
     font-size:12px;
 
+    font-weight:600;
 
 }
-
 
 
 .today-card{
 
+    background:#ecfdf5;
 
-    background:white;
-
-
-    color:#166534;
-
+    color:#15803d;
 
     padding:12px 22px;
 
-
     border-radius:30px;
-
 
     font-weight:800;
 
-
 }
-
-
-
 
 
 
 
 /* ===============================
-STAT CARD
+STATISTICS
 ================================ */
 
 
 .employee-stats{
 
-
     display:grid;
 
+    grid-template-columns:repeat(5,1fr);
 
-    grid-template-columns:
-
-    repeat(4,1fr);
-
-
-    gap:18px;
-
+    gap:16px;
 
     margin-bottom:22px;
 
-
 }
-
 
 
 
 .stat-card{
 
-
     background:white;
 
+    border:1px solid #e2e8f0;
 
-    padding:20px;
+    padding:18px;
 
-
-    border-radius:22px;
-
+    border-radius:20px;
 
     display:flex;
 
-
     align-items:center;
 
+    gap:14px;
 
-    gap:15px;
-
-
-    box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.08);
-
-
-    transition:.3s;
-
+    transition:.25s;
 
 }
-
 
 
 
 .stat-card:hover{
 
+    transform:translateY(-3px);
 
-    transform:translateY(-5px);
-
+    box-shadow:
+    0 10px 25px rgba(15,23,42,.08);
 
 }
-
 
 
 
 .stat-icon{
 
+    width:46px;
 
-    width:48px;
+    height:46px;
 
-
-    height:48px;
-
+    border-radius:14px;
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
-
-    border-radius:15px;
-
-
-    font-size:22px;
-
+    font-size:20px;
 
 }
-
 
 
 .stat-icon.green{
-
     background:#dcfce7;
-
 }
-
 
 
 .stat-icon.blue{
-
     background:#dbeafe;
-
 }
-
 
 
 .stat-icon.orange{
-
     background:#fef3c7;
-
 }
-
 
 
 .stat-icon.purple{
-
     background:#ede9fe;
-
 }
-
-
 
 
 
 .stat-card label{
 
+    font-size:12px;
 
     color:#64748b;
 
-
-    font-size:12px;
-
-
 }
-
 
 
 
 .stat-card h2{
 
-
     margin:5px 0;
 
+    font-size:24px;
 
-    color:#166534;
-
+    color:#172033;
 
 }
 
 
 
+.stat-card small{
 
+    color:#94a3b8;
+
+}
 
 
 
@@ -1326,33 +1340,13 @@ GRID
 
 .employee-grid{
 
-
     display:grid;
 
-
     grid-template-columns:
-
     minmax(0,2fr)
-
     minmax(320px,1fr);
 
-
     gap:20px;
-
-
-    align-items:start;
-
-
-}
-
-
-
-.employee-left,
-.employee-right{
-
-
-    min-width:0;
-
 
 }
 
@@ -1367,50 +1361,31 @@ PANEL
 
 .employee-panel{
 
-
     background:white;
 
+    border:1px solid #e2e8f0;
 
     padding:22px;
 
-
     border-radius:22px;
-
 
     margin-bottom:20px;
 
-
-    box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.08);
-
-
 }
-
 
 
 
 .panel-header{
 
-
-    font-size:16px;
-
+    font-size:17px;
 
     font-weight:800;
 
-
-    color:#1e293b;
-
+    color:#172033;
 
     margin-bottom:18px;
 
-
 }
-
-
-
-
 
 
 
@@ -1423,90 +1398,67 @@ PROJECT
 
 .project-item{
 
+    background:#f8fafc;
 
-    margin-bottom:20px;
+    padding:16px;
 
+    border-radius:16px;
+
+    margin-bottom:12px;
 
 }
-
 
 
 
 .project-top{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     margin-bottom:10px;
 
-
 }
-
 
 
 
 .project-top span{
 
-
-    color:#166534;
-
+    color:#15803d;
 
     font-weight:800;
 
-
 }
-
-
-
 
 
 
 .progress-bar{
 
-
-    height:12px;
-
+    height:8px;
 
     background:#e2e8f0;
 
-
     border-radius:20px;
-
 
     overflow:hidden;
 
-
 }
-
 
 
 
 .progress-value{
 
-
     height:100%;
-
 
     background:
 
     linear-gradient(
-        90deg,
-        #166534,
-        #22c55e
+    90deg,
+    #16a34a,
+    #22c55e
     );
 
-
-    border-radius:20px;
-
-
 }
-
-
-
 
 
 
@@ -1519,106 +1471,63 @@ TASK
 
 .task-row{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     align-items:center;
 
-
-    padding:14px;
-
+    padding:15px;
 
     background:#f8fafc;
 
+    border:1px solid #e2e8f0;
 
-    border-radius:15px;
+    border-radius:16px;
 
-
-    margin-bottom:10px;
-
-
-    transition:.3s;
-
+    margin-bottom:12px;
 
 }
-
-
-
-
-.task-row:hover{
-
-
-    background:#ecfdf5;
-
-
-    transform:translateX(5px);
-
-
-}
-
-
 
 
 
 .task-row strong{
 
+    font-size:14px;
 
-    font-size:13px;
-
+    color:#172033;
 
 }
-
 
 
 
 .task-row p{
 
-
-    margin-top:5px;
-
-
-    color:#64748b;
-
+    margin:5px 0 0;
 
     font-size:12px;
 
+    color:#64748b;
 
 }
-
-
 
 
 
 .task-row span{
 
+    background:#ecfdf5;
 
-    background:#dcfce7;
-
-
-    color:#166534;
-
+    color:#15803d;
 
     padding:6px 12px;
 
-
     border-radius:20px;
-
 
     font-size:11px;
 
-
-    text-transform:capitalize;
-
+    font-weight:700;
 
 }
-
-
-
-
 
 
 
@@ -1631,37 +1540,24 @@ CHART
 
 .chart-box{
 
-
-    height:260px;
-
+    height:220px;
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
-
 }
-
 
 
 #taskChart{
 
+    max-width:190px!important;
 
-    max-width:230px!important;
-
-
-    max-height:230px!important;
-
+    max-height:190px!important;
 
 }
-
-
-
-
 
 
 
@@ -1674,63 +1570,35 @@ INFO
 
 .info-row{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
-    padding:13px 0;
-
+    padding:14px 0;
 
     border-bottom:1px solid #f1f5f9;
 
-
 }
-
 
 
 
 .info-row span{
 
-
     color:#64748b;
-
 
     font-size:13px;
 
-
 }
-
-
 
 
 
 .info-row b{
 
-
-    color:#166534;
-
+    color:#15803d;
 
     font-size:13px;
 
-
 }
-
-
-
-
-.active-status{
-
-
-    color:#16a34a!important;
-
-
-}
-
-
-
 
 
 
@@ -1743,87 +1611,59 @@ DEADLINE
 
 .deadline-card{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     align-items:center;
-
 
     padding:15px;
 
-
     background:#f8fafc;
-
 
     border-radius:16px;
 
-
-    margin-bottom:10px;
-
+    margin-bottom:12px;
 
 }
-
-
 
 
 
 .deadline-card strong{
 
-
     font-size:13px;
 
-
 }
-
 
 
 
 .deadline-card p{
 
-
-    margin-top:5px;
-
-
-    color:#64748b;
-
+    margin:5px 0 0;
 
     font-size:12px;
 
+    color:#64748b;
 
 }
-
 
 
 
 .deadline-date{
 
+    background:#ecfdf5;
 
-    background:#dcfce7;
-
-
-    color:#166534;
-
+    color:#15803d;
 
     padding:7px 13px;
 
-
     border-radius:20px;
-
 
     font-size:12px;
 
-
     font-weight:700;
 
-
 }
-
-
-
 
 
 
@@ -1836,21 +1676,15 @@ ACTIVITY
 
 .activity-card{
 
-
     display:flex;
-
 
     align-items:flex-start;
 
-
     gap:15px;
-
 
     padding:15px 0;
 
-
     border-bottom:1px solid #f1f5f9;
-
 
 }
 
@@ -1858,103 +1692,69 @@ ACTIVITY
 
 .activity-dot{
 
+    width:10px;
 
-    width:11px;
-
-
-    height:11px;
-
+    height:10px;
 
     background:#22c55e;
 
-
     border-radius:50%;
-
 
     margin-top:7px;
 
-
 }
-
-
 
 
 
 .activity-content{
 
-
     flex:1;
 
-
 }
-
-
-
 
 
 .activity-content strong{
 
-
-    font-size:13px;
-
+    font-size:14px;
 
 }
-
-
-
 
 
 .activity-content p{
 
-
     margin:5px 0;
-
 
     font-size:13px;
 
+    color:#475569;
 
 }
-
-
 
 
 
 .activity-content small{
 
-
     color:#94a3b8;
 
-
 }
-
 
 
 
 .activity-percent{
 
+    background:#ecfdf5;
 
-    background:#dcfce7;
-
-
-    color:#166534;
-
+    color:#15803d;
 
     padding:6px 12px;
 
-
     border-radius:20px;
-
 
     font-size:12px;
 
-
     font-weight:700;
 
-
 }
-
-
-
 
 
 
@@ -1962,20 +1762,13 @@ ACTIVITY
 
 .empty-data{
 
-
     text-align:center;
-
 
     color:#94a3b8;
 
-
-    padding:20px;
-
+    padding:25px;
 
 }
-
-
-
 
 
 
@@ -1986,109 +1779,75 @@ RESPONSIVE
 ================================ */
 
 
-@media(max-width:1200px){
+@media(max-width:1300px){
+
+.employee-stats{
+
+    grid-template-columns:repeat(3,1fr);
+
+}
+
+}
+
+
+
+@media(max-width:900px){
 
 
 .employee-stats{
 
-
-    grid-template-columns:
-
-    repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .employee-grid{
 
-
     grid-template-columns:1fr;
 
-
 }
-
-
-
-}
-
-
-
-
-@media(max-width:700px){
-
-
-.employee-stats{
-
-
-    grid-template-columns:1fr;
-
-
-}
-
-
 
 
 .employee-welcome{
 
-
     flex-direction:column;
-
 
     align-items:flex-start;
 
-
     gap:20px;
 
-
 }
 
-
-
-
-.welcome-tags{
-
-
-    flex-wrap:wrap;
 
 
 }
 
 
+@media(max-width:600px){
+
+
+.employee-stats{
+
+    grid-template-columns:1fr;
+
+}
 
 
 .task-row,
 .deadline-card{
 
-
     flex-direction:column;
-
 
     align-items:flex-start;
 
-
     gap:10px;
 
-
-}
-
-
-
-.employee-panel{
-
-
-    padding:18px;
-
-
 }
 
 
 }
-
 
 
 </style>
-
 
 @endsection

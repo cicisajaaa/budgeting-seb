@@ -14,6 +14,7 @@ use App\Models\AktivitasTugas;
 use App\Models\Divisi;
 use App\Models\LogAudit;
 
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -189,20 +190,7 @@ class DashboardController extends Controller
         ->take(5)
 
         ->get();
-        $recentTasks = Tugas::with([
-
-    'proyek',
-
-    'karyawan'
-
-])
-
-->latest()
-
-->take(5)
-
-->get();
-
+        
 /*
 |--------------------------------------------------------------------------
 | DATA KEUANGAN
@@ -448,37 +436,47 @@ $recentAudit = LogAudit::with(
 
 ->get();
         /*
-        |--------------------------------------------------------------------------
-        | DASHBOARD KARYAWAN
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| DASHBOARD KARYAWAN
+|--------------------------------------------------------------------------
+*/
 
 
-        $employeeTasks = collect();
+// DEFAULT DATA KARYAWAN
+// Supaya tidak undefined variable ketika login bukan karyawan
+
+$totalExpenseRequest = 0;
+
+$pendingExpenseRequest = 0;
+
+$approvedExpenseRequest = 0;
+
+$recentExpenseRequest = collect();
 
 
-        $deadlineTasks = collect();
+
+$employeeTasks = collect();
 
 
-        $projectProgress = collect();
+$deadlineTasks = collect();
 
 
-        $recentActivities = collect();
+$projectProgress = collect();
+
+
+$recentActivities = collect();
 
 
 
+$taskChart = [
 
-        $taskChart = [
+    'done'=>0,
 
-            'done'=>0,
+    'progress'=>0,
 
-            'progress'=>0,
+    'todo'=>0
 
-            'todo'=>0
-
-        ];
-
-
+];
 
 
 
@@ -693,6 +691,47 @@ $recentAudit = LogAudit::with(
                 ->take(5);
 
 
+                $totalExpenseRequest = PengajuanDana::where(
+                    'pengguna_id',
+                    $user->id
+                )->count();
+
+
+                $pendingExpenseRequest = PengajuanDana::where(
+                    'pengguna_id',
+                    $user->id
+                )
+                ->where(
+                    'status',
+                    'pending'
+                )
+                ->count();
+
+
+
+                $approvedExpenseRequest = PengajuanDana::where(
+                    'pengguna_id',
+                    $user->id
+                )
+                ->where(
+                    'status',
+                    'approved'
+                )
+                ->count();
+
+
+
+                $recentExpenseRequest = PengajuanDana::with([
+                    'proyek'
+                ])
+                ->where(
+                    'pengguna_id',
+                    $user->id
+                )
+                ->latest()
+                ->take(5)
+                ->get();
+
             }
 
 
@@ -863,6 +902,14 @@ $recentAudit = LogAudit::with(
             'recentAudit'=>$recentAudit,
 
 
+
+            'totalExpenseRequest'=>$totalExpenseRequest,
+
+            'pendingExpenseRequest'=>$pendingExpenseRequest,
+
+            'approvedExpenseRequest'=>$approvedExpenseRequest,
+
+            'recentExpenseRequest'=>$recentExpenseRequest,
         ];
 
 

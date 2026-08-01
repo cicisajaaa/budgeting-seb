@@ -490,167 +490,152 @@ Belum ada aktivitas.
 </div>
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-.welcome-card{
-
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
-
-
-
-padding:28px;
-
-
-border-radius:24px;
-
-
-color:white;
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-margin-bottom:20px;
-
-
+body{
+    background:#f8fafc;
 }
 
 
+.welcome-card{
 
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    padding:32px;
+
+    border-radius:24px;
+
+    color:#172033;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:24px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
+
+}
 
 
 
 .welcome-label{
 
+    font-size:11px;
 
-font-size:11px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-font-weight:700;
-
-
-letter-spacing:2px;
-
-
-opacity:.8;
-
+    color:#64748b;
 
 }
-
-
-
 
 
 
 .welcome-card h1{
 
+    margin:10px 0;
 
-font-size:28px;
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
 
 
-margin:8px 0;
 
+.welcome-card p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
 
 }
 
 
 
 
-
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .back-btn{
 
+    background:#ecfdf5;
 
-background:white;
+    color:#15803d;
 
+    padding:12px 22px;
 
-color:#166534;
+    border-radius:999px;
 
+    text-decoration:none;
 
-padding:12px 20px;
+    font-size:13px;
 
+    font-weight:700;
 
-border-radius:20px;
-
-
-text-decoration:none;
-
-
-font-weight:700;
-
-
-font-size:13px;
-
+    transition:.2s;
 
 }
 
 
 
+.back-btn:hover{
+
+    background:#dcfce7;
+
+}
 
 
 
-
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
+    background:white;
 
-background:white;
+    border:1px solid #e2e8f0;
 
+    padding:28px;
 
-padding:24px;
+    border-radius:24px;
 
+    margin-bottom:22px;
 
-border-radius:24px;
+    box-shadow:
 
-
-margin-bottom:20px;
-
-
-box-shadow:
-
-0 10px 30px rgba(15,23,42,.08);
-
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
-
-
-
-
-
-
-.panel-header h2,
 
 
 .glass-panel h2{
 
+    font-size:18px;
 
-font-size:20px;
+    font-weight:800;
 
+    color:#172033;
 
-margin-bottom:18px;
-
-
-color:#1e293b;
-
+    margin:0 0 22px;
 
 }
 
@@ -658,161 +643,119 @@ color:#1e293b;
 
 
 
-
-
+/* ===============================
+DETAIL GRID
+================================ */
 
 
 .detail-grid{
 
+    display:grid;
 
-display:grid;
+    grid-template-columns:repeat(4,1fr);
 
-
-grid-template-columns:
-
-repeat(4,1fr);
-
-
-gap:15px;
-
+    gap:18px;
 
 }
-
-
-
-
-
-
 
 
 
 .info-box{
 
+    background:#f8fafc;
 
-background:#f8fafc;
+    border:1px solid #e2e8f0;
 
+    padding:18px;
 
-padding:18px;
+    border-radius:18px;
 
-
-border-radius:15px;
-
+    transition:.2s;
 
 }
 
 
 
+.info-box:hover{
 
+    transform:translateY(-3px);
+
+}
 
 
 
 .info-box label{
 
+    display:block;
 
-display:block;
+    font-size:11px;
 
+    color:#64748b;
 
-font-size:12px;
+    font-weight:600;
 
-
-color:#64748b;
-
-
-margin-bottom:8px;
-
+    margin-bottom:8px;
 
 }
-
-
-
-
 
 
 
 .info-box strong{
 
+    color:#172033;
 
-color:#166534;
-
+    font-size:14px;
 
 }
 
 
 
-
-
-
-
+/* ===============================
+STATUS
+================================ */
 
 
 .status{
 
+    display:inline-flex;
 
-display:inline-block;
+    padding:7px 15px;
 
+    border-radius:999px;
 
-padding:7px 15px;
+    font-size:11px;
 
-
-border-radius:20px;
-
-
-font-size:12px;
-
-
-font-weight:700;
-
+    font-weight:800;
 
 }
-
-
-
-
 
 
 
 .status.todo{
 
+    background:#f1f5f9;
 
-background:#e2e8f0;
-
-
-color:#475569;
-
+    color:#475569;
 
 }
-
-
-
-
 
 
 
 .status.progress{
 
+    background:#dbeafe;
 
-background:#dbeafe;
-
-
-color:#1d4ed8;
-
+    color:#1d4ed8;
 
 }
-
-
-
-
 
 
 
 .status.done{
 
+    background:#dcfce7;
 
-background:#dcfce7;
-
-
-color:#166534;
-
+    color:#15803d;
 
 }
 
@@ -820,83 +763,66 @@ color:#166534;
 
 
 
+/* ===============================
+PROGRESS
+================================ */
 
+
+.progress-area{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
 
 
 
 .progress-track{
 
+    flex:1;
 
-height:18px;
+    height:14px;
 
+    background:#e2e8f0;
 
-background:#e2e8f0;
+    border-radius:999px;
 
-
-border-radius:20px;
-
-
-overflow:hidden;
-
+    overflow:hidden;
 
 }
-
-
-
-
 
 
 
 .progress-value{
 
+    height:100%;
 
-height:100%;
+    background:
 
+    linear-gradient(
+    90deg,
+    #16a34a,
+    #22c55e
+    );
 
-background:
-
-linear-gradient(
-
-90deg,
-
-#166534,
-
-#22c55e
-
-);
-
-
-border-radius:20px;
-
+    border-radius:999px;
 
 }
-
-
-
-
-
 
 
 
 .progress-number{
 
+    font-size:24px;
 
-font-size:28px;
+    font-weight:800;
 
-
-font-weight:800;
-
-
-color:#166534;
-
-
-margin-top:12px;
-
+    color:#15803d;
 
 }
-
-
-
 
 
 
@@ -904,48 +830,33 @@ margin-top:12px;
 
 .update-btn{
 
+    display:inline-flex;
 
-display:inline-block;
+    margin-top:22px;
 
+    background:#0f172a;
 
-margin-top:20px;
+    color:white;
 
+    padding:12px 24px;
 
-background:#166534;
+    border-radius:14px;
 
+    text-decoration:none;
 
-color:white;
+    font-size:13px;
 
+    font-weight:700;
 
-padding:12px 22px;
-
-
-border-radius:15px;
-
-
-text-decoration:none;
-
-
-font-weight:700;
-
-
-font-size:13px;
-
+    transition:.2s;
 
 }
-
-
-
-
-
 
 
 
 .update-btn:hover{
 
-
-background:#22c55e;
-
+    background:#166534;
 
 }
 
@@ -953,27 +864,26 @@ background:#22c55e;
 
 
 
-
-
+/* ===============================
+DESCRIPTION
+================================ */
 
 
 .description{
 
+    background:#f8fafc;
 
-background:#f8fafc;
+    border:1px solid #e2e8f0;
 
+    padding:20px;
 
-padding:18px;
+    border-radius:18px;
 
+    color:#475569;
 
-border-radius:15px;
+    line-height:1.7;
 
-
-color:#475569;
-
-
-line-height:1.6;
-
+    font-size:14px;
 
 }
 
@@ -981,117 +891,96 @@ line-height:1.6;
 
 
 
-
-
+/* ===============================
+TIMELINE
+================================ */
 
 
 .timeline-item{
 
+    display:flex;
 
-display:flex;
+    gap:18px;
 
+    padding:18px;
 
-gap:15px;
+    background:#f8fafc;
 
+    border-radius:18px;
 
-padding:18px 0;
-
-
-border-bottom:1px solid #e2e8f0;
-
+    margin-bottom:14px;
 
 }
-
-
-
-
-
 
 
 
 .timeline-dot{
 
+    width:14px;
 
-width:12px;
+    height:14px;
 
+    flex:none;
 
-height:12px;
+    background:#22c55e;
 
+    border-radius:50%;
 
-background:#22c55e;
-
-
-border-radius:50%;
-
-
-margin-top:8px;
-
+    margin-top:6px;
 
 }
-
-
-
-
-
 
 
 
 .timeline-content strong{
 
+    color:#15803d;
 
-color:#166534;
-
+    font-size:14px;
 
 }
-
-
-
-
-
 
 
 
 .timeline-content p{
 
+    margin:8px 0;
 
-margin:8px 0;
+    color:#475569;
 
-
-color:#475569;
-
+    font-size:13px;
 
 }
-
-
-
-
-
 
 
 
 .activity-progress{
 
+    display:inline-block;
 
-font-weight:700;
+    background:#ecfdf5;
 
+    color:#15803d;
 
-color:#166534;
+    padding:5px 12px;
 
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
 
 }
-
-
-
-
-
 
 
 
 .timeline-content small{
 
+    display:block;
 
-color:#64748b;
+    margin-top:8px;
 
+    color:#64748b;
 
 }
 
@@ -1099,14 +988,18 @@ color:#64748b;
 
 
 
-
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
+    padding:30px;
 
-color:#94a3b8;
+    text-align:center;
 
+    color:#94a3b8;
 
 }
 
@@ -1114,66 +1007,71 @@ color:#94a3b8;
 
 
 
+/* ===============================
+RESPONSIVE
+================================ */
 
 
-
-
-@media(max-width:1000px){
-
+@media(max-width:1100px){
 
 .detail-grid{
 
+    grid-template-columns:repeat(2,1fr);
 
-grid-template-columns:
-
-repeat(2,1fr);
-
+}
 
 }
 
 
 
-}
-
-
-
-
-
-
-
-
-@media(max-width:600px){
-
-
-.detail-grid{
-
-
-grid-template-columns:1fr;
-
-
-}
-
+@media(max-width:700px){
 
 
 .welcome-card{
 
+    flex-direction:column;
 
-flex-direction:column;
+    align-items:flex-start;
 
-
-align-items:flex-start;
-
-
-gap:15px;
-
+    gap:20px;
 
 }
 
 
 
+.detail-grid{
+
+    grid-template-columns:1fr;
+
 }
 
 
+
+.progress-area{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.progress-track{
+
+    width:100%;
+
+}
+
+
+.glass-panel{
+
+    padding:20px;
+
+}
+
+
+}
 
 </style>
 

@@ -2,13 +2,11 @@
 
 @section('content')
 
-<div class="detail-container">
+<div class="detail-container detail-page">
 
-
-<!-- HEADER -->
+{{-- ================= HEADER ================= --}}
 
 <div class="detail-header">
-
     <div class="header-left">
 
         <div class="header-label">
@@ -22,7 +20,7 @@
 
 
         <p>
-            {{ \Carbon\Carbon::parse($request->created_at)->format('d M Y, H:i') }}
+            {{ $request->created_at->format('d M Y, H:i') }}
         </p>
 
 
@@ -53,27 +51,51 @@
 
         @if($request->status == 'pending')
 
-            <div class="status pending">
-                Menunggu Persetujuan
-            </div>
+        <div class="status pending">
+            Menunggu Persetujuan
+        </div>
 
         @elseif($request->status == 'approved')
 
-            <div class="status approved">
-                Dana Disetujui
-            </div>
+        <div class="status approved">
+            Dana Disetujui
+        </div>
 
         @else
 
-            <div class="status rejected">
-                Pengajuan Ditolak
-            </div>
+        <div class="status rejected">
+            Pengajuan Ditolak
+        </div>
 
         @endif
 
 
     </div>
 
+</div>
+
+
+
+
+{{-- ================= TIMELINE ================= --}}
+
+<div class="timeline-box">
+
+    <div class="timeline-step active">
+        ✓ Pengajuan dibuat
+    </div>
+
+
+    <div class="timeline-step 
+    {{ $request->status != 'pending' ? 'active':'' }}">
+        ✓ Diproses Finance
+    </div>
+
+
+    <div class="timeline-step
+    {{ $request->status == 'approved' ? 'active':'' }}">
+        ✓ Dana Disetujui
+    </div>
 
 </div>
 
@@ -81,22 +103,25 @@
 
 
 
+{{-- ================= DETAIL ================= --}}
 
-<!-- INFORMASI -->
-
-<div class="card">
-
+<div class="card" style="overflow:visible;">
 
 <div class="card-title">
     Detail Pengajuan
 </div>
 
 
-
 <div class="info-grid">
 
 
 <div class="info-item">
+
+<div class="detail-icon">
+📁
+</div>
+
+<div>
 
 <label>
 Project
@@ -108,9 +133,18 @@ Project
 
 </div>
 
+</div>
+
+
 
 
 <div class="info-item">
+
+<div class="detail-icon">
+🏢
+</div>
+
+<div>
 
 <label>
 Divisi
@@ -122,10 +156,18 @@ Divisi
 
 </div>
 
+</div>
+
 
 
 
 <div class="info-item">
+
+<div class="detail-icon">
+💰
+</div>
+
+<div>
 
 <label>
 Jumlah Dana
@@ -137,10 +179,18 @@ Rp {{ number_format($request->jumlah,0,',','.') }}
 
 </div>
 
+</div>
+
 
 
 
 <div class="info-item">
+
+<div class="detail-icon">
+📅
+</div>
+
+<div>
 
 <label>
 Tanggal Pengajuan
@@ -152,10 +202,11 @@ Tanggal Pengajuan
 
 </div>
 
+</div>
+
 
 
 </div>
-
 
 
 
@@ -170,18 +221,17 @@ Keterangan
 {{ $request->keterangan ?? '-' }}
 </p>
 
-</div>
-
 
 </div>
 
+</div>
 
 
 
 
 
 
-<!-- FILE -->
+{{-- ================= DOKUMEN ================= --}}
 
 <div class="card">
 
@@ -204,10 +254,10 @@ $filePath = public_path(
 
 $fileSize = file_exists($filePath)
 ? number_format(filesize($filePath)/1024,1).' KB'
-: '-';
+:'-';
+
 
 @endphp
-
 
 
 
@@ -241,9 +291,7 @@ Lampiran transaksi • {{ $fileSize }}
 
 
 
-
 <button 
-type="button"
 onclick="openProof()"
 class="btn-view">
 
@@ -260,14 +308,15 @@ Lihat Bukti
 
 
 <div class="empty">
+
 Tidak ada dokumen pendukung
+
 </div>
 
 
 @endif
 
 
-
 </div>
 
 
@@ -275,10 +324,7 @@ Tidak ada dokumen pendukung
 
 
 
-
-
-
-<!-- MODAL -->
+{{-- ================= MODAL ================= --}}
 
 @if($request->bukti_pengajuan)
 
@@ -296,18 +342,6 @@ Preview Bukti
 </strong>
 
 
-<div>
-
-
-<a 
-href="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}"
-download
-class="btn-download">
-
-Download
-
-</a>
-
 
 <button 
 onclick="closeProof()"
@@ -315,31 +349,32 @@ class="btn-close">
 
 ×
 
-
 </button>
 
 
 </div>
 
 
-</div>
 
 
+@if(Str::endsWith($request->bukti_pengajuan,'.pdf'))
 
-<img 
-id="proofImage"
+
+<iframe
 src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}"
->
+width="100%"
+height="600">
+</iframe>
 
 
+@else
 
-<button 
-onclick="zoomProof()"
-class="btn-zoom">
 
-Zoom Gambar
+<img
+src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
-</button>
+
+@endif
 
 
 </div>
@@ -350,20 +385,13 @@ Zoom Gambar
 
 @endif
 
-
-
-
-
-
-
-<!-- AUDIT TRAIL -->
-
+{{-- ================= AUDIT TRAIL ================= --}}
 
 <div class="card">
 
 
 <div class="card-title">
-Audit Trail Aktivitas
+    Audit Trail Aktivitas
 </div>
 
 
@@ -425,11 +453,14 @@ Audit Trail Aktivitas
 </div>
 
 
+
 @empty
 
 
 <div class="empty">
+
 Belum ada aktivitas
+
 </div>
 
 
@@ -447,18 +478,23 @@ Belum ada aktivitas
 
 
 
-<!-- KEPUTUSAN FINANCE -->
+
+{{-- ================= KEPUTUSAN FINANCE ================= --}}
 
 
-@if($request->catatan_persetujuan)
+@if($request->status != 'pending')
 
 
 <div class="card decision-card">
 
 
 <div class="card-title">
+
 Keputusan Finance
+
 </div>
+
+
 
 
 
@@ -469,8 +505,11 @@ Keputusan Finance
 
 
 <div class="decision-icon success">
+
 ✓
+
 </div>
+
 
 
 <div>
@@ -478,6 +517,7 @@ Keputusan Finance
 <strong>
 Pengajuan Disetujui
 </strong>
+
 
 <p>
 Dana berhasil diverifikasi Finance
@@ -488,12 +528,16 @@ Dana berhasil diverifikasi Finance
 
 
 
+
 @else
 
 
 <div class="decision-icon failed">
+
 ×
+
 </div>
+
 
 
 <div>
@@ -501,6 +545,7 @@ Dana berhasil diverifikasi Finance
 <strong>
 Pengajuan Ditolak
 </strong>
+
 
 <p>
 Pengajuan tidak dapat diproses
@@ -520,6 +565,7 @@ Pengajuan tidak dapat diproses
 
 
 
+
 <div class="decision-note">
 
 
@@ -529,11 +575,12 @@ Catatan
 
 
 <p>
-{{ $request->catatan_persetujuan }}
+{{ $request->catatan_persetujuan ?? 'Tidak ada catatan tambahan' }}
 </p>
 
 
 </div>
+
 
 
 
@@ -547,6 +594,7 @@ Catatan
 <label>
 Diproses oleh
 </label>
+
 
 <strong>
 {{ $request->penyetuju->name ?? 'Finance' }}
@@ -563,8 +611,9 @@ Diproses oleh
 Tanggal
 </label>
 
+
 <strong>
-{{ $request->disetujui_pada?->format('d M Y H:i') }}
+{{ $request->disetujui_pada?->format('d M Y H:i') ?? '-' }}
 </strong>
 
 
@@ -572,6 +621,7 @@ Tanggal
 
 
 </div>
+
 
 
 </div>
@@ -583,9 +633,14 @@ Tanggal
 
 
 
+
+
 <a href="{{ route('expense.myhistory') }}" class="back">
+
 ← Kembali
+
 </a>
+
 
 
 </div>
@@ -595,32 +650,61 @@ Tanggal
 
 
 
-<style>
+<script>
 
-.detail-container{
-    width:100%;
-    max-width:1200px;
-    margin:auto;
-    padding-bottom:40px;
+
+function openProof(){
+
+    document
+    .getElementById('modalProof')
+    .style.display='flex';
+
 }
 
 
-/* HEADER */
+
+function closeProof(){
+
+    document
+    .getElementById('modalProof')
+    .style.display='none';
+
+}
+
+
+</script>
+<style>
+
+/* =========================
+GLOBAL
+========================= */
+
+.detail-container{
+    width:100%;
+    max-width:100%;
+}
+
+
+*{
+    box-sizing:border-box;
+}
+
+
+/* =========================
+HEADER DETAIL
+========================= */
 
 .detail-header{
 
-    background:
-    linear-gradient(
-        135deg,
-        #14532d,
-        #22c55e
-    );
+    width:100%;
 
-    color:white;
+    background:#ffffff;
 
-    padding:32px;
+    border:1px solid #e2e8f0;
 
     border-radius:24px;
+
+    padding:34px;
 
     display:flex;
 
@@ -628,10 +712,22 @@ Tanggal
 
     align-items:center;
 
+    gap:35px;
+
     margin-bottom:22px;
 
     box-shadow:
-    0 15px 35px rgba(22,101,52,.25);
+    0 8px 25px rgba(15,23,42,.06);
+
+}
+
+
+
+.header-left{
+
+    flex:1;
+
+    min-width:0;
 
 }
 
@@ -643,17 +739,23 @@ Tanggal
 
     letter-spacing:2px;
 
-    opacity:.8;
+    font-weight:700;
+
+    color:#64748b;
 
 }
 
 
 
-.detail-header h1{
+.header-left h1{
 
-    margin:10px 0 5px;
+    margin:12px 0 8px;
 
-    font-size:30px;
+    font-size:34px;
+
+    line-height:1.2;
+
+    color:#172033;
 
     font-weight:800;
 
@@ -661,13 +763,11 @@ Tanggal
 
 
 
-.detail-header p{
-
-    margin:0;
-
-    opacity:.85;
+.header-left p{
 
     font-size:13px;
+
+    color:#64748b;
 
 }
 
@@ -675,17 +775,21 @@ Tanggal
 
 .requester{
 
-    margin-top:15px;
+    margin-top:16px;
 
-    display:inline-block;
+    padding:8px 18px;
 
-    background:rgba(255,255,255,.15);
+    display:inline-flex;
 
-    padding:7px 15px;
+    background:#f1f5f9;
 
-    border-radius:30px;
+    border-radius:999px;
+
+    color:#334155;
 
     font-size:12px;
+
+    font-weight:600;
 
 }
 
@@ -693,7 +797,14 @@ Tanggal
 
 
 
+/* =========================
+AMOUNT
+========================= */
+
+
 .header-right{
+
+    width:260px;
 
     text-align:right;
 
@@ -703,11 +814,13 @@ Tanggal
 
 .amount-card{
 
-    background:rgba(255,255,255,.15);
+    background:#f8fafc;
 
-    padding:15px 20px;
+    border:1px solid #e2e8f0;
 
-    border-radius:18px;
+    padding:20px;
+
+    border-radius:20px;
 
 }
 
@@ -717,11 +830,9 @@ Tanggal
 
     display:block;
 
-    font-size:11px;
+    color:#64748b;
 
-    opacity:.8;
-
-    text-transform:uppercase;
+    font-size:12px;
 
 }
 
@@ -729,7 +840,13 @@ Tanggal
 
 .amount-card strong{
 
-    font-size:27px;
+    display:block;
+
+    margin-top:8px;
+
+    color:#172033;
+
+    font-size:30px;
 
 }
 
@@ -737,17 +854,20 @@ Tanggal
 
 
 
+/* =========================
+STATUS
+========================= */
+
+
 .status{
 
-    margin-top:12px;
+    margin-top:14px;
 
-    display:inline-block;
+    display:inline-flex;
 
-    background:white;
+    padding:10px 22px;
 
-    padding:10px 18px;
-
-    border-radius:30px;
+    border-radius:999px;
 
     font-size:12px;
 
@@ -758,42 +878,121 @@ Tanggal
 
 
 .status.pending{
+
+    background:#fef3c7;
+
     color:#92400e;
+
 }
+
 
 
 .status.approved{
-    color:#166534;
+
+    background:#dcfce7;
+
+    color:#15803d;
+
 }
+
 
 
 .status.rejected{
+
+    background:#fee2e2;
+
     color:#dc2626;
+
 }
 
 
 
 
 
+/* =========================
+TIMELINE
+========================= */
 
 
-/* CARD */
+.timeline-box{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:22px;
+
+    padding:20px;
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:22px;
+
+}
+
+
+
+.timeline-step{
+
+    flex:1;
+
+    text-align:center;
+
+    padding:13px;
+
+    background:#f8fafc;
+
+    border-radius:14px;
+
+    border:1px solid #e2e8f0;
+
+    color:#64748b;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+
+.timeline-step.active{
+
+    background:#ecfdf5;
+
+    color:#15803d;
+
+    border-color:#86efac;
+
+}
+
+
+
+
+
+/* =========================
+CARD
+========================= */
 
 
 .card{
 
+    width:100%;
+
     background:white;
 
-    border-radius:22px;
+    border:1px solid #e2e8f0;
 
-    padding:24px;
+    border-radius:24px;
 
-    margin-bottom:20px;
+    padding:28px;
 
-    border:1px solid #e5e7eb;
+    margin-bottom:22px;
 
     box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+    0 8px 20px rgba(15,23,42,.04);
 
 }
 
@@ -801,13 +1000,13 @@ Tanggal
 
 .card-title{
 
-    font-size:16px;
+    font-size:18px;
 
     font-weight:800;
 
-    margin-bottom:20px;
+    color:#172033;
 
-    color:#0f172a;
+    margin-bottom:22px;
 
 }
 
@@ -815,19 +1014,18 @@ Tanggal
 
 
 
-
-
-/* INFO */
+/* =========================
+DETAIL INFO
+========================= */
 
 
 .info-grid{
 
     display:grid;
 
-    grid-template-columns:
-    repeat(2,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
 
-    gap:15px;
+    gap:18px;
 
 }
 
@@ -835,11 +1033,44 @@ Tanggal
 
 .info-item{
 
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
     background:#f8fafc;
 
-    padding:16px;
+    border-radius:18px;
 
-    border-radius:16px;
+}
+
+
+
+.detail-icon{
+
+    width:46px;
+
+    height:46px;
+
+    flex:none;
+
+    background:white;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.05);
 
 }
 
@@ -851,9 +1082,7 @@ Tanggal
 
     font-size:11px;
 
-    color:#64748b;
-
-    margin-bottom:6px;
+    color:#94a3b8;
 
 }
 
@@ -861,9 +1090,9 @@ Tanggal
 
 .info-item strong{
 
-    font-size:14px;
+    color:#172033;
 
-    color:#1e293b;
+    font-size:14px;
 
 }
 
@@ -873,22 +1102,26 @@ Tanggal
 
     color:#15803d!important;
 
-    font-size:18px!important;
-
 }
 
 
 
 
+
+/* =========================
+DESCRIPTION
+========================= */
+
+
 .description-box{
 
-    margin-top:18px;
+    margin-top:20px;
+
+    padding:18px;
 
     background:#f8fafc;
 
-    padding:16px;
-
-    border-radius:16px;
+    border-radius:18px;
 
 }
 
@@ -896,21 +1129,11 @@ Tanggal
 
 .description-box label{
 
-    font-size:11px;
-
     color:#64748b;
 
-}
+    font-size:12px;
 
-
-
-.description-box p{
-
-    margin:8px 0 0;
-
-    font-size:14px;
-
-    color:#334155;
+    font-weight:700;
 
 }
 
@@ -918,39 +1141,26 @@ Tanggal
 
 
 
-
-
-
-/* FILE */
+/* =========================
+DOCUMENT
+========================= */
 
 
 .file-card{
 
-    background:#f8fafc;
-
-    border:1px solid #e2e8f0;
-
-    border-radius:18px;
-
-    padding:15px;
-
     display:flex;
+
+    align-items:center;
 
     justify-content:space-between;
 
-    align-items:center;
+    gap:15px;
 
-}
+    background:#f8fafc;
 
+    padding:18px;
 
-
-.file-detail{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
+    border-radius:18px;
 
 }
 
@@ -962,9 +1172,7 @@ Tanggal
 
     height:45px;
 
-    background:#dcfce7;
-
-    color:#166534;
+    background:white;
 
     border-radius:14px;
 
@@ -974,19 +1182,21 @@ Tanggal
 
     justify-content:center;
 
-    font-size:11px;
+    color:#334155;
 
-    font-weight:800;
+    font-weight:700;
 
 }
 
 
 
-.file-detail strong{
+.file-detail{
 
-    display:block;
+    display:flex;
 
-    font-size:13px;
+    align-items:center;
+
+    gap:15px;
 
 }
 
@@ -994,178 +1204,52 @@ Tanggal
 
 .file-detail small{
 
+    display:block;
+
+    margin-top:5px;
+
     color:#64748b;
 
-    font-size:11px;
-
 }
-
 
 
 
 .btn-view{
 
-    background:#166534;
+    background:#0f172a;
 
     color:white;
 
-    border:none;
+    padding:11px 22px;
 
-    padding:10px 16px;
+    border:none;
 
     border-radius:12px;
 
     font-weight:700;
 
-    font-size:12px;
-
-    cursor:pointer;
-
-}
-
-
-
-.btn-view:hover{
-
-    background:#14532d;
-
 }
 
 
 
 
 
+/* =========================
+EMPTY
+========================= */
 
 
-/* MODAL */
+.empty{
 
-
-.modal{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:
-    rgba(15,23,42,.75);
-
-    backdrop-filter:blur(5px);
-
-    z-index:9999;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:20px;
-
-}
-
-
-
-.modal-content{
-
-    background:white;
-
-    border-radius:22px;
-
-    padding:20px;
-
-    max-width:850px;
-
-    width:100%;
-
-}
-
-
-
-.modal-head{
+    min-height:130px;
 
     display:flex;
 
-    justify-content:space-between;
+    justify-content:center;
 
     align-items:center;
 
-    margin-bottom:15px;
-
-}
-
-
-
-.btn-download,
-.btn-close,
-.btn-zoom{
-
-    border:none;
-
-    padding:9px 14px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    font-weight:700;
-
-    font-size:12px;
-
-}
-
-
-
-.btn-download{
-
-    background:#166534;
-
-    color:white;
-
-    text-decoration:none;
-
-}
-
-
-
-.btn-close{
-
-    background:#dc2626;
-
-    color:white;
-
-}
-
-
-
-.modal img{
-
-    width:100%;
-
-    max-height:70vh;
-
-    object-fit:contain;
-
-    border-radius:15px;
-
-    transition:.3s;
-
-}
-
-
-
-.modal img.zoomed{
-
-    transform:scale(1.5);
-
-}
-
-
-
-.btn-zoom{
-
-    margin-top:15px;
-
-    background:#f1f5f9;
+    color:#94a3b8;
 
 }
 
@@ -1173,14 +1257,16 @@ Tanggal
 
 
 
-
-
-/* AUDIT */
+/* =========================
+AUDIT TRAIL
+========================= */
 
 
 .audit-list{
 
     position:relative;
+
+    padding-left:45px;
 
 }
 
@@ -1192,7 +1278,7 @@ Tanggal
 
     position:absolute;
 
-    left:20px;
+    left:16px;
 
     top:10px;
 
@@ -1200,7 +1286,7 @@ Tanggal
 
     width:2px;
 
-    background:#bbf7d0;
+    background:#e2e8f0;
 
 }
 
@@ -1208,13 +1294,15 @@ Tanggal
 
 .audit-card{
 
-    display:flex;
-
-    gap:15px;
-
     position:relative;
 
-    margin-bottom:18px;
+    background:#f8fafc;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    margin-bottom:15px;
 
 }
 
@@ -1222,39 +1310,29 @@ Tanggal
 
 .audit-icon{
 
-    width:40px;
+    position:absolute;
 
-    height:40px;
+    left:-45px;
+
+    top:20px;
+
+    width:34px;
+
+    height:34px;
 
     border-radius:50%;
 
-    background:#22c55e;
+    background:#16a34a;
 
     color:white;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
+    align-items:center;
+
     font-weight:800;
-
-    z-index:2;
-
-}
-
-
-
-.audit-content{
-
-    flex:1;
-
-    background:#f8fafc;
-
-    border-radius:16px;
-
-    padding:15px;
 
 }
 
@@ -1264,17 +1342,7 @@ Tanggal
 
     display:flex;
 
-    gap:10px;
-
-    align-items:center;
-
-}
-
-
-
-.audit-header strong{
-
-    color:#166534;
+    justify-content:space-between;
 
 }
 
@@ -1284,11 +1352,11 @@ Tanggal
 
     background:#dcfce7;
 
-    color:#166534;
+    color:#15803d;
 
-    padding:3px 10px;
+    padding:5px 12px;
 
-    border-radius:20px;
+    border-radius:999px;
 
     font-size:11px;
 
@@ -1298,9 +1366,9 @@ Tanggal
 
 .audit-content p{
 
-    margin:8px 0;
+    margin:10px 0;
 
-    font-size:13px;
+    color:#475569;
 
 }
 
@@ -1308,7 +1376,7 @@ Tanggal
 
 .audit-meta{
 
-    color:#64748b;
+    color:#94a3b8;
 
     font-size:12px;
 
@@ -1318,17 +1386,9 @@ Tanggal
 
 
 
-
-
-/* DECISION */
-
-
-.decision-card{
-
-    border-left:5px solid #22c55e;
-
-}
-
+/* =========================
+DECISION FINANCE
+========================= */
 
 
 .decision-header{
@@ -1337,7 +1397,13 @@ Tanggal
 
     align-items:center;
 
-    gap:15px;
+    gap:18px;
+
+    padding:20px;
+
+    background:#f8fafc;
+
+    border-radius:18px;
 
 }
 
@@ -1345,11 +1411,11 @@ Tanggal
 
 .decision-icon{
 
-    width:45px;
+    width:48px;
 
-    height:45px;
+    height:48px;
 
-    border-radius:50%;
+    border-radius:16px;
 
     display:flex;
 
@@ -1357,7 +1423,7 @@ Tanggal
 
     justify-content:center;
 
-    color:white;
+    font-size:20px;
 
     font-weight:800;
 
@@ -1365,17 +1431,31 @@ Tanggal
 
 
 
-.success{
+.failed{
 
-    background:#22c55e;
+    background:#fee2e2;
+
+    color:#dc2626;
 
 }
 
 
 
-.failed{
+.success{
 
-    background:#dc2626;
+    background:#dcfce7;
+
+    color:#16a34a;
+
+}
+
+
+
+.decision-header strong{
+
+    font-size:16px;
+
+    color:#172033;
 
 }
 
@@ -1383,46 +1463,25 @@ Tanggal
 
 .decision-header p{
 
-    margin:5px 0;
+    margin-top:5px;
 
     color:#64748b;
 
-    font-size:13px;
-
 }
+
+
 
 
 
 .decision-note{
 
-    margin-top:20px;
+    margin-top:18px;
+
+    padding:18px;
 
     background:#f8fafc;
 
-    padding:15px;
-
-    border-radius:15px;
-
-}
-
-
-
-.decision-note label,
-.decision-info label{
-
-    font-size:11px;
-
-    color:#64748b;
-
-    display:block;
-
-}
-
-
-
-.decision-note p{
-
-    margin:6px 0;
+    border-radius:16px;
 
 }
 
@@ -1430,13 +1489,13 @@ Tanggal
 
 .decision-info{
 
+    margin-top:18px;
+
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
 
-    gap:15px;
-
-    margin-top:15px;
+    gap:18px;
 
 }
 
@@ -1444,11 +1503,33 @@ Tanggal
 
 .decision-info div{
 
+    padding:18px;
+
     background:#f8fafc;
 
-    padding:14px;
+    border-radius:16px;
 
-    border-radius:14px;
+}
+
+
+
+.decision-info label{
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+
+.decision-info strong{
+
+    display:block;
+
+    margin-top:5px;
+
+    color:#172033;
 
 }
 
@@ -1456,34 +1537,24 @@ Tanggal
 
 
 
-
-.empty{
-
-    text-align:center;
-
-    color:#94a3b8;
-
-    padding:25px;
-
-}
-
-
-
+/* =========================
+BACK
+========================= */
 
 
 .back{
 
-    display:inline-block;
+    display:inline-flex;
 
-    background:#166534;
+    background:#0f172a;
 
     color:white;
 
+    padding:12px 26px;
+
+    border-radius:14px;
+
     text-decoration:none;
-
-    padding:11px 20px;
-
-    border-radius:12px;
 
     font-weight:700;
 
@@ -1493,6 +1564,9 @@ Tanggal
 
 
 
+/* =========================
+RESPONSIVE
+========================= */
 
 
 @media(max-width:900px){
@@ -1504,13 +1578,13 @@ Tanggal
 
     align-items:flex-start;
 
-    gap:20px;
-
 }
 
 
 
 .header-right{
+
+    width:100%;
 
     text-align:left;
 
@@ -1518,9 +1592,19 @@ Tanggal
 
 
 
-.info-grid{
+.info-grid,
+
+.decision-info{
 
     grid-template-columns:1fr;
+
+}
+
+
+
+.timeline-box{
+
+    flex-direction:column;
 
 }
 
@@ -1532,315 +1616,11 @@ Tanggal
 
     align-items:flex-start;
 
-    gap:15px;
-
-}
-
-
-
-.decision-info{
-
-    grid-template-columns:1fr;
-
 }
 
 
 }
-/* COMPACT DETAIL OVERRIDE */
-
-.detail-container{
-    max-width:1000px;
-    padding-bottom:20px;
-}
-
-
-.card{
-    padding:16px;
-    border-radius:16px;
-    margin-bottom:14px;
-}
-
-
-.card-title{
-    font-size:14px;
-    margin-bottom:12px;
-}
-
-
-/* AUDIT COMPACT */
-
-.audit-card{
-    gap:10px;
-    margin-bottom:10px;
-}
-
-
-.audit-icon{
-    width:28px;
-    height:28px;
-    font-size:12px;
-}
-
-
-.audit-list:before{
-    left:13px;
-}
-
-
-.audit-content{
-
-    padding:10px 12px;
-
-    border-radius:12px;
-
-}
-
-
-.audit-header strong{
-
-    font-size:13px;
-
-}
-
-
-.audit-header span{
-
-    font-size:10px;
-
-    padding:2px 8px;
-
-}
-
-
-.audit-content p{
-
-    font-size:12px;
-
-    margin:4px 0;
-
-}
-
-
-.audit-meta{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-/* KEPUTUSAN FINANCE */
-
-.decision-header{
-
-    gap:10px;
-
-}
-
-
-.decision-icon{
-
-    width:32px;
-
-    height:32px;
-
-    font-size:13px;
-
-}
-
-
-.decision-header strong{
-
-    font-size:14px;
-
-}
-
-
-.decision-header p{
-
-    font-size:12px;
-
-    margin:2px 0;
-
-}
-
-
-.decision-note{
-
-    margin-top:12px;
-
-    padding:12px;
-
-}
-
-
-.decision-info{
-
-    margin-top:10px;
-
-    gap:10px;
-
-}
-
-
-.decision-info div{
-
-    padding:10px;
-
-}
-
-
-.back{
-
-    padding:9px 16px;
-
-    font-size:13px;
-
-}
-
-/* SMALL HEADER VERSION */
-
-.detail-header{
-
-    padding:20px 24px;
-
-    border-radius:18px;
-
-    margin-bottom:15px;
-
-}
-
-
-.detail-header h1{
-
-    font-size:22px;
-
-    margin:6px 0;
-
-}
-
-
-.header-label{
-
-    font-size:10px;
-
-}
-
-
-.detail-header p{
-
-    font-size:12px;
-
-}
-
-
-
-.requester{
-
-    margin-top:8px;
-
-    padding:5px 12px;
-
-    font-size:11px;
-
-}
-
-
-
-.amount-card{
-
-    padding:10px 16px;
-
-    border-radius:14px;
-
-}
-
-
-
-.amount-card small{
-
-    font-size:9px;
-
-}
-
-
-
-.amount-card strong{
-
-    font-size:20px;
-
-}
-
-
-
-.status{
-
-    padding:8px 15px;
-
-    font-size:11px;
-
-    margin-top:8px;
-
-}
-.card{
-
-    padding:16px;
-
-    margin-bottom:12px;
-
-}
-
-
-.card-title{
-
-    font-size:14px;
-
-    margin-bottom:12px;
-
-}
-
-
-
-
-
-
-
-
 
 </style>
-
-
-
-
-
-
-<script>
-
-function openProof(){
-
-document.getElementById('modalProof').style.display='flex';
-
-}
-
-
-function closeProof(){
-
-document.getElementById('modalProof').style.display='none';
-
-}
-
-
-
-function zoomProof(){
-
-document
-.getElementById('proofImage')
-.classList.toggle('zoomed');
-
-}
-
-</script>
 
 @endsection

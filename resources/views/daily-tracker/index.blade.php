@@ -2,27 +2,33 @@
 
 @section('content')
 
+<div class="daily-container">
 
-<div class="welcome-card">
+
+{{-- ================= HEADER ================= --}}
+
+<div class="daily-header">
+
 
 <div>
 
-<div class="welcome-label">
-EMPLOYEE DAILY TRACKER
-</div>
+<span class="daily-label">
+AKTIVITAS HARIAN KARYAWAN
+</span>
 
 
 <h1>
-Daily Tracker
+Aktivitas Harian
 </h1>
 
 
 <p>
-Update progress pekerjaan dan aktivitas harian kamu
+Monitoring aktivitas dan perkembangan pekerjaan harian kamu.
 </p>
 
 
 </div>
+
 
 
 <div class="date-box">
@@ -31,31 +37,123 @@ Update progress pekerjaan dan aktivitas harian kamu
 
 </div>
 
+
+
 </div>
 
 
 
 
 
-@forelse($tasks as $task)
+{{-- ================= SUMMARY ================= --}}
 
 
-<div class="glass-panel task-card">
+<div class="summary-grid">
 
 
-<div class="task-header">
 
+<div class="summary-card">
 
-<div>
+<span>
+Total Tugas
+</span>
 
 <h2>
-{{$task->nama_tugas}}
+{{$tasks->count()}}
+</h2>
+
+<p>
+Task diberikan
+</p>
+
+</div>
+
+
+
+
+
+<div class="summary-card">
+
+<span>
+Total Aktivitas
+</span>
+
+
+<h2>
+
+{{$tasks->sum(function($task){
+
+return $task->aktivitasTugas->count();
+
+})}}
+
 </h2>
 
 
 <p>
-Project :
-{{$task->proyek->nama_proyek ?? '-'}}
+Update pekerjaan
+</p>
+
+</div>
+
+
+
+
+
+
+<div class="summary-card">
+
+<span>
+Progress Rata-rata
+</span>
+
+
+<h2>
+
+{{number_format(
+$tasks->avg('progres_persen') ?? 0,
+0
+)}}%
+
+</h2>
+
+
+<p>
+Keseluruhan task
+</p>
+
+</div>
+
+
+
+
+
+
+<div class="summary-card">
+
+<span>
+Anggaran Aktivitas
+</span>
+
+<h2>
+
+Rp 
+{{ number_format(
+    $tasks->sum(function($task){
+
+        return $task->aktivitasTugas
+            ->sum('anggaran_aktivitas');
+
+    }),
+    0,
+    ',',
+    '.'
+) }}
+
+</h2>
+
+<p>
+Penggunaan dana
 </p>
 
 
@@ -63,7 +161,59 @@ Project :
 
 
 
-<span class="status-badge">
+
+</div>
+
+
+
+
+
+
+
+{{-- ================= TASK MONITORING ================= --}}
+
+
+<div class="panel">
+
+
+<div class="panel-title">
+
+📌 Pemantauan Tugas
+
+</div>
+
+
+
+
+@forelse($tasks as $task)
+
+
+
+<div class="task-card">
+
+
+
+<div class="task-top">
+
+
+<div>
+
+
+<h3>
+{{$task->nama_tugas}}
+</h3>
+
+
+<p>
+📁 {{$task->proyek->nama_proyek ?? '-'}}
+</p>
+
+
+</div>
+
+
+
+<span class="status">
 
 {{strtoupper($task->status)}}
 
@@ -77,22 +227,8 @@ Project :
 
 
 
+
 <div class="task-info">
-
-
-<div>
-
-<label>
-Prioritas
-</label>
-
-<strong>
-{{$task->prioritas}}
-</strong>
-
-
-</div>
-
 
 
 
@@ -107,8 +243,8 @@ Deadline
 {{$task->deadline ?? '-'}}
 </strong>
 
-
 </div>
+
 
 
 
@@ -121,7 +257,25 @@ Progress
 
 
 <strong>
-{{$task->progres_persen}}%
+{{$task->progres_persen}}%</strong>
+
+</div>
+
+
+
+
+<div>
+
+<label>
+Aktivitas
+</label>
+
+
+<strong>
+
+{{$task->aktivitasTugas->count()}}
+
+Update
 
 </strong>
 
@@ -136,27 +290,10 @@ Progress
 
 
 
-
-
-<div class="progress-wrapper">
-
-
-<div class="progress-text">
-
-Progress Pekerjaan
-
-<span>
-{{$task->progres_persen}}%
-</span>
-
-</div>
-
-
-
 <div class="progress-bar">
 
 
-<div class="progress-fill"
+<div class="progress-value"
 
 style="width:{{$task->progres_persen}}%">
 
@@ -166,255 +303,18 @@ style="width:{{$task->progres_persen}}%">
 </div>
 
 
-</div>
 
-
-
-
-
-
-
-
-
-
-<div class="update-box">
-
-
-<h3>
-Update Aktivitas
-</h3>
-
-
-
-
-<form method="POST"
-
-action="{{route('daily-tracker.store')}}">
-
-
-@csrf
-
-
-
-<input type="hidden"
-
-name="task_id"
-
-value="{{$task->id}}">
-
-
-
-
-
-<label>
-Aktivitas Hari Ini
-</label>
-
-
-<textarea
-
-name="aktivitas"
-
-placeholder="Tuliskan aktivitas hari ini..."
-
-required></textarea>
-
-
-
-
-
-
-
-
-<div class="form-grid">
-
-
-<div>
-
-
-<label>
-Progress (%)
-</label>
-
-
-<input
-
-type="number"
-
-name="progres"
-
-min="0"
-
-max="100"
-
-placeholder="Masukkan progress">
-
-</div>
-
-
-
-
-
-
-<div>
-
-
-<label>
-Budget Activity
-</label>
-
-
-<input
-
-type="number"
-
-name="anggaran_aktivitas"
-
-value="0"
-
-min="0">
-
-</div>
 
 
 
 </div>
-
-
-
-
-
-
-
-<label>
-Catatan
-</label>
-
-
-<textarea
-
-name="catatan"
-
-placeholder="Catatan tambahan..."></textarea>
-
-
-
-
-
-
-
-<button>
-
-Simpan Update
-
-</button>
-
-
-
-</form>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-<div class="history">
-
-
-<h3>
-Riwayat Aktivitas
-</h3>
-
-
-
-
-
-@forelse($task->aktivitasTugas ?? [] as $activity)
-
-
-
-<div class="history-item">
-
-
-<strong>
-
-{{\Carbon\Carbon::parse($activity->tanggal)->format('d M Y')}}
-
-</strong>
-
-
-
-<p>
-
-{{$activity->aktivitas}}
-
-</p>
-
-
-
-<span>
-
-Progress {{$activity->progres}}%
-
-</span>
-
-
-
-@if($activity->anggaran_aktivitas > 0)
-
-<br>
-
-<small>
-
-Budget :
-Rp {{number_format($activity->anggaran_aktivitas,0,',','.')}}
-
-</small>
-
-@endif
-
-
-
-</div>
-
 
 
 
 @empty
 
 
-<p>
-Belum ada aktivitas.
-</p>
-
-
-@endforelse
-
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-@empty
-
-
-<div class="glass-panel">
+<div class="empty">
 
 Belum ada task.
 
@@ -425,6 +325,184 @@ Belum ada task.
 
 
 
+</div>
+
+
+
+
+
+
+
+
+
+{{-- ================= TIMELINE ================= --}}
+
+
+
+<div class="panel">
+
+
+<div class="panel-title">
+
+📝 Timeline Aktivitas
+
+</div>
+
+
+
+
+
+@php
+
+$activities = collect();
+
+foreach($tasks as $task){
+
+    foreach($task->aktivitasTugas as $activity){
+
+        $activities->push([
+
+        'task'=>$task->nama_tugas,
+
+        'project'=>$task->proyek->nama_proyek ?? '-',
+
+        'activity'=>$activity
+
+        ]);
+
+    }
+
+}
+
+
+$activities=$activities->sortByDesc(function($item){
+
+return $item['activity']->tanggal;
+
+});
+
+
+@endphp
+
+
+
+
+
+
+@forelse($activities as $item)
+
+
+
+<div class="activity-item">
+
+
+
+<div class="activity-dot"></div>
+
+
+
+<div class="activity-content">
+
+
+<h4>
+
+{{$item['task']}}
+
+</h4>
+
+
+<p>
+
+{{$item['activity']->aktivitas}}
+
+</p>
+
+
+
+<span>
+
+📁 {{$item['project']}}
+
+</span>
+
+
+
+
+<div class="activity-footer">
+
+
+Tanggal :
+
+{{Carbon\Carbon::parse(
+$item['activity']->tanggal
+)->format('d M Y')}}
+
+
+
+&nbsp; | &nbsp;
+
+
+Progress :
+
+{{$item['activity']->progres}}%
+
+
+@if($item['activity']->anggaran_aktivitas > 0)
+
+&nbsp; | &nbsp;
+
+Budget :
+
+Rp {{number_format(
+$item['activity']->anggaran_aktivitas,
+0,
+',',
+'.'
+)}}
+
+@endif
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+@empty
+
+
+<div class="empty">
+
+Belum ada aktivitas tercatat.
+
+</div>
+
+
+@endforelse
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
 
 
 
@@ -432,20 +510,28 @@ Belum ada task.
 <style>
 
 
-.welcome-card{
+.daily-container{
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+width:100%;
+
+}
+
+
+
+
+/* HEADER */
+
+
+.daily-header{
+
+
+background:white;
+
+border:1px solid #e5e7eb;
 
 padding:30px;
 
 border-radius:24px;
-
-color:white;
 
 display:flex;
 
@@ -453,39 +539,55 @@ justify-content:space-between;
 
 align-items:center;
 
-margin-bottom:20px;
+margin-bottom:25px;
+
+box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
 
 
 
-.welcome-label{
+.daily-label{
 
 font-size:11px;
 
 letter-spacing:2px;
 
-font-weight:700;
+font-weight:800;
+
+color:#64748b;
 
 }
 
 
 
-.welcome-card h1{
+.daily-header h1{
 
-font-size:28px;
+font-size:30px;
 
 margin:10px 0;
 
+color:#172033;
+
 }
+
+
+
+.daily-header p{
+
+color:#64748b;
+
+}
+
+
 
 
 
 .date-box{
 
-background:white;
+background:#f8f3ea;
 
-color:#166534;
+color:#8b5e22;
 
 padding:12px 20px;
 
@@ -499,21 +601,63 @@ font-weight:700;
 
 
 
-.glass-panel{
 
-background:
-rgba(255,255,255,.75);
+/* SUMMARY */
 
-backdrop-filter:blur(15px);
 
-border-radius:24px;
+.summary-grid{
 
-padding:25px;
+display:grid;
 
-margin-bottom:20px;
+grid-template-columns:repeat(4,1fr);
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.08);
+gap:18px;
+
+margin-bottom:25px;
+
+}
+
+
+
+.summary-card{
+
+background:white;
+
+border:1px solid #e5e7eb;
+
+padding:22px;
+
+border-radius:20px;
+
+}
+
+
+
+.summary-card span{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.summary-card h2{
+
+margin:8px 0;
+
+color:#172033;
+
+}
+
+
+
+.summary-card p{
+
+font-size:12px;
+
+color:#94a3b8;
 
 }
 
@@ -521,7 +665,65 @@ box-shadow:
 
 
 
-.task-header{
+
+/* PANEL */
+
+
+.panel{
+
+background:white;
+
+border:1px solid #e5e7eb;
+
+padding:25px;
+
+border-radius:24px;
+
+margin-bottom:25px;
+
+box-shadow:0 10px 30px rgba(15,23,42,.05);
+
+}
+
+
+
+.panel-title{
+
+font-size:18px;
+
+font-weight:800;
+
+margin-bottom:20px;
+
+color:#172033;
+
+}
+
+
+
+
+
+
+/* TASK */
+
+
+.task-card{
+
+background:#fafafa;
+
+border:1px solid #e5e7eb;
+
+padding:20px;
+
+border-radius:18px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.task-top{
 
 display:flex;
 
@@ -533,17 +735,19 @@ align-items:center;
 
 
 
-.task-header h2{
+.task-top h3{
 
-font-size:22px;
+color:#172033;
 
-color:#166534;
+margin-bottom:5px;
 
 }
 
 
 
-.task-header p{
+.task-top p{
+
+font-size:13px;
 
 color:#64748b;
 
@@ -553,19 +757,19 @@ color:#64748b;
 
 
 
-.status-badge{
+.status{
 
-background:#dcfce7;
+background:#f8f3ea;
 
-color:#166534;
+color:#8b5e22;
 
-padding:8px 15px;
+padding:7px 14px;
 
 border-radius:20px;
 
-font-size:12px;
+font-size:11px;
 
-font-weight:700;
+font-weight:800;
 
 }
 
@@ -581,19 +785,21 @@ grid-template-columns:repeat(3,1fr);
 
 gap:15px;
 
-margin-top:20px;
+margin:20px 0;
 
 }
 
 
 
+
+
 .task-info div{
 
-background:#f8fafc;
+background:white;
 
 padding:15px;
 
-border-radius:15px;
+border-radius:14px;
 
 }
 
@@ -603,7 +809,7 @@ border-radius:15px;
 
 display:block;
 
-font-size:12px;
+font-size:11px;
 
 color:#64748b;
 
@@ -613,35 +819,16 @@ color:#64748b;
 
 .task-info strong{
 
-color:#166534;
+color:#172033;
 
 }
-
-
-
-
-
-
-
-.progress-text{
-
-display:flex;
-
-justify-content:space-between;
-
-margin:15px 0 8px;
-
-font-weight:600;
-
-}
-
 
 
 
 
 .progress-bar{
 
-height:12px;
+height:10px;
 
 background:#e2e8f0;
 
@@ -653,18 +840,11 @@ overflow:hidden;
 
 
 
-
-
-.progress-fill{
+.progress-value{
 
 height:100%;
 
-background:
-linear-gradient(
-90deg,
-#166534,
-#22c55e
-);
+background:#16a34a;
 
 }
 
@@ -672,87 +852,92 @@ linear-gradient(
 
 
 
-.update-box{
-
-margin-top:25px;
-
-background:#f8fafc;
-
-padding:20px;
-
-border-radius:20px;
-
-}
 
 
+/* ACTIVITY */
 
 
+.activity-item{
 
-.update-box textarea{
+display:flex;
 
-width:100%;
+gap:15px;
 
-height:90px;
+padding:18px 0;
 
-border-radius:15px;
-
-border:1px solid #e2e8f0;
-
-padding:12px;
-
-margin:8px 0 15px;
+border-bottom:1px solid #e5e7eb;
 
 }
 
 
 
+.activity-dot{
 
-.form-grid{
+width:12px;
 
-display:grid;
+height:12px;
 
-grid-template-columns:1fr 1fr;
+background:#16a34a;
 
-gap:20px;
+border-radius:50%;
 
-}
-
-
-
-
-input{
-
-width:100%;
-
-padding:12px;
-
-border-radius:12px;
-
-border:1px solid #e2e8f0;
+margin-top:8px;
 
 }
 
 
 
+.activity-content h4{
+
+margin-bottom:5px;
+
+color:#172033;
+
+}
 
 
-button{
 
-margin-top:20px;
+.activity-content p{
 
-background:#166534;
+color:#475569;
 
-color:white;
+margin-bottom:8px;
 
-border:none;
+}
 
-padding:12px 25px;
 
-border-radius:15px;
+
+.activity-content span{
+
+font-size:12px;
+
+color:#8b5e22;
 
 font-weight:700;
 
-cursor:pointer;
+}
+
+
+
+.activity-footer{
+
+margin-top:8px;
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+padding:25px;
+
+color:#94a3b8;
 
 }
 
@@ -760,31 +945,17 @@ cursor:pointer;
 
 
 
-.history{
 
-margin-top:25px;
-
-}
+@media(max-width:1000px){
 
 
+.summary-grid{
 
-
-.history-item{
-
-padding:15px;
-
-border-bottom:1px solid #e2e8f0;
+grid-template-columns:repeat(2,1fr);
 
 }
 
 
-
-
-.history-item span{
-
-color:#166534;
-
-font-weight:700;
 
 }
 
@@ -792,23 +963,44 @@ font-weight:700;
 
 @media(max-width:700px){
 
-.task-info,
-.form-grid{
+
+.summary-grid{
 
 grid-template-columns:1fr;
 
 }
 
 
-.task-header{
+.daily-header{
 
 flex-direction:column;
 
 align-items:flex-start;
 
-gap:10px;
+gap:15px;
 
 }
+
+
+
+.task-top{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+
+
+.task-info{
+
+grid-template-columns:1fr;
+
+}
+
 
 }
 

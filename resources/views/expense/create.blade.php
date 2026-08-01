@@ -26,14 +26,6 @@
 
 
 
-    <div class="system-status">
-
-        <span></span>
-
-        Employee
-
-    </div>
-
 
 </div>
 
@@ -207,11 +199,12 @@ Jumlah Dana
 </label>
 
 
-
 <input 
 type="number"
 name="jumlah"
-placeholder="Masukkan nominal"
+value="{{old('jumlah')}}"
+placeholder="Contoh: 1000000"
+min="1000"
 required>
 
 
@@ -229,55 +222,36 @@ required>
 
 
 
-
-<div>
-
+<div class="full-field">
 
 <label>
 Judul Pengeluaran
 </label>
 
-
-
 <input 
-
 type="text"
-
 name="judul"
-
+value="{{old('judul')}}"
 placeholder="Contoh: Pembelian alat kerja"
-
 required>
-
 
 </div>
 
 
-
-
-
-
-
-
-<div>
-
+<div class="full-field">
 
 <label>
 Keterangan
 </label>
 
-
-
 <textarea
-
 name="keterangan"
-
-rows="4"
-
-placeholder="Jelaskan kebutuhan dana"></textarea>
-
+rows="5"
+placeholder="Jelaskan kebutuhan dana">{{old('keterangan')}}</textarea>
 
 </div>
+
+
 <div class="upload-section">
 
 
@@ -286,22 +260,14 @@ Bukti Pengajuan
 </label>
 
 
-
 <div class="upload-box">
 
-
 <input
-
 type="file"
-
 name="bukti_pengajuan"
-
 id="bukti_pengajuan"
-
 accept=".jpg,.jpeg,.png,.webp,.pdf"
-
->
-
+required>
 
 
 <label for="bukti_pengajuan" class="upload-button">
@@ -311,18 +277,12 @@ accept=".jpg,.jpeg,.png,.webp,.pdf"
 </label>
 
 
-
 <span id="file-name">
-
 Belum ada file dipilih
-
 </span>
 
 
 </div>
-
-
-
 
 
 <small class="upload-info">
@@ -332,50 +292,33 @@ Format: JPG, PNG, WEBP, PDF. Maksimal 2MB.
 </small>
 
 
+<div id="file-message" class="file-message"></div>
 
 
-
-<div id="file-message"
-
-class="file-message">
-
-</div>
-
-
-
-
-
-<div id="preview-container"
-
-class="preview-card">
-
+<div id="preview-container" class="preview-card">
 
 <div class="preview-title">
-
 Preview Bukti Pengajuan
-
 </div>
-
 
 
 <img
-
 id="image-preview"
-
 class="preview-image"
-
 >
 
+</div>
 
 
 </div>
 
+<div class="approval-info">
 
+<p>
+ℹ Pengajuan dana akan diperiksa oleh bagian keuangan dan diteruskan kepada pemilik perusahaan untuk persetujuan.
+</p>
 
 </div>
-
-
-
 
 <button class="btn-submit">
 
@@ -399,32 +342,34 @@ class="preview-image"
 
 
 
-
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
 .welcome-card{
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    background:white;
 
-padding:30px;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    padding:32px;
 
-color:white;
+    border-radius:24px;
 
-display:flex;
+    color:#172033;
 
-justify-content:space-between;
+    display:flex;
 
-align-items:center;
+    justify-content:space-between;
 
-margin-bottom:22px;
+    align-items:center;
+
+    margin-bottom:22px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -432,128 +377,109 @@ margin-bottom:22px;
 
 .welcome-label{
 
-font-size:10px;
+    font-size:11px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:700;
+    font-weight:800;
 
-opacity:.8;
+    color:#64748b;
 
 }
-
 
 
 
 .welcome-card h1{
 
-font-size:28px;
+    font-size:30px;
 
-margin:8px 0;
+    margin:10px 0;
+
+    color:#172033;
 
 }
-
 
 
 
 .welcome-card p{
 
-font-size:13px;
+    color:#64748b;
 
-opacity:.9;
-
-}
-
-
-
-
-.system-status{
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-font-weight:700;
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
+    font-size:14px;
 
 }
 
 
 
 
-.system-status span{
-
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
-
-}
 
 
+
+
+/* ===============================
+ALERT
+================================ */
 
 
 .success-box{
 
-background:#dcfce7;
+    background:#ecfdf5;
 
-color:#166534;
+    border:1px solid #bbf7d0;
 
-padding:15px;
+    color:#166534;
 
-border-radius:14px;
+    padding:15px;
 
-margin-bottom:20px;
+    border-radius:16px;
 
-font-weight:600;
+    margin-bottom:20px;
 
 }
-
 
 
 
 .error-box{
 
-background:#fee2e2;
+    background:#fef2f2;
 
-color:#991b1b;
+    border:1px solid #fecaca;
 
-padding:15px;
+    color:#991b1b;
 
-border-radius:14px;
+    padding:15px;
 
-margin-bottom:20px;
+    border-radius:16px;
+
+    margin-bottom:20px;
 
 }
 
 
 
+.full-field{
+
+    grid-column:1/-1;
+
+}
+/* ===============================
+MAIN FORM CARD
+================================ */
 
 
 .glass-panel{
 
-background:
-rgba(255,255,255,.65);
+    background:white;
 
-backdrop-filter:blur(15px);
+    border:1px solid #e2e8f0;
 
-border-radius:22px;
+    border-radius:24px;
 
-padding:22px;
+    padding:30px;
 
-border:1px solid rgba(255,255,255,.8);
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.05);
 
 }
 
@@ -563,11 +489,13 @@ border:1px solid rgba(255,255,255,.8);
 
 .panel-title{
 
-font-size:16px;
+    font-size:18px;
 
-font-weight:700;
+    font-weight:800;
 
-margin-bottom:20px;
+    color:#172033;
+
+    margin-bottom:25px;
 
 }
 
@@ -575,34 +503,44 @@ margin-bottom:20px;
 
 
 
+/* ===============================
+FORM
+================================ */
 .form-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:18px;
+    gap:20px;
+
+}
+
+.form-grid input[type="number"]{
+
+width:100%;
 
 }
 
 
+form > div:not(.form-grid){
 
+margin-top:18px;
 
-
+}
 label{
 
-display:block;
+    display:block;
 
-font-size:12px;
+    font-size:12px;
 
-font-weight:600;
+    font-weight:700;
 
-color:#475569;
+    color:#475569;
 
-margin-bottom:8px;
+    margin-bottom:8px;
 
 }
-
 
 
 
@@ -610,26 +548,48 @@ input,
 select,
 textarea{
 
+    width:100%;
 
-width:100%;
+    padding:13px 15px;
 
-padding:12px;
+    border-radius:14px;
 
-border-radius:12px;
+    border:1px solid #e2e8f0;
 
-border:1px solid #e2e8f0;
+    background:#f8fafc;
 
-background:white;
+    font-size:13px;
 
-margin-bottom:15px;
+    transition:.2s;
 
 }
 
 
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:#15803d;
+
+    background:white;
+
+    box-shadow:
+    0 0 0 3px rgba(21,128,61,.1);
+
+}
+
+.full-field{
+
+    grid-column:1/-1;
+
+}
 
 textarea{
 
-resize:none;
+    resize:none;
 
 }
 
@@ -637,135 +597,52 @@ resize:none;
 
 
 
-.btn-submit{
-
-
-margin-top:10px;
-
-background:#166534;
-
-color:white;
-
-border:none;
-
-padding:12px 25px;
-
-border-radius:14px;
-
-font-weight:600;
-
-cursor:pointer;
-
-
-}
-
-
-
-
-.btn-submit:hover{
-
-background:#22c55e;
-
-}
-
-
-
-
-
-@media(max-width:900px){
-
-
-.form-grid{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-.welcome-card{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:15px;
-
-}
-
-
-}
-
-
-#file-info{
-
-padding:8px 0;
-
-}
-
-
-#preview-container{
-
-animation:fade .3s ease;
-
-}
-
-
-
-@keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(5px);
-
-}
-
-
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-}
-
+/* ===============================
+UPLOAD
+================================ */
 
 
 .upload-section{
 
-margin-top:15px;
+    margin-top:10px;
 
 }
-
 
 
 .upload-box{
 
-display:flex;
+    background:#f8fafc;
 
-align-items:center;
+    border:2px dashed #94a3b8;
 
-gap:12px;
+    padding:20px;
 
-background:white;
+    border-radius:18px;
 
-border:1px solid #e2e8f0;
+    display:flex;
 
-padding:10px;
+    align-items:center;
 
-border-radius:12px;
+    gap:15px;
+
+    transition:.2s;
+
+}
+
+
+.upload-box:hover{
+
+    border-color:#15803d;
+
+    background:#f0fdf4;
 
 }
 
 
 
-.upload-box input[type="file"]{
+.upload-box input{
 
-display:none;
+    display:none;
 
 }
 
@@ -773,19 +650,19 @@ display:none;
 
 .upload-button{
 
-background:#166534;
+    background:#0f172a;
 
-color:white;
+    color:white;
 
-padding:8px 15px;
+    padding:10px 18px;
 
-border-radius:10px;
+    border-radius:12px;
 
-font-size:12px;
+    cursor:pointer;
 
-font-weight:700;
+    font-size:12px;
 
-cursor:pointer;
+    font-weight:700;
 
 }
 
@@ -793,101 +670,275 @@ cursor:pointer;
 
 #file-name{
 
-font-size:12px;
+    color:#64748b;
 
-color:#64748b;
+    font-size:12px;
 
 }
+
 
 
 
 
 .upload-info{
 
-display:block;
+    margin-top:8px;
 
-margin-top:8px;
+    display:block;
 
-color:#64748b;
+    color:#94a3b8;
 
-font-size:11px;
+    font-size:11px;
 
 }
+
 
 
 
 
 .file-message{
 
-margin-top:10px;
+    margin-top:10px;
 
-font-size:12px;
+    font-size:12px;
 
-font-weight:700;
+    font-weight:700;
 
 }
 
 
 
+
+
+/* ===============================
+PREVIEW
+================================ */
 
 
 .preview-card{
 
-display:none;
+    display:none;
 
-margin-top:15px;
+    margin-top:20px;
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:15px;
+    border:1px solid #e2e8f0;
 
-border-radius:18px;
+    padding:18px;
 
-width:340px;
+    border-radius:18px;
 
-border:1px solid #e2e8f0;
+    width:360px;
 
 }
-
-
 
 
 
 .preview-title{
 
-font-size:12px;
+    font-size:13px;
 
-font-weight:700;
+    font-weight:800;
 
-color:#475569;
+    color:#334155;
 
-margin-bottom:12px;
+    margin-bottom:15px;
 
 }
-
 
 
 
 .preview-image{
 
-width:300px;
+    width:320px;
 
-height:380px;
+    height:360px;
 
-object-fit:contain;
+    object-fit:contain;
 
-background:white;
+    background:white;
 
-padding:10px;
+    border-radius:15px;
 
-border-radius:15px;
-
-border:1px solid #e2e8f0;
-
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+    border:1px solid #e2e8f0;
 
 }
+
+
+
+
+
+/* ===============================
+APPROVAL INFO
+================================ */
+
+
+.approval-info{
+
+    margin-top:25px;
+
+    background:#f8fafc;
+
+    border-left:4px solid #15803d;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    color:#475569;
+
+    font-size:13px;
+
+}
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
+
+
+.btn-submit{
+
+    margin-top:20px;
+
+    background:#0f172a;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 30px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+.btn-submit:hover{
+
+    background:#15803d;
+
+    transform:translateY(-2px);
+
+}
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1000px){
+
+
+.form-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.welcome-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+
+
+}
+
+/* ===============================
+FORM BALANCE FIX
+================================ */
+
+
+/* jumlah dana dibuat sejajar */
+
+.form-grid > div:nth-child(3){
+
+    width:100%;
+
+}
+
+
+/* field setelah grid */
+
+.glass-panel form > div:not(.form-grid),
+.glass-panel form > .upload-section,
+.glass-panel form > .approval-info{
+
+    margin-top:18px;
+
+}
+
+
+
+
+/* input lebih proporsional */
+
+input,
+select{
+
+    height:46px;
+
+}
+
+
+textarea{
+
+    min-height:120px;
+
+    height:120px;
+
+    resize:none;
+
+}
+
+
+/* jumlah dana jangan setengah */
+
+.form-grid input[type="number"]{
+
+    width:100%;
+
+}
+
+
+/* tombol */
+
+.btn-submit{
+
+    width:220px;
+
+    height:48px;
+
+}
+
+
 </style>
+
+
+
 <script>
 
 

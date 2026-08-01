@@ -36,7 +36,6 @@ Lihat status seluruh pengajuan dana yang telah kamu ajukan.
 
 
 
-
 <div class="welcome-tags">
 
 
@@ -64,17 +63,6 @@ Lihat status seluruh pengajuan dana yang telah kamu ajukan.
 
 
 
-
-<div class="system-status">
-
-
-<span></span>
-
-
-Employee Active
-
-
-</div>
 
 
 
@@ -360,13 +348,11 @@ Aksi
 <td class="money">
 
 
-Rp {{number_format($request->jumlah,0,',','.')}}
+Rp {{number_format($request->jumlah ?? 0,0,',','.')}}
 
 
 </td>
-
 <td>
-
 
 @if($request->status == 'pending')
 
@@ -392,12 +378,79 @@ Ditolak
 @endif
 
 
+
+<div class="timeline">
+
+
+<div class="step active">
+
+<span>
+✓
+</span>
+
+Diajukan
+
+</div>
+
+
+
+<div class="step 
+{{in_array($request->status,['approved','rejected'])?'active':''}}">
+
+
+<span>
+✓
+</span>
+
+Diproses
+
+</div>
+
+
+
+
+<div class="step 
+{{$request->status=='approved'?'active':''}}">
+
+
+<span>
+✓
+</span>
+
+Selesai
+
+</div>
+
+
+</div>
+
+
+
+
+@if($request->status == 'rejected' && $request->catatan_persetujuan)
+
+<div class="approval-note">
+
+<strong>
+Alasan Penolakan
+</strong>
+
+
+<p>
+{{$request->catatan_persetujuan}}
+</p>
+
+
+</div>
+
+@endif
+
+
 </td>
 
 
 
 <td>
-
 
 <a href="{{ route('expense.detail',$request->id) }}"
 class="detail-btn">
@@ -406,9 +459,7 @@ Lihat Detail
 
 </a>
 
-
 </td>
-
 
 </tr>
 
@@ -421,7 +472,7 @@ Lihat Detail
 <tr>
 
 
-<td colspan="6" class="empty">
+<td colspan="7" class="empty">
 
 
 Belum ada riwayat pengajuan dana
@@ -459,93 +510,70 @@ Belum ada riwayat pengajuan dana
 
 <style>
 
-
+/* =========================
+GLOBAL
+========================= */
 
 .welcome-card{
 
+    background:white;
 
-background:
+    border:1px solid #e2e8f0;
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    border-radius:24px;
 
+    padding:32px;
 
-padding:30px;
+    display:flex;
 
+    justify-content:space-between;
 
-border-radius:24px;
+    align-items:center;
 
+    margin-bottom:22px;
 
-color:white;
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-margin-bottom:22px;
-
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
-
-
 
 
 
 .welcome-label{
 
+    font-size:11px;
 
-font-size:10px;
+    letter-spacing:2px;
 
+    color:#64748b;
 
-letter-spacing:2px;
-
-
-font-weight:700;
-
-
-opacity:.8;
-
+    font-weight:700;
 
 }
-
 
 
 
 .welcome-card h1{
 
+    margin:10px 0;
 
-font-size:28px;
+    font-size:30px;
 
+    color:#172033;
 
-margin:8px 0;
-
+    font-weight:800;
 
 }
-
-
 
 
 
 .welcome-card p{
 
+    color:#64748b;
 
-font-size:13px;
-
-
-opacity:.9;
-
+    font-size:13px;
 
 }
-
 
 
 
@@ -553,15 +581,11 @@ opacity:.9;
 
 .welcome-tags{
 
+    display:flex;
 
-display:flex;
+    gap:10px;
 
-
-gap:10px;
-
-
-margin-top:18px;
-
+    margin-top:18px;
 
 }
 
@@ -569,77 +593,17 @@ margin-top:18px;
 
 .welcome-tags span{
 
+    background:#f1f5f9;
 
-background:rgba(255,255,255,.15);
+    color:#334155;
 
+    padding:8px 14px;
 
-padding:7px 12px;
+    border-radius:999px;
 
+    font-size:11px;
 
-border-radius:20px;
-
-
-font-size:11px;
-
-
-}
-
-
-
-
-
-
-
-.system-status{
-
-
-background:white;
-
-
-color:#166534;
-
-
-padding:12px 18px;
-
-
-border-radius:30px;
-
-
-font-weight:700;
-
-
-font-size:13px;
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:8px;
-
-
-}
-
-
-
-
-
-.system-status span{
-
-
-width:9px;
-
-
-height:9px;
-
-
-background:#22c55e;
-
-
-border-radius:50%;
-
+    font-weight:600;
 
 }
 
@@ -648,257 +612,251 @@ border-radius:50%;
 
 
 
+
+
+
+/* =========================
+PANEL
+========================= */
 
 
 .glass-panel{
 
+    background:white;
 
-background:
+    border:1px solid #e2e8f0;
 
-rgba(255,255,255,.65);
+    border-radius:24px;
 
+    padding:26px;
 
-backdrop-filter:blur(15px);
+    margin-bottom:22px;
 
+    box-shadow:
 
-border-radius:22px;
-
-
-padding:22px;
-
-
-border:1px solid rgba(255,255,255,.8);
-
-
-margin-bottom:20px;
-
+    0 8px 20px rgba(15,23,42,.04);
 
 }
-
-
 
 
 
 .panel-title{
 
+    font-size:18px;
 
-font-size:16px;
+    font-weight:800;
 
+    color:#172033;
 
-font-weight:700;
-
-
-margin-bottom:18px;
-
+    margin-bottom:20px;
 
 }
 
 
 
 
+
+/* =========================
+FILTER
+========================= */
 
 
 .filter-box{
 
+    display:flex;
 
-display:flex;
+    align-items:end;
 
-
-gap:15px;
-
-
-align-items:end;
-
+    gap:15px;
 
 }
-
 
 
 
 .filter-box label{
 
+    display:block;
 
-display:block;
+    font-size:12px;
 
+    color:#64748b;
 
-font-size:12px;
-
-
-color:#64748b;
-
-
-margin-bottom:5px;
-
+    margin-bottom:6px;
 
 }
-
 
 
 
 .filter-box select{
 
+    padding:11px 16px;
 
-padding:10px 15px;
+    border-radius:12px;
 
+    border:1px solid #e2e8f0;
 
-border-radius:10px;
-
-
-border:1px solid #e2e8f0;
-
+    background:white;
 
 }
-
-
 
 
 
 .filter-box button{
 
+    background:#0f172a;
 
-background:#166534;
+    color:white;
 
+    border:none;
 
-color:white;
+    padding:11px 22px;
 
+    border-radius:12px;
 
-border:none;
-
-
-padding:10px 20px;
-
-
-border-radius:12px;
-
-
-font-weight:700;
-
-
-cursor:pointer;
-
+    font-weight:700;
 
 }
 
 
 
 
+
+/* =========================
+TABLE
+========================= */
 
 
 table{
 
+    width:100%;
 
-width:100%;
-
-
-border-collapse:collapse;
-
+    border-collapse:collapse;
 
 }
 
 
 
+thead th{
 
+    background:#f8fafc;
 
+    color:#64748b;
 
-th{
+    font-size:12px;
 
+    font-weight:700;
 
-padding:14px;
+    padding:15px;
 
-
-text-align:left;
-
-
-font-size:12px;
-
-
-color:#64748b;
-
-
-background:#f8fafc;
-
+    text-align:left;
 
 }
 
 
 
+tbody td{
 
+    padding:16px;
 
+    border-bottom:1px solid #f1f5f9;
 
-td{
+    color:#334155;
 
-
-padding:14px;
-
-
-font-size:13px;
-
-
-border-bottom:1px solid #f1f5f9;
-
+    font-size:13px;
 
 }
 
 
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
 
 
 
 td strong{
 
-
-color:#334155;
-
+    color:#172033;
 
 }
-
-
 
 
 
 td small{
 
-
-color:#94a3b8;
-
-
-font-size:11px;
-
+    color:#94a3b8;
 
 }
 
 
 
+
+
+/* =========================
+MONEY
+========================= */
 
 
 .money{
 
+    color:#15803d;
 
-font-weight:700;
-
-
-color:#166534;
-
+    font-weight:800;
 
 }
 
 
 
+
+
+/* =========================
+STATUS
+========================= */
 
 
 .status{
 
+    display:inline-flex;
 
-padding:6px 12px;
+    padding:7px 14px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
 
 
-border-radius:20px;
+
+.status.pending{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
 
 
-font-size:11px;
+
+.status.approved{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
 
 
-font-weight:700;
 
+.status.rejected{
+
+    background:#fee2e2;
+
+    color:#dc2626;
 
 }
 
@@ -906,122 +864,32 @@ font-weight:700;
 
 
 
-.pending{
+/* =========================
+TIMELINE
+========================= */
 
 
-background:#fef3c7;
-
-
-color:#92400e;
-
-
-}
-
-
-
-
-
-.approved{
-
-
-background:#dcfce7;
-
-
-color:#166534;
-
-
-}
-
-
-
-
-
-.rejected{
-
-
-background:#fee2e2;
-
-
-color:#dc2626;
-
-
-}
-
-
-
-
-
-.empty{
-
-
-text-align:center;
-
-
-padding:30px;
-
-
-color:#94a3b8;
-
-
-}
-
-
-
-
-
-
-
-@media(max-width:900px){
-
-
-table{
-
-
-display:block;
-
-
-overflow-x:auto;
-
-
-}
-
-
-
-.filter-box{
-
-
-flex-direction:column;
-
-
-align-items:flex-start;
-
-
-}
-
-
-}
 .timeline{
 
-margin-top:15px;
-
-padding-left:5px;
+    margin-top:14px;
 
 }
+
 
 
 .step{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:8px;
+    gap:8px;
 
-font-size:11px;
+    margin-bottom:8px;
 
-color:#94a3b8;
+    color:#94a3b8;
 
-margin-bottom:8px;
+    font-size:11px;
 
 }
 
@@ -1029,23 +897,21 @@ margin-bottom:8px;
 
 .step span{
 
-width:20px;
+    width:20px;
 
-height:20px;
+    height:20px;
 
-border-radius:50%;
+    border-radius:50%;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
+    align-items:center;
 
-background:#e2e8f0;
+    background:#e2e8f0;
 
-font-size:11px;
-
-font-weight:bold;
+    font-size:10px;
 
 }
 
@@ -1053,9 +919,9 @@ font-weight:bold;
 
 .step.active{
 
-color:#166534;
+    color:#15803d;
 
-font-weight:600;
+    font-weight:700;
 
 }
 
@@ -1063,24 +929,32 @@ font-weight:600;
 
 .step.active span{
 
-background:#22c55e;
+    background:#16a34a;
 
-color:white;
+    color:white;
 
 }
+
+
+
+
+
+/* =========================
+REJECTION NOTE
+========================= */
+
+
 .approval-note{
 
-margin-top:15px;
+    margin-top:15px;
 
-background:#f8fafc;
+    background:#fff7ed;
 
-border-left:4px solid #166534;
+    border-left:4px solid #f97316;
 
-padding:12px;
+    padding:12px;
 
-border-radius:12px;
-
-font-size:12px;
+    border-radius:12px;
 
 }
 
@@ -1088,11 +962,9 @@ font-size:12px;
 
 .approval-note strong{
 
-display:block;
+    color:#c2410c;
 
-color:#166534;
-
-margin-bottom:5px;
+    font-size:12px;
 
 }
 
@@ -1100,39 +972,128 @@ margin-bottom:5px;
 
 .approval-note p{
 
-margin:0;
+    margin-top:5px;
 
-color:#475569;
+    color:#475569;
 
-line-height:1.5;
+    font-size:12px;
 
 }
+
+
+
+
+
+/* =========================
+DETAIL BUTTON
+========================= */
+
+
 .detail-btn{
 
-background:#166534;
+    display:inline-flex;
 
-color:white;
+    align-items:center;
 
-padding:8px 15px;
+    justify-content:center;
 
-border-radius:12px;
+    background:#0f172a;
 
-font-size:12px;
+    color:white;
 
-font-weight:700;
+    padding:9px 18px;
 
-text-decoration:none;
+    border-radius:12px;
 
-display:inline-block;
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:700;
 
 }
+
 
 
 .detail-btn:hover{
 
-background:#22c55e;
+    background:#334155;
 
 }
+
+
+
+
+
+/* =========================
+EMPTY
+========================= */
+
+
+.empty{
+
+    text-align:center;
+
+    padding:35px;
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
+/* =========================
+RESPONSIVE
+========================= */
+
+
+@media(max-width:900px){
+
+
+.welcome-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+
+
+.welcome-tags{
+
+    flex-wrap:wrap;
+
+}
+
+
+
+.filter-box{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+table{
+
+    display:block;
+
+    overflow-x:auto;
+
+}
+
+
+}
+
+
 </style>
 
 

@@ -15,7 +15,7 @@
 
         <div class="project-welcome-label">
 
-            MY PROJECT
+            PROYEK SAYA
 
         </div>
 
@@ -24,7 +24,7 @@
 
         <h1>
 
-            Project Saya
+            Proyek Saya
 
         </h1>
 
@@ -33,7 +33,7 @@
 
         <p>
 
-            Monitoring project dan task yang diberikan kepada kamu.
+            Monitoring project dan tugas yang diberikan kepada kamu.
 
         </p>
 
@@ -96,7 +96,7 @@
 
 <p>
 
-Owner :
+Pemilik :
 
 {{$project->pemilik_proyek ?? '-'}}
 
@@ -130,7 +130,7 @@ Owner :
 
 <span>
 
-Total Task
+Total Tugas
 
 </span>
 
@@ -234,7 +234,7 @@ Progress Project
 
 <h3 class="project-section-title">
 
-📌 Task Saya
+📌 Tugas Saya
 
 </h3>
 
@@ -551,6 +551,9 @@ Belum ada project.
 
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
 .project-container{
 
@@ -563,197 +566,156 @@ Belum ada project.
 }
 
 
+.project-container *{
 
-
-
-
-.project-welcome-card{
-
-
-    background:
-
-    linear-gradient(
-
-        135deg,
-
-        #166534,
-
-        #22c55e
-
-    );
-
-
-    padding:30px;
-
-
-    border-radius:24px;
-
-
-    color:white;
-
-
-    display:flex;
-
-
-    justify-content:space-between;
-
-
-    align-items:center;
-
-
-    margin-bottom:25px;
-
-
-    box-shadow:
-
-    0 15px 40px rgba(34,197,94,.25);
-
+    box-sizing:border-box;
 
 }
 
 
+
+/* ===============================
+WELCOME HEADER
+================================ */
+
+
+.project-welcome-card{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    padding:32px;
+
+    border-radius:24px;
+
+    color:#172033;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:24px;
+
+    box-shadow:
+
+    0 8px 25px rgba(15,23,42,.05);
+
+}
 
 
 
 .project-welcome-label{
 
-
     font-size:11px;
-
 
     letter-spacing:2px;
 
+    font-weight:800;
 
-    font-weight:700;
-
-
-    opacity:.8;
-
+    color:#64748b;
 
 }
-
-
-
 
 
 
 .project-welcome-card h1{
 
-
     font-size:30px;
 
+    margin:10px 0;
 
-    margin:8px 0;
+    color:#172033;
 
+    font-weight:800;
 
 }
-
-
-
-
 
 
 
 .project-welcome-card p{
 
+    margin:0;
 
-    font-size:13px;
+    color:#64748b;
 
-
-    opacity:.9;
-
+    font-size:14px;
 
 }
-
-
-
-
-
 
 
 
 .project-date-box{
 
+    background:#ecfdf5;
 
-    background:white;
+    color:#15803d;
 
+    padding:12px 22px;
 
-    color:#166534;
+    border-radius:999px;
 
+    font-size:13px;
 
-    padding:12px 20px;
-
-
-    border-radius:30px;
-
-
-    font-weight:700;
-
+    font-weight:800;
 
 }
 
 
 
-
-
-
-
+/* ===============================
+PROJECT PANEL
+================================ */
 
 
 .project-panel{
 
-
     background:white;
 
+    border:1px solid #e2e8f0;
 
-    padding:25px;
-
+    padding:28px;
 
     border-radius:24px;
 
-
-    margin-bottom:25px;
-
+    margin-bottom:24px;
 
     box-shadow:
 
-
-    0 10px 30px rgba(15,23,42,.08);
-
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-
-
-
-
+/* ===============================
+PROJECT HEADER
+================================ */
 
 
 .project-card-header h2{
 
+    margin:0 0 8px;
 
     color:#166534;
 
+    font-size:20px;
 
-    margin-bottom:8px;
-
+    font-weight:800;
 
 }
-
-
 
 
 
 .project-card-header p{
 
+    margin:0;
 
     color:#64748b;
 
-
     font-size:13px;
-
 
 }
 
@@ -761,90 +723,62 @@ Belum ada project.
 
 
 
-
-
+/* ===============================
+SUMMARY
+================================ */
 
 
 .project-summary-box{
 
-
     display:grid;
 
+    grid-template-columns:repeat(3,1fr);
 
-    grid-template-columns:
-
-    repeat(3,1fr);
-
-
-    gap:15px;
-
+    gap:18px;
 
     margin:25px 0;
 
-
 }
-
-
-
-
-
-
 
 
 
 .project-summary-box div{
 
-
     background:#f8fafc;
 
+    border:1px solid #e2e8f0;
 
-    padding:18px;
-
+    padding:20px;
 
     border-radius:18px;
 
-
 }
-
-
-
-
-
 
 
 
 .project-summary-box span{
 
-
     display:block;
-
-
-    font-size:12px;
-
 
     color:#64748b;
 
+    font-size:12px;
+
+    font-weight:600;
 
     margin-bottom:8px;
 
-
 }
-
-
-
-
-
 
 
 
 .project-summary-box strong{
 
-
     color:#166534;
 
+    font-size:22px;
 
-    font-size:24px;
-
+    font-weight:800;
 
 }
 
@@ -852,15 +786,20 @@ Belum ada project.
 
 
 
-
-
+/* ===============================
+TASK TITLE
+================================ */
 
 
 .project-section-title{
 
+    font-size:17px;
 
-    margin-bottom:15px;
+    color:#172033;
 
+    font-weight:800;
+
+    margin:25px 0 15px;
 
 }
 
@@ -868,38 +807,44 @@ Belum ada project.
 
 
 
-
-
+/* ===============================
+TASK CARD
+================================ */
 
 
 .project-task-card{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     gap:25px;
-
 
     background:#f8fafc;
 
+    border:1px solid #e2e8f0;
 
     padding:22px;
 
-
     border-radius:20px;
-
 
     margin-bottom:15px;
 
+    transition:.25s;
 
 }
 
 
 
+.project-task-card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+    0 10px 25px rgba(15,23,42,.08);
+
+}
 
 
 
@@ -907,14 +852,11 @@ Belum ada project.
 
 .project-task-main{
 
-
     flex:1;
 
+    min-width:0;
 
 }
-
-
-
 
 
 
@@ -922,33 +864,25 @@ Belum ada project.
 
 .project-task-title h4{
 
+    margin:0 0 8px;
 
-    color:#166534;
+    color:#172033;
 
+    font-size:16px;
 
-    font-size:17px;
-
-
-    margin-bottom:5px;
-
+    font-weight:800;
 
 }
-
-
-
-
-
 
 
 
 .project-task-title p{
 
+    margin:0;
 
     color:#64748b;
 
-
     font-size:13px;
-
 
 }
 
@@ -956,117 +890,82 @@ Belum ada project.
 
 
 
-
-
+/* ===============================
+PROGRESS
+================================ */
 
 
 .project-progress-label{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     margin-bottom:8px;
 
-
     font-size:12px;
-
 
 }
 
 
 
+.project-progress-label span{
 
+    color:#64748b;
 
+}
 
 
 
 .project-progress-label b{
 
-
     color:#166534;
 
-
 }
-
-
-
-
-
 
 
 
 .project-progress-track{
 
-
     width:100%;
 
-
-    height:10px;
-
+    height:12px;
 
     background:#e2e8f0;
 
-
     border-radius:20px;
-
 
     overflow:hidden;
 
-
 }
-
-
-
-
-
 
 
 
 .project-progress-value{
 
-
     height:100%;
-
 
     background:
 
-
     linear-gradient(
-
-        90deg,
-
-        #166534,
-
-        #22c55e
-
+    90deg,
+    #166534,
+    #22c55e
     );
 
+    border-radius:20px;
 
 }
-
-
-
-
-
-
 
 
 
 .project-activity-info{
 
-
-    margin-top:12px;
-
-
-    font-size:12px;
-
+    margin-top:14px;
 
     color:#64748b;
 
+    font-size:12px;
 
 }
 
@@ -1074,58 +973,39 @@ Belum ada project.
 
 
 
-
-
+/* ===============================
+SIDE TASK
+================================ */
 
 
 .project-task-side{
 
+    width:160px;
 
-    width:180px;
-
+    flex-shrink:0;
 
     text-align:right;
 
-
 }
-
-
-
-
-
-
 
 
 
 .project-deadline,
-
-
 .project-status{
-
 
     display:block;
 
-
     padding:7px 12px;
 
-
-    border-radius:20px;
-
+    border-radius:999px;
 
     font-size:11px;
 
-
     font-weight:700;
 
-
-    margin-bottom:8px;
-
+    margin-bottom:10px;
 
 }
-
-
-
-
 
 
 
@@ -1133,71 +1013,41 @@ Belum ada project.
 
 .project-deadline.danger{
 
-
     background:#fee2e2;
-
 
     color:#991b1b;
 
-
 }
-
-
-
-
-
 
 
 
 .project-deadline.warning{
 
-
     background:#fef3c7;
-
 
     color:#92400e;
 
-
 }
-
-
-
-
-
 
 
 
 .project-deadline.success{
 
-
     background:#dcfce7;
-
 
     color:#166534;
 
-
 }
-
-
-
-
-
 
 
 
 .project-deadline.secondary{
 
-
     background:#e2e8f0;
-
 
     color:#475569;
 
-
 }
-
-
-
 
 
 
@@ -1205,121 +1055,108 @@ Belum ada project.
 
 .project-status.done{
 
-
     background:#dcfce7;
-
 
     color:#166534;
 
-
 }
-
-
-
-
-
 
 
 
 .project-status.progress{
 
-
     background:#dbeafe;
-
 
     color:#1d4ed8;
 
-
 }
-
-
-
-
-
 
 
 
 .project-status.todo{
 
-
-    background:#e2e8f0;
-
+    background:#f1f5f9;
 
     color:#475569;
-
 
 }
 
 
 
+.deadline-text{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    margin-bottom:10px;
+
+}
 
 
 
-
+/* ===============================
+BUTTON
+================================ */
 
 
 .project-button-group{
 
-
     display:flex;
-
 
     justify-content:flex-end;
 
-
     gap:8px;
-
 
     margin-top:15px;
 
-
 }
-
-
-
-
-
 
 
 
 .project-button-group a{
 
-
-    text-decoration:none;
-
-
-    background:#166534;
-
+    background:#0f172a;
 
     color:white;
 
+    text-decoration:none;
 
-    padding:9px 15px;
+    padding:9px 16px;
 
-
-    border-radius:14px;
-
+    border-radius:12px;
 
     font-size:12px;
 
-
     font-weight:700;
 
+    transition:.2s;
 
 }
 
 
 
+.project-button-group a:hover{
 
+    background:#166534;
 
+}
 
 
 
 .project-update-btn{
 
-
     background:#2563eb!important;
 
+}
+
+
+
+.project-update-btn:hover{
+
+    background:#1d4ed8!important;
 
 }
 
@@ -1327,111 +1164,103 @@ Belum ada project.
 
 
 
+/* ===============================
+EMPTY
+================================ */
 
 
+.empty-project{
 
+    text-align:center;
 
-@media(max-width:900px){
+    padding:50px;
 
+    color:#94a3b8;
 
-
-.project-welcome-card{
-
-
-    flex-direction:column;
-
-
-    align-items:flex-start;
-
-
-    gap:15px;
-
+    font-weight:600;
 
 }
 
 
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1000px){
+
+
+.project-summary-box{
+
+    grid-template-columns:1fr;
+
+}
 
 
 .project-task-card{
 
-
     flex-direction:column;
 
-
 }
-
 
 
 
 .project-task-side{
 
-
     width:100%;
-
 
     text-align:left;
 
-
 }
-
 
 
 
 .project-button-group{
 
-
     justify-content:flex-start;
 
+}
+
+
+
+.project-welcome-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
 
 }
 
 
 
 }
-
-
-
 
 
 
 @media(max-width:600px){
 
 
-.project-summary-box{
-
-
-    grid-template-columns:1fr;
-
-
-}
-
-
-
 .project-panel{
-
 
     padding:18px;
 
-
 }
 
 
 
-}
+.project-welcome-card h1{
 
-
-
-
-
-
-.project-container *{
-
-
-    box-sizing:border-box;
-
+    font-size:24px;
 
 }
 
+
+}
 
 </style>
 

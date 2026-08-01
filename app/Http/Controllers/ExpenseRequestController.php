@@ -37,8 +37,21 @@ class ExpenseRequestController extends Controller
     public function create()
     {
 
-        $projects = Proyek::all();
+        $employee = Auth::user()->karyawan;
 
+
+        $projects = Proyek::whereHas(
+            'tugas',
+            function($query) use($employee){
+
+                $query->where(
+                    'karyawan_id',
+                    $employee->id
+                );
+
+            }
+        )
+        ->get();
 
         $divisions = Divisi::all();
 
@@ -310,18 +323,12 @@ class ExpenseRequestController extends Controller
 
 
 
-        return back()
-
-        ->with(
-
-
-            'success',
-
-
-            'Pengajuan dana berhasil dikirim dan menunggu persetujuan keuangan'
-
-
-        );
+   return redirect()
+    ->route('expense.myhistory')
+    ->with(
+        'success',
+        'Pengajuan dana berhasil dikirim dan menunggu persetujuan'
+    );
 
 
     }
@@ -443,37 +450,24 @@ class ExpenseRequestController extends Controller
     public function detail($id)
     {
 
-
         $request = PengajuanDana::with([
-
 
             'proyek',
 
-
             'divisi',
-
 
             'penyetuju',
 
-
-            'auditLogs'
-
+            'pengguna',
+            
+            'auditLogs.pengguna'
 
         ])
-
         ->where(
-
-
             'pengguna_id',
-
-
             Auth::id()
-
-
         )
-
         ->findOrFail($id);
-
 
 
 

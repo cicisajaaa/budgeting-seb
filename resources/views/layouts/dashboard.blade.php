@@ -650,16 +650,16 @@ Laporan
 @endif
 {{-- ================= KARYAWAN ================= --}}
 
-
 @if(auth()->user()->role=='karyawan')
 
 
 <div class="menu-title">
-EMPLOYEE
+KARYAWAN
 </div>
 
 
-<a href="{{route('expense.create')}}">
+<a href="{{route('expense.create')}}"
+class="{{request()->routeIs('expense.create')?'active':''}}">
 
 <div class="icon">
 ＋
@@ -671,7 +671,8 @@ Pengajuan Dana
 
 
 
-<a href="{{route('expense.myhistory')}}">
+<a href="{{route('expense.myhistory')}}"
+class="{{request()->routeIs('expense.myhistory')?'active':''}}">
 
 <div class="icon">
 📄
@@ -683,25 +684,27 @@ Riwayat Pengajuan
 
 
 
-<a href="{{route('employee.project.index')}}">
+<a href="{{route('employee.project.index')}}"
+class="{{request()->routeIs('employee.project.*')?'active':''}}">
 
 <div class="icon">
 📁
 </div>
 
-Project Saya
+Proyek Saya
 
 </a>
 
 
 
-<a href="{{route('daily-tracker.index')}}">
+<a href="{{route('daily-tracker.index')}}"
+class="{{request()->routeIs('daily-tracker.*')?'active':''}}">
 
 <div class="icon">
 📝
 </div>
 
-Daily Tracker
+Aktivitas Harian
 
 </a>
 
@@ -1047,11 +1050,13 @@ color:#64748b;
 
 .profile-area{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:15px;
+    gap:18px;
+
+    height:100%;
 
 }
 
@@ -1106,49 +1111,104 @@ font-size:11px;
 
 color:#64748b;
 
+
+}
+
+
+
+.profile-area form{
+
+    margin:0;
+
+    padding:0;
+
+    width:auto;
+
+    height:auto;
+
+    background:none;
+
+    display:flex;
+
+    align-items:center;
+
 }
 
 
 
 .logout{
 
-border:none;
+    border:none;
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#dc2626;
+    color:#dc2626;
 
-padding:8px 15px;
+    padding:9px 18px;
 
-border-radius:6px;
+    border-radius:10px;
 
-font-weight:600;
+    font-size:13px;
 
-cursor:pointer;
+    font-weight:700;
+
+    cursor:pointer;
+
+    width:auto;
+
+    height:auto;
+
+    line-height:normal;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
 
 }
 
+
+.logout:hover{
+
+    background:#fecaca;
+
+}
 
 
 
 
 /* CONTENT */
-
-
 .content{
 
-margin-left:230px;
+    margin-left:230px;
 
-padding:
+    width:auto;
 
-90px 25px 30px;
+    min-height:100vh;
 
-min-height:100vh;
+    padding:90px 25px 30px;
+
+    box-sizing:border-box;
+
+    overflow-x:hidden;
+
+}
+html,
+body{
+
+    width:100%;
+
+    overflow-x:hidden;
 
 }
 
 
+*{
 
+    box-sizing:border-box;
+
+}
 
 
 /* NOTIFICATION */
@@ -1326,44 +1386,27 @@ border-radius:6px;
 margin-bottom:20px;
 
 }
-
-
 @media(max-width:900px){
 
-
 .sidebar{
-
-width:70px;
-
-}
-
-
-.brand-text,
-.menu-title,
-.system-status,
-.sidebar span{
-
-display:none;
-
+    width:70px;
 }
 
 
 .header{
-
-left:70px;
-
+    left:70px;
 }
 
 
 .content{
 
-margin-left:70px;
+    margin-left:70px !important;
+
+    width:auto !important;
 
 }
 
-
 }
-
 
 
 </style>

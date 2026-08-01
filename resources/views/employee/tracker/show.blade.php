@@ -179,10 +179,10 @@ placeholder="Catatan tambahan"></textarea>
 
 
 
-
-<button type="submit">
+<button type="submit" class="submit-update-btn">
 Simpan Update
 </button>
+
 
 
 
@@ -197,86 +197,53 @@ Simpan Update
 
 
 
-
 <style>
 
-
-.alert-error{
-
-background:#fee2e2;
-
-color:#991b1b;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-bottom:20px;
-
-font-weight:600;
-
-}
-
-
-
-
+/* ===============================
+CONTAINER
+================================ */
 
 .tracker-card{
 
+    width:100%;
 
-background:white;
+    background:white;
 
+    border:1px solid #e2e8f0;
 
-padding:30px;
+    border-radius:24px;
 
+    padding:25px;
 
-border-radius:25px;
-
-
-box-shadow:
-0 15px 40px rgba(0,0,0,.08);
-
-
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-
+/* ===============================
+HEADER
+================================ */
 
 
 .header-task{
 
+    background:white;
 
-display:flex;
+    border:1px solid #e2e8f0;
 
+    padding:32px;
 
-justify-content:space-between;
+    border-radius:24px;
 
+    display:flex;
 
-align-items:center;
+    justify-content:space-between;
 
+    align-items:center;
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
-
-
-padding:25px;
-
-
-border-radius:20px;
-
-
-color:white;
-
-
-margin-bottom:25px;
-
-
+    margin-bottom:25px;
 
 }
 
@@ -286,12 +253,13 @@ margin-bottom:25px;
 
 .label{
 
+    font-size:11px;
 
-font-size:11px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
+    color:#64748b;
 
 }
 
@@ -301,13 +269,27 @@ letter-spacing:2px;
 
 .header-task h1{
 
+    margin:10px 0;
 
-margin:8px 0;
+    font-size:30px;
+
+    color:#172033;
+
+    font-weight:800;
+
+}
 
 
-font-size:28px;
 
 
+
+.header-task p{
+
+    color:#64748b;
+
+    margin:0;
+
+    font-size:14px;
 
 }
 
@@ -317,25 +299,29 @@ font-size:28px;
 
 .back{
 
+    background:#f1f5f9;
 
-background:white;
+    color:#172033;
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    transition:.2s;
+
+}
 
 
-color:#166534;
 
+.back:hover{
 
-padding:12px 20px;
-
-
-border-radius:20px;
-
-
-text-decoration:none;
-
-
-font-weight:bold;
-
-
+    background:#e2e8f0;
 
 }
 
@@ -343,28 +329,22 @@ font-weight:bold;
 
 
 
+/* ===============================
+INFO CARD
+================================ */
 
 
 .info-grid{
 
+    display:grid;
 
-display:grid;
+    grid-template-columns:repeat(3,1fr);
 
+    gap:18px;
 
-grid-template-columns:
-repeat(3,1fr);
-
-
-
-gap:20px;
-
-
-margin-bottom:25px;
-
-
+    margin-bottom:25px;
 
 }
-
 
 
 
@@ -372,19 +352,15 @@ margin-bottom:25px;
 
 .info-grid div{
 
+    background:#f8fafc;
 
-background:#f8fafc;
+    border:1px solid #e2e8f0;
 
+    padding:20px;
 
-padding:20px;
-
-
-border-radius:15px;
-
-
+    border-radius:18px;
 
 }
-
 
 
 
@@ -392,22 +368,17 @@ border-radius:15px;
 
 .info-grid label{
 
+    display:block;
 
-display:block;
+    font-size:12px;
 
+    color:#64748b;
 
-font-size:12px;
+    font-weight:700;
 
-
-color:#64748b;
-
-
-margin-bottom:8px;
-
-
+    margin-bottom:10px;
 
 }
-
 
 
 
@@ -415,13 +386,54 @@ margin-bottom:8px;
 
 .info-grid strong{
 
+    color:#172033;
 
-color:#166534;
-
-
+    font-size:16px;
 
 }
 
+
+
+
+
+
+/* ===============================
+DIVIDER
+================================ */
+
+
+.tracker-card hr{
+
+    border:none;
+
+    height:1px;
+
+    background:#e2e8f0;
+
+    margin:30px 0;
+
+}
+
+
+
+
+
+/* ===============================
+FORM CARD
+================================ */
+
+
+form{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    padding:25px;
+
+    border-radius:22px;
+
+}
 
 
 
@@ -429,22 +441,19 @@ color:#166534;
 
 form label{
 
+    display:block;
 
-display:block;
+    margin-top:18px;
 
+    margin-bottom:8px;
 
-font-weight:700;
+    font-size:12px;
 
+    font-weight:800;
 
-margin-top:15px;
-
-
-margin-bottom:8px;
-
-
+    color:#334155;
 
 }
-
 
 
 
@@ -454,25 +463,49 @@ textarea,
 input{
 
 
-width:100%;
+    width:100%;
 
 
-padding:15px;
+    padding:14px 16px;
 
 
-border-radius:15px;
+    border-radius:14px;
 
 
-border:
-1px solid #e2e8f0;
+    border:1px solid #dbe3ee;
 
 
-font-family:inherit;
+    background:white;
 
+
+    font-size:14px;
+
+
+    transition:.2s;
 
 
 }
 
+
+
+
+
+textarea:focus,
+input:focus{
+
+
+    outline:none;
+
+
+    border-color:#2563eb;
+
+
+    box-shadow:
+
+    0 0 0 3px rgba(37,99,235,.12);
+
+
+}
 
 
 
@@ -480,13 +513,48 @@ font-family:inherit;
 
 textarea{
 
+    height:120px;
 
-height:120px;
+    resize:none;
+
+}
 
 
-resize:none;
 
 
+
+input[type="number"]{
+
+    height:48px;
+
+}
+
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
+.submit-update-btn{
+
+    margin-top:25px;
+
+    width:200px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
 
 }
 
@@ -495,33 +563,24 @@ resize:none;
 
 
 
-button{
 
 
-margin-top:20px;
+/* ===============================
+STATUS
+================================ */
 
 
-background:#166534;
+.status{
 
+    display:inline-block;
 
-color:white;
+    padding:7px 14px;
 
+    border-radius:20px;
 
-border:none;
+    font-size:12px;
 
-
-padding:14px 30px;
-
-
-border-radius:15px;
-
-
-font-weight:bold;
-
-
-cursor:pointer;
-
-
+    font-weight:800;
 
 }
 
@@ -529,12 +588,35 @@ cursor:pointer;
 
 
 
-button:hover{
+.status.progress{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
 
 
-background:#22c55e;
 
 
+
+.status.done{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+
+
+.status.todo{
+
+    background:#f1f5f9;
+
+    color:#475569;
 
 }
 
@@ -543,15 +625,44 @@ background:#22c55e;
 
 
 
-@media(max-width:900px){
+/* ===============================
+ALERT
+================================ */
+
+
+.alert-error{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    border:1px solid #fecaca;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1000px){
 
 
 .info-grid{
 
-
-grid-template-columns:1fr;
-
-
+    grid-template-columns:1fr;
 
 }
 
@@ -559,26 +670,42 @@ grid-template-columns:1fr;
 
 .header-task{
 
+    flex-direction:column;
 
-flex-direction:column;
+    align-items:flex-start;
 
-
-align-items:flex-start;
-
-
-gap:20px;
-
-
+    gap:20px;
 
 }
 
 
 
 }
+
+
+
+@media(max-width:600px){
+
+
+.tracker-card{
+
+    padding:18px;
+
+}
+
+
+button{
+
+    width:100%;
+
+}
+
+
+}
+
 
 
 </style>
-
 
 
 @endsection
