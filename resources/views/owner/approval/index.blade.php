@@ -363,7 +363,7 @@ letter-spacing:2px;
 
 font-weight:700;
 
-color:#b08732;
+color:#64748b;
 
 }
 

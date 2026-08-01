@@ -7,8 +7,7 @@
 
 <!-- HEADER -->
 
-<div class="page-header">
-
+<div class="page-header-card">
 
 <div>
 
@@ -333,27 +332,34 @@ placeholder="Kosongkan jika tidak diganti">
 
 
 
-
 <style>
 
-
-/* HEADER */
-
-
-.page-header{
+/* ===============================
+HEADER CARD
+================================ */
 
 
-display:flex;
+.page-header-card{
 
+    background:white;
 
-justify-content:space-between;
+    border:1px solid #e5e7eb;
 
+    border-radius:24px;
 
-align-items:center;
+    padding:30px 32px;
 
+    display:flex;
 
-margin-bottom:20px;
+    justify-content:space-between;
 
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -361,47 +367,39 @@ margin-bottom:20px;
 
 .page-label{
 
+    font-size:11px;
 
-font-size:10px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
-
-font-weight:700;
-
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
 
 
-.page-header h1{
+.page-header-card h1{
 
+    font-size:30px;
 
-font-size:24px;
+    margin:10px 0;
 
+    color:#172033;
 
-color:#166534;
-
-
-margin:5px 0;
-
+    font-weight:800;
 
 }
 
 
 
-.page-header p{
+.page-header-card p{
 
+    margin:0;
 
-font-size:13px;
+    color:#64748b;
 
-
-color:#64748b;
-
+    font-size:14px;
 
 }
 
@@ -409,45 +407,43 @@ color:#64748b;
 
 
 
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
+    background:#f8fafc;
 
-background:white;
+    border:1px solid #e2e8f0;
 
+    color:#334155;
 
-border:
+    padding:11px 22px;
 
-1px solid #e5e7eb;
+    border-radius:14px;
 
+    text-decoration:none;
 
+    font-size:13px;
 
-padding:
+    font-weight:700;
 
-10px 18px;
+    transition:.2s;
 
-
-
-border-radius:12px;
-
-
-
-text-decoration:none;
+}
 
 
 
-font-size:13px;
+.btn-back:hover{
 
+    background:white;
 
+    border-color:#b8863b;
 
-font-weight:600;
-
-
-
-color:#475569;
-
-
+    color:#8b5e22;
 
 }
 
@@ -458,29 +454,36 @@ color:#475569;
 
 
 
-/* ERROR */
+/* ===============================
+ERROR
+================================ */
 
 
 .alert-error{
 
+    background:#fef2f2;
 
-background:#fee2e2;
+    border:1px solid #fecaca;
+
+    color:#991b1b;
+
+    padding:16px 18px;
+
+    border-radius:16px;
+
+    margin-bottom:20px;
+
+    font-size:13px;
+
+}
 
 
-color:#991b1b;
 
+.alert-error strong{
 
-padding:14px 18px;
+    display:block;
 
-
-border-radius:14px;
-
-
-margin-bottom:18px;
-
-
-font-size:13px;
-
+    margin-bottom:8px;
 
 }
 
@@ -488,12 +491,9 @@ font-size:13px;
 
 .alert-error ul{
 
+    margin:0;
 
-padding-left:20px;
-
-
-margin-top:8px;
-
+    padding-left:20px;
 
 }
 
@@ -504,14 +504,14 @@ margin-top:8px;
 
 
 
-/* CARD */
+/* ===============================
+FORM CARD
+================================ */
 
 
 .form-card{
 
-
-max-width:850px;
-
+    max-width:900px;
 
 }
 
@@ -519,57 +519,33 @@ max-width:850px;
 
 .glass-panel{
 
+    background:white;
 
-background:
+    border:1px solid #e5e7eb;
 
-rgba(255,255,255,.65);
+    border-radius:24px;
 
+    padding:30px;
 
+    box-shadow:
 
-backdrop-filter:
-
-blur(15px);
-
-
-
-border-radius:20px;
-
-
-
-padding:25px;
-
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
-
-box-shadow:
-
-0 15px 35px rgba(15,23,42,.06);
-
-
+    0 10px 30px rgba(15,23,42,.06);
 
 }
+
+
 
 
 
 .panel-title{
 
+    font-size:18px;
 
-font-size:15px;
+    font-weight:800;
 
+    color:#172033;
 
-font-weight:700;
-
-
-margin-bottom:20px;
-
-
-color:#111827;
-
+    margin-bottom:25px;
 
 }
 
@@ -580,122 +556,94 @@ color:#111827;
 
 
 
-/* FORM */
+/* ===============================
+FORM
+================================ */
 
 
 .form-grid{
 
+    display:grid;
 
-display:grid;
+    grid-template-columns:repeat(2,1fr);
 
-
-grid-template-columns:
-
-repeat(2,1fr);
-
-
-
-gap:18px;
-
+    gap:22px;
 
 }
+
+
 
 
 
 .form-group{
 
+    display:flex;
 
-display:flex;
-
-
-flex-direction:column;
-
+    flex-direction:column;
 
 }
+
 
 
 
 
 .form-group label{
 
+    font-size:12px;
 
-font-size:12px;
+    font-weight:800;
 
+    color:#475569;
 
-font-weight:600;
-
-
-color:#475569;
-
-
-margin-bottom:7px;
-
+    margin-bottom:8px;
 
 }
+
+
 
 
 
 .form-group input,
-
-
 .form-group select{
 
 
-height:45px;
+    width:100%;
 
+    height:46px;
 
-border-radius:12px;
+    padding:0 15px;
 
+    border-radius:14px;
 
-border:
+    border:1px solid #e2e8f0;
 
-1px solid #e2e8f0;
+    background:#f8fafc;
 
+    color:#172033;
 
+    font-size:13px;
 
-background:#f8fafc;
-
-
-
-padding:
-
-0 14px;
-
-
-
-font-size:13px;
-
-
-
-outline:none;
-
-
-
-transition:.25s;
-
-
+    transition:.2s;
 
 }
+
+
 
 
 
 .form-group input:focus,
-
-
 .form-group select:focus{
 
 
-border-color:#22c55e;
+    outline:none;
 
+    background:white;
 
-background:white;
+    border-color:#b8863b;
 
+    box-shadow:
 
-
-box-shadow:
-
-0 0 0 4px rgba(34,197,94,.12);
-
+    0 0 0 3px rgba(184,134,59,.12);
 
 
 }
@@ -706,21 +654,110 @@ box-shadow:
 
 
 
-
-
-/* BUTTON */
+/* ===============================
+ACTION BUTTON
+================================ */
 
 
 .form-action{
 
 
-margin-top:25px;
+    margin-top:30px;
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:flex-end;
+    justify-content:flex-end;
+
+
+}
+
+
+
+
+.btn-update{
+
+
+    border:none;
+
+    background:#1e293b;
+
+    color:white;
+
+    padding:13px 28px;
+
+    border-radius:14px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+
+
+.btn-update:hover{
+
+
+    background:#b8863b;
+
+    transform:translateY(-2px);
+
+
+}
+
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:800px){
+
+
+.page-header-card{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:20px;
+
+
+}
+
+
+
+
+.form-grid{
+
+
+    grid-template-columns:1fr;
+
+
+}
+
+
+
+.form-action{
+
+
+    justify-content:stretch;
 
 
 }
@@ -730,106 +767,13 @@ justify-content:flex-end;
 .btn-update{
 
 
-border:none;
-
-
-padding:
-
-12px 25px;
-
-
-
-border-radius:14px;
-
-
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
-
-
-
-color:white;
-
-
-
-font-size:13px;
-
-
-
-font-weight:600;
-
-
-
-cursor:pointer;
-
-
-
-box-shadow:
-
-0 10px 25px rgba(34,197,94,.25);
-
+    width:100%;
 
 
 }
 
 
-
-.btn-update:hover{
-
-
-transform:
-
-translateY(-2px);
-
-
-
 }
-
-
-
-
-
-@media(max-width:800px){
-
-
-.form-grid{
-
-
-grid-template-columns:1fr;
-
-
-}
-
-
-
-.page-header{
-
-
-flex-direction:column;
-
-
-align-items:flex-start;
-
-
-gap:15px;
-
-
-}
-
-
-
-}
-
-
 
 </style>
 

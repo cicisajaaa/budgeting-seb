@@ -240,31 +240,24 @@
 
 
 
-
-
-
 {{-- ================= CONTENT GRID ================= --}}
-
 
 <div class="dashboard-grid">
 
 
-
-
+{{-- ================= LEFT SIDE ================= --}}
 
 <div>
 
 
+{{-- MONITORING DANA --}}
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
 📊 Monitoring Pengajuan Dana
-
 </div>
-
 
 
 
@@ -323,6 +316,7 @@ Ditolak
 
 
 
+{{-- PROJECT TERBARU --}}
 
 
 <div class="glass-panel">
@@ -336,7 +330,6 @@ Ditolak
 
 
 
-
 @forelse($recentProjects as $project)
 
 
@@ -345,17 +338,19 @@ Ditolak
 
 <div>
 
+
 <strong>
 {{$project->nama_proyek}}
 </strong>
 
 
 <p>
-{{ $project->created_at->format('d M Y') }}
+{{$project->created_at->format('d M Y')}}
 </p>
 
 
 </div>
+
 
 
 <span>
@@ -371,7 +366,9 @@ Project
 
 
 <div class="empty">
+
 Belum ada project
+
 </div>
 
 
@@ -384,6 +381,191 @@ Belum ada project
 
 
 
+
+
+
+
+{{-- RINGKASAN SISTEM --}}
+
+
+<div class="glass-panel">
+
+
+<div class="panel-title">
+
+📊 Ringkasan Sistem
+
+</div>
+
+
+
+<div class="system-summary">
+
+
+
+<div class="summary-item">
+
+
+<div class="summary-icon">
+
+👥
+
+</div>
+
+
+
+<div>
+
+<span>
+Pengguna
+</span>
+
+
+<strong>
+{{$totalUser}}
+</strong>
+
+
+<small>
+Akun terdaftar
+</small>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="summary-item">
+
+
+<div class="summary-icon blue">
+
+📁
+
+</div>
+
+
+
+<div>
+
+<span>
+Project
+</span>
+
+
+<strong>
+{{$totalProject}}
+</strong>
+
+
+<small>
+Project perusahaan
+</small>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-item">
+
+
+<div class="summary-icon green">
+
+📝
+
+</div>
+
+
+
+<div>
+
+<span>
+Task
+</span>
+
+
+<strong>
+{{$totalTask}}
+</strong>
+
+
+<small>
+Aktivitas pekerjaan
+</small>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-item">
+
+
+<div class="summary-icon gold">
+
+🏢
+
+</div>
+
+
+
+<div>
+
+<span>
+Divisi
+</span>
+
+
+<strong>
+{{$totalDivision}}
+</strong>
+
+
+<small>
+Unit organisasi
+</small>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
 </div>
 
 
@@ -394,7 +576,14 @@ Belum ada project
 
 
 
+{{-- ================= RIGHT SIDE ================= --}}
+
+
 <div>
+
+
+
+{{-- STATUS OPERASIONAL --}}
 
 
 
@@ -403,49 +592,160 @@ Belum ada project
 
 <div class="panel-title">
 
-⚡ Akses Cepat
+📌 Status Operasional Sistem
 
 </div>
 
 
 
-<a href="{{route('admin.users.index')}}" class="quick-menu">
-
-👥
-
-Kelola Pengguna
-
-</a>
+<div class="monitor-box">
 
 
 
-<a href="{{route('admin.projects.index')}}" class="quick-menu">
-
-📁
-
-Kelola Project
-
-</a>
 
 
-
-<a href="{{route('admin.divisions.index')}}" class="quick-menu">
-
-🏢
-
-Kelola Divisi
-
-</a>
+<div class="monitor-item">
 
 
+<div class="monitor-icon green">
 
-<a href="{{route('admin.tasks.index')}}" class="quick-menu">
+✓
+
+</div>
+
+
+<div>
+
+<strong>
+
+Sistem Berjalan Normal
+
+</strong>
+
+
+<p>
+
+Seluruh layanan utama aktif
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="monitor-item">
+
+
+<div class="monitor-icon blue">
+
+📊
+
+</div>
+
+
+<div>
+
+<strong>
+
+{{$totalProject}} Project
+
+</strong>
+
+
+<p>
+
+Project sedang dimonitor
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="monitor-item">
+
+
+<div class="monitor-icon orange">
+
+⏳
+
+</div>
+
+
+<div>
+
+<strong>
+
+{{$totalPendingExpense}} Pending
+
+</strong>
+
+
+<p>
+
+Menunggu approval dana
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="monitor-item">
+
+
+<div class="monitor-icon purple">
 
 📝
 
-Kelola Task
+</div>
 
-</a>
+
+<div>
+
+<strong>
+
+{{$totalTask}} Task
+
+</strong>
+
+
+<p>
+
+Aktivitas pekerjaan sistem
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
 
 
 
@@ -456,6 +756,9 @@ Kelola Task
 
 
 
+
+
+{{-- AKTIVITAS SISTEM --}}
 
 
 
@@ -470,21 +773,32 @@ Kelola Task
 
 
 
-@forelse($recentAudit as $audit)
+
+
+@forelse($recentAudit->take(5) as $audit)
+
 
 
 <div class="activity">
 
 
-<div class="activity-dot"></div>
+<div class="activity-number">
+
+{{$loop->iteration}}
+
+</div>
 
 
-<div>
+
+<div class="activity-content">
 
 
 <strong>
+
 {{$audit->aksi}}
+
 </strong>
+
 
 
 <p>
@@ -494,18 +808,31 @@ Kelola Task
 </p>
 
 
-<small>
 
-{{$audit->pengguna->name ?? 'System'}}
 
--
+<div class="activity-meta">
 
-{{$audit->created_at->format('d M Y H:i')}}
 
-</small>
+<span>
+
+👤 {{$audit->pengguna->name ?? 'System'}}
+
+</span>
+
+
+<span>
+
+🕒 {{$audit->created_at->format('d M Y H:i')}}
+
+</span>
+
 
 
 </div>
+
+
+</div>
+
 
 
 </div>
@@ -516,8 +843,11 @@ Kelola Task
 
 
 <div class="empty">
+
 Belum ada aktivitas
+
 </div>
+
 
 
 @endforelse
@@ -533,55 +863,74 @@ Belum ada aktivitas
 
 
 
-
 </div>
 
-
-
-@endsection
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-/* ================= WELCOME ================= */
+.welcome-card,
+.stat-card,
+.glass-panel{
 
+    background:white;
 
-.welcome-card{
+    border:1px solid #e5e7eb;
 
-background:linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
-
-padding:22px 25px;
-
-border-radius:20px;
-
-color:white;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:18px;
-
-box-shadow:
-0 15px 35px rgba(34,197,94,.18);
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
 
+/* ===============================
+WELCOME
+================================ */
+
+
+.welcome-card{
+
+    padding:30px;
+
+    border-radius:24px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    color:#172033;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+
+.welcome-card::before{
+
+    content:none;
+
+}
+
+
+
 .welcome-label{
 
-font-size:10px;
+    font-size:11px;
 
-letter-spacing:1.5px;
+    letter-spacing:2px;
 
-opacity:.8;
+    font-weight:800;
 
-font-weight:700;
+    color:#64748b;
 
 }
 
@@ -589,9 +938,11 @@ font-weight:700;
 
 .welcome-card h1{
 
-font-size:22px;
+    font-size:28px;
 
-margin:7px 0;
+    margin:10px 0;
+
+    color:#172033;
 
 }
 
@@ -599,9 +950,9 @@ margin:7px 0;
 
 .welcome-card p{
 
-font-size:12px;
+    color:#64748b;
 
-opacity:.9;
+    font-size:14px;
 
 }
 
@@ -609,11 +960,11 @@ opacity:.9;
 
 .welcome-tags{
 
-display:flex;
+    display:flex;
 
-gap:8px;
+    gap:10px;
 
-margin-top:12px;
+    margin-top:15px;
 
 }
 
@@ -621,37 +972,43 @@ margin-top:12px;
 
 .welcome-tags span{
 
-background:rgba(255,255,255,.18);
+    background:#f8f3ea;
 
-padding:5px 12px;
+    color:#8b5e22;
 
-border-radius:20px;
+    padding:6px 14px;
 
-font-size:10px;
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:700;
 
 }
 
 
 
+
+
 .welcome-status{
 
-background:white;
+    background:#f8fafc;
 
-color:#166534;
+    color:#334155;
 
-padding:9px 15px;
+    padding:12px 18px;
 
-border-radius:30px;
+    border-radius:999px;
 
-font-size:12px;
+    font-weight:700;
 
-font-weight:700;
+    display:flex;
 
-display:flex;
+    gap:8px;
 
-align-items:center;
+    align-items:center;
 
-gap:8px;
+    font-size:13px;
 
 }
 
@@ -659,13 +1016,13 @@ gap:8px;
 
 .welcome-status span{
 
-width:8px;
+    width:8px;
 
-height:8px;
+    height:8px;
 
-background:#22c55e;
+    background:#22c55e;
 
-border-radius:50%;
+    border-radius:50%;
 
 }
 
@@ -674,40 +1031,37 @@ border-radius:50%;
 
 
 
-/* ================= STAT CARD ================= */
+/* ===============================
+STATISTIC
+================================ */
 
 
 .stat-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:
-repeat(6,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:12px;
+    gap:18px;
 
-margin-bottom:18px;
+    margin-bottom:25px;
 
 }
+
 
 
 
 .stat-card{
 
-background:white;
+    padding:20px;
 
-border-radius:16px;
+    border-radius:20px;
 
-padding:13px;
+    display:flex;
 
-display:flex;
+    align-items:center;
 
-align-items:center;
-
-gap:10px;
-
-box-shadow:
-0 8px 25px rgba(15,23,42,.05);
+    gap:15px;
 
 }
 
@@ -715,21 +1069,21 @@ box-shadow:
 
 .stat-icon{
 
-width:36px;
+    width:45px;
 
-height:36px;
+    height:45px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-border-radius:12px;
+    border-radius:14px;
 
-background:#dcfce7;
+    background:#f8f3ea;
 
-font-size:16px;
+    font-size:20px;
 
 }
 
@@ -737,7 +1091,7 @@ font-size:16px;
 
 .stat-icon.money{
 
-background:#fef3c7;
+    background:#fef3c7;
 
 }
 
@@ -745,7 +1099,7 @@ background:#fef3c7;
 
 .stat-icon.pending{
 
-background:#fee2e2;
+    background:#fee2e2;
 
 }
 
@@ -753,11 +1107,9 @@ background:#fee2e2;
 
 .stat-card label{
 
-font-size:10px;
+    font-size:12px;
 
-color:#64748b;
-
-display:block;
+    color:#64748b;
 
 }
 
@@ -765,11 +1117,11 @@ display:block;
 
 .stat-card h2{
 
-font-size:19px;
+    margin:5px 0;
 
-margin:3px 0;
+    font-size:24px;
 
-color:#166534;
+    color:#172033;
 
 }
 
@@ -777,9 +1129,9 @@ color:#166534;
 
 .stat-card small{
 
-font-size:10px;
+    font-size:11px;
 
-color:#94a3b8;
+    color:#94a3b8;
 
 }
 
@@ -788,21 +1140,20 @@ color:#94a3b8;
 
 
 
-/* ================= GRID ================= */
+/* ===============================
+CONTENT
+================================ */
 
 
 .dashboard-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:
+    grid-template-columns:2fr 1fr;
 
-2fr 1fr;
-
-gap:15px;
+    gap:20px;
 
 }
-
 
 
 
@@ -810,33 +1161,27 @@ gap:15px;
 
 .glass-panel{
 
-background:white;
+    border-radius:24px;
 
-border-radius:18px;
+    padding:25px;
 
-padding:16px;
-
-margin-bottom:15px;
-
-box-shadow:
-
-0 8px 25px rgba(15,23,42,.05);
-
-border:1px solid #f1f5f9;
+    margin-bottom:20px;
 
 }
+
+
 
 
 
 .panel-title{
 
-font-size:14px;
+    font-size:17px;
 
-font-weight:700;
+    font-weight:800;
 
-margin-bottom:14px;
+    color:#172033;
 
-color:#1e293b;
+    margin-bottom:20px;
 
 }
 
@@ -845,23 +1190,20 @@ color:#1e293b;
 
 
 
-
-/* ================= INFO ================= */
+/* ===============================
+FINANCE MONITOR
+================================ */
 
 
 .info-row{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding:10px 0;
+    padding:14px 0;
 
-border-bottom:
-
-1px solid #f1f5f9;
-
-font-size:12px;
+    border-bottom:1px solid #e5e7eb;
 
 }
 
@@ -869,7 +1211,9 @@ font-size:12px;
 
 .info-row span{
 
-color:#64748b;
+    color:#64748b;
+
+    font-size:13px;
 
 }
 
@@ -877,7 +1221,7 @@ color:#64748b;
 
 .info-row b{
 
-color:#166534;
+    color:#8b5e22;
 
 }
 
@@ -885,26 +1229,26 @@ color:#166534;
 
 
 
-
-
-/* ================= PROJECT ================= */
+/* ===============================
+PROJECT LIST
+================================ */
 
 
 .project-row{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-padding:12px;
+    background:#f8fafc;
 
-background:#f8fafc;
+    padding:15px;
 
-border-radius:12px;
+    border-radius:16px;
 
-margin-bottom:8px;
+    margin-bottom:10px;
 
 }
 
@@ -912,7 +1256,9 @@ margin-bottom:8px;
 
 .project-row strong{
 
-font-size:12px;
+    font-size:13px;
+
+    color:#172033;
 
 }
 
@@ -920,11 +1266,11 @@ font-size:12px;
 
 .project-row p{
 
-font-size:10px;
+    margin-top:5px;
 
-color:#94a3b8;
+    font-size:11px;
 
-margin-top:3px;
+    color:#94a3b8;
 
 }
 
@@ -932,56 +1278,80 @@ margin-top:3px;
 
 .project-row span{
 
-font-size:10px;
+    background:#f8f3ea;
 
-background:#dcfce7;
+    color:#8b5e22;
 
-color:#166534;
+    padding:5px 12px;
 
-padding:4px 9px;
+    border-radius:20px;
 
-border-radius:20px;
+    font-size:11px;
+
+    font-weight:700;
 
 }
 
 
 
+/* ===============================
+SYSTEM MONITOR
+================================ */
+
+
+.monitor-box{
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+}
 
 
 
-
-/* ================= QUICK MENU ================= */
-
-
-.quick-menu{
+.monitor-item{
 
 display:flex;
 
 align-items:center;
 
-gap:10px;
-
-padding:11px;
+gap:15px;
 
 background:#f8fafc;
 
-border-radius:12px;
+padding:15px;
 
-margin-bottom:8px;
-
-font-size:12px;
-
-color:#334155;
-
-text-decoration:none;
-
-transition:.2s;
+border-radius:16px;
 
 }
 
 
 
-.quick-menu:hover{
+.monitor-icon{
+
+width:42px;
+
+height:42px;
+
+border-radius:14px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:18px;
+
+font-weight:800;
+
+}
+
+
+
+.monitor-icon.green{
 
 background:#dcfce7;
 
@@ -991,40 +1361,291 @@ color:#166534;
 
 
 
+.monitor-icon.blue{
 
+background:#dbeafe;
 
-
-
-/* ================= AUDIT ================= */
-
-
-.activity{
-
-display:flex;
-
-gap:10px;
-
-padding:10px 0;
-
-border-bottom:
-
-1px solid #f1f5f9;
+color:#2563eb;
 
 }
 
 
 
-.activity-dot{
+.monitor-icon.orange{
 
-width:8px;
+background:#fef3c7;
 
-height:8px;
+color:#92400e;
 
-background:#22c55e;
+}
+
+
+
+.monitor-icon.purple{
+
+background:#ede9fe;
+
+color:#7c3aed;
+
+}
+
+
+
+
+.monitor-item strong{
+
+font-size:13px;
+
+color:#172033;
+
+display:block;
+
+}
+
+
+
+.monitor-item p{
+
+margin-top:4px;
+
+font-size:11px;
+
+color:#64748b;
+
+}
+
+/* ===============================
+SYSTEM SUMMARY
+================================ */
+
+
+.system-summary{
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+}
+
+
+
+
+
+.summary-item{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+padding:14px;
+
+background:#f8fafc;
+
+border-radius:16px;
+
+border:1px solid #f1f5f9;
+
+}
+
+
+
+
+
+.summary-icon{
+
+width:40px;
+
+height:40px;
+
+border-radius:12px;
+
+background:#f8f3ea;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:18px;
+
+}
+
+
+
+.summary-icon.blue{
+
+background:#dbeafe;
+
+}
+
+
+
+.summary-icon.green{
+
+background:#dcfce7;
+
+}
+
+
+
+.summary-icon.gold{
+
+background:#fef3c7;
+
+}
+
+
+
+
+.summary-item span{
+
+display:block;
+
+font-size:11px;
+
+color:#64748b;
+
+}
+
+
+
+
+.summary-item strong{
+
+display:block;
+
+font-size:20px;
+
+color:#172033;
+
+line-height:1.2;
+
+}
+
+
+
+
+.summary-item small{
+
+font-size:10px;
+
+color:#94a3b8;
+
+}
+
+
+
+/* ===============================
+AUDIT
+================================ */
+
+
+.activity{
+
+    display:flex;
+
+    gap:12px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+.activity{
+
+display:flex;
+
+gap:15px;
+
+padding:15px 0;
+
+border-bottom:1px solid #e5e7eb;
+
+}
+
+
+
+.activity-number{
+
+width:32px;
+
+height:32px;
 
 border-radius:50%;
 
-margin-top:5px;
+background:#f8f3ea;
+
+color:#8b5e22;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:12px;
+
+font-weight:800;
+
+flex-shrink:0;
+
+}
+
+
+
+.activity-content strong{
+
+font-size:13px;
+
+color:#172033;
+
+}
+
+
+
+.activity-content p{
+
+margin:5px 0;
+
+font-size:12px;
+
+color:#64748b;
+
+line-height:1.5;
+
+}
+
+
+
+.activity-meta{
+
+display:flex;
+
+gap:15px;
+
+font-size:11px;
+
+color:#94a3b8;
+
+}
+
+.activity-dot{
+
+    width:9px;
+
+    height:9px;
+
+    background:#b8863b;
+
+    border-radius:50%;
+
+    margin-top:5px;
 
 }
 
@@ -1032,9 +1653,9 @@ margin-top:5px;
 
 .activity strong{
 
-font-size:12px;
+    color:#172033;
 
-color:#166534;
+    font-size:13px;
 
 }
 
@@ -1042,11 +1663,11 @@ color:#166534;
 
 .activity p{
 
-font-size:11px;
+    color:#64748b;
 
-color:#475569;
+    font-size:12px;
 
-margin:3px 0;
+    margin:5px 0;
 
 }
 
@@ -1054,9 +1675,9 @@ margin:3px 0;
 
 .activity small{
 
-font-size:10px;
+    color:#94a3b8;
 
-color:#94a3b8;
+    font-size:11px;
 
 }
 
@@ -1066,13 +1687,13 @@ color:#94a3b8;
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-padding:20px;
+    padding:25px;
 
-font-size:12px;
+    color:#94a3b8;
 
-color:#94a3b8;
+    font-size:13px;
 
 }
 
@@ -1080,18 +1701,17 @@ color:#94a3b8;
 
 
 
+/* ===============================
+RESPONSIVE
+================================ */
 
 
-/* ================= RESPONSIVE ================= */
-
-
-@media(max-width:1200px){
+@media(max-width:1100px){
 
 
 .stat-grid{
 
-grid-template-columns:
-repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 }
 
@@ -1103,36 +1723,42 @@ repeat(3,1fr);
 @media(max-width:900px){
 
 
-.welcome-card{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:15px;
-
-}
-
-
-
 .dashboard-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
 
+
+
+.welcome-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+
+
+}
+
+
+
+@media(max-width:600px){
 
 
 .stat-grid{
 
-grid-template-columns:
-repeat(2,1fr);
+    grid-template-columns:1fr;
 
 }
 
 
 }
-
 
 
 </style>
+@endsection

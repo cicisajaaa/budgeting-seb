@@ -454,7 +454,7 @@ font-weight:700;
 
 letter-spacing:2px;
 
-color:#a67c2e;
+color:#64748b;
 
 }
 

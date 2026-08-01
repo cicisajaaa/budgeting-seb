@@ -7,17 +7,13 @@
 
 <!-- HEADER -->
 
-
-<div class="page-header">
-
+<div class="page-header-card">
 
 <div>
 
 
 <div class="page-label">
-
-FINANCIAL MANAGEMENT
-
+PENGATURAN PEMBAGIAN DANA
 </div>
 
 
@@ -610,28 +606,34 @@ Belum ada pembagian dana
 
 
 
-
-
 <style>
 
-
-/* HEADER */
-
-
-.page-header{
+/* ===============================
+HEADER CARD
+================================ */
 
 
-display:flex;
+.page-header-card{
 
+    background:white;
 
-justify-content:space-between;
+    border:1px solid #e5e7eb;
 
+    border-radius:24px;
 
-align-items:center;
+    padding:30px 32px;
 
+    display:flex;
 
-margin-bottom:22px;
+    justify-content:space-between;
 
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -639,49 +641,42 @@ margin-bottom:22px;
 
 .page-label{
 
+    font-size:11px;
 
-font-size:10px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
-
-font-weight:800;
-
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
 
 
-.page-header h1{
+.page-header-card h1{
 
+    font-size:30px;
 
-font-size:26px;
+    margin:10px 0;
 
+    color:#172033;
 
-color:#166534;
-
-
-margin:5px 0;
-
+    font-weight:800;
 
 }
 
 
 
-.page-header p{
+.page-header-card p{
 
+    margin:0;
 
-font-size:13px;
+    font-size:14px;
 
-
-color:#64748b;
-
+    color:#64748b;
 
 }
+
 
 
 
@@ -689,30 +684,33 @@ color:#64748b;
 
 .btn-back{
 
+    background:#f8fafc;
 
-background:white;
+    border:1px solid #e2e8f0;
+
+    padding:11px 20px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    color:#334155;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    transition:.2s;
+
+}
 
 
-border:1px solid #e5e7eb;
 
+.btn-back:hover{
 
-padding:10px 18px;
+    background:#1e293b;
 
-
-border-radius:12px;
-
-
-font-size:13px;
-
-
-font-weight:600;
-
-
-text-decoration:none;
-
-
-color:#475569;
-
+    color:white;
 
 }
 
@@ -722,46 +720,42 @@ color:#475569;
 
 
 
-
-/* SUMMARY */
+/* ===============================
+PROJECT SUMMARY
+================================ */
 
 
 .project-summary{
 
 
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
+    background:white;
 
 
-
-border-radius:22px;
-
-
-padding:25px;
+    border:1px solid #e5e7eb;
 
 
-color:white;
+    border-radius:24px;
 
 
-display:flex;
+    padding:25px;
 
 
-justify-content:space-between;
+    display:flex;
 
 
-align-items:center;
+    justify-content:space-between;
 
 
-margin-bottom:20px;
+    align-items:center;
+
+
+    margin-bottom:22px;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
@@ -773,13 +767,13 @@ margin-bottom:20px;
 .project-info{
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-gap:15px;
+    gap:15px;
 
 
 }
@@ -787,34 +781,32 @@ gap:15px;
 
 
 
+
 .project-icon{
 
 
-width:50px;
+    width:55px;
 
 
-height:50px;
+    height:55px;
 
 
-background:white;
+    border-radius:16px;
 
 
-color:#166534;
+    background:#f1f5f9;
 
 
-border-radius:15px;
+    display:flex;
 
 
-display:flex;
+    justify-content:center;
 
 
-align-items:center;
+    align-items:center;
 
 
-justify-content:center;
-
-
-font-size:22px;
+    font-size:24px;
 
 
 }
@@ -824,28 +816,35 @@ font-size:22px;
 
 
 .project-info span,
-
-
 .budget-status span{
 
 
-font-size:12px;
+    color:#64748b;
 
 
-opacity:.8;
+    font-size:12px;
 
 
 }
+
+
 
 
 
 .project-info h2{
 
 
-font-size:22px;
+    margin-top:5px;
+
+
+    color:#172033;
+
+
+    font-size:22px;
 
 
 }
+
 
 
 
@@ -856,55 +855,67 @@ font-size:22px;
 .budget-status{
 
 
-width:250px;
+    width:250px;
 
 
 }
+
+
 
 
 
 .budget-status h2{
 
 
-font-size:28px;
+    font-size:28px;
 
 
-margin:5px 0;
+    margin:5px 0;
+
+
+    color:#172033;
 
 
 }
+
+
+
+
+
 
 
 
 .progress-track{
 
 
-height:8px;
+    height:10px;
 
 
-background:rgba(255,255,255,.3);
+    background:#e2e8f0;
 
 
-border-radius:20px;
+    border-radius:20px;
 
 
-overflow:hidden;
+    overflow:hidden;
 
 
 }
+
+
 
 
 
 .progress-track div{
 
 
-height:100%;
+    height:100%;
 
 
-background:white;
+    background:#22c55e;
 
 
-border-radius:20px;
+    border-radius:20px;
 
 
 }
@@ -916,31 +927,30 @@ border-radius:20px;
 
 
 
-/* ALERT */
+
+/* ===============================
+ALERT
+================================ */
 
 
 .success-alert,
-
-
 .warning-alert,
-
-
 .error-alert{
 
 
-padding:14px 18px;
+    padding:14px 18px;
 
 
-border-radius:15px;
+    border-radius:16px;
 
 
-margin-bottom:18px;
+    margin-bottom:18px;
 
 
-font-size:13px;
+    font-size:13px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
 }
@@ -950,10 +960,13 @@ font-weight:600;
 .success-alert{
 
 
-background:#dcfce7;
+    background:#f0fdf4;
 
 
-color:#166534;
+    border:1px solid #bbf7d0;
+
+
+    color:#166534;
 
 
 }
@@ -963,10 +976,13 @@ color:#166534;
 .warning-alert{
 
 
-background:#fef3c7;
+    background:#fffbeb;
 
 
-color:#92400e;
+    border:1px solid #fde68a;
+
+
+    color:#92400e;
 
 
 }
@@ -976,10 +992,13 @@ color:#92400e;
 .error-alert{
 
 
-background:#fee2e2;
+    background:#fef2f2;
 
 
-color:#991b1b;
+    border:1px solid #fecaca;
+
+
+    color:#991b1b;
 
 
 }
@@ -992,39 +1011,33 @@ color:#991b1b;
 
 
 
-/* CARD */
+/* ===============================
+PANEL CARD
+================================ */
 
 
 .glass-panel{
 
 
-background:
-
-rgba(255,255,255,.65);
+    background:white;
 
 
-backdrop-filter:
-
-blur(15px);
+    border:1px solid #e5e7eb;
 
 
-border-radius:22px;
+    border-radius:24px;
 
 
-padding:22px;
+    padding:25px;
 
 
-border:
-
-1px solid rgba(255,255,255,.8);
+    margin-bottom:22px;
 
 
-box-shadow:
-
-0 15px 35px rgba(15,23,42,.06);
+    box-shadow:
 
 
-margin-bottom:20px;
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
@@ -1034,13 +1047,16 @@ margin-bottom:20px;
 .panel-title{
 
 
-font-size:16px;
+    font-size:17px;
 
 
-font-weight:700;
+    font-weight:800;
 
 
-margin-bottom:20px;
+    color:#172033;
+
+
+    margin-bottom:22px;
 
 
 }
@@ -1051,27 +1067,30 @@ margin-bottom:20px;
 
 
 
-/* FORM */
+
+
+/* ===============================
+FORM
+================================ */
 
 
 .allocation-form{
 
 
-display:grid;
+    display:grid;
 
 
-grid-template-columns:
-
-2fr 1fr auto;
+    grid-template-columns:2fr 1fr auto;
 
 
-gap:15px;
+    gap:18px;
 
 
-align-items:end;
+    align-items:end;
 
 
 }
+
 
 
 
@@ -1079,113 +1098,150 @@ align-items:end;
 .form-group{
 
 
-display:flex;
+    display:flex;
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
 }
+
+
 
 
 
 .form-group label{
 
 
-font-size:12px;
+    font-size:12px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
-margin-bottom:7px;
+    color:#475569;
 
 
-color:#475569;
+    margin-bottom:8px;
 
 
 }
+
 
 
 
 
 
 select,
-
-
 input{
 
 
-height:45px;
+    height:46px;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-border:1px solid #e2e8f0;
+    border:1px solid #dbe1e8;
 
 
-background:#f8fafc;
+    background:#f8fafc;
 
 
-padding:0 14px;
+    padding:0 14px;
 
 
-font-size:13px;
+    font-size:14px;
+
+
+    outline:none;
 
 
 }
+
+
+
+
+
+select:focus,
+input:focus{
+
+
+    background:white;
+
+
+    border-color:#2563eb;
+
+
+    box-shadow:
+
+
+    0 0 0 3px rgba(37,99,235,.12);
+
+
+}
+
+
+
+
+
+
 
 
 
 .percent-input{
 
 
-display:flex;
+    display:flex;
 
 
 }
+
+
 
 
 
 .percent-input input{
 
 
-width:100%;
+    flex:1;
 
 
-border-radius:12px 0 0 12px;
+    border-radius:14px 0 0 14px;
 
 
 }
+
+
 
 
 
 .percent-input span{
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-padding:0 14px;
+    padding:0 16px;
 
 
-background:#dcfce7;
+    background:#f1f5f9;
 
 
-color:#166534;
+    color:#475569;
 
 
-font-weight:700;
+    font-weight:800;
 
 
-border-radius:0 12px 12px 0;
+    border-radius:0 14px 14px 0;
 
 
 }
+
 
 
 
@@ -1196,39 +1252,43 @@ border-radius:0 12px 12px 0;
 .btn-save{
 
 
-height:45px;
+    height:46px;
 
 
-padding:0 22px;
+    padding:0 25px;
 
 
-border:none;
+    border:none;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
+    background:#1e293b;
 
 
-
-color:white;
-
-
-font-weight:700;
+    color:white;
 
 
-cursor:pointer;
+    font-weight:800;
+
+
+    cursor:pointer;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+
+
+.btn-save:hover{
+
+
+    background:#2563eb;
 
 
 }
@@ -1239,67 +1299,168 @@ cursor:pointer;
 
 
 
-/* TABLE */
+
+
+/* ===============================
+TABLE
+================================ */
+
+
+.table-header{
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    margin-bottom:20px;
+
+
+}
+
+
+
+
+
+.table-header h3{
+
+
+    margin:0;
+
+
+    font-size:18px;
+
+
+    color:#172033;
+
+
+}
+
+
+
+
+
+.table-header p{
+
+
+    margin-top:5px;
+
+
+    font-size:13px;
+
+
+    color:#64748b;
+
+
+}
+
+
+
+
+
+.total-project{
+
+
+    background:#f1f5f9;
+
+
+    color:#334155;
+
+
+    padding:8px 16px;
+
+
+    border-radius:999px;
+
+
+    font-size:12px;
+
+
+    font-weight:700;
+
+
+}
+
+
+
+
+
+
 
 
 table{
 
 
-width:100%;
+    width:100%;
 
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 
 }
+
+
 
 
 
 th{
 
 
-background:#f8fafc;
+    background:#f8fafc;
 
 
-padding:14px;
+    padding:14px;
 
 
-font-size:11px;
+    text-align:left;
 
 
-color:#64748b;
+    color:#64748b;
 
 
-text-align:left;
+    font-size:12px;
 
 
 }
+
+
 
 
 
 td{
 
 
-padding:14px;
+    padding:15px;
 
 
-font-size:13px;
+    border-bottom:1px solid #e5e7eb;
 
 
-border-bottom:1px solid #f1f5f9;
+    font-size:13px;
 
 
 }
+
+
+
 
 
 
 tr:hover{
 
 
-background:#f0fdf4;
+    background:#fafafa;
 
 
 }
+
+
+
 
 
 
@@ -1309,22 +1470,27 @@ background:#f0fdf4;
 .division-name{
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-gap:10px;
+    gap:10px;
 
 
-font-weight:600;
+    color:#172033;
 
 
-color:#166534;
+    font-weight:700;
 
 
 }
+
+
+
+
+
 
 
 
@@ -1332,50 +1498,60 @@ color:#166534;
 .percentage{
 
 
-background:#dcfce7;
+    background:#dcfce7;
 
 
-color:#166534;
+    color:#166534;
 
 
-padding:6px 14px;
+    padding:7px 14px;
 
 
-border-radius:20px;
+    border-radius:999px;
 
 
-font-weight:700;
+    font-size:12px;
 
 
-font-size:12px;
+    font-weight:800;
 
 
 }
+
+
+
+
+
 
 
 
 .allocated{
 
 
-background:#dbeafe;
+    background:#dbeafe;
 
 
-color:#1d4ed8;
+    color:#1d4ed8;
 
 
-padding:6px 12px;
+    padding:7px 14px;
 
 
-border-radius:20px;
+    border-radius:999px;
 
 
-font-size:11px;
+    font-size:12px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
 }
+
+
+
+
+
 
 
 
@@ -1383,47 +1559,69 @@ font-weight:600;
 .delete{
 
 
-border:none;
+    border:none;
 
 
-background:#fee2e2;
+    background:#fee2e2;
 
 
-color:#dc2626;
+    color:#dc2626;
 
 
-padding:8px 13px;
+    padding:8px 14px;
 
 
-border-radius:10px;
+    border-radius:12px;
 
 
-font-size:12px;
+    font-size:12px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
-cursor:pointer;
+    cursor:pointer;
 
 
 }
+
+
+
+.delete:hover{
+
+
+    background:#dc2626;
+
+
+    color:white;
+
+
+}
+
+
+
+
+
 
 
 
 .empty{
 
 
-text-align:center;
+    text-align:center;
 
 
-padding:30px;
+    padding:30px;
 
 
-color:#64748b;
+    color:#94a3b8;
 
 
 }
+
+
+
+
 
 
 
@@ -1432,26 +1630,46 @@ color:#64748b;
 @media(max-width:900px){
 
 
-.project-summary{
+.page-header-card{
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
-align-items:flex-start;
+    align-items:flex-start;
 
 
-gap:20px;
+    gap:20px;
 
 
 }
+
+
+
+
+
+.project-summary{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:20px;
+
+
+}
+
+
 
 
 
 .allocation-form{
 
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 
 }
@@ -1459,10 +1677,7 @@ grid-template-columns:1fr;
 
 
 }
-
-
 
 </style>
-
 
 @endsection

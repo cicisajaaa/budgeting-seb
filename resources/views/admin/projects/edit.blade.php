@@ -7,8 +7,7 @@
 
 
 {{-- ================= HEADER ================= --}}
-
-<div class="page-header">
+<div class="page-header-card">
 
 
 <div>
@@ -329,28 +328,44 @@ required
 
 <style>
 
+/* ===============================
+WRAPPER
+================================ */
 
 .page-wrapper{
 
-width:100%;
+    width:100%;
 
 }
 
 
 
+/* ===============================
+HEADER CARD
+================================ */
 
-/* HEADER */
 
+.page-header-card{
 
-.page-header{
+    background:white;
 
-display:flex;
+    border:1px solid #e5e7eb;
 
-justify-content:space-between;
+    border-radius:24px;
 
-align-items:center;
+    padding:30px 32px;
 
-margin-bottom:25px;
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -358,60 +373,81 @@ margin-bottom:25px;
 
 .page-label{
 
-font-size:11px;
+    font-size:11px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
-
-}
-
-
-
-.page-header h1{
-
-margin:5px 0;
-
-font-size:28px;
-
-color:#166534;
+    color:#94a3b8;
 
 }
 
 
 
-.page-header p{
+.page-header-card h1{
 
-margin:0;
+    margin:10px 0;
 
-font-size:13px;
+    font-size:30px;
 
-color:#64748b;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
 
+
+.page-header-card p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
-background:white;
+    background:#f8fafc;
 
-padding:10px 18px;
+    border:1px solid #e2e8f0;
 
-border-radius:14px;
+    padding:11px 20px;
 
-text-decoration:none;
+    border-radius:14px;
 
-color:#475569;
+    text-decoration:none;
 
-font-size:13px;
+    color:#334155;
 
-font-weight:700;
+    font-size:13px;
 
-border:1px solid #e2e8f0;
+    font-weight:700;
+
+    transition:.2s;
+
+}
+
+
+
+.btn-back:hover{
+
+    background:#1e293b;
+
+    color:white;
 
 }
 
@@ -421,22 +457,27 @@ border:1px solid #e2e8f0;
 
 
 
-/* ERROR */
+
+/* ===============================
+ERROR
+================================ */
 
 
 .alert-error{
 
-background:#fee2e2;
+    background:#fef2f2;
 
-color:#991b1b;
+    border:1px solid #fecaca;
 
-padding:15px 20px;
+    color:#991b1b;
 
-border-radius:15px;
+    padding:15px 18px;
 
-margin-bottom:20px;
+    border-radius:16px;
 
-font-size:13px;
+    margin-bottom:20px;
+
+    font-size:13px;
 
 }
 
@@ -444,7 +485,9 @@ font-size:13px;
 
 .alert-error ul{
 
-margin-bottom:0;
+    margin:8px 0 0;
+
+    padding-left:20px;
 
 }
 
@@ -455,43 +498,55 @@ margin-bottom:0;
 
 
 
-/* CARD */
+/* ===============================
+FORM CARD
+================================ */
 
 
 .form-card{
 
 
-background:white;
+    background:white;
 
 
-padding:28px;
+    border:1px solid #e5e7eb;
 
 
-border-radius:25px;
+    border-radius:24px;
 
 
-max-width:850px;
+    padding:28px;
 
 
-box-shadow:
+    max-width:900px;
 
-0 15px 40px rgba(15,23,42,.08);
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
+
+
 
 
 
 .card-title{
 
 
-font-size:17px;
+    font-size:17px;
 
-font-weight:800;
 
-margin-bottom:25px;
+    font-weight:800;
 
-color:#1e293b;
+
+    color:#172033;
+
+
+    margin-bottom:25px;
+
 
 }
 
@@ -502,51 +557,64 @@ color:#1e293b;
 
 
 
-/* FORM */
+/* ===============================
+FORM GRID
+================================ */
 
 
 .form-grid{
 
 
-display:grid;
+    display:grid;
 
 
-grid-template-columns:
-
-repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 
-gap:20px;
+    gap:20px;
 
 
 }
+
+
 
 
 
 .form-group{
 
 
-display:flex;
+    display:flex;
 
-flex-direction:column;
+
+    flex-direction:column;
 
 
 }
+
+
 
 
 
 .form-group label{
 
 
-font-size:12px;
+    font-size:12px;
 
-font-weight:700;
 
-color:#475569;
+    font-weight:700;
 
-margin-bottom:8px;
+
+    color:#475569;
+
+
+    margin-bottom:8px;
+
 
 }
+
+
+
+
 
 
 
@@ -554,43 +622,49 @@ margin-bottom:8px;
 .form-group input{
 
 
-height:45px;
+    height:46px;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-border:1px solid #e2e8f0;
+    border:1px solid #dbe1e8;
 
 
-background:#f8fafc;
+    background:#f8fafc;
 
 
-padding:0 14px;
+    padding:0 15px;
 
 
-font-size:13px;
+    font-size:14px;
 
 
-outline:none;
+    outline:none;
+
+
+    transition:.2s;
 
 
 }
+
+
 
 
 
 .form-group input:focus{
 
 
-background:white;
+    background:white;
 
 
-border-color:#22c55e;
+    border-color:#2563eb;
 
 
-box-shadow:
+    box-shadow:
 
-0 0 0 4px rgba(34,197,94,.15);
+
+    0 0 0 3px rgba(37,99,235,.12);
 
 
 }
@@ -602,61 +676,85 @@ box-shadow:
 
 
 
-/* MONEY */
+/* ===============================
+MONEY INPUT
+================================ */
 
 
 .money-input{
 
 
-display:flex;
+    height:46px;
 
 
-align-items:center;
+    display:flex;
 
 
-height:45px;
+    align-items:center;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-background:#f8fafc;
+    background:#f8fafc;
 
 
-border:1px solid #e2e8f0;
+    border:1px solid #dbe1e8;
 
 
-overflow:hidden;
+    overflow:hidden;
 
 
 }
+
+
 
 
 
 .money-input span{
 
 
-padding:0 15px;
+    padding:0 15px;
 
 
-font-weight:800;
+    font-weight:800;
 
 
-color:#166534;
+    color:#475569;
 
 
 }
+
+
 
 
 
 .money-input input{
 
 
-border:none;
+    flex:1;
 
-height:100%;
 
-flex:1;
+    border:none;
+
+
+    height:100%;
+
+
+    background:transparent;
+
+
+}
+
+
+
+
+
+.money-input input:focus{
+
+
+    box-shadow:none;
+
 
 }
 
@@ -667,20 +765,123 @@ flex:1;
 
 
 
-
-/* BUTTON */
+/* ===============================
+BUTTON
+================================ */
 
 
 .form-action{
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:flex-end;
+    justify-content:flex-end;
 
 
-margin-top:30px;
+    margin-top:30px;
+
+
+}
+
+
+
+
+
+.btn-update{
+
+
+    border:none;
+
+
+    padding:13px 28px;
+
+
+    border-radius:14px;
+
+
+    background:#1e293b;
+
+
+    color:white;
+
+
+    font-size:13px;
+
+
+    font-weight:800;
+
+
+    cursor:pointer;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+
+
+.btn-update:hover{
+
+
+    background:#2563eb;
+
+
+    transform:translateY(-2px);
+
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:800px){
+
+
+.form-grid{
+
+
+    grid-template-columns:1fr;
+
+
+}
+
+
+
+
+.page-header-card{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:20px;
+
+
+}
+
+
+
+
+.form-action{
+
+
+    justify-content:flex-start;
 
 
 }
@@ -690,80 +891,14 @@ margin-top:30px;
 .btn-update{
 
 
-border:none;
-
-
-padding:13px 28px;
-
-
-border-radius:15px;
-
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
-
-
-color:white;
-
-
-font-weight:800;
-
-
-cursor:pointer;
+    width:100%;
 
 
 }
 
 
-
-.btn-update:hover{
-
-transform:translateY(-2px);
-
 }
-
-
-
-
-
-
-
-@media(max-width:800px){
-
-
-.form-grid{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-.page-header{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:15px;
-
-}
-
-
-}
-
-
 
 </style>
-
 
 @endsection

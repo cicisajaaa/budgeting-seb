@@ -7,8 +7,7 @@
 
 <!-- HEADER -->
 
-
-<div class="page-header">
+<div class="page-header-card">
 
 
 <div>
@@ -335,24 +334,30 @@ value="{{old('tanggal_selesai')}}">
 
 <style>
 
+/* ===============================
+HEADER CARD
+================================ */
 
-/* HEADER */
+.page-header-card{
 
+    background:white;
 
-.page-header{
+    border:1px solid #e5e7eb;
 
+    border-radius:24px;
 
-display:flex;
+    padding:30px 32px;
 
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
+    align-items:center;
 
-align-items:center;
+    margin-bottom:25px;
 
-
-margin-bottom:22px;
-
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -360,82 +365,82 @@ margin-bottom:22px;
 
 .page-label{
 
+    font-size:11px;
 
-font-size:10px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
-
-font-weight:800;
-
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
 
 
-.page-header h1{
+.page-header-card h1{
 
+    font-size:30px;
 
-font-size:26px;
+    margin:10px 0;
 
+    color:#172033;
 
-color:#166534;
-
-
-margin:5px 0;
-
+    font-weight:800;
 
 }
 
 
 
-.page-header p{
+.page-header-card p{
 
+    margin:0;
 
-font-size:13px;
+    color:#64748b;
 
-
-color:#64748b;
-
+    font-size:14px;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
+    background:#f8fafc;
 
-background:white;
+    border:1px solid #e2e8f0;
 
+    padding:11px 20px;
 
-border:1px solid #e5e7eb;
+    border-radius:14px;
 
+    text-decoration:none;
 
-padding:
+    color:#334155;
 
-10px 18px;
+    font-size:13px;
 
+    font-weight:700;
 
-border-radius:12px;
+    transition:.2s;
 
-
-font-size:13px;
-
-
-font-weight:600;
-
-
-text-decoration:none;
+}
 
 
-color:#475569;
 
+.btn-back:hover{
+
+    background:#1e293b;
+
+    color:white;
 
 }
 
@@ -445,33 +450,26 @@ color:#475569;
 
 
 
-
-
-/* ERROR */
+/* ===============================
+ERROR
+================================ */
 
 
 .alert-error{
 
+    background:#fef2f2;
 
-background:#fee2e2;
+    border:1px solid #fecaca;
 
+    color:#991b1b;
 
-color:#991b1b;
+    padding:15px 18px;
 
+    border-radius:16px;
 
-padding:
+    margin-bottom:20px;
 
-15px 18px;
-
-
-border-radius:15px;
-
-
-margin-bottom:18px;
-
-
-font-size:13px;
-
+    font-size:13px;
 
 }
 
@@ -479,12 +477,9 @@ font-size:13px;
 
 .alert-error ul{
 
+    margin-top:8px;
 
-padding-left:20px;
-
-
-margin-top:8px;
-
+    padding-left:20px;
 
 }
 
@@ -495,16 +490,14 @@ margin-top:8px;
 
 
 
-
-
-/* CARD */
+/* ===============================
+FORM CARD
+================================ */
 
 
 .form-card{
 
-
-max-width:900px;
-
+    max-width:900px;
 
 }
 
@@ -513,54 +506,43 @@ max-width:900px;
 .glass-panel{
 
 
-background:
-
-rgba(255,255,255,.65);
+    background:white;
 
 
-
-backdrop-filter:
-
-blur(15px);
+    border:1px solid #e5e7eb;
 
 
-
-border-radius:22px;
-
+    border-radius:24px;
 
 
-padding:25px;
+    padding:28px;
 
 
-
-border:
-
-1px solid rgba(255,255,255,.8);
+    box-shadow:
 
 
-
-box-shadow:
-
-0 15px 35px rgba(15,23,42,.06);
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
+
+
 
 
 
 .panel-title{
 
 
-font-size:16px;
+    font-size:17px;
 
 
-font-weight:700;
+    font-weight:800;
 
 
-margin-bottom:22px;
+    color:#172033;
 
 
-color:#111827;
+    margin-bottom:25px;
 
 
 }
@@ -572,39 +554,40 @@ color:#111827;
 
 
 
-
-/* FORM */
+/* ===============================
+FORM GRID
+================================ */
 
 
 .form-grid{
 
 
-display:grid;
+    display:grid;
 
 
-grid-template-columns:
-
-repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 
-
-gap:18px;
+    gap:20px;
 
 
 }
+
+
 
 
 
 .form-group{
 
 
-display:flex;
+    display:flex;
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
 }
+
 
 
 
@@ -612,19 +595,20 @@ flex-direction:column;
 .form-group label{
 
 
-font-size:12px;
+    font-size:12px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
-color:#475569;
+    color:#475569;
 
 
-margin-bottom:7px;
+    margin-bottom:8px;
 
 
 }
+
 
 
 
@@ -635,32 +619,28 @@ margin-bottom:7px;
 .form-group input{
 
 
-height:45px;
+    height:46px;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-border:
-
-1px solid #e2e7f0;
+    border:1px solid #dbe1e8;
 
 
-background:#f8fafc;
+    background:#f8fafc;
 
 
-padding:
-
-0 14px;
+    padding:0 15px;
 
 
-font-size:13px;
+    font-size:14px;
 
 
-outline:none;
+    outline:none;
 
 
-transition:.25s;
+    transition:.2s;
 
 
 }
@@ -672,16 +652,16 @@ transition:.25s;
 .form-group input:focus{
 
 
-background:white;
+    background:white;
 
 
-border-color:#22c55e;
+    border-color:#2563eb;
 
 
+    box-shadow:
 
-box-shadow:
 
-0 0 0 4px rgba(34,197,94,.12);
+    0 0 0 3px rgba(37,99,235,.12);
 
 
 }
@@ -694,33 +674,33 @@ box-shadow:
 
 
 
-/* MONEY */
+/* ===============================
+MONEY INPUT
+================================ */
 
 
 .input-money{
 
 
-height:45px;
+    height:46px;
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-background:#f8fafc;
+    border:1px solid #dbe1e8;
 
 
-border:
-
-1px solid #e2e8f0;
+    background:#f8fafc;
 
 
-overflow:hidden;
+    overflow:hidden;
 
 
 }
@@ -730,18 +710,16 @@ overflow:hidden;
 .input-money span{
 
 
-padding:
-
-0 13px;
+    padding:0 15px;
 
 
-font-size:13px;
+    font-size:13px;
 
 
-font-weight:700;
+    font-weight:800;
 
 
-color:#166534;
+    color:#475569;
 
 
 }
@@ -751,13 +729,26 @@ color:#166534;
 .input-money input{
 
 
-flex:1;
+    flex:1;
 
 
-border:none;
+    border:none;
 
 
-height:100%;
+    height:100%;
+
+
+    background:transparent;
+
+
+}
+
+
+
+.input-money input:focus{
+
+
+    box-shadow:none;
 
 
 }
@@ -769,20 +760,21 @@ height:100%;
 
 
 
-
-/* BUTTON */
+/* ===============================
+BUTTON
+================================ */
 
 
 .form-action{
 
 
-margin-top:25px;
+    margin-top:30px;
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:flex-end;
+    justify-content:flex-end;
 
 
 }
@@ -792,47 +784,31 @@ justify-content:flex-end;
 .btn-save{
 
 
-border:none;
+    border:none;
 
 
-padding:
-
-12px 25px;
+    background:#1e293b;
 
 
-border-radius:14px;
+    color:white;
 
 
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
+    padding:13px 28px;
 
 
-
-color:white;
-
-
-font-size:13px;
+    border-radius:14px;
 
 
-font-weight:700;
+    font-size:13px;
 
 
-cursor:pointer;
+    font-weight:800;
 
 
-box-shadow:
+    cursor:pointer;
 
-0 10px 25px rgba(34,197,94,.25);
+
+    transition:.2s;
 
 
 }
@@ -842,9 +818,10 @@ box-shadow:
 .btn-save:hover{
 
 
-transform:
+    background:#2563eb;
 
-translateY(-2px);
+
+    transform:translateY(-2px);
 
 
 }
@@ -854,6 +831,11 @@ translateY(-2px);
 
 
 
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:800px){
@@ -862,31 +844,49 @@ translateY(-2px);
 .form-grid{
 
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 
 }
 
 
 
-.page-header{
+.page-header-card{
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
-align-items:flex-start;
+    align-items:flex-start;
 
 
-gap:15px;
+    gap:20px;
+
+
+}
+
+
+
+.form-action{
+
+
+    justify-content:flex-start;
 
 
 }
 
 
 
+.btn-save{
+
+
+    width:100%;
+
+
 }
 
+
+}
 
 </style>
 

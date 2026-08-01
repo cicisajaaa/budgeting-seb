@@ -4,14 +4,18 @@
 @section('content')
 
 
-<div class="page-header">
+{{-- ================= HEADER ================= --}}
+
+<div class="page-header-card">
 
 
 <div>
 
+
 <div class="page-label">
-ORGANIZATION MANAGEMENT
+MANAJEMEN DIVISI
 </div>
+
 
 
 <h1>
@@ -19,12 +23,16 @@ Tambah Divisi
 </h1>
 
 
+
 <p>
 Tambahkan unit organisasi baru perusahaan.
 </p>
 
 
+
 </div>
+
+
 
 
 
@@ -35,7 +43,10 @@ Tambahkan unit organisasi baru perusahaan.
 </a>
 
 
+
 </div>
+
+
 
 
 
@@ -78,6 +89,8 @@ Terjadi kesalahan:
 
 
 
+
+
 @if(session('success'))
 
 
@@ -96,14 +109,19 @@ Terjadi kesalahan:
 
 
 
-<div class="glass-panel">
+{{-- ================= FORM ================= --}}
+
+
+<div class="form-card">
 
 
 
-<div class="info-box">
 
 
-<div class="info-icon">
+<div class="form-heading">
+
+
+<div class="form-icon">
 
 🏢
 
@@ -111,38 +129,25 @@ Terjadi kesalahan:
 
 
 
+
 <div>
 
 
-<strong>
-Manajemen Divisi
-</strong>
+<h3>
+Informasi Divisi
+</h3>
 
 
 <p>
-Divisi ini akan digunakan untuk alokasi dana project,
-pengajuan biaya, dan monitoring saldo divisi.
+Kelola data unit organisasi yang digunakan dalam sistem perusahaan.
 </p>
 
 
 </div>
 
 
-</div>
-
-
-
-
-
-
-
-
-<div class="panel-title">
-
-🏢 Form Tambah Divisi
 
 </div>
-
 
 
 
@@ -162,11 +167,20 @@ action="{{route('admin.divisions.store')}}">
 
 
 
+
+<div class="form-grid">
+
+
+
+
+
 <div class="form-group">
 
 
 <label>
+
 Nama Divisi
+
 </label>
 
 
@@ -191,6 +205,112 @@ required>
 
 
 
+
+
+<div class="form-group">
+
+
+<label>
+
+Kepala Divisi
+
+</label>
+
+
+<input
+
+type="text"
+
+name="kepala_divisi"
+
+value="{{old('kepala_divisi')}}"
+
+placeholder="Nama kepala divisi">
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="form-group full">
+
+
+<label>
+
+Deskripsi Divisi
+
+</label>
+
+
+<textarea
+
+name="deskripsi"
+
+placeholder="Masukkan deskripsi divisi...">{{old('deskripsi')}}</textarea>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Status Divisi
+
+</label>
+
+
+<select name="status">
+
+
+<option value="aktif">
+
+Aktif
+
+</option>
+
+
+<option value="nonaktif">
+
+Nonaktif
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <div class="form-action">
 
 
@@ -207,7 +327,108 @@ required>
 
 
 
+
 </form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+{{-- ================= INFORMATION ================= --}}
+
+
+
+<div class="information-grid">
+
+
+
+
+
+<div class="information-card">
+
+
+
+<div class="information-icon">
+
+🏢
+
+</div>
+
+
+
+
+<div>
+
+
+<h4>
+
+Fungsi Divisi
+
+</h4>
+
+
+<p>
+
+Data divisi digunakan untuk pengelolaan project, pembagian dana, dan monitoring aktivitas pekerjaan.
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="information-card">
+
+
+
+<div class="information-icon blue">
+
+💰
+
+</div>
+
+
+
+
+<div>
+
+
+<h4>
+
+Integrasi Sistem
+
+</h4>
+
+
+<p>
+
+Informasi divisi terhubung dengan alokasi dana, pengajuan biaya, dan laporan keuangan perusahaan.
+
+</p>
+
+
+</div>
+
+
+</div>
+
 
 
 
@@ -225,203 +446,349 @@ required>
 <style>
 
 
-.page-header{
+/* ===============================
+HEADER
+================================ */
+
+
+.page-header-card{
+
+
+background:white;
+
+
+border:1px solid #e5e7eb;
+
+
+border-radius:24px;
+
+
+padding:30px;
+
 
 display:flex;
 
+
 justify-content:space-between;
+
 
 align-items:center;
 
+
 margin-bottom:25px;
 
+
+box-shadow:
+
+
+0 10px 30px rgba(15,23,42,.06);
+
+
 }
+
+
 
 
 
 .page-label{
 
-font-size:10px;
+
+font-size:11px;
+
 
 letter-spacing:2px;
 
+
 font-weight:800;
+
 
 color:#94a3b8;
 
-}
-
-
-
-.page-header h1{
-
-font-size:28px;
-
-color:#166534;
-
-margin:5px 0;
 
 }
 
 
 
-.page-header p{
 
-font-size:13px;
+
+.page-header-card h1{
+
+
+font-size:30px;
+
+
+margin:10px 0;
+
+
+color:#172033;
+
+
+font-weight:800;
+
+
+}
+
+
+
+
+
+.page-header-card p{
+
+
+font-size:14px;
+
 
 color:#64748b;
 
+
+margin:0;
+
+
 }
 
 
 
+
+
+
+
+
+/* ===============================
+BUTTON BACK
+================================ */
 
 
 .btn-back{
 
-background:white;
 
-border:1px solid #e5e7eb;
+background:#f8fafc;
 
-padding:12px 18px;
+
+border:1px solid #e2e8f0;
+
+
+padding:11px 20px;
+
 
 border-radius:14px;
 
+
 text-decoration:none;
+
 
 color:#475569;
 
+
 font-size:13px;
 
-font-weight:600;
-
-}
-
-
-
-
-
-
-
-
-
-.glass-panel{
-
-background:white;
-
-border-radius:22px;
-
-padding:30px;
-
-box-shadow:
-
-0 10px 30px rgba(15,23,42,.08);
-
-max-width:700px;
-
-}
-
-
-
-
-
-
-
-.info-box{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-background:#f0fdf4;
-
-padding:18px;
-
-border-radius:18px;
-
-margin-bottom:25px;
-
-}
-
-
-
-.info-icon{
-
-width:45px;
-
-height:45px;
-
-border-radius:15px;
-
-background:#dcfce7;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:20px;
-
-}
-
-
-
-.info-box strong{
-
-font-size:14px;
-
-color:#166534;
-
-}
-
-
-
-.info-box p{
-
-font-size:12px;
-
-color:#64748b;
-
-margin-top:5px;
-
-}
-
-
-
-
-
-
-
-
-.panel-title{
-
-font-size:18px;
 
 font-weight:700;
 
-color:#166534;
 
-margin-bottom:25px;
+}
+
+
+
+.btn-back:hover{
+
+
+background:#1e293b;
+
+
+color:white;
+
 
 }
 
 
 
 
+
+
+
+
+/* ===============================
+FORM CARD
+================================ */
+
+
+.form-card{
+
+
+background:white;
+
+
+border:1px solid #e5e7eb;
+
+
+border-radius:26px;
+
+
+padding:35px;
+
+
+box-shadow:
+
+
+0 15px 40px rgba(15,23,42,.06);
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+FORM HEADER
+================================ */
+
+
+.form-heading{
+
+
+display:flex;
+
+
+align-items:center;
+
+
+gap:15px;
+
+
+padding-bottom:22px;
+
+
+margin-bottom:30px;
+
+
+border-bottom:1px solid #f1f5f9;
+
+
+}
+
+
+
+.form-icon{
+
+
+width:50px;
+
+
+height:50px;
+
+
+border-radius:16px;
+
+
+background:#dbeafe;
+
+
+display:flex;
+
+
+align-items:center;
+
+
+justify-content:center;
+
+
+font-size:22px;
+
+
+}
+
+
+
+
+
+.form-heading h3{
+
+
+margin:0;
+
+
+font-size:18px;
+
+
+font-weight:800;
+
+
+color:#172033;
+
+
+}
+
+
+
+
+
+.form-heading p{
+
+
+margin:5px 0 0;
+
+
+font-size:13px;
+
+
+color:#64748b;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+FORM
+================================ */
+
+
+.form-grid{
+
+
+display:grid;
+
+
+grid-template-columns:1fr 1fr;
+
+
+gap:20px;
+
+
+}
+
+
+
+.form-group.full{
+
+
+grid-column:span 2;
+
+
+}
 
 
 
 
 .form-group{
 
+
 display:flex;
+
 
 flex-direction:column;
 
-gap:8px;
 
 }
 
@@ -429,45 +796,79 @@ gap:8px;
 
 .form-group label{
 
-font-size:13px;
+
+font-size:12px;
+
 
 font-weight:700;
 
+
 color:#475569;
+
+
+margin-bottom:8px;
+
 
 }
 
 
 
-input{
 
-height:50px;
+
+
+input,
+select,
+textarea{
+
 
 border-radius:14px;
 
-border:1px solid #e2e8f0;
+
+border:1px solid #dbe3ef;
+
 
 background:#f8fafc;
 
+
 padding:0 15px;
+
 
 font-size:14px;
 
-}
-
-
-
-input:focus{
 
 outline:none;
 
-background:white;
 
-border-color:#22c55e;
+transition:.2s;
 
-box-shadow:
 
-0 0 0 4px rgba(34,197,94,.12);
+}
+
+
+
+
+input,
+select{
+
+
+height:50px;
+
+
+}
+
+
+
+textarea{
+
+
+height:120px;
+
+
+padding:15px;
+
+
+resize:none;
+
 
 }
 
@@ -475,20 +876,53 @@ box-shadow:
 
 
 
+
+input:focus,
+select:focus,
+textarea:focus{
+
+
+background:white;
+
+
+border-color:#2563eb;
+
+
+box-shadow:
+
+
+0 0 0 4px rgba(37,99,235,.12);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+/* ===============================
+SAVE BUTTON
+================================ */
 
 
 .form-action{
 
-margin-top:25px;
+
+margin-top:30px;
+
 
 display:flex;
 
+
 justify-content:flex-end;
 
+
 }
-
-
-
 
 
 
@@ -497,28 +931,45 @@ justify-content:flex-end;
 
 background:
 
+
 linear-gradient(
+
 135deg,
-#166534,
-#22c55e
+
+#2563eb,
+
+#3b82f6
+
 );
+
 
 
 color:white;
 
+
 border:none;
 
-padding:13px 25px;
+
+padding:13px 30px;
+
 
 border-radius:14px;
 
-font-weight:700;
+
+font-size:13px;
+
+
+font-weight:800;
+
 
 cursor:pointer;
 
+
 box-shadow:
 
-0 10px 25px rgba(34,197,94,.25);
+
+0 10px 25px rgba(37,99,235,.25);
+
 
 }
 
@@ -526,7 +977,12 @@ box-shadow:
 
 .btn-save:hover{
 
+
+background:#1d4ed8;
+
+
 transform:translateY(-2px);
+
 
 }
 
@@ -536,19 +992,173 @@ transform:translateY(-2px);
 
 
 
-.alert-error{
 
-background:#fee2e2;
 
-color:#991b1b;
+/* ===============================
+INFORMATION CARD
+================================ */
 
-padding:15px;
+
+.information-grid{
+
+
+display:grid;
+
+
+grid-template-columns:1fr 1fr;
+
+
+gap:20px;
+
+
+margin-top:25px;
+
+
+}
+
+
+
+.information-card{
+
+
+background:white;
+
+
+border:1px solid #e5e7eb;
+
+
+border-radius:22px;
+
+
+padding:22px;
+
+
+display:flex;
+
+
+gap:15px;
+
+
+box-shadow:
+
+
+0 10px 25px rgba(15,23,42,.05);
+
+
+}
+
+
+
+.information-icon{
+
+
+width:45px;
+
+
+height:45px;
+
 
 border-radius:15px;
 
+
+background:#dcfce7;
+
+
+display:flex;
+
+
+align-items:center;
+
+
+justify-content:center;
+
+
+font-size:20px;
+
+
+}
+
+
+
+.information-icon.blue{
+
+
+background:#dbeafe;
+
+
+}
+
+
+
+.information-card h4{
+
+
+margin:0;
+
+
+font-size:15px;
+
+
+color:#172033;
+
+
+}
+
+
+
+.information-card p{
+
+
+margin-top:7px;
+
+
+font-size:12px;
+
+
+line-height:1.6;
+
+
+color:#64748b;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+ALERT
+================================ */
+
+
+.alert-error{
+
+
+background:#fef2f2;
+
+
+border:1px solid #fecaca;
+
+
+color:#991b1b;
+
+
+padding:15px;
+
+
+border-radius:16px;
+
+
 margin-bottom:20px;
 
+
 font-size:13px;
+
 
 }
 
@@ -556,32 +1166,43 @@ font-size:13px;
 
 .alert-error ul{
 
-margin:8px 0 0;
 
 padding-left:20px;
 
+
 }
+
 
 
 
 
 .alert-success{
 
-background:#dcfce7;
+
+background:#f0fdf4;
+
+
+border:1px solid #bbf7d0;
+
 
 color:#166534;
 
+
 padding:15px;
 
-border-radius:15px;
+
+border-radius:16px;
+
 
 margin-bottom:20px;
 
-font-size:13px;
 
-font-weight:600;
+font-weight:700;
+
 
 }
+
+
 
 
 
@@ -592,19 +1213,53 @@ font-weight:600;
 @media(max-width:800px){
 
 
-.page-header{
+.page-header-card{
+
 
 flex-direction:column;
 
+
 align-items:flex-start;
+
 
 gap:15px;
 
+
+}
+
+
+
+.form-grid{
+
+
+grid-template-columns:1fr;
+
+
 }
 
 
 
+.form-group.full{
+
+
+grid-column:auto;
+
+
 }
+
+
+
+.information-grid{
+
+
+grid-template-columns:1fr;
+
+
+}
+
+
+}
+
 
 
 </style>

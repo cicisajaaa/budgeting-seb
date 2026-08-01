@@ -426,9 +426,11 @@ Enterprise Management System
 MAIN
 </div>
 
+<a href="{{auth()->user()->role=='admin'
+? route('admin.dashboard')
+: route('dashboard')}}"
 
-<a href="{{route('dashboard')}}"
-class="{{request()->routeIs('dashboard')?'active':''}}">
+class="{{request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') ? 'active' : ''}}">
 
 
 <div class="icon">
@@ -456,7 +458,7 @@ class="{{request()->routeIs('admin.users.*')?'active':''}}">
 👥
 </div>
 
-Pengguna
+Kelola Pengguna
 
 </a>
 
@@ -469,7 +471,7 @@ class="{{request()->routeIs('admin.projects.*')?'active':''}}">
 📁
 </div>
 
-Project
+Kelola Project
 
 </a>
 
@@ -481,10 +483,21 @@ class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
 🏢
 </div>
 
-Divisi
+Kelola Divisi
 
 </a>
 
+
+<a href="{{route('admin.tasks.index')}}"
+class="{{request()->routeIs('admin.tasks.*')?'active':''}}">
+
+<div class="icon">
+📝
+</div>
+
+Monitoring Tugas
+
+</a>
 
 @endif
 @if(auth()->user()->role=='owner')

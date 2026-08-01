@@ -6,12 +6,10 @@
 
 
 <!-- HEADER -->
-
-<div class="page-header">
+<div class="page-header-card">
 
 
 <div>
-
 
 <div class="page-label">
 
@@ -43,7 +41,6 @@ Buat akun pengguna baru dan atur hak akses sistem.
 ← Kembali
 
 </a>
-
 
 
 </div>
@@ -320,29 +317,34 @@ required>
 
 
 
-
 <style>
 
-
-/* =========================
-HEADER
-========================= */
-
-
-.page-header{
+/* ===============================
+GLOBAL HEADER CARD
+================================ */
 
 
-display:flex;
+.page-header-card{
 
+    background:white;
 
-justify-content:space-between;
+    border:1px solid #e5e7eb;
 
+    border-radius:24px;
 
-align-items:center;
+    padding:30px 32px;
 
+    display:flex;
 
-margin-bottom:20px;
+    justify-content:space-between;
 
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -350,47 +352,39 @@ margin-bottom:20px;
 
 .page-label{
 
+    font-size:11px;
 
-font-size:10px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
-
-font-weight:700;
-
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
 
 
-.page-header h1{
+.page-header-card h1{
 
+    font-size:30px;
 
-font-size:24px;
+    margin:10px 0;
 
+    color:#172033;
 
-color:#166534;
-
-
-margin:5px 0;
-
+    font-weight:800;
 
 }
 
 
 
-.page-header p{
+.page-header-card p{
 
+    margin:0;
 
-font-size:13px;
+    color:#64748b;
 
-
-color:#64748b;
-
+    font-size:14px;
 
 }
 
@@ -398,44 +392,45 @@ color:#64748b;
 
 
 
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
 
-background:white;
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    color:#334155;
+
+    padding:11px 22px;
+
+    border-radius:14px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.2s;
 
 
-border:
-
-1px solid #e5e7eb;
-
-
-
-padding:
-
-10px 18px;
-
-
-
-border-radius:12px;
-
-
-
-font-size:13px;
-
-
-
-font-weight:600;
+}
 
 
 
-text-decoration:none;
+.btn-back:hover{
 
 
+    background:#ffffff;
 
-color:#475569;
+    border-color:#b8863b;
 
+    color:#8b5e22;
 
 
 }
@@ -446,45 +441,51 @@ color:#475569;
 
 
 
-
-/* =========================
-ERROR
-========================= */
+/* ===============================
+ERROR ALERT
+================================ */
 
 
 .alert-error{
 
 
-background:#fee2e2;
+    background:#fef2f2;
 
+    border:1px solid #fecaca;
 
-color:#991b1b;
+    color:#991b1b;
 
+    padding:16px 18px;
 
-padding:15px 18px;
+    border-radius:16px;
 
+    margin-bottom:20px;
 
-border-radius:15px;
-
-
-margin-bottom:18px;
-
-
-font-size:13px;
+    font-size:13px;
 
 
 }
 
+
+
+.alert-error strong{
+
+
+    display:block;
+
+    margin-bottom:8px;
+
+
+}
 
 
 
 .alert-error ul{
 
 
-margin-top:8px;
+    margin:0;
 
-
-padding-left:20px;
+    padding-left:20px;
 
 
 }
@@ -494,56 +495,40 @@ padding-left:20px;
 
 
 
-
-/* =========================
+/* ===============================
 FORM CARD
-========================= */
+================================ */
 
 
 .form-card{
 
 
-max-width:850px;
+    max-width:900px;
 
 
 }
-
-
 
 
 
 .glass-panel{
 
 
-background:
-
-rgba(255,255,255,.65);
+    background:white;
 
 
-
-backdrop-filter:
-
-blur(15px);
+    border:1px solid #e5e7eb;
 
 
-
-border-radius:20px;
-
+    border-radius:24px;
 
 
-padding:25px;
+    padding:30px;
 
 
-
-border:
-
-1px solid rgba(255,255,255,.8);
+    box-shadow:
 
 
-
-box-shadow:
-
-0 15px 35px rgba(15,23,42,.06);
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
@@ -555,16 +540,16 @@ box-shadow:
 .panel-title{
 
 
-font-size:15px;
+    font-size:18px;
 
 
-font-weight:700;
+    font-weight:800;
 
 
-margin-bottom:20px;
+    color:#172033;
 
 
-color:#111827;
+    margin-bottom:25px;
 
 
 }
@@ -575,24 +560,21 @@ color:#111827;
 
 
 
-/* =========================
-FORM
-========================= */
+/* ===============================
+FORM GRID
+================================ */
 
 
 .form-grid{
 
 
-display:grid;
+    display:grid;
 
 
-grid-template-columns:
-
-repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 
-
-gap:18px;
+    gap:22px;
 
 
 }
@@ -604,102 +586,97 @@ gap:18px;
 .form-group{
 
 
-display:flex;
+    display:flex;
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
 }
+
+
 
 
 
 .form-group label{
 
 
-font-size:12px;
+    font-size:12px;
 
 
-font-weight:600;
+    font-weight:800;
 
 
-color:#475569;
+    color:#475569;
 
 
-margin-bottom:7px;
+    margin-bottom:8px;
 
 
 }
+
+
 
 
 
 
 
 .form-group input,
-
-
 .form-group select{
 
 
-height:45px;
+    width:100%;
 
 
-
-border-radius:12px;
-
+    height:46px;
 
 
-border:
-
-1px solid #e2e8f0;
+    padding:0 15px;
 
 
-
-background:
-
-rgba(248,250,252,.8);
+    border-radius:14px;
 
 
-
-padding:
-
-0 14px;
+    border:1px solid #e2e8f0;
 
 
-
-font-size:13px;
-
+    background:#f8fafc;
 
 
-outline:none;
+    color:#172033;
 
 
+    font-size:13px;
 
-transition:.25s;
 
+    transition:.2s;
 
 
 }
+
+
+
+
 
 
 
 .form-group input:focus,
-
-
 .form-group select:focus{
 
 
-border-color:#22c55e;
+    outline:none;
 
 
-background:white;
+    background:white;
 
 
+    border-color:#b8863b;
 
-box-shadow:
 
-0 0 0 4px rgba(34,197,94,.12);
+    box-shadow:
 
+
+    0 0 0 3px rgba(184,134,59,.12);
 
 
 }
@@ -709,26 +686,24 @@ box-shadow:
 
 
 
-
-/* =========================
-BUTTON
-========================= */
+/* ===============================
+ACTION BUTTON
+================================ */
 
 
 .form-action{
 
 
-margin-top:25px;
+    margin-top:30px;
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:flex-end;
+    justify-content:flex-end;
 
 
 }
-
 
 
 
@@ -736,66 +711,46 @@ justify-content:flex-end;
 .btn-save{
 
 
-border:none;
+    background:#1e293b;
 
 
-padding:
-
-12px 25px;
+    color:white;
 
 
-
-border-radius:14px;
-
+    border:none;
 
 
-background:
-
-linear-gradient(
-
-135deg,
-
-#166534,
-
-#22c55e
-
-);
+    padding:13px 28px;
 
 
-
-color:white;
-
+    border-radius:14px;
 
 
-font-weight:600;
+    font-size:13px;
 
 
-
-font-size:13px;
-
+    font-weight:800;
 
 
-cursor:pointer;
+    cursor:pointer;
 
 
-
-box-shadow:
-
-0 10px 25px rgba(34,197,94,.25);
-
+    transition:.2s;
 
 
 }
+
+
 
 
 
 .btn-save:hover{
 
 
-transform:
+    background:#b8863b;
 
-translateY(-2px);
 
+    transform:translateY(-2px);
 
 
 }
@@ -806,41 +761,62 @@ translateY(-2px);
 
 
 
-@media(max-width:800px){
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:900px){
+
+
+.page-header-card{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:20px;
+
+
+}
+
 
 
 .form-grid{
 
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 
 }
 
 
 
-.page-header{
+.form-action{
 
 
-flex-direction:column;
-
-
-align-items:flex-start;
-
-
-gap:15px;
+    justify-content:stretch;
 
 
 }
 
 
 
+.btn-save{
+
+
+    width:100%;
+
+
 }
 
 
+}
 
 </style>
-
 
 
 @endsection

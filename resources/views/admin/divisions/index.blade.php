@@ -491,20 +491,47 @@ Tambahkan unit organisasi baru.
 
 
 
-
-
 <style>
 
+/* ===============================
+GLOBAL WIDTH
+================================ */
+
+.page-header,
+.division-stat-grid,
+.glass-panel{
+
+    width:100%;
+
+}
+
+
+
+/* ===============================
+HEADER CARD
+================================ */
 
 .page-header{
 
-display:flex;
+    background:white;
 
-justify-content:space-between;
+    border:1px solid #e5e7eb;
 
-align-items:center;
+    border-radius:24px;
 
-margin-bottom:22px;
+    padding:30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -512,13 +539,13 @@ margin-bottom:22px;
 
 .page-label{
 
-font-size:10px;
+    font-size:11px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#94a3b8;
 
 }
 
@@ -526,11 +553,11 @@ color:#94a3b8;
 
 .page-header h1{
 
-font-size:26px;
+    font-size:30px;
 
-color:#166534;
+    margin:10px 0;
 
-margin:5px 0;
+    color:#172033;
 
 }
 
@@ -538,40 +565,64 @@ margin:5px 0;
 
 .page-header p{
 
-font-size:13px;
+    margin:0;
 
-color:#64748b;
+    color:#64748b;
+
+    font-size:14px;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
 
 
 .btn-primary{
 
 
-background:
-
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    background:#1e293b;
 
 
+    color:white;
 
-color:white;
 
-padding:12px 20px;
+    padding:13px 22px;
 
-border-radius:14px;
 
-font-size:13px;
+    border-radius:14px;
 
-font-weight:700;
 
-text-decoration:none;
+    font-size:13px;
+
+
+    font-weight:700;
+
+
+    text-decoration:none;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+.btn-primary:hover{
+
+
+    background:#334155;
+
+
+    transform:translateY(-2px);
+
 
 }
 
@@ -581,21 +632,30 @@ text-decoration:none;
 
 
 
+
+/* ===============================
+STATISTIC
+================================ */
 
 
 .division-stat-grid{
 
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
 
-gap:18px;
+    grid-template-columns:
+    repeat(3,1fr);
 
-margin-bottom:22px;
+
+    gap:18px;
+
+
+    margin-bottom:25px;
 
 
 }
+
 
 
 
@@ -604,42 +664,69 @@ margin-bottom:22px;
 .division-stat{
 
 
-background:white;
+    background:white;
 
-border-radius:20px;
 
-padding:18px;
+    border:1px solid #e5e7eb;
 
-display:flex;
 
-align-items:center;
+    border-radius:22px;
 
-gap:15px;
 
-box-shadow:
+    padding:22px;
 
-0 10px 30px rgba(15,23,42,.08);
+
+    min-height:105px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:16px;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.05);
+
 
 }
+
+
+
 
 
 
 .stat-icon{
 
 
-width:45px;
+    width:50px;
 
-height:45px;
 
-border-radius:15px;
+    height:50px;
 
-display:flex;
 
-align-items:center;
+    border-radius:16px;
 
-justify-content:center;
 
-font-size:20px;
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    font-size:22px;
+
+
+    flex-shrink:0;
+
 
 }
 
@@ -647,25 +734,25 @@ font-size:20px;
 
 .stat-icon.green{
 
-background:#dcfce7;
+    background:#dcfce7;
 
 }
+
 
 
 .stat-icon.blue{
 
-background:#dbeafe;
+    background:#dbeafe;
 
 }
+
 
 
 .stat-icon.orange{
 
-background:#fef3c7;
+    background:#ede9fe;
 
 }
-
-
 
 
 
@@ -673,11 +760,12 @@ background:#fef3c7;
 
 .division-stat span{
 
-font-size:11px;
 
-color:#64748b;
+    font-size:12px;
 
-display:block;
+
+    color:#64748b;
+
 
 }
 
@@ -685,11 +773,15 @@ display:block;
 
 .division-stat h3{
 
-font-size:22px;
 
-color:#166534;
+    margin:5px 0;
 
-margin:5px 0;
+
+    font-size:25px;
+
+
+    color:#172033;
+
 
 }
 
@@ -697,9 +789,12 @@ margin:5px 0;
 
 .division-stat small{
 
-font-size:11px;
 
-color:#94a3b8;
+    font-size:11px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -709,22 +804,36 @@ color:#94a3b8;
 
 
 
+
+/* ===============================
+TABLE CARD
+================================ */
 
 
 .glass-panel{
 
 
-background:white;
+    background:white;
 
-border-radius:22px;
 
-padding:22px;
+    border:1px solid #e5e7eb;
 
-box-shadow:
 
-0 10px 30px rgba(15,23,42,.08);
+    border-radius:24px;
+
+
+    padding:25px;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.06);
+
 
 }
+
+
 
 
 
@@ -732,13 +841,16 @@ box-shadow:
 .table-header{
 
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
 
-align-items:center;
+    justify-content:space-between;
 
-margin-bottom:18px;
+
+    align-items:center;
+
+
+    margin-bottom:20px;
 
 
 }
@@ -747,7 +859,15 @@ margin-bottom:18px;
 
 .table-header h3{
 
-margin:0;
+
+    margin:0;
+
+
+    font-size:18px;
+
+
+    color:#172033;
+
 
 }
 
@@ -755,9 +875,15 @@ margin:0;
 
 .table-header p{
 
-font-size:12px;
 
-color:#64748b;
+    margin-top:5px;
+
+
+    font-size:13px;
+
+
+    color:#64748b;
+
 
 }
 
@@ -768,17 +894,23 @@ color:#64748b;
 .total-data{
 
 
-background:#dcfce7;
+    background:#eff6ff;
 
-color:#166534;
 
-padding:7px 15px;
+    color:#2563eb;
 
-border-radius:20px;
 
-font-size:12px;
+    padding:8px 16px;
 
-font-weight:700;
+
+    border-radius:999px;
+
+
+    font-size:12px;
+
+
+    font-weight:700;
+
 
 }
 
@@ -786,30 +918,62 @@ font-weight:700;
 
 
 
+
+
+
+/* ===============================
+TABLE
+================================ */
+
+
+.table-wrapper{
+
+
+    width:100%;
+
+
+    overflow-x:auto;
+
+
+}
 
 
 
 table{
 
-width:100%;
 
-border-collapse:collapse;
+    width:100%;
+
+
+    border-collapse:collapse;
+
+
+    table-layout:fixed;
+
 
 }
 
 
 
+
+
 th{
 
-padding:14px;
 
-background:#f8fafc;
+    padding:16px 18px;
 
-font-size:12px;
 
-color:#64748b;
+    background:#f8fafc;
 
-text-align:left;
+
+    color:#64748b;
+
+
+    font-size:12px;
+
+
+    text-align:left;
+
 
 }
 
@@ -817,11 +981,18 @@ text-align:left;
 
 td{
 
-padding:14px;
 
-font-size:13px;
+    padding:18px;
 
-border-bottom:1px solid #f1f5f9;
+
+    font-size:13px;
+
+
+    color:#334155;
+
+
+    border-bottom:1px solid #f1f5f9;
+
 
 }
 
@@ -831,7 +1002,55 @@ border-bottom:1px solid #f1f5f9;
 
 tr:hover{
 
-background:#f0fdf4;
+
+    background:#f8fafc;
+
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+COLUMN WIDTH
+================================ */
+
+
+th:nth-child(1),
+td:nth-child(1){
+
+    width:8%;
+
+}
+
+
+
+th:nth-child(2),
+td:nth-child(2){
+
+    width:45%;
+
+}
+
+
+
+th:nth-child(3),
+td:nth-child(3){
+
+    width:25%;
+
+}
+
+
+
+th:nth-child(4),
+td:nth-child(4){
+
+    width:22%;
 
 }
 
@@ -843,14 +1062,22 @@ background:#f0fdf4;
 
 
 
+/* ===============================
+DIVISION PROFILE
+================================ */
+
+
 .division-name{
 
 
-display:flex;
+    display:flex;
 
-align-items:center;
 
-gap:12px;
+    align-items:center;
+
+
+    gap:15px;
+
 
 }
 
@@ -859,29 +1086,47 @@ gap:12px;
 .division-icon{
 
 
-width:38px;
+    width:42px;
 
-height:38px;
 
-border-radius:12px;
+    height:42px;
 
-background:#dcfce7;
 
-display:flex;
+    border-radius:14px;
 
-align-items:center;
 
-justify-content:center;
+    background:#eff6ff;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    flex-shrink:0;
+
 
 }
 
 
 
+
+
 .division-name strong{
 
-display:block;
 
-color:#166534;
+    display:block;
+
+
+    color:#172033;
+
+
+    font-size:14px;
+
 
 }
 
@@ -889,9 +1134,12 @@ color:#166534;
 
 .division-name small{
 
-font-size:11px;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+
+    font-size:11px;
+
 
 }
 
@@ -903,12 +1151,23 @@ color:#94a3b8;
 
 
 
+
+/* ===============================
+ACTION
+================================ */
+
+
 .action{
 
 
-display:flex;
+    display:flex;
 
-gap:8px;
+
+    gap:10px;
+
+
+    justify-content:flex-start;
+
 
 }
 
@@ -916,9 +1175,12 @@ gap:8px;
 
 .action form{
 
-display:inline;
+
+    display:inline;
+
 
 }
+
 
 
 
@@ -927,40 +1189,82 @@ display:inline;
 .delete{
 
 
-padding:8px 14px;
+    padding:8px 15px;
 
-border-radius:10px;
 
-font-size:12px;
+    border-radius:12px;
 
-font-weight:600;
 
-border:none;
+    font-size:12px;
 
-cursor:pointer;
 
-text-decoration:none;
+    font-weight:700;
+
+
+    border:none;
+
+
+    cursor:pointer;
+
+
+    text-decoration:none;
+
 
 }
+
 
 
 
 
 .edit{
 
-background:#dcfce7;
 
-color:#166534;
+    background:#dbeafe;
+
+
+    color:#2563eb;
+
 
 }
+
+
+
+.edit:hover{
+
+
+    background:#2563eb;
+
+
+    color:white;
+
+
+}
+
+
 
 
 
 .delete{
 
-background:#fee2e2;
 
-color:#dc2626;
+    background:#fee2e2;
+
+
+    color:#dc2626;
+
+
+}
+
+
+
+.delete:hover{
+
+
+    background:#dc2626;
+
+
+    color:white;
+
 
 }
 
@@ -969,28 +1273,46 @@ color:#dc2626;
 
 
 
+
+
+
+/* ===============================
+SUCCESS
+================================ */
 
 
 .success-alert{
 
 
-background:#dcfce7;
+    background:#f0fdf4;
 
-color:#166534;
 
-padding:15px;
+    border:1px solid #bbf7d0;
 
-border-radius:15px;
 
-margin-bottom:20px;
+    color:#166534;
 
-display:flex;
 
-gap:10px;
+    padding:15px 18px;
 
-font-size:13px;
 
-font-weight:600;
+    border-radius:16px;
+
+
+    margin-bottom:20px;
+
+
+    display:flex;
+
+
+    gap:10px;
+
+
+    font-size:13px;
+
+
+    font-weight:700;
+
 
 }
 
@@ -998,13 +1320,26 @@ font-weight:600;
 
 
 
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
+
+
 .empty{
 
-text-align:center;
 
-padding:40px;
+    text-align:center;
 
-color:#64748b;
+
+    padding:45px;
+
+
+    color:#64748b;
+
 
 }
 
@@ -1012,9 +1347,12 @@ color:#64748b;
 
 .empty-icon{
 
-font-size:30px;
 
-margin-bottom:10px;
+    font-size:35px;
+
+
+    margin-bottom:10px;
+
 
 }
 
@@ -1022,12 +1360,22 @@ margin-bottom:10px;
 
 .empty small{
 
-color:#94a3b8;
+
+    color:#94a3b8;
+
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
@@ -1035,7 +1383,9 @@ color:#94a3b8;
 
 .division-stat-grid{
 
-grid-template-columns:1fr;
+
+    grid-template-columns:1fr;
+
 
 }
 
@@ -1043,11 +1393,15 @@ grid-template-columns:1fr;
 
 .page-header{
 
-flex-direction:column;
 
-align-items:flex-start;
+    flex-direction:column;
 
-gap:15px;
+
+    align-items:flex-start;
+
+
+    gap:15px;
+
 
 }
 
@@ -1055,18 +1409,15 @@ gap:15px;
 
 table{
 
-display:block;
 
-overflow-x:auto;
-
-}
+    table-layout:auto;
 
 
 }
 
 
+
+}
 
 </style>
-
-
 @endsection

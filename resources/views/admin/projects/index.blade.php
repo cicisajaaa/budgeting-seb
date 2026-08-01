@@ -4,7 +4,7 @@
 @section('content')
 
 
-<div class="page-header">
+<div class="page-header-card">
 
 
 <div>
@@ -601,20 +601,34 @@ Belum ada project
 
 
 
-
-
 <style>
 
+/* ===============================
+HEADER CARD
+================================ */
 
-.page-header{
 
-display:flex;
+.page-header-card{
 
-justify-content:space-between;
+    background:white;
 
-align-items:center;
+    border:1px solid #e5e7eb;
 
-margin-bottom:22px;
+    border-radius:24px;
+
+    padding:30px 32px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -622,67 +636,79 @@ margin-bottom:22px;
 
 .page-label{
 
-font-size:10px;
+    font-size:11px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
-
-}
-
-
-
-.page-header h1{
-
-font-size:26px;
-
-color:#166534;
-
-margin:5px 0;
+    color:#94a3b8;
 
 }
 
 
 
-.page-header p{
+.page-header-card h1{
 
-font-size:13px;
+    font-size:30px;
 
-color:#64748b;
+    margin:10px 0;
+
+    color:#172033;
+
+    font-weight:800;
 
 }
 
 
 
+.page-header-card p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
 
 
 .btn-primary{
 
-background:
+    background:#1e293b;
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    color:white;
+
+    padding:12px 22px;
+
+    border-radius:14px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
 
 
-color:white;
 
-padding:
+.btn-primary:hover{
 
-12px 20px;
+    background:#b8863b;
 
-
-border-radius:14px;
-
-font-size:13px;
-
-font-weight:700;
-
-text-decoration:none;
+    transform:translateY(-2px);
 
 }
 
@@ -690,82 +716,70 @@ text-decoration:none;
 
 
 
+
+
+/* ===============================
+STATISTIC
+================================ */
 
 
 .project-stat-grid{
 
+    display:grid;
 
-display:grid;
+    grid-template-columns:repeat(3,1fr);
 
+    gap:18px;
 
-grid-template-columns:
-
-repeat(3,1fr);
-
-
-gap:18px;
-
-
-margin-bottom:22px;
-
+    margin-bottom:25px;
 
 }
+
+
 
 
 
 .project-stat{
 
+    background:white;
 
-background:white;
+    border:1px solid #e5e7eb;
 
+    border-radius:22px;
 
-border-radius:20px;
+    padding:22px;
 
+    display:flex;
 
-padding:18px;
+    align-items:center;
 
+    gap:16px;
 
-display:flex;
+    box-shadow:
 
-
-align-items:center;
-
-
-gap:15px;
-
-
-box-shadow:
-
-0 10px 30px rgba(15,23,42,.08);
-
+    0 10px 30px rgba(15,23,42,.05);
 
 }
 
 
 
+
+
 .stat-icon{
 
+    width:48px;
 
-width:45px;
+    height:48px;
 
+    border-radius:15px;
 
-height:45px;
+    display:flex;
 
+    align-items:center;
 
-border-radius:15px;
+    justify-content:center;
 
-
-display:flex;
-
-
-align-items:center;
-
-
-justify-content:center;
-
-
-font-size:20px;
-
+    font-size:20px;
 
 }
 
@@ -773,7 +787,7 @@ font-size:20px;
 
 .stat-icon.green{
 
-background:#dcfce7;
+    background:#f1f5f9;
 
 }
 
@@ -781,7 +795,7 @@ background:#dcfce7;
 
 .stat-icon.blue{
 
-background:#dbeafe;
+    background:#dbeafe;
 
 }
 
@@ -789,30 +803,45 @@ background:#dbeafe;
 
 .stat-icon.orange{
 
-background:#fef3c7;
+    background:#fef3c7;
 
 }
+
 
 
 
 
 .project-stat span{
 
-font-size:12px;
+    font-size:12px;
 
-color:#64748b;
+    color:#64748b;
 
 }
+
+
 
 
 
 .project-stat h3{
 
-margin:5px 0;
+    margin:5px 0;
 
-font-size:22px;
+    font-size:25px;
 
-color:#166534;
+    color:#172033;
+
+}
+
+
+
+
+
+.project-stat small{
+
+    color:#94a3b8;
+
+    font-size:11px;
 
 }
 
@@ -822,21 +851,64 @@ color:#166534;
 
 
 
+
+/* ===============================
+ALERT
+================================ */
+
+
+.success-alert{
+
+
+    background:#f0fdf4;
+
+    border:1px solid #bbf7d0;
+
+    color:#166534;
+
+    padding:14px 18px;
+
+    border-radius:16px;
+
+    margin-bottom:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+
+}
+
+
+
+
+
+
+
+/* ===============================
+TABLE PANEL
+================================ */
+
+
 .glass-panel{
 
 
-background:white;
+    background:white;
 
 
-padding:22px;
+    border:1px solid #e5e7eb;
 
 
-border-radius:22px;
+    border-radius:24px;
 
 
-box-shadow:
+    padding:25px;
 
-0 10px 30px rgba(15,23,42,.08);
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.06);
 
 
 }
@@ -848,16 +920,16 @@ box-shadow:
 .table-header{
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:space-between;
+    justify-content:space-between;
 
 
-align-items:center;
+    align-items:center;
 
 
-margin-bottom:18px;
+    margin-bottom:20px;
 
 
 }
@@ -866,7 +938,13 @@ margin-bottom:18px;
 
 .table-header h3{
 
-margin:0;
+
+    font-size:18px;
+
+    color:#172033;
+
+    margin:0 0 5px;
+
 
 }
 
@@ -874,11 +952,16 @@ margin:0;
 
 .table-header p{
 
-font-size:12px;
 
-color:#64748b;
+    color:#64748b;
+
+    font-size:13px;
+
+    margin:0;
+
 
 }
+
 
 
 
@@ -886,22 +969,19 @@ color:#64748b;
 .total-project{
 
 
-background:#dcfce7;
+    background:#f8fafc;
 
+    border:1px solid #e2e8f0;
 
-color:#166534;
+    color:#334155;
 
+    padding:8px 16px;
 
-padding:7px 15px;
+    border-radius:999px;
 
+    font-size:12px;
 
-border-radius:20px;
-
-
-font-size:12px;
-
-
-font-weight:700;
+    font-weight:700;
 
 
 }
@@ -911,14 +991,25 @@ font-weight:700;
 
 
 
+
+/* ===============================
+TABLE
+================================ */
+
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+}
+
+
+
 table{
 
+    width:100%;
 
-width:100%;
-
-
-border-collapse:collapse;
-
+    border-collapse:collapse;
 
 }
 
@@ -927,19 +1018,15 @@ border-collapse:collapse;
 th{
 
 
-padding:14px;
+    background:#f8fafc;
 
+    padding:14px;
 
-font-size:12px;
+    text-align:left;
 
+    font-size:12px;
 
-text-align:left;
-
-
-background:#f8fafc;
-
-
-color:#64748b;
+    color:#64748b;
 
 
 }
@@ -949,84 +1036,95 @@ color:#64748b;
 td{
 
 
-padding:14px;
+    padding:15px;
 
+    border-bottom:1px solid #e5e7eb;
 
-font-size:13px;
+    font-size:13px;
 
-
-border-bottom:1px solid #f1f5f9;
+    color:#334155;
 
 
 }
-
 
 
 
 tr:hover{
 
-
-background:#f8fafc;
-
+    background:#fafafa;
 
 }
 
 
 
 
+
+
+
+
+/* ===============================
+PROJECT NAME
+================================ */
 
 
 .project-name{
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-gap:10px;
+    gap:12px;
 
 
 }
+
+
 
 
 
 .project-icon{
 
 
-width:36px;
+    width:40px;
 
 
-height:36px;
+    height:40px;
 
 
-border-radius:12px;
+    border-radius:14px;
 
 
-background:#dcfce7;
+    background:#f1f5f9;
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-justify-content:center;
+    justify-content:center;
 
 
 }
 
 
 
+
+
 .project-name strong{
 
 
-display:block;
+    display:block;
 
 
-color:#166534;
+    color:#172033;
+
+
+    font-size:13px;
 
 
 }
@@ -1036,10 +1134,10 @@ color:#166534;
 .project-name small{
 
 
-font-size:11px;
+    color:#94a3b8;
 
 
-color:#94a3b8;
+    font-size:11px;
 
 
 }
@@ -1048,15 +1146,20 @@ color:#94a3b8;
 
 
 
+
+
+/* ===============================
+BUDGET
+================================ */
 
 
 .budget-text{
 
 
-font-weight:700;
+    font-weight:700;
 
 
-color:#166534;
+    color:#172033;
 
 
 }
@@ -1065,13 +1168,21 @@ color:#166534;
 
 
 
+
+
+
+/* ===============================
+DATE
+================================ */
+
+
 .date{
 
 
-font-size:12px;
+    font-size:12px;
 
 
-color:#475569;
+    color:#475569;
 
 
 }
@@ -1081,7 +1192,7 @@ color:#475569;
 .date span{
 
 
-color:#94a3b8;
+    color:#94a3b8;
 
 
 }
@@ -1090,11 +1201,17 @@ color:#94a3b8;
 
 
 
+
+
+
+/* ===============================
+PROGRESS
+================================ */
+
+
 .progress-box{
 
-
-width:130px;
-
+    width:130px;
 
 }
 
@@ -1103,16 +1220,16 @@ width:130px;
 .progress-label{
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:space-between;
+    justify-content:space-between;
 
 
-font-size:11px;
+    font-size:11px;
 
 
-margin-bottom:5px;
+    margin-bottom:6px;
 
 
 }
@@ -1122,26 +1239,28 @@ margin-bottom:5px;
 .progress-label b{
 
 
-color:#166534;
+    color:#16a34a;
 
 
 }
 
 
 
+
+
 .progress-track{
 
 
-height:7px;
+    height:8px;
 
 
-background:#e2e8f0;
+    background:#e2e8f0;
 
 
-border-radius:20px;
+    border-radius:20px;
 
 
-overflow:hidden;
+    overflow:hidden;
 
 
 }
@@ -1151,16 +1270,13 @@ overflow:hidden;
 .progress-track div{
 
 
-height:100%;
+    height:100%;
 
 
-background:
+    background:#16a34a;
 
-linear-gradient(
-90deg,
-#166534,
-#22c55e
-);
+
+    border-radius:20px;
 
 
 }
@@ -1171,13 +1287,19 @@ linear-gradient(
 
 
 
+
+/* ===============================
+ACTION
+================================ */
+
+
 .action{
 
 
-display:flex;
+    display:flex;
 
 
-gap:6px;
+    gap:7px;
 
 
 }
@@ -1187,7 +1309,7 @@ gap:6px;
 .action form{
 
 
-display:inline;
+    display:inline;
 
 
 }
@@ -1200,38 +1322,39 @@ display:inline;
 .delete{
 
 
-padding:7px 10px;
+    padding:8px 12px;
 
 
-border-radius:10px;
+    border-radius:12px;
 
 
-font-size:11px;
+    font-size:11px;
 
 
-font-weight:600;
+    font-weight:700;
 
 
-border:none;
+    text-decoration:none;
 
 
-cursor:pointer;
+    border:none;
 
 
-text-decoration:none;
+    cursor:pointer;
 
 
 }
 
 
 
+
 .edit{
 
 
-background:#dcfce7;
+    background:#dbeafe;
 
 
-color:#166534;
+    color:#1d4ed8;
 
 
 }
@@ -1241,10 +1364,10 @@ color:#166534;
 .allocation{
 
 
-background:#dbeafe;
+    background:#fef3c7;
 
 
-color:#1d4ed8;
+    color:#92400e;
 
 
 }
@@ -1254,13 +1377,50 @@ color:#1d4ed8;
 .delete{
 
 
-background:#fee2e2;
+    background:#fee2e2;
 
 
-color:#dc2626;
+    color:#dc2626;
 
 
 }
+
+
+
+.edit:hover{
+
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+
+
+.allocation:hover{
+
+
+    background:#d97706;
+
+    color:white;
+
+}
+
+
+
+.delete:hover{
+
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+
+
+
 
 
 
@@ -1268,47 +1428,25 @@ color:#dc2626;
 .empty{
 
 
-text-align:center;
+    text-align:center;
 
+    padding:30px;
 
-padding:30px;
-
-
-color:#64748b;
-
-
-}
-
-
-
-
-.success-alert{
-
-
-background:#dcfce7;
-
-
-color:#166534;
-
-
-padding:13px;
-
-
-border-radius:15px;
-
-
-margin-bottom:18px;
-
-
-font-size:13px;
-
-
-font-weight:600;
+    color:#94a3b8;
 
 
 }
 
 
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
@@ -1317,40 +1455,45 @@ font-weight:600;
 .project-stat-grid{
 
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 
 }
 
 
 
-.page-header{
+.page-header-card{
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
-align-items:flex-start;
+    align-items:flex-start;
 
 
-gap:15px;
-
-
-}
-
-
-
-table{
-
-
-font-size:12px;
+    gap:20px;
 
 
 }
 
 
+
+.table-header{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:15px;
+
+
 }
 
+
+}
 
 </style>
 

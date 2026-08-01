@@ -441,7 +441,7 @@ letter-spacing:2px;
 
 font-weight:700;
 
-color:#a67c2e;
+color:#64748b;
 
 }
 
