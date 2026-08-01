@@ -68,7 +68,7 @@ if($user->role == 'admin'){
 
 if($user->role == 'keuangan'){
 
-    return redirect('/finance/dashboard');
+    return redirect('/dashboard');
 
 }
 
