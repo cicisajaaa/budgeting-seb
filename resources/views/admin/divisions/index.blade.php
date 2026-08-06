@@ -4,12 +4,10 @@
 @section('content')
 
 
-
 <div class="page-header">
 
 
 <div>
-
 
 <div class="page-label">
 ORGANIZATION MANAGEMENT
@@ -17,17 +15,16 @@ ORGANIZATION MANAGEMENT
 
 
 <h1>
-Kelola Divisi
+Manajemen Divisi
 </h1>
 
 
 <p>
-Kelola struktur organisasi dan unit kerja perusahaan.
+Kelola struktur organisasi, anggota, tugas, dan aktivitas setiap unit perusahaan.
 </p>
 
 
 </div>
-
 
 
 
@@ -38,18 +35,13 @@ Kelola struktur organisasi dan unit kerja perusahaan.
 </a>
 
 
-
 </div>
 
 
 
 
 
-
-
-
-
-<!-- STATISTIC -->
+{{-- ================= STATISTIC ================= --}}
 
 
 <div class="division-stat-grid">
@@ -68,7 +60,6 @@ Kelola struktur organisasi dan unit kerja perusahaan.
 
 <div>
 
-
 <span>
 Total Divisi
 </span>
@@ -80,7 +71,7 @@ Total Divisi
 
 
 <small>
-Unit organisasi
+Unit organisasi aktif
 </small>
 
 
@@ -88,7 +79,6 @@ Unit organisasi
 
 
 </div>
-
 
 
 
@@ -101,26 +91,29 @@ Unit organisasi
 
 <div class="stat-icon blue">
 
-📁
+👥
 
 </div>
 
 
 <div>
 
-
 <span>
-Penggunaan
+Total Anggota
 </span>
 
 
 <h3>
-Project
+
+{{$divisions->sum(function($item){
+return $item->karyawan->count();
+})}}
+
 </h3>
 
 
 <small>
-Terhubung dengan project perusahaan
+Karyawan terdaftar
 </small>
 
 
@@ -135,32 +128,34 @@ Terhubung dengan project perusahaan
 
 
 
-
 <div class="division-stat">
 
 
 <div class="stat-icon orange">
 
-💰
+📝
 
 </div>
 
 
 <div>
 
-
 <span>
-Fungsi
+Total Task
 </span>
 
 
 <h3>
-Dana
+
+{{$divisions->sum(function($item){
+return $item->tugas->count();
+})}}
+
 </h3>
 
 
 <small>
-Digunakan untuk alokasi keuangan
+Aktivitas pekerjaan
 </small>
 
 
@@ -183,19 +178,11 @@ Digunakan untuk alokasi keuangan
 
 @if(session('success'))
 
-
 <div class="success-alert">
 
-<div>
-✓
-</div>
-
-
-{{session('success')}}
-
+✓ {{session('success')}}
 
 </div>
-
 
 @endif
 
@@ -205,7 +192,6 @@ Digunakan untuk alokasi keuangan
 
 
 
-<!-- TABLE -->
 
 
 <div class="glass-panel">
@@ -217,19 +203,17 @@ Digunakan untuk alokasi keuangan
 
 <div>
 
-
 <h3>
-Daftar Divisi
+Daftar Divisi Perusahaan
 </h3>
 
 
 <p>
-Daftar unit organisasi perusahaan.
+Monitoring unit organisasi dan aktivitas kerja.
 </p>
 
 
 </div>
-
 
 
 
@@ -255,12 +239,10 @@ Daftar unit organisasi perusahaan.
 <table>
 
 
-
 <thead>
 
 
 <tr>
-
 
 <th>
 No
@@ -268,12 +250,27 @@ No
 
 
 <th>
-Nama Divisi
+Informasi Divisi
 </th>
 
 
 <th>
-Dibuat
+Anggota
+</th>
+
+
+<th>
+Task
+</th>
+
+
+<th>
+Project
+</th>
+
+
+<th>
+Status
 </th>
 
 
@@ -286,7 +283,6 @@ Aksi
 
 
 </thead>
-
 
 
 
@@ -329,6 +325,7 @@ Aksi
 </div>
 
 
+
 <div>
 
 
@@ -338,18 +335,20 @@ Aksi
 
 
 <small>
-Unit perusahaan
+
+{{$division->deskripsi ?? 'Unit organisasi perusahaan'}}
+
 </small>
 
 
 </div>
 
 
-
 </div>
 
 
 </td>
+
 
 
 
@@ -361,10 +360,93 @@ Unit perusahaan
 <td>
 
 
-{{\Carbon\Carbon::parse($division->created_at)->format('d M Y')}}
+<div class="mini-info">
+
+
+👥
+
+{{$division->karyawan->count()}}
+
+Orang
+
+
+</div>
 
 
 </td>
+
+
+
+
+
+
+
+
+
+<td>
+
+
+<div class="mini-info">
+
+
+📝
+
+{{$division->tugas->count()}}
+
+Task
+
+
+</div>
+
+
+</td>
+
+
+
+
+
+
+
+
+
+<td>
+
+
+<div class="mini-info">
+
+
+📁
+
+{{$division->alokasiProyekDivisi->count()}}
+
+Project
+
+
+</div>
+
+
+</td>
+
+
+
+
+
+
+
+
+
+<td>
+
+
+<span class="status-active">
+
+Aktif
+
+</span>
+
+
+</td>
+
 
 
 
@@ -379,13 +461,20 @@ Unit perusahaan
 <div class="action">
 
 
+<a href="{{route('admin.divisions.show',$division->id)}}"
+class="detail">
+
+👁
+
+</a>
+
+
+
 
 <a href="{{route('admin.divisions.edit',$division->id)}}"
-
 class="edit">
 
-
-Edit
+✏️
 
 </a>
 
@@ -393,10 +482,7 @@ Edit
 
 
 
-
-
 <form method="POST"
-
 action="{{route('admin.divisions.destroy',$division->id)}}">
 
 
@@ -405,16 +491,10 @@ action="{{route('admin.divisions.destroy',$division->id)}}">
 @method('DELETE')
 
 
-
-<button
-
-class="delete"
-
+<button class="delete"
 onclick="return confirm('Hapus divisi ini?')">
 
-
-Hapus
-
+🗑
 
 </button>
 
@@ -429,11 +509,7 @@ Hapus
 </td>
 
 
-
-
 </tr>
-
-
 
 
 
@@ -442,25 +518,9 @@ Hapus
 
 <tr>
 
-
-<td colspan="4" class="empty">
-
-
-<div class="empty-icon">
-🏢
-</div>
-
+<td colspan="7" class="empty">
 
 Belum ada divisi
-
-
-<br>
-
-
-<small>
-Tambahkan unit organisasi baru.
-</small>
-
 
 </td>
 
@@ -479,22 +539,19 @@ Tambahkan unit organisasi baru.
 </table>
 
 
-</div>
-
-
 
 </div>
 
 
 
+</div>
 
-
-
+@endsection
 
 <style>
 
 /* ===============================
-GLOBAL WIDTH
+GLOBAL
 ================================ */
 
 .page-header,
@@ -507,9 +564,13 @@ GLOBAL WIDTH
 
 
 
+
+
+
 /* ===============================
-HEADER CARD
+HEADER
 ================================ */
+
 
 .page-header{
 
@@ -530,7 +591,6 @@ HEADER CARD
     margin-bottom:25px;
 
     box-shadow:
-
     0 10px 30px rgba(15,23,42,.06);
 
 }
@@ -589,24 +649,17 @@ BUTTON
 
     background:#1e293b;
 
-
     color:white;
-
 
     padding:13px 22px;
 
-
     border-radius:14px;
-
 
     font-size:13px;
 
-
     font-weight:700;
 
-
     text-decoration:none;
-
 
     transition:.2s;
 
@@ -617,12 +670,9 @@ BUTTON
 
 .btn-primary:hover{
 
-
     background:#334155;
 
-
     transform:translateY(-2px);
-
 
 }
 
@@ -632,9 +682,8 @@ BUTTON
 
 
 
-
 /* ===============================
-STATISTIC
+STAT CARD
 ================================ */
 
 
@@ -643,13 +692,9 @@ STATISTIC
 
     display:grid;
 
-
-    grid-template-columns:
-    repeat(3,1fr);
-
+    grid-template-columns:repeat(3,1fr);
 
     gap:18px;
-
 
     margin-bottom:25px;
 
@@ -659,37 +704,24 @@ STATISTIC
 
 
 
-
-
 .division-stat{
 
 
     background:white;
 
-
     border:1px solid #e5e7eb;
-
 
     border-radius:22px;
 
-
     padding:22px;
-
-
-    min-height:105px;
-
 
     display:flex;
 
-
     align-items:center;
-
 
     gap:16px;
 
-
     box-shadow:
-
 
     0 10px 30px rgba(15,23,42,.05);
 
@@ -698,35 +730,22 @@ STATISTIC
 
 
 
-
-
-
 .stat-icon{
 
 
-    width:50px;
+    width:52px;
 
-
-    height:50px;
-
+    height:52px;
 
     border-radius:16px;
 
-
     display:flex;
-
 
     align-items:center;
 
-
     justify-content:center;
 
-
-    font-size:22px;
-
-
-    flex-shrink:0;
-
+    font-size:23px;
 
 }
 
@@ -750,22 +769,18 @@ STATISTIC
 
 .stat-icon.orange{
 
-    background:#ede9fe;
+    background:#fef3c7;
 
 }
 
 
 
 
-
 .division-stat span{
-
 
     font-size:12px;
 
-
     color:#64748b;
-
 
 }
 
@@ -773,15 +788,11 @@ STATISTIC
 
 .division-stat h3{
 
-
     margin:5px 0;
 
-
-    font-size:25px;
-
+    font-size:26px;
 
     color:#172033;
-
 
 }
 
@@ -789,15 +800,11 @@ STATISTIC
 
 .division-stat small{
 
+    color:#94a3b8;
 
     font-size:11px;
 
-
-    color:#94a3b8;
-
-
 }
-
 
 
 
@@ -806,30 +813,28 @@ STATISTIC
 
 
 /* ===============================
-TABLE CARD
+ALERT
 ================================ */
 
 
-.glass-panel{
+.success-alert{
 
 
-    background:white;
+    background:#f0fdf4;
 
+    border:1px solid #bbf7d0;
 
-    border:1px solid #e5e7eb;
+    color:#166534;
 
+    padding:15px 18px;
 
-    border-radius:24px;
+    border-radius:16px;
 
+    margin-bottom:20px;
 
-    padding:25px;
+    font-size:13px;
 
-
-    box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.06);
-
+    font-weight:700;
 
 }
 
@@ -838,17 +843,40 @@ TABLE CARD
 
 
 
+
+/* ===============================
+TABLE PANEL
+================================ */
+
+
+.glass-panel{
+
+
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
+
+
+}
+
+
+
 .table-header{
 
 
     display:flex;
 
-
     justify-content:space-between;
 
-
     align-items:center;
-
 
     margin-bottom:20px;
 
@@ -859,15 +887,11 @@ TABLE CARD
 
 .table-header h3{
 
-
     margin:0;
-
 
     font-size:18px;
 
-
     color:#172033;
-
 
 }
 
@@ -875,15 +899,11 @@ TABLE CARD
 
 .table-header p{
 
-
     margin-top:5px;
-
 
     font-size:13px;
 
-
     color:#64748b;
-
 
 }
 
@@ -896,23 +916,18 @@ TABLE CARD
 
     background:#eff6ff;
 
-
     color:#2563eb;
-
 
     padding:8px 16px;
 
-
     border-radius:999px;
-
 
     font-size:12px;
 
-
     font-weight:700;
 
-
 }
+
 
 
 
@@ -928,12 +943,7 @@ TABLE
 
 .table-wrapper{
 
-
-    width:100%;
-
-
     overflow-x:auto;
-
 
 }
 
@@ -944,35 +954,25 @@ table{
 
     width:100%;
 
-
     border-collapse:collapse;
-
-
-    table-layout:fixed;
 
 
 }
 
 
 
-
-
 th{
-
-
-    padding:16px 18px;
 
 
     background:#f8fafc;
 
+    padding:15px;
 
-    color:#64748b;
-
+    text-align:left;
 
     font-size:12px;
 
-
-    text-align:left;
+    color:#64748b;
 
 
 }
@@ -982,20 +982,16 @@ th{
 td{
 
 
-    padding:18px;
+    padding:18px 15px;
 
+    border-bottom:1px solid #f1f5f9;
 
     font-size:13px;
-
 
     color:#334155;
 
 
-    border-bottom:1px solid #f1f5f9;
-
-
 }
-
 
 
 
@@ -1003,54 +999,8 @@ td{
 tr:hover{
 
 
-    background:#f8fafc;
+    background:#fafafa;
 
-
-}
-
-
-
-
-
-
-
-
-/* ===============================
-COLUMN WIDTH
-================================ */
-
-
-th:nth-child(1),
-td:nth-child(1){
-
-    width:8%;
-
-}
-
-
-
-th:nth-child(2),
-td:nth-child(2){
-
-    width:45%;
-
-}
-
-
-
-th:nth-child(3),
-td:nth-child(3){
-
-    width:25%;
-
-}
-
-
-
-th:nth-child(4),
-td:nth-child(4){
-
-    width:22%;
 
 }
 
@@ -1063,7 +1013,7 @@ td:nth-child(4){
 
 
 /* ===============================
-DIVISION PROFILE
+DIVISION INFO
 ================================ */
 
 
@@ -1072,11 +1022,9 @@ DIVISION PROFILE
 
     display:flex;
 
-
     align-items:center;
 
-
-    gap:15px;
+    gap:14px;
 
 
 }
@@ -1086,33 +1034,24 @@ DIVISION PROFILE
 .division-icon{
 
 
-    width:42px;
+    width:45px;
 
+    height:45px;
 
-    height:42px;
-
-
-    border-radius:14px;
-
+    border-radius:15px;
 
     background:#eff6ff;
 
-
     display:flex;
-
-
-    align-items:center;
-
 
     justify-content:center;
 
+    align-items:center;
 
-    flex-shrink:0;
+    font-size:20px;
 
 
 }
-
-
 
 
 
@@ -1121,11 +1060,9 @@ DIVISION PROFILE
 
     display:block;
 
+    font-size:14px;
 
     color:#172033;
-
-
-    font-size:14px;
 
 
 }
@@ -1135,15 +1072,77 @@ DIVISION PROFILE
 .division-name small{
 
 
+    display:block;
+
+    margin-top:5px;
+
     color:#94a3b8;
 
-
     font-size:11px;
+
+    max-width:220px;
 
 
 }
 
 
+
+
+
+
+/* ===============================
+MINI INFO
+================================ */
+
+
+.mini-info{
+
+
+    background:#f8fafc;
+
+    padding:8px 12px;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    color:#475569;
+
+    width:max-content;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+STATUS
+================================ */
+
+
+.status-active{
+
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    padding:7px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+
+}
 
 
 
@@ -1162,11 +1161,7 @@ ACTION
 
     display:flex;
 
-
-    gap:10px;
-
-
-    justify-content:flex-start;
+    gap:8px;
 
 
 }
@@ -1175,43 +1170,52 @@ ACTION
 
 .action form{
 
-
-    display:inline;
-
+    margin:0;
 
 }
 
 
 
 
-
+.detail,
 .edit,
 .delete{
 
 
-    padding:8px 15px;
+    width:38px;
 
+    height:36px;
 
     border-radius:12px;
 
+    display:flex;
 
-    font-size:12px;
+    align-items:center;
 
-
-    font-weight:700;
-
+    justify-content:center;
 
     border:none;
 
-
     cursor:pointer;
 
-
     text-decoration:none;
+
+    font-size:15px;
 
 
 }
 
+
+
+.detail{
+
+
+    background:#dcfce7;
+
+    color:#166534;
+
+
+}
 
 
 
@@ -1221,21 +1225,7 @@ ACTION
 
     background:#dbeafe;
 
-
     color:#2563eb;
-
-
-}
-
-
-
-.edit:hover{
-
-
-    background:#2563eb;
-
-
-    color:white;
 
 
 }
@@ -1249,7 +1239,6 @@ ACTION
 
     background:#fee2e2;
 
-
     color:#dc2626;
 
 
@@ -1257,66 +1246,33 @@ ACTION
 
 
 
-.delete:hover{
 
 
-    background:#dc2626;
+.detail:hover{
 
+    background:#166534;
 
     color:white;
 
+}
+
+
+.edit:hover{
+
+    background:#2563eb;
+
+    color:white;
 
 }
 
 
+.delete:hover{
 
+    background:#dc2626;
 
-
-
-
-
-
-/* ===============================
-SUCCESS
-================================ */
-
-
-.success-alert{
-
-
-    background:#f0fdf4;
-
-
-    border:1px solid #bbf7d0;
-
-
-    color:#166534;
-
-
-    padding:15px 18px;
-
-
-    border-radius:16px;
-
-
-    margin-bottom:20px;
-
-
-    display:flex;
-
-
-    gap:10px;
-
-
-    font-size:13px;
-
-
-    font-weight:700;
-
+    color:white;
 
 }
-
-
 
 
 
@@ -1334,32 +1290,7 @@ EMPTY
 
     text-align:center;
 
-
-    padding:45px;
-
-
-    color:#64748b;
-
-
-}
-
-
-
-.empty-icon{
-
-
-    font-size:35px;
-
-
-    margin-bottom:10px;
-
-
-}
-
-
-
-.empty small{
-
+    padding:40px;
 
     color:#94a3b8;
 
@@ -1378,7 +1309,35 @@ RESPONSIVE
 ================================ */
 
 
+@media(max-width:1100px){
+
+
+.division-stat-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
 @media(max-width:900px){
+
+
+.page-header{
+
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+
+}
+
 
 
 .division-stat-grid{
@@ -1390,34 +1349,8 @@ RESPONSIVE
 }
 
 
-
-.page-header{
-
-
-    flex-direction:column;
-
-
-    align-items:flex-start;
-
-
-    gap:15px;
-
-
 }
 
 
-
-table{
-
-
-    table-layout:auto;
-
-
-}
-
-
-
-}
 
 </style>
-@endsection

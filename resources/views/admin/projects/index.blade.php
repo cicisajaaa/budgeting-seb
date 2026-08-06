@@ -4,6 +4,9 @@
 @section('content')
 
 
+{{-- ================= HEADER ================= --}}
+
+
 <div class="page-header-card">
 
 
@@ -21,7 +24,7 @@ Kelola Project
 
 
 <p>
-Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
+Kelola informasi project, anggaran, progres, dan aktivitas perusahaan.
 </p>
 
 
@@ -29,11 +32,13 @@ Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
 
 
 
-<a href="{{ route('admin.projects.create') }}" class="btn-primary">
+<a href="{{route('admin.projects.create')}}" 
+class="btn-primary">
 
 ＋ Tambah Project
 
 </a>
+
 
 
 </div>
@@ -45,7 +50,7 @@ Kelola informasi project, anggaran, progres, dan alokasi dana perusahaan.
 
 
 
-{{-- STATISTIC --}}
+{{-- ================= STATISTIC ================= --}}
 
 
 <div class="project-stat-grid">
@@ -100,19 +105,22 @@ Project terdaftar
 <div>
 
 <span>
-Project Aktif
+Project Berjalan
 </span>
 
 
 <h3>
 
-{{$projects->where('progres_keseluruhan','<',100)->count()}}
+{{$projects->whereBetween(
+'progres_keseluruhan',
+[1,99]
+)->count()}}
 
 </h3>
 
 
 <small>
-Sedang berjalan
+Sedang dikerjakan
 </small>
 
 
@@ -132,31 +140,29 @@ Sedang berjalan
 
 
 <div class="stat-icon orange">
-💰
+✓
 </div>
 
 
 <div>
 
 <span>
-Total Budget
+Project Selesai
 </span>
 
 
 <h3>
 
-Rp {{number_format(
-$projects->sum('total_anggaran'),
-0,
-',',
-'.'
-)}}
+{{$projects->where(
+'progres_keseluruhan',
+100
+)->count()}}
 
 </h3>
 
 
 <small>
-Nilai keseluruhan
+Progress 100%
 </small>
 
 
@@ -182,14 +188,9 @@ Nilai keseluruhan
 
 <div class="success-alert">
 
-
-<div>
 ✓
-</div>
-
 
 {{session('success')}}
-
 
 </div>
 
@@ -201,6 +202,10 @@ Nilai keseluruhan
 
 
 
+
+
+
+{{-- ================= TABLE ================= --}}
 
 
 
@@ -229,7 +234,9 @@ Monitoring seluruh project perusahaan.
 
 <div class="total-project">
 
-{{$projects->count()}} Project
+{{$projects->count()}}
+
+Project
 
 </div>
 
@@ -254,6 +261,7 @@ Monitoring seluruh project perusahaan.
 
 <tr>
 
+
 <th>
 No
 </th>
@@ -265,17 +273,12 @@ Project
 
 
 <th>
-Owner
+Informasi
 </th>
 
 
 <th>
 Budget
-</th>
-
-
-<th>
-Periode
 </th>
 
 
@@ -307,6 +310,7 @@ Aksi
 @forelse($projects as $project)
 
 
+
 <tr>
 
 
@@ -324,6 +328,7 @@ Aksi
 
 
 
+
 <td>
 
 
@@ -331,7 +336,9 @@ Aksi
 
 
 <div class="project-icon">
+
 📁
+
 </div>
 
 
@@ -367,80 +374,32 @@ Project Perusahaan
 
 
 
+
+
 <td>
 
+
+<div class="project-info">
+
+
+<span>
+
+👤 
 {{$project->pemilik_proyek ?? '-'}}
-
-</td>
-
-
-
-
-
-
-
-
-<td>
-
-
-<span class="budget-text">
-
-
-Rp {{number_format(
-$project->total_anggaran,
-0,
-',',
-'.'
-)}}
-
 
 </span>
 
 
-</td>
 
+<span>
 
-
-
-
-
-
-
-<td>
-
-
-<div class="date">
-
+📅
 
 {{\Carbon\Carbon::parse(
 $project->tanggal_mulai
 )->format('d M Y')}}
 
-
-
-<br>
-
-
-<span>
-s/d
 </span>
-
-
-<br>
-
-
-
-@if($project->tanggal_selesai)
-
-{{\Carbon\Carbon::parse(
-$project->tanggal_selesai
-)->format('d M Y')}}
-
-@else
-
--
-
-@endif
 
 
 
@@ -448,6 +407,42 @@ $project->tanggal_selesai
 
 
 </td>
+
+
+
+
+
+
+
+
+
+<td>
+
+
+<strong class="budget-text">
+
+Rp 
+
+{{number_format(
+$project->total_anggaran,
+0,
+',',
+'.'
+)}}
+
+</strong>
+
+
+</td>
+
+
+
+
+
+
+
+
+
 <td>
 
 
@@ -457,16 +452,48 @@ $project->tanggal_selesai
 <div class="progress-label">
 
 
-<span>
-Progress
-</span>
-
-
 <b>
 
 {{$project->progres_keseluruhan ?? 0}}%
 
 </b>
+
+
+
+@if(($project->progres_keseluruhan ?? 0)==0)
+
+
+<span class="status pending">
+
+Belum Mulai
+
+</span>
+
+
+
+@elseif(($project->progres_keseluruhan ?? 0)<100)
+
+
+<span class="status running">
+
+Berjalan
+
+</span>
+
+
+
+@else
+
+
+<span class="status done">
+
+Selesai
+
+</span>
+
+
+
+@endif
 
 
 </div>
@@ -478,7 +505,9 @@ Progress
 <div class="progress-track">
 
 
-<div style="width:{{$project->progres_keseluruhan ?? 0}}%">
+<div style="
+width:{{$project->progres_keseluruhan ?? 0}}%
+">
 
 </div>
 
@@ -491,6 +520,7 @@ Progress
 
 
 </td>
+
 
 
 
@@ -506,26 +536,38 @@ Progress
 
 
 
-<a href="{{route('admin.projects.edit',$project->id)}}"
+<a href="{{route(
+'admin.projects.edit',
+$project->id
+)}}"
 
-class="edit">
+class="edit"
 
-Edit
+title="Edit">
+
+✏️
+
+</a>
+
+
+
+
+
+
+
+<a href="{{route(
+'admin.allocation.index',
+['project'=>$project->id]
+)}}"
+
+class="allocation"
+
+title="Dana">
+
+💰
 
 </a>
 
-
-
-
-
-
-<a href="{{route('admin.allocation.index',['project'=>$project->id])}}"
-
-class="allocation">
-
-Dana
-
-</a>
 
 
 
@@ -534,7 +576,10 @@ Dana
 
 <form method="POST"
 
-action="{{route('admin.projects.destroy',$project->id)}}">
+action="{{route(
+'admin.projects.destroy',
+$project->id
+)}}">
 
 
 @csrf
@@ -545,9 +590,13 @@ action="{{route('admin.projects.destroy',$project->id)}}">
 
 <button class="delete"
 
-onclick="return confirm('Hapus project ini?')">
+title="Hapus"
 
-Hapus
+onclick="
+return confirm('Hapus project ini?')
+">
+
+🗑
 
 </button>
 
@@ -567,19 +616,39 @@ Hapus
 
 
 
+
+
 @empty
 
 
 <tr>
 
-<td colspan="7" class="empty">
+
+<td colspan="6" class="empty">
+
+
+<div class="empty-icon">
+
+📁
+
+</div>
+
 
 Belum ada project
 
+
+<br>
+
+
+<small>
+Tambahkan project baru untuk memulai.
+</small>
+
+
 </td>
 
-</tr>
 
+</tr>
 
 
 @endforelse
@@ -598,13 +667,24 @@ Belum ada project
 </div>
 
 
-
-
-
 <style>
 
 /* ===============================
-HEADER CARD
+GLOBAL
+================================ */
+
+.page-header-card,
+.project-stat-grid,
+.glass-panel{
+
+    width:100%;
+
+}
+
+
+
+/* ===============================
+HEADER
 ================================ */
 
 
@@ -627,7 +707,6 @@ HEADER CARD
     margin-bottom:25px;
 
     box-shadow:
-
     0 10px 30px rgba(15,23,42,.06);
 
 }
@@ -677,6 +756,7 @@ HEADER CARD
 
 
 
+
 /* ===============================
 BUTTON
 ================================ */
@@ -684,11 +764,12 @@ BUTTON
 
 .btn-primary{
 
+
     background:#1e293b;
 
     color:white;
 
-    padding:12px 22px;
+    padding:13px 22px;
 
     border-radius:14px;
 
@@ -706,7 +787,7 @@ BUTTON
 
 .btn-primary:hover{
 
-    background:#b8863b;
+    background:#334155;
 
     transform:translateY(-2px);
 
@@ -725,6 +806,7 @@ STATISTIC
 
 .project-stat-grid{
 
+
     display:grid;
 
     grid-template-columns:repeat(3,1fr);
@@ -733,13 +815,14 @@ STATISTIC
 
     margin-bottom:25px;
 
+
 }
 
 
 
 
-
 .project-stat{
+
 
     background:white;
 
@@ -759,6 +842,7 @@ STATISTIC
 
     0 10px 30px rgba(15,23,42,.05);
 
+
 }
 
 
@@ -767,19 +851,20 @@ STATISTIC
 
 .stat-icon{
 
-    width:48px;
 
-    height:48px;
+    width:52px;
 
-    border-radius:15px;
+    height:52px;
+
+    border-radius:16px;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    font-size:20px;
+    align-items:center;
+
+    font-size:23px;
 
 }
 
@@ -787,7 +872,7 @@ STATISTIC
 
 .stat-icon.green{
 
-    background:#f1f5f9;
+    background:#dcfce7;
 
 }
 
@@ -821,13 +906,11 @@ STATISTIC
 
 
 
-
-
 .project-stat h3{
 
     margin:5px 0;
 
-    font-size:25px;
+    font-size:26px;
 
     color:#172033;
 
@@ -835,15 +918,14 @@ STATISTIC
 
 
 
-
-
 .project-stat small{
-
-    color:#94a3b8;
 
     font-size:11px;
 
+    color:#94a3b8;
+
 }
+
 
 
 
@@ -866,7 +948,7 @@ ALERT
 
     color:#166534;
 
-    padding:14px 18px;
+    padding:15px 18px;
 
     border-radius:16px;
 
@@ -874,10 +956,11 @@ ALERT
 
     font-size:13px;
 
-    font-weight:600;
+    font-weight:700;
 
 
 }
+
 
 
 
@@ -895,18 +978,13 @@ TABLE PANEL
 
     background:white;
 
-
     border:1px solid #e5e7eb;
-
 
     border-radius:24px;
 
-
     padding:25px;
 
-
     box-shadow:
-
 
     0 10px 30px rgba(15,23,42,.06);
 
@@ -917,17 +995,15 @@ TABLE PANEL
 
 
 
+
 .table-header{
 
 
     display:flex;
 
-
     justify-content:space-between;
 
-
     align-items:center;
-
 
     margin-bottom:20px;
 
@@ -939,11 +1015,11 @@ TABLE PANEL
 .table-header h3{
 
 
+    margin:0;
+
     font-size:18px;
 
     color:#172033;
-
-    margin:0 0 5px;
 
 
 }
@@ -953,11 +1029,11 @@ TABLE PANEL
 .table-header p{
 
 
+    margin-top:5px;
+
     color:#64748b;
 
     font-size:13px;
-
-    margin:0;
 
 
 }
@@ -969,11 +1045,9 @@ TABLE PANEL
 .total-project{
 
 
-    background:#f8fafc;
+    background:#eff6ff;
 
-    border:1px solid #e2e8f0;
-
-    color:#334155;
+    color:#2563eb;
 
     padding:8px 16px;
 
@@ -992,12 +1066,16 @@ TABLE PANEL
 
 
 
+
+
 /* ===============================
 TABLE
 ================================ */
 
 
 .table-wrapper{
+
+    width:100%;
 
     overflow-x:auto;
 
@@ -1007,9 +1085,11 @@ TABLE
 
 table{
 
+
     width:100%;
 
     border-collapse:collapse;
+
 
 }
 
@@ -1020,7 +1100,7 @@ th{
 
     background:#f8fafc;
 
-    padding:14px;
+    padding:15px;
 
     text-align:left;
 
@@ -1036,9 +1116,9 @@ th{
 td{
 
 
-    padding:15px;
+    padding:18px 15px;
 
-    border-bottom:1px solid #e5e7eb;
+    border-bottom:1px solid #f1f5f9;
 
     font-size:13px;
 
@@ -1062,8 +1142,9 @@ tr:hover{
 
 
 
+
 /* ===============================
-PROJECT NAME
+PROJECT PROFILE
 ================================ */
 
 
@@ -1072,11 +1153,9 @@ PROJECT NAME
 
     display:flex;
 
-
     align-items:center;
 
-
-    gap:12px;
+    gap:14px;
 
 
 }
@@ -1088,29 +1167,24 @@ PROJECT NAME
 .project-icon{
 
 
-    width:40px;
+    width:45px;
 
+    height:45px;
 
-    height:40px;
+    border-radius:15px;
 
-
-    border-radius:14px;
-
-
-    background:#f1f5f9;
-
+    background:#eff6ff;
 
     display:flex;
 
-
     align-items:center;
-
 
     justify-content:center;
 
+    font-size:20px;
+
 
 }
-
 
 
 
@@ -1120,27 +1194,59 @@ PROJECT NAME
 
     display:block;
 
+    font-size:14px;
 
     color:#172033;
 
 
-    font-size:13px;
-
-
 }
+
 
 
 
 .project-name small{
 
 
-    color:#94a3b8;
+    display:block;
 
+    margin-top:4px;
+
+    color:#94a3b8;
 
     font-size:11px;
 
 
 }
+
+
+
+
+
+
+
+
+
+/* ===============================
+PROJECT INFO
+================================ */
+
+
+.project-info{
+
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+
+    font-size:12px;
+
+    color:#475569;
+
+
+}
+
 
 
 
@@ -1156,44 +1262,9 @@ BUDGET
 .budget-text{
 
 
-    font-weight:700;
-
-
     color:#172033;
 
-
-}
-
-
-
-
-
-
-
-
-/* ===============================
-DATE
-================================ */
-
-
-.date{
-
-
-    font-size:12px;
-
-
-    color:#475569;
-
-
-}
-
-
-
-.date span{
-
-
-    color:#94a3b8;
-
+    font-size:13px;
 
 }
 
@@ -1211,7 +1282,7 @@ PROGRESS
 
 .progress-box{
 
-    width:130px;
+    width:150px;
 
 }
 
@@ -1222,14 +1293,13 @@ PROGRESS
 
     display:flex;
 
+    align-items:center;
 
     justify-content:space-between;
 
+    gap:8px;
 
-    font-size:11px;
-
-
-    margin-bottom:6px;
+    margin-bottom:8px;
 
 
 }
@@ -1239,7 +1309,9 @@ PROGRESS
 .progress-label b{
 
 
-    color:#16a34a;
+    font-size:13px;
+
+    color:#172033;
 
 
 }
@@ -1253,12 +1325,9 @@ PROGRESS
 
     height:8px;
 
-
     background:#e2e8f0;
 
-
     border-radius:20px;
-
 
     overflow:hidden;
 
@@ -1272,14 +1341,74 @@ PROGRESS
 
     height:100%;
 
-
-    background:#16a34a;
-
+    background:#22c55e;
 
     border-radius:20px;
 
 
 }
+
+
+
+
+
+
+
+
+
+/* STATUS BADGE */
+
+
+.status{
+
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+
+}
+
+
+
+.status.pending{
+
+
+    background:#f1f5f9;
+
+    color:#64748b;
+
+
+}
+
+
+
+.status.running{
+
+
+    background:#dcfce7;
+
+    color:#166534;
+
+
+}
+
+
+
+.status.done{
+
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+
+}
+
 
 
 
@@ -1298,9 +1427,7 @@ ACTION
 
     display:flex;
 
-
-    gap:7px;
-
+    gap:8px;
 
 }
 
@@ -1308,11 +1435,10 @@ ACTION
 
 .action form{
 
-
-    display:inline;
-
+    margin:0;
 
 }
+
 
 
 
@@ -1322,28 +1448,29 @@ ACTION
 .delete{
 
 
-    padding:8px 12px;
+    width:38px;
 
+    height:36px;
 
     border-radius:12px;
 
+    display:flex;
 
-    font-size:11px;
+    justify-content:center;
 
-
-    font-weight:700;
-
-
-    text-decoration:none;
-
+    align-items:center;
 
     border:none;
 
+    text-decoration:none;
 
     cursor:pointer;
 
+    font-size:15px;
+
 
 }
+
 
 
 
@@ -1353,8 +1480,7 @@ ACTION
 
     background:#dbeafe;
 
-
-    color:#1d4ed8;
+    color:#2563eb;
 
 
 }
@@ -1365,7 +1491,6 @@ ACTION
 
 
     background:#fef3c7;
-
 
     color:#92400e;
 
@@ -1379,11 +1504,12 @@ ACTION
 
     background:#fee2e2;
 
-
     color:#dc2626;
 
 
 }
+
+
 
 
 
@@ -1393,6 +1519,7 @@ ACTION
     background:#2563eb;
 
     color:white;
+
 
 }
 
@@ -1405,6 +1532,7 @@ ACTION
 
     color:white;
 
+
 }
 
 
@@ -1416,6 +1544,7 @@ ACTION
 
     color:white;
 
+
 }
 
 
@@ -1423,6 +1552,12 @@ ACTION
 
 
 
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
@@ -1430,12 +1565,25 @@ ACTION
 
     text-align:center;
 
-    padding:30px;
+    padding:45px;
 
     color:#94a3b8;
 
 
 }
+
+
+
+.empty-icon{
+
+
+    font-size:35px;
+
+    margin-bottom:10px;
+
+
+}
+
 
 
 
@@ -1449,7 +1597,37 @@ RESPONSIVE
 ================================ */
 
 
-@media(max-width:900px){
+@media(max-width:1000px){
+
+
+.project-stat-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:800px){
+
+
+.page-header-card{
+
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+
+}
+
 
 
 .project-stat-grid{
@@ -1462,30 +1640,12 @@ RESPONSIVE
 
 
 
-.page-header-card{
-
-
-    flex-direction:column;
-
-
-    align-items:flex-start;
-
-
-    gap:20px;
-
-
-}
-
-
-
 .table-header{
 
 
     flex-direction:column;
 
-
     align-items:flex-start;
-
 
     gap:15px;
 
@@ -1493,9 +1653,9 @@ RESPONSIVE
 }
 
 
+
 }
 
 </style>
-
 
 @endsection

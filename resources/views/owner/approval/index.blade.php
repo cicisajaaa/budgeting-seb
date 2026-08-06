@@ -6,9 +6,11 @@
 <div class="approval-container">
 
 
+
 {{-- HEADER --}}
 
 <div class="page-header">
+
 
 <span class="label">
 PEMILIK PERUSAHAAN
@@ -16,15 +18,18 @@ PEMILIK PERUSAHAAN
 
 
 <h1>
-Persetujuan Dana
+Monitoring Pengajuan Dana
 </h1>
 
 
 <p>
-Monitoring dan persetujuan pengajuan dana perusahaan.
+Melihat perkembangan pengajuan dana yang telah diproses oleh bagian keuangan.
 </p>
 
+
 </div>
+
+
 
 
 
@@ -32,22 +37,28 @@ Monitoring dan persetujuan pengajuan dana perusahaan.
 
 {{-- SUMMARY --}}
 
+
 <div class="summary-grid">
+
 
 
 <div class="summary-card">
 
+
 <span>
-Menunggu Persetujuan
+Menunggu Verifikasi
 </span>
 
+
 <h2>
-{{ $requests->count() ?? 0 }}
+{{ $requests->where('status','pending')->count() }}
 </h2>
 
+
 <p>
-Pengajuan membutuhkan keputusan
+Pengajuan menunggu pemeriksaan keuangan
 </p>
+
 
 </div>
 
@@ -55,21 +66,29 @@ Pengajuan membutuhkan keputusan
 
 
 
+
+
 <div class="summary-card">
+
 
 <span>
 Total Pengajuan
 </span>
 
+
 <h2>
-{{ \App\Models\ExpenseRequest::count() }}
+{{ $requests->count() }}
 </h2>
 
+
 <p>
-Seluruh pengajuan dana
+Seluruh pengajuan dana perusahaan
 </p>
 
+
 </div>
+
+
 
 
 
@@ -77,45 +96,54 @@ Seluruh pengajuan dana
 
 <div class="summary-card">
 
+
 <span>
-Dana Disetujui
+Total Dana Disetujui
 </span>
 
+
 <h2>
+
 Rp {{number_format(
-\App\Models\ExpenseRequest::where('status','approved')->sum('jumlah'),
+$requests->where('status','approved')->sum('jumlah'),
 0,
 ',',
 '.'
 )}}
+
 </h2>
 
+
 <p>
-Total dana yang telah disetujui
+Dana yang telah disetujui keuangan
 </p>
 
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
 
 
 
 
-{{-- LIST PENGAJUAN --}}
+
+
+
+{{-- TABLE --}}
 
 
 <div class="panel">
 
 
 <h3>
-📋 Daftar Pengajuan Dana
+📋 Riwayat Pengajuan Dana
 </h3>
+
+
 
 
 
@@ -124,7 +152,9 @@ Total dana yang telah disetujui
 
 <thead>
 
+
 <tr>
+
 
 <th>
 Project
@@ -152,7 +182,7 @@ Status
 
 
 <th>
-Detail
+Aksi
 </th>
 
 
@@ -165,17 +195,21 @@ Detail
 
 
 
+
+
 <tbody>
 
 
-@forelse($requests ?? [] as $expense)
+@forelse($requests as $expense)
 
 
 
 <tr>
 
 
+
 <td>
+
 
 <strong>
 
@@ -183,7 +217,9 @@ Detail
 
 </strong>
 
+
 </td>
+
 
 
 
@@ -199,6 +235,7 @@ Detail
 
 
 
+
 <td>
 
 {{ $expense->user->name ?? '-' }}
@@ -209,7 +246,9 @@ Detail
 
 
 
+
 <td class="nominal">
+
 
 Rp {{number_format(
 $expense->jumlah ?? 0,
@@ -218,7 +257,10 @@ $expense->jumlah ?? 0,
 '.'
 )}}
 
+
 </td>
+
+
 
 
 
@@ -228,18 +270,19 @@ $expense->jumlah ?? 0,
 <td>
 
 
-@if($expense->status == 'pending')
+
+@if($expense->status=='pending')
 
 
 <span class="status waiting">
 
-Menunggu
+Menunggu Keuangan
 
 </span>
 
 
 
-@elseif($expense->status == 'approved')
+@elseif($expense->status=='approved')
 
 
 <span class="status approved">
@@ -260,10 +303,14 @@ Ditolak
 </span>
 
 
+
 @endif
 
 
+
 </td>
+
+
 
 
 
@@ -271,17 +318,29 @@ Ditolak
 
 <td>
 
-<a href="{{route('owner.approval.detail',$expense->id)}}"
+
+<a href="{{route(
+'owner.approval.detail',
+$expense->id
+)}}"
+
 class="btn detail">
+
 
 Lihat Detail
 
+
 </a>
+
 
 </td>
 
 
+
+
+
 </tr>
+
 
 
 
@@ -292,13 +351,18 @@ Lihat Detail
 
 <tr>
 
+
 <td colspan="6" align="center">
+
 
 Belum ada pengajuan dana
 
+
 </td>
 
+
 </tr>
+
 
 
 @endforelse
@@ -308,14 +372,20 @@ Belum ada pengajuan dana
 </tbody>
 
 
+
 </table>
 
 
-</div>
-
-
 
 </div>
+
+
+
+
+
+
+</div>
+
 
 
 
@@ -336,7 +406,10 @@ margin-top:10px;
 
 
 
+
+
 .page-header{
+
 
 background:white;
 
@@ -349,13 +422,16 @@ border:1px solid #e2e8f0;
 margin-bottom:25px;
 
 box-shadow:
+
 0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
+
 .label{
+
 
 font-size:11px;
 
@@ -365,11 +441,13 @@ font-weight:700;
 
 color:#64748b;
 
+
 }
 
 
 
 .page-header h1{
+
 
 margin:10px 0;
 
@@ -377,21 +455,32 @@ font-size:28px;
 
 color:#1e293b;
 
+
 }
+
 
 
 
 .page-header p{
 
+
 color:#64748b;
 
+font-size:14px;
+
+
 }
+
+
+
+
 
 
 
 
 
 .summary-grid{
+
 
 display:grid;
 
@@ -401,11 +490,17 @@ gap:20px;
 
 margin-bottom:25px;
 
+
 }
 
 
 
+
+
+
+
 .summary-card{
+
 
 background:white;
 
@@ -416,23 +511,31 @@ border-radius:18px;
 border:1px solid #e2e8f0;
 
 box-shadow:
+
 0 5px 20px rgba(15,23,42,.05);
 
+
 }
+
+
 
 
 
 .summary-card span{
 
+
 font-size:12px;
 
 color:#64748b;
+
 
 }
 
 
 
+
 .summary-card h2{
+
 
 margin-top:10px;
 
@@ -440,23 +543,33 @@ font-size:26px;
 
 color:#1e293b;
 
+
 }
+
+
 
 
 
 .summary-card p{
 
+
 font-size:12px;
 
 color:#94a3b8;
 
+
 }
+
+
+
+
 
 
 
 
 
 .panel{
+
 
 background:white;
 
@@ -467,19 +580,25 @@ border-radius:18px;
 border:1px solid #e2e8f0;
 
 box-shadow:
+
 0 5px 20px rgba(15,23,42,.05);
 
+
 }
+
 
 
 
 .panel h3{
 
+
 margin-bottom:20px;
 
 color:#1e293b;
 
+
 }
+
 
 
 
@@ -488,15 +607,19 @@ color:#1e293b;
 
 table{
 
+
 width:100%;
 
 border-collapse:collapse;
+
 
 }
 
 
 
+
 th{
+
 
 padding:15px;
 
@@ -508,11 +631,15 @@ color:#64748b;
 
 border-bottom:1px solid #e2e8f0;
 
+
 }
 
 
 
+
+
 td{
+
 
 padding:15px;
 
@@ -520,15 +647,24 @@ font-size:14px;
 
 border-bottom:1px solid #f1f5f9;
 
+
 }
+
+
+
 
 
 
 tr:hover{
 
+
 background:#f8fafc;
 
+
 }
+
+
+
 
 
 
@@ -536,11 +672,15 @@ background:#f8fafc;
 
 .nominal{
 
+
 font-weight:700;
 
 color:#1e293b;
 
+
 }
+
+
 
 
 
@@ -550,6 +690,7 @@ color:#1e293b;
 
 .status{
 
+
 padding:6px 12px;
 
 border-radius:20px;
@@ -558,38 +699,49 @@ font-size:12px;
 
 font-weight:700;
 
+
 }
+
+
 
 
 
 .waiting{
 
+
 background:#fef3c7;
 
 color:#92400e;
 
+
 }
+
 
 
 
 .approved{
 
+
 background:#dcfce7;
 
 color:#166534;
 
+
 }
+
+
 
 
 
 .rejected{
 
+
 background:#fee2e2;
 
 color:#991b1b;
 
-}
 
+}
 
 
 
@@ -599,7 +751,6 @@ color:#991b1b;
 
 .btn{
 
-border:none;
 
 padding:8px 14px;
 
@@ -609,19 +760,32 @@ font-size:12px;
 
 font-weight:600;
 
-cursor:pointer;
-
 text-decoration:none;
+
 
 }
 
 
 
+
+
 .detail{
+
 
 background:#f1f5f9;
 
 color:#334155;
+
+
+}
+
+
+
+.detail:hover{
+
+
+background:#e2e8f0;
+
 
 }
 
@@ -636,14 +800,18 @@ color:#334155;
 
 .summary-grid{
 
+
 grid-template-columns:1fr;
+
 
 }
 
 
 table{
 
+
 font-size:12px;
+
 
 }
 
@@ -652,6 +820,7 @@ font-size:12px;
 
 
 </style>
+
 
 
 @endsection

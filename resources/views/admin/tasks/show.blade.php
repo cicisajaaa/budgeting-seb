@@ -5,6 +5,7 @@
 
 <div class="page-header-card">
 
+
 <div>
 
 <div class="page-label">
@@ -18,7 +19,7 @@ TASK DETAIL
 
 
 <p>
-Detail monitoring aktivitas, progress, dan informasi pekerjaan.
+Detail monitoring pekerjaan, progress, dan informasi pelaksanaan task.
 </p>
 
 
@@ -40,10 +41,17 @@ Detail monitoring aktivitas, progress, dan informasi pekerjaan.
 
 
 
+
+
+
 <div class="detail-grid">
 
 
-<!-- INFORMASI UTAMA -->
+
+
+
+{{-- INFORMASI TASK --}}
+
 
 <div class="glass-panel">
 
@@ -67,10 +75,14 @@ Project
 </span>
 
 <strong>
+
 {{$task->proyek->nama_proyek ?? '-'}}
+
 </strong>
 
 </div>
+
+
 
 
 
@@ -80,13 +92,17 @@ Project
 
 <span>
 PIC
+
 </span>
 
 <strong>
+
 {{$task->karyawan->name ?? '-'}}
+
 </strong>
 
 </div>
+
 
 
 
@@ -100,10 +116,34 @@ Divisi
 </span>
 
 <strong>
+
 {{$task->divisi->nama_divisi ?? '-'}}
+
 </strong>
 
 </div>
+
+
+
+
+
+
+
+
+<div class="info-item">
+
+<span>
+Prioritas
+</span>
+
+<strong>
+
+{{$task->prioritas ?? '-'}}
+
+</strong>
+
+</div>
+
 
 
 
@@ -145,16 +185,19 @@ Deadline
 
 
 
-<!-- STATUS -->
+
+{{-- STATUS --}}
+
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
 
-📊 Status Pekerjaan
+📊 Monitoring Progress
 
 </div>
+
 
 
 
@@ -162,44 +205,72 @@ Deadline
 <div class="status-box">
 
 
-<span>Status</span>
+<span>
+
+Status
+
+</span>
 
 
-<div class="status-badge
 
-@if($task->status=='selesai')
+@php
 
-success
+$statusClass='pending';
 
-@elseif($task->status=='sedang_dikerjakan')
 
-warning
+if($task->status=='selesai'){
 
-@else
+$statusClass='success';
 
-pending
+}
 
-@endif
+elseif($task->status=='sedang_dikerjakan'){
 
-">
+$statusClass='warning';
+
+}
+
+@endphp
+
+
+
+
+<span class="status-badge {{$statusClass}}">
 
 {{$task->status}}
 
+</span>
+
+
+
 </div>
 
 
+
+
+
+
+
+
+<div class="progress-header">
+
+
+<span>
+
+Progress Pekerjaan
+
+</span>
+
+
+<strong>
+
+{{$task->progres_persen ?? 0}}%
+
+</strong>
+
+
 </div>
 
-
-
-
-
-
-<div class="progress-title">
-
-Progress
-
-</div>
 
 
 
@@ -217,19 +288,39 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 
 
-<div class="progress-value">
 
-{{number_format($task->progres_persen ?? 0,0)}}%
+
+
+<div class="progress-info">
+
+
+@if(($task->progres_persen ?? 0) >=100)
+
+✓ Task selesai
+
+
+@elseif(($task->progres_persen ?? 0)>0)
+
+⏳ Sedang berjalan
+
+
+@else
+
+Belum dimulai
+
+
+@endif
+
+
+</div>
+
+
 
 </div>
 
 
 
 
-</div>
-
-
-
 
 </div>
 
@@ -240,7 +331,8 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 
 
-<!-- AKTIVITAS -->
+
+{{-- AKTIVITAS --}}
 
 
 <div class="glass-panel activity-card">
@@ -254,11 +346,11 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 
 
-<p>
+<div class="description-box">
 
 {{$task->aktivitas ?? 'Tidak ada aktivitas'}}
 
-</p>
+</div>
 
 
 </div>
@@ -270,7 +362,9 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 
 
-<!-- CATATAN -->
+
+
+{{-- CATATAN --}}
 
 
 <div class="glass-panel activity-card">
@@ -284,14 +378,17 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 
 
-<p>
+<div class="description-box">
 
-{{$task->catatan ?? 'Tidak ada catatan'}}
+{{$task->catatan ?? 'Tidak ada catatan'}
 
-</p>
+}
+
+</div>
 
 
 </div>
+
 
 
 
@@ -320,8 +417,7 @@ align-items:center;
 
 margin-bottom:25px;
 
-box-shadow:
-0 10px 30px rgba(15,23,42,.06);
+box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -366,6 +462,7 @@ font-size:14px;
 
 
 
+
 .btn-back{
 
 background:#f8fafc;
@@ -390,8 +487,6 @@ color:#475569;
 
 
 
-
-
 .detail-grid{
 
 display:grid;
@@ -408,8 +503,9 @@ margin-bottom:20px;
 
 
 
-.glass-panel{
 
+
+.glass-panel{
 
 background:white;
 
@@ -419,12 +515,11 @@ border-radius:24px;
 
 padding:28px;
 
-box-shadow:
-
-0 10px 30px rgba(15,23,42,.06);
-
+box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
+
+
 
 
 
@@ -444,8 +539,10 @@ margin-bottom:22px;
 
 
 
-.info-item{
 
+
+
+.info-item{
 
 display:flex;
 
@@ -465,9 +562,9 @@ margin-bottom:12px;
 
 .info-item span{
 
-color:#64748b;
-
 font-size:13px;
+
+color:#64748b;
 
 }
 
@@ -475,11 +572,14 @@ font-size:13px;
 
 .info-item strong{
 
-color:#172033;
-
 font-size:13px;
 
+color:#172033;
+
 }
+
+
+
 
 
 
@@ -499,23 +599,11 @@ margin-bottom:25px;
 
 
 
-.status-box span{
-
-color:#64748b;
-
-font-size:13px;
-
-}
-
-
-
-
-
 .status-badge{
 
-padding:8px 15px;
+padding:8px 16px;
 
-border-radius:20px;
+border-radius:999px;
 
 font-size:12px;
 
@@ -558,24 +646,36 @@ color:#0369a1;
 
 
 
-.progress-title{
+
+.progress-header{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-bottom:10px;
 
 font-size:13px;
 
-font-weight:700;
-
 color:#475569;
 
-margin-bottom:10px;
+}
+
+
+
+.progress-header strong{
+
+color:#166534;
 
 }
 
 
 
 
+
 .progress-track{
 
-height:10px;
+height:12px;
 
 background:#e2e8f0;
 
@@ -584,7 +684,6 @@ border-radius:20px;
 overflow:hidden;
 
 }
-
 
 
 
@@ -600,32 +699,23 @@ border-radius:20px;
 
 
 
-.progress-value{
-
-margin-top:10px;
-
-font-size:20px;
-
-font-weight:800;
-
-color:#166534;
-
-}
 
 
+.progress-info{
 
+margin-top:15px;
 
+font-size:13px;
 
-
-.activity-card{
-
-margin-bottom:20px;
+color:#64748b;
 
 }
 
 
 
-.activity-card p{
+
+
+.description-box{
 
 background:#f8fafc;
 
@@ -637,15 +727,25 @@ color:#475569;
 
 font-size:14px;
 
-line-height:1.6;
+line-height:1.7;
+
+}
+
+
+
+.activity-card{
+
+margin-bottom:20px;
 
 }
 
 
 
 
-@media(max-width:900px){
 
+
+
+@media(max-width:900px){
 
 .detail-grid{
 
@@ -665,12 +765,10 @@ gap:15px;
 
 }
 
-
 }
 
 
 </style>
-
 
 
 @endsection

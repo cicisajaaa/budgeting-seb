@@ -26,24 +26,182 @@ class AllocationController extends Controller
 
 
         $allocations = AlokasiProyekDivisi::with([
-
             'divisi'
+        ])
+        ->where(
+            'proyek_id',
+            $project->id
+        )
+        ->latest()
+        ->get();
+
+
+
+
+        $divisions = Divisi::latest()->get();
+
+
+
+
+        return view(
+            'admin.allocation.index',
+            compact(
+                'project',
+                'allocations',
+                'divisions'
+            )
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    public function store(Request $request,$project)
+    {
+
+
+        $project = Proyek::findOrFail($project);
+
+
+
+        $request->validate([
+
+
+            'divisi_id'=>[
+                'required',
+                'exists:divisi,id',
+            ],
+
+
+            'persentase'=>[
+                'required',
+                'numeric',
+                'min:1',
+                'max:100'
+            ]
+
+
+        ]);
+
+
+
+
+
+        $cekDivisi = AlokasiProyekDivisi::where([
+
+            'proyek_id'=>$project->id,
+
+            'divisi_id'=>$request->divisi_id
 
         ])
+        ->exists();
 
-        ->where(
+
+
+
+
+        if($cekDivisi)
+        {
+
+            return back()
+
+            ->with(
+                'error',
+                'Divisi tersebut sudah memiliki alokasi dana'
+            );
+
+        }
+
+
+
+
+
+
+
+
+        $total = AlokasiProyekDivisi::where(
 
             'proyek_id',
 
             $project->id
 
         )
-
-        ->latest()
-
-        ->get();
+        ->sum('persentase');
 
 
+
+
+
+
+        if($total + $request->persentase > 100)
+        {
+
+            return back()
+
+            ->with(
+                'error',
+                'Total pembagian dana melebihi 100%'
+            );
+
+        }
+
+
+
+
+
+
+
+        AlokasiProyekDivisi::create([
+
+            'proyek_id'=>$project->id,
+
+            'divisi_id'=>$request->divisi_id,
+
+            'persentase'=>$request->persentase,
+
+        ]);
+
+
+
+
+
+
+        return back()
+
+        ->with(
+            'success',
+            'Pembagian dana berhasil ditambahkan'
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    public function edit($id)
+    {
+
+
+        $allocation = AlokasiProyekDivisi::findOrFail($id);
+
+
+
+        $project = Proyek::findOrFail(
+            $allocation->proyek_id
+        );
 
 
 
@@ -55,13 +213,13 @@ class AllocationController extends Controller
 
         return view(
 
-            'admin.allocation.index',
+            'admin.allocation.edit',
 
             compact(
 
-                'project',
+                'allocation',
 
-                'allocations',
+                'project',
 
                 'divisions'
 
@@ -79,44 +237,29 @@ class AllocationController extends Controller
 
 
 
-    public function store(Request $request,$project)
+
+    public function update(Request $request,$id)
     {
 
 
-        $project = Proyek::findOrFail($project);
-
-
+        $allocation = AlokasiProyekDivisi::findOrFail($id);
 
 
 
         $request->validate([
 
 
-            'divisi_id'=>
-
-            [
-
+            'divisi_id'=>[
                 'required',
-
-                'exists:divisi,id',
-
+                'exists:divisi,id'
             ],
 
 
-
-
-            'persentase'=>
-
-            [
-
+            'persentase'=>[
                 'required',
-
                 'numeric',
-
                 'min:1',
-
                 'max:100'
-
             ]
 
 
@@ -127,99 +270,7 @@ class AllocationController extends Controller
 
 
 
-
-
-        $cekDivisi = AlokasiProyekDivisi::where([
-
-
-            'proyek_id'=>$project->id,
-
-
-            'divisi_id'=>$request->divisi_id
-
-
-        ])
-
-        ->exists();
-
-
-
-
-
-        if($cekDivisi)
-        {
-
-
-            return back()
-
-            ->with(
-
-                'error',
-
-                'Divisi tersebut sudah memiliki alokasi dana'
-
-            );
-
-
-        }
-
-
-
-
-
-
-
-
-
-        $total = AlokasiProyekDivisi::where(
-
-            'proyek_id',
-
-            $project->id
-
-        )
-
-        ->sum('persentase');
-
-
-
-
-
-
-
-
-        if(
-
-            $total + $request->persentase > 100
-
-        )
-        {
-
-
-            return back()
-
-            ->with(
-
-                'error',
-
-                'Total pembagian dana melebihi 100%'
-
-            );
-
-
-        }
-
-
-
-
-
-
-
-
-        AlokasiProyekDivisi::create([
-
-
-            'proyek_id'=>$project->id,
+        $allocation->update([
 
 
             'divisi_id'=>$request->divisi_id,
@@ -236,19 +287,27 @@ class AllocationController extends Controller
 
 
 
+        return redirect()
 
-        return back()
+        ->route(
+
+            'admin.allocation.index',
+
+            $allocation->proyek_id
+
+        )
 
         ->with(
 
             'success',
 
-            'Pembagian dana berhasil ditambahkan'
+            'Alokasi dana berhasil diperbarui'
 
         );
 
 
     }
+
 
 
 

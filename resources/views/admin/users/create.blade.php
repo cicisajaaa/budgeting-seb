@@ -4,31 +4,23 @@
 @section('content')
 
 
-
-<!-- HEADER -->
 <div class="page-header-card">
 
 
 <div>
 
 <div class="page-label">
-
 ADMINISTRASI
-
 </div>
 
 
 <h1>
-
 Tambah User
-
 </h1>
 
 
 <p>
-
 Buat akun pengguna baru dan atur hak akses sistem.
-
 </p>
 
 
@@ -49,10 +41,6 @@ Buat akun pengguna baru dan atur hak akses sistem.
 
 
 
-
-
-
-
 @if($errors->any())
 
 
@@ -60,34 +48,24 @@ Buat akun pengguna baru dan atur hak akses sistem.
 
 
 <strong>
-
 Terjadi kesalahan:
-
 </strong>
 
 
 <ul>
 
-
 @foreach($errors->all() as $error)
 
-
 <li>
-
-{{ $error }}
-
+{{$error}}
 </li>
 
-
 @endforeach
-
 
 </ul>
 
 
-
 </div>
-
 
 
 @endif
@@ -96,9 +74,6 @@ Terjadi kesalahan:
 
 
 
-
-
-<!-- FORM -->
 
 
 <div class="glass-panel form-card">
@@ -114,10 +89,9 @@ Terjadi kesalahan:
 
 
 
-
 <form method="POST"
 
-action="{{ route('admin.users.store') }}">
+action="{{route('admin.users.store')}}">
 
 
 @csrf
@@ -130,13 +104,13 @@ action="{{ route('admin.users.store') }}">
 
 
 
+
+
+
 <div class="form-group">
 
-
 <label>
-
 Nama Lengkap
-
 </label>
 
 
@@ -152,10 +126,7 @@ placeholder="Masukkan nama pengguna"
 
 required>
 
-
-
 </div>
-
 
 
 
@@ -165,11 +136,8 @@ required>
 
 <div class="form-group">
 
-
 <label>
-
 Email
-
 </label>
 
 
@@ -185,8 +153,6 @@ placeholder="nama@email.com"
 
 required>
 
-
-
 </div>
 
 
@@ -198,48 +164,114 @@ required>
 
 <div class="form-group">
 
-
 <label>
-
 Role Pengguna
-
 </label>
 
 
-<select name="role">
+<select name="role" id="role">
 
 
-<option value="admin">
-
+<option value="admin"
+{{old('role')=='admin'?'selected':''}}>
 Admin
-
 </option>
 
 
-<option value="owner">
-
+<option value="owner"
+{{old('role')=='owner'?'selected':''}}>
 Owner
-
 </option>
 
 
-<option value="keuangan">
-
+<option value="keuangan"
+{{old('role')=='keuangan'?'selected':''}}>
 Keuangan
-
 </option>
 
 
-<option value="karyawan">
-
+<option value="karyawan"
+{{old('role')=='karyawan'?'selected':''}}>
 Karyawan
-
 </option>
 
 
 </select>
 
 
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group employee-field">
+
+
+<label>
+Nama Karyawan
+</label>
+
+
+<input
+
+type="text"
+
+name="nama_karyawan"
+
+value="{{old('nama_karyawan')}}"
+
+placeholder="Masukkan nama karyawan">
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group employee-field">
+
+
+<label>
+Divisi
+</label>
+
+
+<select name="divisi_id" id="divisi_id">
+
+<option value="">
+-- Pilih Divisi --
+</option>
+
+
+
+@foreach($divisi as $item)
+
+
+<option value="{{$item->id}}"
+
+{{old('divisi_id')==$item->id?'selected':''}}
+
+>
+
+{{$item->nama_divisi}}
+
+</option>
+
+
+@endforeach
+
+
+
+</select>
+
 
 </div>
 
@@ -254,9 +286,7 @@ Karyawan
 
 
 <label>
-
 Password
-
 </label>
 
 
@@ -271,15 +301,14 @@ placeholder="Masukkan password"
 required>
 
 
-
 </div>
 
 
 
 
 
-</div>
 
+</div>
 
 
 
@@ -302,10 +331,7 @@ required>
 
 
 
-
-
 </form>
-
 
 
 </div>
@@ -315,6 +341,102 @@ required>
 
 
 
+
+
+
+<style>
+
+
+.employee-field{
+
+display:flex;
+
+}
+
+
+
+</style>
+
+
+
+
+
+
+
+<script>
+
+document.addEventListener(
+'DOMContentLoaded',
+function(){
+
+
+const role = document.getElementById('role');
+
+const fields = document.querySelectorAll('.employee-field');
+
+
+
+function toggleEmployee(){
+
+
+if(role.value === 'owner'){
+
+
+fields.forEach(function(field){
+
+field.style.display='none';
+
+
+field.querySelectorAll('input,select')
+.forEach(function(input){
+
+input.disabled=true;
+
+});
+
+
+});
+
+
+}else{
+
+
+fields.forEach(function(field){
+
+field.style.display='flex';
+
+
+field.querySelectorAll('input,select')
+.forEach(function(input){
+
+input.disabled=false;
+
+});
+
+
+});
+
+
+}
+
+
+}
+
+
+
+
+role.addEventListener(
+'change',
+toggleEmployee
+);
+
+
+toggleEmployee();
+
+
+});
+
+</script>
 
 
 <style>
@@ -816,7 +938,13 @@ RESPONSIVE
 
 }
 
+.employee-field.hidden{
+display:none!important;
+}
+
 </style>
+
+
 
 
 @endsection

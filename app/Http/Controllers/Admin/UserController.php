@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Karyawan;
 use App\Models\Divisi;
+use App\Models\LogAudit;
 
 use Illuminate\Http\Request;
 
@@ -25,20 +26,96 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
     public function index()
     {
 
 
         $users = User::with([
-
             'karyawan.divisi'
-
         ])
-
         ->latest()
-
         ->get();
+
+
+
+
+        $totalUser = User::count();
+
+
+
+        $totalAdmin = User::where(
+            'role',
+            'admin'
+        )->count();
+
+
+
+
+        $totalKaryawan = User::whereIn(
+            'role',
+            [
+                'admin',
+                'keuangan',
+                'karyawan'
+            ]
+        )->count();
+
+
+
+
+        $totalProject = \App\Models\Proyek::count();
+
+
+        $totalTask = \App\Models\Tugas::count();
+
+
+        $totalDivision = Divisi::count();
+
+
+
+
+        $totalExpenseRequest = \App\Models\PengajuanDana::count();
+
+
+
+        $totalPendingExpense = \App\Models\PengajuanDana::where(
+            'status',
+            'pending'
+        )->count();
+
+
+
+        $totalApprovedExpense = \App\Models\PengajuanDana::where(
+            'status',
+            'disetujui'
+        )->count();
+
+
+
+        $totalRejectedExpense = \App\Models\PengajuanDana::where(
+            'status',
+            'ditolak'
+        )->count();
+
+
+
+
+
+        $recentProjects = \App\Models\Proyek::latest()
+            ->limit(5)
+            ->get();
+
+
+
+
+
+        $recentAudit = LogAudit::with(
+            'pengguna'
+        )
+        ->latest()
+        ->limit(5)
+        ->get();
+
 
 
 
@@ -50,7 +127,31 @@ class UserController extends Controller
 
             compact(
 
-                'users'
+                'users',
+
+                'totalUser',
+
+                'totalAdmin',
+
+                'totalKaryawan',
+
+                'totalProject',
+
+                'totalTask',
+
+                'totalDivision',
+
+                'totalExpenseRequest',
+
+                'totalPendingExpense',
+
+                'totalApprovedExpense',
+
+                'totalRejectedExpense',
+
+                'recentProjects',
+
+                'recentAudit'
 
             )
 
@@ -66,13 +167,11 @@ class UserController extends Controller
 
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | FORM TAMBAH USER
+    | CREATE
     |--------------------------------------------------------------------------
     */
-
 
     public function create()
     {
@@ -82,16 +181,11 @@ class UserController extends Controller
 
 
 
-
         return view(
 
             'admin.users.create',
 
-            compact(
-
-                'divisi'
-
-            )
+            compact('divisi')
 
         );
 
@@ -108,10 +202,9 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SIMPAN USER
+    | STORE
     |--------------------------------------------------------------------------
     */
-
 
     public function store(Request $request)
     {
@@ -120,35 +213,25 @@ class UserController extends Controller
         $request->validate([
 
 
-
             'name'=>'required|string|max:255',
-
 
 
             'email'=>'required|email|unique:users,email',
 
 
-
             'password'=>'required|min:8',
-
 
 
             'role'=>'required|in:owner,admin,keuangan,karyawan',
 
 
-
-            'nama_karyawan'=>'nullable|string',
-
+            'nama_karyawan'=>'required_if:role,admin,keuangan,karyawan|string',
 
 
-            'divisi_id'=>'nullable|exists:divisi,id'
-
+            'divisi_id'=>'required_if:role,admin,keuangan,karyawan|exists:divisi,id'
 
 
         ]);
-
-
-
 
 
 
@@ -157,25 +240,18 @@ class UserController extends Controller
         $user = User::create([
 
 
-
             'name'=>$request->name,
-
 
 
             'email'=>$request->email,
 
 
-
             'password'=>Hash::make(
-
                 $request->password
-
             ),
 
 
-
             'role'=>$request->role
-
 
 
         ]);
@@ -185,34 +261,27 @@ class UserController extends Controller
 
 
 
+        // Admin, Keuangan, Karyawan memiliki data karyawan
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | BUAT DATA KARYAWAN
-        |--------------------------------------------------------------------------
-        */
-
-
-        if($request->role == 'karyawan')
+        if(in_array($request->role,[
+            'admin',
+            'keuangan',
+            'karyawan'
+        ]))
         {
 
 
             Karyawan::create([
 
 
-
                 'pengguna_id'=>$user->id,
 
 
-
-                'nama_karyawan'=>$request->nama_karyawan,
-
+                'nama_karyawan'=>$request->nama_karyawan
+                    ?? $request->name,
 
 
                 'divisi_id'=>$request->divisi_id
-
 
 
             ]);
@@ -226,15 +295,9 @@ class UserController extends Controller
 
 
 
-
-
         return redirect()
 
-            ->route(
-
-                'admin.users.index'
-
-            )
+            ->route('admin.users.index')
 
             ->with(
 
@@ -257,7 +320,7 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL USER
+    | SHOW
     |--------------------------------------------------------------------------
     */
 
@@ -268,9 +331,60 @@ class UserController extends Controller
 
         $user->load([
 
-            'karyawan.divisi'
+            'karyawan.divisi',
+
+            'karyawan.tugas',
+
+            'logAudit',
+
+            'pengajuanDana'
 
         ]);
+
+
+
+
+
+        $totalTask = 0;
+
+
+        $taskSelesai = 0;
+
+
+
+
+
+        if($user->karyawan)
+        {
+
+
+            $totalTask = $user
+                ->karyawan
+                ->tugas
+                ->count();
+
+
+
+            $taskSelesai = $user
+                ->karyawan
+                ->tugas
+                ->where(
+                    'status',
+                    'selesai'
+                )
+                ->count();
+
+
+        }
+
+
+
+
+
+        $totalPengajuan = $user
+            ->pengajuanDana
+            ->count();
+
 
 
 
@@ -282,7 +396,13 @@ class UserController extends Controller
 
             compact(
 
-                'user'
+                'user',
+
+                'totalTask',
+
+                'taskSelesai',
+
+                'totalPengajuan'
 
             )
 
@@ -301,10 +421,9 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | EDIT USER
+    | EDIT
     |--------------------------------------------------------------------------
     */
-
 
     public function edit(User $user)
     {
@@ -314,12 +433,8 @@ class UserController extends Controller
 
 
 
-
-
         $user->load(
-
-            'karyawan'
-
+            'karyawan.divisi'
         );
 
 
@@ -353,29 +468,87 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | UPDATE USER
+    | UPDATE
+    |--------------------------------------------------------------------------
+    */
+public function update(Request $request, User $user)
+{
+
+    $request->validate([
+
+        'name'=>'required|string|max:255',
+
+        'email'=>'required|email|unique:users,email,'.$user->id,
+
+        'role'=>'required|in:owner,admin,keuangan,karyawan'
+
+    ]);
+
+
+
+
+
+    $user->update([
+
+        'name'=>$request->name,
+
+        'email'=>$request->email,
+
+        'role'=>$request->role
+
+    ]);
+
+
+
+
+
+
+    if($request->password)
+    {
+
+        $user->update([
+
+            'password'=>Hash::make(
+                $request->password
+            )
+
+        ]);
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | KELOLA DATA KARYAWAN
     |--------------------------------------------------------------------------
     */
 
 
-    public function update(Request $request, User $user)
+    if(in_array($request->role,[
+
+        'admin',
+
+        'keuangan',
+
+        'karyawan'
+
+    ]))
+
     {
 
 
         $request->validate([
 
 
-
-            'name'=>'required|string|max:255',
-
+            'nama_karyawan'=>'required|string',
 
 
-            'email'=>'required|email|unique:users,email,'.$user->id,
-
-
-
-            'role'=>'required|in:owner,admin,keuangan,karyawan',
-
+            'divisi_id'=>'required|exists:divisi,id'
 
 
         ]);
@@ -384,126 +557,40 @@ class UserController extends Controller
 
 
 
+        Karyawan::updateOrCreate(
 
+            [
 
+                'pengguna_id'=>$user->id
 
-        $user->update([
+            ],
 
 
+            [
 
-            'name'=>$request->name,
+                'nama_karyawan'=>$request->nama_karyawan,
 
+                'divisi_id'=>$request->divisi_id
 
+            ]
 
-            'email'=>$request->email,
+        );
 
 
+    }
 
-            'role'=>$request->role
+    else
 
+    {
 
 
-        ]);
+        Karyawan::where(
 
+            'pengguna_id',
 
+            $user->id
 
-
-
-
-
-
-
-        if($request->password)
-        {
-
-
-            $user->update([
-
-
-
-                'password'=>Hash::make(
-
-                    $request->password
-
-                )
-
-
-
-            ]);
-
-
-        }
-
-
-
-
-
-
-
-
-
-        if($request->role == 'karyawan')
-        {
-
-
-            Karyawan::updateOrCreate(
-
-
-
-                [
-
-                    'pengguna_id'=>$user->id
-
-                ],
-
-
-
-                [
-
-
-                    'nama_karyawan'=>
-
-                        $request->nama_karyawan,
-
-
-
-                    'divisi_id'=>
-
-                        $request->divisi_id
-
-
-                ]
-
-
-
-            );
-
-
-        }
-
-
-
-
-
-
-
-
-
-        return redirect()
-
-            ->route(
-
-                'admin.users.index'
-
-            )
-
-            ->with(
-
-                'success',
-
-                'User berhasil diperbarui'
-
-            );
+        )->delete();
 
 
     }
@@ -514,14 +601,30 @@ class UserController extends Controller
 
 
 
+    return redirect()
+
+        ->route('admin.users.index')
+
+        ->with(
+
+            'success',
+
+            'User berhasil diperbarui'
+
+        );
+
+
+}
+
+
+
 
 
     /*
     |--------------------------------------------------------------------------
-    | HAPUS USER
+    | DELETE
     |--------------------------------------------------------------------------
     */
-
 
     public function destroy(User $user)
     {
@@ -531,14 +634,9 @@ class UserController extends Controller
 
 
 
-
         return redirect()
 
-            ->route(
-
-                'admin.users.index'
-
-            )
+            ->route('admin.users.index')
 
             ->with(
 
@@ -550,7 +648,6 @@ class UserController extends Controller
 
 
     }
-
 
 
 }

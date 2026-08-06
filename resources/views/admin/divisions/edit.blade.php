@@ -184,24 +184,15 @@ action="{{route('admin.divisions.update',$division->id)}}">
 
 
 
-
-
 <div class="form-group">
 
-
 <label>
-
 Nama Divisi
-
 </label>
 
 
-
-
 <input
-
 type="text"
-
 name="nama_divisi"
 
 value="{{old('nama_divisi',$division->nama_divisi)}}"
@@ -210,6 +201,21 @@ placeholder="Masukkan nama divisi"
 
 required>
 
+</div>
+
+
+
+
+<div class="form-group">
+
+<label>
+Deskripsi Divisi
+</label>
+
+
+<textarea
+name="deskripsi"
+placeholder="Masukkan deskripsi divisi">{{old('deskripsi',$division->deskripsi)}}</textarea>
 
 
 </div>
@@ -692,6 +698,39 @@ box-shadow:
 
 
 
+
+textarea{
+
+    min-height:120px;
+
+    border-radius:14px;
+
+    border:1px solid #dbe3ef;
+
+    background:#f8fafc;
+
+    padding:15px;
+
+    font-size:14px;
+
+    resize:none;
+
+    outline:none;
+
+}
+
+
+
+textarea:focus{
+
+    background:white;
+
+    border-color:#2563eb;
+
+    box-shadow:
+    0 0 0 4px rgba(37,99,235,.12);
+
+}
 
 
 

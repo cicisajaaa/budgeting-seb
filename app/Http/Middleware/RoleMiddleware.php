@@ -2,16 +2,12 @@
 
 namespace App\Http\Middleware;
 
-
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
-
 class RoleMiddleware
 {
-
 
     public function handle(
         Request $request,
@@ -21,72 +17,31 @@ class RoleMiddleware
     {
 
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Memeriksa Status Login
-        |--------------------------------------------------------------------------
-        */
-
-
         if(!auth()->check())
         {
-
-
             abort(401);
-
-
         }
 
 
 
 
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Mengambil Role Pengguna
-        |--------------------------------------------------------------------------
-        */
-
-
         $userRole = strtolower(
-
             trim(
-
                 auth()->user()->role
-
             )
-
         );
 
 
 
 
 
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Menyesuaikan Role yang Diizinkan pada Route
-        |--------------------------------------------------------------------------
-        */
-
-
         $allowedRoles = array_map(
 
             function($role){
 
-
                 return strtolower(
-
                     trim($role)
-
                 );
-
 
             },
 
@@ -99,16 +54,6 @@ class RoleMiddleware
 
 
 
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Memeriksa Hak Akses Pengguna
-        |--------------------------------------------------------------------------
-        */
-
-
         if(
             !in_array(
                 $userRole,
@@ -116,15 +61,8 @@ class RoleMiddleware
             )
         )
         {
-
-
             abort(403);
-
-
         }
-
-
-
 
 
 
@@ -132,13 +70,6 @@ class RoleMiddleware
 
         return $next($request);
 
-
-dd([
-    'check'=>auth()->check(),
-    'user'=>auth()->user(),
-    'roles'=>$roles
-]);
     }
-
 
 }

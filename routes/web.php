@@ -223,7 +223,7 @@ Route::middleware('role:karyawan')->group(function(){
 */
 
 
-Route::middleware('role:bendahara,keuangan')->group(function(){
+Route::middleware('role:keuangan')->group(function(){
 
 
 
@@ -365,7 +365,7 @@ Route::middleware('role:owner,keuangan')->group(function(){
 */
 
 
-Route::middleware('role:bendahara,keuangan,owner')->group(function(){
+Route::middleware('role:keuangan,owner')->group(function(){
 
 
 
@@ -521,6 +521,26 @@ TaskController::class,
 
 
 
+    Route::get(
+        '/allocation/{allocation}/edit',
+        [
+            AllocationController::class,
+            'edit'
+        ]
+    )
+    ->name('allocation.edit');
+
+
+
+    Route::put(
+        '/allocation/{allocation}',
+        [
+            AllocationController::class,
+            'update'
+        ]
+    )
+    ->name('allocation.update');
+
 
     Route::post(
         '/projects/{project}/allocation',
@@ -650,9 +670,20 @@ Route::post('/approval/{id}/reject',
     ])
     ->name('audit');
 
+    Route::get('/audit/history',
+[
+    OwnerAuditController::class,
+    'history'
+])
+->name('audit.history');
 
 
-
+Route::get('/audit/history/{tanggal}',
+[
+    OwnerAuditController::class,
+    'date'
+])
+->name('audit.date');
 
 
     /*

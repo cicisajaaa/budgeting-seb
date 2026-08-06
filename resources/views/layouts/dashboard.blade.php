@@ -396,8 +396,6 @@ border-radius:50%;
 
 
 <body>
-
-
 <aside class="sidebar">
 
 
@@ -420,17 +418,29 @@ Enterprise Management System
 </div>
 
 
+
+{{-- ================= DASHBOARD ================= --}}
+
 @if(auth()->user()->role!='owner')
 
 <div class="menu-title">
 MAIN
 </div>
 
-<a href="{{auth()->user()->role=='admin'
-? route('admin.dashboard')
-: route('dashboard')}}"
 
-class="{{request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') ? 'active' : ''}}">
+<a href="
+@if(auth()->user()->role=='admin')
+
+{{route('admin.dashboard')}}
+
+@else
+
+{{route('dashboard')}}
+
+@endif
+"
+
+class="{{request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') ? 'active':''}}">
 
 
 <div class="icon">
@@ -444,12 +454,19 @@ Dashboard
 </a>
 
 @endif
+
+
+
+{{-- ================= ADMIN ================= --}}
+
+
 @if(auth()->user()->role=='admin')
 
 
 <div class="menu-title">
 MANAGEMENT
 </div>
+
 
 <a href="{{route('admin.users.index')}}"
 class="{{request()->routeIs('admin.users.*')?'active':''}}">
@@ -461,6 +478,7 @@ class="{{request()->routeIs('admin.users.*')?'active':''}}">
 Kelola Pengguna
 
 </a>
+
 
 
 
@@ -476,6 +494,9 @@ Kelola Project
 </a>
 
 
+
+
+
 <a href="{{route('admin.divisions.index')}}"
 class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
 
@@ -486,6 +507,9 @@ class="{{request()->routeIs('admin.divisions.*')?'active':''}}">
 Kelola Divisi
 
 </a>
+
+
+
 
 
 <a href="{{route('admin.tasks.index')}}"
@@ -499,7 +523,20 @@ Monitoring Tugas
 
 </a>
 
+
+
 @endif
+
+
+
+
+
+
+
+
+{{-- ================= OWNER ================= --}}
+
+
 @if(auth()->user()->role=='owner')
 
 
@@ -508,8 +545,9 @@ PEMILIK
 </div>
 
 
-<a href="{{route('dashboard')}}"
-class="{{request()->routeIs('dashboard')?'active':''}}">
+
+<a href="{{route('owner.dashboard')}}"
+class="{{request()->routeIs('owner.dashboard')?'active':''}}">
 
 <div class="icon">
 ⌂
@@ -518,6 +556,7 @@ class="{{request()->routeIs('dashboard')?'active':''}}">
 Dashboard Utama
 
 </a>
+
 
 
 
@@ -559,7 +598,7 @@ class="{{request()->routeIs('owner.approval')?'active':''}}">
 ✓
 </div>
 
-Persetujuan Dana
+Monitoring Dana 
 
 </a>
 
@@ -579,13 +618,26 @@ Riwayat Aktivitas
 </a>
 
 
+
 @endif
+
+
+
+
+
+
+
+{{-- ================= KEUANGAN ================= --}}
+
+
 @if(auth()->user()->role=='keuangan')
 
 
 <div class="menu-title">
 FINANCE
 </div>
+
+
 
 
 <a href="{{route('finance.deposit')}}"
@@ -601,6 +653,8 @@ Pembayaran Masuk
 
 
 
+
+
 <a href="{{route('finance.bank.index')}}"
 class="{{request()->routeIs('finance.bank.*')?'active':''}}">
 
@@ -611,6 +665,11 @@ class="{{request()->routeIs('finance.bank.*')?'active':''}}">
 Rekening Bank
 
 </a>
+
+
+
+
+
 <a href="{{route('finance.balance')}}"
 class="{{request()->routeIs('finance.balance')?'active':''}}">
 
@@ -621,6 +680,8 @@ class="{{request()->routeIs('finance.balance')?'active':''}}">
 Saldo Divisi
 
 </a>
+
+
 
 
 
@@ -649,6 +710,8 @@ Approval Dana
 
 
 
+
+
 <a href="{{route('finance.report')}}"
 class="{{request()->routeIs('finance.report')?'active':''}}">
 
@@ -660,8 +723,18 @@ Laporan
 
 </a>
 
+
+
 @endif
+
+
+
+
+
+
+
 {{-- ================= KARYAWAN ================= --}}
+
 
 @if(auth()->user()->role=='karyawan')
 
@@ -669,6 +742,8 @@ Laporan
 <div class="menu-title">
 KARYAWAN
 </div>
+
+
 
 
 <a href="{{route('expense.create')}}"
@@ -681,6 +756,7 @@ class="{{request()->routeIs('expense.create')?'active':''}}">
 Pengajuan Dana
 
 </a>
+
 
 
 
@@ -697,6 +773,7 @@ Riwayat Pengajuan
 
 
 
+
 <a href="{{route('employee.project.index')}}"
 class="{{request()->routeIs('employee.project.*')?'active':''}}">
 
@@ -707,6 +784,7 @@ class="{{request()->routeIs('employee.project.*')?'active':''}}">
 Proyek Saya
 
 </a>
+
 
 
 
@@ -722,10 +800,8 @@ Aktivitas Harian
 </a>
 
 
+
 @endif
-
-
-
 
 
 <div class="system-status">
@@ -1422,6 +1498,24 @@ margin-bottom:20px;
 }
 
 
+
+/* FIX ACTIVE SIDEBAR COLOR */
+
+.sidebar a.active,
+.sidebar a.active:hover,
+.sidebar a.active:focus,
+.sidebar a.active:visited{
+
+    color:white !important;
+
+}
+
+
+.sidebar a.active .icon{
+
+    color:white !important;
+
+}
 </style>
 
 

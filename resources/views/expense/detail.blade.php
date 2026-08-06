@@ -631,11 +631,25 @@ Tanggal
 
 
 
+<a href="
+@if(auth()->user()->role == 'karyawan')
 
+{{ route('expense.myhistory') }}
 
+@elseif(
+auth()->user()->role == 'keuangan' ||
+auth()->user()->role == 'bendahara'
+)
 
+{{ route('expense.approval') }}
 
-<a href="{{ route('expense.myhistory') }}" class="back">
+@else
+
+{{ route('dashboard') }}
+
+@endif
+" 
+class="back">
 
 ← Kembali
 

@@ -8,6 +8,10 @@
 
 
 
+
+
+{{-- HEADER --}}
+
 <div class="page-header">
 
 
@@ -17,12 +21,12 @@ AUDIT AKTIVITAS
 
 
 <h1>
-Riwayat Aktivitas Sistem
+Aktivitas Terbaru Sistem
 </h1>
 
 
 <p>
-Pantau seluruh aktivitas pengguna dalam sistem perusahaan.
+Monitoring aktivitas pengguna perusahaan secara real-time.
 </p>
 
 
@@ -31,9 +35,17 @@ Pantau seluruh aktivitas pengguna dalam sistem perusahaan.
 
 
 
+
+
+
+
+{{-- FILTER --}}
+
+
 <form method="GET"
 action="{{route('owner.audit')}}"
 class="filter-box">
+
 
 
 <select name="modul">
@@ -77,19 +89,28 @@ Approval Dana
 
 
 
-<input type="date"
+<input 
+type="date"
 name="tanggal"
-value="{{request('tanggal')}}">
-
+value="{{request('tanggal')}}"
+>
 
 
 
 
 <button type="submit">
-
 Cari
-
 </button>
+
+
+
+<a href="{{route('owner.audit.history')}}"
+class="history-btn">
+
+📚 Semua Riwayat
+
+</a>
+
 
 
 </form>
@@ -99,36 +120,64 @@ Cari
 
 
 
+
+
+
+{{-- PANEL --}}
+
+
 <div class="panel">
 
 
+<div class="panel-header">
+
 <h3>
-📝 Aktivitas Terbaru
+📝 5 Aktivitas Terbaru
 </h3>
 
 
- @forelse($activities ?? [] as $activity)
+<span>
+Monitoring Owner
+</span>
+
+
+</div>
+
+
+
+
+
+
+
+@forelse($activities as $activity)
+
 
 <div class="activity">
 
 
+
 <div class="activity-icon">
+
 
 @if($activity->modul == 'Keuangan')
 
 💰
 
+
 @elseif($activity->modul == 'Project')
 
 📁
+
 
 @elseif($activity->modul == 'Pengajuan Dana')
 
 💸
 
+
 @elseif($activity->modul == 'Approval Dana')
 
 ✅
+
 
 @else
 
@@ -136,7 +185,11 @@ Cari
 
 @endif
 
+
 </div>
+
+
+
 
 
 
@@ -147,37 +200,59 @@ Cari
 
 <h4>
 
-{{ $activity->aksi }}
+{{$activity->aksi}}
 
 </h4>
 
 
 
 <small>
+
 Oleh:
-{{ $activity->pengguna->name ?? 'System' }}
+<strong>
+{{$activity->pengguna->name ?? 'System'}}
+</strong>
+
 </small>
+
+
+
+
+
 <p>
 
-{{ $activity->deskripsi }}
+{{$activity->deskripsi}}
 
 </p>
 
 
 
 
+
+
+<div class="activity-footer">
+
+
 <span class="module">
 
-{{ $activity->modul }}
+{{$activity->modul}}
 
 </span>
 
 
 
+<span class="time">
 
-<div class="activity-time">
+{{$activity->created_at->format('d M Y H:i')}}
 
-{{ $activity->created_at->format('d M Y H:i') }}
+</span>
+
+
+</div>
+
+
+
+
 
 </div>
 
@@ -185,9 +260,6 @@ Oleh:
 
 </div>
 
-
-
-</div>
 
 
 @empty
@@ -203,14 +275,15 @@ Belum ada aktivitas tercatat.
 @endforelse
 
 
-</div>
-
-
-
-
 
 
 </div>
+
+
+
+
+</div>
+
 
 
 
@@ -232,22 +305,21 @@ margin-top:10px;
 
 
 
-.page-header{
 
+.page-header{
 
 background:white;
 
-padding:28px;
+padding:30px;
 
-border-radius:18px;
+border-radius:20px;
 
 border:1px solid #e2e8f0;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
-
 margin-bottom:25px;
 
+box-shadow:
+0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -256,45 +328,35 @@ margin-bottom:25px;
 
 .label{
 
-
 font-size:11px;
 
 letter-spacing:2px;
 
-font-weight:700;
+font-weight:800;
 
 color:#64748b;
 
-
 }
-
-
 
 
 
 .page-header h1{
 
-
 margin:10px 0;
 
-font-size:28px;
+font-size:30px;
 
 color:#1e293b;
 
-
 }
-
-
 
 
 
 .page-header p{
 
-
 color:#64748b;
 
 font-size:14px;
-
 
 }
 
@@ -303,6 +365,8 @@ font-size:14px;
 
 
 
+
+/* FILTER */
 
 
 .filter-box{
@@ -314,16 +378,18 @@ padding:20px;
 
 border-radius:18px;
 
+border:1px solid #e2e8f0;
+
 display:flex;
 
 gap:15px;
 
+align-items:center;
+
 margin-bottom:25px;
 
-border:1px solid #e2e8f0;
-
-
 }
+
 
 
 
@@ -337,12 +403,12 @@ padding:0 15px;
 
 border-radius:10px;
 
-border:1px solid #ddd;
+border:1px solid #e2e8f0;
 
 font-size:13px;
 
-
 }
+
 
 
 
@@ -350,20 +416,21 @@ font-size:13px;
 .filter-box button{
 
 
-background:#6b4f1d;
+height:42px;
+
+padding:0 25px;
+
+background:#334155;
 
 color:white;
 
 border:none;
 
-padding:0 25px;
-
 border-radius:10px;
 
-font-weight:600;
+font-weight:700;
 
 cursor:pointer;
-
 
 }
 
@@ -372,6 +439,40 @@ cursor:pointer;
 
 
 
+.history-btn{
+
+
+height:42px;
+
+display:flex;
+
+align-items:center;
+
+padding:0 20px;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+color:#334155;
+
+border-radius:10px;
+
+text-decoration:none;
+
+font-size:13px;
+
+font-weight:700;
+
+}
+
+
+
+
+
+
+
+/* PANEL */
 
 
 .panel{
@@ -379,29 +480,49 @@ cursor:pointer;
 
 background:white;
 
-padding:25px;
+padding:30px;
 
-border-radius:18px;
+border-radius:20px;
 
 border:1px solid #e2e8f0;
 
 box-shadow:
 0 5px 20px rgba(15,23,42,.05);
 
-
 }
 
 
 
+.panel-header{
 
 
-.panel h3{
+display:flex;
 
+justify-content:space-between;
+
+align-items:center;
 
 margin-bottom:20px;
 
+}
+
+
+
+.panel-header h3{
+
+
 color:#1e293b;
 
+}
+
+
+
+.panel-header span{
+
+
+font-size:12px;
+
+color:#94a3b8;
 
 }
 
@@ -410,6 +531,8 @@ color:#1e293b;
 
 
 
+
+/* ACTIVITY */
 
 
 .activity{
@@ -421,24 +544,17 @@ gap:20px;
 
 padding:20px 0;
 
-border-bottom:1px solid #eee;
-
+border-bottom:1px solid #f1f5f9;
 
 }
-
-
 
 
 
 .activity:last-child{
 
-
 border-bottom:none;
 
-
 }
-
-
 
 
 
@@ -453,7 +569,7 @@ height:45px;
 
 border-radius:50%;
 
-background:#f8f3e8;
+background:#f8fafc;
 
 display:flex;
 
@@ -463,12 +579,18 @@ justify-content:center;
 
 font-size:20px;
 
-
 }
 
 
 
 
+
+.activity-content{
+
+
+flex:1;
+
+}
 
 
 
@@ -480,48 +602,53 @@ font-size:15px;
 
 color:#172033;
 
+margin-bottom:5px;
 
 }
 
 
+
+
+.activity-content small{
+
+
+color:#64748b;
+
+font-size:12px;
+
+}
 
 
 
 .activity-content p{
 
 
+margin-top:8px;
+
 font-size:13px;
 
 color:#64748b;
 
-margin-top:6px;
-
 line-height:1.6;
 
-
 }
 
 
 
 
 
+.activity-footer{
 
 
-.activity-time{
+display:flex;
 
+align-items:center;
 
-font-size:12px;
+gap:15px;
 
-color:#94a3b8;
-
-margin-top:8px;
-
+margin-top:12px;
 
 }
-
-
-
-
 
 
 
@@ -529,15 +656,11 @@ margin-top:8px;
 .module{
 
 
-display:inline-block;
-
-margin-top:8px;
+background:#f1f5f9;
 
 padding:5px 12px;
 
 border-radius:20px;
-
-background:#f1f5f9;
 
 font-size:11px;
 
@@ -545,6 +668,17 @@ font-weight:700;
 
 color:#475569;
 
+}
+
+
+
+
+.time{
+
+
+font-size:12px;
+
+color:#94a3b8;
 
 }
 
@@ -562,27 +696,35 @@ text-align:center;
 
 color:#94a3b8;
 
-
 }
 
 
 
 
 
-@media(max-width:700px){
+
+@media(max-width:800px){
 
 
 .filter-box{
 
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+
+
+.activity{
 
 flex-direction:column;
 
-
 }
 
 
-
 }
+
 
 </style>
 

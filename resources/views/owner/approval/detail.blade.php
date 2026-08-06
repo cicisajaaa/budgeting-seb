@@ -9,16 +9,19 @@
 <div class="detail-header">
 
 <span>
-DETAIL PENGAJUAN DANA
+MONITORING PENGAJUAN DANA
 </span>
 
+
 <h1>
-Persetujuan Dana
+Detail Pengajuan Dana
 </h1>
 
+
 <p>
-Informasi lengkap pengajuan dana dari karyawan.
+Melihat informasi dan status pengajuan dana yang telah diproses oleh bagian keuangan.
 </p>
+
 
 </div>
 
@@ -35,7 +38,9 @@ Informasi lengkap pengajuan dana dari karyawan.
 
 
 
+
 <div class="detail-grid">
+
 
 
 <div class="detail-item">
@@ -43,6 +48,7 @@ Informasi lengkap pengajuan dana dari karyawan.
 <label>
 Project
 </label>
+
 
 <b>
 {{ $expense->proyek->nama_proyek ?? '-' }}
@@ -60,11 +66,13 @@ Project
 Pengaju
 </label>
 
+
 <b>
 {{ $expense->user->name ?? '-' }}
 </b>
 
 </div>
+
 
 
 
@@ -76,11 +84,14 @@ Pengaju
 Judul Pengajuan
 </label>
 
+
 <b>
 {{ $expense->judul }}
 </b>
 
+
 </div>
+
 
 
 
@@ -92,6 +103,7 @@ Judul Pengajuan
 Jumlah Dana
 </label>
 
+
 <b>
 Rp {{number_format(
 $expense->jumlah,
@@ -101,7 +113,10 @@ $expense->jumlah,
 )}}
 </b>
 
+
 </div>
+
+
 
 
 
@@ -109,13 +124,16 @@ $expense->jumlah,
 
 <div class="detail-item full">
 
+
 <label>
 Keterangan
 </label>
 
+
 <b>
 {{ $expense->keterangan ?? '-' }}
 </b>
+
 
 </div>
 
@@ -123,28 +141,37 @@ Keterangan
 
 
 
+
+
 <div class="detail-item">
 
+
 <label>
-Status
+Status Pengajuan
 </label>
 
 
+
 @if($expense->status == 'pending')
+
 
 <span class="status pending">
 Menunggu
 </span>
 
 
+
 @elseif($expense->status == 'approved')
+
 
 <span class="status approved">
 Disetujui
 </span>
 
 
+
 @else
+
 
 <span class="status rejected">
 Ditolak
@@ -154,77 +181,145 @@ Ditolak
 @endif
 
 
-</div>
-
-
 
 </div>
 
 
 
 
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="monitoring-box">
+
+
+<h3>
+📊 Monitoring Keputusan Pengajuan
+</h3>
+
+
+
+
+<div class="monitoring-content">
 
 
 
 @if($expense->status == 'pending')
 
 
-<div class="approval-box">
+<div class="waiting">
 
 
-<h3>
-Keputusan Pengajuan
-</h3>
-
-<div class="approval-action">
-
-<form method="POST"
-class="approve-form"
-action="{{route('owner.approval.approve',$expense->id)}}">
-
-@csrf
-
-<button class="approve">
-✓ Setujui Pengajuan
-</button>
-
-</form>
+<span>
+⏳ Menunggu Verifikasi Keuangan
+</span>
 
 
 
-<form method="POST"
-action="{{route('owner.approval.reject',$expense->id)}}"
-class="reject-form">
+<p>
+Pengajuan dana masih menunggu proses verifikasi dari bagian keuangan.
+Owner hanya memiliki akses untuk melihat perkembangan pengajuan.
+</p>
 
-@csrf
-
-
-<label>
-Alasan Penolakan
-</label>
-
-
-<textarea 
-name="catatan"
-placeholder="Masukkan alasan penolakan">
-</textarea>
-
-
-
-<button class="reject">
-✕ Tolak Pengajuan
-</button>
-
-
-</form>
 
 
 </div>
 
+
+
+
+
+@elseif($expense->status == 'approved')
+
+
+
+<div class="approved-info">
+
+
+<span>
+✓ Pengajuan Disetujui
+</span>
+
+
+
+<p>
+Pengajuan dana telah disetujui oleh bagian keuangan dan dapat diproses sesuai prosedur perusahaan.
+</p>
+
+
+
 </div>
+
+
+
+
+
+@else
+
+
+
+<div class="rejected-info">
+
+
+<span>
+✕ Pengajuan Ditolak
+</span>
+
+
+
+<p>
+Pengajuan dana tidak disetujui oleh bagian keuangan.
+</p>
+
+
+
+
+
+@if($expense->catatan)
+
+
+<div class="reason">
+
+
+<strong>
+Alasan Penolakan:
+</strong>
+
+
+<br>
+
+
+{{ $expense->catatan }}
+
+
+
+</div>
+
 
 
 @endif
+
+
+
+
+</div>
+
+
+
+@endif
+
+
+
+</div>
+
+
+</div>
 
 
 
@@ -236,51 +331,62 @@ placeholder="Masukkan alasan penolakan">
 <a href="{{route('owner.approval')}}"
 class="back-btn">
 
+
 ← Kembali
+
 
 </a>
 
 
 
-</div>
-
 
 </div>
 
 
-
-
-
-
+</div>
 
 
 <style>
 
+
 .detail-container{
+
     margin-top:10px;
+
 }
 
 
-/* HEADER */
+
+/* ================= HEADER ================= */
+
 
 .detail-header{
 
     background:white;
+
     padding:30px;
+
     border-radius:20px;
+
     border:1px solid #e2e8f0;
+
     margin-bottom:25px;
+
     box-shadow:
     0 5px 20px rgba(15,23,42,.05);
 
 }
 
 
+
 .detail-header span{
 
     font-size:11px;
+
     letter-spacing:2px;
+
     font-weight:700;
+
     color:#a67c2e;
 
 }
@@ -290,8 +396,12 @@ class="back-btn">
 .detail-header h1{
 
     margin:12px 0 8px;
+
     font-size:30px;
+
     color:#1e293b;
+
+    font-weight:800;
 
 }
 
@@ -300,6 +410,7 @@ class="back-btn">
 .detail-header p{
 
     color:#64748b;
+
     font-size:14px;
 
 }
@@ -308,15 +419,19 @@ class="back-btn">
 
 
 
+/* ================= PANEL ================= */
 
-/* PANEL */
 
 .panel{
 
     background:white;
+
     padding:30px;
+
     border-radius:20px;
+
     border:1px solid #e2e8f0;
+
     box-shadow:
     0 5px 20px rgba(15,23,42,.05);
 
@@ -327,8 +442,12 @@ class="back-btn">
 .panel h3{
 
     color:#1e293b;
+
     margin-bottom:25px;
+
     font-size:18px;
+
+    font-weight:800;
 
 }
 
@@ -336,12 +455,15 @@ class="back-btn">
 
 
 
-/* DETAIL */
+/* ================= DETAIL GRID ================= */
+
 
 .detail-grid{
 
     display:grid;
+
     grid-template-columns:repeat(2,1fr);
+
     gap:18px;
 
 }
@@ -351,8 +473,11 @@ class="back-btn">
 .detail-item{
 
     background:#f8fafc;
+
     padding:20px;
+
     border-radius:15px;
+
     border:1px solid #e2e8f0;
 
 }
@@ -370,9 +495,14 @@ class="back-btn">
 .detail-item label{
 
     display:block;
+
     font-size:12px;
+
     color:#64748b;
+
     margin-bottom:10px;
+
+    font-weight:600;
 
 }
 
@@ -381,18 +511,17 @@ class="back-btn">
 .detail-item b{
 
     color:#1e293b;
+
     font-size:15px;
 
 }
 
 
 
-
-/* JUMLAH */
-
 .detail-item:nth-child(4) b{
 
     color:#6b4f1d;
+
     font-size:22px;
 
 }
@@ -401,16 +530,19 @@ class="back-btn">
 
 
 
-
-/* STATUS */
+/* ================= STATUS ================= */
 
 
 .status{
 
     display:inline-flex;
+
     padding:8px 16px;
+
     border-radius:30px;
+
     font-size:12px;
+
     font-weight:700;
 
 }
@@ -420,6 +552,7 @@ class="back-btn">
 .pending{
 
     background:#fef3c7;
+
     color:#92400e;
 
 }
@@ -429,6 +562,7 @@ class="back-btn">
 .approved{
 
     background:#dcfce7;
+
     color:#166534;
 
 }
@@ -438,6 +572,7 @@ class="back-btn">
 .rejected{
 
     background:#fee2e2;
+
     color:#991b1b;
 
 }
@@ -446,19 +581,22 @@ class="back-btn">
 
 
 
-/* APPROVAL */
+/* ================= MONITORING ================= */
 
-.approval-box{
+
+.monitoring-box{
 
     margin-top:35px;
+
     padding-top:30px;
+
     border-top:1px solid #e2e8f0;
 
 }
 
 
 
-.approval-box h3{
+.monitoring-box h3{
 
     margin-bottom:20px;
 
@@ -466,123 +604,103 @@ class="back-btn">
 
 
 
+.monitoring-content{
 
+    background:#f8fafc;
 
-.approval-action{
+    padding:25px;
 
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
-
-}
-
-
-
-
-
-.approve-form{
-
-    display:flex;
-    align-items:center;
-
-}
-
-
-
-
-.approve{
-
-    width:100%;
-    height:50px;
-    border:none;
-    border-radius:12px;
-    background:#15803d;
-    color:white;
-    font-weight:700;
-    font-size:14px;
-    cursor:pointer;
-
-}
-
-
-
-.approve:hover{
-
-    background:#166534;
-
-}
-
-
-
-
-.reject-form{
-
-    background:#fff7ed;
-    padding:20px;
     border-radius:15px;
-    border:1px solid #fed7aa;
+
+    border:1px solid #e2e8f0;
 
 }
 
 
 
-.reject-form label{
-
-    display:block;
-    font-size:13px;
-    font-weight:700;
-    color:#9a3412;
-    margin-bottom:10px;
-
-}
 
 
+.waiting span,
+.approved-info span,
+.rejected-info span{
 
-textarea{
 
-    width:100%;
-    height:100px;
-    resize:none;
+    display:inline-block;
 
-    padding:12px;
+    padding:10px 18px;
 
-    border-radius:12px;
-
-    border:1px solid #fdba74;
+    border-radius:20px;
 
     font-size:13px;
 
-    margin-bottom:12px;
+    font-weight:700;
+
+
+}
+
+
+
+.waiting span{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.approved-info span{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.rejected-info span{
+
+    background:#fee2e2;
+
+    color:#991b1b;
 
 }
 
 
 
 
+.monitoring-content p{
 
-.reject{
+    margin-top:15px;
 
-    width:100%;
-    height:45px;
+    color:#64748b;
 
-    background:#dc2626;
-    color:white;
+    font-size:14px;
 
-    border:none;
+    line-height:1.6;
+
+}
+
+
+
+.reason{
+
+
+    margin-top:15px;
+
+    padding:15px;
+
+    background:white;
 
     border-radius:12px;
 
-    font-weight:700;
+    border:1px solid #fecaca;
 
-    cursor:pointer;
+    color:#991b1b;
 
-}
-
-
-
-.reject:hover{
-
-    background:#b91c1c;
+    font-size:13px;
 
 }
 
@@ -590,10 +708,11 @@ textarea{
 
 
 
+/* ================= BACK BUTTON ================= */
 
-/* BACK */
 
 .back-btn{
+
 
     display:inline-flex;
 
@@ -613,39 +732,51 @@ textarea{
 
     font-weight:600;
 
+
 }
 
 
 
 .back-btn:hover{
 
+
     background:#1e293b;
+
 
 }
 
 
 
+
+
+/* ================= RESPONSIVE ================= */
 
 
 @media(max-width:900px){
 
-.detail-grid,
-.approval-action{
 
-    grid-template-columns:1fr;
+    .detail-grid{
+
+
+        grid-template-columns:1fr;
+
+
+    }
+
+
+
+    .detail-item.full{
+
+
+        grid-column:auto;
+
+
+    }
+
 
 }
 
 
-
-.detail-item.full{
-
-    grid-column:auto;
-
-}
-
-}
 
 </style>
-
 @endsection

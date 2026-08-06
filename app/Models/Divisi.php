@@ -3,24 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Tugas;
+
+
 class Divisi extends Model
 {
 
 
     protected $table = 'divisi';
 
-public function tugas()
-{
-    return $this->hasMany(
-        Tugas::class,
-        'divisi_id'
-    );
-}
+
 
     protected $fillable = [
 
-        'nama_divisi'
+        'nama_divisi',
+
+        'deskripsi'
 
     ];
 
@@ -30,17 +27,16 @@ public function tugas()
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Alokasi Proyek
+    | Relasi Karyawan
     |--------------------------------------------------------------------------
     */
 
-
-    public function alokasiProyekDivisi()
+    public function karyawan()
     {
 
         return $this->hasMany(
 
-            AlokasiProyekDivisi::class,
+            Karyawan::class,
 
             'divisi_id'
 
@@ -56,17 +52,41 @@ public function tugas()
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Karyawan
+    | Relasi Tugas
     |--------------------------------------------------------------------------
     */
 
-
-    public function karyawan()
+    public function tugas()
     {
 
         return $this->hasMany(
 
-            Karyawan::class,
+            Tugas::class,
+
+            'divisi_id'
+
+        );
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Alokasi Project
+    |--------------------------------------------------------------------------
+    */
+
+    public function alokasiProyekDivisi()
+    {
+
+        return $this->hasMany(
+
+            AlokasiProyekDivisi::class,
 
             'divisi_id'
 

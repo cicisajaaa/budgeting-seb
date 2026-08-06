@@ -1,20 +1,14 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
-<!-- HEADER -->
 <div class="page-header-card">
-
 
 <div>
 
-
 <div class="page-label">
-
 USER MANAGEMENT
-
 </div>
 
 
@@ -24,64 +18,52 @@ Kelola Pengguna
 
 
 <p>
-Manajemen akun, role, dan hak akses pengguna sistem.
+Kelola akun pengguna, role, dan hak akses sistem perusahaan.
 </p>
 
 
 </div>
 
 
-
-
 <a href="{{route('admin.users.create')}}" class="btn-primary">
 
-<span>＋</span>
-
-Tambah User
+＋ Tambah User
 
 </a>
 
 
-
 </div>
 
 
 
 
 
+{{-- STATISTIC --}}
+
+<div class="stat-grid">
 
 
+<div class="stat-card">
 
-<!-- STATISTIC -->
-
-
-<div class="user-stat-grid">
-
-
-
-<div class="user-stat">
-
-<div class="stat-icon green">
-
+<div class="stat-icon">
 👥
-
 </div>
 
 
 <div>
 
-<span>
-Total Pengguna
-</span>
+<label>
+Total User
+</label>
 
 
-<h3>
-{{count($users)}}
-</h3>
+<h2>
+{{$totalUser}}
+</h2>
 
 
 <small>
-Akun sistem
+Seluruh akun sistem
 </small>
 
 
@@ -94,37 +76,32 @@ Akun sistem
 
 
 
+<div class="stat-card">
 
-<div class="user-stat">
-
-
-<div class="stat-icon blue">
-
+<div class="stat-icon">
 🛡️
-
 </div>
 
 
 <div>
 
-<span>
+<label>
 Administrator
-</span>
+</label>
 
 
-<h3>
-{{$users->where('role','admin')->count()}}
-</h3>
+<h2>
+{{$totalAdmin}}
+</h2>
 
 
 <small>
-Hak akses penuh
+Hak akses admin
 </small>
 
 
 </div>
 
-
 </div>
 
 
@@ -133,26 +110,23 @@ Hak akses penuh
 
 
 
-<div class="user-stat">
+<div class="stat-card">
 
-
-<div class="stat-icon orange">
-
+<div class="stat-icon">
 💼
-
 </div>
 
 
 <div>
 
-<span>
+<label>
 Karyawan
-</span>
+</label>
 
 
-<h3>
-{{$users->where('role','karyawan')->count()}}
-</h3>
+<h2>
+{{$totalKaryawan}}
+</h2>
 
 
 <small>
@@ -162,16 +136,10 @@ Pengguna operasional
 
 </div>
 
-
 </div>
 
 
-
-
-
 </div>
-
-
 
 
 
@@ -182,18 +150,11 @@ Pengguna operasional
 
 @if(session('success'))
 
-
 <div class="success-alert">
 
-<div>
-✓
-</div>
-
-{{session('success')}}
-
+✓ {{session('success')}}
 
 </div>
-
 
 @endif
 
@@ -203,7 +164,7 @@ Pengguna operasional
 
 
 
-<!-- TABLE CARD -->
+{{-- TABLE --}}
 
 
 <div class="glass-panel">
@@ -214,14 +175,13 @@ Pengguna operasional
 
 <div>
 
-
 <h3>
 Daftar Pengguna
 </h3>
 
 
 <p>
-Kelola akun yang memiliki akses ke sistem.
+Data akun yang memiliki akses ke sistem.
 </p>
 
 
@@ -231,12 +191,14 @@ Kelola akun yang memiliki akses ke sistem.
 
 <div class="total-user">
 
-{{count($users)}} User
+{{$users->count()}} User
 
 </div>
 
 
 </div>
+
+
 
 
 
@@ -251,8 +213,12 @@ Kelola akun yang memiliki akses ke sistem.
 
 <thead>
 
-
 <tr>
+
+<th>
+No
+</th>
+
 
 <th>
 Pengguna
@@ -270,7 +236,7 @@ Role
 
 
 <th>
-Status
+Divisi
 </th>
 
 
@@ -281,8 +247,9 @@ Aksi
 
 </tr>
 
-
 </thead>
+
+
 
 
 
@@ -291,10 +258,22 @@ Aksi
 <tbody>
 
 
-@foreach($users as $user)
+@forelse($users as $user)
 
 
 <tr>
+
+
+<td>
+
+{{$loop->iteration}}
+
+</td>
+
+
+
+
+
 
 
 <td>
@@ -303,7 +282,7 @@ Aksi
 <div class="user-profile">
 
 
-<div class="avatar-user">
+<div class="avatar">
 
 {{strtoupper(substr($user->name,0,1))}}
 
@@ -319,7 +298,7 @@ Aksi
 
 
 <small>
-User Sistem
+Akun Sistem
 </small>
 
 
@@ -329,8 +308,8 @@ User Sistem
 </div>
 
 
-
 </td>
+
 
 
 
@@ -366,18 +345,21 @@ User Sistem
 
 
 
+
 <td>
 
 
-<span class="status">
+@if($user->karyawan)
 
 
-<span></span>
-
-Aktif
+{{$user->karyawan->divisi->nama_divisi ?? '-'}}
 
 
-</span>
+@else
+
+-
+
+@endif
 
 
 </td>
@@ -390,8 +372,17 @@ Aktif
 
 <td>
 
-
 <div class="action">
+
+
+<a href="{{route('admin.users.show',$user->id)}}"
+
+class="detail">
+
+👁
+
+</a>
+
 
 
 
@@ -399,12 +390,9 @@ Aktif
 
 class="edit">
 
-
-Edit
+✏️ 
 
 </a>
-
-
 
 
 
@@ -420,13 +408,11 @@ action="{{route('admin.users.destroy',$user->id)}}">
 @method('DELETE')
 
 
-<button
+<button class="delete"
 
-onclick="return confirm('Hapus user ini?')"
+onclick="return confirm('Hapus user ini?')">
 
-class="delete">
-
-Hapus
+🗑️
 
 </button>
 
@@ -436,10 +422,7 @@ Hapus
 
 
 </div>
-
-
 </td>
-
 
 
 
@@ -447,23 +430,35 @@ Hapus
 
 
 
-@endforeach
+@empty
+
+
+<tr>
+
+<td colspan="6" class="empty">
+
+Belum ada pengguna
+
+</td>
+
+</tr>
+
+
+@endforelse
 
 
 
 </tbody>
 
 
-
 </table>
 
 
-
 </div>
 
 
-
 </div>
+
 
 
 
@@ -474,31 +469,26 @@ Hapus
 
 <style>
 
-/* ===============================
-GLOBAL HEADER CARD
-================================ */
-
 
 .page-header-card{
 
-    background:white;
+background:white;
 
-    border:1px solid #e5e7eb;
+border:1px solid #e5e7eb;
 
-    border-radius:24px;
+border-radius:24px;
 
-    padding:30px 32px;
+padding:30px;
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    align-items:center;
+align-items:center;
 
-    margin-bottom:25px;
+margin-bottom:25px;
 
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.06);
+box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -506,13 +496,13 @@ GLOBAL HEADER CARD
 
 .page-label{
 
-    font-size:11px;
+font-size:11px;
 
-    letter-spacing:2px;
+letter-spacing:2px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#94a3b8;
+color:#94a3b8;
 
 }
 
@@ -520,13 +510,13 @@ GLOBAL HEADER CARD
 
 .page-header-card h1{
 
-    font-size:30px;
+font-size:30px;
 
-    margin:10px 0;
+margin:10px 0;
 
-    color:#172033;
+color:#172033;
 
-    font-weight:800;
+font-weight:800;
 
 }
 
@@ -534,11 +524,11 @@ GLOBAL HEADER CARD
 
 .page-header-card p{
 
-    margin:0;
+color:#64748b;
 
-    color:#64748b;
+font-size:14px;
 
-    font-size:14px;
+margin:0;
 
 }
 
@@ -546,34 +536,22 @@ GLOBAL HEADER CARD
 
 
 
-/* ===============================
-BUTTON TAMBAH
-================================ */
-
 
 .btn-primary{
 
-    display:flex;
+background:#1e293b;
 
-    align-items:center;
+color:white;
 
-    gap:8px;
+padding:12px 22px;
 
-    background:#1e293b;
+border-radius:14px;
 
-    color:white;
+text-decoration:none;
 
-    padding:12px 22px;
+font-size:13px;
 
-    border-radius:14px;
-
-    text-decoration:none;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    transition:.2s;
+font-weight:700;
 
 }
 
@@ -581,9 +559,7 @@ BUTTON TAMBAH
 
 .btn-primary:hover{
 
-    background:#b8863b;
-
-    transform:translateY(-2px);
+background:#b8863b;
 
 }
 
@@ -594,44 +570,40 @@ BUTTON TAMBAH
 
 
 
-/* ===============================
-STATISTIC CARD
-================================ */
 
+.stat-grid{
 
-.user-stat-grid{
+display:grid;
 
-    display:grid;
+grid-template-columns:repeat(3,1fr);
 
-    grid-template-columns:repeat(3,1fr);
+gap:18px;
 
-    gap:18px;
-
-    margin-bottom:25px;
+margin-bottom:25px;
 
 }
 
 
 
-.user-stat{
 
-    background:white;
 
-    border:1px solid #e5e7eb;
+.stat-card{
 
-    border-radius:22px;
+background:white;
 
-    padding:22px;
+border:1px solid #e5e7eb;
 
-    display:flex;
+border-radius:22px;
 
-    align-items:center;
+padding:22px;
 
-    gap:16px;
+display:flex;
 
-    box-shadow:
+align-items:center;
 
-    0 10px 30px rgba(15,23,42,.05);
+gap:15px;
+
+box-shadow:0 10px 30px rgba(15,23,42,.05);
 
 }
 
@@ -641,75 +613,53 @@ STATISTIC CARD
 
 .stat-icon{
 
-    width:48px;
+width:50px;
 
-    height:48px;
+height:50px;
 
-    border-radius:15px;
+border-radius:16px;
 
-    display:flex;
+background:#f8f3ea;
 
-    align-items:center;
+display:flex;
 
-    justify-content:center;
+align-items:center;
 
-    font-size:20px;
+justify-content:center;
 
-}
-
-
-
-.stat-icon.green{
-
-    background:#f1f5f9;
+font-size:22px;
 
 }
 
 
 
-.stat-icon.blue{
+.stat-card label{
 
-    background:#dbeafe;
+font-size:12px;
 
-}
-
-
-
-.stat-icon.orange{
-
-    background:#fef3c7;
+color:#64748b;
 
 }
 
 
 
-.user-stat span{
+.stat-card h2{
 
-    font-size:12px;
+font-size:28px;
 
-    color:#64748b;
+margin:5px 0;
 
-}
-
-
-
-.user-stat h3{
-
-    margin:5px 0;
-
-    font-size:26px;
-
-    color:#172033;
+color:#172033;
 
 }
 
 
 
-.user-stat small{
+.stat-card small{
 
-    color:#94a3b8;
+font-size:11px;
 
-    font-size:11px;
+color:#94a3b8;
 
 }
 
@@ -718,38 +668,25 @@ STATISTIC CARD
 
 
 
-
-
-/* ===============================
-SUCCESS ALERT
-================================ */
 
 
 .success-alert{
 
+background:#f0fdf4;
 
-    display:flex;
+border:1px solid #bbf7d0;
 
-    align-items:center;
+padding:15px;
 
-    gap:10px;
+border-radius:16px;
 
-    background:#f0fdf4;
+color:#166534;
 
-    border:1px solid #bbf7d0;
+font-size:13px;
 
-    color:#166534;
+font-weight:700;
 
-    padding:14px 18px;
-
-    border-radius:16px;
-
-    margin-bottom:20px;
-
-    font-size:13px;
-
-    font-weight:600;
-
+margin-bottom:20px;
 
 }
 
@@ -758,46 +695,33 @@ SUCCESS ALERT
 
 
 
-
-/* ===============================
-TABLE PANEL
-================================ */
 
 
 .glass-panel{
 
+background:white;
 
-    background:white;
+border:1px solid #e5e7eb;
 
-    border:1px solid #e5e7eb;
+border-radius:24px;
 
-    border-radius:24px;
+padding:25px;
 
-    padding:25px;
-
-    box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.06);
-
+box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
-
-
 
 
 
 .table-header{
 
+display:flex;
 
-    display:flex;
+justify-content:space-between;
 
-    justify-content:space-between;
+align-items:center;
 
-    align-items:center;
-
-    margin-bottom:20px;
-
+margin-bottom:20px;
 
 }
 
@@ -805,13 +729,11 @@ TABLE PANEL
 
 .table-header h3{
 
+margin:0;
 
-    font-size:18px;
+font-size:18px;
 
-    color:#172033;
-
-    margin:0 0 5px;
-
+color:#172033;
 
 }
 
@@ -819,37 +741,25 @@ TABLE PANEL
 
 .table-header p{
 
+font-size:13px;
 
-    color:#64748b;
-
-    font-size:13px;
-
-    margin:0;
-
+color:#64748b;
 
 }
-
-
 
 
 
 .total-user{
 
+background:#f1f5f9;
 
-    background:#f8fafc;
+padding:8px 15px;
 
-    border:1px solid #e2e8f0;
+border-radius:999px;
 
-    color:#334155;
+font-size:12px;
 
-    padding:8px 16px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:700;
-
+font-weight:700;
 
 }
 
@@ -857,27 +767,14 @@ TABLE PANEL
 
 
 
-
-
-
-/* ===============================
-TABLE
-================================ */
-
-
-.table-wrapper{
-
-    overflow-x:auto;
-
-}
 
 
 
 table{
 
-    width:100%;
+width:100%;
 
-    border-collapse:collapse;
+border-collapse:collapse;
 
 }
 
@@ -885,16 +782,15 @@ table{
 
 th{
 
+background:#f8fafc;
 
-    background:#f8fafc;
+padding:14px;
 
-    padding:14px;
+font-size:12px;
 
-    text-align:left;
+color:#64748b;
 
-    font-size:12px;
-
-    color:#64748b;
+text-align:left;
 
 }
 
@@ -902,25 +798,11 @@ th{
 
 td{
 
+padding:15px;
 
-    padding:15px;
+border-bottom:1px solid #e5e7eb;
 
-    border-bottom:1px solid #e5e7eb;
-
-    color:#334155;
-
-    font-size:13px;
-
-
-}
-
-
-
-tr:hover{
-
-
-    background:#fafafa;
-
+font-size:13px;
 
 }
 
@@ -929,50 +811,39 @@ tr:hover{
 
 
 
-
-
-/* ===============================
-USER PROFILE
-================================ */
 
 
 .user-profile{
 
+display:flex;
 
-    display:flex;
+align-items:center;
 
-    align-items:center;
-
-    gap:12px;
-
+gap:12px;
 
 }
 
 
 
+.avatar{
 
+width:40px;
 
-.avatar-user{
+height:40px;
 
+border-radius:50%;
 
-    width:40px;
+background:#1e293b;
 
-    height:40px;
+color:white;
 
-    border-radius:50%;
+display:flex;
 
-    background:#1e293b;
+align-items:center;
 
-    color:white;
+justify-content:center;
 
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-weight:800;
-
+font-weight:800;
 
 }
 
@@ -980,13 +851,7 @@ USER PROFILE
 
 .user-profile strong{
 
-
-    display:block;
-
-    color:#172033;
-
-    font-size:13px;
-
+display:block;
 
 }
 
@@ -994,11 +859,7 @@ USER PROFILE
 
 .user-profile small{
 
-
-    color:#94a3b8;
-
-    font-size:11px;
-
+color:#94a3b8;
 
 }
 
@@ -1009,22 +870,15 @@ USER PROFILE
 
 
 
-/* ===============================
-ROLE BADGE
-================================ */
-
-
 .role{
 
+padding:7px 14px;
 
-    padding:7px 14px;
+border-radius:999px;
 
-    border-radius:999px;
+font-size:11px;
 
-    font-size:11px;
-
-    font-weight:700;
-
+font-weight:700;
 
 }
 
@@ -1032,11 +886,9 @@ ROLE BADGE
 
 .role.admin{
 
+background:#dbeafe;
 
-    background:#e0e7ff;
-
-    color:#3730a3;
-
+color:#1d4ed8;
 
 }
 
@@ -1044,11 +896,9 @@ ROLE BADGE
 
 .role.owner{
 
+background:#fef3c7;
 
-    background:#fef3c7;
-
-    color:#92400e;
-
+color:#92400e;
 
 }
 
@@ -1056,11 +906,9 @@ ROLE BADGE
 
 .role.keuangan{
 
+background:#dcfce7;
 
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
+color:#166534;
 
 }
 
@@ -1068,11 +916,9 @@ ROLE BADGE
 
 .role.karyawan{
 
+background:#f1f5f9;
 
-    background:#f1f5f9;
-
-    color:#475569;
-
+color:#475569;
 
 }
 
@@ -1080,67 +926,13 @@ ROLE BADGE
 
 
 
-
-
-
-/* ===============================
-STATUS
-================================ */
-
-
-.status{
-
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    color:#166534;
-
-    font-size:12px;
-
-    font-weight:700;
-
-
-}
-
-
-
-.status span{
-
-
-    width:8px;
-
-    height:8px;
-
-    background:#22c55e;
-
-    border-radius:50%;
-
-
-}
-
-
-
-
-
-
-
-
-/* ===============================
-ACTION BUTTON
-================================ */
 
 
 .action{
 
+display:flex;
 
-    display:flex;
-
-    gap:8px;
-
+gap:8px;
 
 }
 
@@ -1148,33 +940,44 @@ ACTION BUTTON
 
 .action form{
 
+display:inline;
 
-    display:inline;
+}
 
+
+.detail,
+.edit,
+.delete{
+
+padding:8px 12px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+border:none;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+gap:5px;
 
 }
 
 
 
+.detail{
 
-.edit,
-.delete{
+background:#dcfce7;
 
-
-    border:none;
-
-    padding:8px 15px;
-
-    border-radius:12px;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    text-decoration:none;
-
+color:#166534;
 
 }
 
@@ -1182,11 +985,9 @@ ACTION BUTTON
 
 .edit{
 
+background:#dbeafe;
 
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
+color:#1d4ed8;
 
 }
 
@@ -1194,25 +995,29 @@ ACTION BUTTON
 
 .delete{
 
+background:#fee2e2;
 
-    background:#fee2e2;
-
-    color:#dc2626;
-
+color:#dc2626;
 
 }
 
 
 
+.detail:hover{
+
+background:#166534;
+
+color:white;
+
+}
+
 
 
 .edit:hover{
 
+background:#2563eb;
 
-    background:#2563eb;
-
-    color:white;
-
+color:white;
 
 }
 
@@ -1220,11 +1025,23 @@ ACTION BUTTON
 
 .delete:hover{
 
+background:#dc2626;
 
-    background:#dc2626;
+color:white;
 
-    color:white;
+}
 
+
+
+
+
+.empty{
+
+text-align:center;
+
+padding:40px;
+
+color:#94a3b8;
 
 }
 
@@ -1234,20 +1051,12 @@ ACTION BUTTON
 
 
 
-
-/* ===============================
-RESPONSIVE
-================================ */
-
-
 @media(max-width:900px){
 
 
-.user-stat-grid{
+.stat-grid{
 
-
-    grid-template-columns:1fr;
-
+grid-template-columns:1fr;
 
 }
 
@@ -1255,33 +1064,24 @@ RESPONSIVE
 
 .page-header-card{
 
+flex-direction:column;
 
-    flex-direction:column;
+align-items:flex-start;
 
-    align-items:flex-start;
-
-    gap:20px;
-
+gap:20px;
 
 }
 
 
+.table-wrapper{
 
-.table-header{
-
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-
+overflow-x:auto;
 
 }
 
 
-
 }
+
 
 
 </style>

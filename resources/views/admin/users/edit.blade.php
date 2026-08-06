@@ -209,7 +209,7 @@ Role Pengguna
 
 
 
-<select name="role">
+<select name="role" id="role">
 
 
 <option value="admin"
@@ -261,10 +261,68 @@ Karyawan
 
 </div>
 
+<div id="employee-field">
+
+
+<div class="form-group">
+
+<label>
+Nama Karyawan
+</label>
+
+<input
+type="text"
+name="nama_karyawan"
+value="{{old(
+'nama_karyawan',
+$user->karyawan->nama_karyawan ?? $user->name
+)}}">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Divisi
+</label>
+
+
+<select name="divisi_id">
+
+
+<option value="">
+-- Pilih Divisi --
+</option>
 
 
 
+@foreach($divisi as $item)
 
+
+<option value="{{$item->id}}"
+
+{{old(
+'divisi_id',
+$user->karyawan->divisi_id ?? ''
+)==$item->id ? 'selected':''}}
+
+>
+
+{{$item->nama_divisi}}
+
+</option>
+
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
+</div>
 
 <div class="form-group">
 
@@ -775,8 +833,56 @@ RESPONSIVE
 
 }
 
+#employee-field{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
+
+}
 </style>
 
+<script>
 
+const role = document.getElementById('role');
+
+const employeeField = document.getElementById('employee-field');
+
+
+function checkRole(){
+
+
+    if(role.value === 'owner'){
+
+
+        employeeField.style.display = 'none';
+
+
+    }else{
+
+
+        employeeField.style.display = 'grid';
+
+
+    }
+
+
+}
+
+
+
+role.addEventListener(
+'change',
+checkRole
+);
+
+
+
+checkRole();
+
+
+</script>
 
 @endsection

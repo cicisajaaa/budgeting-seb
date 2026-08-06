@@ -532,8 +532,19 @@ Teralokasi
 
 
 
-
 <td>
+
+<div class="action">
+
+
+<a href="{{route('admin.allocation.edit',$allocation->id)}}"
+
+class="edit">
+
+Edit
+
+</a>
+
 
 
 <form method="POST"
@@ -558,12 +569,13 @@ Hapus
 </button>
 
 
-
 </form>
 
 
-</td>
+</div>
 
+
+</td>
 
 
 </tr>
@@ -1600,7 +1612,55 @@ tr:hover{
 
 
 
+.action{
 
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+}
+
+
+
+.action form{
+
+    margin:0;
+
+}
+
+
+
+.edit{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+    padding:8px 14px;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+
+
+.edit:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+}
 
 
 
