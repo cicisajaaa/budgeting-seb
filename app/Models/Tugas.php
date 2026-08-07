@@ -1,9 +1,12 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Proyek;
+use App\Models\Divisi;
+use App\Models\Karyawan;
+use App\Models\AktivitasTugas;
 
 class Tugas extends Model
 {
@@ -128,22 +131,33 @@ class Tugas extends Model
     */
 
 
-    public function aktivitasTugas()
-    {
+public function aktivitasTugas()
+{
 
-        return $this->hasMany(
+    return $this->hasMany(
+        AktivitasTugas::class,
+        'tugas_id'
+    )
+    ->latest();
 
-            AktivitasTugas::class,
-
-            'tugas_id'
-
-        );
-
-    }
+}
 
 
 
+public function updateProgress()
+{
 
+    $progress = $this->aktivitasTugas()
+        ->max('progres');
+
+
+    $this->progres_persen = $progress ?? 0;
+
+
+    $this->save();
+
+
+}
 
 
 

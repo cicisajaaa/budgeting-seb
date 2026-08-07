@@ -62,18 +62,6 @@ Monitoring pemasukan, pengeluaran, saldo dan aktivitas transaksi perusahaan.
 
 
 
-@if(session('success'))
-
-<div class="success-box">
-
-{{session('success')}}
-
-</div>
-
-@endif
-
-
-
 
 
 

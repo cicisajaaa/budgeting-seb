@@ -13,7 +13,7 @@ class TaskController extends Controller
     // 1. Menampilkan daftar tugas
     public function index(Proyek $project)
     {
-        $tugas = $project->tasks()
+        $tugas = $project->tugas()
             ->with([
                 'division',
                 'employee'
@@ -76,7 +76,7 @@ class TaskController extends Controller
 
 
 
-        $project->tasks()->create(
+        $project->tugas()->create(
             $request->all()
         );
 

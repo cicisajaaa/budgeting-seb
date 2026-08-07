@@ -87,22 +87,19 @@ Project
 
 
 
-
 <div class="info-item">
 
 <span>
 PIC
-
 </span>
 
 <strong>
 
-{{$task->karyawan->name ?? '-'}}
+{{$task->karyawan->nama_karyawan ?? '-'}}
 
 </strong>
 
 </div>
-
 
 
 
@@ -329,11 +326,7 @@ Belum dimulai
 
 
 
-
-
-
-{{-- AKTIVITAS --}}
-
+{{-- AKTIVITAS PEKERJAAN --}}
 
 <div class="glass-panel activity-card">
 
@@ -360,6 +353,101 @@ Belum dimulai
 
 
 
+{{-- RIWAYAT UPDATE AKTIVITAS --}}
+
+
+<div class="glass-panel activity-card">
+
+
+<div class="panel-title">
+
+📌 Riwayat Update Aktivitas
+
+</div>
+
+
+
+
+@forelse($task->aktivitasTugas as $aktivitas)
+
+
+
+<div class="description-box" style="margin-bottom:12px">
+
+
+
+<strong>
+
+@if($aktivitas->tanggal)
+
+{{\Carbon\Carbon::parse($aktivitas->tanggal)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
+
+</strong>
+
+
+
+<p style="margin-top:8px">
+
+{{$aktivitas->aktivitas}}
+
+</p>
+
+
+
+
+<span>
+
+Progress:
+{{$aktivitas->progres}}%
+
+</span>
+
+
+
+
+
+@if($aktivitas->catatan)
+
+
+<p>
+
+Catatan:
+{{$aktivitas->catatan}}
+
+</p>
+
+
+@endif
+
+
+
+
+</div>
+
+
+
+@empty
+
+
+<div class="description-box">
+
+Belum ada update aktivitas.
+
+</div>
+
+
+@endforelse
+
+
+
+</div>
 
 
 
@@ -380,9 +468,8 @@ Belum dimulai
 
 <div class="description-box">
 
-{{$task->catatan ?? 'Tidak ada catatan'}
+{{$task->catatan ?? 'Tidak ada catatan'}}
 
-}
 
 </div>
 

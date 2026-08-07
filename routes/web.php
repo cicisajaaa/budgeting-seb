@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\AllocationController;
 use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Admin\ProjectMemberController;
+
 
 use App\Http\Controllers\BankAccountController;
 
@@ -486,27 +488,61 @@ Route::middleware([
         'divisions',
         DivisionController::class
     );
+/*
+|--------------------------------------------------------------------------
+| TASK MONITORING
+|--------------------------------------------------------------------------
+*/
 
 
 Route::get(
-'/tasks',
-[
-TaskController::class,
-'index'
-]
+    '/tasks',
+    [
+        TaskController::class,
+        'index'
+    ]
 )
 ->name('tasks.index');
 
 
 
 Route::get(
-'/tasks/{task}',
-[
-TaskController::class,
-'show'
-]
+    '/tasks/{task}',
+    [
+        TaskController::class,
+        'show'
+    ]
 )
 ->name('tasks.show');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| TASK BY PROJECT
+|--------------------------------------------------------------------------
+*/
+
+
+Route::get(
+    '/projects/{project}/tasks/create',
+    [
+        TaskController::class,
+        'create'
+    ]
+)
+->name('tasks.create');
+
+
+
+Route::post(
+    '/projects/{project}/tasks',
+    [
+        TaskController::class,
+        'store'
+    ]
+)
+->name('tasks.store');
 
 
 
@@ -564,13 +600,61 @@ TaskController::class,
     ->name('allocation.destroy');
 
 
+
+    Route::get(
+    '/projects/{project}/members',
+    [
+        ProjectMemberController::class,
+        'index'
+    ]
+)
+->name('members.index');
+
+
+
+Route::post(
+    '/projects/{project}/members',
+    [
+        ProjectMemberController::class,
+        'store'
+    ]
+)
+->name('members.store');
+
+
+
+Route::delete(
+    '/projects/{project}/members/{user}',
+    [
+        ProjectMemberController::class,
+        'destroy'
+    ]
+)
+->name('members.destroy');
+Route::get(
+
+'projects/{project}/tasks/create',
+
+[TaskController::class,'create']
+
+)
+
+->name('tasks.create');
+
+
+
+Route::post(
+
+'projects/{project}/tasks',
+
+[TaskController::class,'store']
+
+)
+
+->name('tasks.store');
+});
 });
 
-
-
-
-
-});
 
 
 // ================= OWNER =================

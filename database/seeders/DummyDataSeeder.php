@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\Employee;
-use App\Models\Task;
+use App\Models\Tugas;
 use App\Models\ProjectDivisionAllocation;
 use Carbon\Carbon;
 

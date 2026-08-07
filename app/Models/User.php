@@ -4,26 +4,39 @@ namespace App\Models;
 
 
 use Database\Factories\UserFactory;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 use App\Models\Karyawan;
 use App\Models\ExpenseRequest;
 use App\Models\LogAudit;
+use App\Models\Proyek;
+
 
 
 class User extends Authenticatable
 {
 
-protected $table = 'users';
 
-protected $primaryKey = 'id';
+    protected $table = 'users';
+
+
+
+    protected $primaryKey = 'id';
+
+
+
     use HasFactory, Notifiable;
 
 
 
+
+
     protected $fillable = [
+
 
         'name',
 
@@ -33,7 +46,10 @@ protected $primaryKey = 'id';
 
         'role'
 
+
     ];
+
+
 
 
 
@@ -41,11 +57,41 @@ protected $primaryKey = 'id';
 
     protected $hidden = [
 
+
         'password',
 
         'remember_token'
 
+
     ];
+
+
+
+
+
+
+
+    protected function casts(): array
+    {
+
+
+        return [
+
+
+            'email_verified_at' => 'datetime',
+
+
+            'password' => 'hashed',
+
+
+        ];
+
+
+    }
+
+
+
+
 
 
 
@@ -104,23 +150,6 @@ protected $primaryKey = 'id';
 
 
 
-    protected function casts(): array
-    {
-
-        return [
-
-            'email_verified_at' => 'datetime',
-
-            'password' => 'hashed',
-
-        ];
-
-    }
-
-
-
-
-
 
 
     /*
@@ -149,6 +178,8 @@ protected $primaryKey = 'id';
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Relasi Pengajuan Dana
@@ -156,18 +187,21 @@ protected $primaryKey = 'id';
     */
 
 
-public function pengajuanDana()
-{
+    public function pengajuanDana()
+    {
 
-    return $this->hasMany(
+        return $this->hasMany(
 
-        ExpenseRequest::class,
+            ExpenseRequest::class,
 
-        'pengguna_id'
+            'pengguna_id'
 
-    );
+        );
 
-}
+    }
+
+
+
 
 
 
@@ -181,18 +215,21 @@ public function pengajuanDana()
     */
 
 
-public function persetujuanDana()
-{
+    public function persetujuanDana()
+    {
 
-    return $this->hasMany(
+        return $this->hasMany(
 
-        ExpenseRequest::class,
+            ExpenseRequest::class,
 
-        'disetujui_oleh'
+            'disetujui_oleh'
 
-    );
+        );
 
-}
+    }
+
+
+
 
 
 
@@ -218,6 +255,39 @@ public function persetujuanDana()
         );
 
     }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Anggota Project
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function projects()
+    {
+
+        return $this->belongsToMany(
+
+            Proyek::class,
+
+            'project_user',
+
+            'user_id',
+
+            'proyek_id'
+
+        );
+
+    }
+
 
 
 }

@@ -55,14 +55,6 @@ Kelola pengajuan dana karyawan dan lakukan proses persetujuan keuangan perusahaa
 
 
 
-@if(session('success'))
-
-<div class="success-box">
-{{session('success')}}
-</div>
-
-@endif
-
 
 
 

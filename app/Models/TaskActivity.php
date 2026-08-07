@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Tugas;
+use App\Models\Employee;
+
+
+
 class TaskActivity extends Model
 {
 
@@ -34,12 +39,21 @@ class TaskActivity extends Model
 
 
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Tugas
+    |--------------------------------------------------------------------------
+    */
+
+
     public function tugas()
     {
 
         return $this->belongsTo(
 
-            Task::class,
+            Tugas::class,
 
             'tugas_id'
 
@@ -49,6 +63,15 @@ class TaskActivity extends Model
 
 
 
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Karyawan
+    |--------------------------------------------------------------------------
+    */
 
 
     public function karyawan()
@@ -63,6 +86,7 @@ class TaskActivity extends Model
         );
 
     }
+
 
 
 }

@@ -29,8 +29,7 @@ Pemantauan kondisi proyek, keuangan, dan aktivitas perusahaan secara menyeluruh.
 
 
 
-
-{{-- RINGKASAN UTAMA --}}
+{{-- ================= RINGKASAN UTAMA ================= --}}
 
 
 <div class="summary-grid">
@@ -54,8 +53,6 @@ Jumlah proyek perusahaan
 
 
 </div>
-
-
 
 
 
@@ -89,8 +86,6 @@ Nilai keseluruhan proyek
 
 
 
-
-
 <div class="summary-card">
 
 <span>
@@ -109,7 +104,7 @@ $totalDeposit ?? 0,
 
 
 <p>
-Pembayaran dari pelanggan
+Pembayaran pelanggan
 </p>
 
 
@@ -119,12 +114,10 @@ Pembayaran dari pelanggan
 
 
 
-
-
 <div class="summary-card">
 
 <span>
-Total Pengeluaran
+Pengeluaran
 </span>
 
 
@@ -139,7 +132,7 @@ $totalExpense ?? 0,
 
 
 <p>
-Dana yang telah digunakan
+Dana digunakan
 </p>
 
 
@@ -156,8 +149,7 @@ Dana yang telah digunakan
 
 
 
-
-{{-- RINGKASAN TAMBAHAN --}}
+{{-- ================= MONITORING OPERASIONAL ================= --}}
 
 
 <div class="summary-grid">
@@ -184,7 +176,7 @@ $sisaDana ?? 0,
 
 
 <p>
-Dana yang tersedia
+Dana tersedia
 </p>
 
 
@@ -195,24 +187,25 @@ Dana yang tersedia
 
 
 
-
-
 <div class="summary-card">
 
 <span>
-Persentase Penyelesaian Proyek
+Progress Proyek
 </span>
 
 
 <h2>
 
-{{$progressProject ?? 0}}%
+{{number_format(
+$progressProject ?? 0,
+0
+)}}%
 
 </h2>
 
 
 <p>
-Rata-rata progres proyek
+Rata-rata penyelesaian
 </p>
 
 
@@ -224,11 +217,37 @@ Rata-rata progres proyek
 
 
 
+<div class="summary-card">
+
+<span>
+Total Task
+</span>
+
+
+<h2>
+
+{{$totalTask ?? 0}}
+
+</h2>
+
+
+<p>
+Seluruh pekerjaan
+</p>
+
+
+</div>
+
+
+
+
+
+
 
 <div class="summary-card">
 
 <span>
-Persetujuan Tertunda
+Approval Pending
 </span>
 
 
@@ -240,35 +259,7 @@ Persetujuan Tertunda
 
 
 <p>
-Menunggu keputusan pemilik
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="summary-card">
-
-<span>
-Aktivitas Sistem
-</span>
-
-
-<h2>
-
-{{$totalActivity ?? 0}}
-
-</h2>
-
-
-<p>
-Riwayat aktivitas terbaru
+Menunggu persetujuan
 </p>
 
 
@@ -286,8 +277,7 @@ Riwayat aktivitas terbaru
 
 
 
-{{-- KONDISI KEUANGAN --}}
-
+{{-- ================= KEUANGAN ================= --}}
 
 
 <div class="content-grid">
@@ -300,6 +290,7 @@ Riwayat aktivitas terbaru
 <h3>
 📊 Ringkasan Keuangan
 </h3>
+
 
 
 
@@ -357,7 +348,7 @@ $totalExpense ?? 0,
 <div class="finance-row">
 
 <span>
-Saldo Tersedia
+Saldo
 </span>
 
 
@@ -401,29 +392,12 @@ $sisaDana ?? 0,
 <div class="health-item">
 
 <span>
-Arus Keuangan
+Jumlah Project
 </span>
 
 
 <b>
-Stabil
-</b>
-
-</div>
-
-
-
-
-
-<div class="health-item">
-
-<span>
-Jumlah Proyek Aktif
-</span>
-
-
-<b>
-{{$totalProject ?? 0}} Proyek
+{{$totalProject ?? 0}} Project
 </b>
 
 </div>
@@ -436,18 +410,38 @@ Jumlah Proyek Aktif
 <div class="health-item">
 
 <span>
-Persetujuan Dana
+Task Berjalan
 </span>
 
 
 <b>
-{{$pendingApproval ?? 0}} Menunggu
+{{$taskBerjalan ?? 0}} Task
 </b>
 
 </div>
 
 
 
+
+
+
+<div class="health-item">
+
+<span>
+Task Selesai
+</span>
+
+
+<b>
+{{$taskSelesai ?? 0}} Task
+</b>
+
+</div>
+
+
+
+
+
 </div>
 
 
@@ -462,7 +456,7 @@ Persetujuan Dana
 
 
 
-{{-- PEMANTAUAN PROYEK --}}
+{{-- ================= PROJECT MONITORING ================= --}}
 
 
 
@@ -475,6 +469,8 @@ Persetujuan Dana
 
 
 
+
+
 <table>
 
 
@@ -484,12 +480,12 @@ Persetujuan Dana
 
 
 <th>
-Nama Proyek
+Nama Project
 </th>
 
 
 <th>
-Progres
+Progress
 </th>
 
 
@@ -530,6 +526,7 @@ Status
 
 </strong>
 
+
 </td>
 
 
@@ -562,31 +559,35 @@ $project->total_anggaran ?? 0,
 
 
 
+
 <td>
 
 
-@if(($project->progres_keseluruhan ?? 0) >= 100)
+@if(($project->progres_keseluruhan ?? 0)>=100)
 
 
 <span class="status selesai">
-
 Selesai
+</span>
 
+
+@elseif(($project->progres_keseluruhan ?? 0)>0)
+
+
+<span class="status berjalan">
+Berjalan
 </span>
 
 
 @else
 
 
-<span class="status berjalan">
-
-Berjalan
-
+<span class="status pending">
+Belum Mulai
 </span>
 
 
 @endif
-
 
 
 </td>
@@ -603,9 +604,9 @@ Berjalan
 
 <tr>
 
-<td colspan="4" align="center">
+<td colspan="4">
 
-Belum terdapat data proyek
+Belum ada project
 
 </td>
 
@@ -633,7 +634,7 @@ Belum terdapat data proyek
 
 
 
-{{-- AKTIVITAS TERBARU --}}
+{{-- ================= TASK TERBARU ================= --}}
 
 
 
@@ -641,8 +642,9 @@ Belum terdapat data proyek
 
 
 <h3>
-📝 Aktivitas Terbaru
+📝 Aktivitas Pekerjaan Terbaru
 </h3>
+
 
 
 
@@ -656,13 +658,24 @@ Belum terdapat data proyek
 <tr>
 
 <th>
-Aktivitas
+Task
+</th>
+
+
+<th>
+Project
+</th>
+
+
+<th>
+PIC
 </th>
 
 
 <th>
 Tanggal
 </th>
+
 
 </tr>
 
@@ -671,11 +684,13 @@ Tanggal
 
 
 
+
+
 <tbody>
 
 
 
-@forelse($activities ?? [] as $activity)
+@forelse($recentTasks ?? [] as $task)
 
 
 
@@ -684,24 +699,50 @@ Tanggal
 
 <td>
 
-{{$activity->description ?? '-'}}
+<strong>
+
+{{$task->nama_tugas}}
+
+</strong>
+
 
 </td>
+
 
 
 
 
 <td>
 
-{{$activity->created_at
-? $activity->created_at->format('d M Y')
+{{$task->proyek->nama_proyek ?? '-'}}
+
+</td>
+
+
+
+
+
+<td>
+
+{{$task->karyawan->nama_karyawan ?? '-'}}
+
+</td>
+
+
+
+
+
+<td>
+
+{{$task->created_at
+? $task->created_at->format('d M Y')
 : '-'}}
 
 </td>
 
 
-</tr>
 
+</tr>
 
 
 
@@ -710,7 +751,7 @@ Tanggal
 
 <tr>
 
-<td colspan="2">
+<td colspan="4">
 
 Belum ada aktivitas
 
@@ -740,11 +781,12 @@ Belum ada aktivitas
 
 
 
+
+
 <style>
 
 
 .dashboard-header{
-
 
 background:white;
 
@@ -756,9 +798,7 @@ border:1px solid #e2e8f0;
 
 margin-bottom:25px;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
-
+box-shadow:0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -800,27 +840,23 @@ color:#64748b;
 
 
 
-
 .summary-grid{
-
 
 display:grid;
 
-grid-template-columns:
-repeat(4,1fr);
+grid-template-columns:repeat(4,1fr);
 
 gap:20px;
 
 margin-bottom:20px;
-
 
 }
 
 
 
 
-.summary-card{
 
+.summary-card{
 
 background:white;
 
@@ -830,9 +866,7 @@ border-radius:18px;
 
 border:1px solid #e2e8f0;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
-
+box-shadow:0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -870,6 +904,22 @@ color:#94a3b8;
 
 
 
+.green{
+
+color:#15803d!important;
+
+}
+
+
+
+.red{
+
+color:#dc2626!important;
+
+}
+
+
+
 
 
 .content-grid{
@@ -902,7 +952,6 @@ margin-bottom:20px;
 
 
 
-
 .finance-row,
 .health-item{
 
@@ -913,22 +962,6 @@ justify-content:space-between;
 padding:15px 0;
 
 border-bottom:1px solid #f1f5f9;
-
-}
-
-
-
-.green{
-
-color:#15803d!important;
-
-}
-
-
-
-.red{
-
-color:#dc2626!important;
 
 }
 
@@ -965,6 +998,8 @@ td{
 padding:14px;
 
 border-bottom:1px solid #f1f5f9;
+
+font-size:14px;
 
 }
 
@@ -1006,6 +1041,18 @@ color:#1d4ed8;
 
 
 
+.pending{
+
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+
+
+
+
 @media(max-width:1000px){
 
 
@@ -1027,7 +1074,6 @@ grid-template-columns:1fr;
 
 
 </style>
-
 
 
 @endsection

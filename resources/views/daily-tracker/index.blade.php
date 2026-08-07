@@ -303,7 +303,19 @@ style="width:{{$task->progres_persen}}%">
 </div>
 
 
+<div style="margin-top:20px;">
 
+<a href="{{route(
+'daily-tracker.show',
+$task->id
+)}}"
+class="btn-update">
+
++ Update Aktivitas
+
+</a>
+
+</div>
 
 
 
@@ -847,7 +859,32 @@ height:100%;
 background:#16a34a;
 
 }
+.btn-update{
 
+display:inline-block;
+
+background:#1e293b;
+
+color:white;
+
+padding:10px 18px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+
+.btn-update:hover{
+
+background:#334155;
+
+}
 
 
 

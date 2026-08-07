@@ -206,7 +206,19 @@ Tanggal Mulai
 
 
 <td>
-{{$project->tanggal_mulai ?? '-'}}
+
+@if($project->tanggal_mulai)
+
+{{\Carbon\Carbon::parse(
+$project->tanggal_mulai
+)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
 </td>
 
 
@@ -223,7 +235,19 @@ Tanggal Selesai
 
 
 <td>
-{{$project->tanggal_selesai ?? '-'}}
+
+@if($project->tanggal_selesai)
+
+{{\Carbon\Carbon::parse(
+$project->tanggal_selesai
+)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
 </td>
 
 
@@ -250,11 +274,19 @@ Selesai
 </span>
 
 
-@else
+@elseif(($project->progres_keseluruhan ?? 0) > 0)
 
 
 <span class="status berjalan">
 Berjalan
+</span>
+
+
+@else
+
+
+<span class="status todo">
+Belum Mulai
 </span>
 
 
@@ -307,12 +339,27 @@ Nama Tugas
 
 
 <th>
+PIC
+</th>
+
+
+<th>
+Divisi
+</th>
+
+
+<th>
 Status
 </th>
 
 
 <th>
 Progress
+</th>
+
+
+<th>
+Update Terakhir
 </th>
 
 
@@ -340,24 +387,104 @@ Progress
 <td>
 
 <strong>
+
 {{$task->nama_tugas ?? '-'}}
+
 </strong>
 
+
+<br>
+
+
+<small>
+
+{{$task->aktivitas ?? '-'}}
+
+</small>
+
+
 </td>
+
+
+
 
 
 
 
 <td>
 
-{{$task->status ?? '-'}}
+{{$task->karyawan->nama_karyawan ?? '-'}}
 
 </td>
 
 
 
 
+
+
+
 <td>
+
+{{$task->divisi->nama_divisi ?? '-'}}
+
+</td>
+
+
+
+
+
+
+
+<td>
+
+
+@if($task->status=='selesai')
+
+
+<span class="status selesai">
+
+Selesai
+
+</span>
+
+
+
+@elseif($task->status=='sedang_dikerjakan')
+
+
+<span class="status berjalan">
+
+Berjalan
+
+</span>
+
+
+
+@else
+
+
+<span class="status todo">
+
+Belum Mulai
+
+</span>
+
+
+
+@endif
+
+
+</td>
+
+
+
+
+
+
+
+
+<td>
+
 
 
 <div class="progress">
@@ -373,10 +500,64 @@ style="width:{{$task->progres_persen ?? 0}}%">
 </div>
 
 
+
 {{$task->progres_persen ?? 0}}%
 
 
+
 </td>
+
+
+
+
+
+
+
+
+<td>
+
+
+
+@if($task->aktivitasTugas->count())
+
+
+
+<strong>
+
+{{\Carbon\Carbon::parse(
+$task->aktivitasTugas->last()->tanggal
+)->format('d M Y')}}
+
+</strong>
+
+
+
+<br>
+
+
+
+<small>
+
+{{$task->aktivitasTugas->last()->aktivitas}}
+
+</small>
+
+
+
+@else
+
+
+Belum ada update
+
+
+
+@endif
+
+
+
+</td>
+
+
 
 
 
@@ -391,7 +572,7 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 <tr>
 
-<td colspan="3" align="center">
+<td colspan="6" align="center">
 
 Belum terdapat pekerjaan
 
@@ -625,6 +806,8 @@ border-bottom:1px solid #eee;
 
 text-align:left;
 
+font-size:13px;
+
 }
 
 
@@ -701,6 +884,29 @@ color:#1d4ed8;
 
 
 
+.todo{
+
+background:#f1f5f9;
+
+color:#475569;
+
+}
+
+
+
+
+
+
+small{
+
+color:#64748b;
+
+font-size:12px;
+
+}
+
+
+
 
 
 
@@ -714,10 +920,26 @@ grid-template-columns:repeat(2,1fr);
 }
 
 
+table{
+
+min-width:900px;
+
+}
+
+
+
+.panel{
+
+overflow-x:auto;
+
+}
+
+
 }
 
 
 </style>
+
 
 
 @endsection

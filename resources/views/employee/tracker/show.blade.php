@@ -39,7 +39,7 @@ UPDATE PROGRESS
 </div>
 
 
-<a href="{{route('employee.project.index')}}" class="back">
+<a href="{{route('daily-tracker.index')}}" class="back">
 ← Kembali
 </a>
 
@@ -155,7 +155,7 @@ Progress (%)
 <input 
 type="number"
 name="progres"
-min="0"
+min="{{$task->progres_persen ?? 0}}"
 max="100"
 value="{{$task->progres_persen ?? 0}}"
 required
@@ -164,7 +164,16 @@ required
 
 
 
+<label>
+Anggaran Aktivitas
+</label>
 
+
+<input 
+type="number"
+name="anggaran_aktivitas"
+min="0"
+placeholder="Masukkan penggunaan anggaran">
 
 <label>
 Catatan
@@ -188,7 +197,53 @@ Simpan Update
 
 </form>
 
+<hr>
 
+
+<div class="history">
+
+<h3>
+Riwayat Aktivitas
+</h3>
+
+
+@forelse($task->aktivitasTugas as $item)
+
+
+<div class="history-item">
+
+<strong>
+{{$item->aktivitas}}
+</strong>
+
+
+<p>
+Progress : {{$item->progres}}%
+</p>
+
+
+<small>
+
+{{\Carbon\Carbon::parse($item->tanggal)->format('d M Y')}}
+
+</small>
+
+
+</div>
+
+
+@empty
+
+
+<p>
+Belum ada aktivitas.
+</p>
+
+
+@endforelse
+
+
+</div>
 
 </div>
 
@@ -681,7 +736,64 @@ RESPONSIVE
 
 
 }
+.history{
 
+margin-top:25px;
+
+}
+
+
+.history h3{
+
+color:#172033;
+
+margin-bottom:15px;
+
+}
+
+
+
+.history-item{
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-bottom:10px;
+
+}
+
+
+
+.history-item strong{
+
+color:#172033;
+
+}
+
+
+
+.history-item p{
+
+font-size:13px;
+
+color:#475569;
+
+margin-top:5px;
+
+}
+
+
+
+.history-item small{
+
+color:#94a3b8;
+
+}
 
 
 @media(max-width:600px){

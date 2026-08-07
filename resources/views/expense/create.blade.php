@@ -33,17 +33,6 @@
 
 
 
-@if(session('success'))
-
-<div class="success-box">
-
-    {{ session('success') }}
-
-</div>
-
-@endif
-
-
 
 
 

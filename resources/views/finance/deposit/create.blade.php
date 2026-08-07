@@ -35,15 +35,6 @@ Input pembayaran project dan sistem akan memperbarui saldo bank serta distribusi
 
 
 
-@if(session('success'))
-
-<div class="success-box">
-{{session('success')}}
-</div>
-
-@endif
-
-
 
 
 @if($errors->any())

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 
 class Proyek extends Model
@@ -246,5 +247,26 @@ class Proyek extends Model
     }
 
 
+/*
+|--------------------------------------------------------------------------
+| Relasi Anggota Project
+|--------------------------------------------------------------------------
+*/
 
+public function users()
+{
+
+    return $this->belongsToMany(
+
+        User::class,
+
+        'project_user',
+
+        'proyek_id',
+
+        'user_id'
+
+    );
+
+}
 }

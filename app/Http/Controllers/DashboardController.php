@@ -435,15 +435,12 @@ $recentAudit = LogAudit::with(
 ->take(5)
 
 ->get();
-        /*
+     /*
 |--------------------------------------------------------------------------
 | DASHBOARD KARYAWAN
 |--------------------------------------------------------------------------
 */
 
-
-// DEFAULT DATA KARYAWAN
-// Supaya tidak undefined variable ketika login bukan karyawan
 
 $totalExpenseRequest = 0;
 
@@ -454,18 +451,15 @@ $approvedExpenseRequest = 0;
 $recentExpenseRequest = collect();
 
 
-
 $employeeTasks = collect();
 
+$employeeProjects = collect();
 
 $deadlineTasks = collect();
 
-
 $projectProgress = collect();
 
-
 $recentActivities = collect();
-
 
 
 $taskChart = [
@@ -481,267 +475,347 @@ $taskChart = [
 
 
 
+if($user->role == 'karyawan')
+{
 
 
-        if($user->role == 'karyawan')
-        {
+    /*
+    |--------------------------------------------------------------------------
+    | PROJECT YANG DIMILIKI KARYAWAN
+    |--------------------------------------------------------------------------
+    */
 
 
-            $employee = $user->karyawan;
+    $employeeProjects = $user
 
+        ->projects()
 
+        ->with([
 
-            if($employee)
-            {
+            'tugas.aktivitasTugas'
 
+        ])
 
-                $employeeTasks = Tugas::where(
+        ->latest()
 
-                    'karyawan_id',
+        ->get();
 
-                    $employee->id
 
-                )
 
-                ->with([
 
-                    'proyek',
 
-                    'aktivitasTugas'
 
-                ])
+    /*
+    |--------------------------------------------------------------------------
+    | TASK BERDASARKAN PROJECT
+    |--------------------------------------------------------------------------
+    */
 
-                ->latest()
 
-                ->get();
+    $employeeTasks = Tugas::whereIn(
 
+        'proyek_id',
 
+        $employeeProjects->pluck('id')
 
+    )
 
+    ->with([
 
+        'proyek',
 
+        'aktivitasTugas'
 
-                $taskChart = [
+    ])
 
+    ->latest()
 
-                    'done'=>$employeeTasks
+    ->get();
 
-                    ->whereIn(
 
-                        'status',
 
-                        [
 
-                            'selesai',
 
-                            'done'
 
-                        ]
 
-                    )
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS TASK
+    |--------------------------------------------------------------------------
+    */
 
-                    ->count(),
 
+    $taskChart = [
 
 
+        'done'=>$employeeTasks
 
+        ->whereIn(
 
-                    'progress'=>$employeeTasks
+            'status',
 
-                    ->whereIn(
+            [
 
-                        'status',
+                'selesai',
 
-                        [
+                'done'
 
-                            'berjalan',
+            ]
 
-                            'progress'
+        )
 
-                        ]
+        ->count(),
 
-                    )
 
-                    ->count(),
 
 
+        'progress'=>$employeeTasks
 
+        ->whereIn(
 
+            'status',
 
-                    'todo'=>$employeeTasks
+            [
 
-                    ->whereIn(
+                'berjalan',
 
-                        'status',
+                'progress',
 
-                        [
+                'sedang_dikerjakan'
 
-                            'belum_dikerjakan',
+            ]
 
-                            'todo'
+        )
 
-                        ]
+        ->count(),
 
-                    )
 
-                    ->count(),
 
 
-                ];
+        'todo'=>$employeeTasks
 
+        ->whereIn(
 
+            'status',
 
+            [
 
+                'belum_dikerjakan',
 
+                'todo'
 
+            ]
 
-                $deadlineTasks = $employeeTasks
+        )
 
-                ->whereNotNull(
+        ->count(),
 
-                    'deadline'
 
-                )
+    ];
 
-                ->sortBy(
 
-                    'deadline'
 
-                )
 
-                ->take(5);
 
 
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | DEADLINE TASK
+    |--------------------------------------------------------------------------
+    */
 
 
-                $projectProgress = $employeeTasks
+    $deadlineTasks = $employeeTasks
 
-                ->groupBy(function($task){
+        ->whereNotNull('deadline')
 
+        ->sortBy('deadline')
 
-                    return $task->proyek->nama_proyek
+        ->take(5);
 
-                    ??
 
-                    'Tanpa Proyek';
 
 
-                })
 
-                ->map(function($tasks){
 
 
-                    return round(
 
-                        $tasks->avg(
 
-                            'progres_persen'
+    /*
+    |--------------------------------------------------------------------------
+    | PROGRESS PROJECT
+    |--------------------------------------------------------------------------
+    */
 
-                        )
 
-                    );
+    $projectProgress = $employeeProjects
 
+        ->mapWithKeys(function($project){
 
-                });
 
+            return [
 
+                $project->nama_proyek =>
 
+                $project->progres_keseluruhan
 
+            ];
 
 
+        });
 
 
-                $recentActivities = $employeeTasks
 
-                ->flatMap(function($task){
 
 
-                    return $task->aktivitasTugas
 
-                    ->map(function($activity) use($task){
 
 
-                        return [
 
-                            'task'=>$task->nama_tugas,
+    /*
+    |--------------------------------------------------------------------------
+    | AKTIVITAS TERBARU
+    |--------------------------------------------------------------------------
+    */
 
-                            'aktivitas'=>$activity->aktivitas,
 
-                            'progress'=>$activity->progres,
+    $recentActivities = $employeeTasks
 
-                            'tanggal'=>$activity->created_at
+    ->flatMap(function($task){
 
-                        ];
 
+        return $task->aktivitasTugas
 
-                    });
+        ->map(function($activity) use($task){
 
 
-                })
+            return [
 
-                ->sortByDesc(
+                'task'=>$task->nama_tugas,
 
-                    'tanggal'
+                'aktivitas'=>$activity->aktivitas,
 
-                )
+                'progress'=>$activity->progres,
 
-                ->take(5);
+                'tanggal'=>$activity->created_at
 
+            ];
 
-                $totalExpenseRequest = PengajuanDana::where(
-                    'pengguna_id',
-                    $user->id
-                )->count();
 
+        });
 
-                $pendingExpenseRequest = PengajuanDana::where(
-                    'pengguna_id',
-                    $user->id
-                )
-                ->where(
-                    'status',
-                    'pending'
-                )
-                ->count();
 
+    })
 
+    ->sortByDesc('tanggal')
 
-                $approvedExpenseRequest = PengajuanDana::where(
-                    'pengguna_id',
-                    $user->id
-                )
-                ->where(
-                    'status',
-                    'approved'
-                )
-                ->count();
+    ->take(5);
 
 
 
-                $recentExpenseRequest = PengajuanDana::with([
-                    'proyek'
-                ])
-                ->where(
-                    'pengguna_id',
-                    $user->id
-                )
-                ->latest()
-                ->take(5)
-                ->get();
 
-            }
 
 
-        }
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | PENGAJUAN DANA KARYAWAN
+    |--------------------------------------------------------------------------
+    */
 
 
+    $totalExpenseRequest = PengajuanDana::where(
 
+        'pengguna_id',
+
+        $user->id
+
+    )
+
+    ->count();
+
+
+
+
+
+
+    $pendingExpenseRequest = PengajuanDana::where(
+
+        'pengguna_id',
+
+        $user->id
+
+    )
+
+    ->where(
+
+        'status',
+
+        'pending'
+
+    )
+
+    ->count();
+
+
+
+
+
+
+
+    $approvedExpenseRequest = PengajuanDana::where(
+
+        'pengguna_id',
+
+        $user->id
+
+    )
+
+    ->where(
+
+        'status',
+
+        'approved'
+
+    )
+
+    ->count();
+
+
+
+
+
+
+
+
+    $recentExpenseRequest = PengajuanDana::with([
+
+        'proyek'
+
+    ])
+
+    ->where(
+
+        'pengguna_id',
+
+        $user->id
+
+    )
+
+    ->latest()
+
+    ->take(5)
+
+    ->get();
+
+
+
+}
 
 
 
@@ -756,6 +830,9 @@ $taskChart = [
         $data = [
 
 
+            'employeeProjects'=>$employeeProjects,
+
+
             'employeeTasks'=>$employeeTasks,
 
 
@@ -766,6 +843,7 @@ $taskChart = [
 
 
             'recentActivities'=>$recentActivities,
+
 
 
             'taskChart'=>$taskChart,
@@ -998,6 +1076,5 @@ $taskChart = [
 
 
     }
-
 
 }

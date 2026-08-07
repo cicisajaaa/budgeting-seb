@@ -47,16 +47,6 @@ Monitoring pembayaran project yang masuk dan transaksi keuangan perusahaan.
 
 
 
-@if(session('success'))
-
-<div class="success-box">
-
-{{session('success')}}
-
-</div>
-
-@endif
-
 
 
 

@@ -183,22 +183,6 @@ Progress 100%
 
 
 
-@if(session('success'))
-
-
-<div class="success-alert">
-
-✓
-
-{{session('success')}}
-
-</div>
-
-
-@endif
-
-
-
 
 
 
@@ -570,9 +554,31 @@ title="Dana">
 
 
 
+<a href="{{route(
+'admin.members.index',
+$project->id
+)}}"
 
+class="allocation"
 
+title="Anggota">
 
+👥
+
+</a>
+
+<a href="{{route(
+'admin.tasks.create',
+$project->id
+)}}"
+
+class="task"
+
+title="Tambah Tugas">
+
+📝
+
+</a>
 
 <form method="POST"
 
@@ -1445,6 +1451,7 @@ ACTION
 
 .edit,
 .allocation,
+.task,
 .delete{
 
 
@@ -1535,7 +1542,40 @@ ACTION
 
 }
 
+.task{
 
+    width:38px;
+
+    height:36px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+}
+
+
+.task:hover{
+
+    background:#16a34a;
+
+    color:white;
+
+}
 
 .delete:hover{
 

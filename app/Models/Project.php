@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Task;
-use App\Models\TaskActivity;
+
+use App\Models\Tugas;
+use App\Models\AktivitasTugas;
 use App\Models\ProjectDeposit;
 use App\Models\ProjectDivisionAllocation;
 use App\Models\DivisionBalance;
+use App\Models\User;
+
+
 
 class Project extends Model
 {
@@ -32,7 +37,6 @@ class Project extends Model
 
         'progres_keseluruhan',
 
-
     ];
 
 
@@ -43,7 +47,7 @@ class Project extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Tugas
+    | Relasi Tugas Project
     |--------------------------------------------------------------------------
     */
 
@@ -53,7 +57,7 @@ class Project extends Model
 
         return $this->hasMany(
 
-            Task::class,
+            Tugas::class,
 
             'proyek_id'
 
@@ -79,9 +83,9 @@ class Project extends Model
 
         return $this->hasManyThrough(
 
-            TaskActivity::class,
+            AktivitasTugas::class,
 
-            Task::class,
+            Tugas::class,
 
             'proyek_id',
 
@@ -131,7 +135,7 @@ class Project extends Model
 
         return $this->total_anggaran -
 
-               $this->total_anggaran_aktivitas;
+        $this->total_anggaran_aktivitas;
 
     }
 
@@ -221,7 +225,7 @@ class Project extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Hitung Progres Otomatis
+    | Hitung Progress Otomatis
     |--------------------------------------------------------------------------
     */
 
@@ -255,6 +259,36 @@ class Project extends Model
 
         );
 
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Anggota Project
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function users()
+    {
+
+        return $this->belongsToMany(
+
+            User::class,
+
+            'project_user',
+
+            'proyek_id',
+
+            'user_id'
+
+        );
 
     }
 

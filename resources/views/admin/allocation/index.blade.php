@@ -175,19 +175,6 @@ Saat ini:
 
 
 
-@if(session('success'))
-
-
-<div class="success-alert">
-
-✓ {{session('success')}}
-
-</div>
-
-
-@endif
-
-
 
 
 

@@ -21,7 +21,6 @@ class EmployeeProjectController extends Controller
 
 
 
-
         if(!$karyawan)
         {
 
@@ -32,41 +31,28 @@ class EmployeeProjectController extends Controller
 
 
 
-
-
         $proyek = Proyek::whereHas(
-
 
             'tugas',
 
-
             function ($query) use ($karyawan) {
 
-
                 $query->where(
-
                     'karyawan_id',
-
                     $karyawan->id
-
                 );
 
-
             }
-
 
         )
 
         ->with([
 
 
-
             'tugas' => function ($query) use ($karyawan) {
 
 
-                $query
-
-                ->where(
+                $query->where(
 
                     'karyawan_id',
 
@@ -76,13 +62,16 @@ class EmployeeProjectController extends Controller
 
                 ->with([
 
-                    'aktivitasTugas'
+                    'aktivitasTugas',
+
+                    'divisi',
+
+                    'karyawan'
 
                 ]);
 
 
             }
-
 
 
         ])
@@ -94,25 +83,17 @@ class EmployeeProjectController extends Controller
 
 
 
-
-
-
-
         return view(
 
             'employee.projects.index',
 
             compact(
-
                 'proyek'
-
             )
 
         );
 
 
     }
-
-
 
 }

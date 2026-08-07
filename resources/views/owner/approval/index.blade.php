@@ -51,7 +51,7 @@ Menunggu Verifikasi
 
 
 <h2>
-{{ $requests->where('status','pending')->count() }}
+{{ $pendingRequests->count() }}
 </h2>
 
 

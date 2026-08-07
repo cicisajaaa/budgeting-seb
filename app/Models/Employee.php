@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Division;
+use App\Models\User;
+use App\Models\Tugas;
+
+
 
 class Employee extends Model
 {
@@ -27,6 +32,15 @@ class Employee extends Model
 
 
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Divisi
+    |--------------------------------------------------------------------------
+    */
+
+
     public function divisi()
     {
 
@@ -42,6 +56,15 @@ class Employee extends Model
 
 
 
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi User
+    |--------------------------------------------------------------------------
+    */
 
 
     public function pengguna()
@@ -61,18 +84,28 @@ class Employee extends Model
 
 
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Tugas Karyawan
+    |--------------------------------------------------------------------------
+    */
+
+
     public function tugas()
     {
 
         return $this->hasMany(
 
-            Task::class,
+            Tugas::class,
 
             'karyawan_id'
 
         );
 
     }
+
 
 
 }
