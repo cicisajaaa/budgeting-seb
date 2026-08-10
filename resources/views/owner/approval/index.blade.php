@@ -51,7 +51,7 @@ Menunggu Verifikasi
 
 
 <h2>
-{{ $pendingRequests->count() }}
+{{ $requests->count() }}
 </h2>
 
 

@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\Project;
+use App\Models\Proyek;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -11,8 +11,9 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
 
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -25,7 +26,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 
 
 
-class ProjectReportExport implements
+class FinanceProjectSheet implements
 
     FromCollection,
 
@@ -37,11 +38,19 @@ class ProjectReportExport implements
 
     WithDrawings,
 
-    WithCustomStartCell,
+    WithColumnWidths,
 
-    WithColumnWidths
+    WithTitle,
+
+    WithCustomStartCell
 
 {
+
+
+    public function title(): string
+    {
+        return 'Monitoring Project';
+    }
 
 
 
@@ -54,18 +63,10 @@ class ProjectReportExport implements
 
 
 
-
-
     public function collection()
     {
-
-        return Project::latest()
-            ->get();
-
+        return Proyek::latest()->get();
     }
-
-
-
 
 
 
@@ -78,21 +79,21 @@ class ProjectReportExport implements
 
             'Nama Project',
 
-            'Pemilik / Client',
+            'Pemilik Project',
 
-            'Total Anggaran',
+            'Tanggal Mulai',
 
-            'Progress (%)',
+            'Tanggal Selesai',
 
-            'Tanggal Selesai'
+            'Anggaran',
+
+            'Progress',
+
+            'Status'
 
         ];
 
     }
-
-
-
-
 
 
 
@@ -101,30 +102,58 @@ class ProjectReportExport implements
     public function map($project): array
     {
 
+        $progress = $project->progres_keseluruhan ?? 0;
+
+
         return [
 
             $project->nama_proyek ?? '-',
 
             $project->pemilik_proyek ?? '-',
 
-            $project->total_anggaran ?? 0,
 
-            $project->progres_keseluruhan ?? 0,
+            $project->tanggal_mulai
+            ? date(
+                'd M Y',
+                strtotime($project->tanggal_mulai)
+            )
+            : '-',
+
+
 
             $project->tanggal_selesai
             ? date(
                 'd M Y',
                 strtotime($project->tanggal_selesai)
             )
-            : '-'
+            : '-',
+
+
+
+            $project->total_anggaran ?? 0,
+
+
+            $progress,
+
+
+            $progress >= 100
+
+            ? 'Selesai'
+
+            : (
+
+                $progress > 0
+
+                ? 'Berjalan'
+
+                : 'Belum Dimulai'
+
+            )
+
 
         ];
 
     }
-
-
-
-
 
 
 
@@ -155,7 +184,7 @@ class ProjectReportExport implements
 
 
         $drawing->setHeight(
-            70
+            60
         );
 
 
@@ -183,10 +212,6 @@ class ProjectReportExport implements
 
 
 
-
-
-
-
     public function registerEvents(): array
     {
 
@@ -204,20 +229,18 @@ class ProjectReportExport implements
 
 
 
-
-
                 /*
-                HEADER PERUSAHAAN
+                HEADER
                 */
 
 
                 $sheet->mergeCells(
-                    'B1:E1'
+                    'B1:G1'
                 );
 
 
                 $sheet->mergeCells(
-                    'B2:E2'
+                    'B2:G2'
                 );
 
 
@@ -228,18 +251,15 @@ class ProjectReportExport implements
                 );
 
 
-
                 $sheet->setCellValue(
                     'B2',
-                    'LAPORAN PROJECT PERUSAHAAN'
+                    'LAPORAN MONITORING PROJECT'
                 );
 
 
 
-
-
                 $sheet->getStyle(
-                    'B1:E2'
+                    'B1:G2'
                 )
                 ->applyFromArray([
 
@@ -251,7 +271,9 @@ class ProjectReportExport implements
                         'size'=>16,
 
                         'color'=>[
+
                             'rgb'=>'000000'
+
                         ]
 
                     ],
@@ -266,9 +288,6 @@ class ProjectReportExport implements
                     ]
 
                 ]);
-
-
-
 
 
 
@@ -282,7 +301,7 @@ class ProjectReportExport implements
 
 
                 $sheet->getStyle(
-                    'A6:E6'
+                    'A6:G6'
                 )
                 ->applyFromArray([
 
@@ -292,7 +311,9 @@ class ProjectReportExport implements
                         'bold'=>true,
 
                         'color'=>[
+
                             'rgb'=>'FFFFFF'
+
                         ]
 
                     ],
@@ -303,7 +324,9 @@ class ProjectReportExport implements
                         'fillType'=>Fill::FILL_SOLID,
 
                         'startColor'=>[
+
                             'rgb'=>'000000'
+
                         ]
 
                     ],
@@ -317,10 +340,8 @@ class ProjectReportExport implements
 
                     ]
 
+
                 ]);
-
-
-
 
 
 
@@ -333,16 +354,13 @@ class ProjectReportExport implements
 
 
 
-
-
-
                 /*
-                BORDER DATA
+                BORDER
                 */
 
 
                 $sheet->getStyle(
-                    'A6:E'.$lastRow
+                    'A6:G'.$lastRow
                 )
                 ->applyFromArray([
 
@@ -355,7 +373,9 @@ class ProjectReportExport implements
                             'borderStyle'=>Border::BORDER_THIN,
 
                             'color'=>[
+
                                 'rgb'=>'D1D5DB'
+
                             ]
 
                         ]
@@ -370,15 +390,13 @@ class ProjectReportExport implements
 
 
 
-
-
                 /*
-                FORMAT RUPIAH
+                FORMAT
                 */
 
 
                 $sheet->getStyle(
-                    'C7:C'.$lastRow
+                    'E7:E'.$lastRow
                 )
                 ->getNumberFormat()
                 ->setFormatCode(
@@ -390,24 +408,22 @@ class ProjectReportExport implements
 
 
 
+                $sheet->getStyle(
+                    'A7:G'.$lastRow
+                )
+                ->getAlignment()
+                ->setVertical(
+                    Alignment::VERTICAL_CENTER
+                );
 
-
-
-
-
-                /*
-                CENTER
-                */
 
 
                 $sheet->getStyle(
-                    'C7:E'.$lastRow
+                    'C7:G'.$lastRow
                 )
                 ->getAlignment()
                 ->setHorizontal(
-
                     Alignment::HORIZONTAL_CENTER
-
                 );
 
 
@@ -416,40 +432,66 @@ class ProjectReportExport implements
 
 
 
-
-
                 /*
-                PROGRESS STYLE
+                PROGRESS
                 */
 
 
                 for(
-                    $i = 7;
+                    $i=7;
+                    $i <= $lastRow;
+                    $i++
+                ){
+
+                    $value = $sheet
+                        ->getCell('F'.$i)
+                        ->getValue();
+
+
+                    $sheet->setCellValue(
+
+                        'F'.$i,
+
+                        is_numeric($value)
+
+                        ? $value.'%'
+
+                        : '0%'
+
+                    );
+
+                }
+
+
+
+
+
+
+
+
+                /*
+                STATUS COLOR
+                */
+
+
+                for(
+                    $i=7;
                     $i <= $lastRow;
                     $i++
                 ){
 
 
-                    $progress = (int)$sheet
-                        ->getCell(
-                            'D'.$i
-                        )
+                    $status = $sheet
+                        ->getCell('G'.$i)
                         ->getValue();
 
 
 
-                    $sheet->setCellValue(
-                        'D'.$i,
-                        $progress.'%'
-                    );
-
-
-
-                    if($progress >= 100){
+                    if($status == 'Selesai'){
 
 
                         $sheet->getStyle(
-                            'D'.$i
+                            'G'.$i
                         )
                         ->applyFromArray([
 
@@ -459,7 +501,9 @@ class ProjectReportExport implements
                                 'fillType'=>Fill::FILL_SOLID,
 
                                 'startColor'=>[
+
                                     'rgb'=>'DBEAFE'
+
                                 ]
 
                             ],
@@ -470,10 +514,53 @@ class ProjectReportExport implements
                                 'bold'=>true,
 
                                 'color'=>[
+
                                     'rgb'=>'1D4ED8'
+
                                 ]
 
                             ]
+
+
+                        ]);
+
+
+
+                    }
+                    elseif($status == 'Berjalan'){
+
+
+                        $sheet->getStyle(
+                            'G'.$i
+                        )
+                        ->applyFromArray([
+
+
+                            'fill'=>[
+
+                                'fillType'=>Fill::FILL_SOLID,
+
+                                'startColor'=>[
+
+                                    'rgb'=>'DCFCE7'
+
+                                ]
+
+                            ],
+
+
+                            'font'=>[
+
+                                'bold'=>true,
+
+                                'color'=>[
+
+                                    'rgb'=>'15803D'
+
+                                ]
+
+                            ]
+
 
                         ]);
 
@@ -483,7 +570,7 @@ class ProjectReportExport implements
 
 
                         $sheet->getStyle(
-                            'D'.$i
+                            'G'.$i
                         )
                         ->applyFromArray([
 
@@ -493,7 +580,9 @@ class ProjectReportExport implements
                                 'fillType'=>Fill::FILL_SOLID,
 
                                 'startColor'=>[
-                                    'rgb'=>'DCFCE7'
+
+                                    'rgb'=>'FEF3C7'
+
                                 ]
 
                             ],
@@ -504,13 +593,15 @@ class ProjectReportExport implements
                                 'bold'=>true,
 
                                 'color'=>[
-                                    'rgb'=>'15803D'
+
+                                    'rgb'=>'92400E'
+
                                 ]
 
                             ]
 
-                        ]);
 
+                        ]);
 
                     }
 
@@ -522,43 +613,42 @@ class ProjectReportExport implements
 
 
 
-
-
-
                 /*
-                SUMMARY
+                TOTAL ANGGARAN
                 */
 
 
-                $row = $lastRow + 3;
+                $totalBudget = Proyek::sum(
+                    'total_anggaran'
+                );
+
+
+                $row = $lastRow + 2;
 
 
 
-                $sheet->mergeCells(
-                    'C'.$row.':E'.$row
+                $sheet->setCellValue(
+                    'D'.$row,
+                    'TOTAL ANGGARAN'
                 );
 
 
                 $sheet->setCellValue(
-                    'C'.$row,
-                    'RINGKASAN PROJECT'
+                    'E'.$row,
+                    $totalBudget
                 );
 
 
 
                 $sheet->getStyle(
-                    'C'.$row.':E'.$row
+                    'D'.$row.':E'.$row
                 )
                 ->applyFromArray([
 
 
                     'font'=>[
 
-                        'bold'=>true,
-
-                        'color'=>[
-                            'rgb'=>'FFFFFF'
-                        ]
+                        'bold'=>true
 
                     ],
 
@@ -568,69 +658,12 @@ class ProjectReportExport implements
                         'fillType'=>Fill::FILL_SOLID,
 
                         'startColor'=>[
-                            'rgb'=>'000000'
+
+                            'rgb'=>'FEF3C7'
+
                         ]
 
                     ],
-
-
-                    'alignment'=>[
-
-                        'horizontal'=>Alignment::HORIZONTAL_CENTER
-
-                    ]
-
-                ]);
-
-
-
-
-
-
-
-                $totalProject = Project::count();
-
-
-                $totalBudget = Project::sum(
-                    'total_anggaran'
-                );
-
-
-
-                $sheet->setCellValue(
-                    'C'.($row+1),
-                    'Total Project'
-                );
-
-
-                $sheet->setCellValue(
-                    'D'.($row+1),
-                    $totalProject.' Project'
-                );
-
-
-
-
-                $sheet->setCellValue(
-                    'C'.($row+2),
-                    'Total Anggaran'
-                );
-
-
-                $sheet->setCellValue(
-                    'D'.($row+2),
-                    $totalBudget
-                );
-
-
-
-
-
-
-                $sheet->getStyle(
-                    'C'.($row+1).':D'.($row+2)
-                )
-                ->applyFromArray([
 
 
                     'borders'=>[
@@ -640,17 +673,12 @@ class ProjectReportExport implements
                             'borderStyle'=>Border::BORDER_THIN,
 
                             'color'=>[
+
                                 'rgb'=>'D1D5DB'
+
                             ]
 
                         ]
-
-                    ],
-
-
-                    'font'=>[
-
-                        'bold'=>true
 
                     ]
 
@@ -658,9 +686,8 @@ class ProjectReportExport implements
 
 
 
-
                 $sheet->getStyle(
-                    'D'.($row+2)
+                    'E'.$row
                 )
                 ->getNumberFormat()
                 ->setFormatCode(
@@ -673,57 +700,49 @@ class ProjectReportExport implements
 
 
 
-
-
                 /*
-                COLUMN SIZE
+                COLUMN
                 */
 
 
                 $sheet->getColumnDimension('A')
-                    ->setWidth(32);
-
+                    ->setWidth(30);
 
 
                 $sheet->getColumnDimension('B')
                     ->setWidth(25);
 
 
-
                 $sheet->getColumnDimension('C')
-                    ->setWidth(22);
-
+                    ->setWidth(18);
 
 
                 $sheet->getColumnDimension('D')
                     ->setWidth(18);
 
 
-
                 $sheet->getColumnDimension('E')
                     ->setWidth(20);
 
 
+                $sheet->getColumnDimension('F')
+                    ->setWidth(15);
+
+
+                $sheet->getColumnDimension('G')
+                    ->setWidth(15);
 
 
 
 
-
-
-
-                /*
-                ROW SIZE
-                */
 
 
                 $sheet->getRowDimension(1)
                     ->setRowHeight(45);
 
 
-
                 $sheet->getRowDimension(2)
                     ->setRowHeight(30);
-
 
 
                 $sheet->getRowDimension(6)
@@ -734,17 +753,10 @@ class ProjectReportExport implements
 
 
 
-
-
-
-                /*
-                FILTER FREEZE
-                */
-
-
                 $sheet->setAutoFilter(
-                    'A6:E'.$lastRow
+                    'A6:G'.$lastRow
                 );
+
 
 
                 $sheet->freezePane(
@@ -763,24 +775,24 @@ class ProjectReportExport implements
 
 
 
-
-
-
-
     public function columnWidths(): array
     {
 
         return [
 
-            'A'=>32,
+            'A'=>30,
 
             'B'=>25,
 
-            'C'=>22,
+            'C'=>18,
 
             'D'=>18,
 
-            'E'=>20
+            'E'=>20,
+
+            'F'=>15,
+
+            'G'=>15
 
         ];
 

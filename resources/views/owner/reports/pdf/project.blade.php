@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
+<meta charset="utf-8">
+
+
 <title>
-Laporan Proyek
+Laporan Project
 </title>
 
 
@@ -11,9 +15,11 @@ Laporan Proyek
 
 body{
 
-font-family:Arial,sans-serif;
+font-family: DejaVu Sans, sans-serif;
+
 font-size:12px;
-color:#333;
+
+color:#1e293b;
 
 }
 
@@ -21,14 +27,41 @@ color:#333;
 .header{
 
 text-align:center;
-margin-bottom:30px;
+
+margin-bottom:25px;
 
 }
 
 
-.header h1{
+.logo{
 
-font-size:22px;
+width:80px;
+
+}
+
+
+
+.company{
+
+font-size:18px;
+
+font-weight:bold;
+
+color:#8B5E22;
+
+margin-top:10px;
+
+}
+
+
+
+.title{
+
+font-size:16px;
+
+font-weight:bold;
+
+margin-top:5px;
 
 }
 
@@ -36,16 +69,23 @@ font-size:22px;
 
 .info{
 
-margin-bottom:20px;
+color:#64748b;
+
+margin-top:8px;
 
 }
+
+
 
 
 
 table{
 
 width:100%;
+
 border-collapse:collapse;
+
+margin-top:25px;
 
 }
 
@@ -53,25 +93,11 @@ border-collapse:collapse;
 
 th{
 
-background:#6b4f1d;
+background:#8B5E22;
+
 color:white;
-padding:10px;
-text-align:left;
 
-}
-
-
-
-td{
-
-padding:10px;
-border-bottom:1px solid #ddd;
-
-}
-
-
-
-.center{
+padding:9px;
 
 text-align:center;
 
@@ -79,26 +105,53 @@ text-align:center;
 
 
 
-.right{
+td{
 
-text-align:right;
+padding:8px;
+
+border:1px solid #ddd;
 
 }
 
 
 
-.badge{
+td,th{
 
-padding:5px 10px;
-border-radius:10px;
 font-size:11px;
 
 }
 
+th:last-child,
+td:last-child{
+
+width:90px;
+
+}
+
+.status{
+
+display:inline-block;
+
+min-width:85px;
+
+text-align:center;
+
+padding:5px 10px;
+
+border-radius:15px;
+
+font-size:10px;
+
+font-weight:bold;
+
+white-space:nowrap;
+
+}
 
 .selesai{
 
 background:#dbeafe;
+
 color:#1d4ed8;
 
 }
@@ -108,33 +161,57 @@ color:#1d4ed8;
 .berjalan{
 
 background:#dcfce7;
+
 color:#166534;
 
 }
 
 
 
-.terlambat{
+.belum{
 
-background:#fee2e2;
-color:#991b1b;
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+.footer{
+
+margin-top:30px;
+
+text-align:right;
+
+font-size:11px;
+
+color:#64748b;
+
+}
+
+.progress-bg{
+
+width:100px;
+
+height:8px;
+
+background:#e5e7eb;
+
+border-radius:20px;
+
+margin-top:5px;
 
 }
 
 
-.summary{
+.progress-fill{
 
-margin-bottom:25px;
+height:8px;
 
-}
+background:#8B5E22;
 
-
-.summary td{
-
-border:1px solid #ddd;
+border-radius:20px;
 
 }
-
 
 </style>
 
@@ -150,90 +227,41 @@ border:1px solid #ddd;
 <div class="header">
 
 
-<h1>
-Laporan Monitoring Proyek
-</h1>
+<img 
+src="{{public_path('images/logo-cv.png')}}"
+class="logo"
+>
 
 
-<p>
-Sahabat Eksplorasi Banua
-</p>
+<div class="company">
 
+CV SAHABAT EKSPLORASI BANUA
 
 </div>
 
 
+
+<div class="title">
+
+LAPORAN MONITORING PROJECT
+
+</div>
 
 
 
 <div class="info">
 
-Tanggal Cetak :
+Tanggal :
 {{now()->format('d M Y')}}
+
+</div>
+
 
 </div>
 
 
 
 
-
-
-
-<table class="summary">
-
-
-<tr>
-
-<td>
-Total Proyek
-</td>
-
-
-<td class="center">
-
-{{count($projects)}}
-
-</td>
-
-
-</tr>
-
-
-<tr>
-
-<td>
-Total Anggaran
-</td>
-
-
-<td class="right">
-
-Rp {{number_format(
-$projects->sum('total_anggaran'),
-0,
-',',
-'.'
-)}}
-
-</td>
-
-
-</tr>
-
-
-</table>
-
-
-
-
-
-
-
-
-
-<h3>
-Daftar Proyek
-</h3>
 
 
 
@@ -244,15 +272,17 @@ Daftar Proyek
 
 <thead>
 
+
 <tr>
 
+
 <th>
-Nama Proyek
+Nama Project
 </th>
 
 
 <th>
-Pemilik / Client
+Pemilik
 </th>
 
 
@@ -266,10 +296,15 @@ Progress
 </th>
 
 
+
 <th>
-Tanggal Selesai
+Jumlah Tugas
 </th>
 
+
+<th>
+Deadline
+</th>
 
 <th>
 Status
@@ -278,26 +313,21 @@ Status
 
 </tr>
 
-</thead>
 
+</thead>
 
 
 <tbody>
 
-
 @forelse($projects as $project)
-
-
 
 <tr>
 
-
 <td>
 
-{{$project->nama_proyek}}
+{{$project->nama_proyek ?? '-'}}
 
 </td>
-
 
 
 <td>
@@ -307,10 +337,8 @@ Status
 </td>
 
 
-
-
-<td class="right">
-
+<td>
+    
 Rp {{number_format(
 $project->total_anggaran ?? 0,
 0,
@@ -321,55 +349,72 @@ $project->total_anggaran ?? 0,
 </td>
 
 
-
-
-<td class="center">
+<td align="center">
 
 {{$project->progres_keseluruhan ?? 0}}%
 
+<div class="progress-bg">
+
+<div class="progress-fill"
+
+style="
+width:{{$project->progres_keseluruhan ?? 0}}%
+">
+
+</div>
+
+</div>
+
+</td>
+
+
+
+<td align="center">
+
+{{$project->tugas->count()}}
+
 </td>
 
 
 
 
+<td align="center">
 
-<td>
+@if($project->tanggal_selesai)
 
-{{$project->tanggal_selesai ?? '-'}}
+{{\Carbon\Carbon::parse(
+$project->tanggal_selesai
+)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
 
 </td>
-
-
-
-
-
-<td class="center">
-
+<td align="center">
 
 @if(($project->progres_keseluruhan ?? 0)>=100)
 
-
-<span class="badge selesai">
+<span class="status selesai">
 Selesai
 </span>
 
 
-@elseif(
-$project->tanggal_selesai &&
-$project->tanggal_selesai < now()
-)
+@elseif(($project->progres_keseluruhan ?? 0)>0)
 
-
-<span class="badge terlambat">
-Terlambat
+<span class="status berjalan">
+Berjalan
 </span>
 
 
 @else
 
-
-<span class="badge berjalan">
-Berjalan
+<span class="status belum">
+Belum
+<br>
+Dimulai
 </span>
 
 
@@ -379,10 +424,7 @@ Berjalan
 </td>
 
 
-
-
 </tr>
-
 
 
 @empty
@@ -390,24 +432,41 @@ Berjalan
 
 <tr>
 
-<td colspan="6" class="center">
+<td colspan="7" align="center">
 
-Belum ada proyek
+Belum ada data project
 
 </td>
 
 </tr>
 
 
-
 @endforelse
-
 
 
 </tbody>
 
 
+
 </table>
+
+
+
+
+
+
+
+
+<div class="footer">
+
+
+Dicetak oleh sistem pada
+
+{{now()->format('d M Y H:i')}}
+
+
+</div>
+
 
 
 

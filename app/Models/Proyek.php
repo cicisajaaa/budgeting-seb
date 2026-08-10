@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
@@ -31,7 +32,15 @@ class Proyek extends Model
     ];
 
 
+    protected $casts = [
 
+        'total_anggaran'=>'decimal:2',
+
+        'tanggal_mulai'=>'date',
+
+        'tanggal_selesai'=>'date',
+
+    ];
 
 
     /*
@@ -267,6 +276,26 @@ public function users()
         'user_id'
 
     );
+
+}
+
+
+public function getStatusProjectAttribute()
+{
+
+    if($this->progres_keseluruhan >= 100)
+    {
+        return 'Selesai';
+    }
+
+
+    if($this->progres_keseluruhan > 0)
+    {
+        return 'Berjalan';
+    }
+
+
+    return 'Belum Dimulai';
 
 }
 }

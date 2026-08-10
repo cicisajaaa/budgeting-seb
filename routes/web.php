@@ -852,8 +852,22 @@ Route::get('/audit/history/{tanggal}',
 
     ->name('report.performance.excel');
 
+Route::get(
+    '/reports/pdf',
+    [OwnerReportController::class,'exportPdf']
+)
+->name('report.pdf');
 
 
+
+Route::get(
+'/owner/report/performance/pdf',
+[
+OwnerReportController::class,
+'performancePdf'
+]
+)
+->name('owner.report.performance.pdf');
 });
 
 require __DIR__.'/auth.php';

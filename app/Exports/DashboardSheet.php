@@ -3,74 +3,122 @@
 namespace App\Exports;
 
 
+use App\Models\Proyek;
 use App\Models\SetoranProyek;
 use App\Models\TransaksiDana;
-use App\Models\Proyek;
-use App\Models\RekeningBank;
 
 
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Maatwebsite\Excel\Events\AfterSheet;
+
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 
 
 class DashboardSheet implements
-FromCollection,
-WithTitle,
-WithStyles,
-WithColumnWidths
+
+    FromArray,
+
+    WithEvents,
+
+    WithDrawings,
+
+    WithTitle,
+
+    WithCustomStartCell
+
 {
 
 
-    public function collection()
+    public function title(): string
+    {
+        return 'Dashboard';
+    }
+
+
+
+
+
+    public function startCell(): string
+    {
+        return 'A6';
+    }
+
+
+
+
+
+
+
+
+    public function array(): array
     {
 
 
-        $income = SetoranProyek::sum(
-            'jumlah_setoran'
-        );
-
-
-        $expense = TransaksiDana::sum(
-            'jumlah'
-        );
-
-
-        $balance = $income - $expense;
+        $project = Proyek::all();
 
 
 
-        $bankBalance = RekeningBank::where(
-            'status',
-            true
-        )
-        ->sum('saldo');
+        $totalProject = $project->count();
 
 
 
-        $bankCount = RekeningBank::where(
-            'status',
-            true
-        )
-        ->count();
+
+        $aktif = $project
+            ->where(
+                'progres_keseluruhan',
+                '<',
+                100
+            )
+            ->count();
 
 
 
-        $projectCount = Proyek::count();
+
+
+        $selesai = $project
+            ->where(
+                'progres_keseluruhan',
+                '>=',
+                100
+            )
+            ->count();
 
 
 
-        $transactionCount =
+
+
+        $progress = $project
+            ->avg(
+                'progres_keseluruhan'
+            ) ?? 0;
+
+
+
+
+
+        $client = $project
+            ->pluck(
+                'pemilik_proyek'
+            )
+            ->unique()
+            ->count();
+
+
+
+
+
+        $transaksi =
             SetoranProyek::count()
             +
             TransaksiDana::count();
@@ -79,146 +127,255 @@ WithColumnWidths
 
 
 
-        return collect([
+        $totalAnggaran = $project
+            ->sum(
+                'total_anggaran'
+            );
 
+
+
+
+
+        $terbaru = Proyek::latest('id')
+            ->first();
+
+
+
+
+
+        $tertinggi = $project
+            ->sortByDesc(
+                'progres_keseluruhan'
+            )
+            ->first();
+
+
+
+
+
+        $terendah = $project
+            ->sortBy(
+                'progres_keseluruhan'
+            )
+            ->first();
+
+
+
+
+
+        $monitoring = $project
+            ->where(
+                'progres_keseluruhan',
+                '<',
+                50
+            )
+            ->count();
+
+
+
+
+
+        return [
 
             [
+
                 '',
-                'SAHABAT EKSPLORASI BANUA',
+
+                '',
+
+                '',
+
+                ''
+
+            ],
+
+            [
+                'INFORMASI PERUSAHAAN',
                 '',
                 '',
                 ''
             ],
 
 
+
+
             [
-                '',
-                'FINANCIAL MANAGEMENT SYSTEM',
+                'Nama Perusahaan',
+                'CV Sahabat Eksplorasi Banua',
+                'Status Sistem',
+                'Aktif'
+            ],
+
+
+
+
+            [
+                'Bidang Usaha',
+                'Konsultasi & Jasa Pertambangan',
+                'Periode Laporan',
+                date('Y')
+            ],
+
+
+
+
+            [
+                'Sistem',
+                'Financial Management System',
+                'Tanggal Cetak',
+                now()->format('d M Y')
+            ],
+
+
+
+
+            [
+                'STATISTIK OPERASIONAL',
                 '',
                 '',
                 ''
             ],
 
 
-            [
-                '',
-                'LAPORAN DASHBOARD KEUANGAN',
-                date('d M Y'),
-                '',
-                ''
-            ],
 
 
             [
-                '',
-                '',
-                '',
-                '',
-                ''
+                'Total Project',
+                $totalProject.' Project',
+                'Jumlah Client',
+                $client.' Client'
             ],
 
 
 
-            [
-                'RINGKASAN KEUANGAN',
-                '',
-                '',
-                '',
-                ''
-            ],
-
-
 
             [
-                'Total Pemasukan',
-                $income,
-                'Dana Masuk',
-                '',
-                ''
-            ],
-
-
-
-            [
-                'Total Pengeluaran',
-                $expense,
-                'Dana Keluar',
-                '',
-                ''
-            ],
-
-
-
-            [
-                'Saldo Akhir',
-                $balance,
-                'Dana Tersedia',
-                '',
-                ''
-            ],
-
-
-
-            [
-                'Saldo Bank',
-                $bankBalance,
-                'Rekening Aktif',
-                '',
-                ''
-            ],
-
-
-
-            [
-                'Jumlah Rekening',
-                $bankCount,
-                'Bank Aktif',
-                '',
-                ''
-            ],
-
-
-
-            [
-                'Jumlah Project',
-                $projectCount,
                 'Project Aktif',
-                '',
-                ''
+                $aktif.' Project',
+                'Project Selesai',
+                $selesai.' Project'
             ],
 
 
 
+
             [
-                'Jumlah Transaksi',
-                $transactionCount,
+                'Rata-rata Progress',
+                number_format(
+                    $progress,
+                    1
+                ).'%',
                 'Total Transaksi',
-                '',
-                ''
+                $transaksi.' Transaksi'
             ],
 
-
-            [
-                '',
-                '',
-                '',
-                '',
-                ''
-            ],
 
 
 
             [
-                'Generated by Sahabat Eksplorasi Banua Financial System',
-                '',
+                'Project Progress Rendah',
+                $monitoring.' Project',
+                'Status Operasional',
+                $monitoring > 0
+                ?
+                'Perlu Evaluasi'
+                :
+                'Aman'
+            ],
+
+
+
+
+
+            [
+                'MONITORING PROJECT',
                 '',
                 '',
                 ''
             ],
 
 
-        ]);
 
+
+            [
+                'Project Terbaru',
+                $terbaru->nama_proyek ?? '-',
+                'Progress Tertinggi',
+                ($tertinggi->nama_proyek ?? '-')
+                .' ('.
+                ($tertinggi->progres_keseluruhan ?? 0)
+                .'%)'
+            ],
+
+
+
+
+            [
+                'Progress Terendah',
+                ($terendah->nama_proyek ?? '-')
+                .' ('.
+                ($terendah->progres_keseluruhan ?? 0)
+                .'%)',
+                'Project Monitoring',
+                $monitoring.' Project'
+            ],
+
+
+
+
+
+            [
+                'INFORMASI KEUANGAN PROJECT',
+                '',
+                '',
+                ''
+            ],
+
+
+
+
+
+            [
+                'Total Nilai Project',
+                $totalAnggaran,
+
+                
+                'Status Monitoring',
+                $monitoring > 0
+                ?
+                'Perlu Evaluasi'
+                :
+                'Aman'
+            ],
+
+
+
+
+
+            [
+                'INFORMASI LAPORAN',
+                '',
+                '',
+                ''
+            ],
+
+
+
+
+
+            [
+                'Modul Laporan',
+
+                'Dashboard, Keuangan, Transaksi, Monitoring Project',
+
+                '',
+
+                ''
+            ],
+
+
+
+        ];
 
     }
 
@@ -228,10 +385,61 @@ WithColumnWidths
 
 
 
-    public function title(): string
+
+
+    public function drawings()
     {
 
-        return 'Dashboard';
+
+        $drawing = new Drawing();
+
+
+
+        $drawing->setName(
+            'Logo CV'
+        );
+
+
+
+        $drawing->setDescription(
+            'Logo CV Sahabat Eksplorasi Banua'
+        );
+
+
+
+        $drawing->setPath(
+            public_path(
+                'images/logo-cv.png'
+            )
+        );
+
+
+
+        $drawing->setHeight(
+            70
+        );
+
+
+
+        $drawing->setCoordinates(
+            'A1'
+        );
+
+
+
+        $drawing->setOffsetX(
+            10
+        );
+
+
+
+        $drawing->setOffsetY(
+            5
+        );
+
+
+
+        return $drawing;
 
     }
 
@@ -243,283 +451,470 @@ WithColumnWidths
 
 
 
-    public function styles(Worksheet $sheet)
-    {
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | MERGE HEADER
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->mergeCells('B1:E1');
-
-        $sheet->mergeCells('B2:E2');
-
-        $sheet->mergeCells('B3:C3');
-
-        $sheet->mergeCells('A5:C5');
-
-        $sheet->mergeCells('A14:E14');
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | HEADER COMPANY
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('B1:E1')
-        ->getFont()
-        ->setBold(true)
-        ->setSize(18)
-        ->getColor()
-        ->setARGB('6B4F1D');
-
-
-
-        $sheet->getStyle('B2:E2')
-        ->getFont()
-        ->setBold(true)
-        ->setSize(13)
-        ->getColor()
-        ->setARGB('1E3A5F');
-
-
-
-        $sheet->getStyle('B3:C3')
-        ->getFont()
-        ->setItalic(true)
-        ->getColor()
-        ->setARGB('64748B');
-
-
-
-
-
-        $sheet->getStyle('B1:E3')
-        ->getAlignment()
-        ->setHorizontal(
-            Alignment::HORIZONTAL_CENTER
-        );
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SECTION TITLE
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('A5:C5')
-        ->getFill()
-        ->setFillType(
-            Fill::FILL_SOLID
-        )
-        ->getStartColor()
-        ->setARGB(
-            '6B4F1D'
-        );
-
-
-
-        $sheet->getStyle('A5:C5')
-        ->getFont()
-        ->setBold(true)
-        ->getColor()
-        ->setARGB(
-            'FFFFFF'
-        );
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATA
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('A6:C12')
-        ->getBorders()
-        ->getAllBorders()
-        ->setBorderStyle(
-            Border::BORDER_THIN
-        );
-
-
-
-        $sheet->getStyle('A6:A12')
-        ->getFont()
-        ->setBold(true);
-
-
-
-        $sheet->getStyle('B6:B9')
-        ->getNumberFormat()
-        ->setFormatCode(
-            '"Rp" #,##0'
-        );
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS COLOR
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('C6')
-        ->getFont()
-        ->getColor()
-        ->setARGB('16A34A');
-
-
-
-        $sheet->getStyle('C7')
-        ->getFont()
-        ->getColor()
-        ->setARGB('DC2626');
-
-
-
-        $sheet->getStyle('C8')
-        ->getFont()
-        ->getColor()
-        ->setARGB('6B4F1D');
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FOOTER
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('A14:E14')
-        ->getFont()
-        ->setItalic(true)
-        ->setSize(10)
-        ->getColor()
-        ->setARGB('64748B');
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | LOGO
-        |--------------------------------------------------------------------------
-        */
-
-
-        $logo = public_path(
-            'images/logo-cv.png'
-        );
-
-
-        if(file_exists($logo))
-        {
-
-
-            $drawing = new Drawing();
-
-
-            $drawing->setName(
-                'Logo SEB'
-            );
-
-
-            $drawing->setDescription(
-                'Sahabat Eksplorasi Banua'
-            );
-
-
-            $drawing->setPath(
-                $logo
-            );
-
-
-            $drawing->setHeight(
-                55
-            );
-
-
-            $drawing->setCoordinates(
-                'A1'
-            );
-
-
-            $drawing->setWorksheet(
-                $sheet
-            );
-
-        }
-
-
-
-
-
-
-        $sheet->freezePane('A6');
-
-
-
-        return $sheet;
-
-
-    }
-
-
-
-
-
-
-
-    public function columnWidths(): array
+    public function registerEvents(): array
     {
 
 
         return [
 
-            'A'=>30,
 
-            'B'=>25,
 
-            'C'=>22,
+            AfterSheet::class => function(AfterSheet $event){
 
-            'D'=>15,
 
-            'E'=>15,
+                $sheet = $event
+                    ->sheet
+                    ->getDelegate();
+
+
+
+
+
+
+
+
+                /*
+                HEADER
+                */
+
+
+                $sheet->mergeCells('B1:E1');
+
+                $sheet->mergeCells('B2:E2');
+
+                $sheet->mergeCells('B3:E3');
+
+
+
+
+                $sheet->setCellValue(
+                    'B1',
+                    'CV SAHABAT EKSPLORASI BANUA'
+                );
+
+
+
+                $sheet->setCellValue(
+                    'B2',
+                    'EXECUTIVE REPORT DASHBOARD'
+                );
+
+
+
+                $sheet->setCellValue(
+                    'B3',
+                    'Laporan Monitoring Project dan Informasi Operasional'
+                );
+
+
+
+
+
+
+                $sheet->getStyle(
+                    'B1:E3'
+                )
+                ->applyFromArray([
+
+
+
+                    'font'=>[
+
+                        'bold'=>true
+
+                    ],
+
+
+
+                    'alignment'=>[
+
+                        'horizontal'=>Alignment::HORIZONTAL_CENTER,
+
+                        'vertical'=>Alignment::VERTICAL_CENTER
+
+                    ]
+
+
+
+                ]);
+
+
+
+                $sheet->getStyle('B1')
+                    ->getFont()
+                    ->setSize(16);
+
+
+
+                $sheet->getStyle('B2')
+                    ->getFont()
+                    ->setSize(13);
+
+
+
+                $sheet->getStyle('B3')
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10);
+
+
+
+
+
+
+
+
+
+                /*
+                SECTION
+                */
+
+                $sectionRows = [
+
+                    6,
+
+                    11,
+
+                    16,
+
+                    19
+                ];
+
+
+
+
+
+                foreach($sectionRows as $row){
+
+
+                    $sheet->mergeCells(
+                        'A'.$row.':D'.$row
+                    );
+
+
+
+                    $sheet->getStyle(
+                        'A'.$row.':D'.$row
+                    )
+                    ->applyFromArray([
+
+
+
+                        'fill'=>[
+
+                            'fillType'=>Fill::FILL_SOLID,
+
+                            'startColor'=>[
+                                'rgb'=>'000000'
+                            ]
+
+                        ],
+
+
+
+                        'font'=>[
+
+                            'bold'=>true,
+
+                            'color'=>[
+                                'rgb'=>'FFFFFF'
+                            ]
+
+                        ],
+
+
+
+                        'alignment'=>[
+
+                            'horizontal'=>Alignment::HORIZONTAL_CENTER
+
+                        ]
+
+
+
+                    ]);
+
+
+                }
+
+
+
+
+
+
+
+
+
+                /*
+                BORDER
+                */
+
+
+                $lastRow = $sheet->getHighestRow();
+
+
+
+                $sheet->getStyle(
+                    'A6:D'.$lastRow
+                )
+                ->applyFromArray([
+
+
+
+                    'borders'=>[
+
+                        'allBorders'=>[
+
+                            'borderStyle'=>Border::BORDER_THIN,
+
+                            'color'=>[
+                                'rgb'=>'D1D5DB'
+                            ]
+
+                        ]
+
+                    ]
+
+
+
+                ]);
+
+
+
+
+
+                $sheet->getStyle(
+                    'A6:D'.$lastRow
+                )
+                ->getAlignment()
+                ->setVertical(
+                    Alignment::VERTICAL_CENTER
+                );
+
+
+$sheet->getStyle(
+    'B12:B19'
+)
+->getAlignment()
+->setHorizontal(
+    Alignment::HORIZONTAL_RIGHT
+);
+                /*
+                LABEL
+                */
+
+
+                foreach(['A','C'] as $col){
+
+
+                    $sheet->getStyle(
+                        $col.'7:'.$col.$lastRow
+                    )
+                    ->getFont()
+                    ->setBold(true);
+
+
+                }
+
+
+
+
+
+
+
+
+
+                /*
+                STATUS WARNA
+                */
+
+
+                $sheet->getStyle('D7')
+                ->applyFromArray([
+
+
+                    'fill'=>[
+
+                        'fillType'=>Fill::FILL_SOLID,
+
+                        'startColor'=>[
+                            'rgb'=>'DCFCE7'
+                        ]
+
+                    ],
+
+
+                    'font'=>[
+
+                        'bold'=>true,
+
+                        'color'=>[
+                            'rgb'=>'15803D'
+                        ]
+
+                    ]
+
+                ]);
+
+
+
+
+
+                $sheet->getStyle('D14')
+                ->applyFromArray([
+
+
+                    'fill'=>[
+
+                        'fillType'=>Fill::FILL_SOLID,
+
+                        'startColor'=>[
+                            'rgb'=>'FEF3C7'
+                        ]
+
+                    ],
+
+
+                    'font'=>[
+
+                        'bold'=>true
+
+                    ]
+
+                ]);
+
+
+
+
+
+
+
+
+
+                /*
+                RUPIAH
+                */
+
+
+                $sheet->getStyle(
+                    'B19'
+                )
+                ->getNumberFormat()
+                ->setFormatCode(
+                    '"Rp" #,##0'
+                );
+
+
+/*
+HIGHLIGHT TOTAL PROJECT VALUE
+*/
+
+
+$sheet->getStyle(
+    'B19'
+)
+->applyFromArray([
+
+
+    'fill'=>[
+
+        'fillType'=>Fill::FILL_SOLID,
+
+        'startColor'=>[
+
+            'rgb'=>'DCFCE7'
+
+        ]
+
+    ],
+
+
+    'font'=>[
+
+        'bold'=>true
+
+    ]
+
+]);
+
+
+
+                /*
+                WIDTH
+                */
+
+
+                $sheet->getColumnDimension('A')
+                    ->setWidth(30);
+
+
+                $sheet->getColumnDimension('B')
+                    ->setWidth(45);
+
+
+                $sheet->getColumnDimension('C')
+                    ->setWidth(30);
+
+
+                $sheet->getColumnDimension('D')
+                    ->setWidth(25);
+
+
+
+
+
+
+
+
+
+                /*
+                HEIGHT
+                */
+
+
+                $sheet->getRowDimension(1)
+                    ->setRowHeight(45);
+
+
+
+                $sheet->getRowDimension(2)
+                    ->setRowHeight(30);
+
+
+
+                $sheet->getRowDimension(3)
+                    ->setRowHeight(20);
+
+
+
+
+
+                foreach($sectionRows as $row){
+
+                    $sheet->getRowDimension($row)
+                        ->setRowHeight(25);
+
+                }
+
+
+$sheet->mergeCells(
+    'B21:D21'
+);
+
+
+
+
+
+
+                $sheet->freezePane(
+                    'A7'
+                );
+
+
+            }
+
 
         ];
-
 
     }
 

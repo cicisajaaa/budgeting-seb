@@ -3,6 +3,9 @@
 
 <head>
 
+<meta charset="utf-8">
+
+
 <title>
 Analisis Performa Perusahaan
 </title>
@@ -10,14 +13,13 @@ Analisis Performa Perusahaan
 
 <style>
 
-
 body{
 
-font-family:Arial,sans-serif;
+font-family: DejaVu Sans, sans-serif;
 
 font-size:12px;
 
-color:#333;
+color:#1e293b;
 
 }
 
@@ -33,9 +35,35 @@ margin-bottom:30px;
 
 
 
-.header h1{
+.logo{
 
-font-size:22px;
+width:80px;
+
+}
+
+
+
+.company{
+
+font-size:18px;
+
+font-weight:bold;
+
+color:#8B5E22;
+
+margin-top:10px;
+
+}
+
+
+
+.title{
+
+font-size:16px;
+
+font-weight:bold;
+
+margin-top:5px;
 
 }
 
@@ -43,7 +71,21 @@ font-size:22px;
 
 .info{
 
-margin-bottom:25px;
+color:#64748b;
+
+margin-top:8px;
+
+}
+
+.card-table{
+
+width:100%;
+
+border-collapse:separate;
+
+border-spacing:10px 0;
+
+margin-top:20px;
 
 }
 
@@ -55,21 +97,19 @@ border:1px solid #ddd;
 
 padding:15px;
 
-margin-bottom:15px;
+border-radius:8px;
+
+height:70px;
 
 }
 
 
 
-.card-title{
+.label{
 
-font-weight:bold;
+font-size:11px;
 
-font-size:14px;
-
-margin-bottom:8px;
-
-color:#6b4f1d;
+color:#64748b;
 
 }
 
@@ -81,7 +121,51 @@ font-size:22px;
 
 font-weight:bold;
 
+margin-top:8px;
+
+color:#1e293b;
+
 }
+
+
+
+
+
+.progress-box{
+
+margin-top:25px;
+
+}
+
+
+
+.progress-bg{
+
+height:18px;
+
+width:100%;
+
+background:#e5e7eb;
+
+border-radius:20px;
+
+}
+
+
+
+.progress-fill{
+
+height:18px;
+
+background:#8B5E22;
+
+border-radius:20px;
+
+}
+
+
+
+
 
 
 
@@ -91,7 +175,7 @@ width:100%;
 
 border-collapse:collapse;
 
-margin-top:20px;
+margin-top:25px;
 
 }
 
@@ -99,7 +183,7 @@ margin-top:20px;
 
 td{
 
-padding:12px;
+padding:10px;
 
 border-bottom:1px solid #ddd;
 
@@ -107,17 +191,7 @@ border-bottom:1px solid #ddd;
 
 
 
-.label{
-
-color:#64748b;
-
-}
-
-
-
-.right{
-
-text-align:right;
+td:first-child{
 
 font-weight:bold;
 
@@ -125,20 +199,48 @@ font-weight:bold;
 
 
 
+
+
+.footer{
+
+margin-top:30px;
+
+text-align:right;
+
+font-size:11px;
+
+color:#64748b;
+
+}
+
+
+.status{
+
+font-weight:bold;
+
+padding:6px 12px;
+
+border-radius:15px;
+
+}
+
+
 .good{
+
+background:#dcfce7;
 
 color:#166534;
 
 }
 
 
-
 .warning{
+
+background:#fef3c7;
 
 color:#92400e;
 
 }
-
 
 </style>
 
@@ -150,100 +252,149 @@ color:#92400e;
 <body>
 
 
+
+
 <div class="header">
 
 
-<h1>
-Analisis Performa Perusahaan
-</h1>
+<img
+src="{{public_path('images/logo-cv.png')}}"
+class="logo"
+>
 
 
-<p>
-Sahabat Eksplorasi Banua
-</p>
+<div class="company">
 
+CV SAHABAT EKSPLORASI BANUA
 
 </div>
 
+
+
+<div class="title">
+
+ANALISIS PERFORMA PERUSAHAAN
+
+</div>
 
 
 
 <div class="info">
 
-Tanggal Analisis :
+Tanggal :
 {{now()->format('d M Y')}}
 
 </div>
 
 
+</div>
 
 
 
+<table class="card-table">
+
+<tr>
 
 
-<div class="card">
+<td class="card">
 
 
-<div class="card-title">
-
-Total Proyek
-
+<div class="label">
+Total Project
 </div>
 
 
 <div class="value">
-
-{{$totalProject}}
-
+{{$totalProject ?? 0}}
 </div>
 
 
-</div>
+</td>
 
 
 
+<td class="card">
 
 
-
-
-<div class="card">
-
-
-<div class="card-title">
-
+<div class="label">
 Project Aktif
+</div>
 
+
+<div class="value">
+{{$projectAktif ?? 0}}
+</div>
+
+
+</td>
+
+
+
+
+<td class="card">
+
+
+<div class="label">
+Rata-rata Progress Project
 </div>
 
 
 <div class="value">
 
-{{$projectAktif}}
+{{number_format($progress ?? 0,1)}}%
 
 </div>
 
 
-</div>
+</td>
 
 
 
 
+<td class="card">
 
 
-
-<div class="card">
-
-
-<div class="card-title">
-
-Rata-rata Progress Proyek
-
+<div class="label">
+Project Selesai
 </div>
 
 
 <div class="value">
 
-{{number_format($progress,1)}}%
+{{$projectSelesai ?? 0}}
+
+</div>
+
+
+</td>
+
+
+</tr>
+
+</table>
+
+
+
+
+
+
+<div class="progress-box">
+
+
+<p>
+Tingkat Penyelesaian Project :
+<strong>
+{{number_format($progress ?? 0,1)}}%
+</strong>
+</p>
+
+<div class="progress-bg">
+
+
+<div class="progress-fill"
+
+style="width:
+{{($progress ?? 0)}}%">
 
 </div>
 
@@ -251,127 +402,93 @@ Rata-rata Progress Proyek
 </div>
 
 
-
-
+</div>
 
 
 
 
 
 <h3>
-Ringkasan Performa
+Ringkasan Evaluasi
 </h3>
-
-
-
-
 
 <table>
 
 
 <tr>
 
+<td>
 
-<td class="label">
-
-Jumlah Seluruh Proyek
-
-</td>
-
-
-<td class="right">
-
-{{$totalProject}} Proyek
+Status Operasional
 
 </td>
 
 
-</tr>
+<td>
 
+@if(($progress ?? 0)>=75)
 
-
-
-
-<tr>
-
-
-<td class="label">
-
-Proyek Sedang Berjalan
-
-</td>
-
-
-<td class="right good">
-
-{{$projectAktif}} Proyek
-
-</td>
-
-
-</tr>
-
-
-
-
-
-<tr>
-
-
-<td class="label">
-
-Rata-rata Penyelesaian
-
-</td>
-
-
-<td class="right">
-
-{{number_format($progress,1)}}%
-
-</td>
-
-
-</tr>
-
-
-
-
-
-<tr>
-
-
-<td class="label">
-
-Status Perusahaan
-
-</td>
-
-
-<td class="right">
-
-
-@if($progress >= 75)
-
-<span class="good">
-Performa Baik
+<span class="status good">
+Baik
 </span>
 
+@elseif(($progress ?? 0)>=50)
 
-@elseif($progress >= 50)
-
-
-<span class="warning">
-Perlu Monitoring
+<span class="status warning">
+Cukup
 </span>
-
 
 @else
 
-Perlu Evaluasi
+<span class="status warning">
+Perlu Monitoring
+</span>
 
 @endif
 
+</td>
+
+
+</tr>
+
+
+
+
+
+<tr>
+
+<td>
+
+Jumlah Project Berjalan
+
+</td>
+
+
+<td>
+
+{{$projectAktif ?? 0}} Project
+
+</td>
+
+
+</tr>
+
+
+
+
+
+<tr>
+
+<td>
+
+Evaluasi Performa
+
+</td>
+
+
+<td>
+
+Berdasarkan perkembangan progres project perusahaan
 
 </td>
 
@@ -383,6 +500,21 @@ Perlu Evaluasi
 </table>
 
 
+
+
+
+
+
+
+<div class="footer">
+
+
+Dicetak oleh sistem pada
+
+{{now()->format('d M Y H:i')}}
+
+
+</div>
 
 
 

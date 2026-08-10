@@ -11,9 +11,9 @@ protected $table = 'setoran_proyek';
 
     protected $fillable = [
 
-        'project_id',
+        'proyek_id',
 
-        'bank_account_id',
+        'rekening_bank_id',
 
         'jumlah_setoran',
 
@@ -22,32 +22,28 @@ protected $table = 'setoran_proyek';
     ];
 
 
-
-
     public function proyek()
     {
 
         return $this->belongsTo(
-            Proyek::class
-        );
 
+            Proyek::class,
+            
+            'proyek_id'
+
+        );
     }
 
 
 
 
-
-
-    public function bank()
-    {
-
-        return $this->belongsTo(
-            BankAccount::class,
-            'bank_account_id'
-        );
-
-    }
-
+public function bank()
+{
+    return $this->belongsTo(
+        RekeningBank::class,
+        'rekening_bank_id'
+    );
+}
 
 
 
