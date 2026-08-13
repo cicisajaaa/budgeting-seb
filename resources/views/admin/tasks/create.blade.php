@@ -3,7 +3,6 @@
 
 @section('content')
 
-
 <div class="page-header-card">
 
     <div>
@@ -24,6 +23,11 @@
         </p>
 
     </div>
+
+
+    <a href="{{ url()->previous() }}" class="btn-back">
+        ← Kembali
+    </a>
 
 
 </div>
@@ -445,7 +449,59 @@ background:#334155;
 
 }
 
+.page-header-card{
 
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+.btn-back{
+
+    background:#f1f5f9;
+
+    color:#334155;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    border:1px solid #e2e8f0;
+
+    transition:.2s;
+
+}
+
+
+.btn-back:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+
+}
 
 </style>
 

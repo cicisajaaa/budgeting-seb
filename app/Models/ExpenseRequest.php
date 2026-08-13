@@ -4,7 +4,7 @@ namespace App\Models;
 
 
 use App\Models\User;
-use App\Models\Project;
+use App\Models\Proyek;
 use App\Models\Division;
 use Illuminate\Database\Eloquent\Model;
 
@@ -97,8 +97,9 @@ public function user()
 public function proyek()
 {
     return $this->belongsTo(
-        Project::class,
-        'proyek_id'
+        Proyek::class,
+        'proyek_id',
+        'id'
     );
 }
 

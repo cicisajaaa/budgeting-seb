@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\Project;
+use App\Models\Proyek;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -44,10 +44,81 @@ class ProjectReportExport implements
 {
 
 
+    protected $startDate;
+
+    protected $endDate;
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+
+        $this->startDate = $startDate;
+
+        $this->endDate = $endDate;
+
+    }
+
+
+
+
+
+
+    private function getProjects()
+    {
+
+        return Proyek::when(
+
+            $this->startDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '>=',
+                    $this->startDate
+                );
+
+            }
+
+        )
+
+        ->when(
+
+            $this->endDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '<=',
+                    $this->endDate
+                );
+
+            }
+
+        )
+
+        ->latest()
+
+        ->get();
+
+    }
+
+
+
+
+
+
 
     public function startCell(): string
     {
+
         return 'A6';
+
     }
 
 
@@ -59,8 +130,7 @@ class ProjectReportExport implements
     public function collection()
     {
 
-        return Project::latest()
-            ->get();
+        return $this->getProjects();
 
     }
 
@@ -112,11 +182,15 @@ class ProjectReportExport implements
             $project->progres_keseluruhan ?? 0,
 
             $project->tanggal_selesai
-            ? date(
+            ?
+            date(
                 'd M Y',
-                strtotime($project->tanggal_selesai)
+                strtotime(
+                    $project->tanggal_selesai
+                )
             )
-            : '-'
+            :
+            '-'
 
         ];
 
@@ -132,7 +206,6 @@ class ProjectReportExport implements
 
     public function drawings()
     {
-
 
         $drawing = new Drawing();
 
@@ -176,7 +249,6 @@ class ProjectReportExport implements
 
         return $drawing;
 
-
     }
 
 
@@ -190,7 +262,6 @@ class ProjectReportExport implements
     public function registerEvents(): array
     {
 
-
         return [
 
 
@@ -203,12 +274,6 @@ class ProjectReportExport implements
 
 
 
-
-
-
-                /*
-                HEADER PERUSAHAAN
-                */
 
 
                 $sheet->mergeCells(
@@ -248,11 +313,7 @@ class ProjectReportExport implements
 
                         'bold'=>true,
 
-                        'size'=>16,
-
-                        'color'=>[
-                            'rgb'=>'000000'
-                        ]
+                        'size'=>16
 
                     ],
 
@@ -270,15 +331,6 @@ class ProjectReportExport implements
 
 
 
-
-
-
-
-
-
-                /*
-                HEADER TABLE
-                */
 
 
                 $sheet->getStyle(
@@ -311,17 +363,11 @@ class ProjectReportExport implements
 
                     'alignment'=>[
 
-                        'horizontal'=>Alignment::HORIZONTAL_CENTER,
-
-                        'vertical'=>Alignment::VERTICAL_CENTER
+                        'horizontal'=>Alignment::HORIZONTAL_CENTER
 
                     ]
 
                 ]);
-
-
-
-
 
 
 
@@ -333,14 +379,6 @@ class ProjectReportExport implements
 
 
 
-
-
-
-                /*
-                BORDER DATA
-                */
-
-
                 $sheet->getStyle(
                     'A6:E'.$lastRow
                 )
@@ -348,7 +386,6 @@ class ProjectReportExport implements
 
 
                     'borders'=>[
-
 
                         'allBorders'=>[
 
@@ -368,49 +405,25 @@ class ProjectReportExport implements
 
 
 
-
-
-
-
-                /*
-                FORMAT RUPIAH
-                */
-
-
                 $sheet->getStyle(
                     'C7:C'.$lastRow
                 )
                 ->getNumberFormat()
                 ->setFormatCode(
-
                     '"Rp" #,##0'
-
                 );
 
-
-
-
-
-
-
-
-
-                /*
-                CENTER
+                                /*
+                CENTER DATA
                 */
-
 
                 $sheet->getStyle(
                     'C7:E'.$lastRow
                 )
                 ->getAlignment()
                 ->setHorizontal(
-
                     Alignment::HORIZONTAL_CENTER
-
                 );
-
-
 
 
 
@@ -428,7 +441,6 @@ class ProjectReportExport implements
                     $i <= $lastRow;
                     $i++
                 ){
-
 
                     $progress = (int)$sheet
                         ->getCell(
@@ -511,7 +523,6 @@ class ProjectReportExport implements
 
                         ]);
 
-
                     }
 
 
@@ -526,7 +537,7 @@ class ProjectReportExport implements
 
 
                 /*
-                SUMMARY
+                SUMMARY PROJECT
                 */
 
 
@@ -537,6 +548,7 @@ class ProjectReportExport implements
                 $sheet->mergeCells(
                     'C'.$row.':E'.$row
                 );
+
 
 
                 $sheet->setCellValue(
@@ -587,13 +599,24 @@ class ProjectReportExport implements
 
 
 
+                /*
+                FILTER SUMMARY
+                */
 
-                $totalProject = Project::count();
+
+                $projects = $this->getProjects();
 
 
-                $totalBudget = Project::sum(
+
+                $totalProject = $projects->count();
+
+
+
+                $totalBudget = $projects->sum(
                     'total_anggaran'
                 );
+
+
 
 
 
@@ -601,6 +624,7 @@ class ProjectReportExport implements
                     'C'.($row+1),
                     'Total Project'
                 );
+
 
 
                 $sheet->setCellValue(
@@ -611,10 +635,12 @@ class ProjectReportExport implements
 
 
 
+
                 $sheet->setCellValue(
                     'C'.($row+2),
                     'Total Anggaran'
                 );
+
 
 
                 $sheet->setCellValue(
@@ -655,6 +681,8 @@ class ProjectReportExport implements
                     ]
 
                 ]);
+
+
 
 
 
@@ -738,13 +766,14 @@ class ProjectReportExport implements
 
 
                 /*
-                FILTER FREEZE
+                FILTER + FREEZE
                 */
 
 
                 $sheet->setAutoFilter(
                     'A6:E'.$lastRow
                 );
+
 
 
                 $sheet->freezePane(

@@ -40,6 +40,26 @@ class FinanceSummarySheet implements
 {
 
 
+    protected $startDate;
+
+    protected $endDate;
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+
+        $this->startDate = $startDate;
+
+        $this->endDate = $endDate;
+
+    }
+
+
+
     public function title(): string
     {
 
@@ -67,14 +87,85 @@ class FinanceSummarySheet implements
 
 
 
-    public function array(): array
-    {
+public function array(): array
+{
 
 
-        $pendapatan = ProjectDeposit::sum(
-            'jumlah_setoran'
+$pendapatan = ProjectDeposit::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'tanggal_setoran',
+            '>=',
+            $this->startDate
         );
 
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'tanggal_setoran',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->sum('jumlah_setoran');
+
+
+
+
+$pengeluaran = ExpenseRequest::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->where(
+    'status',
+    'approved'
+)
+
+->sum('jumlah');
 
         $pengeluaran = ExpenseRequest::where(
             'status',
@@ -88,7 +179,39 @@ class FinanceSummarySheet implements
 
 
 
-        $totalProject = Proyek::count();
+       $totalProject = Proyek::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->count();
 
 
 
@@ -180,14 +303,76 @@ class FinanceSummarySheet implements
 
 
             [
+ProjectDeposit::when(
 
-                'Jumlah Transaksi',
+    $this->startDate,
 
-                ProjectDeposit::count()
-                +
-                ExpenseRequest::count(),
+    function($query){
 
-                'Total'
+        $query->whereDate(
+            'tanggal_setoran',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'tanggal_setoran',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->count()
+
+
++
+
+ExpenseRequest::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->count()
 
             ],
 

@@ -320,10 +320,6 @@ Melewati deadline
 
 
 
-
-
-
-
 <div class="kpi-card progress-card">
 
 
@@ -351,104 +347,32 @@ Perkembangan seluruh project
 
 
 
-</div>
 
-{{-- RINGKASAN KEUANGAN --}}
+<div class="kpi-card transaction-card">
 
-
-<div class="panel">
-
-
-<h3>
-📊 Ringkasan Keuangan
-</h3>
-
-
-
-<div class="finance-grid">
-
-
-
-<div>
 
 <span>
-Pendapatan
+Total Transaksi
 </span>
 
 
-<b class="green">
+<h2>
 
-Rp {{number_format(
-$totalPendapatan ?? 0,
-0,
-',',
-'.'
-)}}
+{{$totalTransaksi ?? 0}}
 
-</b>
-
-</div>
+</h2>
 
 
-
-
-
-<div>
-
-<span>
-Pengeluaran
-</span>
-
-
-<b class="red">
-
-Rp {{number_format(
-$totalPengeluaran ?? 0,
-0,
-',',
-'.'
-)}}
-
-</b>
-
-</div>
-
-
-
-
-
-<div>
-
-<span>
-Saldo Bersih
-</span>
-
-
-<b>
-
-Rp {{number_format(
-$saldo ?? 0,
-0,
-',',
-'.'
-)}}
-
-</b>
-
-</div>
-
-
-</div>
+<small>
+Jumlah transaksi perusahaan
+</small>
 
 
 </div>
 
 
 
-
-
-
-
+</div>
 
 
 {{-- ANALISIS PERFORMA --}}
@@ -700,11 +624,12 @@ project, dan performa perusahaan.
 <div class="button-group">
 
 
-<a href="{{route('owner.report.pdf')}}"
+<a href="{{route('owner.report.pdf',[
+'start_date'=>request('start_date'),
+'end_date'=>request('end_date')
+])}}"
 class="pdf">
-
 PDF
-
 </a>
 
 
@@ -746,22 +671,30 @@ saldo, dan transaksi perusahaan.
 <div class="button-group">
 
 
-<a href="{{route('owner.report.finance.pdf')}}"
+<a href="{{route('owner.report.finance.pdf',
+[
+'start_date'=>request('start_date'),
+'end_date'=>request('end_date')
+])}}"
 class="pdf">
 
 PDF
 
 </a>
 
+<a href="{{route('owner.report.finance.excel',[
 
+    'start_date'=>request('start_date'),
 
-<a href="{{route('owner.report.finance.excel')}}"
+    'end_date'=>request('end_date')
+
+])}}"
+
 class="excel">
 
 Excel
 
 </a>
-
 
 </div>
 
@@ -810,7 +743,14 @@ PDF
 
 
 
-<a href="{{route('owner.report.project.excel')}}"
+<a href="{{route('owner.report.project.excel',[
+
+    'start_date'=>request('start_date'),
+
+    'end_date'=>request('end_date')
+
+])}}"
+
 class="excel">
 
 Excel
@@ -865,7 +805,16 @@ PDF
 
 
 
-<a href="{{route('owner.report.performance.excel')}}"
+
+
+<a href="{{route('owner.report.performance.excel',[
+
+    'start_date'=>request('start_date'),
+
+    'end_date'=>request('end_date')
+
+])}}"
+
 class="excel">
 
 Excel
@@ -884,382 +833,6 @@ Excel
 
 
 </div>
-
-{{-- PROJECT MONITORING --}}
-
-
-<div class="panel">
-
-
-<h3>
-📁 Monitoring Project
-</h3>
-
-
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Project
-</th>
-
-
-<th>
-Anggaran
-</th>
-
-
-<th>
-Progress
-</th>
-
-
-<th>
-Status
-</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-<tbody>
-
-
-
-@forelse($projects ?? [] as $project)
-
-
-<tr>
-
-
-
-<td>
-
-<strong>
-
-{{$project->nama_proyek ?? '-'}}
-
-</strong>
-
-</td>
-
-
-
-
-
-<td>
-
-Rp {{number_format(
-$project->total_anggaran ?? 0,
-0,
-',',
-'.'
-)}}
-
-</td>
-
-
-
-
-
-<td>
-
-
-
-<div class="progress-box">
-
-
-<div class="progress-value">
-
-{{number_format(
-$project->progres_keseluruhan ?? 0,
-0
-)}}%
-
-</div>
-
-
-
-
-<div class="progress-track">
-
-
-<div class="progress-fill"
-
-style="width:{{min($project->progres_keseluruhan ?? 0,100)}}%">
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-</td>
-
-
-
-
-
-
-
-<td>
-
-
-
-@if(($project->progres_keseluruhan ?? 0) >= 100)
-
-
-<span class="status selesai">
-
-Selesai
-
-</span>
-
-
-
-@else
-
-
-<span class="status berjalan">
-
-Berjalan
-
-</span>
-
-
-
-@endif
-
-
-
-</td>
-
-
-
-</tr>
-
-
-
-
-
-@empty
-
-
-<tr>
-
-<td colspan="4" align="center">
-
-Belum ada project
-
-</td>
-
-</tr>
-
-
-@endforelse
-
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- RINGKASAN EKSEKUTIF --}}
-
-
-<div class="panel">
-
-
-<h3>
-
-📌 Ringkasan Eksekutif
-
-</h3>
-
-
-
-
-<div class="summary-grid">
-
-
-
-
-
-<div class="summary-card">
-
-
-<span>
-
-Total Proyek
-
-</span>
-
-
-
-<h2>
-
-{{$totalProject ?? 0}}
-
-</h2>
-
-
-
-<small>
-
-Jumlah seluruh project
-
-</small>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<span>
-
-Rata-rata Progress
-
-</span>
-
-
-
-<h2>
-
-{{number_format(
-$progressProject ?? 0,
-1
-)}}%
-
-</h2>
-
-
-
-<small>
-
-Perkembangan seluruh project
-
-</small>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<span>
-
-Saldo Perusahaan
-
-</span>
-
-
-
-<h2>
-
-Rp {{number_format(
-$saldo ?? 0,
-0,
-',',
-'.'
-)}}
-
-</h2>
-
-
-
-<small>
-
-Dana tersedia saat ini
-
-</small>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="summary-card">
-
-
-<span>
-
-Total Transaksi
-
-</span>
-
-
-
-<h2>
-
-{{$totalTransaksi ?? 0}}
-
-</h2>
-
-
-
-<small>
-
-Jumlah transaksi keuangan
-
-</small>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-</div>
-
 
 
 
@@ -1573,7 +1146,11 @@ color:#2563eb;
 
 }
 
+.transaction-card h2{
 
+color:#7c3aed;
+
+}
 
 
 

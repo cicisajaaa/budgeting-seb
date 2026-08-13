@@ -38,7 +38,7 @@ Atur distribusi anggaran project berdasarkan kebutuhan divisi.
 
 <a href="{{route('admin.projects.index')}}" class="btn-back">
 
-← Kembali Project
+← Kembali 
 
 </a>
 

@@ -25,7 +25,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 
-
 class FinanceTransactionSheet implements
 
     FromCollection,
@@ -46,6 +45,24 @@ class FinanceTransactionSheet implements
 
 {
 
+
+    protected $startDate;
+
+    protected $endDate;
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+
+        $this->startDate = $startDate;
+
+        $this->endDate = $endDate;
+
+    }
 
 
     public function title(): string
@@ -76,33 +93,121 @@ class FinanceTransactionSheet implements
 
 
     public function collection()
-    {
+{
 
 
-        $pemasukan = ProjectDeposit::with('proyek')
-            ->latest()
-            ->get();
+    $pemasukan = ProjectDeposit::with('proyek')
+
+        ->when(
+
+            $this->startDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'tanggal_setoran',
+                    '>=',
+                    $this->startDate
+                );
+
+            }
+
+        )
+
+        ->when(
+
+            $this->endDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'tanggal_setoran',
+                    '<=',
+                    $this->endDate
+                );
+
+            }
+
+        )
+
+        ->latest()
+
+        ->get();
 
 
 
 
-        $pengeluaran = ExpenseRequest::with('proyek')
-            ->where(
-                'status',
-                'approved'
-            )
-            ->latest()
-            ->get();
+
+    $pengeluaran = ExpenseRequest::with('proyek')
+
+        ->where(
+            'status',
+            'approved'
+        )
+
+        ->when(
+
+            $this->startDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '>=',
+                    $this->startDate
+                );
+
+            }
+
+        )
+
+        ->when(
+
+            $this->endDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '<=',
+                    $this->endDate
+                );
+
+            }
+
+        )
+
+        ->latest()
+
+        ->get();
 
 
 
 
-        return $pemasukan->concat(
-            $pengeluaran
-        );
 
 
-    }
+return $pemasukan
+    ->concat($pengeluaran)
+    ->sortByDesc(function($item){
+
+        return $item instanceof ProjectDeposit
+            ? $item->tanggal_setoran
+            : $item->created_at;
+
+    })
+    ->values();
+
+return $pemasukan
+    ->concat($pengeluaran)
+    ->sortByDesc(function($item){
+
+        return $item instanceof ProjectDeposit
+            ? $item->tanggal_setoran
+            : $item->created_at;
+
+    })
+    ->values();
+}
 
 
 
@@ -152,10 +257,9 @@ class FinanceTransactionSheet implements
 
             return [
 
-
-                $row->created_at
-                ? $row->created_at->format('d M Y')
-                : '-',
+            $row->tanggal_setoran
+            ? \Carbon\Carbon::parse($row->tanggal_setoran)->format('d M Y')
+            : '-',
 
 
 
@@ -492,10 +596,42 @@ $sheet->getStyle(
 TOTAL
 */
 
+$totalMasuk = ProjectDeposit::when(
 
-$totalMasuk = ProjectDeposit::sum(
-    'jumlah_setoran'
-);
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'tanggal_setoran',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'tanggal_setoran',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->sum('jumlah_setoran');
+
+
+
 
 
 
@@ -503,6 +639,39 @@ $totalKeluar = ExpenseRequest::where(
     'status',
     'approved'
 )
+
+->when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
 ->sum('jumlah');
 
 

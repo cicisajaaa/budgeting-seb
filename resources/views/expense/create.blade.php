@@ -309,7 +309,7 @@ class="preview-image"
 
 </div>
 
-<button class="btn-submit">
+<button type="submit" class="btn-submit">
 
 + Kirim Pengajuan
 

@@ -6,41 +6,121 @@ namespace App\Exports;
 use App\Models\SaldoDivisi;
 
 
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 
 
 class BalanceSheet implements
-FromCollection,
-WithTitle,
-WithStyles,
-WithColumnWidths
+
+    FromArray,
+
+    WithEvents,
+
+    WithDrawings,
+
+    WithTitle,
+
+    WithCustomStartCell
+
 {
 
 
-    public function collection()
+    protected $startDate;
+
+    protected $endDate;
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+
+        $this->startDate = $startDate;
+
+        $this->endDate = $endDate;
+
+    }
+
+
+
+
+
+    public function title(): string
+    {
+        return 'Saldo Divisi';
+    }
+
+
+
+
+
+    public function startCell(): string
+    {
+        return 'A6';
+    }
+
+
+
+
+
+
+    public function array(): array
     {
 
 
-        $balances = SaldoDivisi::with([
+        $data = SaldoDivisi::with([
 
-            'proyek',
-
-            'divisi'
+            'divisi',
+            'proyek'
 
         ])
+
+        ->when(
+
+            $this->startDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '>=',
+                    $this->startDate
+                );
+
+            }
+
+        )
+
+        ->when(
+
+            $this->endDate,
+
+            function($query){
+
+                $query->whereDate(
+                    'created_at',
+                    '<=',
+                    $this->endDate
+                );
+
+            }
+
+        )
 
         ->latest()
 
@@ -50,44 +130,10 @@ WithColumnWidths
 
 
 
-
-        $rows = collect([
-
+        $rows = [
 
 
             [
-                '',
-                'SAHABAT EKSPLORASI BANUA',
-                '',
-                '',
-                ''
-            ],
-
-
-
-            [
-                '',
-                'FINANCIAL MANAGEMENT SYSTEM',
-                '',
-                '',
-                ''
-            ],
-
-
-
-            [
-                '',
-                'LAPORAN SALDO DIVISI',
-                date('d M Y'),
-                '',
-                ''
-            ],
-
-
-
-
-            [
-                '',
                 '',
                 '',
                 '',
@@ -95,19 +141,46 @@ WithColumnWidths
             ],
 
 
+            [
+                'INFORMASI SALDO DIVISI',
+                '',
+                '',
+                ''
+            ],
 
 
             [
-                'PROJECT',
+                'Sistem',
+                'Financial Management System',
+                'Tanggal Cetak',
+                now()->format('d M Y')
+            ],
+
+
+            [
+                'Status Laporan',
+                'Monitoring Saldo Divisi',
+                'Total Data',
+                $data->count().' Data'
+            ],
+
+
+            [
+                'Ringkasan',
+                'Informasi saldo setiap divisi',
+                '',
+                ''
+            ],
+
+
+            [
                 'DIVISI',
+                'PROJECT',
                 'SALDO',
-                'STATUS',
-                ''
-            ],
+                'STATUS'
+            ]
 
-
-
-        ]);
+        ];
 
 
 
@@ -116,43 +189,30 @@ WithColumnWidths
 
 
 
-        foreach($balances as $balance)
+        foreach($data as $item)
         {
 
 
-            $rows->push([
+            $rows[]=[
 
 
-
-                $balance->proyek->nama_proyek ?? '-',
-
+                $item->divisi->nama_divisi ?? '-',
 
 
-                $balance->divisi->nama_divisi ?? '-',
+                $item->proyek->nama_proyek ?? '-',
 
 
-
-                $balance->saldo,
-
+                $item->saldo ?? 0,
 
 
-                $balance->saldo > 0
-
+                ($item->saldo > 0)
                 ?
-
-                'Tersedia'
-
+                'Aktif'
                 :
-
-                'Kosong',
-
+                'Kosong'
 
 
-                ''
-
-
-
-            ]);
+            ];
 
 
         }
@@ -163,33 +223,27 @@ WithColumnWidths
 
 
 
+        $rows[]=[
 
-        $rows->push([
-
-            '',
             '',
             '',
             '',
             ''
 
-        ]);
+        ];
 
 
 
 
 
-
-
-        $rows->push([
+        $rows[]=[
 
             'Generated by Sahabat Eksplorasi Banua Financial System',
-
-            '',
             '',
             '',
             ''
 
-        ]);
+        ];
 
 
 
@@ -209,328 +263,51 @@ WithColumnWidths
 
 
 
-    public function title(): string
-    {
-
-        return 'Saldo Divisi';
-
-    }
-
-
-
-
-
-
-
-
-
-    public function styles(Worksheet $sheet)
+    public function drawings()
     {
 
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | HEADER
-        |--------------------------------------------------------------------------
-        */
+        $drawing = new Drawing();
 
 
-        $sheet->mergeCells('B1:E1');
-
-        $sheet->mergeCells('B2:E2');
-
-        $sheet->mergeCells('B3:C3');
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TITLE
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('B1:E1')
-        ->getFont()
-        ->setBold(true)
-        ->setSize(18)
-        ->getColor()
-        ->setARGB('6B4F1D');
-
-
-
-
-        $sheet->getStyle('B2:E2')
-        ->getFont()
-        ->setBold(true)
-        ->setSize(13)
-        ->getColor()
-        ->setARGB('1E3A5F');
-
-
-
-
-        $sheet->getStyle('B3:C3')
-        ->getFont()
-        ->setItalic(true)
-        ->getColor()
-        ->setARGB('64748B');
-
-
-
-
-
-
-        $sheet->getStyle('B1:E3')
-        ->getAlignment()
-        ->setHorizontal(
-            Alignment::HORIZONTAL_CENTER
+        $drawing->setName(
+            'Logo CV'
         );
 
 
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TABLE HEADER
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle('A5:D5')
-        ->getFill()
-        ->setFillType(
-            Fill::FILL_SOLID
-        )
-        ->getStartColor()
-        ->setARGB(
-            '6B4F1D'
+        $drawing->setDescription(
+            'Logo CV Sahabat Eksplorasi Banua'
         );
 
 
-
-
-        $sheet->getStyle('A5:D5')
-        ->getFont()
-        ->setBold(true)
-        ->getColor()
-        ->setARGB(
-            'FFFFFF'
+        $drawing->setPath(
+            public_path(
+                'images/logo-cv.png'
+            )
         );
 
 
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TABLE
-        |--------------------------------------------------------------------------
-        */
-
-
-        $highestRow = $sheet->getHighestRow();
-
-
-
-        $sheet->getStyle(
-            'A5:D'.$highestRow
-        )
-        ->getBorders()
-        ->getAllBorders()
-        ->setBorderStyle(
-            Border::BORDER_THIN
+        $drawing->setHeight(
+            70
         );
 
 
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | RUPIAH
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle(
-            'C6:C'.$highestRow
-        )
-        ->getNumberFormat()
-        ->setFormatCode(
-            '"Rp" #,##0'
+        $drawing->setCoordinates(
+            'A1'
         );
 
 
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS
-        |--------------------------------------------------------------------------
-        */
-
-
-        for($i=6;$i<=$highestRow;$i++)
-        {
-
-
-            $status = $sheet->getCell(
-                'D'.$i
-            )->getValue();
-
-
-
-            if($status == 'Tersedia')
-            {
-
-
-                $sheet->getStyle(
-                    'D'.$i
-                )
-                ->getFont()
-                ->getColor()
-                ->setARGB(
-                    '16A34A'
-                );
-
-
-            }
-            else
-            {
-
-
-                $sheet->getStyle(
-                    'D'.$i
-                )
-                ->getFont()
-                ->getColor()
-                ->setARGB(
-                    'DC2626'
-                );
-
-
-            }
-
-
-        }
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | LOGO
-        |--------------------------------------------------------------------------
-        */
-
-
-        $logo = public_path(
-            'images/logo-cv.png'
+        $drawing->setOffsetX(
+            10
         );
 
 
-
-        if(file_exists($logo))
-        {
-
-
-            $drawing = new Drawing();
-
-
-            $drawing->setName(
-                'Logo SEB'
-            );
-
-
-
-            $drawing->setPath(
-                $logo
-            );
-
-
-
-            $drawing->setHeight(
-                55
-            );
-
-
-
-            $drawing->setCoordinates(
-                'A1'
-            );
-
-
-
-            $drawing->setWorksheet(
-                $sheet
-            );
-
-
-        }
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FOOTER
-        |--------------------------------------------------------------------------
-        */
-
-
-        $sheet->getStyle(
-            'A'.$highestRow
-        )
-        ->getFont()
-        ->setItalic(true)
-        ->getColor()
-        ->setARGB(
-            '64748B'
+        $drawing->setOffsetY(
+            5
         );
 
 
-
-
-
-
-
-        $sheet->freezePane(
-            'A6'
-        );
-
-
-
-        return $sheet;
+        return $drawing;
 
 
     }
@@ -543,27 +320,388 @@ WithColumnWidths
 
 
 
-    public function columnWidths(): array
+    public function registerEvents(): array
     {
 
 
         return [
 
-            'A'=>30,
 
-            'B'=>25,
 
-            'C'=>22,
+            AfterSheet::class => function(AfterSheet $event){
 
-            'D'=>18,
 
-            'E'=>15,
+                $sheet = $event
+                    ->sheet
+                    ->getDelegate();
+
+
+
+
+
+                /*
+                HEADER
+                */
+
+
+                $sheet->mergeCells('B1:D1');
+
+                $sheet->mergeCells('B2:D2');
+
+                $sheet->mergeCells('B3:D3');
+
+
+
+
+
+                $sheet->setCellValue(
+                    'B1',
+                    'CV SAHABAT EKSPLORASI BANUA'
+                );
+
+
+                $sheet->setCellValue(
+                    'B2',
+                    'FINANCIAL MANAGEMENT SYSTEM'
+                );
+
+
+                $sheet->setCellValue(
+                    'B3',
+                    'LAPORAN SALDO DIVISI'
+                );
+
+
+
+
+
+
+                $sheet->getStyle('B1:D3')
+                ->applyFromArray([
+
+
+                    'font'=>[
+                        'bold'=>true
+                    ],
+
+
+                    'alignment'=>[
+
+                        'horizontal'=>Alignment::HORIZONTAL_CENTER,
+
+                        'vertical'=>Alignment::VERTICAL_CENTER
+
+                    ]
+
+
+                ]);
+
+
+
+
+
+                $sheet->getStyle('B1')
+                ->getFont()
+                ->setSize(16);
+
+
+
+                $sheet->getStyle('B2')
+                ->getFont()
+                ->setSize(13);
+
+
+
+                $sheet->getStyle('B3')
+                ->getFont()
+                ->setItalic(true);
+
+
+
+
+
+
+
+
+
+                /*
+                SECTION
+                */
+
+
+                $sheet->mergeCells(
+                    'A7:D7'
+                );
+
+
+
+                $sheet->getStyle('A7:D7')
+                ->applyFromArray([
+
+
+                    'fill'=>[
+
+                        'fillType'=>Fill::FILL_SOLID,
+
+                        'startColor'=>[
+                            'rgb'=>'000000'
+                        ]
+
+                    ],
+
+
+                    'font'=>[
+
+                        'bold'=>true,
+
+                        'color'=>[
+                            'rgb'=>'FFFFFF'
+                        ]
+
+                    ],
+
+
+                    'alignment'=>[
+
+                        'horizontal'=>Alignment::HORIZONTAL_CENTER
+
+                    ]
+
+
+                ]);
+
+
+
+
+
+
+
+
+
+                /*
+                TABLE HEADER
+                */
+
+
+                $sheet->getStyle(
+                    'A11:D11'
+                )
+                ->applyFromArray([
+
+
+                    'fill'=>[
+
+                        'fillType'=>Fill::FILL_SOLID,
+
+                        'startColor'=>[
+                            'rgb'=>'000000'
+                        ]
+
+                    ],
+
+
+                    'font'=>[
+
+                        'bold'=>true,
+
+                        'color'=>[
+                            'rgb'=>'FFFFFF'
+                        ]
+
+                    ],
+
+
+                    'alignment'=>[
+
+                        'horizontal'=>Alignment::HORIZONTAL_CENTER
+
+                    ]
+
+                ]);
+
+
+
+
+
+
+
+
+
+                $lastRow=$sheet->getHighestRow();
+
+
+
+
+
+
+
+                /*
+                BORDER
+                */
+
+
+                $sheet->getStyle(
+                    'A11:D'.$lastRow
+                )
+                ->applyFromArray([
+
+
+                    'borders'=>[
+
+                        'allBorders'=>[
+
+                            'borderStyle'=>Border::BORDER_THIN,
+
+                            'color'=>[
+                                'rgb'=>'D1D5DB'
+                            ]
+
+                        ]
+
+                    ]
+
+                ]);
+
+
+
+
+
+
+
+
+                /*
+                RUPIAH
+                */
+
+
+                $sheet->getStyle(
+                    'C12:C'.$lastRow
+                )
+                ->getNumberFormat()
+                ->setFormatCode(
+                    '"Rp" #,##0'
+                );
+
+
+
+
+
+
+
+
+
+                /*
+                STATUS
+                */
+
+
+                for($i=12;$i<=$lastRow;$i++)
+                {
+
+
+                    $sheet->getStyle(
+                        'D'.$i
+                    )
+                    ->applyFromArray([
+
+
+                        'fill'=>[
+
+                            'fillType'=>Fill::FILL_SOLID,
+
+                            'startColor'=>[
+                                'rgb'=>'DCFCE7'
+                            ]
+
+                        ],
+
+
+                        'font'=>[
+
+                            'bold'=>true,
+
+                            'color'=>[
+                                'rgb'=>'15803D'
+                            ]
+
+                        ]
+
+                    ]);
+
+
+                }
+
+
+
+
+
+
+
+
+                /*
+                WIDTH
+                */
+
+
+                $width=[
+
+                    'A'=>22,
+
+                    'B'=>35,
+
+                    'C'=>22,
+
+                    'D'=>18
+
+                ];
+
+
+
+                foreach($width as $col=>$size)
+                {
+
+                    $sheet->getColumnDimension($col)
+                    ->setWidth($size);
+
+                }
+
+
+
+
+
+
+
+
+
+                $sheet->getRowDimension(1)
+                ->setRowHeight(45);
+
+
+                $sheet->getRowDimension(2)
+                ->setRowHeight(30);
+
+
+                $sheet->getRowDimension(11)
+                ->setRowHeight(25);
+
+
+
+
+
+
+
+
+                $sheet->freezePane(
+                    'A12'
+                );
+
+
+            }
+
 
         ];
 
-
     }
-
 
 
 }

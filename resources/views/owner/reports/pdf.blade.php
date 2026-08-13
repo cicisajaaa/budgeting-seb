@@ -740,30 +740,25 @@ $project->total_anggaran ?? 0,
 
 
 <td>
-
-
-@if(($project->progres_keseluruhan ?? 0)>=100)
-
+@if(($project->progres_keseluruhan ?? 0) >= 100)
 
 <span class="badge selesai">
-
 Selesai
-
 </span>
 
+@elseif(($project->progres_keseluruhan ?? 0) > 0)
+
+<span class="badge berjalan">
+Berjalan
+</span>
 
 @else
 
-
 <span class="badge berjalan">
-
-Berjalan
-
+Belum Mulai
 </span>
 
-
 @endif
-
 
 </td>
 

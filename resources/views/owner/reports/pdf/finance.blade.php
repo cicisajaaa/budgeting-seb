@@ -330,14 +330,12 @@ LAPORAN KEUANGAN PERUSAHAAN
 </div>
 
 
-
 <div class="info">
 
 Tanggal :
-{{now()->format('d M Y')}}
+{{$tanggal->translatedFormat('d F Y')}}
 
 </div>
-
 
 </div>
 
@@ -560,9 +558,8 @@ $item['nominal'],
 
 
 <span class="expense">
-
 - Rp&nbsp;{{number_format(
-$item['nominal'],
+abs($item['nominal']),
 0,
 ',',
 '.'
@@ -651,11 +648,9 @@ Belum ada transaksi
 
 <div class="footer">
 
-
 Dicetak oleh sistem pada
 
-{{now()->format('d M Y H:i')}}
-
+{{$tanggal->translatedFormat('d F Y H:i')}}
 
 
 </div>

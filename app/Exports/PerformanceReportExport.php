@@ -37,6 +37,23 @@ class PerformanceReportExport implements
 
 {
 
+        protected $startDate;
+
+    protected $endDate;
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+
+        $this->startDate = $startDate;
+
+        $this->endDate = $endDate;
+
+    }
 
     public function title(): string
     {
@@ -67,7 +84,41 @@ class PerformanceReportExport implements
     {
 
 
-        $projects = Proyek::all();
+     $projects = Proyek::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->latest()
+
+->get();
 
 
 

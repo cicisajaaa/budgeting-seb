@@ -38,7 +38,21 @@ class DashboardSheet implements
     WithCustomStartCell
 
 {
+protected $startDate;
 
+protected $endDate;
+
+public function __construct(
+    $startDate = null,
+    $endDate = null
+)
+{
+
+    $this->startDate = $startDate;
+
+    $this->endDate = $endDate;
+
+}
 
     public function title(): string
     {
@@ -61,13 +75,43 @@ class DashboardSheet implements
 
 
 
-    public function array(): array
-    {
+public function array(): array
+{
 
 
-        $project = Proyek::all();
+    $project = Proyek::when(
 
+        $this->startDate,
 
+        function($query){
+
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $this->startDate
+            );
+
+        }
+
+    )
+
+    ->when(
+
+        $this->endDate,
+
+        function($query){
+
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $this->endDate
+            );
+
+        }
+
+    )
+
+    ->get();
 
         $totalProject = $project->count();
 
@@ -118,11 +162,86 @@ class DashboardSheet implements
 
 
 
-        $transaksi =
-            SetoranProyek::count()
-            +
-            TransaksiDana::count();
+$totalSetoran = SetoranProyek::when(
 
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->count();
+
+
+
+
+
+$totalDana = TransaksiDana::when(
+
+    $this->startDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+
+    }
+
+)
+
+->when(
+
+    $this->endDate,
+
+    function($query){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+
+    }
+
+)
+
+->count();
+
+
+
+
+
+$transaksi = 
+    $totalSetoran 
+    +
+    $totalDana;
 
 
 
@@ -136,8 +255,9 @@ class DashboardSheet implements
 
 
 
-        $terbaru = Proyek::latest('id')
-            ->first();
+$terbaru = $project
+    ->sortByDesc('id')
+    ->first();
 
 
 

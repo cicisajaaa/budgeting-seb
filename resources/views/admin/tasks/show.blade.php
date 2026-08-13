@@ -29,7 +29,7 @@ Detail monitoring pekerjaan, progress, dan informasi pelaksanaan task.
 
 <a href="{{route('admin.tasks.index')}}" class="btn-back">
 
-← Kembali Monitoring
+← Kembali 
 
 </a>
 
