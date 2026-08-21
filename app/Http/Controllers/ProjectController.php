@@ -8,15 +8,26 @@ class ProjectController extends Controller
 {
     public function myProject()
     {
-        $karyawan = auth()->user()->employee;
+
+        $karyawan = auth()->user()->karyawan;
+
+
+        if (!$karyawan) {
+
+            abort(
+                403,
+                'Akun belum terhubung dengan data karyawan.'
+            );
+
+        }
 
 
         $proyek = Proyek::whereHas(
-            'tasks',
-            function ($query) use ($karyawan) {
+            'tugas',
+            function($query) use ($karyawan){
 
                 $query->where(
-                    'employee_id',
+                    'karyawan_id',
                     $karyawan->id
                 );
 
@@ -24,16 +35,22 @@ class ProjectController extends Controller
         )
         ->with([
 
-            'tasks' => function ($query) use ($karyawan) {
+            // ambil perusahaan proyek
+            'perusahaan',
+
+            // tugas karyawan
+            'tugas' => function($query) use ($karyawan){
 
                 $query->where(
-                    'employee_id',
+                    'karyawan_id',
                     $karyawan->id
-                );
+                )
+                ->orderBy('id');
 
             },
 
-            'tasks.activities'
+            // aktivitas tugas
+            'tugas.aktivitasTugas'
 
         ])
         ->latest()
@@ -45,5 +62,6 @@ class ProjectController extends Controller
             'project.my-project',
             compact('proyek')
         );
+
     }
 }

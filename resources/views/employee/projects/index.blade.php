@@ -161,9 +161,7 @@ Selesai
 </span>
 
 
-
 <strong>
-
 
 {{$project->tugas
 
@@ -182,8 +180,6 @@ Selesai
 )
 
 ->count()}}
-
-
 
 </strong>
 
@@ -403,47 +399,40 @@ $statusDeadline = $task->statusDeadline();
 </span>
 
 
-
-
-
-
-
 <span class="project-status
 
 @if(in_array($task->status,['selesai','done']))
 
 done
 
-
-@elseif(in_array($task->status,['berjalan','progress']))
-
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
 progress
 
-
 @else
 
-
 todo
-
 
 @endif
 
 ">
 
+@if(in_array($task->status,['selesai','done']))
 
+Selesai
 
-{{strtoupper($task->status)}}
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
+Sedang Dikerjakan
+
+@else
+
+Belum Dikerjakan
+
+@endif
 
 
 </span>
-
-
-
-
-
-
 
 
 
@@ -470,7 +459,7 @@ Detail
 
 
 
-
+@if(!in_array($task->status,['selesai','done']))
 
 <a href="{{route(
 
@@ -482,12 +471,11 @@ $task->id
 
 class="project-update-btn">
 
-
 Update
-
 
 </a>
 
+@endif
 
 
 </div>
@@ -549,6 +537,10 @@ Belum ada project.
 
 </div>
 
+
+
+
+
 <style>
 
 /* ===============================
@@ -556,40 +548,34 @@ GLOBAL
 ================================ */
 
 .project-container{
-
     width:100%;
-
-    max-width:100%;
-
-    overflow:hidden;
-
 }
 
-
 .project-container *{
-
     box-sizing:border-box;
-
 }
 
 
 
 /* ===============================
-WELCOME HEADER
+HEADER OWNER STYLE
 ================================ */
 
 
 .project-welcome-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
-    padding:32px;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    color:#172033;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -597,19 +583,13 @@ WELCOME HEADER
 
     align-items:center;
 
-    margin-bottom:24px;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
 }
 
 
 
 .project-welcome-label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
@@ -623,13 +603,13 @@ WELCOME HEADER
 
 .project-welcome-card h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
-
-    color:#172033;
+    font-size:28px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -641,7 +621,7 @@ WELCOME HEADER
 
     color:#64748b;
 
-    font-size:14px;
+    font-size:13px;
 
 }
 
@@ -649,19 +629,21 @@ WELCOME HEADER
 
 .project-date-box{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
-    padding:12px 22px;
+    padding:10px 18px;
 
     border-radius:999px;
 
-    font-size:13px;
+    font-size:12px;
 
-    font-weight:800;
+    font-weight:700;
 
 }
+
+
 
 
 
@@ -674,36 +656,38 @@ PROJECT PANEL
 
     background:white;
 
+    padding:25px;
+
+    border-radius:22px;
+
     border:1px solid #e2e8f0;
-
-    padding:28px;
-
-    border-radius:24px;
-
-    margin-bottom:24px;
 
     box-shadow:
 
-    0 8px 25px rgba(15,23,42,.05);
+    0 5px 20px rgba(15,23,42,.05);
+
+    margin-bottom:20px;
 
 }
 
 
 
+
+
 /* ===============================
-PROJECT HEADER
+PROJECT TITLE
 ================================ */
 
 
 .project-card-header h2{
 
-    margin:0 0 8px;
+    margin:0;
 
-    color:#166534;
-
-    font-size:20px;
+    font-size:18px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -711,11 +695,11 @@ PROJECT HEADER
 
 .project-card-header p{
 
-    margin:0;
+    margin:6px 0 0;
 
     color:#64748b;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -723,8 +707,10 @@ PROJECT HEADER
 
 
 
+
+
 /* ===============================
-SUMMARY
+SUMMARY CARD OWNER STYLE
 ================================ */
 
 
@@ -734,9 +720,9 @@ SUMMARY
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:18px;
+    gap:15px;
 
-    margin:25px 0;
+    margin:20px 0;
 
 }
 
@@ -748,9 +734,9 @@ SUMMARY
 
     border:1px solid #e2e8f0;
 
-    padding:20px;
-
     border-radius:18px;
+
+    padding:18px;
 
 }
 
@@ -760,13 +746,11 @@ SUMMARY
 
     display:block;
 
+    font-size:11px;
+
     color:#64748b;
 
-    font-size:12px;
-
-    font-weight:600;
-
-    margin-bottom:8px;
+    font-weight:700;
 
 }
 
@@ -774,34 +758,44 @@ SUMMARY
 
 .project-summary-box strong{
 
-    color:#166534;
+    display:block;
+
+    margin-top:8px;
 
     font-size:22px;
 
-    font-weight:800;
+    color:#1e293b;
 
 }
+
+
 
 
 
 
 
 /* ===============================
-TASK TITLE
+SECTION TITLE
 ================================ */
 
 
 .project-section-title{
 
-    font-size:17px;
-
-    color:#172033;
+    font-size:16px;
 
     font-weight:800;
+
+    color:#1e293b;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
 
     margin:25px 0 15px;
 
 }
+
+
 
 
 
@@ -818,19 +812,19 @@ TASK CARD
 
     justify-content:space-between;
 
-    gap:25px;
+    gap:20px;
+
+    padding:18px;
 
     background:#f8fafc;
 
     border:1px solid #e2e8f0;
 
-    padding:22px;
+    border-radius:18px;
 
-    border-radius:20px;
+    margin-bottom:12px;
 
-    margin-bottom:15px;
-
-    transition:.25s;
+    transition:.2s;
 
 }
 
@@ -838,39 +832,27 @@ TASK CARD
 
 .project-task-card:hover{
 
-    transform:translateY(-3px);
+    background:white;
+
+    transform:translateY(-2px);
 
     box-shadow:
 
-    0 10px 25px rgba(15,23,42,.08);
+    0 8px 20px rgba(15,23,42,.06);
 
 }
-
-
-
-
-
-.project-task-main{
-
-    flex:1;
-
-    min-width:0;
-
-}
-
-
 
 
 
 .project-task-title h4{
 
-    margin:0 0 8px;
+    margin:0 0 6px;
 
-    color:#172033;
-
-    font-size:16px;
+    font-size:14px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -880,9 +862,9 @@ TASK CARD
 
     margin:0;
 
-    color:#64748b;
+    font-size:12px;
 
-    font-size:13px;
+    color:#64748b;
 
 }
 
@@ -903,15 +885,7 @@ PROGRESS
 
     margin-bottom:8px;
 
-    font-size:12px;
-
-}
-
-
-
-.project-progress-label span{
-
-    color:#64748b;
+    font-size:11px;
 
 }
 
@@ -927,9 +901,7 @@ PROGRESS
 
 .project-progress-track{
 
-    width:100%;
-
-    height:12px;
+    height:8px;
 
     background:#e2e8f0;
 
@@ -945,13 +917,7 @@ PROGRESS
 
     height:100%;
 
-    background:
-
-    linear-gradient(
-    90deg,
-    #166534,
-    #22c55e
-    );
+    background:#16a34a;
 
     border-radius:20px;
 
@@ -961,33 +927,23 @@ PROGRESS
 
 .project-activity-info{
 
-    margin-top:14px;
-
-    color:#64748b;
+    margin-top:12px;
 
     font-size:12px;
 
+    color:#64748b;
+
 }
+
+
 
 
 
 
 
 /* ===============================
-SIDE TASK
+BADGE STATUS
 ================================ */
-
-
-.project-task-side{
-
-    width:160px;
-
-    flex-shrink:0;
-
-    text-align:right;
-
-}
-
 
 
 .project-deadline,
@@ -995,19 +951,17 @@ SIDE TASK
 
     display:block;
 
-    padding:7px 12px;
+    padding:6px 12px;
 
     border-radius:999px;
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
-
-
 
 
 
@@ -1020,7 +974,6 @@ SIDE TASK
 }
 
 
-
 .project-deadline.warning{
 
     background:#fef3c7;
@@ -1028,7 +981,6 @@ SIDE TASK
     color:#92400e;
 
 }
-
 
 
 .project-deadline.success{
@@ -1041,18 +993,6 @@ SIDE TASK
 
 
 
-.project-deadline.secondary{
-
-    background:#e2e8f0;
-
-    color:#475569;
-
-}
-
-
-
-
-
 .project-status.done{
 
     background:#dcfce7;
@@ -1062,7 +1002,6 @@ SIDE TASK
 }
 
 
-
 .project-status.progress{
 
     background:#dbeafe;
@@ -1070,7 +1009,6 @@ SIDE TASK
     color:#1d4ed8;
 
 }
-
 
 
 .project-status.todo{
@@ -1083,22 +1021,12 @@ SIDE TASK
 
 
 
-.deadline-text{
 
-    display:block;
-
-    color:#94a3b8;
-
-    font-size:11px;
-
-    margin-bottom:10px;
-
-}
 
 
 
 /* ===============================
-BUTTON
+BUTTON OWNER STYLE
 ================================ */
 
 
@@ -1106,11 +1034,9 @@ BUTTON
 
     display:flex;
 
-    justify-content:flex-end;
-
     gap:8px;
 
-    margin-top:15px;
+    margin-top:12px;
 
 }
 
@@ -1118,21 +1044,19 @@ BUTTON
 
 .project-button-group a{
 
-    background:#0f172a;
+    background:#334155;
 
     color:white;
 
-    text-decoration:none;
+    padding:8px 16px;
 
-    padding:9px 16px;
+    border-radius:10px;
 
-    border-radius:12px;
-
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
-    transition:.2s;
+    text-decoration:none;
 
 }
 
@@ -1140,7 +1064,7 @@ BUTTON
 
 .project-button-group a:hover{
 
-    background:#166534;
+    background:#1e293b;
 
 }
 
@@ -1164,25 +1088,6 @@ BUTTON
 
 
 
-/* ===============================
-EMPTY
-================================ */
-
-
-.empty-project{
-
-    text-align:center;
-
-    padding:50px;
-
-    color:#94a3b8;
-
-    font-weight:600;
-
-}
-
-
-
 
 
 /* ===============================
@@ -1198,6 +1103,7 @@ RESPONSIVE
     grid-template-columns:1fr;
 
 }
+
 
 
 .project-task-card{
@@ -1218,49 +1124,20 @@ RESPONSIVE
 
 
 
-.project-button-group{
-
-    justify-content:flex-start;
-
-}
-
-
-
 .project-welcome-card{
 
     flex-direction:column;
 
     align-items:flex-start;
 
-    gap:20px;
-
-}
-
-
-
-}
-
-
-
-@media(max-width:600px){
-
-
-.project-panel{
-
-    padding:18px;
-
-}
-
-
-
-.project-welcome-card h1{
-
-    font-size:24px;
+    gap:15px;
 
 }
 
 
 }
+
+
 
 </style>
 
