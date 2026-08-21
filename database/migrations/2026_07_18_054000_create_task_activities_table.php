@@ -1,57 +1,54 @@
 <?php
 
-namespace App\Models;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Database\Eloquent\Model;
 
-
-class TaskActivity extends Model
+return new class extends Migration
 {
 
-
-    protected $table = 'aktivitas_tugas';
-
-
-
-    protected $fillable = [
-
-        'tugas_id',
-
-        'karyawan_id',
-
-        'tanggal',
-
-        'aktivitas',
-
-        'progres',
-
-        'anggaran_aktivitas',
-
-        'catatan',
-
-    ];
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Tugas
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function tugas()
+    public function up(): void
     {
 
-        return $this->belongsTo(
+        Schema::create('aktivitas_tugas', function (Blueprint $table) {
 
-            Task::class,
 
-            'tugas_id'
+            $table->id();
 
-        );
+
+            $table->foreignId('tugas_id')
+                ->constrained('tugas')
+                ->cascadeOnDelete();
+
+
+            $table->foreignId('karyawan_id')
+                ->constrained('karyawan')
+                ->cascadeOnDelete();
+
+
+            $table->date('tanggal');
+
+
+            $table->text('aktivitas');
+
+
+            $table->integer('progres')
+                ->default(0);
+
+
+            $table->integer('anggaran_aktivitas')
+                ->default(0);
+
+
+            $table->text('catatan')
+                ->nullable();
+
+
+            $table->timestamps();
+
+
+        });
 
     }
 
@@ -59,25 +56,11 @@ class TaskActivity extends Model
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relasi Karyawan
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function karyawan()
+    public function down(): void
     {
 
-        return $this->belongsTo(
-
-            Employee::class,
-
-            'karyawan_id'
-
-        );
+        Schema::dropIfExists('aktivitas_tugas');
 
     }
 
-
-}
+};

@@ -3,33 +3,26 @@
 @section('content')
 
 
-{{-- ================= HEADER ================= --}}
-
 <div class="page-header-card">
 
     <div>
 
         <div class="page-label">
-            PROJECT MANAGEMENT
+            TASK MANAGEMENT
         </div>
 
-
         <h1>
-            Tambah Tugas Project
+            Edit Task
         </h1>
 
-
         <p>
-            Tambahkan pekerjaan untuk project 
-            <b>{{ $project->nama_proyek }}</b>
+            Perbarui informasi pekerjaan dan progres tugas.
         </p>
-
 
     </div>
 
 
-
-    <a href="{{ url()->previous() }}" class="btn-back">
+    <a href="{{route('admin.tasks.show',$task->id)}}" class="btn-back">
         ← Kembali
     </a>
 
@@ -40,27 +33,44 @@
 
 
 
+@if($errors->any())
 
-{{-- ================= FORM ================= --}}
+<div class="alert-error">
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>{{$error}}</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
+
+
+
+
+
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
-📝 Informasi Tugas Project
-
+📝 Informasi Task
 </div>
 
 
 
 <form method="POST"
-action="{{ route('admin.tasks.store',$project->id) }}">
+action="{{route('admin.tasks.update',$task->id)}}">
 
 
 @csrf
-
-
+@method('PUT')
 
 
 
@@ -71,55 +81,16 @@ action="{{ route('admin.tasks.store',$project->id) }}">
 <div class="form-group">
 
 <label>
-Nama Tugas
+Nama Task
 </label>
 
-<input 
+<input
 type="text"
 name="nama_tugas"
-placeholder="Masukkan nama tugas"
+value="{{old('nama_tugas',$task->nama_tugas)}}"
 required>
 
 </div>
-
-
-
-
-
-
-
-<div class="form-group">
-
-<label>
-Karyawan PIC
-</label>
-
-
-<select name="karyawan_id">
-
-
-<option value="">
--- Pilih Karyawan --
-</option>
-
-
-@foreach($karyawan as $item)
-
-<option value="{{ $item->id }}">
-
-{{ $item->nama_karyawan }}
-
-</option>
-
-@endforeach
-
-
-</select>
-
-</div>
-
-
-
 
 
 
@@ -135,7 +106,6 @@ Divisi
 
 <select name="divisi_id">
 
-
 <option value="">
 -- Pilih Divisi --
 </option>
@@ -143,9 +113,13 @@ Divisi
 
 @foreach($divisi as $item)
 
-<option value="{{ $item->id }}">
+<option value="{{$item->id}}"
 
-{{ $item->nama_divisi }}
+{{old('divisi_id',$task->divisi_id)==$item->id?'selected':''}}
+
+>
+
+{{$item->nama_divisi}}
 
 </option>
 
@@ -154,9 +128,8 @@ Divisi
 
 </select>
 
+
 </div>
-
-
 
 
 
@@ -167,13 +140,57 @@ Divisi
 <div class="form-group">
 
 <label>
-Tanggal Mulai
+Karyawan
 </label>
 
 
-<input 
+<select name="karyawan_id">
+
+<option value="">
+-- Pilih Karyawan --
+</option>
+
+
+@foreach($karyawan as $item)
+
+<option value="{{$item->id}}"
+
+{{old('karyawan_id',$task->karyawan_id)==$item->id?'selected':''}}
+
+>
+
+{{$item->nama_karyawan}}
+
+</option>
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="form-group">
+
+<label>
+Tanggal
+</label>
+
+
+<input
 type="date"
 name="tanggal"
+
+value="{{old('tanggal',$task->tanggal ? $task->tanggal->format('Y-m-d') : '')}}"
+
 required>
 
 </div>
@@ -184,27 +201,22 @@ required>
 
 
 
-
-
-<div class="form-group full">
+<div class="form-group">
 
 <label>
-Aktivitas
+Deadline
 </label>
 
 
-<textarea
+<input
+type="date"
+name="deadline"
 
-name="aktivitas"
+value="{{old('deadline',$task->deadline ? $task->deadline->format('Y-m-d') : '')}}"
 
-placeholder="Deskripsi aktivitas tugas"
-
-required></textarea>
-
+>
 
 </div>
-
-
 
 
 
@@ -222,17 +234,20 @@ Prioritas
 <select name="prioritas">
 
 
-<option value="Low">
+<option value="Low"
+{{old('prioritas',$task->prioritas)=='Low'?'selected':''}}>
 Low
 </option>
 
 
-<option value="Medium">
+<option value="Medium"
+{{old('prioritas',$task->prioritas)=='Medium'?'selected':''}}>
 Medium
 </option>
 
 
-<option value="High">
+<option value="High"
+{{old('prioritas',$task->prioritas)=='High'?'selected':''}}>
 High
 </option>
 
@@ -248,60 +263,34 @@ High
 
 
 
-
-
-<div class="form-group">
-
-<label>
-Deadline
-</label>
-
-
-<input
-type="date"
-name="deadline">
-
-</div>
-
-
-
-
-
-
-
-
-
 <div class="form-group">
 
 <label>
 Status
 </label>
 
-
 <select name="status">
 
-
-<option value="belum_dikerjakan">
+<option value="belum_dikerjakan"
+{{$task->status=='belum_dikerjakan'?'selected':''}}>
 Belum Dikerjakan
 </option>
 
 
-<option value="sedang_dikerjakan">
+<option value="sedang_dikerjakan"
+{{$task->status=='sedang_dikerjakan'?'selected':''}}>
 Sedang Dikerjakan
 </option>
 
 
-<option value="selesai">
+<option value="selesai"
+{{$task->status=='selesai'?'selected':''}}>
 Selesai
 </option>
 
 
 </select>
-
-
 </div>
-
-
 
 
 
@@ -326,7 +315,7 @@ min="0"
 
 max="100"
 
-value="0"
+value="{{old('progres_persen',$task->progres_persen)}}"
 
 required>
 
@@ -334,10 +323,55 @@ required>
 </div>
 
 
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group">
+
+<label>
+Aktivitas
+</label>
+
+
+<textarea
+
+name="aktivitas"
+
+rows="5"
+
+required>{{old('aktivitas',$task->aktivitas)}}</textarea>
 
 
 </div>
 
+
+
+
+
+
+
+
+<div class="form-group">
+
+<label>
+Catatan
+</label>
+
+
+<textarea
+
+name="catatan"
+
+rows="4">{{old('catatan',$task->catatan)}}</textarea>
+
+
+</div>
 
 
 
@@ -351,7 +385,7 @@ required>
 
 <button class="btn-save">
 
-💾 Simpan Tugas
+💾 Update Task
 
 </button>
 
@@ -360,17 +394,10 @@ required>
 
 
 
-
-
-
 </form>
 
 
 </div>
-
-
-
-
 
 
 
@@ -385,10 +412,10 @@ GLOBAL
 }
 
 
-
 /* ===============================
 HEADER
 ================================ */
+
 
 .page-header-card{
 
@@ -396,9 +423,9 @@ HEADER
 
     border:1px solid #e2e8f0;
 
-    border-radius:24px;
+    border-radius:20px;
 
-    padding:25px;
+    padding:22px 28px;
 
     display:flex;
 
@@ -406,10 +433,10 @@ HEADER
 
     align-items:center;
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
     box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+    0 5px 18px rgba(15,23,42,.05);
 
 }
 
@@ -417,7 +444,7 @@ HEADER
 
 .page-label{
 
-    font-size:10px;
+    font-size:9px;
 
     letter-spacing:2px;
 
@@ -431,13 +458,13 @@ HEADER
 
 .page-header-card h1{
 
-    margin:8px 0;
+    margin:7px 0;
 
-    font-size:24px;
+    font-size:22px;
 
     font-weight:800;
 
-    color:#1e293b;
+    color:#172033;
 
 }
 
@@ -447,7 +474,7 @@ HEADER
 
     margin:0;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748b;
 
@@ -457,9 +484,12 @@ HEADER
 
 
 
+
+
 /* ===============================
-BACK BUTTON
+BUTTON BACK
 ================================ */
+
 
 .btn-back{
 
@@ -467,17 +497,19 @@ BACK BUTTON
 
     border:1px solid #e2e8f0;
 
-    padding:10px 18px;
+    padding:8px 16px;
 
-    border-radius:12px;
-
-    color:#334155;
+    border-radius:11px;
 
     text-decoration:none;
 
-    font-size:12px;
+    color:#334155;
+
+    font-size:11px;
 
     font-weight:700;
+
+    transition:.2s;
 
 }
 
@@ -497,25 +529,58 @@ BACK BUTTON
 
 
 
+
 /* ===============================
-MAIN PANEL
+ERROR
 ================================ */
+
+
+.alert-error{
+
+    background:#fef2f2;
+
+    border:1px solid #fecaca;
+
+    color:#991b1b;
+
+    padding:12px 15px;
+
+    border-radius:14px;
+
+    margin-bottom:18px;
+
+    font-size:11px;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+MAIN CARD
+================================ */
+
 
 .glass-panel{
 
     background:white;
 
-    border:1px solid #e2e8f0;
+    border:1px solid #e5e7eb;
 
-    border-radius:24px;
+    border-radius:20px;
 
     padding:20px;
 
     box-shadow:
 
-    0 5px 20px rgba(15,23,42,.05);
+    0 6px 20px rgba(15,23,42,.04);
 
 }
+
+
 
 
 
@@ -526,9 +591,9 @@ MAIN PANEL
 
     font-weight:800;
 
-    color:#1e293b;
+    color:#172033;
 
-    margin-bottom:20px;
+    margin-bottom:18px;
 
     padding-left:10px;
 
@@ -543,9 +608,11 @@ MAIN PANEL
 
 
 
+
 /* ===============================
 FORM GRID
 ================================ */
+
 
 .form-grid{
 
@@ -553,9 +620,12 @@ FORM GRID
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:16px;
+    gap:14px;
 
 }
+
+
+
 
 
 
@@ -565,31 +635,26 @@ FORM GRID
 
     flex-direction:column;
 
-}
+    gap:6px;
 
-
-
-.form-group.full{
-
-    grid-column:1/-1;
+    margin-bottom:12px;
 
 }
-
 
 
 
 
 .form-group label{
 
-    font-size:11px;
+    font-size:10px;
 
-    font-weight:700;
+    font-weight:800;
 
     color:#64748b;
 
-    margin-bottom:7px;
-
 }
+
+
 
 
 
@@ -601,15 +666,15 @@ FORM GRID
 
     width:100%;
 
-    border-radius:12px;
+    border-radius:11px;
 
     border:1px solid #dbe1e8;
 
     background:#f8fafc;
 
-    padding:10px 13px;
+    padding:9px 12px;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#172033;
 
@@ -617,18 +682,23 @@ FORM GRID
 
 
 
+
+
+
 .form-group input,
 .form-group select{
 
-    height:40px;
+    height:38px;
 
 }
 
 
 
+
+
 .form-group textarea{
 
-    min-height:100px;
+    min-height:80px;
 
     resize:none;
 
@@ -650,9 +720,25 @@ FORM GRID
 
     box-shadow:
 
-    0 0 0 3px rgba(51,65,85,.1);
+    0 0 0 3px rgba(51,65,85,.08);
 
 }
+
+
+
+
+
+
+
+/* textarea full */
+
+.form-group:has(textarea){
+
+    grid-column:1/-1;
+
+}
+
+
 
 
 
@@ -667,9 +753,9 @@ ACTION
 
 .form-action{
 
-    margin-top:25px;
+    margin-top:20px;
 
-    padding-top:18px;
+    padding-top:15px;
 
     border-top:1px solid #e5e7eb;
 
@@ -681,6 +767,8 @@ ACTION
 
 
 
+
+
 .btn-save{
 
     background:#334155;
@@ -689,15 +777,17 @@ ACTION
 
     border:none;
 
-    padding:11px 24px;
+    padding:10px 22px;
 
-    border-radius:12px;
+    border-radius:11px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:800;
 
     cursor:pointer;
+
+    transition:.2s;
 
 }
 
@@ -719,6 +809,7 @@ ACTION
 /* ===============================
 RESPONSIVE
 ================================ */
+
 
 @media(max-width:900px){
 

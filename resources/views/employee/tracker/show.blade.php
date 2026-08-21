@@ -197,56 +197,71 @@ Simpan Update
 
 </form>
 
-<hr>
+
+<div class="employee-panel">
 
 
-<div class="history">
-
-<h3>
-Riwayat Aktivitas
-</h3>
+<div class="panel-header">
+📝 Riwayat Aktivitas
+</div>
 
 
-@forelse($task->aktivitasTugas as $item)
+
+@forelse($activities as $activity)
 
 
-<div class="history-item">
+<div class="activity-card">
+
+
+<div class="activity-content">
+
 
 <strong>
-{{$item->aktivitas}}
+{{$activity->aktivitas}}
 </strong>
 
 
 <p>
-Progress : {{$item->progres}}%
+Progress:
+{{$activity->progres}}%
 </p>
 
 
 <small>
-
-{{\Carbon\Carbon::parse($item->tanggal)->format('d M Y')}}
-
+{{\Carbon\Carbon::parse($activity->tanggal)->format('d M Y')}}
 </small>
+
+
+@if($activity->catatan)
+
+<p>
+Catatan:
+{{$activity->catatan}}
+</p>
+
+@endif
 
 
 </div>
 
 
+</div>
+
+
+
 @empty
 
 
-<p>
-Belum ada aktivitas.
-</p>
+<div class="empty-data">
+Belum ada aktivitas
+</div>
 
 
 @endforelse
 
 
 </div>
-
 </div>
-
 
 
 
@@ -255,24 +270,11 @@ Belum ada aktivitas.
 <style>
 
 /* ===============================
-CONTAINER
+GLOBAL
 ================================ */
 
 .tracker-card{
-
     width:100%;
-
-    background:white;
-
-    border:1px solid #e2e8f0;
-
-    border-radius:24px;
-
-    padding:25px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
 }
 
 
@@ -284,13 +286,18 @@ HEADER
 
 .header-task{
 
-    background:white;
+    background:#f8fafc;
+
+    padding:25px 30px;
+
+    border-radius:24px;
 
     border:1px solid #e2e8f0;
 
-    padding:32px;
+    margin-bottom:25px;
 
-    border-radius:24px;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -298,17 +305,13 @@ HEADER
 
     align-items:center;
 
-    margin-bottom:25px;
-
 }
-
-
 
 
 
 .label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
@@ -320,31 +323,27 @@ HEADER
 
 
 
-
-
 .header-task h1{
 
-    margin:10px 0;
+    margin:8px 0;
 
-    font-size:30px;
-
-    color:#172033;
+    font-size:28px;
 
     font-weight:800;
 
+    color:#1e293b;
+
 }
-
-
 
 
 
 .header-task p{
 
-    color:#64748b;
-
     margin:0;
 
-    font-size:14px;
+    color:#64748b;
+
+    font-size:13px;
 
 }
 
@@ -352,23 +351,24 @@ HEADER
 
 
 
+/* BUTTON BACK */
+
+
 .back{
 
-    background:#f1f5f9;
+    background:#334155;
 
-    color:#172033;
+    color:white;
 
-    padding:12px 22px;
+    padding:10px 20px;
 
-    border-radius:999px;
+    border-radius:12px;
 
     text-decoration:none;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
-
-    transition:.2s;
 
 }
 
@@ -376,7 +376,7 @@ HEADER
 
 .back:hover{
 
-    background:#e2e8f0;
+    background:#1e293b;
 
 }
 
@@ -403,21 +403,20 @@ INFO CARD
 
 
 
-
-
 .info-grid div{
 
-    background:#f8fafc;
-
-    border:1px solid #e2e8f0;
+    background:white;
 
     padding:20px;
 
     border-radius:18px;
 
+    border:1px solid #e2e8f0;
+
+    box-shadow:
+    0 5px 20px rgba(15,23,42,.04);
+
 }
-
-
 
 
 
@@ -425,47 +424,23 @@ INFO CARD
 
     display:block;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748b;
 
     font-weight:700;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
-
-
 
 
 
 .info-grid strong{
 
-    color:#172033;
-
     font-size:16px;
 
-}
-
-
-
-
-
-
-/* ===============================
-DIVIDER
-================================ */
-
-
-.tracker-card hr{
-
-    border:none;
-
-    height:1px;
-
-    background:#e2e8f0;
-
-    margin:30px 0;
+    color:#1e293b;
 
 }
 
@@ -473,20 +448,26 @@ DIVIDER
 
 
 
+
+
 /* ===============================
-FORM CARD
+FORM PANEL
 ================================ */
 
 
 form{
 
-    background:#f8fafc;
+    background:white;
 
     border:1px solid #e2e8f0;
 
+    border-radius:20px;
+
     padding:25px;
 
-    border-radius:22px;
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -498,19 +479,15 @@ form label{
 
     display:block;
 
-    margin-top:18px;
-
-    margin-bottom:8px;
+    margin:18px 0 8px;
 
     font-size:12px;
 
-    font-weight:800;
+    font-weight:700;
 
     color:#334155;
 
 }
-
-
 
 
 
@@ -520,49 +497,17 @@ input{
 
     width:100%;
 
+    padding:12px 14px;
 
-    padding:14px 16px;
+    border-radius:12px;
 
+    border:1px solid #e2e8f0;
 
-    border-radius:14px;
+    background:#f8fafc;
 
-
-    border:1px solid #dbe3ee;
-
-
-    background:white;
-
-
-    font-size:14px;
-
-
-    transition:.2s;
-
+    font-size:13px;
 
 }
-
-
-
-
-
-textarea:focus,
-input:focus{
-
-
-    outline:none;
-
-
-    border-color:#2563eb;
-
-
-    box-shadow:
-
-    0 0 0 3px rgba(37,99,235,.12);
-
-
-}
-
-
 
 
 
@@ -576,11 +521,14 @@ textarea{
 
 
 
+textarea:focus,
+input:focus{
 
+    outline:none;
 
-input[type="number"]{
+    background:white;
 
-    height:48px;
+    border-color:#334155;
 
 }
 
@@ -589,23 +537,25 @@ input[type="number"]{
 
 
 /* ===============================
-BUTTON
+SUBMIT
 ================================ */
+
+
 .submit-update-btn{
 
     margin-top:25px;
 
-    width:200px;
+    background:#334155;
 
-    height:48px;
+    color:white;
 
     border:none;
 
-    border-radius:14px;
+    padding:12px 25px;
 
-    background:#2563eb;
+    border-radius:12px;
 
-    color:white;
+    font-size:12px;
 
     font-weight:800;
 
@@ -613,6 +563,13 @@ BUTTON
 
 }
 
+
+
+.submit-update-btn:hover{
+
+    background:#1e293b;
+
+}
 
 
 
@@ -627,19 +584,17 @@ STATUS
 
 .status{
 
-    display:inline-block;
+    display:inline-flex;
 
     padding:7px 14px;
 
-    border-radius:20px;
+    border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
-    font-weight:800;
+    font-weight:700;
 
 }
-
-
 
 
 
@@ -653,8 +608,6 @@ STATUS
 
 
 
-
-
 .status.done{
 
     background:#dcfce7;
@@ -662,8 +615,6 @@ STATUS
     color:#166534;
 
 }
-
-
 
 
 
@@ -680,6 +631,8 @@ STATUS
 
 
 
+
+
 /* ===============================
 ALERT
 ================================ */
@@ -689,9 +642,9 @@ ALERT
 
     background:#fee2e2;
 
-    color:#991b1b;
-
     border:1px solid #fecaca;
+
+    color:#991b1b;
 
     padding:15px;
 
@@ -699,9 +652,132 @@ ALERT
 
     margin-bottom:20px;
 
+    font-size:13px;
+
     font-weight:700;
 
 }
+
+
+
+
+
+
+
+
+/* ===============================
+ACTIVITY PANEL
+================================ */
+
+
+.employee-panel{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    margin-top:25px;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
+
+}
+
+
+
+.panel-header{
+
+    font-size:17px;
+
+    font-weight:800;
+
+    color:#1e293b;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+ACTIVITY CARD
+================================ */
+
+
+.activity-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    margin-bottom:12px;
+
+}
+
+
+
+.activity-content strong{
+
+    color:#1e293b;
+
+    font-size:14px;
+
+}
+
+
+
+.activity-content p{
+
+    margin:8px 0;
+
+    color:#64748b;
+
+    font-size:13px;
+
+}
+
+
+
+.activity-content small{
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+}
+
+
+
+.activity-content p:last-child{
+
+    background:white;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    border:1px solid #e2e8f0;
+
+}
+
+
 
 
 
@@ -715,6 +791,18 @@ RESPONSIVE
 @media(max-width:1000px){
 
 
+.header-task{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+
+
 .info-grid{
 
     grid-template-columns:1fr;
@@ -723,77 +811,8 @@ RESPONSIVE
 
 
 
-.header-task{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:20px;
-
 }
 
-
-
-}
-.history{
-
-margin-top:25px;
-
-}
-
-
-.history h3{
-
-color:#172033;
-
-margin-bottom:15px;
-
-}
-
-
-
-.history-item{
-
-background:#f8fafc;
-
-border:1px solid #e2e8f0;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-bottom:10px;
-
-}
-
-
-
-.history-item strong{
-
-color:#172033;
-
-}
-
-
-
-.history-item p{
-
-font-size:13px;
-
-color:#475569;
-
-margin-top:5px;
-
-}
-
-
-
-.history-item small{
-
-color:#94a3b8;
-
-}
 
 
 @media(max-width:600px){
@@ -801,12 +820,13 @@ color:#94a3b8;
 
 .tracker-card{
 
-    padding:18px;
+    padding:0;
 
 }
 
 
-button{
+
+.submit-update-btn{
 
     width:100%;
 
@@ -814,8 +834,6 @@ button{
 
 
 }
-
-
 
 </style>
 

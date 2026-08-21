@@ -8,6 +8,9 @@ use App\Models\Divisi;
 use App\Models\Karyawan;
 use App\Models\AktivitasTugas;
 
+use Carbon\Carbon;
+
+
 class Tugas extends Model
 {
 
@@ -41,6 +44,58 @@ class Tugas extends Model
         'catatan',
 
     ];
+
+
+
+    protected $casts = [
+
+        'tanggal' => 'date',
+
+        'deadline' => 'date',
+
+    ];
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Status Otomatis
+    |--------------------------------------------------------------------------
+    */
+
+
+    protected static function booted()
+    {
+
+        static::saving(function ($task) {
+
+
+            if($task->progres_persen >= 100)
+            {
+
+                $task->status = 'selesai';
+
+            }
+
+            elseif($task->progres_persen > 0)
+            {
+
+                $task->status = 'sedang_dikerjakan';
+
+            }
+
+            else
+            {
+
+                $task->status = 'belum_dikerjakan';
+
+            }
+
+
+        });
+
+    }
+
 
 
 
@@ -131,70 +186,53 @@ class Tugas extends Model
     */
 
 
-public function aktivitasTugas()
-{
+    public function aktivitasTugas()
+    {
 
-    return $this->hasMany(
-        AktivitasTugas::class,
-        'tugas_id'
-    )
-    ->latest();
+        return $this->hasMany(
 
-}
+            AktivitasTugas::class,
 
+            'tugas_id'
 
+        );
 
-public function updateProgress()
-{
-
-    $progress = $this->aktivitasTugas()
-        ->max('progres');
+    }
 
 
-    $this->progres_persen = $progress ?? 0;
 
 
-    $this->save();
-
-
-}
 
 
 
     /*
     |--------------------------------------------------------------------------
-    | Update Status Otomatis
+    | Update Progress dari Aktivitas
     |--------------------------------------------------------------------------
     */
 
 
-    public function updateStatus()
-{
-
-
-    if($this->progres_persen >= 100)
+    public function updateProgress()
     {
 
-        $this->status = 'selesai';
+        $progress = $this->aktivitasTugas()
 
-    }
-    elseif($this->progres_persen > 0)
-    {
+            ->max('progres');
 
-        $this->status = 'sedang_dikerjakan';
 
-    }
-    else
-    {
 
-        $this->status = 'belum_dikerjakan';
+        $this->progres_persen = $progress ?? 0;
+
+
+        $this->save();
+
 
     }
 
 
-    $this->save();
 
-}
+
+
 
 
     /*
@@ -225,15 +263,33 @@ public function updateProgress()
 
 
 
-
         $hariIni = now();
 
 
-        $tenggat = \Carbon\Carbon::parse(
+        $tenggat = Carbon::parse(
 
             $this->deadline
 
         );
+
+
+
+
+
+
+
+        if($this->status == 'selesai')
+        {
+
+            return [
+
+                'label'=>'Selesai',
+
+                'color'=>'success'
+
+            ];
+
+        }
 
 
 
@@ -288,8 +344,49 @@ public function updateProgress()
         ];
 
 
+    }
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor Status Progress
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getStatusProgressAttribute()
+    {
+
+
+        if($this->progres_persen >= 100)
+        {
+
+            return 'Selesai';
+
+        }
+
+
+
+        if($this->progres_persen > 0)
+        {
+
+            return 'Berjalan';
+
+        }
+
+
+
+        return 'Belum Dimulai';
+
 
     }
+
 
 
 

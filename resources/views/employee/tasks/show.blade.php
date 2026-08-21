@@ -488,28 +488,39 @@ Belum ada aktivitas.
 
 
 </div>
+
+
 <style>
 
 /* ===============================
 GLOBAL
 ================================ */
 
-body{
-    background:#f8fafc;
+.task-container{
+    width:100%;
 }
+
+
+
+/* ===============================
+HEADER OWNER STYLE
+================================ */
 
 
 .welcome-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
-    padding:32px;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    color:#172033;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -517,22 +528,17 @@ body{
 
     align-items:center;
 
-    margin-bottom:24px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
 }
 
 
 
 .welcome-label{
 
-    font-size:11px;
-
-    letter-spacing:2px;
+    font-size:10px;
 
     font-weight:800;
+
+    letter-spacing:2px;
 
     color:#64748b;
 
@@ -542,13 +548,13 @@ body{
 
 .welcome-card h1{
 
-    margin:10px 0;
+    margin:8px 0;
 
-    font-size:30px;
+    font-size:28px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
 }
 
@@ -560,9 +566,10 @@ body{
 
     color:#64748b;
 
-    font-size:14px;
+    font-size:13px;
 
 }
+
 
 
 
@@ -574,21 +581,19 @@ BACK BUTTON
 
 .back-btn{
 
-    background:#ecfdf5;
+    background:#334155;
 
-    color:#15803d;
+    color:white;
 
-    padding:12px 22px;
+    padding:10px 20px;
 
-    border-radius:999px;
+    border-radius:12px;
 
     text-decoration:none;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
-
-    transition:.2s;
 
 }
 
@@ -596,14 +601,18 @@ BACK BUTTON
 
 .back-btn:hover{
 
-    background:#dcfce7;
+    background:#1e293b;
 
 }
 
 
 
+
+
+
+
 /* ===============================
-PANEL
+PANEL OWNER STYLE
 ================================ */
 
 
@@ -611,17 +620,17 @@ PANEL
 
     background:white;
 
+    padding:25px;
+
+    border-radius:20px;
+
     border:1px solid #e2e8f0;
-
-    padding:28px;
-
-    border-radius:24px;
-
-    margin-bottom:22px;
 
     box-shadow:
 
-    0 8px 25px rgba(15,23,42,.05);
+    0 5px 20px rgba(15,23,42,.05);
+
+    margin-bottom:20px;
 
 }
 
@@ -629,15 +638,21 @@ PANEL
 
 .glass-panel h2{
 
-    font-size:18px;
+    font-size:17px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
-    margin:0 0 22px;
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:20px;
 
 }
+
+
 
 
 
@@ -654,7 +669,7 @@ DETAIL GRID
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:18px;
+    gap:15px;
 
 }
 
@@ -664,21 +679,11 @@ DETAIL GRID
 
     background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
     padding:18px;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    transition:.2s;
-
-}
-
-
-
-.info-box:hover{
-
-    transform:translateY(-3px);
+    border:1px solid #e2e8f0;
 
 }
 
@@ -692,7 +697,7 @@ DETAIL GRID
 
     color:#64748b;
 
-    font-weight:600;
+    font-weight:700;
 
     margin-bottom:8px;
 
@@ -702,16 +707,20 @@ DETAIL GRID
 
 .info-box strong{
 
-    color:#172033;
-
     font-size:14px;
+
+    color:#1e293b;
 
 }
 
 
 
+
+
+
+
 /* ===============================
-STATUS
+STATUS BADGE
 ================================ */
 
 
@@ -719,13 +728,13 @@ STATUS
 
     display:inline-flex;
 
-    padding:7px 15px;
+    padding:7px 14px;
 
     border-radius:999px;
 
     font-size:11px;
 
-    font-weight:800;
+    font-weight:700;
 
 }
 
@@ -755,7 +764,7 @@ STATUS
 
     background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
 }
 
@@ -763,8 +772,10 @@ STATUS
 
 
 
+
+
 /* ===============================
-PROGRESS
+PROGRESS OWNER STYLE
 ================================ */
 
 
@@ -774,7 +785,7 @@ PROGRESS
 
     align-items:center;
 
-    gap:20px;
+    gap:15px;
 
 }
 
@@ -784,11 +795,11 @@ PROGRESS
 
     flex:1;
 
-    height:14px;
+    height:10px;
 
     background:#e2e8f0;
 
-    border-radius:999px;
+    border-radius:20px;
 
     overflow:hidden;
 
@@ -800,15 +811,9 @@ PROGRESS
 
     height:100%;
 
-    background:
+    background:#16a34a;
 
-    linear-gradient(
-    90deg,
-    #16a34a,
-    #22c55e
-    );
-
-    border-radius:999px;
+    border-radius:20px;
 
 }
 
@@ -816,11 +821,11 @@ PROGRESS
 
 .progress-number{
 
-    font-size:24px;
+    font-size:22px;
 
     font-weight:800;
 
-    color:#15803d;
+    color:#1e293b;
 
 }
 
@@ -828,27 +833,31 @@ PROGRESS
 
 
 
+
+/* ===============================
+UPDATE BUTTON
+================================ */
+
+
 .update-btn{
 
     display:inline-flex;
 
-    margin-top:22px;
+    margin-top:20px;
 
-    background:#0f172a;
+    background:#334155;
 
     color:white;
 
-    padding:12px 24px;
+    padding:10px 20px;
 
-    border-radius:14px;
+    border-radius:12px;
 
     text-decoration:none;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
-
-    transition:.2s;
 
 }
 
@@ -856,9 +865,11 @@ PROGRESS
 
 .update-btn:hover{
 
-    background:#166534;
+    background:#1e293b;
 
 }
+
+
 
 
 
@@ -873,17 +884,17 @@ DESCRIPTION
 
     background:#f8fafc;
 
+    padding:18px;
+
+    border-radius:16px;
+
     border:1px solid #e2e8f0;
-
-    padding:20px;
-
-    border-radius:18px;
 
     color:#475569;
 
-    line-height:1.7;
+    font-size:13px;
 
-    font-size:14px;
+    line-height:1.7;
 
 }
 
@@ -891,8 +902,10 @@ DESCRIPTION
 
 
 
+
+
 /* ===============================
-TIMELINE
+TIMELINE AUDIT STYLE
 ================================ */
 
 
@@ -900,15 +913,17 @@ TIMELINE
 
     display:flex;
 
-    gap:18px;
+    gap:15px;
 
     padding:18px;
 
     background:#f8fafc;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    margin-bottom:14px;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:12px;
 
 }
 
@@ -916,17 +931,15 @@ TIMELINE
 
 .timeline-dot{
 
-    width:14px;
+    width:12px;
 
-    height:14px;
+    height:12px;
 
-    flex:none;
-
-    background:#22c55e;
+    background:#16a34a;
 
     border-radius:50%;
 
-    margin-top:6px;
+    margin-top:5px;
 
 }
 
@@ -934,9 +947,9 @@ TIMELINE
 
 .timeline-content strong{
 
-    color:#15803d;
+    color:#1e293b;
 
-    font-size:14px;
+    font-size:13px;
 
 }
 
@@ -946,9 +959,9 @@ TIMELINE
 
     margin:8px 0;
 
-    color:#475569;
+    color:#64748b;
 
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -956,17 +969,17 @@ TIMELINE
 
 .activity-progress{
 
-    display:inline-block;
-
-    background:#ecfdf5;
-
-    color:#15803d;
+    display:inline-flex;
 
     padding:5px 12px;
 
     border-radius:999px;
 
-    font-size:12px;
+    background:#dcfce7;
+
+    color:#166534;
+
+    font-size:11px;
 
     font-weight:700;
 
@@ -988,6 +1001,8 @@ TIMELINE
 
 
 
+
+
 /* ===============================
 EMPTY
 ================================ */
@@ -995,7 +1010,7 @@ EMPTY
 
 .empty{
 
-    padding:30px;
+    padding:35px;
 
     text-align:center;
 
@@ -1014,11 +1029,13 @@ RESPONSIVE
 
 @media(max-width:1100px){
 
+
 .detail-grid{
 
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr);
 
 }
+
 
 }
 
@@ -1029,11 +1046,11 @@ RESPONSIVE
 
 .welcome-card{
 
-    flex-direction:column;
+flex-direction:column;
 
-    align-items:flex-start;
+align-items:flex-start;
 
-    gap:20px;
+gap:15px;
 
 }
 
@@ -1041,7 +1058,7 @@ RESPONSIVE
 
 .detail-grid{
 
-    grid-template-columns:1fr;
+grid-template-columns:1fr;
 
 }
 
@@ -1049,9 +1066,9 @@ RESPONSIVE
 
 .progress-area{
 
-    flex-direction:column;
+flex-direction:column;
 
-    align-items:flex-start;
+align-items:flex-start;
 
 }
 
@@ -1059,22 +1076,23 @@ RESPONSIVE
 
 .progress-track{
 
-    width:100%;
+width:100%;
 
 }
+
 
 
 .glass-panel{
 
-    padding:20px;
+padding:20px;
 
 }
 
 
 }
+
 
 </style>
-
 
 
 @endsection

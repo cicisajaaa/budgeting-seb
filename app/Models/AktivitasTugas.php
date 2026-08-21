@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Tugas;
+use App\Models\Karyawan;
+
 
 class AktivitasTugas extends Model
 {
@@ -33,11 +36,54 @@ class AktivitasTugas extends Model
 
 
 
+    protected $casts = [
+
+        'tanggal' => 'date',
+
+        'progres' => 'integer',
+
+        'anggaran_aktivitas' => 'integer',
+
+    ];
+
+    /*
+
+    |--------------------------------------------------------------------------
+
+    | AUTO UPDATE PROGRESS TUGAS
+
+    |--------------------------------------------------------------------------
+
+    */
+
+    protected static function booted()
+
+    {
+
+        static::saved(function($aktivitas){
+
+            if($aktivitas->tugas)
+
+            {
+
+                $aktivitas->tugas->updateProgress();
+
+            }
+
+        });
+
+    }
+
+
+
+
+
+
 
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Tugas
+    | Relasi Tugas
     |--------------------------------------------------------------------------
     */
 
@@ -59,11 +105,9 @@ class AktivitasTugas extends Model
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Karyawan
+    | Relasi Karyawan
     |--------------------------------------------------------------------------
     */
 

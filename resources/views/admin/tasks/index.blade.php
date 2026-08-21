@@ -79,7 +79,7 @@
 
 
             <h3>
-                {{$tasks->where('status','sedang_dikerjakan')->count()}}
+            {{$tasks->where('status','sedang_dikerjakan')->count()}}
             </h3>
 
 
@@ -377,36 +377,28 @@ style="width: {{$task->progres_persen ?? 0}}%">
 
 
 
-
-
 <td>
 
-
 <span class="badge-status
-
-@if($task->status=='selesai')
-
+@if($task->status == 'selesai')
 success
 
-@elseif($task->status=='sedang_dikerjakan')
-
+@elseif($task->status == 'sedang_dikerjakan')
 warning
 
 @else
-
 pending
 
 @endif
-
 ">
 
 
-@if($task->status=='selesai')
+@if($task->status == 'selesai')
 
 Selesai
 
 
-@elseif($task->status=='sedang_dikerjakan')
+@elseif($task->status == 'sedang_dikerjakan')
 
 Sedang Dikerjakan
 
@@ -423,8 +415,6 @@ Belum Dikerjakan
 
 
 </td>
-
-
 
 
 
@@ -480,35 +470,39 @@ Belum ada task
 
 </div>
 
-
-
-
-
-
-
-
 <style>
+
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+
+/* ===============================
+HEADER
+================================ */
 
 
 .page-header-card{
 
-background:white;
+    width:100%;
 
-border:1px solid #e5e7eb;
+    background:#f8fafc;
 
-border-radius:24px;
+    border:1px solid #e2e8f0;
 
-padding:30px;
+    border-radius:20px;
 
-display:flex;
+    padding:22px 28px;
 
-justify-content:space-between;
+    margin-bottom:20px;
 
-align-items:center;
-
-margin-bottom:25px;
-
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+    0 5px 18px rgba(15,23,42,.04);
 
 }
 
@@ -516,13 +510,13 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .page-label{
 
-font-size:11px;
+    font-size:9px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -530,11 +524,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-font-size:30px;
+    margin:7px 0;
 
-margin:10px 0;
+    font-size:22px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -542,11 +538,11 @@ color:#172033;
 
 .page-header-card p{
 
-margin:0;
+    margin:0;
 
-font-size:14px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -554,15 +550,22 @@ color:#64748b;
 
 
 
+
+
+/* ===============================
+STAT CARD
+================================ */
+
+
 .task-stat-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:18px;
+    gap:16px;
 
-margin-bottom:25px;
+    margin-bottom:20px;
 
 }
 
@@ -572,21 +575,61 @@ margin-bottom:25px;
 
 .task-stat{
 
-background:white;
 
-border:1px solid #e5e7eb;
+    background:white;
 
-border-radius:22px;
 
-padding:22px;
+    border:1px solid #e5e7eb;
 
-display:flex;
 
-align-items:center;
+    border-radius:18px;
 
-gap:15px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.05);
+    padding:16px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:12px;
+
+
+    position:relative;
+
+
+    overflow:hidden;
+
+
+    box-shadow:
+
+
+    0 6px 20px rgba(15,23,42,.04);
+
+
+}
+
+
+
+
+
+.task-stat::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:3px;
+
+    background:#334155;
 
 }
 
@@ -596,93 +639,139 @@ box-shadow:0 10px 30px rgba(15,23,42,.05);
 
 .icon-box{
 
-width:50px;
 
-height:50px;
+    width:40px;
 
-border-radius:16px;
 
-display:flex;
+    height:40px;
 
-align-items:center;
 
-justify-content:center;
+    border-radius:12px;
 
-font-size:22px;
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    font-size:17px;
+
 
 }
+
+
 
 
 
 .icon-box.green{
 
-background:#dcfce7;
+    background:#dcfce7;
 
 }
+
 
 
 .icon-box.blue{
 
-background:#dbeafe;
+    background:#dbeafe;
 
 }
+
 
 
 .icon-box.orange{
 
-background:#fef3c7;
+    background:#fef3c7;
 
 }
+
+
+
 
 
 
 
 .task-stat span{
 
-font-size:12px;
+    font-size:10px;
 
-color:#64748b;
+    color:#64748b;
 
 }
+
+
+
 
 
 .task-stat h3{
 
-margin:5px 0;
+    margin:3px 0;
 
-font-size:26px;
+    font-size:22px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
+
+
+
 
 
 .task-stat small{
 
-font-size:11px;
+    font-size:9px;
 
-color:#94a3b8;
+    color:#94a3b8;
 
 }
 
 
 
 
+
+
+
+
+
+/* ===============================
+TABLE CARD
+================================ */
 
 
 .glass-panel{
 
-background:white;
 
-border:1px solid #e5e7eb;
+    width:100%;
 
-border-radius:24px;
 
-padding:25px;
+    background:white;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+
+    border:1px solid #e5e7eb;
+
+
+    border-radius:20px;
+
+
+    padding:18px;
+
+
+    box-shadow:
+
+
+    0 6px 20px rgba(15,23,42,.04);
+
 
 }
+
+
+
 
 
 
@@ -690,109 +779,186 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .table-header{
 
-display:flex;
 
-justify-content:space-between;
+    display:flex;
 
-align-items:center;
 
-margin-bottom:20px;
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    margin-bottom:15px;
+
 
 }
+
+
+
+
 
 
 
 .table-header h3{
 
-margin:0;
 
-font-size:18px;
+    margin:0;
 
-color:#172033;
+
+    font-size:15px;
+
+
+    font-weight:800;
+
+
+    color:#172033;
+
 
 }
+
+
+
+
 
 
 
 .table-header p{
 
-margin-top:5px;
 
-font-size:13px;
+    margin:4px 0 0;
 
-color:#64748b;
+
+    font-size:10px;
+
+
+    color:#64748b;
+
 
 }
+
+
+
+
 
 
 
 .total-data{
 
-background:#eff6ff;
 
-color:#2563eb;
+    background:#f1f5f9;
 
-padding:8px 16px;
 
-border-radius:999px;
+    padding:6px 12px;
 
-font-size:12px;
 
-font-weight:700;
+    border-radius:999px;
+
+
+    font-size:10px;
+
+
+    font-weight:700;
+
+
+    color:#334155;
+
 
 }
 
 
 
 
+
+
+
+
+
+/* ===============================
+TABLE
+================================ */
+
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+}
 
 
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
-
-}
-
-
-
-th{
-
-padding:15px;
-
-background:#f8fafc;
-
-color:#64748b;
-
-font-size:12px;
-
-text-align:left;
+    border-collapse:collapse;
 
 }
 
 
 
-td{
 
-padding:16px;
 
-font-size:13px;
+thead th{
 
-color:#334155;
 
-border-bottom:1px solid #f1f5f9;
+    background:#f8fafc;
+
+
+    padding:10px;
+
+
+    font-size:10px;
+
+
+    color:#64748b;
+
+
+    font-weight:800;
+
+
+    text-align:left;
+
 
 }
 
 
 
-tr:hover{
 
-background:#f8fafc;
+
+
+tbody td{
+
+
+    padding:11px 10px;
+
+
+    border-bottom:1px solid #f1f5f9;
+
+
+    font-size:11px;
+
+
+    color:#334155;
+
 
 }
+
+
+
+
+
+
+
+tbody tr:hover{
+
+
+    background:#fafafa;
+
+
+}
+
+
 
 
 
@@ -800,19 +966,33 @@ background:#f8fafc;
 
 td strong{
 
-color:#172033;
 
-font-size:14px;
+    font-size:12px;
+
+
+    color:#172033;
+
 
 }
+
+
 
 
 
 td small{
 
-color:#94a3b8;
 
-font-size:11px;
+    display:block;
+
+
+    margin-top:3px;
+
+
+    font-size:9px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -822,9 +1002,18 @@ font-size:11px;
 
 
 
+
+
+/* ===============================
+PROGRESS
+================================ */
+
+
 .progress-wrapper{
 
-width:120px;
+
+    width:95px;
+
 
 }
 
@@ -832,135 +1021,228 @@ width:120px;
 
 .progress{
 
-width:120px;
 
-height:8px;
+    width:95px;
 
-background:#e2e8f0;
 
-border-radius:20px;
+    height:6px;
 
-overflow:hidden;
+
+    background:#e2e8f0;
+
+
+    border-radius:20px;
+
+
+    overflow:hidden;
+
 
 }
+
+
 
 
 
 .progress-bar{
 
-height:100%;
 
-background:#16a34a;
+    height:100%;
 
-border-radius:20px;
+
+    background:#334155;
+
 
 }
+
+
 
 
 
 .progress-text{
 
-margin-top:6px;
 
-font-size:12px;
+    margin-top:4px;
 
-font-weight:700;
 
-color:#64748b;
+    font-size:9px;
+
+
+    font-weight:700;
+
+
+    color:#64748b;
+
 
 }
 
+
+
+
+
+
+
+
+
+/* ===============================
+STATUS BADGE
+================================ */
 
 
 .badge-status{
 
-padding:8px 16px;
 
-border-radius:20px;
+    display:inline-flex;
 
-font-size:11px;
 
-font-weight:700;
+    padding:5px 10px;
 
-white-space:nowrap;
 
-display:inline-block;
+    border-radius:999px;
+
+
+    font-size:9px;
+
+
+    font-weight:800;
+
+
+    white-space:nowrap;
+
 
 }
+
+
 
 
 
 .badge-status.success{
 
-background:#dcfce7;
 
-color:#166534;
+    background:#dcfce7;
+
+
+    color:#166534;
+
 
 }
+
+
 
 
 
 .badge-status.warning{
 
-background:#fef3c7;
 
-color:#92400e;
+    background:#fef3c7;
+
+
+    color:#92400e;
+
 
 }
+
+
 
 
 
 .badge-status.pending{
 
-background:#e0f2fe;
 
-color:#0369a1;
+    background:#dbeafe;
+
+
+    color:#1d4ed8;
+
 
 }
 
 
 
+
+
+
+
+
+
+/* ===============================
+DETAIL BUTTON
+================================ */
 
 
 .btn-detail{
 
-background:#dbeafe;
 
-color:#2563eb;
+    display:inline-flex;
 
-padding:8px 15px;
 
-border-radius:12px;
+    align-items:center;
 
-text-decoration:none;
 
-font-size:12px;
+    justify-content:center;
 
-font-weight:700;
+
+    padding:6px 12px;
+
+
+    border-radius:10px;
+
+
+    background:#dbeafe;
+
+
+    color:#2563eb;
+
+
+    text-decoration:none;
+
+
+    font-size:10px;
+
+
+    font-weight:800;
+
 
 }
+
+
 
 
 
 .btn-detail:hover{
 
-background:#2563eb;
 
-color:white;
+    background:#2563eb;
+
+
+    color:white;
+
 
 }
 
 
 
+
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 td[colspan="8"]{
 
-text-align:center;
 
-padding:40px;
+    text-align:center;
 
-color:#94a3b8;
+
+    padding:30px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -968,24 +1250,21 @@ color:#94a3b8;
 
 
 
-@media(max-width:900px){
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1100px){
 
 
 .task-stat-grid{
 
-grid-template-columns:1fr;
-
-}
-
-
-
-.page-header-card{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:15px;
+    grid-template-columns:1fr;
 
 }
 
@@ -993,15 +1272,15 @@ gap:15px;
 
 table{
 
-min-width:900px;
+    min-width:900px;
 
 }
 
 
 }
+
 
 
 </style>
-
 
 @endsection
