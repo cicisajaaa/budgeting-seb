@@ -28,21 +28,7 @@ Melihat penyebaran dana project ke setiap divisi.
 
 
 
-<div class="system-status">
-
-<span></span>
-
-Finance Active
-
 </div>
-
-
-
-</div>
-
-
-
-
 
 
 
@@ -118,7 +104,7 @@ Nominal
 <td>
 
 {{ 
-$distribution->setoranProyek->proyek->nama_proyek ?? '-'
+$distribution->setoranProyek?->proyek?->nama_proyek ?? '-'
 }}
 
 </td>
@@ -130,7 +116,7 @@ $distribution->setoranProyek->proyek->nama_proyek ?? '-'
 <td>
 
 {{
-$distribution->divisi->nama_divisi ?? '-'
+$distribution->divisi?->nama_divisi ?? '-'
 }}
 
 </td>
@@ -269,51 +255,41 @@ Transaksi
 
 
 
-
-
-
-
 <style>
+
+/* ===============================
+HEADER
+================================ */
 
 
 .welcome-card{
 
-background:
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    background:#f8fafc;
 
-padding:30px;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:24px;
 
-color:white;
+    padding:30px;
 
-display:flex;
+    margin-bottom:25px;
 
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:22px;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-
-
 .welcome-label{
 
-font-size:10px;
+    font-size:10px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:700;
+    font-weight:800;
 
-opacity:.8;
+    color:#64748b;
 
 }
 
@@ -321,9 +297,13 @@ opacity:.8;
 
 .welcome-card h1{
 
-font-size:28px;
+    margin:10px 0;
 
-margin:8px 0;
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -331,65 +311,41 @@ margin:8px 0;
 
 .welcome-card p{
 
-font-size:13px;
+    margin:0;
 
-opacity:.9;
+    font-size:13px;
 
-}
-
-
-
-.system-status{
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-font-weight:700;
-
-font-size:13px;
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
+    color:#64748b;
 
 }
 
 
 
-.system-status span{
 
-width:9px;
 
-height:9px;
 
-background:#22c55e;
 
-border-radius:50%;
 
-}
-
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-background:rgba(255,255,255,.65);
+    background:white;
 
-backdrop-filter:blur(15px);
+    border:1px solid #e5e7eb;
 
-border-radius:22px;
+    border-radius:24px;
 
-padding:22px;
+    padding:25px;
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
-border:1px solid rgba(255,255,255,.8);
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -397,21 +353,32 @@ border:1px solid rgba(255,255,255,.8);
 
 .panel-title{
 
-font-size:16px;
+    font-size:16px;
 
-font-weight:700;
+    font-weight:800;
 
-margin-bottom:18px;
+    color:#172033;
+
+    margin-bottom:18px;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+TABLE
+================================ */
+
+
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
 
@@ -419,15 +386,17 @@ border-collapse:collapse;
 
 th{
 
-text-align:left;
+    padding:14px;
 
-padding:14px;
+    background:#f8fafc;
 
-font-size:12px;
+    text-align:left;
 
-color:#64748b;
+    font-size:11px;
 
-background:#f8fafc;
+    color:#64748b;
+
+    font-weight:700;
 
 }
 
@@ -435,11 +404,21 @@ background:#f8fafc;
 
 td{
 
-padding:14px;
+    padding:14px;
 
-border-bottom:1px solid #f1f5f9;
+    border-bottom:1px solid #f1f5f9;
 
-font-size:13px;
+    font-size:12px;
+
+    color:#334155;
+
+}
+
+
+
+tr:hover{
+
+    background:#f8fafc;
 
 }
 
@@ -447,32 +426,45 @@ font-size:13px;
 
 .money{
 
-font-weight:700;
+    font-weight:800;
 
-color:#16a34a;
+    color:#16a34a;
 
 }
+
+
 
 
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-color:#94a3b8;
+    padding:35px;
+
+    color:#94a3b8;
 
 }
 
 
 
 
+
+
+
+
+/* ===============================
+SUMMARY DISTRIBUSI
+================================ */
+
+
 .summary-box{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
-gap:20px;
+    gap:20px;
 
 }
 
@@ -480,15 +472,67 @@ gap:20px;
 
 .summary-box div{
 
-background:#f8fafc;
 
-padding:20px;
+    background:white;
 
-border-radius:15px;
 
-display:flex;
+    border:1px solid #e5e7eb;
 
-justify-content:space-between;
+
+    border-radius:22px;
+
+
+    padding:22px;
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.05);
+
+
+    position:relative;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+.summary-box div::before{
+
+
+    content:"";
+
+
+    position:absolute;
+
+
+    top:0;
+
+
+    left:0;
+
+
+    width:100%;
+
+
+    height:4px;
+
+
+    background:#334155;
+
 
 }
 
@@ -496,9 +540,9 @@ justify-content:space-between;
 
 .summary-box span{
 
-color:#64748b;
+    font-size:12px;
 
-font-size:13px;
+    color:#64748b;
 
 }
 
@@ -506,10 +550,23 @@ font-size:13px;
 
 .summary-box b{
 
-color:#166534;
+    font-size:20px;
+
+    color:#172033;
+
+    font-weight:800;
 
 }
 
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:800px){
@@ -517,15 +574,22 @@ color:#166534;
 
 .summary-box{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
+
+
+
+.welcome-card{
+
+    padding:25px;
+
+}
+
 
 
 }
 
 </style>
-
-
 
 @endsection

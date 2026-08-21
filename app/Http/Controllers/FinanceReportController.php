@@ -202,14 +202,11 @@ class FinanceReportController extends Controller
 
 
 
-        $balance =
-
-            $totalIncome
-
-            -
-
-            $totalExpense;
-
+        $balance = RekeningBank::where(
+            'status',
+            true
+        )
+        ->sum('saldo');
 
 
 
@@ -259,7 +256,7 @@ class FinanceReportController extends Controller
         )
 
         ->get();
-
+        $totalBankSaldo = $banks->sum('saldo');
 
 
 
@@ -277,6 +274,8 @@ class FinanceReportController extends Controller
                 'deposits',
 
                 'expenses',
+
+                'totalBankSaldo',
 
                 'totalIncome',
 

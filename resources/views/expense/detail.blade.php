@@ -4,98 +4,153 @@
 
 <div class="detail-container detail-page">
 
+
 {{-- ================= HEADER ================= --}}
 
 <div class="detail-header">
-    <div class="header-left">
 
-        <div class="header-label">
-            PENGAJUAN DANA #{{ str_pad($request->id,4,'0',STR_PAD_LEFT) }}
-        </div>
+<div class="header-left">
 
 
-        <h1>
-            {{ $request->judul }}
-        </h1>
+<div class="header-label">
 
-
-        <p>
-            {{ $request->created_at->format('d M Y, H:i') }}
-        </p>
-
-
-        <div class="requester">
-            {{ $request->pengguna->name ?? 'Pengguna' }}
-        </div>
-
-    </div>
-
-
-
-    <div class="header-right">
-
-
-        <div class="amount-card">
-
-            <small>
-                Total Pengajuan
-            </small>
-
-            <strong>
-                Rp {{ number_format($request->jumlah,0,',','.') }}
-            </strong>
-
-        </div>
-
-
-
-        @if($request->status == 'pending')
-
-        <div class="status pending">
-            Menunggu Persetujuan
-        </div>
-
-        @elseif($request->status == 'approved')
-
-        <div class="status approved">
-            Dana Disetujui
-        </div>
-
-        @else
-
-        <div class="status rejected">
-            Pengajuan Ditolak
-        </div>
-
-        @endif
-
-
-    </div>
+PENGAJUAN DANA #{{ str_pad($request->id,4,'0',STR_PAD_LEFT) }}
 
 </div>
+
+
+
+<h1>
+
+{{ $request->judul }}
+
+</h1>
+
+
+
+<p>
+
+{{ $request->created_at->format('d M Y, H:i') }}
+
+</p>
+
+
+
+<div class="requester">
+
+{{ $request->pengguna->name ?? 'Pengguna' }}
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="header-right">
+
+
+<div class="amount-card">
+
+
+<small>
+
+Total Pengajuan
+
+</small>
+
+
+<strong>
+
+Rp {{ number_format($request->jumlah,0,',','.') }}
+
+</strong>
+
+
+</div>
+
+
+
+
+@if($request->status == 'pending')
+
+
+<div class="status pending">
+
+Menunggu Persetujuan
+
+</div>
+
+
+@elseif($request->status == 'approved')
+
+
+<div class="status approved">
+
+Dana Disetujui
+
+</div>
+
+
+@else
+
+
+<div class="status rejected">
+
+Pengajuan Ditolak
+
+</div>
+
+
+@endif
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 
 
 
 
 {{-- ================= TIMELINE ================= --}}
 
+
 <div class="timeline-box">
 
-    <div class="timeline-step active">
-        ✓ Pengajuan dibuat
-    </div>
+
+<div class="timeline-step active">
+
+✓ Pengajuan dibuat
+
+</div>
 
 
-    <div class="timeline-step 
-    {{ $request->status != 'pending' ? 'active':'' }}">
-        ✓ Diproses Finance
-    </div>
+
+<div class="timeline-step
+
+{{ $request->status != 'pending' ? 'active':'' }}">
+
+✓ Diproses Finance
+
+</div>
 
 
-    <div class="timeline-step
-    {{ $request->status == 'approved' ? 'active':'' }}">
-        ✓ Dana Disetujui
-    </div>
+
+<div class="timeline-step
+
+{{ $request->status == 'approved' ? 'active':'' }}">
+
+✓ Dana Disetujui
+
+</div>
+
 
 </div>
 
@@ -103,128 +158,398 @@
 
 
 
-{{-- ================= DETAIL ================= --}}
 
-<div class="card" style="overflow:visible;">
+
+
+
+{{-- ================= DETAIL PENGAJUAN + BUDGET ================= --}}
+
+
+<div class="card">
+
 
 <div class="card-title">
-    Detail Pengajuan
+
+Detail Pengajuan
+
 </div>
+
+
 
 
 <div class="info-grid">
 
 
-<div class="info-item">
-
-<div class="detail-icon">
-📁
-</div>
-
-<div>
-
-<label>
-Project
-</label>
-
-<strong>
-{{ $request->proyek->nama_proyek ?? '-' }}
-</strong>
-
-</div>
-
-</div>
 
 
+
+
+{{-- PERUSAHAAN --}}
 
 
 <div class="info-item">
 
+
 <div class="detail-icon">
+
 🏢
+
 </div>
+
 
 <div>
 
+
 <label>
-Divisi
+
+Perusahaan
+
 </label>
 
+
 <strong>
-{{ $request->divisi->nama_divisi ?? '-' }}
+
+{{ $request->proyek->perusahaan->nama_perusahaan ?? '-' }}
+
 </strong>
 
-</div>
 
 </div>
 
 
+</div>
+
+
+
+
+
+
+
+{{-- PROJECT --}}
 
 
 <div class="info-item">
 
+
 <div class="detail-icon">
-💰
+
+📁
+
 </div>
+
 
 <div>
 
+
 <label>
-Jumlah Dana
+
+Project
+
 </label>
+
+
+<strong>
+
+{{ $request->proyek->nama_proyek ?? '-' }}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{{-- DIVISI --}}
+
+
+<div class="info-item">
+
+
+<div class="detail-icon">
+
+🏬
+
+</div>
+
+
+<div>
+
+
+<label>
+
+Divisi
+
+</label>
+
+
+<strong>
+
+{{ $request->divisi->nama_divisi ?? '-' }}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+{{-- JUMLAH PENGAJUAN --}}
+
+
+<div class="info-item">
+
+
+<div class="detail-icon">
+
+💰
+
+</div>
+
+
+<div>
+
+
+<label>
+
+Jumlah Dana
+
+</label>
+
 
 <strong class="money">
+
 Rp {{ number_format($request->jumlah,0,',','.') }}
+
 </strong>
 
-</div>
 
 </div>
 
 
+</div>
+
+
+
+
+
+
+
+
+{{-- TOTAL BUDGET PROJECT --}}
 
 
 <div class="info-item">
 
+
 <div class="detail-icon">
-📅
+
+💼
+
 </div>
+
 
 <div>
 
+
 <label>
-Tanggal Pengajuan
+
+Total Budget Project
+
 </label>
 
+
 <strong>
-{{ $request->created_at->format('d M Y') }}
+
+Rp {{ number_format($request->proyek->total_anggaran ?? 0,0,',','.') }}
+
 </strong>
 
-</div>
 
 </div>
 
 
+</div>
+
+
+
+
+
+
+
+
+{{-- REALISASI --}}
+
+
+<div class="info-item">
+
+
+<div class="detail-icon">
+
+📊
 
 </div>
+
+
+<div>
+
+
+<label>
+
+Total Realisasi Dana
+
+</label>
+
+
+<strong>
+
+Rp {{ number_format($request->proyek->total_realisasi ?? 0,0,',','.') }}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{{-- SISA BUDGET --}}
+
+
+<div class="info-item">
+
+
+<div class="detail-icon">
+
+💳
+
+</div>
+
+
+<div>
+
+
+<label>
+
+Sisa Budget
+
+</label>
+
+
+<strong class="money">
+    
+
+Rp {{ number_format($request->proyek->sisa_budget ?? 0,0,',','.') }}
+
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{{-- TANGGAL --}}
+
+
+<div class="info-item">
+
+
+<div class="detail-icon">
+
+📅
+
+</div>
+
+
+<div>
+
+
+<label>
+
+Tanggal Pengajuan
+
+</label>
+
+
+<strong>
+
+{{ $request->created_at->format('d M Y') }}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
 
 
 
 
 <div class="description-box">
 
+
 <label>
+
 Keterangan
+
 </label>
 
+
 <p>
+
 {{ $request->keterangan ?? '-' }}
+
 </p>
 
 
 </div>
 
+
+
 </div>
+
+
+
 
 
 
@@ -233,16 +558,21 @@ Keterangan
 
 {{-- ================= DOKUMEN ================= --}}
 
+
 <div class="card">
 
 
 <div class="card-title">
+
 Dokumen Pendukung
+
 </div>
 
 
 
+
 @if($request->bukti_pengajuan)
+
 
 
 @php
@@ -253,11 +583,20 @@ $filePath = public_path(
 
 
 $fileSize = file_exists($filePath)
-? number_format(filesize($filePath)/1024,1).' KB'
-:'-';
+
+?
+
+number_format(filesize($filePath)/1024,1).' KB'
+
+:
+
+'-';
 
 
 @endphp
+
+
+
 
 
 
@@ -268,19 +607,27 @@ $fileSize = file_exists($filePath)
 
 
 <div class="file-icon">
+
 FILE
+
 </div>
+
 
 
 <div>
 
+
 <strong>
+
 {{ $request->bukti_pengajuan }}
+
 </strong>
 
 
 <small>
+
 Lampiran transaksi • {{ $fileSize }}
+
 </small>
 
 
@@ -291,8 +638,11 @@ Lampiran transaksi • {{ $fileSize }}
 
 
 
-<button 
+
+<button
+
 onclick="openProof()"
+
 class="btn-view">
 
 Lihat Bukti
@@ -300,7 +650,9 @@ Lihat Bukti
 </button>
 
 
+
 </div>
+
 
 
 
@@ -317,14 +669,9 @@ Tidak ada dokumen pendukung
 @endif
 
 
+
 </div>
-
-
-
-
-
-
-{{-- ================= MODAL ================= --}}
+{{-- ================= MODAL BUKTI ================= --}}
 
 @if($request->bukti_pengajuan)
 
@@ -338,18 +685,24 @@ Tidak ada dokumen pendukung
 
 
 <strong>
+
 Preview Bukti
+
 </strong>
 
 
 
-<button 
+
+<button
+
 onclick="closeProof()"
+
 class="btn-close">
 
 ×
 
 </button>
+
 
 
 </div>
@@ -361,20 +714,29 @@ class="btn-close">
 
 
 <iframe
+
 src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}"
+
 width="100%"
+
 height="600">
+
 </iframe>
+
 
 
 @else
 
 
+
 <img
+
 src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 
+
 @endif
+
 
 
 </div>
@@ -384,14 +746,23 @@ src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 
 @endif
+
+
+
+
+
+
 
 {{-- ================= AUDIT TRAIL ================= --}}
+
 
 <div class="card">
 
 
 <div class="card-title">
-    Audit Trail Aktivitas
+
+Audit Trail Aktivitas
+
 </div>
 
 
@@ -399,15 +770,20 @@ src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 <div class="audit-list">
 
 
+
 @forelse($request->auditLogs as $log)
+
 
 
 <div class="audit-card">
 
 
 <div class="audit-icon">
+
 ✓
+
 </div>
+
 
 
 
@@ -416,35 +792,51 @@ src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 <div class="audit-header">
 
+
 <strong>
+
 {{ $log->aksi }}
+
 </strong>
 
 
+
 <span>
+
 {{ $log->modul }}
+
 </span>
+
 
 
 </div>
 
 
 
+
 <p>
+
 {{ $log->deskripsi }}
+
 </p>
+
 
 
 
 <div class="audit-meta">
 
+
 {{ $log->pengguna->name ?? 'System' }}
+
 
 •
 
 {{ $log->created_at->format('d M Y H:i') }}
 
+
+
 </div>
+
 
 
 </div>
@@ -457,6 +849,7 @@ src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 @empty
 
 
+
 <div class="empty">
 
 Belum ada aktivitas
@@ -464,13 +857,17 @@ Belum ada aktivitas
 </div>
 
 
+
 @endforelse
 
 
+
 </div>
 
 
+
 </div>
+
 
 
 
@@ -498,10 +895,13 @@ Keputusan Finance
 
 
 
+
 <div class="decision-header">
 
 
+
 @if($request->status == 'approved')
+
 
 
 <div class="decision-icon success">
@@ -512,16 +912,24 @@ Keputusan Finance
 
 
 
+
 <div>
 
+
 <strong>
+
 Pengajuan Disetujui
+
 </strong>
 
 
+
 <p>
+
 Dana berhasil diverifikasi Finance
+
 </p>
+
 
 
 </div>
@@ -532,6 +940,7 @@ Dana berhasil diverifikasi Finance
 @else
 
 
+
 <div class="decision-icon failed">
 
 ×
@@ -540,26 +949,39 @@ Dana berhasil diverifikasi Finance
 
 
 
+
 <div>
 
+
 <strong>
+
 Pengajuan Ditolak
+
 </strong>
 
 
+
 <p>
+
 Pengajuan tidak dapat diproses
+
 </p>
 
 
+
 </div>
+
 
 
 
 @endif
 
 
+
 </div>
+
+
+
 
 
 
@@ -570,16 +992,22 @@ Pengajuan tidak dapat diproses
 
 
 <label>
+
 Catatan
+
 </label>
 
 
 <p>
+
 {{ $request->catatan_persetujuan ?? 'Tidak ada catatan tambahan' }}
+
 </p>
 
 
 </div>
+
+
 
 
 
@@ -591,73 +1019,104 @@ Catatan
 
 <div>
 
+
 <label>
-Diproses oleh
+
+Diproses Oleh
+
 </label>
 
 
 <strong>
+
 {{ $request->penyetuju->name ?? 'Finance' }}
+
 </strong>
 
 
 </div>
+
+
 
 
 
 <div>
 
+
 <label>
+
 Tanggal
+
 </label>
 
 
 <strong>
+
 {{ $request->disetujui_pada?->format('d M Y H:i') ?? '-' }}
+
 </strong>
 
 
 </div>
 
 
-</div>
-
-
 
 </div>
+
+
+
+</div>
+
 
 
 @endif
 
 
 
+
+
+
+
 <a href="
+
 @if(auth()->user()->role == 'karyawan')
 
 {{ route('expense.myhistory') }}
+
 
 @elseif(
 auth()->user()->role == 'keuangan' ||
 auth()->user()->role == 'bendahara'
 )
 
+
 {{ route('expense.approval') }}
+
 
 @else
 
+
 {{ route('dashboard') }}
 
+
 @endif
-" 
+
+"
+
 class="back">
 
+
 ← Kembali
+
 
 </a>
 
 
 
 </div>
+
+
+
 
 
 
@@ -687,38 +1146,50 @@ function closeProof(){
 
 
 </script>
+
+
+
+@endsection
+
+
+
+
+
 <style>
 
-/* =========================
+/* =================================
 GLOBAL
-========================= */
-
-.detail-container{
-    width:100%;
-    max-width:100%;
-}
-
+================================= */
 
 *{
     box-sizing:border-box;
 }
 
+.detail-container{
+    width:100%;
+}
 
-/* =========================
-HEADER DETAIL
-========================= */
+
+
+/* =================================
+HEADER
+================================= */
+
 
 .detail-header{
 
-    width:100%;
+    background:#f8fafc;
 
-    background:#ffffff;
-
-    border:1px solid #e2e8f0;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    padding:34px;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:20px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -726,34 +1197,17 @@ HEADER DETAIL
 
     align-items:center;
 
-    gap:35px;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.06);
-
-}
-
-
-
-.header-left{
-
-    flex:1;
-
-    min-width:0;
-
 }
 
 
 
 .header-label{
 
-    font-size:11px;
+    font-size:10px;
+
+    font-weight:800;
 
     letter-spacing:2px;
-
-    font-weight:700;
 
     color:#64748b;
 
@@ -763,15 +1217,13 @@ HEADER DETAIL
 
 .header-left h1{
 
-    margin:12px 0 8px;
+    margin:8px 0;
 
-    font-size:34px;
-
-    line-height:1.2;
-
-    color:#172033;
+    font-size:24px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -779,7 +1231,9 @@ HEADER DETAIL
 
 .header-left p{
 
-    font-size:13px;
+    margin:0;
+
+    font-size:12px;
 
     color:#64748b;
 
@@ -789,36 +1243,33 @@ HEADER DETAIL
 
 .requester{
 
-    margin-top:16px;
-
-    padding:8px 18px;
+    margin-top:12px;
 
     display:inline-flex;
+
+    padding:7px 14px;
 
     background:#f1f5f9;
 
     border-radius:999px;
 
+    font-size:11px;
+
+    font-weight:700;
+
     color:#334155;
-
-    font-size:12px;
-
-    font-weight:600;
 
 }
 
 
 
 
-
-/* =========================
+/* =================================
 AMOUNT
-========================= */
+================================= */
 
 
 .header-right{
-
-    width:260px;
 
     text-align:right;
 
@@ -828,13 +1279,13 @@ AMOUNT
 
 .amount-card{
 
-    background:#f8fafc;
+    background:white;
+
+    padding:18px;
+
+    border-radius:18px;
 
     border:1px solid #e2e8f0;
-
-    padding:20px;
-
-    border-radius:20px;
 
 }
 
@@ -844,9 +1295,9 @@ AMOUNT
 
     display:block;
 
-    color:#64748b;
+    font-size:11px;
 
-    font-size:12px;
+    color:#64748b;
 
 }
 
@@ -858,9 +1309,9 @@ AMOUNT
 
     margin-top:8px;
 
-    color:#172033;
+    font-size:22px;
 
-    font-size:30px;
+    color:#1e293b;
 
 }
 
@@ -868,22 +1319,22 @@ AMOUNT
 
 
 
-/* =========================
+/* =================================
 STATUS
-========================= */
+================================= */
 
 
 .status{
 
-    margin-top:14px;
-
     display:inline-flex;
 
-    padding:10px 22px;
+    padding:7px 14px;
+
+    margin-top:12px;
 
     border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -891,7 +1342,7 @@ STATUS
 
 
 
-.status.pending{
+.pending{
 
     background:#fef3c7;
 
@@ -901,21 +1352,21 @@ STATUS
 
 
 
-.status.approved{
+.approved{
 
     background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
 }
 
 
 
-.status.rejected{
+.rejected{
 
     background:#fee2e2;
 
-    color:#dc2626;
+    color:#b91c1c;
 
 }
 
@@ -923,26 +1374,29 @@ STATUS
 
 
 
-/* =========================
+
+/* =================================
 TIMELINE
-========================= */
+================================= */
 
 
 .timeline-box{
 
     background:white;
 
+    padding:18px;
+
+    border-radius:20px;
+
     border:1px solid #e2e8f0;
 
-    border-radius:22px;
+    display:grid;
 
-    padding:20px;
-
-    display:flex;
+    grid-template-columns:repeat(3,1fr);
 
     gap:15px;
 
-    margin-bottom:22px;
+    margin-bottom:20px;
 
 }
 
@@ -950,21 +1404,17 @@ TIMELINE
 
 .timeline-step{
 
-    flex:1;
-
     text-align:center;
 
-    padding:13px;
-
-    background:#f8fafc;
+    padding:12px;
 
     border-radius:14px;
 
-    border:1px solid #e2e8f0;
+    background:#f8fafc;
 
-    color:#64748b;
+    color:#94a3b8;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -974,11 +1424,9 @@ TIMELINE
 
 .timeline-step.active{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
-
-    border-color:#86efac;
+    color:#166534;
 
 }
 
@@ -986,27 +1434,27 @@ TIMELINE
 
 
 
-/* =========================
-CARD
-========================= */
+
+/* =================================
+CARD PANEL OWNER STYLE
+================================= */
 
 
 .card{
 
-    width:100%;
-
     background:white;
 
-    border:1px solid #e2e8f0;
+    padding:25px;
 
     border-radius:24px;
 
-    padding:28px;
-
-    margin-bottom:22px;
+    border:1px solid #e2e8f0;
 
     box-shadow:
-    0 8px 20px rgba(15,23,42,.04);
+
+    0 5px 20px rgba(15,23,42,.05);
+
+    margin-bottom:20px;
 
 }
 
@@ -1014,13 +1462,17 @@ CARD
 
 .card-title{
 
-    font-size:18px;
+    font-size:16px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
-    margin-bottom:22px;
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:20px;
 
 }
 
@@ -1028,18 +1480,19 @@ CARD
 
 
 
-/* =========================
-DETAIL INFO
-========================= */
+
+/* =================================
+INFO GRID
+================================= */
 
 
 .info-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+    gap:15px;
 
 }
 
@@ -1051,13 +1504,13 @@ DETAIL INFO
 
     align-items:center;
 
-    gap:15px;
+    gap:12px;
 
-    padding:18px;
+    padding:15px;
 
     background:#f8fafc;
 
-    border-radius:18px;
+    border-radius:16px;
 
 }
 
@@ -1065,26 +1518,19 @@ DETAIL INFO
 
 .detail-icon{
 
-    width:46px;
+    width:42px;
 
-    height:46px;
+    height:42px;
 
-    flex:none;
+    border-radius:14px;
 
     background:white;
-
-    border-radius:15px;
 
     display:flex;
 
     align-items:center;
 
     justify-content:center;
-
-    font-size:20px;
-
-    box-shadow:
-    0 4px 10px rgba(0,0,0,.05);
 
 }
 
@@ -1094,7 +1540,7 @@ DETAIL INFO
 
     display:block;
 
-    font-size:11px;
+    font-size:10px;
 
     color:#94a3b8;
 
@@ -1104,9 +1550,13 @@ DETAIL INFO
 
 .info-item strong{
 
-    color:#172033;
+    display:block;
 
-    font-size:14px;
+    margin-top:4px;
+
+    font-size:13px;
+
+    color:#1e293b;
 
 }
 
@@ -1122,20 +1572,20 @@ DETAIL INFO
 
 
 
-/* =========================
+/* =================================
 DESCRIPTION
-========================= */
+================================= */
 
 
 .description-box{
 
     margin-top:20px;
 
-    padding:18px;
+    padding:16px;
 
     background:#f8fafc;
 
-    border-radius:18px;
+    border-radius:16px;
 
 }
 
@@ -1143,11 +1593,23 @@ DESCRIPTION
 
 .description-box label{
 
-    color:#64748b;
-
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
+
+    color:#64748b;
+
+}
+
+
+
+.description-box p{
+
+    margin:8px 0 0;
+
+    font-size:13px;
+
+    color:#334155;
 
 }
 
@@ -1155,50 +1617,25 @@ DESCRIPTION
 
 
 
-/* =========================
+
+/* =================================
 DOCUMENT
-========================= */
+================================= */
 
 
 .file-card{
 
-    display:flex;
+    background:#f8fafc;
 
-    align-items:center;
+    padding:16px;
+
+    border-radius:16px;
+
+    display:flex;
 
     justify-content:space-between;
 
-    gap:15px;
-
-    background:#f8fafc;
-
-    padding:18px;
-
-    border-radius:18px;
-
-}
-
-
-
-.file-icon{
-
-    width:45px;
-
-    height:45px;
-
-    background:white;
-
-    border-radius:14px;
-
-    display:flex;
-
     align-items:center;
-
-    justify-content:center;
-
-    color:#334155;
-
-    font-weight:700;
 
 }
 
@@ -1210,7 +1647,31 @@ DOCUMENT
 
     align-items:center;
 
-    gap:15px;
+    gap:12px;
+
+}
+
+
+
+.file-icon{
+
+    width:42px;
+
+    height:42px;
+
+    background:white;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:11px;
+
+    font-weight:800;
 
 }
 
@@ -1220,9 +1681,7 @@ DOCUMENT
 
     display:block;
 
-    margin-top:5px;
-
-    color:#64748b;
+    color:#94a3b8;
 
 }
 
@@ -1230,15 +1689,17 @@ DOCUMENT
 
 .btn-view{
 
-    background:#0f172a;
+    background:#334155;
 
     color:white;
 
-    padding:11px 22px;
-
     border:none;
 
-    border-radius:12px;
+    padding:9px 18px;
+
+    border-radius:10px;
+
+    font-size:12px;
 
     font-weight:700;
 
@@ -1248,39 +1709,16 @@ DOCUMENT
 
 
 
-/* =========================
-EMPTY
-========================= */
-
-
-.empty{
-
-    min-height:130px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:#94a3b8;
-
-}
-
-
-
-
-
-/* =========================
+/* =================================
 AUDIT TRAIL
-========================= */
+================================= */
 
 
 .audit-list{
 
     position:relative;
 
-    padding-left:45px;
+    padding-left:35px;
 
 }
 
@@ -1292,11 +1730,11 @@ AUDIT TRAIL
 
     position:absolute;
 
-    left:16px;
+    left:13px;
 
-    top:10px;
+    top:0;
 
-    bottom:10px;
+    bottom:0;
 
     width:2px;
 
@@ -1308,15 +1746,15 @@ AUDIT TRAIL
 
 .audit-card{
 
-    position:relative;
-
     background:#f8fafc;
 
-    padding:18px;
+    padding:15px;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    margin-bottom:15px;
+    margin-bottom:12px;
+
+    position:relative;
 
 }
 
@@ -1326,13 +1764,11 @@ AUDIT TRAIL
 
     position:absolute;
 
-    left:-45px;
+    left:-35px;
 
-    top:20px;
+    width:28px;
 
-    width:34px;
-
-    height:34px;
+    height:28px;
 
     border-radius:50%;
 
@@ -1342,11 +1778,11 @@ AUDIT TRAIL
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
 
-    font-weight:800;
+    justify-content:center;
+
+    font-size:12px;
 
 }
 
@@ -1362,17 +1798,25 @@ AUDIT TRAIL
 
 
 
+.audit-header strong{
+
+    font-size:13px;
+
+}
+
+
+
 .audit-header span{
 
     background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
-    padding:5px 12px;
+    padding:4px 10px;
 
     border-radius:999px;
 
-    font-size:11px;
+    font-size:10px;
 
 }
 
@@ -1380,7 +1824,9 @@ AUDIT TRAIL
 
 .audit-content p{
 
-    margin:10px 0;
+    margin:8px 0;
+
+    font-size:12px;
 
     color:#475569;
 
@@ -1390,9 +1836,9 @@ AUDIT TRAIL
 
 .audit-meta{
 
-    color:#94a3b8;
+    font-size:11px;
 
-    font-size:12px;
+    color:#94a3b8;
 
 }
 
@@ -1400,9 +1846,9 @@ AUDIT TRAIL
 
 
 
-/* =========================
+/* =================================
 DECISION FINANCE
-========================= */
+================================= */
 
 
 .decision-header{
@@ -1411,13 +1857,13 @@ DECISION FINANCE
 
     align-items:center;
 
-    gap:18px;
-
-    padding:20px;
+    gap:15px;
 
     background:#f8fafc;
 
-    border-radius:18px;
+    padding:16px;
+
+    border-radius:16px;
 
 }
 
@@ -1425,11 +1871,11 @@ DECISION FINANCE
 
 .decision-icon{
 
-    width:48px;
+    width:42px;
 
-    height:48px;
+    height:42px;
 
-    border-radius:16px;
+    border-radius:14px;
 
     display:flex;
 
@@ -1437,19 +1883,7 @@ DECISION FINANCE
 
     justify-content:center;
 
-    font-size:20px;
-
     font-weight:800;
-
-}
-
-
-
-.failed{
-
-    background:#fee2e2;
-
-    color:#dc2626;
 
 }
 
@@ -1459,41 +1893,30 @@ DECISION FINANCE
 
     background:#dcfce7;
 
-    color:#16a34a;
+    color:#166534;
 
 }
 
 
 
-.decision-header strong{
+.failed{
 
-    font-size:16px;
+    background:#fee2e2;
 
-    color:#172033;
-
-}
-
-
-
-.decision-header p{
-
-    margin-top:5px;
-
-    color:#64748b;
+    color:#b91c1c;
 
 }
 
 
 
+.decision-note,
+.decision-info div{
 
-
-.decision-note{
-
-    margin-top:18px;
-
-    padding:18px;
+    margin-top:15px;
 
     background:#f8fafc;
+
+    padding:15px;
 
     border-radius:16px;
 
@@ -1503,25 +1926,11 @@ DECISION FINANCE
 
 .decision-info{
 
-    margin-top:18px;
-
     display:grid;
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
-
-}
-
-
-
-.decision-info div{
-
-    padding:18px;
-
-    background:#f8fafc;
-
-    border-radius:16px;
+    gap:15px;
 
 }
 
@@ -1543,7 +1952,7 @@ DECISION FINANCE
 
     margin-top:5px;
 
-    color:#172033;
+    font-size:13px;
 
 }
 
@@ -1551,26 +1960,30 @@ DECISION FINANCE
 
 
 
-/* =========================
+
+
+/* =================================
 BACK
-========================= */
+================================= */
 
 
 .back{
 
     display:inline-flex;
 
-    background:#0f172a;
+    padding:10px 20px;
+
+    background:#334155;
 
     color:white;
 
-    padding:12px 26px;
+    border-radius:12px;
 
-    border-radius:14px;
-
-    text-decoration:none;
+    font-size:12px;
 
     font-weight:700;
+
+    text-decoration:none;
 
 }
 
@@ -1578,9 +1991,68 @@ BACK
 
 
 
-/* =========================
+
+
+/* =================================
+MODAL
+================================= */
+
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.6);
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:999;
+
+}
+
+
+
+.modal-content{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    width:80%;
+
+}
+
+
+
+.btn-close{
+
+    background:#fee2e2;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:5px 12px;
+
+    color:#b91c1c;
+
+}
+
+
+
+
+
+/* =================================
 RESPONSIVE
-========================= */
+================================= */
 
 
 @media(max-width:900px){
@@ -1595,33 +2067,13 @@ RESPONSIVE
 }
 
 
-
-.header-right{
-
-    width:100%;
-
-    text-align:left;
-
-}
-
-
-
 .info-grid,
-
-.decision-info{
+.decision-info,
+.timeline-box{
 
     grid-template-columns:1fr;
 
 }
-
-
-
-.timeline-box{
-
-    flex-direction:column;
-
-}
-
 
 
 .file-card{
@@ -1630,11 +2082,11 @@ RESPONSIVE
 
     align-items:flex-start;
 
+    gap:15px;
+
 }
 
 
 }
 
 </style>
-
-@endsection

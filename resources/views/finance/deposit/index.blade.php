@@ -427,33 +427,42 @@ Belum ada pembayaran masuk
 
 
 
-
-
-
-
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-/* HEADER */
+body{
+    color:#172033;
+}
+
+
+/* ===============================
+HEADER
+================================ */
 
 
 .welcome-card{
 
-background:white;
+    background:#f8fafc;
 
-padding:28px;
+    border:1px solid #e2e8f0;
 
-border-radius:12px;
+    border-radius:24px;
 
-display:flex;
+    padding:30px;
 
-justify-content:space-between;
+    display:flex;
 
-align-items:center;
+    justify-content:space-between;
 
-margin-bottom:20px;
+    align-items:center;
 
-border:1px solid #e2e8f0;
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -461,13 +470,13 @@ border:1px solid #e2e8f0;
 
 .welcome-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -475,11 +484,13 @@ color:#64748b;
 
 .welcome-card h1{
 
-font-size:28px;
+    margin:10px 0;
 
-color:#5b3a16;
+    font-size:24px;
 
-margin:8px 0;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -487,41 +498,11 @@ margin:8px 0;
 
 .welcome-card p{
 
-font-size:13px;
+    margin:0;
 
-color:#64748b;
+    font-size:13px;
 
-}
-
-
-
-
-
-.btn-add,
-.btn-small{
-
-background:#6b4f1d;
-
-color:white;
-
-padding:12px 18px;
-
-border-radius:10px;
-
-text-decoration:none;
-
-font-size:13px;
-
-font-weight:600;
-
-}
-
-
-
-.btn-add:hover,
-.btn-small:hover{
-
-background:#8b6b2e;
+    color:#64748b;
 
 }
 
@@ -529,42 +510,31 @@ background:#8b6b2e;
 
 
 
+.btn-add{
 
+    background:#1e293b;
 
+    color:white;
 
+    padding:12px 22px;
 
-/* ALERT */
+    border-radius:14px;
 
+    font-size:12px;
 
-.success-box{
+    font-weight:700;
 
-background:#fff7db;
-
-color:#6b4f1d;
-
-padding:15px;
-
-border-radius:12px;
-
-margin-bottom:20px;
-
-font-weight:600;
+    text-decoration:none;
 
 }
 
 
 
-.error-box{
 
-background:#fee2e2;
 
-color:#991b1b;
+.btn-add:hover{
 
-padding:15px;
-
-border-radius:12px;
-
-margin-bottom:20px;
+    background:#334155;
 
 }
 
@@ -574,62 +544,95 @@ margin-bottom:20px;
 
 
 
-
-
-/* SUMMARY */
+/* ===============================
+SUMMARY CARD
+================================ */
 
 
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:18px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
 
 }
+
 
 
 
 .summary-card{
 
-background:white;
+    background:white;
 
-padding:20px;
+    border:1px solid #e5e7eb;
 
-border-radius:12px;
+    border-radius:22px;
 
-border:1px solid #e2e8f0;
+    padding:18px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:15px;
+    gap:14px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.05);
+
+    position:relative;
+
+    overflow:hidden;
 
 }
 
 
 
+
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    height:4px;
+
+    width:100%;
+
+    background:#334155;
+
+}
+
+
+
+
+
 .summary-icon{
 
-width:45px;
+    width:45px;
 
-height:45px;
+    height:45px;
 
-background:#fff7db;
+    border-radius:14px;
 
-border-radius:12px;
+    background:#fef3c7;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-font-size:22px;
+    font-size:18px;
 
 }
 
@@ -637,9 +640,9 @@ font-size:22px;
 
 .summary-card label{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -647,11 +650,13 @@ color:#64748b;
 
 .summary-card h2{
 
-font-size:18px;
+    margin:4px 0;
 
-color:#5b3a16;
+    font-size:18px;
 
-margin-top:5px;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -659,9 +664,9 @@ margin-top:5px;
 
 .summary-card small{
 
-color:#94a3b8;
+    font-size:10px;
 
-font-size:11px;
+    color:#94a3b8;
 
 }
 
@@ -671,44 +676,44 @@ font-size:11px;
 
 
 
-
-
-/* PANEL */
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-background:white;
 
-padding:22px;
-
-border-radius:12px;
-
-border:1px solid #e2e8f0;
-
-}
+    background:white;
 
 
+    border:1px solid #e5e7eb;
 
-.panel-header{
 
-display:flex;
+    border-radius:24px;
 
-justify-content:space-between;
 
-align-items:center;
+    padding:25px;
 
-margin-bottom:18px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
+
 
 }
+
+
 
 
 
 .panel-title{
 
-font-size:16px;
+    font-size:16px;
 
-font-weight:700;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -716,9 +721,9 @@ font-weight:700;
 
 .panel-header small{
 
-color:#94a3b8;
+    font-size:11px;
 
-font-size:12px;
+    color:#94a3b8;
 
 }
 
@@ -729,15 +734,16 @@ font-size:12px;
 
 
 
-
-/* TABLE */
+/* ===============================
+TABLE
+================================ */
 
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
 
@@ -745,15 +751,15 @@ border-collapse:collapse;
 
 th{
 
-padding:14px;
+    background:#f8fafc;
 
-background:#f8fafc;
+    padding:13px;
 
-text-align:left;
+    font-size:11px;
 
-font-size:12px;
+    color:#64748b;
 
-color:#64748b;
+    text-align:left;
 
 }
 
@@ -761,51 +767,63 @@ color:#64748b;
 
 td{
 
-padding:14px;
+    padding:14px;
 
-border-bottom:1px solid #f1f5f9;
+    font-size:12px;
 
-font-size:13px;
+    color:#334155;
+
+    border-bottom:1px solid #f1f5f9;
 
 }
+
+
+
+td strong{
+
+    font-size:13px;
+
+    color:#172033;
+
+}
+
+
+
+tr:hover{
+
+    background:#fafafa;
+
+}
+
+
 
 
 
 .income{
 
-color:#16a34a;
+    color:#16a34a;
 
-font-weight:700;
+    font-weight:800;
 
 }
+
+
 
 
 
 .status-success{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
-padding:6px 12px;
+    padding:6px 12px;
 
-border-radius:20px;
+    border-radius:999px;
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:600;
-
-}
-
-
-
-.empty{
-
-text-align:center;
-
-padding:30px;
-
-color:#94a3b8;
+    font-weight:700;
 
 }
 
@@ -815,10 +833,12 @@ color:#94a3b8;
 
 
 
+/* ===============================
+RESPONSIVE
+================================ */
 
 
-@media(max-width:1000px){
-
+@media(max-width:1200px){
 
 .summary-grid{
 
@@ -826,20 +846,17 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
-
 }
 
 
 
-@media(max-width:700px){
-
+@media(max-width:800px){
 
 .summary-grid{
 
 grid-template-columns:1fr;
 
 }
-
 
 
 .welcome-card{
@@ -858,6 +875,5 @@ gap:15px;
 
 
 </style>
-
 
 @endsection

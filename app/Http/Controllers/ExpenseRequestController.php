@@ -40,6 +40,11 @@ class ExpenseRequestController extends Controller
         $employee = Auth::user()->karyawan;
 
 
+        if(!$employee)
+        {
+            abort(403);
+        }
+
         $projects = Proyek::whereHas(
             'tugas',
             function($query) use($employee){
@@ -51,8 +56,8 @@ class ExpenseRequestController extends Controller
 
             }
         )
+        ->with('perusahaan')
         ->get();
-
         $divisions = Divisi::all();
 
 
@@ -88,7 +93,38 @@ class ExpenseRequestController extends Controller
     public function store(StorePengajuanDanaRequest $request)
     {
 
+$employee = Auth::user()->karyawan;
 
+
+if(!$employee)
+{
+    abort(403);
+}
+
+
+$allowedProject = Proyek::whereHas(
+    'tugas',
+    function($query) use($employee){
+
+        $query->where(
+            'karyawan_id',
+            $employee->id
+        );
+
+    }
+)
+->where(
+    'id',
+    $request->proyek_id
+)
+->exists();
+
+
+
+if(!$allowedProject)
+{
+    abort(403);
+}
         $balance = SaldoDivisi::where([
 
 
@@ -153,7 +189,40 @@ class ExpenseRequestController extends Controller
 
 
 
+/*
+|--------------------------------------------------------------------------
+| CEK SISA BUDGET PROJECT
+|--------------------------------------------------------------------------
+*/
 
+
+$project = Proyek::findOrFail(
+    $request->proyek_id
+);
+
+
+
+if($project->sisa_budget < $request->jumlah)
+{
+
+    return back()
+
+    ->withErrors([
+
+        'jumlah' => 'Budget project tidak mencukupi. Sisa budget: Rp '.
+
+        number_format(
+            $project->sisa_budget,
+            0,
+            ',',
+            '.'
+        )
+
+    ])
+
+    ->withInput();
+
+}
 
 
 
@@ -179,7 +248,14 @@ class ExpenseRequestController extends Controller
             $filename = time().'_'.$file->getClientOriginalName();
 
 
-
+            if(!file_exists(public_path('uploads/pengajuan')))
+            {
+                mkdir(
+                    public_path('uploads/pengajuan'),
+                    0755,
+                    true
+                );
+            }
             $file->move(
 
                 public_path('uploads/pengajuan'),
@@ -350,22 +426,15 @@ class ExpenseRequestController extends Controller
 
     public function history(Request $request)
     {
-
-
         $query = PengajuanDana::with([
 
-
-            'proyek',
-
+            'proyek.perusahaan',
 
             'divisi',
 
-
             'penyetuju'
 
-
         ])
-
         ->where(
 
 
@@ -449,10 +518,11 @@ class ExpenseRequestController extends Controller
 
     public function detail($id)
     {
-
         $request = PengajuanDana::with([
 
-            'proyek',
+            'proyek.perusahaan',
+
+            'proyek.transaksiDana',
 
             'divisi',
 

@@ -115,7 +115,7 @@ Jumlah Divisi
 
 
 <h2>
-{{$balances->count()}}
+{{$balances->pluck('divisi_id')->unique()->count()}}
 </h2>
 
 
@@ -245,10 +245,6 @@ Rp {{number_format($balance->saldo,0,',','.')}}
 
 
 
-
-
-
-
 <div class="info-box">
 
 
@@ -286,9 +282,24 @@ Divisi
 
 
 
+
+<div>
+
+<span>
+Distribusi
+</span>
+
+
+<b>
+{{$balance->jumlah_distribusi}} transaksi
+</b>
+
+
 </div>
 
 
+
+</div>
 
 
 
@@ -338,23 +349,26 @@ Belum ada saldo divisi
 
 
 
-
-
-
 <style>
 
+/* ===============================
+HEADER
+================================ */
 
 .welcome-card{
 
-background:white;
+    background:#f8fafc;
 
-padding:28px;
+    border:1px solid #e2e8f0;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    padding:30px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -362,13 +376,13 @@ margin-bottom:20px;
 
 .welcome-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -376,11 +390,13 @@ color:#64748b;
 
 .welcome-card h1{
 
-font-size:28px;
+    margin:10px 0;
 
-margin:8px 0;
+    font-size:24px;
 
-color:#6b4f1d;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -388,9 +404,11 @@ color:#6b4f1d;
 
 .welcome-card p{
 
-font-size:13px;
+    margin:0;
 
-color:#64748b;
+    font-size:13px;
+
+    color:#64748b;
 
 }
 
@@ -398,13 +416,15 @@ color:#64748b;
 
 
 
+/* TAG */
+
 .welcome-tags{
 
-display:flex;
+    display:flex;
 
-gap:10px;
+    gap:10px;
 
-margin-top:15px;
+    margin-top:15px;
 
 }
 
@@ -412,17 +432,17 @@ margin-top:15px;
 
 .welcome-tags span{
 
-background:#fff7db;
+    background:#f1f5f9;
 
-color:#6b4f1d;
+    color:#334155;
 
-padding:7px 14px;
+    padding:6px 12px;
 
-border-radius:20px;
+    border-radius:999px;
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:600;
+    font-weight:700;
 
 }
 
@@ -430,37 +450,100 @@ font-weight:600;
 
 
 
+
+
+
+/* ===============================
+SUMMARY
+================================ */
 
 
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
-gap:20px;
+    gap:20px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
+
+}
+
+
+.summary-card{
+
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:22px;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.05);
+
+    position:relative;
+
+    overflow:hidden;
 
 }
 
 
 
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
+
+}
 .summary-card{
 
-background:white;
 
-border:1px solid #e2e8f0;
+    background:white;
 
-padding:20px;
 
-border-radius:18px;
+    border:1px solid #e5e7eb;
 
-display:flex;
 
-align-items:center;
+    border-radius:22px;
 
-gap:15px;
+
+    padding:20px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:15px;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.05);
+
 
 }
 
@@ -468,32 +551,40 @@ gap:15px;
 
 .summary-icon{
 
-width:50px;
 
-height:50px;
+    width:48px;
 
-border-radius:15px;
 
-background:#fff7db;
+    height:48px;
 
-display:flex;
 
-align-items:center;
+    border-radius:15px;
 
-justify-content:center;
 
-font-size:22px;
+    background:#dbeafe;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    font-size:20px;
+
 
 }
 
 
 
-
 .summary-card label{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -501,9 +592,28 @@ color:#64748b;
 
 .summary-card h2{
 
-color:#6b4f1d;
 
-margin-top:5px;
+    margin:5px 0;
+
+
+    font-size:19px;
+
+
+    font-weight:800;
+
+
+    color:#172033;
+
+
+}
+
+
+
+.summary-card small{
+
+    font-size:10px;
+
+    color:#94a3b8;
 
 }
 
@@ -511,27 +621,46 @@ margin-top:5px;
 
 
 
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-background:white;
 
-padding:22px;
+    background:white;
 
-border-radius:18px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e5e7eb;
+
+
+    border-radius:24px;
+
+
+    padding:25px;
+
+
+    margin-bottom:20px;
+
+
+    box-shadow:
+
+
+    0 10px 30px rgba(15,23,42,.06);
+
 
 }
-
 
 
 
 
 .panel-header{
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
 
@@ -539,11 +668,28 @@ margin-bottom:20px;
 
 .panel-title{
 
-font-size:16px;
 
-font-weight:700;
+    font-size:16px;
 
-color:#1e293b;
+
+    font-weight:800;
+
+
+    color:#172033;
+
+
+}
+
+
+
+.panel-header small{
+
+
+    color:#94a3b8;
+
+
+    font-size:11px;
+
 
 }
 
@@ -551,18 +697,28 @@ color:#1e293b;
 
 
 
+
+
+
+
+/* ===============================
+BALANCE GRID
+================================ */
 
 
 .balance-grid{
 
-display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    display:grid;
 
-gap:18px;
+
+    grid-template-columns:repeat(3,1fr);
+
+
+    gap:18px;
+
 
 }
-
 
 
 
@@ -571,15 +727,24 @@ gap:18px;
 
 .balance-card{
 
-background:white;
 
-padding:22px;
+    background:white;
 
-border-radius:20px;
 
-border:1px solid #f1f5f9;
+    border:1px solid #e5e7eb;
 
-box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+    border-radius:22px;
+
+
+    padding:22px;
+
+
+    box-shadow:
+
+
+    0 10px 25px rgba(15,23,42,.05);
+
 
 }
 
@@ -591,11 +756,15 @@ box-shadow:0 10px 25px rgba(0,0,0,.05);
 
 .balance-header{
 
-display:flex;
 
-gap:15px;
+    display:flex;
 
-align-items:center;
+
+    align-items:center;
+
+
+    gap:14px;
+
 
 }
 
@@ -605,43 +774,67 @@ align-items:center;
 
 .division-icon{
 
-width:50px;
 
-height:50px;
+    width:45px;
 
-background:#fff7db;
 
-border-radius:15px;
+    height:45px;
 
-display:flex;
 
-align-items:center;
+    border-radius:14px;
 
-justify-content:center;
 
-font-size:22px;
+    background:#dbeafe;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    font-size:18px;
+
 
 }
+
+
+
 
 
 
 .balance-header h3{
 
-font-size:17px;
 
-color:#6b4f1d;
+    margin:0;
+
+
+    font-size:15px;
+
+
+    color:#172033;
+
 
 }
+
+
 
 
 
 .balance-header p{
 
-font-size:12px;
 
-color:#64748b;
+    margin-top:4px;
 
-margin-top:5px;
+
+    font-size:11px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -651,9 +844,17 @@ margin-top:5px;
 
 
 
+
+/* ===============================
+SALDO
+================================ */
+
+
 .saldo-box{
 
-margin-top:20px;
+
+    margin-top:18px;
+
 
 }
 
@@ -661,9 +862,12 @@ margin-top:20px;
 
 .saldo-box label{
 
-font-size:12px;
 
-color:#94a3b8;
+    font-size:11px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -671,11 +875,18 @@ color:#94a3b8;
 
 .saldo-box h2{
 
-color:#6b4f1d;
 
-font-size:22px;
+    margin-top:5px;
 
-margin-top:5px;
+
+    font-size:20px;
+
+
+    color:#166534;
+
+
+    font-weight:800;
+
 
 }
 
@@ -685,15 +896,26 @@ margin-top:5px;
 
 
 
+
+/* ===============================
+INFO BOX
+================================ */
+
+
 .info-box{
 
-background:#faf7ef;
 
-padding:12px;
+    background:#f8fafc;
 
-border-radius:12px;
 
-margin-top:15px;
+    padding:14px;
+
+
+    border-radius:14px;
+
+
+    margin-top:15px;
+
 
 }
 
@@ -701,13 +923,18 @@ margin-top:15px;
 
 .info-box div{
 
-display:flex;
 
-justify-content:space-between;
+    display:flex;
 
-font-size:12px;
 
-margin-bottom:8px;
+    justify-content:space-between;
+
+
+    font-size:11px;
+
+
+    margin-bottom:8px;
+
 
 }
 
@@ -715,7 +942,7 @@ margin-bottom:8px;
 
 .info-box div:last-child{
 
-margin-bottom:0;
+    margin-bottom:0;
 
 }
 
@@ -723,7 +950,7 @@ margin-bottom:0;
 
 .info-box span{
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -731,50 +958,72 @@ color:#64748b;
 
 .info-box b{
 
-color:#6b4f1d;
+    color:#172033;
 
 }
 
 
 
 
+
+
+
+
+
+/* ===============================
+STATUS
+================================ */
 
 
 .active{
 
-background:#dcfce7;
 
-color:#166534;
+    background:#dcfce7;
 
-padding:6px 14px;
 
-border-radius:20px;
+    color:#166534;
 
-font-size:12px;
 
-font-weight:700;
+    padding:6px 12px;
 
-display:inline-flex;
 
-align-items:center;
+    border-radius:999px;
 
-gap:6px;
 
-border:1px solid #bbf7d0;
+    font-size:10px;
+
+
+    font-weight:700;
+
+
+    border:1px solid #bbf7d0;
+
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
-text-align:center;
 
-padding:35px;
+    text-align:center;
 
-color:#94a3b8;
+
+    padding:40px;
+
+
+    color:#94a3b8;
+
 
 }
 
@@ -784,30 +1033,52 @@ color:#94a3b8;
 
 
 
-@media(max-width:1000px){
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1200px){
 
 
 .balance-grid{
 
-grid-template-columns:1fr;
+
+    grid-template-columns:repeat(2,1fr);
+
+
+}
+
 
 }
 
 
 
+@media(max-width:800px){
+
+
+.balance-grid,
 .summary-grid{
 
-grid-template-columns:1fr;
+
+    grid-template-columns:1fr;
+
+
+}
+
+
+.welcome-card{
+
+
+    padding:25px;
+
 
 }
 
 
 }
-
-
 
 </style>
-
-
 
 @endsection

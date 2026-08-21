@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\DepositDistribution;
+use App\Models\DistribusiSetoran;
 
 
 
@@ -15,7 +15,7 @@ class DepositDistributionController extends Controller
     {
 
 
-        $distributions = DepositDistribution::with([
+        $distributions = DistribusiSetoran::with([
 
             'setoranProyek.proyek',
 

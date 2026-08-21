@@ -5,6 +5,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
+
 
 class RekeningBank extends Model
 {

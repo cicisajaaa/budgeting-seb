@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\PengajuanDana;
+use App\Models\User;
+use App\Models\RekeningBank;
+use App\Models\Proyek;
 
 class TransaksiDana extends Model
 {
@@ -131,6 +134,32 @@ class TransaksiDana extends Model
     }
 
 
+/*
+|--------------------------------------------------------------------------
+| Relasi Project melalui Pengajuan Dana
+|--------------------------------------------------------------------------
+*/
 
+
+public function proyek()
+{
+
+    return $this->hasOneThrough(
+
+        Proyek::class,
+
+        PengajuanDana::class,
+
+        'id',
+
+        'id',
+
+        'pengajuan_dana_id',
+
+        'proyek_id'
+
+    );
+
+}
 
 }

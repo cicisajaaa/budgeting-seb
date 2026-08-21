@@ -25,11 +25,12 @@ class ExpenseApprovalController extends Controller
 
     public function index()
     {
-
         $requests = PengajuanDana::with([
 
-            'proyek',
+            'proyek.perusahaan',
+
             'divisi',
+
             'pengguna'
 
         ])
@@ -101,13 +102,15 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-                $bank = RekeningBank::findOrFail(
-
+                $bank = RekeningBank::where(
+                    'id',
                     $request->rekening_bank_id
-
-                );
-
+                )
+                ->where(
+                    'status',
+                    true
+                )
+                ->firstOrFail();
 
 
 
@@ -161,7 +164,21 @@ class ExpenseApprovalController extends Controller
 
 
 
+$project = Proyek::findOrFail(
+    $expenseRequest->proyek_id
+);
 
+
+if(
+    $project->sisa_budget < $expenseRequest->jumlah
+)
+{
+
+    throw new \Exception(
+        'Budget proyek tidak mencukupi'
+    );
+
+}
 
                 $expenseRequest->update([
 
@@ -181,7 +198,7 @@ class ExpenseApprovalController extends Controller
 
                     ??
 
-                    'Disetujui oleh Keuangan'
+                    'Disetujui oleh '.Auth::user()->name
 
 
                 ]);
@@ -243,30 +260,25 @@ class ExpenseApprovalController extends Controller
             |--------------------------------------------------------------------------
             */
 
-
             AuditHelper::create(
 
-                'UPDATE SALDO',
+            'UPDATE SALDO',
 
-                'Keuangan',
+            'Keuangan',
 
-                'Mengurangi saldo divisi sebesar Rp ' .
+            'Pencairan dana project '.
+            $project->nama_proyek.
+            ' sebesar Rp '.
+            number_format(
+                $expenseRequest->jumlah,
+                0,
+                ',',
+                '.'
+            ),
 
-                number_format(
+            $expenseRequest->id
 
-                    $expenseRequest->jumlah,
-
-                    0,
-
-                    ',',
-
-                    '.'
-
-                ),
-
-                $expenseRequest->id
-
-            );
+        );
 
 
 
@@ -707,6 +719,7 @@ class ExpenseApprovalController extends Controller
 
         $expense = PengajuanDana::with([
 
+            'proyek.perusahaan',
 
             'proyek',
 

@@ -4,54 +4,85 @@ namespace App\Http\Controllers;
 
 
 use App\Models\SaldoDivisi;
-
+use App\Models\DistribusiSetoran;
 
 
 class DivisionBalanceController extends Controller
 {
 
+public function index()
+{
 
-    public function index()
+
+    $balances = SaldoDivisi::with([
+
+        'proyek',
+        'divisi'
+
+    ])
+
+    ->latest()
+
+    ->get();
+
+
+
+
+
+    foreach($balances as $balance)
     {
 
+        $balance->jumlah_distribusi = DistribusiSetoran::where(
 
-        $balances = SaldoDivisi::with([
+            'divisi_id',
 
-            'proyek',
+            $balance->divisi_id
 
-            'divisi'
+        )
 
-        ])
+        ->whereHas('setoranProyek', function($query) use ($balance){
 
-        ->latest()
+            $query->where(
 
-        ->get();
+                'proyek_id',
 
+                $balance->proyek_id
 
+            );
 
+        })
 
-        $totalSaldo = $balances->sum('saldo');
-
-
-
-
-
-        return view(
-
-            'finance.balance.index',
-
-            compact(
-
-                'balances',
-
-                'totalSaldo'
-
-            )
-
-        );
+        ->count();
 
 
     }
 
+
+
+
+
+    $totalSaldo = $balances->sum('saldo');
+
+
+
+
+
+
+    return view(
+
+        'finance.balance.index',
+
+        compact(
+
+            'balances',
+
+            'totalSaldo'
+
+        )
+
+    );
+
+
+}
 
 }

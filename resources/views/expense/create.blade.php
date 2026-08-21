@@ -6,30 +6,26 @@
 
 <div class="welcome-card">
 
-    <div>
+<div>
 
-        <div class="welcome-label">
-            PENGAJUAN DANA
-        </div>
-
-
-        <h1>
-            Ajukan Dana Project
-        </h1>
+<div class="welcome-label">
+PENGAJUAN DANA
+</div>
 
 
-        <p>
-            Isi form berikut untuk mengajukan kebutuhan dana kepada keuangan.
-        </p>
-
-    </div>
+<h1>
+Ajukan Dana Project
+</h1>
 
 
+<p>
+Isi form kebutuhan dana project untuk diproses oleh bagian keuangan.
+</p>
 
 
 </div>
 
-
+</div>
 
 
 
@@ -76,9 +72,12 @@
 
 
 
-<form method="POST" 
-action="{{ route('expense.store') }}"
+<form method="POST"
+
+action="{{route('expense.store')}}"
+
 enctype="multipart/form-data">
+
 
 @csrf
 
@@ -92,15 +91,23 @@ enctype="multipart/form-data">
 
 
 
+{{-- PROJECT --}}
+
 <div>
+
 
 <label>
 Project
 </label>
 
 
+<select 
 
-<select name="proyek_id" required>
+name="proyek_id"
+
+id="proyek_id"
+
+required>
 
 
 <option value="">
@@ -112,15 +119,26 @@ Project
 @foreach($projects as $project)
 
 
-<option value="{{ $project->id }}">
+<option
 
-{{ $project->nama_proyek }}
+value="{{$project->id}}"
+
+data-perusahaan="{{$project->perusahaan->nama_perusahaan ?? '-'}}"
+
+data-budget="{{$project->total_anggaran}}"
+
+data-sisa="{{$project->sisa_budget}}"
+
+>
+
+
+{{$project->nama_proyek}}
+
 
 </option>
 
 
 @endforeach
-
 
 
 </select>
@@ -134,6 +152,9 @@ Project
 
 
 
+
+
+{{-- DIVISI --}}
 
 
 <div>
@@ -145,7 +166,11 @@ Divisi
 
 
 
-<select name="divisi_id" required>
+<select
+
+name="divisi_id"
+
+required>
 
 
 <option value="">
@@ -157,9 +182,9 @@ Divisi
 @foreach($divisions as $division)
 
 
-<option value="{{ $division->id }}">
+<option value="{{$division->id}}">
 
-{{ $division->nama_divisi }}
+{{$division->nama_divisi}}
 
 </option>
 
@@ -180,6 +205,9 @@ Divisi
 
 
 
+{{-- JUMLAH --}}
+
+
 <div>
 
 
@@ -188,21 +216,102 @@ Jumlah Dana
 </label>
 
 
-<input 
+<input
+
 type="number"
+
+id="jumlah"
+
 name="jumlah"
+
 value="{{old('jumlah')}}"
+
 placeholder="Contoh: 1000000"
+
 min="1000"
+
 required>
 
 
+<div id="budget-warning"></div>
+
+
 </div>
 
 
 
 
+
 </div>
+
+
+
+
+
+
+
+
+
+{{-- INFO PROJECT --}}
+
+
+<div id="project-info" class="project-info">
+
+
+<div>
+
+<label>
+Perusahaan
+</label>
+
+
+<strong id="company-name">
+-
+</strong>
+
+
+</div>
+
+
+
+
+
+<div>
+
+<label>
+Total Budget Project
+</label>
+
+
+<strong id="project-budget">
+-
+</strong>
+
+
+</div>
+
+
+
+
+
+<div>
+
+<label>
+Sisa Budget
+</label>
+
+
+<strong id="project-balance">
+-
+</strong>
+
+
+</div>
+
+
+
+</div>
+
 
 
 
@@ -212,33 +321,65 @@ required>
 
 
 <div class="full-field">
+
 
 <label>
 Judul Pengeluaran
 </label>
 
-<input 
+
+
+<input
+
 type="text"
+
 name="judul"
+
 value="{{old('judul')}}"
+
 placeholder="Contoh: Pembelian alat kerja"
+
 required>
+
 
 </div>
 
 
+
+
+
+
+
+
+
 <div class="full-field">
+
 
 <label>
 Keterangan
 </label>
 
+
+
 <textarea
+
 name="keterangan"
-rows="5"
+
 placeholder="Jelaskan kebutuhan dana">{{old('keterangan')}}</textarea>
 
+
+
 </div>
+
+
+
+
+
+
+
+
+
+{{-- UPLOAD --}}
 
 
 <div class="upload-section">
@@ -249,71 +390,134 @@ Bukti Pengajuan
 </label>
 
 
+
 <div class="upload-box">
 
+
 <input
+
 type="file"
+
 name="bukti_pengajuan"
+
 id="bukti_pengajuan"
+
 accept=".jpg,.jpeg,.png,.webp,.pdf"
+
 required>
 
 
-<label for="bukti_pengajuan" class="upload-button">
+
+<label
+
+for="bukti_pengajuan"
+
+class="upload-button">
+
 
 📎 Pilih File
+
 
 </label>
 
 
+
 <span id="file-name">
+
 Belum ada file dipilih
+
 </span>
 
 
+
 </div>
+
+
+
 
 
 <small class="upload-info">
 
-Format: JPG, PNG, WEBP, PDF. Maksimal 2MB.
+Format JPG, PNG, WEBP, PDF maksimal 2MB.
 
 </small>
 
 
-<div id="file-message" class="file-message"></div>
 
 
-<div id="preview-container" class="preview-card">
+
+<div id="file-message"
+class="file-message">
+</div>
+
+
+
+
+
+<div id="preview-container"
+class="preview-card">
+
 
 <div class="preview-title">
+
 Preview Bukti Pengajuan
+
 </div>
 
 
 <img
+
 id="image-preview"
-class="preview-image"
->
+
+class="preview-image">
+
+
+</div>
+
+
+
 
 </div>
 
 
-</div>
+
+
+
+
+
 
 <div class="approval-info">
 
+
 <p>
-ℹ Pengajuan dana akan diperiksa oleh bagian keuangan dan diteruskan kepada pemilik perusahaan untuk persetujuan.
+
+ℹ Pengajuan dana akan diperiksa finance sebelum dilakukan pencairan.
+
 </p>
+
 
 </div>
 
-<button type="submit" class="btn-submit">
+
+
+
+
+
+
+
+<button
+
+type="submit"
+
+class="btn-submit">
+
 
 + Kirim Pengajuan
 
+
 </button>
+
+
 
 
 
@@ -325,37 +529,33 @@ class="preview-image"
 </div>
 
 
-
-
-
-
-
-
 <style>
 
-/* ===============================
+/* =================================
 GLOBAL
-================================ */
+================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+
+/* =================================
+HEADER OWNER STYLE
+================================= */
+
 
 .welcome-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
-    padding:32px;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    color:#172033;
+    border:1px solid #e2e8f0;
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:22px;
+    margin-bottom:25px;
 
     box-shadow:
     0 8px 25px rgba(15,23,42,.05);
@@ -366,11 +566,11 @@ GLOBAL
 
 .welcome-label{
 
-    font-size:11px;
-
-    letter-spacing:2px;
+    font-size:10px;
 
     font-weight:800;
+
+    letter-spacing:2px;
 
     color:#64748b;
 
@@ -380,11 +580,13 @@ GLOBAL
 
 .welcome-card h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
+    font-size:24px;
 
-    color:#172033;
+    font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -392,99 +594,81 @@ GLOBAL
 
 .welcome-card p{
 
+    margin:0;
+
+    font-size:12px;
+
     color:#64748b;
 
-    font-size:14px;
-
 }
 
 
 
 
 
-
-
-
-/* ===============================
-ALERT
-================================ */
-
-
-.success-box{
-
-    background:#ecfdf5;
-
-    border:1px solid #bbf7d0;
-
-    color:#166534;
-
-    padding:15px;
-
-    border-radius:16px;
-
-    margin-bottom:20px;
-
-}
-
+/* =================================
+ERROR
+================================= */
 
 
 .error-box{
 
-    background:#fef2f2;
+    background:#fee2e2;
 
     border:1px solid #fecaca;
 
-    color:#991b1b;
-
     padding:15px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     margin-bottom:20px;
 
-}
+    color:#991b1b;
 
-
-
-.full-field{
-
-    grid-column:1/-1;
+    font-size:12px;
 
 }
-/* ===============================
-MAIN FORM CARD
-================================ */
+
+
+
+
+
+/* =================================
+MAIN PANEL
+================================= */
 
 
 .glass-panel{
 
     background:white;
 
-    border:1px solid #e2e8f0;
+    padding:25px;
 
     border-radius:24px;
 
-    padding:30px;
+    border:1px solid #e2e8f0;
 
     box-shadow:
 
-    0 10px 30px rgba(15,23,42,.05);
+    0 5px 20px rgba(15,23,42,.05);
 
 }
-
-
 
 
 
 .panel-title{
 
-    font-size:18px;
+    font-size:16px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
-    margin-bottom:25px;
+    margin-bottom:20px;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
 
 }
 
@@ -492,42 +676,34 @@ MAIN FORM CARD
 
 
 
-/* ===============================
+/* =================================
 FORM
-================================ */
+================================= */
+
+
 .form-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
 
     gap:20px;
 
 }
 
-.form-grid input[type="number"]{
-
-width:100%;
-
-}
 
 
-form > div:not(.form-grid){
-
-margin-top:18px;
-
-}
 label{
 
     display:block;
 
-    font-size:12px;
+    margin-bottom:7px;
+
+    font-size:11px;
 
     font-weight:700;
 
-    color:#475569;
-
-    margin-bottom:8px;
+    color:#64748b;
 
 }
 
@@ -537,19 +713,30 @@ input,
 select,
 textarea{
 
+
     width:100%;
 
-    padding:13px 15px;
+    height:42px;
 
-    border-radius:14px;
+    padding:10px 14px;
+
+    border-radius:12px;
 
     border:1px solid #e2e8f0;
 
     background:#f8fafc;
 
-    font-size:13px;
+    font-size:12px;
 
-    transition:.2s;
+    color:#334155;
+
+}
+
+
+
+textarea{
+
+    height:110px;
 
 }
 
@@ -561,24 +748,22 @@ textarea:focus{
 
     outline:none;
 
-    border-color:#15803d;
+    border-color:#334155;
 
     background:white;
 
-    box-shadow:
-    0 0 0 3px rgba(21,128,61,.1);
-
 }
+
+
+
+
+
+/* FULL FIELD */
+
 
 .full-field{
 
-    grid-column:1/-1;
-
-}
-
-textarea{
-
-    resize:none;
+    margin-top:20px;
 
 }
 
@@ -586,27 +771,126 @@ textarea{
 
 
 
-/* ===============================
+
+
+/* =================================
+PROJECT INFO
+================================= */
+
+
+.project-info{
+
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+
+}
+
+
+
+.project-info div{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    border:1px solid #e2e8f0;
+
+}
+
+
+
+.project-info label{
+
+    font-size:10px;
+
+    color:#94a3b8;
+
+}
+
+
+
+.project-info strong{
+
+    display:block;
+
+    margin-top:5px;
+
+    font-size:13px;
+
+    color:#1e293b;
+
+}
+
+
+
+
+
+/* =================================
+BUDGET STATUS
+================================= */
+
+
+.warning{
+
+    margin-top:8px;
+
+    color:#dc2626;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+
+.safe{
+
+    margin-top:8px;
+
+    color:#16a34a;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+/* =================================
 UPLOAD
-================================ */
+================================= */
 
 
 .upload-section{
 
-    margin-top:10px;
+    margin-top:20px;
 
 }
 
 
+
 .upload-box{
-
-    background:#f8fafc;
-
-    border:2px dashed #94a3b8;
-
-    padding:20px;
-
-    border-radius:18px;
 
     display:flex;
 
@@ -614,16 +898,13 @@ UPLOAD
 
     gap:15px;
 
-    transition:.2s;
+    background:#f8fafc;
 
-}
+    border:2px dashed #cbd5e1;
 
+    padding:18px;
 
-.upload-box:hover{
-
-    border-color:#15803d;
-
-    background:#f0fdf4;
+    border-radius:18px;
 
 }
 
@@ -639,7 +920,7 @@ UPLOAD
 
 .upload-button{
 
-    background:#0f172a;
+    background:#334155;
 
     color:white;
 
@@ -647,11 +928,11 @@ UPLOAD
 
     border-radius:12px;
 
-    cursor:pointer;
-
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
+
+    cursor:pointer;
 
 }
 
@@ -659,66 +940,42 @@ UPLOAD
 
 #file-name{
 
+    font-size:11px;
+
     color:#64748b;
 
-    font-size:12px;
-
 }
-
-
 
 
 
 .upload-info{
 
-    margin-top:8px;
-
-    display:block;
+    font-size:10px;
 
     color:#94a3b8;
 
-    font-size:11px;
-
 }
 
 
 
 
 
-.file-message{
-
-    margin-top:10px;
-
-    font-size:12px;
-
-    font-weight:700;
-
-}
-
-
-
-
-
-/* ===============================
+/* =================================
 PREVIEW
-================================ */
+================================= */
 
 
 .preview-card{
 
     display:none;
 
-    margin-top:20px;
+    margin-top:15px;
+
+    padding:15px;
 
     background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
-    padding:18px;
-
     border-radius:18px;
-
-    width:360px;
 
 }
 
@@ -726,13 +983,11 @@ PREVIEW
 
 .preview-title{
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:800;
 
-    color:#334155;
-
-    margin-bottom:15px;
+    margin-bottom:10px;
 
 }
 
@@ -740,9 +995,9 @@ PREVIEW
 
 .preview-image{
 
-    width:320px;
+    width:220px;
 
-    height:360px;
+    height:220px;
 
     object-fit:contain;
 
@@ -750,66 +1005,69 @@ PREVIEW
 
     border-radius:15px;
 
-    border:1px solid #e2e8f0;
-
 }
 
 
 
 
 
-/* ===============================
+
+
+/* =================================
 APPROVAL INFO
-================================ */
+================================= */
 
 
 .approval-info{
 
-    margin-top:25px;
+    margin-top:20px;
+
+    padding:15px;
 
     background:#f8fafc;
 
-    border-left:4px solid #15803d;
+    border-left:4px solid #334155;
 
-    padding:16px;
+    border-radius:12px;
 
-    border-radius:14px;
+    font-size:12px;
 
-    color:#475569;
-
-    font-size:13px;
+    color:#64748b;
 
 }
 
 
 
 
-/* ===============================
-BUTTON
-================================ */
+
+/* =================================
+BUTTON OWNER STYLE
+================================= */
 
 
 .btn-submit{
 
+
     margin-top:20px;
 
-    background:#0f172a;
+    background:#334155;
 
     color:white;
 
     border:none;
 
-    padding:14px 30px;
+    padding:12px 25px;
 
-    border-radius:14px;
+    border-radius:12px;
 
-    font-weight:700;
+    font-size:12px;
 
-    font-size:14px;
+    font-weight:800;
 
     cursor:pointer;
 
     transition:.2s;
+
 
 }
 
@@ -817,9 +1075,7 @@ BUTTON
 
 .btn-submit:hover{
 
-    background:#15803d;
-
-    transform:translateY(-2px);
+    background:#1e293b;
 
 }
 
@@ -827,136 +1083,101 @@ BUTTON
 
 
 
-/* ===============================
+/* =================================
 RESPONSIVE
-================================ */
+================================= */
 
 
 @media(max-width:1000px){
 
 
-.form-grid{
+.form-grid,
+.project-info{
 
     grid-template-columns:1fr;
 
 }
 
 
-.welcome-card{
+.upload-box{
 
     flex-direction:column;
 
     align-items:flex-start;
 
-    gap:20px;
-
 }
 
 
-
 }
-
-/* ===============================
-FORM BALANCE FIX
-================================ */
-
-
-/* jumlah dana dibuat sejajar */
-
-.form-grid > div:nth-child(3){
-
-    width:100%;
-
-}
-
-
-/* field setelah grid */
-
-.glass-panel form > div:not(.form-grid),
-.glass-panel form > .upload-section,
-.glass-panel form > .approval-info{
-
-    margin-top:18px;
-
-}
-
-
-
-
-/* input lebih proporsional */
-
-input,
-select{
-
-    height:46px;
-
-}
-
-
-textarea{
-
-    min-height:120px;
-
-    height:120px;
-
-    resize:none;
-
-}
-
-
-/* jumlah dana jangan setengah */
-
-.form-grid input[type="number"]{
-
-    width:100%;
-
-}
-
-
-/* tombol */
-
-.btn-submit{
-
-    width:220px;
-
-    height:48px;
-
-}
-
 
 </style>
+
+
 
 
 
 <script>
 
 
-const fileInput = document.getElementById('bukti_pengajuan');
-
-const fileName = document.getElementById('file-name');
-
-const message = document.getElementById('file-message');
-
-const previewBox = document.getElementById('preview-container');
-
-const previewImage = document.getElementById('image-preview');
+/*
+|--------------------------------------------------------------------------
+| PROJECT BUDGET INFO
+|--------------------------------------------------------------------------
+*/
 
 
-
-fileInput.addEventListener('change', function(){
-
-
-let file = this.files[0];
+const projectSelect = 
+document.getElementById('proyek_id');
 
 
+const companyName =
+document.getElementById('company-name');
 
-if(!file){
 
-fileName.innerHTML="Belum ada file dipilih";
+const projectBudget =
+document.getElementById('project-budget');
 
-previewBox.style.display="none";
 
-message.innerHTML="";
+const projectBalance =
+document.getElementById('project-balance');
+
+
+const jumlahInput =
+document.getElementById('jumlah');
+
+
+const warning =
+document.getElementById('budget-warning');
+
+
+
+
+let maxBudget = 0;
+
+
+
+
+
+projectSelect.addEventListener(
+'change',
+function(){
+
+
+let option =
+this.options[this.selectedIndex];
+
+
+
+if(!option.value)
+{
+
+companyName.innerHTML='-';
+
+projectBudget.innerHTML='-';
+
+projectBalance.innerHTML='-';
+
+maxBudget=0;
 
 return;
 
@@ -966,61 +1187,169 @@ return;
 
 
 
-let size = file.size / 1024 / 1024;
+companyName.innerHTML =
+option.dataset.perusahaan;
 
+
+
+projectBudget.innerHTML =
+'Rp '+
+Number(option.dataset.budget)
+.toLocaleString('id-ID');
+
+
+
+projectBalance.innerHTML =
+'Rp '+
+Number(option.dataset.sisa)
+.toLocaleString('id-ID');
+
+
+
+maxBudget =
+Number(option.dataset.sisa);
+
+
+
+});
+
+
+
+
+
+
+
+
+jumlahInput.addEventListener(
+'input',
+function(){
+
+
+let jumlah =
+Number(this.value);
+
+
+
+if(jumlah > maxBudget && maxBudget > 0)
+{
+
+
+warning.className="warning";
+
+
+warning.innerHTML=
+
+'⚠ Jumlah melebihi sisa budget project';
+
+
+
+}
+
+else if(jumlah > 0)
+{
+
+
+warning.className="safe";
+
+
+warning.innerHTML=
+
+'✓ Dana masih dalam batas budget';
+
+
+
+}
+
+else
+
+{
+
+warning.innerHTML='';
+
+}
+
+
+
+});
+
+
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| UPLOAD PREVIEW
+|--------------------------------------------------------------------------
+*/
+
+
+const fileInput =
+document.getElementById('bukti_pengajuan');
+
+
+const fileName =
+document.getElementById('file-name');
+
+
+const message =
+document.getElementById('file-message');
+
+
+const preview =
+document.getElementById('preview-container');
+
+
+const image =
+document.getElementById('image-preview');
+
+
+
+
+
+fileInput.addEventListener(
+'change',
+function(){
+
+
+let file=this.files[0];
+
+
+
+if(!file)
+{
+
+fileName.innerHTML=
+'Belum ada file dipilih';
+
+preview.style.display='none';
+
+return;
+
+}
+
+
+
+
+
+let size =
+file.size / 1024 / 1024;
 
 
 
 if(size > 2)
-
 {
 
-message.style.color="#dc2626";
+
+message.className="warning";
 
 message.innerHTML=
-"⚠ File terlalu besar. Maksimal 2MB";
+'⚠ File maksimal 2MB';
 
 
-this.value="";
-
-previewBox.style.display="none";
-
-return;
-
-}
-
-
-
-
-
-let allowed = [
-
-'image/jpeg',
-
-'image/png',
-
-'image/webp',
-
-'application/pdf'
-
-];
-
-
-
-
-if(!allowed.includes(file.type))
-
-{
-
-message.style.color="#dc2626";
-
-message.innerHTML=
-"⚠ Format file tidak didukung";
-
-
-this.value="";
-
-previewBox.style.display="none";
+this.value='';
 
 return;
 
@@ -1033,40 +1362,32 @@ return;
 fileName.innerHTML=file.name;
 
 
-message.style.color="#166534";
+message.className="safe";
 
 
 message.innerHTML=
-
-"✓ File valid ("+
-
-size.toFixed(2)
-
-+" MB)";
+'✓ File valid';
 
 
 
 
 
 if(file.type.startsWith('image/'))
-
 {
 
 
-let reader = new FileReader();
+let reader =
+new FileReader();
 
 
 
 reader.onload=function(e){
 
+image.src=e.target.result;
 
-previewImage.src=e.target.result;
+preview.style.display='block';
 
-
-previewBox.style.display="block";
-
-
-}
+};
 
 
 
@@ -1080,7 +1401,7 @@ else
 
 {
 
-previewBox.style.display="none";
+preview.style.display='none';
 
 }
 
@@ -1091,4 +1412,7 @@ previewBox.style.display="none";
 
 
 </script>
+
+
 @endsection
+

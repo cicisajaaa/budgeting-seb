@@ -292,21 +292,26 @@ Kembali
 
 
 
-
 <style>
 
+/* ===============================
+HEADER
+================================ */
 
 .welcome-card{
 
-background:white;
+    background:#f8fafc;
 
-padding:28px;
+    border:1px solid #e2e8f0;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    padding:30px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -314,13 +319,13 @@ margin-bottom:20px;
 
 .welcome-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -328,11 +333,13 @@ color:#64748b;
 
 .welcome-card h1{
 
-font-size:28px;
+    margin:10px 0;
 
-margin:8px 0;
+    font-size:24px;
 
-color:#6b4f1d;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -340,9 +347,11 @@ color:#6b4f1d;
 
 .welcome-card p{
 
-font-size:13px;
+    margin:0;
 
-color:#64748b;
+    font-size:13px;
+
+    color:#64748b;
 
 }
 
@@ -350,20 +359,28 @@ color:#64748b;
 
 
 
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-background:white;
+    background:white;
 
-padding:25px;
+    border:1px solid #e5e7eb;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    padding:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
-
 
 
 
@@ -371,13 +388,13 @@ border:1px solid #e2e8f0;
 
 .panel-title{
 
-font-size:17px;
+    font-size:16px;
 
-font-weight:700;
+    font-weight:800;
 
-margin-bottom:20px;
+    color:#172033;
 
-color:#1e293b;
+    margin-bottom:22px;
 
 }
 
@@ -385,36 +402,39 @@ color:#1e293b;
 
 
 
+
+
+
+/* ===============================
+FORM
+================================ */
 
 
 .form-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
-gap:20px;
+    gap:20px;
 
 }
-
-
 
 
 
 label{
 
-display:block;
+    display:block;
 
-font-size:12px;
+    font-size:12px;
 
-font-weight:600;
+    font-weight:800;
 
-color:#475569;
+    color:#475569;
 
-margin-bottom:8px;
+    margin-bottom:8px;
 
 }
-
 
 
 
@@ -422,20 +442,38 @@ margin-bottom:8px;
 input,
 select{
 
-width:100%;
 
-padding:13px;
+    width:100%;
 
-border-radius:12px;
 
-border:1px solid #e2e8f0;
+    height:46px;
 
-background:white;
 
-font-size:13px;
+    padding:0 14px;
+
+
+    border-radius:14px;
+
+
+    border:1px solid #dbe3ef;
+
+
+    background:#f8fafc;
+
+
+    font-size:13px;
+
+
+    color:#172033;
+
+
+    outline:none;
+
+
+    transition:.2s;
+
 
 }
-
 
 
 
@@ -443,9 +481,17 @@ font-size:13px;
 input:focus,
 select:focus{
 
-outline:none;
 
-border-color:#8b6b2e;
+    background:white;
+
+
+    border-color:#334155;
+
+
+    box-shadow:
+
+    0 0 0 3px rgba(51,65,85,.12);
+
 
 }
 
@@ -456,15 +502,20 @@ border-color:#8b6b2e;
 
 
 
+/* ===============================
+BUTTON
+================================ */
+
+
 .button-area{
 
-display:flex;
+    display:flex;
 
-justify-content:flex-end;
+    justify-content:flex-end;
 
-gap:12px;
+    gap:12px;
 
-margin-top:25px;
+    margin-top:25px;
 
 }
 
@@ -474,19 +525,30 @@ margin-top:25px;
 
 .save-btn{
 
-background:#6b4f1d;
 
-color:white;
+    background:#1e293b;
 
-border:none;
 
-padding:12px 22px;
+    color:white;
 
-border-radius:14px;
 
-font-weight:600;
+    border:none;
 
-cursor:pointer;
+
+    padding:13px 25px;
+
+
+    border-radius:14px;
+
+
+    font-size:12px;
+
+
+    font-weight:800;
+
+
+    cursor:pointer;
+
 
 }
 
@@ -494,7 +556,9 @@ cursor:pointer;
 
 .save-btn:hover{
 
-background:#8b6b2e;
+
+    background:#334155;
+
 
 }
 
@@ -506,19 +570,27 @@ background:#8b6b2e;
 
 .back-btn{
 
-background:#f1f5f9;
 
-color:#334155;
+    background:#f1f5f9;
 
-padding:12px 22px;
 
-border-radius:14px;
+    color:#334155;
 
-text-decoration:none;
 
-font-size:13px;
+    padding:13px 22px;
 
-font-weight:600;
+
+    border-radius:14px;
+
+
+    text-decoration:none;
+
+
+    font-size:12px;
+
+
+    font-weight:700;
+
 
 }
 
@@ -526,7 +598,9 @@ font-weight:600;
 
 .back-btn:hover{
 
-background:#e2e8f0;
+
+    background:#e2e8f0;
+
 
 }
 
@@ -534,24 +608,63 @@ background:#e2e8f0;
 
 
 
+
+
+
+
+/* ===============================
+ALERT
+================================ */
 
 
 .alert-error{
 
-background:#fee2e2;
 
-color:#991b1b;
+    background:#fee2e2;
 
-padding:15px;
 
-border-radius:14px;
+    border:1px solid #fecaca;
 
-margin-bottom:20px;
+
+    color:#991b1b;
+
+
+    padding:15px;
+
+
+    border-radius:14px;
+
+
+    margin-bottom:20px;
+
+
+    font-size:13px;
+
 
 }
 
 
 
+.alert-error ul{
+
+
+    margin:0;
+
+    padding-left:20px;
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:800px){
@@ -559,21 +672,31 @@ margin-bottom:20px;
 
 .form-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
+
 
 
 .button-area{
 
-flex-direction:column;
+    flex-direction:column;
+
+}
+
+
+
+.save-btn,
+.back-btn{
+
+    width:100%;
+
+    text-align:center;
 
 }
 
 
 }
-
-
 
 </style>
 

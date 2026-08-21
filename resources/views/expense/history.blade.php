@@ -504,33 +504,34 @@ Belum ada riwayat pengajuan dana
 
 
 
-
-
-
-
 <style>
 
-/* =========================
+/* =================================
 GLOBAL
-========================= */
+================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+
+
+/* =================================
+HEADER OWNER STYLE
+================================= */
+
 
 .welcome-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    padding:32px;
+    border:1px solid #e2e8f0;
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:22px;
+    margin-bottom:25px;
 
     box-shadow:
     0 8px 25px rgba(15,23,42,.05);
@@ -541,13 +542,13 @@ GLOBAL
 
 .welcome-label{
 
-    font-size:11px;
+    font-size:10px;
+
+    font-weight:800;
 
     letter-spacing:2px;
 
     color:#64748b;
-
-    font-weight:700;
 
 }
 
@@ -555,13 +556,13 @@ GLOBAL
 
 .welcome-card h1{
 
-    margin:10px 0;
+    margin:8px 0;
 
-    font-size:30px;
-
-    color:#172033;
+    font-size:24px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -569,13 +570,13 @@ GLOBAL
 
 .welcome-card p{
 
+    margin:0;
+
+    font-size:12px;
+
     color:#64748b;
 
-    font-size:13px;
-
 }
-
-
 
 
 
@@ -585,7 +586,7 @@ GLOBAL
 
     gap:10px;
 
-    margin-top:18px;
+    margin-top:15px;
 
 }
 
@@ -597,13 +598,13 @@ GLOBAL
 
     color:#334155;
 
-    padding:8px 14px;
+    padding:7px 14px;
 
     border-radius:999px;
 
     font-size:11px;
 
-    font-weight:600;
+    font-weight:700;
 
 }
 
@@ -613,40 +614,24 @@ GLOBAL
 
 
 
-
-
-/* =========================
+/* =================================
 PANEL
-========================= */
+================================= */
 
 
 .glass-panel{
 
     background:white;
 
-    border:1px solid #e2e8f0;
+    padding:25px;
 
     border-radius:24px;
 
-    padding:26px;
-
-    margin-bottom:22px;
+    border:1px solid #e2e8f0;
 
     box-shadow:
 
-    0 8px 20px rgba(15,23,42,.04);
-
-}
-
-
-
-.panel-title{
-
-    font-size:18px;
-
-    font-weight:800;
-
-    color:#172033;
+    0 5px 20px rgba(15,23,42,.05);
 
     margin-bottom:20px;
 
@@ -654,11 +639,30 @@ PANEL
 
 
 
+.panel-title{
+
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#1e293b;
+
+    margin-bottom:20px;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+}
 
 
-/* =========================
+
+
+
+
+/* =================================
 FILTER
-========================= */
+================================= */
 
 
 .filter-box{
@@ -677,11 +681,13 @@ FILTER
 
     display:block;
 
-    font-size:12px;
+    font-size:11px;
+
+    font-weight:700;
 
     color:#64748b;
 
-    margin-bottom:6px;
+    margin-bottom:7px;
 
 }
 
@@ -689,13 +695,19 @@ FILTER
 
 .filter-box select{
 
-    padding:11px 16px;
+    height:42px;
+
+    min-width:220px;
+
+    padding:0 14px;
 
     border-radius:12px;
 
     border:1px solid #e2e8f0;
 
-    background:white;
+    background:#f8fafc;
+
+    font-size:12px;
 
 }
 
@@ -703,17 +715,24 @@ FILTER
 
 .filter-box button{
 
-    background:#0f172a;
 
-    color:white;
+    height:42px;
+
+    padding:0 25px;
 
     border:none;
 
-    padding:11px 22px;
-
     border-radius:12px;
 
+    background:#334155;
+
+    color:white;
+
+    font-size:12px;
+
     font-weight:700;
+
+    cursor:pointer;
 
 }
 
@@ -721,9 +740,11 @@ FILTER
 
 
 
-/* =========================
+
+
+/* =================================
 TABLE
-========================= */
+================================= */
 
 
 table{
@@ -738,17 +759,15 @@ table{
 
 thead th{
 
-    background:#f8fafc;
+    padding:14px;
+
+    text-align:left;
+
+    font-size:11px;
 
     color:#64748b;
 
-    font-size:12px;
-
-    font-weight:700;
-
-    padding:15px;
-
-    text-align:left;
+    background:#f8fafc;
 
 }
 
@@ -756,13 +775,21 @@ thead th{
 
 tbody td{
 
-    padding:16px;
+    padding:14px;
 
     border-bottom:1px solid #f1f5f9;
 
+    font-size:12px;
+
     color:#334155;
 
-    font-size:13px;
+}
+
+
+
+tbody tr{
+
+    transition:.2s;
 
 }
 
@@ -778,7 +805,9 @@ tbody tr:hover{
 
 td strong{
 
-    color:#172033;
+    color:#1e293b;
+
+    font-size:13px;
 
 }
 
@@ -794,9 +823,11 @@ td small{
 
 
 
-/* =========================
+
+
+/* =================================
 MONEY
-========================= */
+================================= */
 
 
 .money{
@@ -811,20 +842,21 @@ MONEY
 
 
 
-/* =========================
+
+/* =================================
 STATUS
-========================= */
+================================= */
 
 
 .status{
 
     display:inline-flex;
 
-    padding:7px 14px;
+    padding:6px 14px;
 
     border-radius:999px;
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
@@ -846,7 +878,7 @@ STATUS
 
     background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
 }
 
@@ -856,7 +888,7 @@ STATUS
 
     background:#fee2e2;
 
-    color:#dc2626;
+    color:#b91c1c;
 
 }
 
@@ -864,14 +896,16 @@ STATUS
 
 
 
-/* =========================
+
+
+/* =================================
 TIMELINE
-========================= */
+================================= */
 
 
 .timeline{
 
-    margin-top:14px;
+    margin-top:12px;
 
 }
 
@@ -885,11 +919,11 @@ TIMELINE
 
     gap:8px;
 
-    margin-bottom:8px;
+    margin-bottom:7px;
+
+    font-size:10px;
 
     color:#94a3b8;
-
-    font-size:11px;
 
 }
 
@@ -897,21 +931,21 @@ TIMELINE
 
 .step span{
 
-    width:20px;
+    width:18px;
 
-    height:20px;
-
-    border-radius:50%;
+    height:18px;
 
     display:flex;
 
+    align-items:center;
+
     justify-content:center;
 
-    align-items:center;
+    border-radius:50%;
 
     background:#e2e8f0;
 
-    font-size:10px;
+    font-size:9px;
 
 }
 
@@ -939,20 +973,22 @@ TIMELINE
 
 
 
-/* =========================
-REJECTION NOTE
-========================= */
+
+
+/* =================================
+NOTE
+================================= */
 
 
 .approval-note{
 
-    margin-top:15px;
+    margin-top:12px;
+
+    padding:12px;
 
     background:#fff7ed;
 
     border-left:4px solid #f97316;
-
-    padding:12px;
 
     border-radius:12px;
 
@@ -962,9 +998,9 @@ REJECTION NOTE
 
 .approval-note strong{
 
-    color:#c2410c;
+    font-size:11px;
 
-    font-size:12px;
+    color:#c2410c;
 
 }
 
@@ -972,11 +1008,11 @@ REJECTION NOTE
 
 .approval-note p{
 
-    margin-top:5px;
+    margin:5px 0 0;
+
+    font-size:11px;
 
     color:#475569;
-
-    font-size:12px;
 
 }
 
@@ -984,9 +1020,11 @@ REJECTION NOTE
 
 
 
-/* =========================
-DETAIL BUTTON
-========================= */
+
+
+/* =================================
+BUTTON
+================================= */
 
 
 .detail-btn{
@@ -997,19 +1035,19 @@ DETAIL BUTTON
 
     justify-content:center;
 
-    background:#0f172a;
+    padding:8px 16px;
+
+    background:#334155;
 
     color:white;
 
-    padding:9px 18px;
+    border-radius:10px;
 
-    border-radius:12px;
-
-    text-decoration:none;
-
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
+
+    text-decoration:none;
 
 }
 
@@ -1017,7 +1055,9 @@ DETAIL BUTTON
 
 .detail-btn:hover{
 
-    background:#334155;
+    background:#1e293b;
+
+    color:white;
 
 }
 
@@ -1025,16 +1065,18 @@ DETAIL BUTTON
 
 
 
-/* =========================
+
+
+/* =================================
 EMPTY
-========================= */
+================================= */
 
 
 .empty{
 
     text-align:center;
 
-    padding:35px;
+    padding:40px;
 
     color:#94a3b8;
 
@@ -1044,42 +1086,31 @@ EMPTY
 
 
 
-/* =========================
+
+
+/* =================================
 RESPONSIVE
-========================= */
+================================= */
 
 
 @media(max-width:900px){
-
-
-.welcome-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:20px;
-
-}
-
-
-
-.welcome-tags{
-
-    flex-wrap:wrap;
-
-}
-
 
 
 .filter-box{
 
     flex-direction:column;
 
-    align-items:flex-start;
+    align-items:stretch;
 
 }
 
+
+.filter-box select,
+.filter-box button{
+
+    width:100%;
+
+}
 
 
 table{
@@ -1091,8 +1122,14 @@ table{
 }
 
 
+.welcome-tags{
+
+    flex-wrap:wrap;
+
 }
 
+
+}
 
 </style>
 

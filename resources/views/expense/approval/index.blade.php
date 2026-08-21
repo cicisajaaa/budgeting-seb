@@ -54,7 +54,15 @@ Kelola pengajuan dana karyawan dan lakukan proses persetujuan keuangan perusahaa
 
 
 
+@if(session('success'))
 
+<div class="success-box">
+
+{{session('success')}}
+
+</div>
+
+@endif
 
 
 
@@ -67,6 +75,17 @@ Kelola pengajuan dana karyawan dan lakukan proses persetujuan keuangan perusahaa
 @endif
 
 
+
+@if($banks->count()==0)
+
+<div class="error-box">
+
+⚠ Belum ada rekening aktif untuk pencairan dana. 
+Silakan tambahkan rekening bank terlebih dahulu.
+
+</div>
+
+@endif
 
 
 
@@ -184,6 +203,10 @@ Pemohon
 </th>
 
 <th>
+Perusahaan
+</th>
+
+<th>
 Project
 </th>
 
@@ -240,16 +263,45 @@ Aksi
 
 </td>
 
+<td>
 
+<strong>
+{{$request->proyek->perusahaan->nama_perusahaan ?? '-'}}
+</strong>
+
+<br>
+
+<small>
+
+{{$request->proyek->perusahaan->alamat ?? ''}}
+
+</small>
+
+</td>
 
 
 
 <td>
 
+<strong>
 {{$request->proyek->nama_proyek ?? '-'}}
+</strong>
+
+<br>
+
+<small>
+
+Sisa Budget:
+Rp {{number_format(
+$request->proyek->sisa_budget ?? 0,
+0,
+',',
+'.'
+)}}
+
+</small>
 
 </td>
-
 
 
 
@@ -290,7 +342,8 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 <td>
 
 
-<div class="action-group">
+
+<div class="action-group-column">
 
 
 
@@ -312,12 +365,32 @@ action="{{route('expense.approve',$request->id)}}">
 @csrf
 
 
+<select name="rekening_bank_id" required>
 
-<input type="hidden"
-name="rekening_bank_id"
-value="{{$banks->first()->id ?? ''}}">
+<option value="">
+Pilih Rekening Pencairan
+</option>
 
 
+@foreach($banks as $bank)
+
+<option value="{{$bank->id}}">
+
+{{$bank->nama_bank}}
+-
+Rp {{number_format($bank->saldo,0,',','.')}}
+
+</option>
+
+@endforeach
+
+
+</select>
+
+@if(
+$banks->count()>0 &&
+$request->proyek->sisa_budget >= $request->jumlah
+)
 
 <button class="approve-btn"
 onclick="return confirm('Setujui pengajuan ini?')">
@@ -326,6 +399,16 @@ Setujui
 
 </button>
 
+
+@else
+
+<button class="reject-btn" disabled>
+
+Tidak Bisa Approve
+
+</button>
+
+@endif
 
 </form>
 
@@ -381,7 +464,7 @@ Tolak
 
 <tr>
 
-<td colspan="6"
+<td colspan="7"
 class="empty">
 
 Tidak ada pengajuan menunggu approval
@@ -414,35 +497,39 @@ Tidak ada pengajuan menunggu approval
 
 
 
-
 <style>
 
+/* ===============================
+HEADER
+================================ */
 
 .welcome-card{
 
-background:white;
+    background:#f8fafc;
 
-padding:28px;
+    border:1px solid #e2e8f0;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    padding:30px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
-
 .welcome-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -450,11 +537,13 @@ color:#64748b;
 
 .welcome-card h1{
 
-font-size:28px;
+    margin:10px 0;
 
-color:#6b4f1d;
+    font-size:24px;
 
-margin:8px 0;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -462,23 +551,26 @@ margin:8px 0;
 
 .welcome-card p{
 
-font-size:13px;
+    margin:0;
 
-color:#64748b;
+    font-size:13px;
+
+    color:#64748b;
 
 }
 
 
 
 
+/* TAG */
 
 .welcome-tags{
 
-display:flex;
+    display:flex;
 
-gap:10px;
+    gap:10px;
 
-margin-top:15px;
+    margin-top:15px;
 
 }
 
@@ -486,17 +578,17 @@ margin-top:15px;
 
 .welcome-tags span{
 
-background:#fff7db;
+    background:#f1f5f9;
 
-color:#6b4f1d;
+    color:#334155;
 
-padding:7px 14px;
+    padding:6px 12px;
 
-border-radius:20px;
+    border-radius:999px;
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:600;
+    font-weight:700;
 
 }
 
@@ -506,15 +598,20 @@ font-weight:600;
 
 
 
+/* ===============================
+SUMMARY
+================================ */
+
+
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
-gap:20px;
+    gap:20px;
 
-margin-bottom:20px;
+    margin-bottom:25px;
 
 }
 
@@ -522,19 +619,46 @@ margin-bottom:20px;
 
 .summary-card{
 
-background:white;
+    background:white;
 
-padding:20px;
+    border:1px solid #e5e7eb;
 
-border-radius:18px;
+    border-radius:22px;
 
-border:1px solid #e2e8f0;
+    padding:18px;
 
-display:flex;
+    display:flex;
 
-gap:15px;
+    align-items:center;
 
-align-items:center;
+    gap:15px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.05);
+
+}
+
+
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
 
 }
 
@@ -542,21 +666,21 @@ align-items:center;
 
 .summary-icon{
 
-width:50px;
+    width:45px;
 
-height:50px;
+    height:45px;
 
-border-radius:15px;
+    border-radius:14px;
 
-background:#fff7db;
+    background:#fef3c7;
 
-display:flex;
+    display:flex;
 
-justify-content:center;
+    align-items:center;
 
-align-items:center;
+    justify-content:center;
 
-font-size:22px;
+    font-size:18px;
 
 }
 
@@ -564,9 +688,9 @@ font-size:22px;
 
 .summary-card label{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -574,9 +698,23 @@ color:#64748b;
 
 .summary-card h2{
 
-margin-top:5px;
+    margin:4px 0;
 
-color:#6b4f1d;
+    font-size:20px;
+
+    color:#172033;
+
+    font-weight:800;
+
+}
+
+
+
+.summary-card small{
+
+    font-size:10px;
+
+    color:#94a3b8;
 
 }
 
@@ -586,15 +724,27 @@ color:#6b4f1d;
 
 
 
+
+/* ===============================
+PANEL
+================================ */
+
+
 .glass-panel{
 
-background:white;
+    background:white;
 
-padding:22px;
+    border:1px solid #e5e7eb;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    padding:25px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -602,9 +752,13 @@ border:1px solid #e2e8f0;
 
 .panel-title{
 
-font-size:17px;
+    font-size:16px;
 
-font-weight:700;
+    font-weight:800;
+
+    color:#172033;
+
+    margin-bottom:6px;
 
 }
 
@@ -612,7 +766,9 @@ font-weight:700;
 
 .subtitle{
 
-color:#64748b;
+    color:#94a3b8;
+
+    font-size:11px;
 
 }
 
@@ -620,11 +776,18 @@ color:#64748b;
 
 
 
+
+
+/* ===============================
+TABLE
+================================ */
+
+
 .table-wrapper{
 
-margin-top:20px;
+    margin-top:20px;
 
-overflow-x:auto;
+    overflow-x:auto;
 
 }
 
@@ -632,9 +795,9 @@ overflow-x:auto;
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
 
@@ -642,15 +805,17 @@ border-collapse:collapse;
 
 th{
 
-background:#faf7ef;
+    background:#f8fafc;
 
-padding:14px;
+    padding:14px;
 
-text-align:left;
+    text-align:left;
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    font-weight:700;
+
+    color:#64748b;
 
 }
 
@@ -658,11 +823,31 @@ color:#64748b;
 
 td{
 
-padding:14px;
+    padding:14px;
 
-border-bottom:1px solid #f1f5f9;
+    border-bottom:1px solid #f1f5f9;
 
-font-size:13px;
+    font-size:12px;
+
+    color:#334155;
+
+}
+
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+
+small{
+
+    font-size:10px;
+
+    color:#94a3b8;
 
 }
 
@@ -670,42 +855,84 @@ font-size:13px;
 
 .money{
 
-font-weight:700;
+    font-weight:800;
 
-color:#6b4f1d;
+    color:#16a34a;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+ACTION
+================================ */
+
+
+.action-group-column{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+
+
+.action-group-column form{
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+}
+
+
+
+.action-group-column select{
+
+    height:34px;
+
+    border-radius:10px;
+
+    border:1px solid #e2e8f0;
+
+    padding:0 8px;
+
+    font-size:11px;
+
+    background:#f8fafc;
 
 }
 
 
 
 
-
-.action-group{
-
-display:flex;
-
-gap:8px;
-
-}
+.detail-btn,
+.approve-btn,
+.reject-btn{
 
 
+    padding:8px 14px;
 
-.action-group a,
-.action-group button{
+    border-radius:12px;
 
-border:none;
+    font-size:11px;
 
-padding:8px 12px;
+    font-weight:700;
 
-border-radius:10px;
+    text-decoration:none;
 
-font-size:12px;
+    border:none;
 
-cursor:pointer;
-
-text-decoration:none;
-
-font-weight:600;
+    cursor:pointer;
 
 }
 
@@ -713,33 +940,45 @@ font-weight:600;
 
 .detail-btn{
 
-background:#f1f5f9;
+    background:#f1f5f9;
 
-color:#334155;
+    color:#334155;
 
 }
-
-
 
 
 
 .approve-btn{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
 }
-
-
 
 
 
 .reject-btn{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#dc2626;
+    color:#dc2626;
+
+}
+
+
+
+.approve-btn:hover{
+
+    background:#bbf7d0;
+
+}
+
+
+
+.reject-btn:hover{
+
+    background:#fecaca;
 
 }
 
@@ -747,31 +986,27 @@ color:#dc2626;
 
 
 
-.empty{
-
-text-align:center;
-
-padding:30px;
-
-color:#94a3b8;
-
-}
 
 
 
+/* ===============================
+ALERT
+================================ */
 
 
 .success-box{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
-padding:15px;
+    padding:14px;
 
-border-radius:12px;
+    border-radius:14px;
 
-margin-bottom:20px;
+    margin-bottom:20px;
+
+    font-size:13px;
 
 }
 
@@ -779,17 +1014,43 @@ margin-bottom:20px;
 
 .error-box{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#991b1b;
+    color:#991b1b;
 
-padding:15px;
+    padding:14px;
 
-border-radius:12px;
+    border-radius:14px;
 
-margin-bottom:20px;
+    margin-bottom:20px;
+
+    font-size:13px;
 
 }
+
+
+
+
+
+
+
+
+/* EMPTY */
+
+.empty{
+
+    text-align:center;
+
+    padding:35px;
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
 
 
 
@@ -797,15 +1058,13 @@ margin-bottom:20px;
 
 .summary-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
 
+
 }
-
-
 
 </style>
-
 
 @endsection

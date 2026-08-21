@@ -5,7 +5,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+use App\Models\User;
+use App\Models\Proyek;
+use App\Models\Divisi;
 use App\Models\LogAudit;
+use App\Models\TransaksiDana;
 
 class PengajuanDana extends Model
 {
@@ -176,6 +181,26 @@ protected $fillable = [
 
     }
 
+
+/*
+|--------------------------------------------------------------------------
+| Relasi Transaksi Dana
+|--------------------------------------------------------------------------
+*/
+
+
+public function transaksiDana()
+{
+
+    return $this->hasOne(
+
+        TransaksiDana::class,
+
+        'pengajuan_dana_id'
+
+    );
+
+}
 
 
 public function auditLogs()

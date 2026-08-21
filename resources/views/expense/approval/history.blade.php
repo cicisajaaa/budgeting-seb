@@ -45,16 +45,6 @@
     </div>
 
 
-
-    <div class="system-status">
-
-        <span></span>
-
-        History Aktif
-
-    </div>
-
-
 </div>
 
 
@@ -128,7 +118,7 @@ Project
 </label>
 
 
-<select name="project_id">
+<select name="proyek_id">
 
 
 <option value="">
@@ -142,16 +132,14 @@ Semua Project
 
 <option value="{{$project->id}}"
 
-@if(request('project_id')==$project->id)
-
+@if(request('proyek_id')==$project->id)
 selected
-
 @endif
 
 >
 
 
-{{$project->nama_project}}
+{{$project->nama_proyek}}
 
 
 </option>
@@ -180,7 +168,7 @@ Divisi
 </label>
 
 
-<select name="division_id">
+<select name="divisi_id">
 
 
 <option value="">
@@ -194,12 +182,9 @@ Semua Divisi
 
 <option value="{{$division->id}}"
 
-@if(request('division_id')==$division->id)
-
+@if(request('divisi_id')==$division->id)
 selected
-
 @endif
-
 >
 
 
@@ -405,7 +390,7 @@ Catatan
 
 <td>
 
-{{\Carbon\Carbon::parse($request->created_at)->format('d M Y')}}
+{{$request->created_at->format('d M Y')}}
 
 </td>
 
@@ -418,7 +403,7 @@ Catatan
 
 <strong>
 
-{{$request->user->name ?? '-'}}
+{{$request->pengguna?->name ?? '-'}}
 
 </strong>
 
@@ -442,7 +427,7 @@ Catatan
 <td>
 
 
-{{$request->proyek->nama_proyek ?? '-'}}
+{{$request->proyek?->nama_proyek ?? '-'}}
 
 
 <br>
@@ -450,7 +435,7 @@ Catatan
 
 <span class="divisi">
 
-{{$request->divisi->nama_divisi ?? '-'}}
+{{$request->divisi?->nama_divisi ?? '-'}}
 
 </span>
 
@@ -510,7 +495,7 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 <td>
 
 
-{{$request->approver->name ?? '-'}}
+{{$request->penyetuju->name ?? '-'}}
 
 
 <br>
@@ -519,13 +504,14 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 <small>
 
 
-@if($request->approved_at)
+@if($request->disetujui_pada)
 
-
-{{\Carbon\Carbon::parse($request->approved_at)->format('d M Y H:i')}}
-
+{{\Carbon\Carbon::parse($request->disetujui_pada)->format('d M Y H:i')}}
 
 @endif
+
+
+
 
 
 </small>
@@ -540,11 +526,11 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 <td>
 
-@if($request->approval_note)
+@if($request->catatan_persetujuan)
 
 <div class="note-box">
 
-{{ $request->approval_note }}
+{{ $request->catatan_persetujuan }}
 
 </div>
 
@@ -594,173 +580,101 @@ Belum ada riwayat approval
 
 
 </div>
+
 <style>
 
-
-/* =========================
-WELCOME CARD
-========================= */
-
+/* ===============================
+HEADER
+================================ */
 
 .welcome-card{
 
-background:
+    background:#f8fafc;
 
-linear-gradient(
-135deg,
-#166534,
-#22c55e
-);
+    border:1px solid #e2e8f0;
 
+    border-radius:24px;
 
-padding:28px 32px;
+    padding:30px;
 
-border-radius:24px;
+    margin-bottom:25px;
 
-color:white;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:20px;
-
-
-box-shadow:
-
-0 15px 40px rgba(34,197,94,.2);
-
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
-
-
 
 
 
 .welcome-label{
 
+    font-size:10px;
 
-font-size:10px;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-font-weight:800;
-
-opacity:.8;
-
+    color:#64748b;
 
 }
-
 
 
 
 .welcome-card h1{
 
+    margin:10px 0;
 
-font-size:28px;
+    font-size:24px;
 
-margin:8px 0;
+    font-weight:800;
 
+    color:#172033;
 
 }
-
-
 
 
 
 .welcome-card p{
 
+    margin:0;
 
-font-size:13px;
+    font-size:13px;
 
-opacity:.9;
-
+    color:#64748b;
 
 }
 
 
 
 
+
+/* TAG */
 
 .welcome-tags{
 
+    display:flex;
 
-display:flex;
+    gap:10px;
 
-gap:10px;
-
-margin-top:15px;
-
+    margin-top:15px;
 
 }
-
-
 
 
 
 .welcome-tags span{
 
+    background:#f1f5f9;
 
-background:
+    color:#334155;
 
-rgba(255,255,255,.15);
+    padding:6px 12px;
 
+    border-radius:999px;
 
-padding:7px 14px;
+    font-size:10px;
 
-border-radius:20px;
-
-font-size:11px;
-
-
-}
-
-
-
-
-
-
-.system-status{
-
-
-background:white;
-
-color:#166534;
-
-padding:12px 18px;
-
-border-radius:30px;
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
-
-font-weight:700;
-
-font-size:12px;
-
-
-}
-
-
-
-
-
-.system-status span{
-
-
-width:9px;
-
-height:9px;
-
-background:#22c55e;
-
-border-radius:50%;
-
+    font-weight:700;
 
 }
 
@@ -770,63 +684,41 @@ border-radius:50%;
 
 
 
-/* =========================
-GLASS PANEL
-========================= */
+
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
+    background:white;
 
-background:
+    border:1px solid #e5e7eb;
 
-rgba(255,255,255,.7);
+    border-radius:24px;
 
+    padding:25px;
 
-backdrop-filter:
+    margin-bottom:20px;
 
-blur(18px);
+    box-shadow:
 
-
-border-radius:22px;
-
-
-padding:22px;
-
-
-margin-bottom:20px;
-
-
-border:
-
-1px solid rgba(255,255,255,.8);
-
-
-
-box-shadow:
-
-0 15px 35px rgba(15,23,42,.05);
-
+    0 10px 30px rgba(15,23,42,.06);
 
 }
-
-
-
-
 
 
 
 .panel-title{
 
+    font-size:16px;
 
-font-size:16px;
+    font-weight:800;
 
-font-weight:800;
+    color:#172033;
 
-color:#1e293b;
-
-margin-bottom:18px;
-
+    margin-bottom:18px;
 
 }
 
@@ -837,54 +729,38 @@ margin-bottom:18px;
 
 
 
-/* =========================
-FILTER ONE ROW
-========================= */
+/* ===============================
+FILTER
+================================ */
 
 
 .filter-grid{
 
+    display:grid;
 
-display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1.3fr;
 
+    gap:15px;
 
-grid-template-columns:
-
-
-1.3fr 1fr 1fr 1.4fr;
-
-
-gap:15px;
-
-
-align-items:end;
-
+    align-items:end;
 
 }
-
 
 
 
 .filter-grid label{
 
+    display:block;
 
-display:block;
+    font-size:11px;
 
+    font-weight:700;
 
-font-size:11px;
+    color:#64748b;
 
-
-font-weight:700;
-
-
-color:#64748b;
-
-
-margin-bottom:7px;
-
+    margin-bottom:7px;
 
 }
-
 
 
 
@@ -892,44 +768,32 @@ margin-bottom:7px;
 .filter-grid select{
 
 
-width:100%;
+    height:42px;
 
+    width:100%;
 
-height:42px;
+    padding:0 12px;
 
+    border-radius:12px;
 
-padding:0 12px;
+    border:1px solid #e2e8f0;
 
+    background:#f8fafc;
 
-border-radius:12px;
-
-
-border:
-
-1px solid #e2e8f0;
-
-
-background:white;
-
-
-font-size:12px;
-
-
-outline:none;
-
+    font-size:12px;
 
 }
-
-
 
 
 
 .filter-grid input:focus,
 .filter-grid select:focus{
 
+    outline:none;
 
-border-color:#22c55e;
+    border-color:#334155;
 
+    background:white;
 
 }
 
@@ -941,104 +805,53 @@ border-color:#22c55e;
 
 .status-action{
 
+    display:flex;
 
-display:flex;
-
-
-gap:8px;
-
+    gap:8px;
 
 }
-
-
-
-.status-action select{
-
-
-flex:1;
-
-
-}
-
-
 
 
 
 .status-action button{
 
 
-height:42px;
+    height:42px;
 
+    width:42px;
 
-width:45px;
+    border:none;
 
+    border-radius:12px;
 
-border:none;
+    background:#1e293b;
 
+    color:white;
 
-border-radius:12px;
-
-
-background:#166534;
-
-
-color:white;
-
-
-font-weight:700;
-
-
-cursor:pointer;
-
+    cursor:pointer;
 
 }
-
-
-
-.status-action button:hover{
-
-
-background:#22c55e;
-
-
-}
-
-
 
 
 
 .status-action a{
 
 
-height:42px;
+    display:flex;
 
+    align-items:center;
 
-padding:0 16px;
+    padding:0 15px;
 
+    background:#f1f5f9;
 
-background:#f1f5f9;
+    border-radius:12px;
 
+    text-decoration:none;
 
-border-radius:12px;
+    font-size:12px;
 
-
-display:flex;
-
-
-align-items:center;
-
-
-text-decoration:none;
-
-
-font-size:12px;
-
-
-font-weight:600;
-
-
-color:#475569;
-
+    color:#475569;
 
 }
 
@@ -1048,178 +861,81 @@ color:#475569;
 
 
 
-/* =========================
+
+
+/* ===============================
 TABLE
-========================= */
+================================ */
 
 
 .table-wrapper{
 
-
-overflow-x:auto;
-
+    overflow-x:auto;
 
 }
-
 
 
 
 table{
 
+    width:100%;
 
-width:100%;
-
-
-border-collapse:collapse;
-
-
-table-layout:fixed;
-
+    border-collapse:collapse;
 
 }
 
 
 
+thead th{
 
 
-th{
+    background:#f8fafc;
 
+    padding:14px;
 
-padding:13px;
+    font-size:11px;
 
+    color:#64748b;
 
-background:#f8fafc;
+    font-weight:700;
 
-
-font-size:11px;
-
-
-text-align:left;
-
-
-color:#64748b;
-
-
-white-space:nowrap;
-
+    text-align:left;
 
 }
 
 
 
+tbody td{
 
 
-td{
+    padding:14px;
 
+    font-size:12px;
 
-padding:14px 12px;
+    color:#334155;
 
-
-font-size:12px;
-
-
-border-bottom:
-
-1px solid #f1f5f9;
-
-
-vertical-align:middle;
-
+    border-bottom:1px solid #f1f5f9;
 
 }
 
 
 
+tbody tr:hover{
 
-
-th:nth-child(1),
-td:nth-child(1){
-
-width:12%;
+    background:#f8fafc;
 
 }
-
-
-
-th:nth-child(2),
-td:nth-child(2){
-
-width:17%;
-
-}
-
-
-
-th:nth-child(3),
-td:nth-child(3){
-
-width:18%;
-
-}
-
-
-
-th:nth-child(4),
-td:nth-child(4){
-
-width:15%;
-
-}
-
-
-
-th:nth-child(5),
-td:nth-child(5){
-
-width:12%;
-
-}
-
-
-
-th:nth-child(6),
-td:nth-child(6){
-
-width:13%;
-
-}
-
-
-
-th:nth-child(7),
-td:nth-child(7){
-
-width:13%;
-
-}
-
-
 
 
 
 small{
 
+    font-size:10px;
 
-font-size:11px;
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
-
-
-
-
-.division{
-
-
-font-size:11px;
-
-color:#16a34a;
-
-
-}
 
 
 
@@ -1227,85 +943,121 @@ color:#16a34a;
 
 .money{
 
+    color:#16a34a;
 
-font-weight:700;
-
-color:#dc2626;
-
+    font-weight:800;
 
 }
 
 
 
+
+
+
+.divisi{
+
+    font-size:10px;
+
+    color:#64748b;
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+STATUS
+================================ */
 
 
 .approved,
 .rejected{
 
 
-display:inline-block;
+    padding:6px 12px;
 
+    border-radius:999px;
 
-padding:6px 12px;
+    font-size:10px;
 
+    font-weight:700;
 
-border-radius:20px;
-
-
-font-size:10px;
-
-
-font-weight:700;
-
-
-white-space:nowrap;
-
+    display:inline-block;
 
 }
-
-
 
 
 
 .approved{
 
+    background:#dcfce7;
 
-background:#dcfce7;
-
-color:#166534;
-
+    color:#166534;
 
 }
-
-
 
 
 
 .rejected{
 
+    background:#fee2e2;
 
-background:#fee2e2;
-
-color:#dc2626;
-
+    color:#dc2626;
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+NOTE
+================================ */
+
+
+.note-box{
+
+
+    background:#f8fafc;
+
+    color:#475569;
+
+    padding:8px 12px;
+
+    border-radius:12px;
+
+    font-size:11px;
+
+    max-width:200px;
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
+    text-align:center;
 
-text-align:center;
+    padding:35px;
 
-
-padding:35px;
-
-
-color:#94a3b8;
-
+    color:#94a3b8;
 
 }
 
@@ -1316,26 +1068,15 @@ color:#94a3b8;
 
 
 
-
-/* =========================
-RESPONSIVE
-========================= */
-
+/* RESPONSIVE */
 
 @media(max-width:1100px){
 
-
 .filter-grid{
 
-
-grid-template-columns:
-
-repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
 
 }
-
-
 
 }
 
@@ -1343,73 +1084,22 @@ repeat(2,1fr);
 
 @media(max-width:700px){
 
+.filter-grid{
+
+    grid-template-columns:1fr;
+
+}
+
 
 .welcome-card{
 
-
-flex-direction:column;
-
-
-align-items:flex-start;
-
-
-gap:20px;
-
+    padding:25px;
 
 }
-
-
-
-
-.filter-grid{
-
-
-grid-template-columns:
-
-1fr;
-
-
-}
-
-
-
-table{
-
-
-display:block;
-
-
-overflow-x:auto;
-
-
-}
-
-
-
-}
-
-
-.note-box{
-
-background:#dcfce7;
-
-color:#166534;
-
-padding:8px 12px;
-
-border-radius:10px;
-
-font-size:12px;
-
-font-weight:600;
-
-line-height:1.4;
-
-max-width:200px;
-
-word-wrap:break-word;
 
 }
 
 </style>
+
+
 @endsection

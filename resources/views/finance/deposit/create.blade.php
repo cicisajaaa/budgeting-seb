@@ -132,8 +132,10 @@ Rekening Bank
 @foreach($banks as $bank)
 
 <option value="{{$bank->id}}">
-{{$bank->nama_bank}} -
+{{$bank->nama_bank}} 
+- 
 {{$bank->nomor_rekening}}
+(Rp {{number_format($bank->saldo,0,',','.')}})
 </option>
 
 
@@ -209,31 +211,46 @@ required>
 
 
 
-
-
 <style>
 
+/* ===============================
+HEADER
+================================ */
 
 .welcome-card{
 
-background:white;
-padding:25px;
-border-radius:12px;
-border:1px solid #e2e8f0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
+
 .welcome-label{
 
-font-size:11px;
-font-weight:700;
-letter-spacing:2px;
-color:#64748b;
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    font-weight:800;
+
+    color:#64748b;
 
 }
 
@@ -241,9 +258,13 @@ color:#64748b;
 
 .welcome-card h1{
 
-color:#4b2e05;
-font-size:26px;
-margin:8px 0;
+    margin:10px 0;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -251,53 +272,116 @@ margin:8px 0;
 
 .welcome-card p{
 
-color:#64748b;
-font-size:13px;
+    margin:0;
+
+    font-size:13px;
+
+    color:#64748b;
 
 }
 
+
+
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
-background:#fef3c7;
-color:#92400e;
-padding:10px 18px;
-border-radius:8px;
-text-decoration:none;
-font-weight:600;
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    color:#334155;
+
+    padding:11px 20px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:700;
 
 }
 
 
+
+.btn-back:hover{
+
+    background:#1e293b;
+
+    color:white;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-background:white;
-padding:25px;
-border-radius:12px;
-border:1px solid #e2e8f0;
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
 
 }
+
+
 
 
 
 .panel-title{
 
-font-size:17px;
-font-weight:700;
-margin-bottom:20px;
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    margin-bottom:20px;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+FORM
+================================ */
+
+
 .form-grid{
 
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
 
 }
 
@@ -305,85 +389,247 @@ gap:20px;
 
 label{
 
-display:block;
-font-size:13px;
-font-weight:600;
-color:#475569;
-margin-bottom:8px;
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    color:#475569;
 
 }
+
 
 
 
 input,
 select{
 
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid #e2e8f0;
-background:white;
+
+    width:100%;
+
+
+    height:46px;
+
+
+    padding:0 14px;
+
+
+    border-radius:14px;
+
+
+    border:1px solid #dbe3ef;
+
+
+    background:#f8fafc;
+
+
+    font-size:13px;
+
+
+    color:#172033;
+
+
+    outline:none;
+
+
+    transition:.2s;
+
 
 }
 
+
+
+input:focus,
+select:focus{
+
+
+    background:white;
+
+
+    border-color:#334155;
+
+
+    box-shadow:
+
+    0 0 0 3px rgba(51,65,85,.12);
+
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
 
 
 .btn-submit{
 
-margin-top:25px;
-background:#6b4f1d;
-color:white;
-border:none;
-padding:12px 25px;
-border-radius:10px;
-font-weight:600;
-cursor:pointer;
+
+    margin-top:25px;
+
+
+    background:#1e293b;
+
+
+    color:white;
+
+
+    border:none;
+
+
+    padding:13px 28px;
+
+
+    border-radius:14px;
+
+
+    font-size:12px;
+
+
+    font-weight:800;
+
+
+    cursor:pointer;
+
 
 }
+
 
 
 .btn-submit:hover{
 
-background:#8b6914;
+
+    background:#334155;
+
 
 }
 
+
+
+
+
+
+
+
+
+/* ===============================
+ALERT
+================================ */
 
 
 .success-box{
 
-background:#dcfce7;
-color:#166534;
-padding:12px;
-border-radius:10px;
-margin-bottom:15px;
+
+    background:#dcfce7;
+
+
+    color:#166534;
+
+
+    padding:12px 15px;
+
+
+    border-radius:14px;
+
+
+    margin-bottom:20px;
+
+
+    font-size:13px;
+
 
 }
+
 
 
 
 .error-box{
 
-background:#fee2e2;
-color:#991b1b;
-padding:12px;
-border-radius:10px;
-margin-bottom:15px;
+
+    background:#fee2e2;
+
+
+    color:#991b1b;
+
+
+    padding:12px 15px;
+
+
+    border-radius:14px;
+
+
+    margin-bottom:20px;
+
+
+    font-size:13px;
+
 
 }
 
+
+
+
+
+.error-box ul{
+
+
+    margin:0;
+
+    padding-left:20px;
+
+}
+
+
+
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
 
+
 .form-grid{
 
-grid-template-columns:1fr;
+
+    grid-template-columns:1fr;
+
 
 }
 
+
+
+.welcome-card{
+
+
+    flex-direction:column;
+
+
+    align-items:flex-start;
+
+
+    gap:15px;
+
+
 }
 
+
+}
 
 </style>
 

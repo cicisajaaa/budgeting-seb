@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Proyek;
+use App\Models\Divisi;
 
 class SaldoDivisi extends Model
 {
