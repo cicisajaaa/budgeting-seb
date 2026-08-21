@@ -164,7 +164,13 @@ border-radius:20px;
 }
 
 
+.danger{
 
+background:#fee2e2;
+
+color:#991b1b;
+
+}
 
 
 
@@ -282,9 +288,11 @@ ANALISIS PERFORMA PERUSAHAAN
 <div class="info">
 
 Tanggal :
-{{now()->format('d M Y')}}
+{{($tanggal ?? now())->format('d M Y')}}
 
 </div>
+
+
 
 
 </div>
@@ -394,7 +402,7 @@ Tingkat Penyelesaian Project :
 <div class="progress-fill"
 
 style="width:
-{{($progress ?? 0)}}%">
+{{min($progress ?? 0,100)}}%"
 
 </div>
 
@@ -422,33 +430,28 @@ Ringkasan Evaluasi
 Status Operasional
 
 </td>
-
-
 <td>
-
-@if(($progress ?? 0)>=75)
+@if(($status ?? '') == 'Performa Sangat Baik')
 
 <span class="status good">
-Baik
+{{ $status }}
 </span>
 
-@elseif(($progress ?? 0)>=50)
+@elseif(($status ?? '') == 'Performa Cukup Baik')
 
 <span class="status warning">
-Cukup
+{{ $status }}
 </span>
 
 @else
 
-<span class="status warning">
-Perlu Monitoring
+<span class="status danger">
+{{ $status ?? 'Perlu Monitoring' }}
 </span>
 
 @endif
 
 </td>
-
-
 </tr>
 
 
@@ -488,7 +491,9 @@ Evaluasi Performa
 
 <td>
 
-Berdasarkan perkembangan progres project perusahaan
+Berdasarkan rata-rata progres 
+{{number_format($progress ?? 0,1)}}%
+dari seluruh project yang tercatat.
 
 </td>
 
@@ -511,7 +516,7 @@ Berdasarkan perkembangan progres project perusahaan
 
 Dicetak oleh sistem pada
 
-{{now()->format('d M Y H:i')}}
+{{$tanggal->format('d M Y H:i')}}
 
 
 </div>

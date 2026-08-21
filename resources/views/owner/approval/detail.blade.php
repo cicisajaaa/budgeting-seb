@@ -6,10 +6,19 @@
 <div class="detail-container">
 
 
-<div class="detail-header">
+{{-- HEADER --}}
 
-<span>
-MONITORING PENGAJUAN DANA
+<div class="dashboard-header">
+
+
+<div class="header-content">
+
+
+<div>
+
+
+<span class="label">
+MONITORING DANA
 </span>
 
 
@@ -27,6 +36,30 @@ Melihat informasi dan status pengajuan dana yang telah diproses oleh bagian keua
 
 
 
+
+<a href="{{route('owner.approval')}}"
+class="back-btn">
+
+← Kembali
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- INFORMASI --}}
 
 
 <div class="panel">
@@ -49,7 +82,6 @@ Melihat informasi dan status pengajuan dana yang telah diproses oleh bagian keua
 Project
 </label>
 
-
 <b>
 {{ $expense->proyek->nama_proyek ?? '-' }}
 </b>
@@ -60,12 +92,13 @@ Project
 
 
 
+
+
 <div class="detail-item">
 
 <label>
 Pengaju
 </label>
-
 
 <b>
 {{ $expense->user->name ?? '-' }}
@@ -78,19 +111,19 @@ Pengaju
 
 
 
+
 <div class="detail-item">
 
 <label>
 Judul Pengajuan
 </label>
 
-
 <b>
-{{ $expense->judul }}
+{{ $expense->judul ?? '-' }}
 </b>
 
-
 </div>
+
 
 
 
@@ -103,16 +136,16 @@ Judul Pengajuan
 Jumlah Dana
 </label>
 
+<b class="amount">
 
-<b>
 Rp {{number_format(
-$expense->jumlah,
+$expense->jumlah ?? 0,
 0,
 ',',
 '.'
 )}}
-</b>
 
+</b>
 
 </div>
 
@@ -124,16 +157,13 @@ $expense->jumlah,
 
 <div class="detail-item full">
 
-
 <label>
 Keterangan
 </label>
 
-
 <b>
 {{ $expense->keterangan ?? '-' }}
 </b>
-
 
 </div>
 
@@ -143,8 +173,8 @@ Keterangan
 
 
 
-<div class="detail-item">
 
+<div class="detail-item">
 
 <label>
 Status Pengajuan
@@ -178,6 +208,7 @@ Ditolak
 </span>
 
 
+
 @endif
 
 
@@ -188,15 +219,25 @@ Ditolak
 
 
 
+
+
 </div>
 
+
 </div>
 
 
 
 
 
-<div class="monitoring-box">
+
+
+
+
+{{-- MONITORING --}}
+
+
+<div class="panel">
 
 
 <h3>
@@ -206,20 +247,16 @@ Ditolak
 
 
 
-<div class="monitoring-content">
-
-
-
 @if($expense->status == 'pending')
 
 
-<div class="waiting">
+
+<div class="info-box waiting-box">
 
 
 <span>
 ⏳ Menunggu Verifikasi Keuangan
 </span>
-
 
 
 <p>
@@ -228,8 +265,9 @@ Owner hanya memiliki akses untuk melihat perkembangan pengajuan.
 </p>
 
 
-
 </div>
+
+
 
 
 
@@ -239,7 +277,7 @@ Owner hanya memiliki akses untuk melihat perkembangan pengajuan.
 
 
 
-<div class="approved-info">
+<div class="info-box approved-box">
 
 
 <span>
@@ -247,14 +285,14 @@ Owner hanya memiliki akses untuk melihat perkembangan pengajuan.
 </span>
 
 
-
 <p>
 Pengajuan dana telah disetujui oleh bagian keuangan dan dapat diproses sesuai prosedur perusahaan.
 </p>
 
 
-
 </div>
+
+
 
 
 
@@ -264,13 +302,12 @@ Pengajuan dana telah disetujui oleh bagian keuangan dan dapat diproses sesuai pr
 
 
 
-<div class="rejected-info">
+<div class="info-box rejected-box">
 
 
 <span>
 ✕ Pengajuan Ditolak
 </span>
-
 
 
 <p>
@@ -288,24 +325,13 @@ Pengajuan dana tidak disetujui oleh bagian keuangan.
 
 
 <strong>
-Alasan Penolakan:
+Alasan Penolakan
 </strong>
 
 
-<br>
-
-
+<p>
 {{ $expense->catatan }}
-
-
-
-</div>
-
-
-
-@endif
-
-
+</p>
 
 
 </div>
@@ -319,6 +345,13 @@ Alasan Penolakan:
 </div>
 
 
+
+@endif
+
+
+
+
+
 </div>
 
 
@@ -326,92 +359,98 @@ Alasan Penolakan:
 
 
 
-
-
-<a href="{{route('owner.approval')}}"
-class="back-btn">
-
-
-← Kembali
-
-
-</a>
-
-
-
-
 </div>
 
 
-</div>
+
+
+
 
 
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-.detail-container{
-
-    margin-top:10px;
-
+*{
+    box-sizing:border-box;
 }
 
 
+/* ===============================
+HEADER
+================================ */
 
-/* ================= HEADER ================= */
 
+.dashboard-header{
 
-.detail-header{
+    background:#f8fafc;
 
-    background:white;
+    padding:25px;
 
-    padding:30px;
-
-    border-radius:20px;
+    border-radius:24px;
 
     border:1px solid #e2e8f0;
 
-    margin-bottom:25px;
+    margin-bottom:22px;
 
     box-shadow:
-    0 5px 20px rgba(15,23,42,.05);
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-.detail-header span{
+.header-content{
 
-    font-size:11px;
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+
+
+.label{
+
+    font-size:10px;
 
     letter-spacing:2px;
 
-    font-weight:700;
-
-    color:#a67c2e;
-
-}
-
-
-
-.detail-header h1{
-
-    margin:12px 0 8px;
-
-    font-size:30px;
-
-    color:#1e293b;
-
     font-weight:800;
-
-}
-
-
-
-.detail-header p{
 
     color:#64748b;
 
-    font-size:14px;
+}
+
+
+
+.dashboard-header h1{
+
+    font-size:24px;
+
+    margin:8px 0;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.dashboard-header p{
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -419,21 +458,59 @@ class="back-btn">
 
 
 
-/* ================= PANEL ================= */
+
+/* ===============================
+BACK BUTTON
+================================ */
+
+
+.back-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    background:#0f172a;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .panel{
 
     background:white;
 
-    padding:30px;
+    padding:22px;
 
-    border-radius:20px;
+    border-radius:24px;
 
     border:1px solid #e2e8f0;
 
     box-shadow:
-    0 5px 20px rgba(15,23,42,.05);
+
+    0 8px 25px rgba(15,23,42,.05);
+
+    margin-bottom:22px;
 
 }
 
@@ -441,13 +518,17 @@ class="back-btn">
 
 .panel h3{
 
-    color:#1e293b;
-
-    margin-bottom:25px;
-
-    font-size:18px;
+    font-size:16px;
 
     font-weight:800;
+
+    color:#172033;
+
+    margin-bottom:18px;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
 
 }
 
@@ -455,7 +536,11 @@ class="back-btn">
 
 
 
-/* ================= DETAIL GRID ================= */
+
+
+/* ===============================
+DETAIL GRID
+================================ */
 
 
 .detail-grid{
@@ -464,7 +549,7 @@ class="back-btn">
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+    gap:15px;
 
 }
 
@@ -474,11 +559,19 @@ class="back-btn">
 
     background:#f8fafc;
 
-    padding:20px;
+    padding:16px;
 
-    border-radius:15px;
+    border-radius:18px;
 
     border:1px solid #e2e8f0;
+
+}
+
+
+
+.detail-item:hover{
+
+    background:white;
 
 }
 
@@ -496,13 +589,13 @@ class="back-btn">
 
     display:block;
 
-    font-size:12px;
+    font-size:11px;
+
+    font-weight:700;
 
     color:#64748b;
 
-    margin-bottom:10px;
-
-    font-weight:600;
+    margin-bottom:7px;
 
 }
 
@@ -510,38 +603,41 @@ class="back-btn">
 
 .detail-item b{
 
-    color:#1e293b;
+    font-size:13px;
 
-    font-size:15px;
-
-}
-
-
-
-.detail-item:nth-child(4) b{
-
-    color:#6b4f1d;
-
-    font-size:22px;
+    color:#172033;
 
 }
 
 
 
+.amount{
+
+    font-size:18px!important;
+
+    color:#15803d!important;
+
+}
 
 
-/* ================= STATUS ================= */
+
+
+
+
+/* ===============================
+STATUS
+================================ */
 
 
 .status{
 
     display:inline-flex;
 
-    padding:8px 16px;
+    padding:6px 13px;
 
-    border-radius:30px;
+    border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -581,36 +677,18 @@ class="back-btn">
 
 
 
-/* ================= MONITORING ================= */
 
 
-.monitoring-box{
-
-    margin-top:35px;
-
-    padding-top:30px;
-
-    border-top:1px solid #e2e8f0;
-
-}
+/* ===============================
+MONITORING BOX
+================================ */
 
 
+.info-box{
 
-.monitoring-box h3{
+    padding:20px;
 
-    margin-bottom:20px;
-
-}
-
-
-
-.monitoring-content{
-
-    background:#f8fafc;
-
-    padding:25px;
-
-    border-radius:15px;
+    border-radius:18px;
 
     border:1px solid #e2e8f0;
 
@@ -618,29 +696,45 @@ class="back-btn">
 
 
 
+.info-box span{
 
+    display:inline-flex;
 
-.waiting span,
-.approved-info span,
-.rejected-info span{
+    padding:7px 13px;
 
+    border-radius:999px;
 
-    display:inline-block;
-
-    padding:10px 18px;
-
-    border-radius:20px;
-
-    font-size:13px;
+    font-size:11px;
 
     font-weight:700;
-
 
 }
 
 
 
-.waiting span{
+.info-box p{
+
+    margin-top:12px;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    color:#64748b;
+
+}
+
+
+
+.waiting-box{
+
+    background:#fffbeb;
+
+}
+
+
+
+.waiting-box span{
 
     background:#fef3c7;
 
@@ -650,7 +744,15 @@ class="back-btn">
 
 
 
-.approved-info span{
+.approved-box{
+
+    background:#f0fdf4;
+
+}
+
+
+
+.approved-box span{
 
     background:#dcfce7;
 
@@ -660,7 +762,15 @@ class="back-btn">
 
 
 
-.rejected-info span{
+.rejected-box{
+
+    background:#fef2f2;
+
+}
+
+
+
+.rejected-box span{
 
     background:#fee2e2;
 
@@ -671,26 +781,19 @@ class="back-btn">
 
 
 
-.monitoring-content p{
 
-    margin-top:15px;
 
-    color:#64748b;
 
-    font-size:14px;
-
-    line-height:1.6;
-
-}
-
+/* ===============================
+REASON
+================================ */
 
 
 .reason{
 
-
     margin-top:15px;
 
-    padding:15px;
+    padding:14px;
 
     background:white;
 
@@ -698,85 +801,68 @@ class="back-btn">
 
     border:1px solid #fecaca;
 
+}
+
+
+
+.reason strong{
+
+    font-size:12px;
+
+}
+
+
+
+.reason p{
+
+    margin:7px 0 0;
+
     color:#991b1b;
 
-    font-size:13px;
-
 }
 
 
 
 
 
-/* ================= BACK BUTTON ================= */
 
 
-.back-btn{
-
-
-    display:inline-flex;
-
-    margin-top:25px;
-
-    padding:12px 22px;
-
-    background:#334155;
-
-    color:white;
-
-    border-radius:12px;
-
-    text-decoration:none;
-
-    font-size:13px;
-
-    font-weight:600;
-
-
-}
-
-
-
-.back-btn:hover{
-
-
-    background:#1e293b;
-
-
-}
-
-
-
-
-
-/* ================= RESPONSIVE ================= */
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
 
 
-    .detail-grid{
+.header-content{
 
+    flex-direction:column;
 
-        grid-template-columns:1fr;
-
-
-    }
-
-
-
-    .detail-item.full{
-
-
-        grid-column:auto;
-
-
-    }
-
+    align-items:flex-start;
 
 }
 
 
 
+.detail-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.detail-item.full{
+
+    grid-column:auto;
+
+}
+
+
+}
+
 </style>
+
+
 @endsection

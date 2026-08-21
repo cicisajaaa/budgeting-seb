@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
@@ -8,7 +7,15 @@
 
 
 
-<div class="page-header">
+{{-- HEADER --}}
+
+<div class="dashboard-header">
+
+
+<div class="header-top">
+
+
+<div>
 
 
 <span class="label">
@@ -31,15 +38,51 @@ Daftar aktivitas sistem pada tanggal tersebut.
 
 
 
+<a href="{{route('owner.audit.history')}}"
+class="btn-back">
+
+← Kembali
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{{-- PANEL --}}
 
 
 <div class="panel">
 
 
 
+<div class="panel-header">
+
+
 <h3>
 📝 Daftar Aktivitas
 </h3>
+
+
+
+<span>
+Riwayat Sistem
+</span>
+
+
+</div>
+
+
 
 
 
@@ -52,6 +95,7 @@ Daftar aktivitas sistem pada tanggal tersebut.
 <div class="activity">
 
 
+
 <div class="activity-icon">
 
 
@@ -59,26 +103,33 @@ Daftar aktivitas sistem pada tanggal tersebut.
 
 💰
 
+
 @elseif($activity->modul == 'Project')
 
 📁
+
 
 @elseif($activity->modul == 'Pengajuan Dana')
 
 💸
 
+
 @elseif($activity->modul == 'Approval Dana')
 
 ✅
+
 
 @else
 
 📝
 
+
 @endif
 
 
 </div>
+
+
 
 
 
@@ -95,14 +146,20 @@ Daftar aktivitas sistem pada tanggal tersebut.
 
 
 
+
+
 <small>
 
-Oleh:
+Oleh :
+
 <strong>
 {{$activity->pengguna->name ?? 'System'}}
 </strong>
 
 </small>
+
+
+
 
 
 
@@ -116,7 +173,10 @@ Oleh:
 
 
 
-<div class="info">
+
+
+
+<div class="activity-footer">
 
 
 <span class="module">
@@ -126,9 +186,10 @@ Oleh:
 </span>
 
 
+
 <span class="time">
 
-{{$activity->created_at->format('H:i')}}
+{{$activity->created_at->format('d M Y H:i')}}
 
 </span>
 
@@ -137,11 +198,16 @@ Oleh:
 
 
 
+
+
 </div>
 
 
 
 </div>
+
+
+
 
 
 
@@ -162,23 +228,13 @@ Tidak ada aktivitas pada tanggal ini.
 
 
 
-<a href="{{route('owner.audit.history')}}"
-class="back-btn">
-
-← Kembali Riwayat
-
-</a>
-
-
-
 </div>
 
 
 
 
+
 </div>
-
-
 
 
 
@@ -188,27 +244,56 @@ class="back-btn">
 
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
 
 .audit-container{
 
-margin-top:10px;
+    width:100%;
 
 }
 
 
 
+/* ===============================
+HEADER
+================================ */
 
-.page-header{
 
-background:white;
+.dashboard-header{
 
-padding:30px;
+    background:#f8fafc;
 
-border-radius:20px;
+    padding:25px;
 
-border:1px solid #e2e8f0;
+    border-radius:24px;
 
-margin-bottom:25px;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:22px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
+
+}
+
+
+
+.header-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
 
 }
 
@@ -216,81 +301,173 @@ margin-bottom:25px;
 
 .label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:800;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
-
-}
-
-
-
-.page-header h1{
-
-margin:10px 0;
-
-font-size:28px;
-
-color:#1e293b;
+    color:#64748b;
 
 }
 
 
 
-.page-header p{
+.dashboard-header h1{
 
-color:#64748b;
+    margin:8px 0;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#172033;
 
 }
 
 
+
+.dashboard-header p{
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
+
+
+.btn-back{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:9px 16px;
+
+    background:#0f172a;
+
+    color:white;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .panel{
 
-background:white;
+    background:white;
 
-padding:30px;
+    padding:22px;
 
-border-radius:20px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-}
+    box-shadow:
 
-
-
-.panel h3{
-
-margin-bottom:20px;
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
+.panel-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+
+
+.panel-header h3{
+
+    margin:0;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+}
+
+
+
+.panel-header span{
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+ACTIVITY
+================================ */
 
 
 .activity{
 
-display:flex;
+    display:flex;
 
-gap:20px;
+    gap:15px;
 
-padding:20px 0;
+    padding:15px 0;
 
-border-bottom:1px solid #f1f5f9;
+    border-bottom:1px solid #f1f5f9;
 
 }
-
 
 
 
 .activity:last-child{
 
-border-bottom:none;
+    border-bottom:none;
 
 }
 
@@ -300,21 +477,23 @@ border-bottom:none;
 
 .activity-icon{
 
-width:45px;
+    width:38px;
 
-height:45px;
+    height:38px;
 
-border-radius:50%;
+    border-radius:12px;
 
-background:#f8fafc;
+    background:#f8fafc;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-font-size:20px;
+    font-size:16px;
+
+    flex-shrink:0;
 
 }
 
@@ -322,11 +501,33 @@ font-size:20px;
 
 
 
+.activity-content{
+
+    flex:1;
+
+}
+
+
+
 .activity-content h4{
 
-color:#172033;
+    margin:0 0 5px;
 
-font-size:15px;
+    font-size:13px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.activity-content small{
+
+    font-size:11px;
+
+    color:#64748b;
 
 }
 
@@ -334,39 +535,55 @@ font-size:15px;
 
 .activity-content p{
 
-margin-top:8px;
+    margin:7px 0;
 
-font-size:13px;
+    font-size:12px;
 
-color:#64748b;
+    color:#64748b;
+
+    line-height:1.5;
+
+}
+
+
+
+
+
+
+/* ===============================
+FOOTER
+================================ */
+
+
+.activity-footer{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:8px;
 
 }
 
 
-
-.info{
-
-display:flex;
-
-gap:15px;
-
-margin-top:10px;
-
-}
 
 
 
 .module{
 
-background:#f1f5f9;
+    background:#e0f2fe;
 
-padding:5px 12px;
+    color:#0369a1;
 
-border-radius:20px;
+    padding:5px 12px;
 
-font-size:11px;
+    border-radius:999px;
 
-font-weight:700;
+    font-size:10px;
+
+    font-weight:700;
 
 }
 
@@ -374,53 +591,80 @@ font-weight:700;
 
 .time{
 
-font-size:12px;
+    font-size:11px;
 
-color:#94a3b8;
-
-}
-
-
-
-
-
-.back-btn{
-
-display:inline-flex;
-
-margin-top:25px;
-
-background:#334155;
-
-color:white;
-
-padding:10px 18px;
-
-border-radius:10px;
-
-text-decoration:none;
-
-font-size:13px;
-
-font-weight:700;
+    color:#94a3b8;
 
 }
 
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
-text-align:center;
+    padding:35px;
 
-padding:40px;
+    text-align:center;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+    font-size:12px;
 
 }
 
 
-</style>
 
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:800px){
+
+
+.header-top{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.activity{
+
+    flex-direction:column;
+
+}
+
+
+
+.panel-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:8px;
+
+}
+
+
+}
+
+</style>
 
 
 @endsection

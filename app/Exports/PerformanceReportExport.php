@@ -125,15 +125,15 @@ class PerformanceReportExport implements
         $totalProject = $projects->count();
 
 
-
         $projectAktif = $projects
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                100
-            )
-            ->count();
+            ->filter(function($project){
 
+                return $project->progres_keseluruhan > 0
+                    &&
+                    $project->progres_keseluruhan < 100;
+
+            })
+            ->count();
 
 
         $projectSelesai = $projects
@@ -168,13 +168,14 @@ class PerformanceReportExport implements
 
 
 
-
         $projectRisiko = $projects
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                50
-            )
+            ->filter(function($project){
+
+                return $project->progres_keseluruhan > 0
+                    &&
+                    $project->progres_keseluruhan < 50;
+
+            })
             ->count();
 
 
@@ -190,14 +191,14 @@ class PerformanceReportExport implements
 
 
         $progressAktif = $projects
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                100
-            )
-            ->avg(
-                'progres_keseluruhan'
-            ) ?? 0;
+            ->filter(function($project){
+
+                return $project->progres_keseluruhan > 0
+                    &&
+                    $project->progres_keseluruhan < 100;
+
+            })
+            ->avg('progres_keseluruhan') ?? 0;
 
 
 
@@ -212,22 +213,18 @@ class PerformanceReportExport implements
 
 
 
-
         $anggaranAktif = $projects
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                100
-            )
-            ->sum(
-                'total_anggaran'
-            );
+            ->filter(function($project){
+
+                return $project->progres_keseluruhan > 0
+                    &&
+                    $project->progres_keseluruhan < 100;
+
+            })
+            ->sum('total_anggaran');
 
 
-
-
-
-        $anggaranSelesai = $projects
+        $anggaranSelesai = (float) $projects
             ->where(
                 'progres_keseluruhan',
                 '>=',
@@ -236,7 +233,6 @@ class PerformanceReportExport implements
             ->sum(
                 'total_anggaran'
             );
-
 
 
 
@@ -378,7 +374,15 @@ class PerformanceReportExport implements
 
 
 
+$projectSelesai = (int) $projectSelesai;
 
+$projectHampirSelesai = (int) $projectHampirSelesai;
+
+$projectRisiko = (int) $projectRisiko;
+
+$projectBelumMulai = (int) $projectBelumMulai;
+
+$anggaranSelesai = (float) $anggaranSelesai;
 
 
 
@@ -425,7 +429,7 @@ class PerformanceReportExport implements
 
                 'Project Selesai',
 
-                $projectSelesai,
+                $projectSelesai ?? 0,
 
                 'Client',
 
@@ -495,7 +499,7 @@ class PerformanceReportExport implements
 
                 'Project Hampir Selesai',
 
-                $projectHampirSelesai,
+                $projectHampirSelesai ?? 0,
 
                 'Project Risiko',
 
@@ -549,7 +553,7 @@ class PerformanceReportExport implements
 
                 'Nilai Project Selesai',
 
-                $anggaranSelesai,
+                $anggaranSelesai ?? 0,
 
                 'Rata Anggaran',
 
@@ -849,17 +853,17 @@ class PerformanceReportExport implements
                 SECTION HEADER
                 */
 
-
                 $sectionRows = [
 
-
                     6,
-                    10,
-                    13,
-                    17,
-                    20
 
+                    9,
 
+                    11,
+
+                    14,
+
+                    16
                 ];
 
 
@@ -980,7 +984,7 @@ class PerformanceReportExport implements
                 */
 
 
-                foreach([7,8,11,14,15,18,21] as $row){
+                foreach([7,8,10,13,14,17,20] as $row){
 
 
 
@@ -1090,6 +1094,15 @@ class PerformanceReportExport implements
                             )
                             ->getValue();
 
+                        if($value === null)
+                        {
+                            $sheet->setCellValue(
+                                $column.$row,
+                                '-'
+                            );
+
+                            $value = '-';
+                        }
 
 
                         if(

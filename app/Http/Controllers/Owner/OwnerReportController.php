@@ -161,12 +161,12 @@ class OwnerReportController extends Controller
 
 
             +
-
-
-            ExpenseRequest::when(
-
+            ExpenseRequest::where(
+                'status',
+                'approved'
+            )
+            ->when(
                 $request->start_date,
-
                 function($query) use ($request){
 
                     $query->whereDate(
@@ -176,12 +176,9 @@ class OwnerReportController extends Controller
                     );
 
                 }
-
             )
             ->when(
-
                 $request->end_date,
-
                 function($query) use ($request){
 
                     $query->whereDate(
@@ -191,10 +188,8 @@ class OwnerReportController extends Controller
                     );
 
                 }
-
             )
             ->count();
-
 
 
 
@@ -218,195 +213,152 @@ class OwnerReportController extends Controller
         |--------------------------------------------------------------------------
         */
 
-
-        $projects = Proyek::with('tugas')
-
-            ->when(
-
-                $request->start_date,
-
-                function($query) use ($request){
-
-                    $query->whereDate(
-                        'created_at',
-                        '>=',
-                        $request->start_date
-                    );
-
-                }
-
-            )
-
-            ->when(
-
-                $request->end_date,
-
-                function($query) use ($request){
-
-                    $query->whereDate(
-                        'created_at',
-                        '<=',
-                        $request->end_date
-                    );
-
-                }
-
-            )
-
-            ->latest()
-
-            ->get();
-
-
-
-
-
-
-
-
-        $totalProject = $projects->count();
-
-
-
-
-        $totalProjectSelesai = $projects
-
-            ->where(
-                'progres_keseluruhan',
-                100
-            )
-
-            ->count();
-
-
-
-
-
-
-        $totalProjectTerlambat = $projects
-
-            ->filter(function($project){
-
-
-                if(!$project->tanggal_selesai){
-
-                    return false;
-
-                }
-
-
-
-                return now()->gt(
-                    $project->tanggal_selesai
-                )
-
-                &&
-
-                $project->progres_keseluruhan < 100;
-
-
-
-            })
-
-            ->count();
-
-
-
-
-
-
-
-        $rataProgress = $projects->avg(
-            'progres_keseluruhan'
-        );
-
-
-
-
-
-
-
-        $projectAktif = $projects
-
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                100
-            )
-
-            ->count();
-
-
-
-
-
-
-        $progressProject = $projects->avg(function($project){
-
-            return $project->progres_keseluruhan;
-
-        }) ?? 0;
-
-
-
-
-
-
-
-        $saldo = $profit;
-
-
-
-
-
-$totalBudget = $projects->sum(
-    'total_anggaran'
-);
-
-
-$totalAnggaranProject = $totalBudget;
-
-
-        $totalProjectBerjalan = $projects
-
-            ->filter(function($project){
-
-                return 
-
-                $project->progres_keseluruhan > 0
-
-                &&
-
-                $project->progres_keseluruhan < 100;
-
-
-            })
-
-            ->count();
-
-
-
-
-
-
-
-        $efisiensiDana = 0;
-
-
-
-        if($totalAnggaranProject > 0)
-
-        {
-
-            $efisiensiDana =
-
-            ($saldo / $totalAnggaranProject) * 100;
+/*
+|--------------------------------------------------------------------------
+| DATA PROJECT
+|--------------------------------------------------------------------------
+*/
+
+$projects = Proyek::query()
+
+    ->when(
+        $request->start_date,
+        function($query) use ($request){
+
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $request->start_date
+            );
 
         }
+    )
+
+    ->when(
+        $request->end_date,
+        function($query) use ($request){
+
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $request->end_date
+            );
+
+        }
+    )
+
+    ->latest()
+
+    ->get();
 
 
 
 
+$totalProject = $projects->count();
+
+
+
+
+
+$totalProjectSelesai = $projects
+    ->filter(function($project){
+
+        return (int)$project->progres_keseluruhan >= 100;
+
+    })
+    ->count();
+
+
+
+
+
+$totalProjectTerlambat = $projects
+    ->filter(function($project){
+
+        return $project->tanggal_selesai
+            &&
+            now()->gt($project->tanggal_selesai)
+            &&
+            $project->progres_keseluruhan < 100;
+
+    })
+    ->count();
+
+
+
+
+
+$rataProgress = $projects->avg(function($project){
+
+    return (float)$project->progres_keseluruhan;
+
+}) ?? 0;
+
+
+
+
+
+$projectAktif = $projects
+    ->filter(function($project){
+
+        return $project->progres_keseluruhan > 0
+        &&
+        $project->progres_keseluruhan < 100;
+
+    })
+    ->count();
+
+
+
+
+
+$progressProject = $rataProgress;
+
+
+
+
+
+$saldo = $profit;
+
+
+
+
+
+// total seluruh anggaran project
+
+$totalAnggaranProject = $projects->sum(function($project){
+
+    return (float)$project->total_anggaran;
+
+});
+
+
+
+
+
+$totalBudget = $totalAnggaranProject;
+
+
+
+
+
+$totalProjectBerjalan = $projectAktif;
+
+
+
+
+
+$efisiensiDana = 0;
+
+
+if($totalAnggaranProject > 0){
+
+    $efisiensiDana = round(
+        ($saldo / $totalAnggaranProject) * 100,
+        2
+    );
+
+}
 
 
 
@@ -477,12 +429,37 @@ public function exportPdf(Request $request)
     */
 
 
-    $projects = Proyek::with('tugas')
+$projects = Proyek::with('tugas')
 
-        ->latest()
+    ->when(
+        $request->start_date,
+        function($query) use ($request){
 
-        ->get();
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $request->start_date
+            );
 
+        }
+    )
+
+    ->when(
+        $request->end_date,
+        function($query) use ($request){
+
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $request->end_date
+            );
+
+        }
+    )
+
+    ->latest()
+
+    ->get();
 
 
 
@@ -494,18 +471,67 @@ public function exportPdf(Request $request)
     */
 
 
-    $totalPendapatan = ProjectDeposit::sum(
-        'jumlah_setoran'
-    );
+    $totalPendapatan = ProjectDeposit::when(
+        $request->start_date,
+        function($query) use ($request){
+
+            $query->whereDate(
+                'tanggal_setoran',
+                '>=',
+                $request->start_date
+            );
+
+        }
+    )
+
+    ->when(
+        $request->end_date,
+        function($query) use ($request){
+
+            $query->whereDate(
+                'tanggal_setoran',
+                '<=',
+                $request->end_date
+            );
+
+        }
+    )
+
+    ->sum('jumlah_setoran');
 
 
+$totalPengeluaran = ExpenseRequest::where(
+    'status',
+    'approved'
+)
 
+->when(
+    $request->start_date,
+    function($query) use ($request){
 
-    $totalPengeluaran = ExpenseRequest::sum(
-        'jumlah'
-    );
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $request->start_date
+        );
 
+    }
+)
 
+->when(
+    $request->end_date,
+    function($query) use ($request){
+
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $request->end_date
+        );
+
+    }
+)
+
+->sum('jumlah');
 
 
 
@@ -595,7 +621,25 @@ public function exportPdf(Request $request)
 
 
         'projects'=>$projects,
+        'totalProjectSelesai'=>$projects
+    ->where(
+        'progres_keseluruhan',
+        100
+    )
+    ->count(),
 
+
+'totalProjectTerlambat'=>$projects
+    ->filter(function($project){
+
+        return $project->tanggal_selesai
+        &&
+        now()->gt($project->tanggal_selesai)
+        &&
+        $project->progres_keseluruhan < 100;
+
+    })
+    ->count(),
 
 
     ];
@@ -1082,27 +1126,35 @@ return $pdf->download(
     */
 
 
-    public function projectExcel(Request $request)
+public function projectExcel(Request $request)
 {
 
+    AuditHelper::create(
 
-return Excel::download(
+        'Export Excel Project',
 
-    new ProjectReportExport(
+        'Laporan Owner',
 
-        $request->start_date,
+        'Owner melakukan export laporan project Excel'
 
-        $request->end_date
+    );
 
-    ),
 
-    'laporan-project.xlsx'
+    return Excel::download(
 
-);
+        new ProjectReportExport(
 
+            $request->start_date,
+
+            $request->end_date
+
+        ),
+
+        'laporan-project.xlsx'
+
+    );
 
 }
-
 
 
 
@@ -1154,6 +1206,34 @@ $projects = Proyek::with('tugas')
     ->get();
 
 
+$progress = $projects->avg(function($project){
+
+    return $project->progres_keseluruhan;
+
+}) ?? 0;
+
+
+
+$status = '';
+
+if($progress >= 75){
+
+    $status = 'Performa Sangat Baik';
+
+}
+elseif($progress >= 50){
+
+    $status = 'Performa Cukup Baik';
+
+}
+else{
+
+    $status = 'Perlu Monitoring';
+
+}
+
+
+
 
 $data=[
 
@@ -1161,28 +1241,53 @@ $data=[
     'totalProject'=>$projects->count(),
 
 
-'projectAktif'=>$projects->filter(function($project){
+
+    'projectAktif'=>$projects->filter(function($project){
 
 
-    return $project->progres_keseluruhan > 0 
-        && 
-        $project->progres_keseluruhan < 100;
+        return $project->progres_keseluruhan > 0 
+            && 
+            $project->progres_keseluruhan < 100;
 
 
-})->count(),
+    })->count(),
 
 
 
-    'progress'=>$projects->avg(function($project){
 
-        return $project->progres_keseluruhan;
+    'projectSelesai'=>$projects->where(
 
-    }) ?? 0,
+        'progres_keseluruhan',
+
+        '>=',
+
+        100
+
+    )->count(),
 
 
+
+
+
+    'progress'=>$progress,
+
+
+
+
+
+    'status'=>$status,
+
+    'tanggal'=>Carbon::now(),
 ];
+AuditHelper::create(
 
+    'Export Laporan Performance',
 
+    'Laporan Owner',
+
+    'Owner melakukan export analisis performa PDF'
+
+);
 $pdf = app('dompdf.wrapper')
 
     ->loadView(

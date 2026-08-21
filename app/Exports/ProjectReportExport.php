@@ -7,6 +7,7 @@ use App\Models\Proyek;
 
 
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -39,10 +40,11 @@ class ProjectReportExport implements
 
     WithCustomStartCell,
 
-    WithColumnWidths
+    WithColumnWidths,
+
+    WithTitle
 
 {
-
 
     protected $startDate;
 
@@ -63,7 +65,10 @@ class ProjectReportExport implements
     }
 
 
-
+public function title(): string
+{
+    return 'Laporan Project';
+}
 
 
 

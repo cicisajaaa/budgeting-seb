@@ -5,29 +5,22 @@
 
 {{-- HEADER --}}
 
-<div class="report-header">
+<div class="dashboard-header">
 
-    <div>
-
-        <span class="report-label">
-            LAPORAN PERUSAHAAN
-        </span>
+<span class="label">
+LAPORAN PERUSAHAAN
+</span>
 
 
-        <h1>
-            Laporan Perusahaan
-        </h1>
+<h1>
+Laporan Perusahaan
+</h1>
 
 
-        <p>
-            Ringkasan kondisi keuangan, proyek, dan performa bisnis perusahaan.
-        </p>
+<p>
+Ringkasan kondisi keuangan, proyek, dan performa bisnis perusahaan.
+</p>
 
-    </div>
-
-
-
-  
 
 </div>
 
@@ -112,15 +105,11 @@ value="{{request('end_date')}}">
 
 
 <button type="submit">
-
 Tampilkan
-
 </button>
 
 
 </form>
-
-
 
 
 
@@ -135,8 +124,6 @@ Tampilkan
 
 
 
-
-
 <div class="kpi-card income">
 
 <span>
@@ -144,7 +131,7 @@ Total Pendapatan
 </span>
 
 
-<h2>
+<h2 class="green">
 
 Rp {{number_format(
 $totalPendapatan ?? 0,
@@ -165,19 +152,14 @@ Pemasukan perusahaan
 
 
 
-
-
-
-
 <div class="kpi-card expense">
-
 
 <span>
 Total Pengeluaran
 </span>
 
 
-<h2>
+<h2 class="red">
 
 Rp {{number_format(
 $totalPengeluaran ?? 0,
@@ -193,11 +175,7 @@ $totalPengeluaran ?? 0,
 Dana digunakan
 </small>
 
-
 </div>
-
-
-
 
 
 
@@ -205,13 +183,12 @@ Dana digunakan
 
 <div class="kpi-card profit">
 
-
 <span>
 Profit Bersih
 </span>
 
 
-<h2>
+<h2 class="green">
 
 Rp {{number_format(
 $profit ?? 0,
@@ -227,25 +204,19 @@ $profit ?? 0,
 Keuntungan perusahaan
 </small>
 
-
 </div>
-
-
-
-
 
 
 
 
 <div class="kpi-card project">
 
-
 <span>
 Project Aktif
 </span>
 
 
-<h2>
+<h2 class="blue">
 
 {{$projectAktif ?? 0}}
 
@@ -256,10 +227,7 @@ Project Aktif
 Project berjalan
 </small>
 
-
 </div>
-
-
 
 
 
@@ -267,14 +235,12 @@ Project berjalan
 
 
 <div class="kpi-card selesai-card">
-
-
 <span>
 Project Selesai
 </span>
 
 
-<h2>
+<h2 class="green">
 
 {{$totalProjectSelesai ?? 0}}
 
@@ -282,28 +248,22 @@ Project Selesai
 
 
 <small>
-Project sudah selesai
+Project selesai
 </small>
-
 
 </div>
 
 
 
 
-
-
-
-
 <div class="kpi-card warning-card">
-
 
 <span>
 Project Terlambat
 </span>
 
 
-<h2>
+<h2 class="red">
 
 {{$totalProjectTerlambat ?? 0}}
 
@@ -314,21 +274,20 @@ Project Terlambat
 Melewati deadline
 </small>
 
-
 </div>
+
 
 
 
 
 <div class="kpi-card progress-card">
 
-
 <span>
 Rata-rata Progress
 </span>
 
 
-<h2>
+<h2 class="blue">
 
 {{number_format(
 $rataProgress ?? 0,
@@ -339,9 +298,8 @@ $rataProgress ?? 0,
 
 
 <small>
-Perkembangan seluruh project
+Perkembangan project
 </small>
-
 
 </div>
 
@@ -349,14 +307,12 @@ Perkembangan seluruh project
 
 
 <div class="kpi-card transaction-card">
-
-
 <span>
 Total Transaksi
 </span>
 
 
-<h2>
+<h2 class="purple">
 
 {{$totalTransaksi ?? 0}}
 
@@ -364,25 +320,28 @@ Total Transaksi
 
 
 <small>
-Jumlah transaksi perusahaan
+Jumlah transaksi
 </small>
 
+</div>
+
 
 </div>
 
 
 
-</div>
 
 
-{{-- ANALISIS PERFORMA --}}
+
+
+{{-- ANALISIS --}}
 
 
 <div class="panel">
 
 
 <h3>
-📊 Analisis Performa Perusahaan
+Analisis Performa Perusahaan
 </h3>
 
 
@@ -391,10 +350,7 @@ Jumlah transaksi perusahaan
 
 
 
-
-
 <div class="summary-card">
-
 
 <span>
 Total Anggaran Project
@@ -412,11 +368,9 @@ $totalAnggaranProject ?? 0,
 
 </h2>
 
-
 <small>
-Total nilai seluruh project
+Nilai seluruh project
 </small>
-
 
 </div>
 
@@ -424,11 +378,7 @@ Total nilai seluruh project
 
 
 
-
-
-
 <div class="summary-card">
-
 
 <span>
 Project Berjalan
@@ -441,11 +391,9 @@ Project Berjalan
 
 </h2>
 
-
 <small>
-Project dalam pengerjaan
+Sedang dikerjakan
 </small>
-
 
 </div>
 
@@ -453,11 +401,7 @@ Project dalam pengerjaan
 
 
 
-
-
-
 <div class="summary-card">
-
 
 <span>
 Efisiensi Dana
@@ -473,16 +417,11 @@ $efisiensiDana ?? 0,
 
 </h2>
 
-
 <small>
-Perbandingan saldo terhadap anggaran
+Efisiensi penggunaan dana
 </small>
 
-
 </div>
-
-
-
 
 
 
@@ -490,79 +429,26 @@ Perbandingan saldo terhadap anggaran
 
 <div class="summary-card">
 
-
 <span>
-Total Transaksi
+Saldo Perusahaan
 </span>
 
 
 <h2>
 
-{{$totalTransaksi ?? 0}}
+Rp {{number_format(
+$saldo ?? 0,
+0,
+',',
+'.'
+)}}
 
 </h2>
 
-
 <small>
-Jumlah transaksi perusahaan
+Saldo akhir
 </small>
 
-
-</div>
-
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- CHART --}}
-
-
-<div class="chart-grid">
-
-
-
-<div class="panel chart-card">
-
-
-<h3>
-📈 Grafik Keuangan
-</h3>
-
-
-<canvas id="financeChart"></canvas>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="panel chart-card">
-
-
-<h3>
-📊 Progress Project
-</h3>
-
-
-<canvas id="projectChart"></canvas>
-
-
 </div>
 
 
@@ -570,6 +456,7 @@ Jumlah transaksi perusahaan
 </div>
 
 
+</div>
 
 
 
@@ -581,21 +468,13 @@ Jumlah transaksi perusahaan
 
 
 <h2 class="section-title">
-
 Pusat Laporan
-
 </h2>
 
 
 
 
-
-
-
 <div class="report-grid">
-
-
-
 
 
 
@@ -613,11 +492,8 @@ Laporan Perusahaan
 
 
 <p>
-Ringkasan keseluruhan kondisi keuangan,
-project, dan performa perusahaan.
+Ringkasan keseluruhan kondisi perusahaan.
 </p>
-
-
 
 
 
@@ -629,7 +505,9 @@ project, dan performa perusahaan.
 'end_date'=>request('end_date')
 ])}}"
 class="pdf">
+
 PDF
+
 </a>
 
 
@@ -637,10 +515,6 @@ PDF
 
 
 </div>
-
-
-
-
 
 
 
@@ -660,50 +534,34 @@ Laporan Keuangan
 
 
 <p>
-Informasi pemasukan, pengeluaran,
-saldo, dan transaksi perusahaan.
+Pemasukan, pengeluaran, saldo dan transaksi.
 </p>
-
-
 
 
 
 <div class="button-group">
 
 
-<a href="{{route('owner.report.finance.pdf',
-[
-'start_date'=>request('start_date'),
-'end_date'=>request('end_date')
-])}}"
+<a href="{{route('owner.report.finance.pdf')}}"
 class="pdf">
 
 PDF
 
 </a>
 
-<a href="{{route('owner.report.finance.excel',[
 
-    'start_date'=>request('start_date'),
-
-    'end_date'=>request('end_date')
-
-])}}"
-
+<a href="{{route('owner.report.finance.excel')}}"
 class="excel">
 
 Excel
 
 </a>
 
-</div>
-
 
 </div>
 
 
-
-
+</div>
 
 
 
@@ -723,11 +581,8 @@ Laporan Proyek
 
 
 <p>
-Informasi project, anggaran,
-progress, dan status pekerjaan.
+Detail project, anggaran, progress dan status.
 </p>
-
-
 
 
 
@@ -742,15 +597,7 @@ PDF
 </a>
 
 
-
-<a href="{{route('owner.report.project.excel',[
-
-    'start_date'=>request('start_date'),
-
-    'end_date'=>request('end_date')
-
-])}}"
-
+<a href="{{route('owner.report.project.excel')}}"
 class="excel">
 
 Excel
@@ -762,10 +609,6 @@ Excel
 
 
 </div>
-
-
-
-
 
 
 
@@ -785,11 +628,8 @@ Analisis Performa
 
 
 <p>
-Evaluasi perkembangan bisnis
-dan performa perusahaan.
+Evaluasi perkembangan bisnis perusahaan.
 </p>
-
-
 
 
 
@@ -804,17 +644,7 @@ PDF
 </a>
 
 
-
-
-
-<a href="{{route('owner.report.performance.excel',[
-
-    'start_date'=>request('start_date'),
-
-    'end_date'=>request('end_date')
-
-])}}"
-
+<a href="{{route('owner.report.performance.excel')}}"
 class="excel">
 
 Excel
@@ -829,93 +659,80 @@ Excel
 
 
 
-
-
-
 </div>
-
-
 
 
 <style>
 
-/* =====================================
-   GLOBAL
-===================================== */
-
+/* ===============================
+GLOBAL
+================================ */
 
 *{
-
-box-sizing:border-box;
-
-}
-
-
-body{
-
-background:#f8fafc;
-
+    box-sizing:border-box;
 }
 
 
 
-.report-header{
+/* ===============================
+HEADER
+================================ */
 
-background:white;
 
-padding:22px 25px;
+.dashboard-header{
 
-border-radius:16px;
+    background:#f8fafc;
 
-border:1px solid #e2e8f0;
+    padding:25px;
 
-display:flex;
+    border-radius:24px;
 
-justify-content:space-between;
+    border:1px solid #e2e8f0;
 
-align-items:center;
+    margin-bottom:22px;
 
-margin-bottom:18px;
-
-box-shadow:0 4px 12px rgba(15,23,42,.05);
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-.report-label{
+.label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:1.5px;
+    font-weight:800;
 
-color:#64748b;
-
-}
-
-
-
-.report-header h1{
-
-font-size:26px;
-
-margin:8px 0;
-
-color:#3b361e;
+    color:#64748b;
 
 }
 
 
 
-.report-header p{
+.dashboard-header h1{
 
-margin:0;
+    margin:8px 0;
 
-font-size:14px;
+    font-size:24px;
 
-color:#64748b;
+    color:#172033;
+
+    font-weight:800;
+
+}
+
+
+
+.dashboard-header p{
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -925,31 +742,31 @@ color:#64748b;
 
 
 
-
-
-
-/* =====================================
-   FILTER
-===================================== */
+/* ===============================
+FILTER
+================================ */
 
 
 .report-filter{
 
-background:white;
+    background:white;
 
-padding:18px;
+    padding:20px;
 
-border-radius:16px;
+    border-radius:22px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-display:flex;
+    box-shadow:
+    0 8px 20px rgba(15,23,42,.04);
 
-gap:15px;
+    display:flex;
 
-align-items:end;
+    gap:15px;
 
-margin-bottom:18px;
+    align-items:end;
+
+    margin-bottom:22px;
 
 }
 
@@ -957,13 +774,7 @@ margin-bottom:18px;
 
 .report-filter div{
 
-display:flex;
-
-flex-direction:column;
-
-gap:6px;
-
-width:200px;
+    flex:1;
 
 }
 
@@ -971,11 +782,15 @@ width:200px;
 
 .report-filter label{
 
-font-size:12px;
+    display:block;
 
-font-weight:700;
+    font-size:11px;
 
-color:#64748b;
+    font-weight:700;
+
+    color:#64748b;
+
+    margin-bottom:6px;
 
 }
 
@@ -984,15 +799,17 @@ color:#64748b;
 .report-filter input,
 .report-filter select{
 
-height:38px;
+    width:100%;
 
-border-radius:10px;
+    height:40px;
 
-border:1px solid #cbd5e1;
+    border-radius:12px;
 
-padding:0 12px;
+    border:1px solid #e2e8f0;
 
-font-size:13px;
+    padding:0 12px;
+
+    font-size:12px;
 
 }
 
@@ -1000,19 +817,21 @@ font-size:13px;
 
 .report-filter button{
 
-height:38px;
+    height:40px;
 
-padding:0 25px;
+    padding:0 22px;
 
-border:none;
+    border:none;
 
-border-radius:10px;
+    border-radius:12px;
 
-background:#334155;
+    background:#0f172a;
 
-color:white;
+    color:white;
 
-font-weight:700;
+    font-size:12px;
+
+    font-weight:700;
 
 }
 
@@ -1021,20 +840,21 @@ font-weight:700;
 
 
 
-/* =====================================
-   KPI
-===================================== */
+
+/* ===============================
+KPI GRID
+================================ */
 
 
 .kpi-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:15px;
 
-margin-bottom:18px;
+    margin-bottom:22px;
 
 }
 
@@ -1042,23 +862,43 @@ margin-bottom:18px;
 
 .kpi-card{
 
-background:white;
+    background:white;
 
-border:1px solid #e2e8f0;
+    padding:18px;
 
-border-radius:15px;
+    min-height:110px;
 
-padding:18px;
+    border-radius:22px;
 
-height:115px;
+    border:1px solid #e2e8f0;
 
-display:flex;
+    box-shadow:
 
-flex-direction:column;
+    0 8px 20px rgba(15,23,42,.04);
 
-justify-content:center;
+    position:relative;
 
-box-shadow:0 3px 10px rgba(15,23,42,.04);
+    overflow:hidden;
+
+}
+
+
+
+.kpi-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
 
 }
 
@@ -1066,11 +906,11 @@ box-shadow:0 3px 10px rgba(15,23,42,.04);
 
 .kpi-card span{
 
-font-size:11px;
+    font-size:11px;
 
-font-weight:700;
+    color:#64748b;
 
-color:#64748b;
+    font-weight:700;
 
 }
 
@@ -1078,11 +918,13 @@ color:#64748b;
 
 .kpi-card h2{
 
-font-size:20px;
+    margin:8px 0;
 
-margin:8px 0;
+    font-size:20px;
 
-font-weight:700;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -1090,90 +932,96 @@ font-weight:700;
 
 .kpi-card small{
 
-font-size:11px;
+    font-size:11px;
 
-color:#94a3b8;
-
-}
-
-
-
-.income h2{
-
-color:#16a34a;
-
-}
-
-
-.expense h2{
-
-color:#dc2626;
-
-}
-
-
-.profit h2{
-
-color:#8B5E22;
-
-}
-
-
-.project h2{
-
-color:#2563eb;
-
-}
-
-
-.selesai-card h2{
-
-color:#16a34a;
-
-}
-
-
-.warning-card h2{
-
-color:#dc2626;
-
-}
-
-
-.progress-card h2{
-
-color:#2563eb;
-
-}
-
-.transaction-card h2{
-
-color:#7c3aed;
+    color:#94a3b8;
 
 }
 
 
 
 
+.income::before{
 
-/* =====================================
- PANEL
-===================================== */
+background:#16a34a;
+
+}
+
+
+.expense::before{
+
+background:#dc2626;
+
+}
+
+
+.profit::before{
+
+background:#2563eb;
+
+}
+
+
+.project::before{
+
+background:#f59e0b;
+
+}
+
+
+.selesai-card::before{
+
+background:#16a34a;
+
+}
+
+
+.warning-card::before{
+
+background:#dc2626;
+
+}
+
+
+.progress-card::before{
+
+background:#2563eb;
+
+}
+
+
+.transaction-card::before{
+
+background:#7c3aed;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .panel{
 
-background:white;
+    background:white;
 
-padding:20px;
+    padding:22px;
 
-border-radius:16px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-margin-bottom:18px;
+    box-shadow:
 
-box-shadow:0 3px 10px rgba(15,23,42,.04);
+    0 8px 25px rgba(15,23,42,.05);
+
+    margin-bottom:22px;
 
 }
 
@@ -1181,82 +1029,13 @@ box-shadow:0 3px 10px rgba(15,23,42,.04);
 
 .panel h3{
 
-font-size:16px;
+    margin:0 0 18px;
 
-margin:0 0 15px;
+    font-size:16px;
 
-color:#1e293b;
+    font-weight:800;
 
-}
-
-
-
-
-
-
-/* =====================================
- FINANCE
-===================================== */
-
-
-.finance-grid{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:15px;
-
-}
-
-
-
-.finance-grid div{
-
-background:#f8fafc;
-
-padding:18px;
-
-border-radius:14px;
-
-}
-
-
-
-.finance-grid span{
-
-display:block;
-
-font-size:11px;
-
-font-weight:700;
-
-color:#64748b;
-
-margin-bottom:8px;
-
-}
-
-
-
-.finance-grid b{
-
-font-size:18px;
-
-}
-
-
-
-.green{
-
-color:#16a34a!important;
-
-}
-
-
-.red{
-
-color:#dc2626!important;
+    color:#172033;
 
 }
 
@@ -1265,18 +1044,19 @@ color:#dc2626!important;
 
 
 
-/* =====================================
- SUMMARY
-===================================== */
+
+/* ===============================
+ANALYSIS SUMMARY
+================================ */
 
 
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:15px;
 
 }
 
@@ -1284,13 +1064,13 @@ gap:15px;
 
 .summary-card{
 
-background:#f8fafc;
+    background:#f8fafc;
 
-border:1px solid #e2e8f0;
+    padding:18px;
 
-padding:18px;
+    border-radius:18px;
 
-border-radius:14px;
+    border:1px solid #e2e8f0;
 
 }
 
@@ -1298,11 +1078,11 @@ border-radius:14px;
 
 .summary-card span{
 
-font-size:11px;
+    font-size:11px;
 
-font-weight:700;
+    color:#64748b;
 
-color:#64748b;
+    font-weight:700;
 
 }
 
@@ -1310,11 +1090,11 @@ color:#64748b;
 
 .summary-card h2{
 
-font-size:21px;
+    margin:8px 0;
 
-margin:8px 0;
+    font-size:18px;
 
-color:#1e293b;
+    color:#172033;
 
 }
 
@@ -1322,50 +1102,9 @@ color:#1e293b;
 
 .summary-card small{
 
-font-size:11px;
+    font-size:11px;
 
-color:#94a3b8;
-
-}
-
-
-
-
-
-
-
-/* =====================================
- CHART
-===================================== */
-
-
-.chart-grid{
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:15px;
-
-}
-
-
-
-.chart-card{
-
-height:290px;
-
-overflow:hidden;
-
-}
-
-
-
-.chart-card canvas{
-
-height:210px!important;
-
-width:100%!important;
+    color:#94a3b8;
 
 }
 
@@ -1374,18 +1113,21 @@ width:100%!important;
 
 
 
-/* =====================================
- REPORT CARD
-===================================== */
+
+/* ===============================
+REPORT CENTER
+================================ */
 
 
 .section-title{
 
-font-size:18px;
+    font-size:18px;
 
-margin:20px 0 15px;
+    font-weight:800;
 
-color:#1e293b;
+    color:#172033;
+
+    margin:22px 0 15px;
 
 }
 
@@ -1393,11 +1135,11 @@ color:#1e293b;
 
 .report-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:15px;
 
 }
 
@@ -1405,21 +1147,23 @@ gap:15px;
 
 .report-card{
 
-background:white;
+    background:white;
 
-border:1px solid #e2e8f0;
+    padding:20px;
 
-border-radius:16px;
+    border-radius:22px;
 
-padding:20px;
+    border:1px solid #e2e8f0;
 
-height:270px;
+    box-shadow:
 
-display:flex;
+    0 8px 20px rgba(15,23,42,.04);
 
-flex-direction:column;
+    min-height:230px;
 
-box-shadow:0 3px 10px rgba(15,23,42,.04);
+    display:flex;
+
+    flex-direction:column;
 
 }
 
@@ -1427,23 +1171,23 @@ box-shadow:0 3px 10px rgba(15,23,42,.04);
 
 .report-icon{
 
-width:42px;
+    width:42px;
 
-height:42px;
+    height:42px;
 
-border-radius:12px;
+    background:#f8fafc;
 
-background:#f8fafc;
+    border-radius:14px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-font-size:22px;
+    font-size:20px;
 
-margin-bottom:15px;
+    margin-bottom:14px;
 
 }
 
@@ -1451,11 +1195,11 @@ margin-bottom:15px;
 
 .report-card h3{
 
-font-size:17px;
+    font-size:15px;
 
-margin-bottom:8px;
+    margin:0 0 8px;
 
-color:#1e293b;
+    color:#172033;
 
 }
 
@@ -1463,23 +1207,32 @@ color:#1e293b;
 
 .report-card p{
 
-font-size:13px;
+    font-size:12px;
 
-color:#64748b;
+    color:#64748b;
 
-line-height:1.5;
+    line-height:1.5;
 
-flex:1;
+    flex:1;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
+
+
 .button-group{
 
-display:flex;
+    display:flex;
 
-gap:10px;
+    gap:8px;
 
 }
 
@@ -1487,15 +1240,15 @@ gap:10px;
 
 .button-group a{
 
-padding:8px 15px;
+    padding:8px 14px;
 
-border-radius:8px;
+    border-radius:10px;
 
-font-size:12px;
+    font-size:11px;
 
-font-weight:700;
+    font-weight:700;
 
-text-decoration:none;
+    text-decoration:none;
 
 }
 
@@ -1503,9 +1256,9 @@ text-decoration:none;
 
 .pdf{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#b91c1c;
+    color:#b91c1c;
 
 }
 
@@ -1513,9 +1266,9 @@ color:#b91c1c;
 
 .excel{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#15803d;
+    color:#166534;
 
 }
 
@@ -1524,24 +1277,17 @@ color:#15803d;
 
 
 
-/* =====================================
- TABLE
-===================================== */
+
+/* ===============================
+TABLE
+================================ */
 
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
-
-}
-
-
-
-thead{
-
-background:#f8fafc;
+    border-collapse:collapse;
 
 }
 
@@ -1549,11 +1295,15 @@ background:#f8fafc;
 
 th{
 
-padding:12px;
+    padding:12px;
 
-font-size:11px;
+    background:#f8fafc;
 
-color:#64748b;
+    text-align:left;
+
+    font-size:11px;
+
+    color:#64748b;
 
 }
 
@@ -1561,102 +1311,11 @@ color:#64748b;
 
 td{
 
-padding:12px;
+    padding:12px;
 
-font-size:13px;
+    border-bottom:1px solid #f1f5f9;
 
-border-bottom:1px solid #e2e8f0;
-
-}
-
-
-
-
-/* =====================================
- PROGRESS
-===================================== */
-
-
-.progress-box{
-
-width:150px;
-
-}
-
-
-
-.progress-value{
-
-font-size:12px;
-
-font-weight:700;
-
-margin-bottom:5px;
-
-}
-
-
-
-.progress-track{
-
-height:7px;
-
-background:#e2e8f0;
-
-border-radius:20px;
-
-overflow:hidden;
-
-}
-
-
-
-.progress-fill{
-
-height:100%;
-
-background:#8B5E22;
-
-}
-
-
-
-
-
-/* =====================================
- STATUS
-===================================== */
-
-
-.status{
-
-padding:5px 12px;
-
-border-radius:20px;
-
-font-size:11px;
-
-font-weight:700;
-
-}
-
-
-
-.berjalan{
-
-background:#dcfce7;
-
-color:#15803d;
-
-}
-
-
-
-.selesai{
-
-background:#dbeafe;
-
-color:#1d4ed8;
+    font-size:12px;
 
 }
 
@@ -1665,55 +1324,71 @@ color:#1d4ed8;
 
 
 
-/* =====================================
- RESPONSIVE
-===================================== */
+
+/* ===============================
+COLOR
+================================ */
 
 
-@media(max-width:1400px){
+.green{
 
-
-.kpi-grid,
-.report-grid{
-
-grid-template-columns:repeat(3,1fr);
+    color:#16a34a!important;
 
 }
 
 
-.summary-grid{
+.red{
 
-grid-template-columns:repeat(2,1fr);
-
-}
-
+    color:#dc2626!important;
 
 }
 
 
+.blue{
 
-@media(max-width:900px){
+    color:#2563eb!important;
 
+}
+
+
+.purple{
+
+    color:#7c3aed!important;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1200px){
 
 .kpi-grid,
 .report-grid,
-.summary-grid,
-.finance-grid,
-.chart-grid{
+.summary-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:repeat(2,1fr);
+
+}
 
 }
 
 
 
-.report-header{
+@media(max-width:700px){
 
-flex-direction:column;
+.kpi-grid,
+.report-grid,
+.summary-grid{
 
-align-items:flex-start;
-
-gap:15px;
+    grid-template-columns:1fr;
 
 }
 
@@ -1721,375 +1396,17 @@ gap:15px;
 
 .report-filter{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:stretch;
-
-}
-
-
-.report-filter div{
-
-width:100%;
+    align-items:stretch;
 
 }
 
-
 }
+
 
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-<script>
-
-
-/*
-|--------------------------------------------------------------------------
-| GRAFIK KEUANGAN
-|--------------------------------------------------------------------------
-*/
-
-
-const financeCanvas = document.getElementById(
-    'financeChart'
-);
-
-
-
-if(financeCanvas){
-
-
-
-new Chart(financeCanvas, {
-
-
-type:'bar',
-
-
-
-data:{
-
-
-labels:[
-
-'Pendapatan',
-
-'Pengeluaran',
-
-'Saldo Bersih'
-
-],
-
-
-
-datasets:[{
-
-
-label:'Nominal',
-
-data:[
-
-
-{{ $totalPendapatan ?? 0 }},
-
-
-{{ $totalPengeluaran ?? 0 }},
-
-
-{{ $saldo ?? 0 }}
-
-
-],
-
-
-borderWidth:1
-
-
-}]
-
-},
-
-
-
-
-
-
-options:{
-
-
-
-responsive:true,
-
-maintainAspectRatio:false,
-
-
-
-plugins:{
-
-
-legend:{
-
-
-display:false
-
-
-}
-
-
-
-},
-
-
-
-
-scales:{
-
-
-y:{
-
-
-beginAtZero:true,
-
-
-
-ticks:{
-
-
-
-callback:function(value){
-
-
-
-return 'Rp ' +
-
-value.toLocaleString(
-'id-ID'
-);
-
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| GRAFIK PROJECT
-|--------------------------------------------------------------------------
-*/
-
-
-const projectCanvas = document.getElementById(
-    'projectChart'
-);
-
-
-
-if(projectCanvas){
-
-
-
-new Chart(projectCanvas, {
-
-
-
-type:'bar',
-
-
-
-
-data:{
-
-
-
-labels:[
-
-
-@forelse($projects ?? [] as $project)
-
-
-"{{ $project->nama_proyek }}",
-
-
-@empty
-
-
-"Tidak ada project"
-
-
-@endforelse
-
-
-],
-
-
-
-
-
-datasets:[{
-
-
-label:'Progress',
-
-
-
-data:[
-
-
-@forelse($projects ?? [] as $project)
-
-
-{{ $project->progres_keseluruhan ?? 0 }},
-
-
-@empty
-
-
-0
-
-
-@endforelse
-
-
-],
-
-
-
-borderWidth:1
-
-
-}]
-
-
-
-
-},
-
-
-
-
-
-
-options:{
-
-
-
-responsive:true,
-
-
-maintainAspectRatio:false,
-
-
-
-indexAxis:'y',
-
-
-
-
-plugins:{
-
-
-
-legend:{
-
-
-display:false
-
-
-}
-
-
-
-},
-
-
-
-
-
-scales:{
-
-
-
-x:{
-
-
-beginAtZero:true,
-
-
-max:100,
-
-
-
-ticks:{
-
-
-
-callback:function(value){
-
-
-return value+'%';
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-}
-
-
-
-});
-
-
-
-}
-
-
-
-</script>
 @endsection

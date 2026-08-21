@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
@@ -8,11 +7,9 @@
 
 
 
-
-
 {{-- HEADER --}}
 
-<div class="page-header">
+<div class="dashboard-header">
 
 
 <span class="label">
@@ -39,13 +36,13 @@ Monitoring aktivitas pengguna perusahaan secara real-time.
 
 
 
+
 {{-- FILTER --}}
 
 
 <form method="GET"
 action="{{route('owner.audit')}}"
 class="filter-box">
-
 
 
 <select name="modul">
@@ -89,6 +86,7 @@ Approval Dana
 
 
 
+
 <input 
 type="date"
 name="tanggal"
@@ -99,8 +97,12 @@ value="{{request('tanggal')}}"
 
 
 <button type="submit">
+
 Cari
+
 </button>
+
+
 
 
 
@@ -129,10 +131,11 @@ class="history-btn">
 <div class="panel">
 
 
-<div class="panel-header">
+
+<div class="panel-title">
 
 <h3>
-📝 5 Aktivitas Terbaru
+📝 Riwayat Aktivitas Sistem
 </h3>
 
 
@@ -149,10 +152,14 @@ Monitoring Owner
 
 
 
+
 @forelse($activities as $activity)
 
 
-<div class="activity">
+
+<div class="activity-row">
+
+
 
 
 
@@ -186,6 +193,7 @@ Monitoring Owner
 @endif
 
 
+
 </div>
 
 
@@ -194,26 +202,25 @@ Monitoring Owner
 
 
 
-
-<div class="activity-content">
+<div class="activity-body">
 
 
 <h4>
-
 {{$activity->aksi}}
-
 </h4>
 
 
 
-<small>
 
-Oleh:
+<div class="user">
+
+Oleh :
+
 <strong>
 {{$activity->pengguna->name ?? 'System'}}
 </strong>
 
-</small>
+</div>
 
 
 
@@ -224,6 +231,7 @@ Oleh:
 {{$activity->deskripsi}}
 
 </p>
+
 
 
 
@@ -258,7 +266,11 @@ Oleh:
 
 
 
+
+
 </div>
+
+
 
 
 
@@ -277,14 +289,14 @@ Belum ada aktivitas tercatat.
 
 
 
-</div>
-
-
-
 
 </div>
 
 
+
+
+
+</div>
 
 
 
@@ -294,69 +306,84 @@ Belum ada aktivitas tercatat.
 
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
 
 .audit-container{
 
-margin-top:10px;
+    width:100%;
 
 }
 
 
 
+/* ===============================
+HEADER
+================================ */
 
 
+.dashboard-header{
 
-.page-header{
+    background:#f8fafc;
 
-background:white;
+    padding:25px;
 
-padding:30px;
+    border-radius:24px;
 
-border-radius:20px;
+    border:1px solid #e2e8f0;
 
-border:1px solid #e2e8f0;
+    margin-bottom:22px;
 
-margin-bottom:25px;
-
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
-
 
 
 
 .label{
 
-font-size:11px;
+    font-size:10px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
-}
-
-
-
-.page-header h1{
-
-margin:10px 0;
-
-font-size:30px;
-
-color:#1e293b;
+    text-transform:uppercase;
 
 }
 
 
 
-.page-header p{
+.dashboard-header h1{
 
-color:#64748b;
+    margin:8px 0;
 
-font-size:14px;
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.dashboard-header p{
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -366,103 +393,105 @@ font-size:14px;
 
 
 
-/* FILTER */
+/* ===============================
+FILTER
+================================ */
 
 
 .filter-box{
 
+    background:white;
 
-background:white;
+    padding:18px;
 
-padding:20px;
+    border-radius:20px;
 
-border-radius:18px;
+    border:1px solid #e2e8f0;
 
-border:1px solid #e2e8f0;
+    box-shadow:
 
-display:flex;
+    0 5px 20px rgba(15,23,42,.05);
 
-gap:15px;
+    display:flex;
 
-align-items:center;
+    gap:12px;
 
-margin-bottom:25px;
+    align-items:center;
+
+    margin-bottom:22px;
 
 }
-
 
 
 
 .filter-box select,
 .filter-box input{
 
+    height:38px;
 
-height:42px;
+    padding:0 12px;
 
-padding:0 15px;
+    min-width:180px;
 
-border-radius:10px;
+    border-radius:10px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #cbd5e1;
 
-font-size:13px;
+    font-size:12px;
+
+    color:#334155;
 
 }
-
-
 
 
 
 .filter-box button{
 
+    height:38px;
 
-height:42px;
+    padding:0 22px;
 
-padding:0 25px;
+    border:none;
 
-background:#334155;
+    border-radius:10px;
 
-color:white;
+    background:#0f172a;
 
-border:none;
+    color:white;
 
-border-radius:10px;
+    font-size:12px;
 
-font-weight:700;
+    font-weight:700;
 
-cursor:pointer;
+    cursor:pointer;
 
 }
-
-
-
 
 
 
 .history-btn{
 
+    height:38px;
 
-height:42px;
+    padding:0 16px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-padding:0 20px;
+    background:#f8fafc;
 
-background:#f8fafc;
+    border:1px solid #e2e8f0;
 
-border:1px solid #e2e8f0;
+    border-radius:10px;
 
-color:#334155;
+    text-decoration:none;
 
-border-radius:10px;
+    font-size:12px;
 
-text-decoration:none;
+    font-weight:700;
 
-font-size:13px;
-
-font-weight:700;
+    color:#334155;
 
 }
 
@@ -472,164 +501,165 @@ font-weight:700;
 
 
 
-/* PANEL */
+/* ===============================
+PANEL
+================================ */
 
 
 .panel{
 
+    background:white;
 
-background:white;
+    padding:22px;
 
-padding:30px;
+    border-radius:24px;
 
-border-radius:20px;
+    border:1px solid #e2e8f0;
 
-border:1px solid #e2e8f0;
+    box-shadow:
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
-
-}
-
-
-
-.panel-header{
-
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:20px;
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-.panel-header h3{
+.panel-title{
 
+    display:flex;
 
-color:#1e293b;
+    justify-content:space-between;
 
-}
+    align-items:center;
 
-
-
-.panel-header span{
-
-
-font-size:12px;
-
-color:#94a3b8;
+    margin-bottom:18px;
 
 }
 
 
 
+.panel-title h3{
 
+    margin:0;
 
+    font-size:16px;
 
+    font-weight:800;
 
-/* ACTIVITY */
-
-
-.activity{
-
-
-display:flex;
-
-gap:20px;
-
-padding:20px 0;
-
-border-bottom:1px solid #f1f5f9;
+    color:#172033;
 
 }
 
 
 
-.activity:last-child{
+.panel-title span{
 
-border-bottom:none;
+    font-size:11px;
+
+    color:#94a3b8;
 
 }
 
 
+
+
+
+
+
+/* ===============================
+ACTIVITY
+================================ */
+
+
+.activity-row{
+
+    display:flex;
+
+    gap:15px;
+
+    padding:15px 8px;
+
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+
+
+.activity-row:last-child{
+
+    border-bottom:none;
+
+}
 
 
 
 .activity-icon{
 
+    width:38px;
 
-width:45px;
+    height:38px;
 
-height:45px;
+    border-radius:12px;
 
-border-radius:50%;
+    background:#f8fafc;
 
-background:#f8fafc;
+    display:flex;
 
-display:flex;
+    justify-content:center;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    font-size:16px;
 
-font-size:20px;
-
-}
-
-
-
-
-
-.activity-content{
-
-
-flex:1;
+    flex-shrink:0;
 
 }
 
 
 
 
-.activity-content h4{
 
+.activity-body{
 
-font-size:15px;
-
-color:#172033;
-
-margin-bottom:5px;
+    flex:1;
 
 }
 
 
 
+.activity-body h4{
 
-.activity-content small{
+    margin:0 0 5px;
 
+    font-size:13px;
 
-color:#64748b;
+    font-weight:800;
 
-font-size:12px;
+    color:#172033;
 
 }
 
 
 
-.activity-content p{
+.user{
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
 
 
-margin-top:8px;
 
-font-size:13px;
+.activity-body p{
 
-color:#64748b;
+    margin:7px 0;
 
-line-height:1.6;
+    font-size:12px;
+
+    color:#64748b;
+
+    line-height:1.5;
 
 }
 
@@ -639,62 +669,65 @@ line-height:1.6;
 
 .activity-footer{
 
+    display:flex;
 
-display:flex;
+    align-items:center;
 
-align-items:center;
+    gap:10px;
 
-gap:15px;
-
-margin-top:12px;
+    margin-top:8px;
 
 }
+
 
 
 
 
 .module{
 
+    padding:5px 12px;
 
-background:#f1f5f9;
+    border-radius:999px;
 
-padding:5px 12px;
+    font-size:10px;
 
-border-radius:20px;
+    font-weight:700;
 
-font-size:11px;
+    background:#e0f2fe;
 
-font-weight:700;
-
-color:#475569;
+    color:#0369a1;
 
 }
-
 
 
 
 .time{
 
+    font-size:11px;
 
-font-size:12px;
-
-color:#94a3b8;
+    color:#94a3b8;
 
 }
 
 
 
 
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
+    padding:35px;
 
-padding:40px;
+    text-align:center;
 
-text-align:center;
+    color:#94a3b8;
 
-color:#94a3b8;
+    font-size:12px;
 
 }
 
@@ -703,31 +736,59 @@ color:#94a3b8;
 
 
 
-@media(max-width:800px){
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:900px){
 
 
 .filter-box{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:stretch;
+    align-items:stretch;
+
+}
+
+
+
+.filter-box select,
+.filter-box input,
+.filter-box button,
+.history-btn{
+
+    width:100%;
 
 }
 
 
 
-.activity{
+.activity-row{
 
-flex-direction:column;
+    flex-direction:column;
+
+}
+
+
+
+.panel-title{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:8px;
 
 }
 
 
-}
 
+}
 
 </style>
-
 
 
 @endsection
