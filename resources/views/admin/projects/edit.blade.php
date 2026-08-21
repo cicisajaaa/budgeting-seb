@@ -108,7 +108,49 @@ action="{{route('admin.projects.update',$project->id)}}">
 <div class="form-grid">
 
 
+{{-- PERUSAHAAN --}}
 
+<div class="form-group">
+
+<label>
+Perusahaan
+</label>
+
+
+<select
+name="perusahaan_id"
+required
+>
+
+
+<option value="">
+-- Pilih Perusahaan --
+</option>
+
+
+@foreach($perusahaans as $perusahaan)
+
+
+<option
+
+value="{{ $perusahaan->id }}"
+
+{{ old('perusahaan_id',$project->perusahaan_id) == $perusahaan->id ? 'selected' : '' }}
+
+>
+
+{{ $perusahaan->nama_perusahaan }}
+
+</option>
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
 
 
 {{-- NAMA PROJECT --}}
@@ -323,37 +365,33 @@ required
 </div>
 
 
-
-
-
 <style>
 
 /* ===============================
-WRAPPER
+GLOBAL
 ================================ */
 
 .page-wrapper{
-
     width:100%;
-
 }
 
 
 
+
 /* ===============================
-HEADER CARD
+HEADER
 ================================ */
 
 
 .page-header-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
     border-radius:24px;
 
-    padding:30px 32px;
+    padding:25px 30px;
 
     display:flex;
 
@@ -364,8 +402,7 @@ HEADER CARD
     margin-bottom:25px;
 
     box-shadow:
-
-    0 10px 30px rgba(15,23,42,.06);
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -373,13 +410,13 @@ HEADER CARD
 
 .page-label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
     font-weight:800;
 
-    color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -387,13 +424,13 @@ HEADER CARD
 
 .page-header-card h1{
 
-    margin:10px 0;
+    margin:8px 0;
 
-    font-size:30px;
+    font-size:24px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
 }
 
@@ -405,7 +442,7 @@ HEADER CARD
 
     color:#64748b;
 
-    font-size:14px;
+    font-size:12px;
 
 }
 
@@ -415,43 +452,47 @@ HEADER CARD
 
 
 /* ===============================
-BACK BUTTON
+BACK
 ================================ */
 
 
 .btn-back{
 
-    background:#f8fafc;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:white;
 
     border:1px solid #e2e8f0;
 
-    padding:11px 20px;
-
-    border-radius:14px;
-
-    text-decoration:none;
-
     color:#334155;
 
-    font-size:13px;
+    padding:10px 20px;
+
+    border-radius:12px;
+
+    font-size:12px;
 
     font-weight:700;
 
-    transition:.2s;
+    text-decoration:none;
 
 }
+
+
 
 
 
 .btn-back:hover{
 
-    background:#1e293b;
+    background:#334155;
 
     color:white;
 
 }
-
-
 
 
 
@@ -465,29 +506,19 @@ ERROR
 
 .alert-error{
 
-    background:#fef2f2;
+    background:#fee2e2;
 
     border:1px solid #fecaca;
 
     color:#991b1b;
 
-    padding:15px 18px;
+    padding:14px;
 
-    border-radius:16px;
+    border-radius:15px;
 
     margin-bottom:20px;
 
-    font-size:13px;
-
-}
-
-
-
-.alert-error ul{
-
-    margin:8px 0 0;
-
-    padding-left:20px;
+    font-size:12px;
 
 }
 
@@ -505,27 +536,17 @@ FORM CARD
 
 .form-card{
 
-
     background:white;
 
+    border:1px solid #e2e8f0;
 
-    border:1px solid #e5e7eb;
+    border-radius:22px;
 
-
-    border-radius:24px;
-
-
-    padding:28px;
-
-
-    max-width:900px;
-
+    padding:25px;
 
     box-shadow:
 
-
-    0 10px 30px rgba(15,23,42,.06);
-
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -535,21 +556,19 @@ FORM CARD
 
 .card-title{
 
-
-    font-size:17px;
-
+    font-size:16px;
 
     font-weight:800;
 
-
     color:#172033;
 
+    padding-left:10px;
 
-    margin-bottom:25px;
+    border-left:4px solid #334155;
 
+    margin-bottom:20px;
 
 }
-
 
 
 
@@ -564,15 +583,11 @@ FORM GRID
 
 .form-grid{
 
-
     display:grid;
-
 
     grid-template-columns:repeat(2,1fr);
 
-
-    gap:20px;
-
+    gap:18px;
 
 }
 
@@ -580,14 +595,12 @@ FORM GRID
 
 
 
-.form-group{
 
+.form-group{
 
     display:flex;
 
-
     flex-direction:column;
-
 
 }
 
@@ -597,18 +610,13 @@ FORM GRID
 
 .form-group label{
 
+    font-size:11px;
 
-    font-size:12px;
+    font-weight:800;
 
+    color:#64748b;
 
-    font-weight:700;
-
-
-    color:#475569;
-
-
-    margin-bottom:8px;
-
+    margin-bottom:7px;
 
 }
 
@@ -616,59 +624,44 @@ FORM GRID
 
 
 
+.form-group input,
+.form-group select{
 
 
+    height:44px;
 
-.form-group input{
+    width:100%;
 
+    padding:0 14px;
 
-    height:46px;
-
-
-    border-radius:14px;
-
+    border-radius:12px;
 
     border:1px solid #dbe1e8;
 
-
     background:#f8fafc;
 
+    font-size:12px;
 
-    padding:0 15px;
+    color:#172033;
+
+}
 
 
-    font-size:14px;
 
+.form-group input:focus,
+.form-group select:focus{
 
     outline:none;
 
-
-    transition:.2s;
-
-
-}
-
-
-
-
-
-.form-group input:focus{
-
-
     background:white;
 
-
-    border-color:#2563eb;
-
+    border-color:#334155;
 
     box-shadow:
 
-
-    0 0 0 3px rgba(37,99,235,.12);
-
+    0 0 0 3px rgba(51,65,85,.12);
 
 }
-
 
 
 
@@ -677,88 +670,55 @@ FORM GRID
 
 
 /* ===============================
-MONEY INPUT
+MONEY
 ================================ */
 
 
 .money-input{
 
-
-    height:46px;
-
+    height:44px;
 
     display:flex;
 
-
     align-items:center;
 
-
-    border-radius:14px;
-
-
-    background:#f8fafc;
-
+    border-radius:12px;
 
     border:1px solid #dbe1e8;
 
+    background:#f8fafc;
 
     overflow:hidden;
 
-
 }
-
-
 
 
 
 .money-input span{
 
+    padding:0 14px;
 
-    padding:0 15px;
-
+    font-size:12px;
 
     font-weight:800;
 
-
     color:#475569;
 
-
 }
-
-
 
 
 
 .money-input input{
 
-
     flex:1;
-
-
-    border:none;
-
 
     height:100%;
 
+    border:none;
 
     background:transparent;
 
-
 }
-
-
-
-
-
-.money-input input:focus{
-
-
-    box-shadow:none;
-
-
-}
-
-
 
 
 
@@ -772,15 +732,15 @@ BUTTON
 
 .form-action{
 
+    margin-top:25px;
+
+    padding-top:20px;
+
+    border-top:1px solid #f1f5f9;
 
     display:flex;
 
-
     justify-content:flex-end;
-
-
-    margin-top:30px;
-
 
 }
 
@@ -791,47 +751,33 @@ BUTTON
 .btn-update{
 
 
-    border:none;
-
-
-    padding:13px 28px;
-
-
-    border-radius:14px;
-
-
-    background:#1e293b;
-
+    background:#334155;
 
     color:white;
 
+    border:none;
 
-    font-size:13px;
+    padding:12px 25px;
 
+    border-radius:12px;
+
+    font-size:12px;
 
     font-weight:800;
 
-
     cursor:pointer;
 
-
     transition:.2s;
-
 
 }
 
 
 
-
-
 .btn-update:hover{
 
-
-    background:#2563eb;
-
+    background:#1e293b;
 
     transform:translateY(-2px);
-
 
 }
 
@@ -847,42 +793,32 @@ RESPONSIVE
 ================================ */
 
 
-@media(max-width:800px){
+@media(max-width:900px){
 
 
 .form-grid{
 
-
     grid-template-columns:1fr;
 
-
 }
-
 
 
 
 .page-header-card{
 
-
     flex-direction:column;
-
 
     align-items:flex-start;
 
-
-    gap:20px;
-
+    gap:15px;
 
 }
 
 
 
-
 .form-action{
 
-
-    justify-content:flex-start;
-
+    justify-content:stretch;
 
 }
 
@@ -890,9 +826,7 @@ RESPONSIVE
 
 .btn-update{
 
-
     width:100%;
-
 
 }
 
@@ -900,5 +834,4 @@ RESPONSIVE
 }
 
 </style>
-
 @endsection

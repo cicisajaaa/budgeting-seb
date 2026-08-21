@@ -6,10 +6,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Proyek;
+use App\Models\Perusahaan;
 
 use Illuminate\Http\Request;
 
-
+use App\Helpers\AuditHelper;
 
 class ProjectController extends Controller
 {
@@ -26,8 +27,8 @@ class ProjectController extends Controller
     {
 
 
-        $projects = Proyek::latest()
-
+        $projects = Proyek::with('perusahaan')
+            ->latest()
             ->get();
 
 
@@ -64,18 +65,19 @@ class ProjectController extends Controller
     */
 
 
-    public function create()
-    {
+        public function create()
+        {
+            $perusahaans = Perusahaan::where(
+                'status',
+                'aktif'
+            )->get();
 
 
-        return view(
-
-            'admin.projects.create'
-
-        );
-
-
-    }
+            return view(
+                'admin.projects.create',
+                compact('perusahaans')
+            );
+        }
 
 
 
@@ -98,10 +100,10 @@ class ProjectController extends Controller
 
         $request->validate([
 
+            'perusahaan_id'=>'required|exists:perusahaans,id',
 
 
             'nama_proyek'=>'required|string|max:255',
-
 
 
             'tanggal_mulai'=>'required|date',
@@ -129,39 +131,19 @@ class ProjectController extends Controller
 
 
 
+        $project = Proyek::create([
 
-        Proyek::create([
+            'perusahaan_id'=>$request->perusahaan_id,
 
+            'nama_proyek'=>$request->nama_proyek,
 
+            'tanggal_mulai'=>$request->tanggal_mulai,
 
-            'nama_proyek'=>
+            'tanggal_selesai'=>$request->tanggal_selesai,
 
-                $request->nama_proyek,
+            'pemilik_proyek'=>$request->pemilik_proyek,
 
-
-
-            'tanggal_mulai'=>
-
-                $request->tanggal_mulai,
-
-
-
-            'tanggal_selesai'=>
-
-                $request->tanggal_selesai,
-
-
-
-            'pemilik_proyek'=>
-
-                $request->pemilik_proyek,
-
-
-
-            'total_anggaran'=>
-
-                $request->total_anggaran,
-
+            'total_anggaran'=>$request->total_anggaran,
 
 
         ]);
@@ -170,8 +152,15 @@ class ProjectController extends Controller
 
 
 
+        AuditHelper::create(
 
+            'Tambah Project',
 
+            'Manajemen Project',
+
+            'Admin menambahkan project '.$project->nama_proyek
+
+        );
 
 
         return redirect()
@@ -214,13 +203,15 @@ class ProjectController extends Controller
 
         $project->load([
 
+            'perusahaan',
+
             'tugas',
 
-            'alokasiDivisi'
+            'alokasiDivisi',
+
+            'users'
 
         ]);
-
-
 
 
 
@@ -258,16 +249,18 @@ class ProjectController extends Controller
     {
 
 
+        $perusahaans = Perusahaan::where(
+            'status',
+            'aktif'
+        )->get();
+
+
         return view(
-
             'admin.projects.edit',
-
             compact(
-
-                'project'
-
+                'project',
+                'perusahaans'
             )
-
         );
 
 
@@ -294,6 +287,7 @@ class ProjectController extends Controller
 
         $request->validate([
 
+            'perusahaan_id'=>'required|exists:perusahaans,id',
 
 
             'nama_proyek'=>'required|string|max:255',
@@ -328,6 +322,10 @@ class ProjectController extends Controller
 
         $project->update([
 
+
+            'perusahaan_id'=>
+            
+            $request->perusahaan_id,
 
 
             'nama_proyek'=>
@@ -364,7 +362,15 @@ class ProjectController extends Controller
 
 
 
+        AuditHelper::create(
 
+            'Update Project',
+
+            'Manajemen Project',
+
+            'Admin memperbarui project '.$project->nama_proyek
+
+        );
 
 
 
@@ -402,36 +408,67 @@ class ProjectController extends Controller
     | DELETE PROJECT
     |--------------------------------------------------------------------------
     */
+public function destroy(Proyek $project)
+{
 
 
-    public function destroy(Proyek $project)
-    {
+    if(
 
+        $project->tugas()->count() > 0 ||
 
-        $project->delete();
+        $project->alokasiDivisi()->count() > 0 ||
 
+        $project->users()->count() > 0 ||
 
+        $project->setoranProyek()->count() > 0
 
+    ){
 
-        return redirect()
+        return back()->withErrors([
 
-            ->route(
+            'project'=>'Project tidak dapat dihapus karena masih memiliki tugas, anggota, alokasi, atau transaksi.'
 
-                'admin.projects.index'
-
-            )
-
-            ->with(
-
-                'success',
-
-                'Project berhasil dihapus'
-
-            );
-
+        ]);
 
     }
 
 
+
+
+
+    AuditHelper::create(
+
+        'Hapus Project',
+
+        'Manajemen Project',
+
+        'Admin menghapus project '.$project->nama_proyek
+
+    );
+
+
+
+
+
+    $project->delete();
+
+
+
+
+
+    return redirect()
+
+        ->route('admin.projects.index')
+
+        ->with(
+
+            'success',
+
+            'Project berhasil dihapus'
+
+        );
+
+
+}
 
 }

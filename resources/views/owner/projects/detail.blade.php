@@ -7,8 +7,13 @@
 <div class="page-header">
 
 
+<div class="header-top">
+
+
+<div>
+
 <span class="label">
-DETAIL PROYEK
+PROJECT DETAIL
 </span>
 
 
@@ -24,29 +29,33 @@ Informasi lengkap perkembangan proyek perusahaan.
 
 </div>
 
-
-
-
-
 <a href="{{route('owner.projects')}}" class="btn-back">
 
-← Kembali Pemantauan Proyek
+Kembali ke Daftar Proyek
 
 </a>
 
 
+</div>
+
+
+</div>
 
 
 
 
 
+
+
+
+{{-- SUMMARY --}}
 
 
 <div class="summary-grid">
 
 
-
 <div class="summary-card">
+
 
 <span>
 Total Anggaran
@@ -54,12 +63,14 @@ Total Anggaran
 
 
 <h2>
+
 Rp {{number_format(
 $project->total_anggaran ?? 0,
 0,
 ',',
 '.'
 )}}
+
 </h2>
 
 
@@ -67,15 +78,15 @@ $project->total_anggaran ?? 0,
 Nilai proyek
 </p>
 
+
 </div>
 
 
 
 
 
-
-
 <div class="summary-card">
+
 
 <span>
 Progress Proyek
@@ -83,7 +94,9 @@ Progress Proyek
 
 
 <h2>
+
 {{$project->progres_keseluruhan ?? 0}}%
+
 </h2>
 
 
@@ -91,15 +104,15 @@ Progress Proyek
 Tingkat penyelesaian
 </p>
 
+
 </div>
 
 
 
 
 
-
-
 <div class="summary-card">
+
 
 <span>
 Total Pekerjaan
@@ -107,17 +120,18 @@ Total Pekerjaan
 
 
 <h2>
+
 {{$totalTask ?? 0}}
+
 </h2>
 
 
 <p>
-Jumlah seluruh tugas
+Jumlah task proyek
 </p>
 
+
 </div>
-
-
 
 
 
@@ -125,39 +139,45 @@ Jumlah seluruh tugas
 
 <div class="summary-card">
 
+
 <span>
-Pekerjaan Selesai
+Task Selesai
 </span>
 
 
 <h2>
+
 {{$taskSelesai ?? 0}}
+
 </h2>
 
 
 <p>
-Tugas telah selesai
+Pekerjaan selesai
 </p>
 
-</div>
-
-
 
 </div>
 
 
+</div>
 
 
 
 
 
+
+
+
+
+{{-- INFORMASI PROJECT --}}
 
 
 <div class="panel">
 
 
 <h3>
-📁 Informasi Proyek
+Informasi Proyek
 </h3>
 
 
@@ -171,13 +191,12 @@ Tugas telah selesai
 Nama Proyek
 </td>
 
-
 <td>
 {{$project->nama_proyek}}
 </td>
 
-
 </tr>
+
 
 
 
@@ -187,13 +206,12 @@ Nama Proyek
 Pemilik Proyek
 </td>
 
-
 <td>
 {{$project->pemilik_proyek ?? '-'}}
 </td>
 
-
 </tr>
+
 
 
 
@@ -204,25 +222,16 @@ Pemilik Proyek
 Tanggal Mulai
 </td>
 
-
 <td>
 
-@if($project->tanggal_mulai)
-
-{{\Carbon\Carbon::parse(
-$project->tanggal_mulai
-)->format('d M Y')}}
-
-@else
-
--
-
-@endif
+{{$project->tanggal_mulai
+? $project->tanggal_mulai->format('d M Y')
+:'-'}}
 
 </td>
 
-
 </tr>
+
 
 
 
@@ -233,25 +242,16 @@ $project->tanggal_mulai
 Tanggal Selesai
 </td>
 
-
 <td>
 
-@if($project->tanggal_selesai)
-
-{{\Carbon\Carbon::parse(
-$project->tanggal_selesai
-)->format('d M Y')}}
-
-@else
-
--
-
-@endif
+{{$project->tanggal_selesai
+? $project->tanggal_selesai->format('d M Y')
+:'-'}}
 
 </td>
 
-
 </tr>
+
 
 
 
@@ -259,49 +259,24 @@ $project->tanggal_selesai
 <tr>
 
 <td>
-Status
+Status Proyek
 </td>
-
 
 <td>
 
+<span class="status {{ $project->health_status['color'] ?? 'aman' }}">
 
-@if(($project->progres_keseluruhan ?? 0) >= 100)
+{{ $project->health_status['label'] ?? 'Berjalan' }}
 
-
-<span class="status selesai">
-Selesai
 </span>
-
-
-@elseif(($project->progres_keseluruhan ?? 0) > 0)
-
-
-<span class="status berjalan">
-Berjalan
-</span>
-
-
-@else
-
-
-<span class="status todo">
-Belum Mulai
-</span>
-
-
-@endif
-
 
 </td>
-
 
 </tr>
 
 
 
 </table>
-
 
 
 </div>
@@ -313,6 +288,182 @@ Belum Mulai
 
 
 
+{{-- HEALTH PROJECT --}}
+
+<div class="health-grid">
+
+
+<div class="health-card">
+
+<h3>
+Keuangan Proyek
+</h3>
+
+
+<div>
+<span>
+Total Anggaran
+</span>
+
+<strong>
+Rp {{number_format(
+$project->total_anggaran ?? 0,
+0,
+',',
+'.'
+)}}
+</strong>
+</div>
+
+
+
+<div>
+<span>
+Dana Terpakai
+</span>
+
+<strong>
+Rp {{number_format(
+($project->total_anggaran ?? 0) -
+($project->sisa_budget ?? 0),
+0,
+',',
+'.'
+)}}
+</strong>
+</div>
+
+
+
+<div>
+<span>
+Budget Terpakai
+</span>
+
+<strong>
+{{$project->persentase_budget ?? 0}}%
+</strong>
+
+</div>
+
+
+
+<div>
+<span>
+Sisa Budget
+</span>
+
+<strong>
+Rp {{number_format(
+$project->sisa_budget ?? 0,
+0,
+',',
+'.'
+)}}
+</strong>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="health-card">
+
+
+<h3>
+Kondisi Proyek
+</h3>
+
+
+<div>
+
+<span>
+Progress
+</span>
+
+<strong>
+{{$project->progres_keseluruhan ?? 0}}%
+</strong>
+
+</div>
+
+
+
+<div>
+
+<span>
+Status Proyek
+</span>
+
+<strong>
+{{$project->health_status['label'] ?? 'Berjalan'}}
+</strong>
+
+</div>
+
+
+
+<div>
+
+<span>
+Deadline
+</span>
+
+<strong>
+{{$project->tanggal_selesai
+? $project->tanggal_selesai->format('d M Y')
+:'-'}}
+</strong>
+
+</div>
+
+
+
+<div>
+
+<span>
+Risiko
+</span>
+
+<strong>
+
+@if(($project->persentase_budget ?? 0) >= 80)
+
+<span class="danger">
+Tinggi
+</span>
+
+@elseif(($project->persentase_budget ?? 0) >= 50)
+
+<span class="warning">
+Sedang
+</span>
+
+@else
+
+<span class="success">
+Rendah
+</span>
+
+@endif
+
+</strong>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+{{-- TASK --}}
+
 
 <div class="panel">
 
@@ -320,8 +471,6 @@ Belum Mulai
 <h3>
 📌 Daftar Pekerjaan Proyek
 </h3>
-
-
 
 
 
@@ -337,29 +486,24 @@ Belum Mulai
 Nama Tugas
 </th>
 
-
 <th>
 PIC
 </th>
-
 
 <th>
 Divisi
 </th>
 
-
 <th>
 Status
 </th>
-
 
 <th>
 Progress
 </th>
 
-
 <th>
-Update Terakhir
+Update
 </th>
 
 
@@ -370,21 +514,17 @@ Update Terakhir
 
 
 
-
-
 <tbody>
-
 
 
 @forelse($project->tugas ?? [] as $task)
 
 
-
 <tr>
 
 
-
 <td>
+
 
 <strong>
 
@@ -407,19 +547,11 @@ Update Terakhir
 
 
 
-
-
-
-
 <td>
 
 {{$task->karyawan->nama_karyawan ?? '-'}}
 
 </td>
-
-
-
-
 
 
 
@@ -431,44 +563,31 @@ Update Terakhir
 
 
 
-
-
-
-
 <td>
 
 
-@if($task->status=='selesai')
+@if($task->status == 'selesai')
 
 
-<span class="status selesai">
-
+<span class="status success">
 Selesai
-
 </span>
 
 
+@elseif($task->status == 'sedang_dikerjakan')
 
-@elseif($task->status=='sedang_dikerjakan')
 
-
-<span class="status berjalan">
-
+<span class="status warning">
 Berjalan
-
 </span>
-
 
 
 @else
 
 
-<span class="status todo">
-
+<span class="status normal">
 Belum Mulai
-
 </span>
-
 
 
 @endif
@@ -478,62 +597,52 @@ Belum Mulai
 
 
 
-
-
-
-
-
 <td>
-
-
-
 <div class="progress">
 
+    <div class="progress-fill
+    @if(($task->progres_persen ?? 0) >= 80)
 
-<div class="progress-fill"
+        progress-green
 
-style="width:{{$task->progres_persen ?? 0}}%">
+    @elseif(($task->progres_persen ?? 0) >= 50)
+
+        progress-blue
+
+    @else
+
+        progress-yellow
+
+    @endif"
+
+    style="width:{{min($task->progres_persen ?? 0,100)}}%">
+
+    </div>
 
 </div>
-
-
-</div>
-
 
 
 {{$task->progres_persen ?? 0}}%
 
 
-
 </td>
-
-
-
-
-
-
-
 
 <td>
 
 
-
-@if($task->aktivitasTugas->count())
-
+@if($task->aktivitasTugas && $task->aktivitasTugas->count())
 
 
 <strong>
 
-{{\Carbon\Carbon::parse(
-$task->aktivitasTugas->last()->tanggal
-)->format('d M Y')}}
+{{$task->aktivitasTugas->last()->tanggal
+? $task->aktivitasTugas->last()->tanggal->format('d M Y')
+:'-'}}
 
 </strong>
 
 
-
 <br>
-
 
 
 <small>
@@ -543,21 +652,16 @@ $task->aktivitasTugas->last()->tanggal
 </small>
 
 
-
 @else
 
 
 Belum ada update
 
 
-
 @endif
 
 
-
 </td>
-
-
 
 
 
@@ -565,9 +669,7 @@ Belum ada update
 
 
 
-
 @empty
-
 
 
 <tr>
@@ -586,13 +688,10 @@ Belum terdapat pekerjaan
 @endforelse
 
 
-
 </tbody>
 
 
-
 </table>
-
 
 
 </div>
@@ -603,25 +702,51 @@ Belum terdapat pekerjaan
 
 
 
-
-
 <style>
+
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+
+/* ===============================
+HEADER
+================================ */
 
 
 .page-header{
 
-background:white;
+    background:white;
 
-padding:28px;
+    padding:25px;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    margin-bottom:22px;
 
-margin-bottom:20px;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
+
+}
+
+
+
+.header-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
 
 }
 
@@ -629,13 +754,13 @@ margin-bottom:20px;
 
 .label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:700;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#64748b;
+    color:#64748b;
 
 }
 
@@ -643,11 +768,13 @@ color:#64748b;
 
 .page-header h1{
 
-font-size:28px;
+    margin:8px 0;
 
-margin:10px 0;
+    font-size:24px;
 
-color:#1e293b;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -655,80 +782,125 @@ color:#1e293b;
 
 .page-header p{
 
-color:#64748b;
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
-
-
-
 
 
 
 .btn-back{
 
-display:inline-block;
+    background:#0f172a;
 
-margin-bottom:20px;
+    color:white;
 
-padding:10px 20px;
+    padding:10px 18px;
 
-background:#6b4f1d;
+    border-radius:12px;
 
-color:white;
+    font-size:12px;
 
-border-radius:12px;
+    font-weight:700;
 
-text-decoration:none;
-
-font-size:13px;
-
-font-weight:600;
-
-}
-
-
-
-.btn-back:hover{
-
-background:#a67c2e;
-
-color:white;
+    text-decoration:none;
 
 }
 
 
 
 
+
+
+
+/* ===============================
+SUMMARY
+================================ */
 
 
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:20px;
+    gap:15px;
 
-margin-bottom:25px;
+    margin-bottom:22px;
 
 }
-
-
 
 
 
 .summary-card{
 
-background:white;
+    background:white;
 
-padding:25px;
+    padding:18px;
 
-border-radius:18px;
+    border-radius:22px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    box-shadow:
+
+    0 8px 20px rgba(15,23,42,.04);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
+
+}
+
+
+
+.summary-card:nth-child(1)::before{
+
+    background:#334155;
+
+}
+
+
+.summary-card:nth-child(2)::before{
+
+    background:#2563eb;
+
+}
+
+
+.summary-card:nth-child(3)::before{
+
+    background:#16a34a;
+
+}
+
+
+.summary-card:nth-child(4)::before{
+
+    background:#f59e0b;
 
 }
 
@@ -736,9 +908,11 @@ box-shadow:
 
 .summary-card span{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
+
+    font-weight:700;
 
 }
 
@@ -746,9 +920,25 @@ color:#64748b;
 
 .summary-card h2{
 
-margin-top:10px;
+    margin:8px 0;
 
-color:#6b4f1d;
+    font-size:20px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.summary-card p{
+
+    margin:0;
+
+    font-size:11px;
+
+    color:#94a3b8;
 
 }
 
@@ -758,20 +948,26 @@ color:#6b4f1d;
 
 
 
+/* ===============================
+PANEL
+================================ */
+
+
 .panel{
 
-background:white;
+    background:white;
 
-padding:25px;
+    padding:22px;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-margin-bottom:25px;
+    box-shadow:
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    0 8px 25px rgba(15,23,42,.05);
+
+    margin-bottom:22px;
 
 }
 
@@ -779,58 +975,283 @@ box-shadow:
 
 .panel h3{
 
-margin-bottom:20px;
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:18px;
 
 }
 
 
 
 
+
+
+
+/* ===============================
+TABLE
+================================ */
 
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
-
-}
-
-
-
-td,th{
-
-padding:15px;
-
-border-bottom:1px solid #eee;
-
-text-align:left;
-
-font-size:13px;
+    border-collapse:collapse;
 
 }
 
 
 
+th{
+
+    background:#f8fafc;
+
+    padding:12px;
+
+    font-size:11px;
+
+    text-align:left;
+
+    color:#64748b;
+
+}
 
 
+
+td{
+
+    padding:12px;
+
+    font-size:12px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    color:#334155;
+
+}
+
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+
+td strong{
+
+    font-size:13px;
+
+    color:#172033;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+HEALTH CARD
+================================ */
+
+
+.health-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+    margin-bottom:22px;
+
+}
+
+
+
+.health-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:22px;
+
+    border:1px solid #e2e8f0;
+
+}
+
+
+
+.health-card h3{
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.health-card div{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+
+
+.health-card span{
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+
+
+.health-card strong{
+
+    font-size:12px;
+
+    color:#172033;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+STATUS
+================================ */
+
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+
+.status::before{
+
+    content:"●";
+
+    font-size:8px;
+
+}
+
+
+
+.success{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.danger{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+
+.normal{
+
+    background:#e0f2fe;
+
+    color:#0369a1;
+
+}
+
+
+
+.aman{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PROGRESS
+================================ */
 
 
 .progress{
 
-height:8px;
+    width:120px;
 
-width:160px;
+    height:8px;
 
-background:#e2e8f0;
+    background:#e2e8f0;
 
-border-radius:20px;
+    border-radius:20px;
 
-overflow:hidden;
+    overflow:hidden;
 
-display:inline-block;
+    display:inline-block;
 
-margin-right:10px;
+    vertical-align:middle;
 
 }
 
@@ -838,59 +1259,36 @@ margin-right:10px;
 
 .progress-fill{
 
-height:100%;
+    height:100%;
 
-background:#a67c2e;
-
-}
-
-
-
-
-
-
-
-.status{
-
-padding:6px 14px;
-
-border-radius:20px;
-
-font-size:12px;
-
-font-weight:700;
+    border-radius:20px;
 
 }
 
 
 
-.berjalan{
+.progress-green{
 
-background:#dcfce7;
-
-color:#166534;
+    background:#16a34a;
 
 }
 
 
 
-.selesai{
+.progress-blue{
 
-background:#dbeafe;
-
-color:#1d4ed8;
+    background:#2563eb;
 
 }
 
 
 
-.todo{
+.progress-yellow{
 
-background:#f1f5f9;
-
-color:#475569;
+    background:#f59e0b;
 
 }
+
 
 
 
@@ -899,9 +1297,9 @@ color:#475569;
 
 small{
 
-color:#64748b;
+    font-size:11px;
 
-font-size:12px;
+    color:#64748b;
 
 }
 
@@ -910,36 +1308,77 @@ font-size:12px;
 
 
 
-@media(max-width:1000px){
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1200px){
 
 
 .summary-grid{
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+@media(max-width:900px){
+
+
+.header-top{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.health-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.summary-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.panel{
+
+    overflow-x:auto;
 
 }
 
 
 table{
 
-min-width:900px;
-
-}
-
-
-
-.panel{
-
-overflow-x:auto;
+    min-width:850px;
 
 }
 
 
 }
-
 
 </style>
-
 
 
 @endsection

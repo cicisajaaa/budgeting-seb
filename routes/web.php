@@ -121,8 +121,7 @@ Route::get('/notification/read/{id}',[
 |--------------------------------------------------------------------------
 */
 
-
-Route::middleware('role:karyawan')->group(function(){
+Route::middleware('role:karyawan,admin')->group(function(){
 
 
 
@@ -225,7 +224,7 @@ Route::middleware('role:karyawan')->group(function(){
 */
 
 
-Route::middleware('role:keuangan')->group(function(){
+Route::middleware('role:keuangan,owner')->group(function(){
 
 
 
@@ -449,17 +448,15 @@ Route::delete('/profile',[
 
 
 Route::middleware([
-    'auth',
-    'role:admin'
-])
 
+    'role:owner,admin'
+
+])
 ->prefix('admin')
 
 ->name('admin.')
 
 ->group(function(){
-
-
 
     Route::get('/dashboard',[
         AdminDashboardController::class,
@@ -515,7 +512,24 @@ Route::get(
 )
 ->name('tasks.show');
 
+Route::get(
+    '/tasks/{task}/edit',
+    [
+        TaskController::class,
+        'edit'
+    ]
+)
+->name('tasks.edit');
 
+
+Route::put(
+    '/tasks/{task}',
+    [
+        TaskController::class,
+        'update'
+    ]
+)
+->name('tasks.update');
 
 /*
 |--------------------------------------------------------------------------

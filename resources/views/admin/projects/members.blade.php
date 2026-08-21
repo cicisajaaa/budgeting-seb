@@ -258,33 +258,43 @@ Belum ada anggota project.
 
 
 
-
-
-
-
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
+
+.page-header-card,
+.glass-panel{
+    width:100%;
+}
+
+
+
+/* ===============================
+HEADER
+================================ */
 
 .page-header-card{
 
-background:white;
+    background:#f8fafc;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:22px;
 
-padding:30px;
+    padding:25px 30px;
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:25px;
+    margin-bottom:20px;
 
-box-shadow:
-0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -292,13 +302,13 @@ box-shadow:
 
 .page-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:800;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -306,11 +316,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-margin:10px 0;
+    margin:8px 0;
 
-font-size:30px;
+    font-size:24px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -318,63 +330,54 @@ color:#172033;
 
 .page-header-card p{
 
-color:#64748b;
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
+
+
 
 
 
 .btn-back{
 
-background:#f8fafc;
+    background:white;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-padding:11px 20px;
+    padding:10px 18px;
 
-border-radius:12px;
+    border-radius:12px;
 
-text-decoration:none;
+    text-decoration:none;
 
-color:#334155;
+    color:#334155;
 
-font-weight:700;
+    font-size:12px;
 
-font-size:13px;
-
-}
-
-
-
-
-
-.success-alert{
-
-background:#dcfce7;
-
-color:#166534;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-bottom:20px;
-
-font-weight:700;
+    font-weight:700;
 
 }
 
 
 
+
+
+/* ===============================
+LAYOUT
+================================ */
 
 
 .member-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:1fr 1fr;
+    grid-template-columns:0.8fr 1.2fr;
 
-gap:25px;
+    gap:20px;
 
 }
 
@@ -382,19 +385,26 @@ gap:25px;
 
 
 
+
+
+/* ===============================
+CARD
+================================ */
+
+
 .glass-panel{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e5e7eb;
 
-border-radius:22px;
+    border-radius:22px;
 
-padding:25px;
+    padding:22px;
 
-box-shadow:
+    box-shadow:
 
-0 10px 30px rgba(15,23,42,.05);
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -402,51 +412,78 @@ box-shadow:
 
 .glass-panel h3{
 
-margin-bottom:20px;
+    margin:0 0 18px;
 
-color:#172033;
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    padding-left:10px;
+
+    border-left:4px solid #334155;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+FORM
+================================ */
 
 
 label{
 
-font-size:12px;
+    font-size:11px;
 
-font-weight:700;
+    font-weight:700;
 
-color:#475569;
+    color:#64748b;
 
-display:block;
-
-margin-bottom:8px;
+    margin-bottom:7px;
 
 }
-
-
 
 
 
 select{
 
-width:100%;
+    width:100%;
 
-height:45px;
+    height:42px;
 
-border-radius:12px;
+    border-radius:12px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #dbe1e8;
 
-padding:0 15px;
+    background:#f8fafc;
 
-background:#f8fafc;
+    padding:0 14px;
 
-margin-bottom:20px;
+    font-size:12px;
+
+    margin-bottom:15px;
 
 }
+
+
+
+select:focus{
+
+    outline:none;
+
+    background:white;
+
+    border-color:#334155;
+
+}
+
+
 
 
 
@@ -454,67 +491,75 @@ margin-bottom:20px;
 
 .btn-save{
 
-width:100%;
+    width:100%;
 
-height:45px;
+    height:42px;
 
-background:#1e293b;
+    background:#334155;
 
-color:white;
+    color:white;
 
-border:none;
+    border:none;
 
-border-radius:12px;
+    border-radius:12px;
 
-font-weight:700;
+    font-size:12px;
 
-cursor:pointer;
+    font-weight:800;
+
+    cursor:pointer;
 
 }
-
-
 
 
 
 .btn-save:hover{
 
-background:#8b6b2e;
+    background:#1e293b;
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+MEMBER ITEM
+================================ */
 
 
 .member-item{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:space-between;
 
-justify-content:space-between;
+    align-items:center;
 
-padding:15px;
+    padding:13px;
 
-background:#f8fafc;
+    background:#f8fafc;
 
-border-radius:15px;
+    border:1px solid #e2e8f0;
 
-margin-bottom:12px;
+    border-radius:15px;
+
+    margin-bottom:10px;
 
 }
-
-
 
 
 
 .member-profile{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:12px;
+    gap:12px;
 
 }
 
@@ -524,23 +569,25 @@ gap:12px;
 
 .avatar{
 
-width:42px;
+    width:40px;
 
-height:42px;
+    height:40px;
 
-border-radius:50%;
+    border-radius:50%;
 
-background:#1e293b;
+    background:#334155;
 
-color:white;
+    color:white;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
+    align-items:center;
 
-font-weight:800;
+    font-size:13px;
+
+    font-weight:800;
 
 }
 
@@ -550,63 +597,105 @@ font-weight:800;
 
 .member-profile strong{
 
-display:block;
+    display:block;
 
-color:#172033;
+    font-size:13px;
+
+    color:#172033;
 
 }
-
-
 
 
 
 .member-profile span{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#94a3b8;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+DELETE ICON
+================================ */
 
 
 .btn-delete{
 
-background:#fee2e2;
+    width:34px;
 
-color:#dc2626;
+    height:34px;
 
-border:none;
+    border-radius:10px;
 
-padding:8px 14px;
+    border:none;
 
-border-radius:10px;
+    background:#fee2e2;
 
-font-size:12px;
+    color:#dc2626;
 
-font-weight:700;
+    font-size:0;
 
-cursor:pointer;
+    cursor:pointer;
 
 }
 
 
 
+.btn-delete::after{
+
+    content:"🗑";
+
+    font-size:14px;
+
+}
+
+
+
+.btn-delete:hover{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-padding:30px;
+    padding:35px;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+    font-size:12px;
 
 }
 
 
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
@@ -614,18 +703,19 @@ color:#94a3b8;
 
 .member-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
 
 
+
 .page-header-card{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:flex-start;
+    align-items:flex-start;
 
-gap:20px;
+    gap:15px;
 
 }
 

@@ -3,9 +3,7 @@
 
 @section('content')
 
-
-<div class="page-header">
-
+<div class="dashboard-header">
 
 <span class="label">
 PEMANTAUAN PROYEK
@@ -143,7 +141,7 @@ Telah diselesaikan
 
 
 <h3>
-📁 Daftar Pemantauan Proyek
+Daftar Pemantauan Proyek
 </h3>
 
 
@@ -249,30 +247,45 @@ $project->total_anggaran ?? 0,
 
 
 
-
 <td>
+
+@php
+    $progress = $project->progres_keseluruhan ?? 0;
+@endphp
 
 
 <div class="progress">
 
 
-<div class="progress-fill"
+    <div class="progress-fill
 
-style="width:{{ $project->progres_keseluruhan ?? 0 }}%">
+    @if($progress >= 80)
+
+        progress-green
+
+    @elseif($progress >= 50)
+
+        progress-blue
+
+    @else
+
+        progress-yellow
+
+    @endif"
+
+    style="width: {{ $progress }}%">
+
+    </div>
+
 
 </div>
 
 
-</div>
+<span class="progress-text">
 
-
-
-<span>
-
-{{ $project->progres_keseluruhan ?? 0 }}%
+{{ $progress }}%
 
 </span>
-
 
 
 </td>
@@ -309,14 +322,11 @@ $project->tanggal_selesai
 <td>
 
 
-
 @if(($project->progres_keseluruhan ?? 0) >= 100)
-
 
 <span class="status selesai">
 Selesai
 </span>
-
 
 
 @elseif(
@@ -324,24 +334,26 @@ $project->tanggal_selesai &&
 \Carbon\Carbon::parse($project->tanggal_selesai)->isPast()
 )
 
-
 <span class="status terlambat">
 Terlambat
 </span>
 
 
-
-@else
-
+@elseif(($project->progres_keseluruhan ?? 0) >= 50)
 
 <span class="status berjalan">
 Berjalan
 </span>
 
 
+@else
+
+<span class="status aman">
+Awal
+</span>
+
 
 @endif
-
 
 
 </td>
@@ -409,25 +421,41 @@ Belum terdapat data proyek
 
 
 
-
-
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-.page-header{
+*{
+    box-sizing:border-box;
+}
 
-background:white;
 
-padding:28px;
+body{
+    font-family:Inter, system-ui, sans-serif;
+}
 
-border-radius:18px;
 
-border:1px solid #e2e8f0;
+/* ===============================
+HEADER
+================================ */
 
-margin-bottom:25px;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+.dashboard-header{
+
+    background:#f8fafc;
+
+    padding:25px;
+
+    border-radius:24px;
+
+    border:1px solid #e2e8f0;
+
+    margin-bottom:22px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -435,35 +463,41 @@ box-shadow:
 
 .label{
 
-font-size:11px;
+    font-size:10px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:700;
+    font-weight:800;
 
-color:#64748b;
-
-}
-
-
-
-.page-header h1{
-
-font-size:28px;
-
-margin:10px 0;
-
-color:#1e293b;
+    color:#64748b;
 
 }
 
 
 
-.page-header p{
+.dashboard-header h1{
 
-font-size:14px;
+    margin:8px 0;
 
-color:#64748b;
+    font-size:24px;
+
+    line-height:1.3;
+
+    color:#172033;
+
+    font-weight:800;
+
+}
+
+
+
+.dashboard-header p{
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -471,36 +505,75 @@ color:#64748b;
 
 
 
+
+
+/* ===============================
+SUMMARY
+================================ */
 
 
 .summary-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:20px;
+    gap:15px;
 
-margin-bottom:25px;
+    margin-bottom:22px;
 
 }
-
-
 
 
 
 .summary-card{
 
-background:white;
+    background:white;
 
-padding:25px;
+    padding:18px;
 
-border-radius:18px;
+    min-height:105px;
 
-border:1px solid #e2e8f0;
+    border-radius:22px;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    border:1px solid #e2e8f0;
+
+    box-shadow:
+
+    0 8px 20px rgba(15,23,42,.04);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+
+.summary-card:nth-child(1){
+
+    border-top:4px solid #334155;
+
+}
+
+
+.summary-card:nth-child(2){
+
+    border-top:4px solid #2563eb;
+
+}
+
+
+.summary-card:nth-child(3){
+
+    border-top:4px solid #16a34a;
+
+}
+
+
+.summary-card:nth-child(4){
+
+    border-top:4px solid #f59e0b;
 
 }
 
@@ -508,9 +581,11 @@ box-shadow:
 
 .summary-card span{
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    color:#64748b;
+
+    font-weight:600;
 
 }
 
@@ -518,11 +593,13 @@ color:#64748b;
 
 .summary-card h2{
 
-margin-top:10px;
+    margin:8px 0;
 
-font-size:25px;
+    font-size:20px;
 
-color:#6b4f1d;
+    color:#172033;
+
+    font-weight:800;
 
 }
 
@@ -530,9 +607,11 @@ color:#6b4f1d;
 
 .summary-card p{
 
-font-size:12px;
+    margin:0;
 
-color:#94a3b8;
+    font-size:11px;
+
+    color:#94a3b8;
 
 }
 
@@ -542,18 +621,26 @@ color:#94a3b8;
 
 
 
+/* ===============================
+PANEL
+================================ */
+
+
 .panel{
 
-background:white;
+    background:white;
 
-padding:25px;
+    padding:22px;
 
-border-radius:18px;
+    border-radius:24px;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-box-shadow:
-0 5px 20px rgba(15,23,42,.05);
+    box-shadow:
+
+    0 8px 25px rgba(15,23,42,.05);
+
+    margin-bottom:22px;
 
 }
 
@@ -561,9 +648,13 @@ box-shadow:
 
 .panel h3{
 
-margin-bottom:20px;
+    font-size:16px;
 
-color:#1e293b;
+    font-weight:800;
+
+    color:#172033;
+
+    margin:0 0 18px;
 
 }
 
@@ -571,11 +662,18 @@ color:#1e293b;
 
 
 
+
+
+/* ===============================
+TABLE
+================================ */
+
+
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
 
@@ -583,13 +681,17 @@ border-collapse:collapse;
 
 th{
 
-text-align:left;
+    padding:13px;
 
-font-size:12px;
+    text-align:left;
 
-color:#64748b;
+    background:#f8fafc;
 
-padding:15px;
+    color:#64748b;
+
+    font-size:11px;
+
+    font-weight:700;
 
 }
 
@@ -597,11 +699,31 @@ padding:15px;
 
 td{
 
-padding:15px;
+    padding:13px;
 
-border-bottom:1px solid #eee;
+    border-bottom:1px solid #f1f5f9;
 
-font-size:14px;
+    font-size:12px;
+
+    color:#334155;
+
+}
+
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+
+td strong{
+
+    color:#172033;
+
+    font-size:13px;
 
 }
 
@@ -611,17 +733,26 @@ font-size:14px;
 
 
 
+/* ===============================
+PROGRESS
+================================ */
+
+
 .progress{
 
-height:8px;
+    width:140px;
 
-width:160px;
+    height:8px;
 
-background:#e2e8f0;
+    background:#e2e8f0;
 
-border-radius:20px;
+    border-radius:20px;
 
-overflow:hidden;
+    overflow:hidden;
+
+    display:inline-block;
+
+    vertical-align:middle;
 
 }
 
@@ -629,9 +760,49 @@ overflow:hidden;
 
 .progress-fill{
 
-height:100%;
+    height:100%;
 
-background:#a67c2e;
+    border-radius:20px;
+
+    transition:.3s;
+
+}
+
+
+
+.progress-green{
+
+    background:#16a34a;
+
+}
+
+
+
+.progress-blue{
+
+    background:#2563eb;
+
+}
+
+
+
+.progress-yellow{
+
+    background:#f59e0b;
+
+}
+
+
+
+.progress-text{
+
+    margin-left:8px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#334155;
 
 }
 
@@ -639,27 +810,38 @@ background:#a67c2e;
 
 
 
+
+
+/* ===============================
+STATUS
+================================ */
 
 
 .status{
 
-padding:6px 14px;
+    display:inline-flex;
 
-border-radius:20px;
+    align-items:center;
 
-font-size:12px;
+    gap:6px;
 
-font-weight:600;
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
 
 }
 
 
 
-.berjalan{
+.status::before{
 
-background:#dcfce7;
+    content:"●";
 
-color:#166534;
+    font-size:8px;
 
 }
 
@@ -667,9 +849,29 @@ color:#166534;
 
 .selesai{
 
-background:#dbeafe;
+    background:#dbeafe;
 
-color:#1d4ed8;
+    color:#1d4ed8;
+
+}
+
+
+
+.berjalan{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.aman{
+
+    background:#fef3c7;
+
+    color:#92400e;
 
 }
 
@@ -677,9 +879,9 @@ color:#1d4ed8;
 
 .terlambat{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#991b1b;
+    color:#b91c1c;
 
 }
 
@@ -688,23 +890,33 @@ color:#991b1b;
 
 
 
+
+/* ===============================
+BUTTON
+================================ */
+
+
 .btn-detail{
 
-display:inline-block;
+    display:inline-flex;
 
-padding:8px 18px;
+    align-items:center;
 
-border-radius:12px;
+    justify-content:center;
 
-background:#6b4f1d;
+    padding:8px 16px;
 
-color:white;
+    border-radius:12px;
 
-text-decoration:none;
+    background:#0f172a;
 
-font-size:12px;
+    color:white;
 
-font-weight:600;
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:700;
 
 }
 
@@ -712,9 +924,7 @@ font-weight:600;
 
 .btn-detail:hover{
 
-background:#a67c2e;
-
-color:white;
+    background:#334155;
 
 }
 
@@ -723,20 +933,64 @@ color:white;
 
 
 
-@media(max-width:1000px){
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1200px){
+
 
 .summary-grid{
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 }
 
+
 }
 
 
+
+@media(max-width:700px){
+
+
+.summary-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.dashboard-header{
+
+    padding:20px;
+
+}
+
+
+
+.panel{
+
+    padding:18px;
+
+}
+
+
+
+table{
+
+    display:block;
+
+    overflow-x:auto;
+
+}
+
+
+}
 
 </style>
-
-
 
 @endsection

@@ -2,9 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Tugas;
+use App\Models\AktivitasTugas;
 use App\Models\User;
+use App\Models\Perusahaan;
+use App\Models\PengajuanDana;
+use App\Models\TransaksiDana;
+use App\Models\SetoranProyek;
+use App\Models\AlokasiProyekDivisi;
+use App\Models\SaldoDivisi;
+
+
 
 
 class Proyek extends Model
@@ -17,6 +27,8 @@ class Proyek extends Model
 
     protected $fillable = [
 
+        'perusahaan_id',
+
         'nama_proyek',
 
         'tanggal_mulai',
@@ -27,9 +39,8 @@ class Proyek extends Model
 
         'total_anggaran',
 
-        'progres_keseluruhan',
-
     ];
+
 
 
     protected $casts = [
@@ -41,6 +52,35 @@ class Proyek extends Model
         'tanggal_selesai'=>'date',
 
     ];
+
+    protected $with = [
+
+        'perusahaan'
+
+    ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Perusahaan
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function perusahaan()
+    {
+
+        return $this->belongsTo(
+
+            Perusahaan::class,
+
+            'perusahaan_id'
+
+        );
+
+    }
+
+
 
 
     /*
@@ -62,8 +102,6 @@ class Proyek extends Model
         );
 
     }
-
-
 
 
 
@@ -95,8 +133,6 @@ class Proyek extends Model
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Total Anggaran Aktivitas
@@ -108,33 +144,10 @@ class Proyek extends Model
     {
 
         return $this->aktivitasTugas()
+
             ->sum('anggaran_aktivitas');
 
     }
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sisa Anggaran Proyek
-    |--------------------------------------------------------------------------
-    */
-
-
-    public function getSisaAnggaranAttribute()
-    {
-
-        return $this->total_anggaran -
-
-               $this->total_anggaran_aktivitas;
-
-    }
-
-
 
 
 
@@ -163,9 +176,6 @@ class Proyek extends Model
 
 
 
-
-
-
     /*
     |--------------------------------------------------------------------------
     | Relasi Alokasi Divisi
@@ -185,9 +195,6 @@ class Proyek extends Model
         );
 
     }
-
-
-
 
 
 
@@ -215,8 +222,218 @@ class Proyek extends Model
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Pengajuan Dana
+    |--------------------------------------------------------------------------
+    */
 
 
+    public function pengajuanDana()
+    {
+
+        return $this->hasMany(
+
+            PengajuanDana::class,
+
+            'proyek_id'
+
+        );
+
+    }
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Relasi Transaksi Dana melalui Pengajuan Dana
+|--------------------------------------------------------------------------
+*/
+
+public function transaksiDana()
+{
+
+    return $this->hasManyThrough(
+
+        TransaksiDana::class,
+
+        PengajuanDana::class,
+
+        'proyek_id',              // FK di tabel pengajuan_dana
+
+        'pengajuan_dana_id',      // FK di tabel transaksi_dana
+
+        'id',                     // PK tabel proyek
+
+        'id'                      // PK tabel pengajuan_dana
+
+    );
+
+}
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Realisasi Dana
+    |--------------------------------------------------------------------------
+    */
+
+        public function getTotalRealisasiAttribute()
+        {
+
+            return (float) $this->transaksiDana()
+                ->sum('transaksi_dana.jumlah');
+
+        }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sisa Budget Proyek
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getSisaBudgetAttribute()
+    {
+
+        return $this->total_anggaran -
+
+               $this->total_realisasi;
+
+    }
+
+
+
+
+public function getSisaAnggaranAttribute()
+{
+    return $this->sisa_budget;
+}
+    /*
+    |--------------------------------------------------------------------------
+    | Persentase Budget Terpakai
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getPersentaseBudgetAttribute()
+    {
+
+
+        if($this->total_anggaran == 0)
+        {
+
+            return 0;
+
+        }
+
+
+
+        return round(
+
+            ($this->total_realisasi /
+
+            $this->total_anggaran) * 100
+
+        );
+
+
+    }
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Sisa Budget Persentase
+|--------------------------------------------------------------------------
+*/
+
+public function getSisaPersentaseAttribute()
+{
+
+    if($this->total_anggaran <= 0)
+    {
+        return 0;
+    }
+
+
+    return round(
+        ($this->sisa_budget /
+        $this->total_anggaran) * 100
+    );
+
+}
+    /*
+    |--------------------------------------------------------------------------
+    | Status Budget
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getStatusBudgetAttribute()
+    {
+
+
+        if($this->persentase_budget >= 90)
+        {
+
+            return 'Hampir Habis';
+
+        }
+
+
+
+        if($this->persentase_budget >= 75)
+        {
+
+            return 'Perhatian';
+
+        }
+
+
+
+        return 'Aman';
+
+    }
+
+
+/*
+|--------------------------------------------------------------------------
+| Status Keuangan Proyek
+|--------------------------------------------------------------------------
+*/
+
+public function getStatusKeuanganAttribute()
+{
+
+    if($this->sisa_budget <= 0)
+    {
+        return 'Budget Habis';
+    }
+
+
+    if($this->persentase_budget >= 90)
+    {
+        return 'Kritis';
+    }
+
+
+    if($this->persentase_budget >= 75)
+    {
+        return 'Perlu Pengawasan';
+    }
+
+
+    return 'Normal';
+
+}
 
 
     /*
@@ -230,8 +447,7 @@ class Proyek extends Model
     {
 
 
-        $totalTugas = $this->tugas()
-            ->count();
+        $totalTugas = $this->tugas()->count();
 
 
 
@@ -244,10 +460,10 @@ class Proyek extends Model
 
 
 
-
         return round(
 
             $this->tugas()
+
             ->avg('progres_persen')
 
         );
@@ -256,46 +472,197 @@ class Proyek extends Model
     }
 
 
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Status Project
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getStatusProjectAttribute()
+    {
+
+
+        if($this->progres_keseluruhan >= 100)
+        {
+
+            return 'Selesai';
+
+        }
+
+
+
+        if($this->progres_keseluruhan > 0)
+        {
+
+            return 'Berjalan';
+
+        }
+
+
+
+        return 'Belum Dimulai';
+
+
+    }
+
+
+
+public function transaksi()
+{
+
+    return $this->transaksiDana();
+
+}
+
+
 /*
 |--------------------------------------------------------------------------
-| Relasi Anggota Project
+| Status Deadline
 |--------------------------------------------------------------------------
 */
 
-public function users()
+public function getDeadlineStatusAttribute()
 {
 
-    return $this->belongsToMany(
+    if(!$this->tanggal_selesai)
+    {
+        return 'normal';
+    }
 
-        User::class,
 
-        'project_user',
+    if(now()->gt($this->tanggal_selesai))
+    {
+        return 'terlambat';
+    }
 
-        'proyek_id',
 
-        'user_id'
-
-    );
+    return 'normal';
 
 }
 
 
-public function getStatusProjectAttribute()
+
+
+/*
+|--------------------------------------------------------------------------
+| Status Kesehatan Proyek
+|--------------------------------------------------------------------------
+*/
+
+public function getHealthStatusAttribute()
 {
 
-    if($this->progres_keseluruhan >= 100)
+    $progress = $this->progres_keseluruhan;
+
+    $budget = $this->persentase_budget;
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kondisi Kritis
+    |--------------------------------------------------------------------------
+    */
+
+    if(
+        $budget >= 90 ||
+        (
+            $progress < 50 &&
+            $this->deadline_status == 'terlambat'
+        )
+    )
     {
-        return 'Selesai';
+
+return [
+
+'label'=>'Kritis',
+
+'color'=>'kritis',
+
+'icon'=>'🔴'
+
+];
     }
 
 
-    if($this->progres_keseluruhan > 0)
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kondisi Perhatian
+    |--------------------------------------------------------------------------
+    */
+
+    if(
+
+        $budget >= 75 ||
+
+        $progress < 50
+
+    )
     {
-        return 'Berjalan';
+
+return [
+
+'label'=>'Perhatian',
+
+'color'=>'perhatian',
+
+'icon'=>'🟡'
+
+];
     }
 
 
-    return 'Belum Dimulai';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kondisi Aman
+    |--------------------------------------------------------------------------
+    */
+
+    return [
+
+        'label'=>'Aman',
+
+        'color'=>'aman',
+
+        'icon'=>'🟢'
+
+    ];
+
 
 }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi Anggota Project
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function users()
+    {
+
+        return $this->belongsToMany(
+
+            User::class,
+
+            'project_user',
+
+            'proyek_id',
+
+            'user_id'
+
+        );
+
+    }
+
+
+
 }
