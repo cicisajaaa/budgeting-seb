@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Divisi;
 use Illuminate\Http\Request;
 
-
+use App\Helpers\AuditHelper;
 
 class DivisionController extends Controller
 {
@@ -92,18 +92,24 @@ class DivisionController extends Controller
 
 
 
-        Divisi::create([
+        $division = Divisi::create([
 
-            'nama_divisi'
-                =>$request->nama_divisi,
+            'nama_divisi'=>$request->nama_divisi,
 
-            'deskripsi'
-                =>$request->deskripsi
+            'deskripsi'=>$request->deskripsi
 
         ]);
 
 
+        AuditHelper::create(
 
+            'Tambah Divisi',
+
+            'Manajemen Divisi',
+
+            'Admin menambahkan divisi '.$division->nama_divisi
+
+        );
 
 
         return redirect()
@@ -224,7 +230,15 @@ class DivisionController extends Controller
         ]);
 
 
+        AuditHelper::create(
 
+            'Update Divisi',
+
+            'Manajemen Divisi',
+
+            'Admin memperbarui divisi '.$division->nama_divisi
+
+        );
 
 
 
@@ -255,30 +269,55 @@ class DivisionController extends Controller
     | HAPUS DIVISI
     |--------------------------------------------------------------------------
     */
+public function destroy(Divisi $division)
+{
 
-    public function destroy(Divisi $division)
+
+    if(
+    $division->karyawan()->count() > 0 ||
+    $division->alokasiProyekDivisi()->count() > 0
+)
     {
 
+        return back()->withErrors([
 
-        $division->delete();
+            'division'=>'Divisi tidak dapat dihapus karena masih digunakan oleh karyawan atau project.'
 
-
-
-
-        return redirect()
-
-            ->route(
-                'admin.divisions.index'
-            )
-
-            ->with(
-                'success',
-                'Divisi berhasil dihapus'
-            );
-
+        ]);
 
     }
 
+
+    AuditHelper::create(
+
+        'Hapus Divisi',
+
+        'Manajemen Divisi',
+
+        'Admin menghapus divisi '.$division->nama_divisi
+
+    );
+
+
+
+    $division->delete();
+
+
+
+    return redirect()
+
+        ->route('admin.divisions.index')
+
+        ->with(
+
+            'success',
+
+            'Divisi berhasil dihapus'
+
+        );
+
+
+}
 
 
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+
+use App\Helpers\AuditHelper;
 use App\Models\User;
 use App\Models\Karyawan;
 use App\Models\Divisi;
@@ -26,17 +28,54 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
+public function index(Request $request)
+{
 
 
-        $users = User::with([
-            'karyawan.divisi'
-        ])
-        ->latest()
-        ->get();
+    $users = User::with([
+        'karyawan.divisi'
+    ])
+
+    ->when(
+        $request->role,
+        function($query) use ($request){
+
+            $query->where(
+                'role',
+                $request->role
+            );
+
+        }
+    )
 
 
+    ->when(
+        $request->search,
+        function($query) use ($request){
+
+            $query->where(function($q) use ($request){
+
+                $q->where(
+                    'name',
+                    'like',
+                    '%'.$request->search.'%'
+                )
+
+                ->orWhere(
+                    'email',
+                    'like',
+                    '%'.$request->search.'%'
+                );
+
+            });
+
+        }
+    )
+
+
+    ->latest()
+
+    ->get();
 
 
         $totalUser = User::count();
@@ -48,7 +87,22 @@ class UserController extends Controller
             'admin'
         )->count();
 
+        $totalOwner = User::where(
+            'role',
+            'owner'
+        )->count();
 
+
+        $totalKeuangan = User::where(
+            'role',
+            'keuangan'
+        )->count();
+
+
+        $totalKaryawanOnly = User::where(
+            'role',
+            'karyawan'
+        )->count();
 
 
         $totalKaryawan = User::whereIn(
@@ -135,6 +189,12 @@ class UserController extends Controller
 
                 'totalKaryawan',
 
+                'totalOwner',
+
+                'totalKeuangan',
+
+                'totalKaryawanOnly',
+
                 'totalProject',
 
                 'totalTask',
@@ -219,7 +279,7 @@ class UserController extends Controller
             'email'=>'required|email|unique:users,email',
 
 
-            'password'=>'required|min:8',
+            'password'=>'required|min:8|confirmed',
 
 
             'role'=>'required|in:owner,admin,keuangan,karyawan',
@@ -233,7 +293,19 @@ class UserController extends Controller
 
         ]);
 
+        if(
+            $request->role == 'owner'
+            &&
+            User::where('role','owner')->exists()
+        ){
 
+        return back()
+        ->withErrors([
+        'role'=>'Owner sudah tersedia'
+        ])
+        ->withInput();
+
+        }
 
 
 
@@ -263,32 +335,38 @@ class UserController extends Controller
 
         // Admin, Keuangan, Karyawan memiliki data karyawan
 
-        if(in_array($request->role,[
-            'admin',
-            'keuangan',
-            'karyawan'
-        ]))
-        {
+if(in_array($request->role,[
+    'admin',
+    'keuangan',
+    'karyawan'
+]))
+{
 
 
-            Karyawan::create([
+    Karyawan::create([
+
+        'pengguna_id'=>$user->id,
+
+        'nama_karyawan'=>$request->nama_karyawan
+            ?? $request->name,
+
+        'divisi_id'=>$request->divisi_id
+
+    ]);
+
+}
 
 
-                'pengguna_id'=>$user->id,
 
+AuditHelper::create(
 
-                'nama_karyawan'=>$request->nama_karyawan
-                    ?? $request->name,
+    'Tambah User',
 
+    'Manajemen User',
 
-                'divisi_id'=>$request->divisi_id
+    'Admin menambahkan user '.$user->name
 
-
-            ]);
-
-
-        }
-
+);
 
 
 
@@ -381,10 +459,7 @@ class UserController extends Controller
 
 
 
-        $totalPengajuan = $user
-            ->pengajuanDana
-            ->count();
-
+        $totalPengajuan = $user->pengajuanDana?->count() ?? 0;
 
 
 
@@ -485,7 +560,20 @@ public function update(Request $request, User $user)
     ]);
 
 
+    if(
+        $user->role == 'owner'
+        &&
+        $request->role != 'owner'
+        &&
+        User::where('role','owner')
+        ->count() <= 1
+    ){
 
+        return back()->withErrors([
+            'role'=>'Owner utama tidak dapat diubah.'
+        ]);
+
+    }
 
 
     $user->update([
@@ -498,27 +586,25 @@ public function update(Request $request, User $user)
 
     ]);
 
+if($request->password)
+{
+
+    $request->validate([
+
+        'password'=>'min:8'
+
+    ]);
 
 
+    $user->update([
 
+        'password'=>Hash::make(
+            $request->password
+        )
 
+    ]);
 
-    if($request->password)
-    {
-
-        $user->update([
-
-            'password'=>Hash::make(
-                $request->password
-            )
-
-        ]);
-
-    }
-
-
-
-
+}
 
 
 
@@ -578,11 +664,9 @@ public function update(Request $request, User $user)
 
 
     }
-
     else
 
     {
-
 
         Karyawan::where(
 
@@ -595,6 +679,18 @@ public function update(Request $request, User $user)
 
     }
 
+
+
+
+    AuditHelper::create(
+
+        'Update User',
+
+        'Manajemen User',
+
+        'Admin memperbarui user '.$user->name
+
+    );
 
 
 
@@ -613,11 +709,7 @@ public function update(Request $request, User $user)
 
         );
 
-
-}
-
-
-
+    }
 
 
     /*
@@ -626,28 +718,54 @@ public function update(Request $request, User $user)
     |--------------------------------------------------------------------------
     */
 
-    public function destroy(User $user)
+public function destroy(User $user)
+{
+
+
+    if($user->role == 'owner')
     {
 
+        return back()->withErrors([
 
-        $user->delete();
+            'role'=>'Owner tidak dapat dihapus.'
 
-
-
-        return redirect()
-
-            ->route('admin.users.index')
-
-            ->with(
-
-                'success',
-
-                'User berhasil dihapus'
-
-            );
-
+        ]);
 
     }
+
+
+
+    AuditHelper::create(
+
+        'Hapus User',
+
+        'Manajemen User',
+
+        'Admin menghapus user '.$user->name
+
+    );
+
+
+
+    $user->delete();
+
+
+
+    return redirect()
+
+        ->route('admin.users.index')
+
+        ->with(
+
+            'success',
+
+            'User berhasil dihapus'
+
+        );
+
+
+}
+
 
 
 }

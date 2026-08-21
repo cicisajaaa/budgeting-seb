@@ -35,11 +35,32 @@ Kelola akun pengguna, role, dan hak akses sistem perusahaan.
 </div>
 
 
+@if($errors->any())
 
+<div class="alert-error">
+
+<strong>
+Terjadi kesalahan:
+</strong>
+
+<ul>
+
+@foreach($errors->all() as $error)
+
+<li>
+{{ $error }}
+</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
 
 
 {{-- STATISTIC --}}
-
 <div class="stat-grid">
 
 
@@ -49,29 +70,13 @@ Kelola akun pengguna, role, dan hak akses sistem perusahaan.
 👥
 </div>
 
-
 <div>
-
-<label>
-Total User
-</label>
-
-
-<h2>
-{{$totalUser}}
-</h2>
-
-
-<small>
-Seluruh akun sistem
-</small>
-
-
+<label>Total User</label>
+<h2>{{$totalUser}}</h2>
+<small>Seluruh akun sistem</small>
 </div>
 
 </div>
-
-
 
 
 
@@ -82,30 +87,13 @@ Seluruh akun sistem
 🛡️
 </div>
 
-
 <div>
-
-<label>
-Administrator
-</label>
-
-
-<h2>
-{{$totalAdmin}}
-</h2>
-
-
-<small>
-Hak akses admin
-</small>
-
-
+<label>Administrator</label>
+<h2>{{$totalAdmin}}</h2>
+<small>Hak akses admin</small>
 </div>
 
 </div>
-
-
-
 
 
 
@@ -116,43 +104,51 @@ Hak akses admin
 💼
 </div>
 
+<div>
+<label>Karyawan</label>
+<h2>{{$totalKaryawan}}</h2>
+<small>Pengguna operasional</small>
+</div>
+
+</div>
+
+
+
+
+<div class="stat-card">
+
+<div class="stat-icon">
+👑
+</div>
 
 <div>
-
-<label>
-Karyawan
-</label>
-
-
-<h2>
-{{$totalKaryawan}}
-</h2>
-
-
-<small>
-Pengguna operasional
-</small>
-
-
+<label>Owner</label>
+<h2>{{$totalOwner}}</h2>
+<small>Pemilik sistem</small>
 </div>
 
 </div>
 
 
+
+
+<div class="stat-card">
+
+<div class="stat-icon">
+💰
+</div>
+
+<div>
+<label>Keuangan</label>
+<h2>{{$totalKeuangan}}</h2>
+<small>Pengelola dana</small>
+</div>
+
 </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
+</div>
 
 
 {{-- TABLE --}}
@@ -192,7 +188,72 @@ Data akun yang memiliki akses ke sistem.
 
 
 
+<form method="GET" style="margin-bottom:20px;display:flex;gap:10px;">
 
+
+<input 
+type="text"
+name="search"
+placeholder="Cari nama atau email..."
+value="{{request('search')}}"
+style="
+padding:10px 15px;
+border:1px solid #e5e7eb;
+border-radius:12px;
+width:250px;
+">
+
+
+<select 
+name="role"
+style="
+padding:10px 15px;
+border:1px solid #e5e7eb;
+border-radius:12px;
+">
+
+
+<option value="">
+Semua Role
+</option>
+
+
+<option value="owner"
+{{request('role')=='owner'?'selected':''}}>
+Owner
+</option>
+
+
+<option value="admin"
+{{request('role')=='admin'?'selected':''}}>
+Admin
+</option>
+
+
+<option value="keuangan"
+{{request('role')=='keuangan'?'selected':''}}>
+Keuangan
+</option>
+
+
+<option value="karyawan"
+{{request('role')=='karyawan'?'selected':''}}>
+Karyawan
+</option>
+
+
+</select>
+
+
+<button 
+type="submit"
+class="btn-primary"
+>
+Cari
+</button>
+
+
+</form>
 
 
 
@@ -449,37 +510,42 @@ Belum ada pengguna
 
 
 </div>
-
-
-
-
-
-
-
-
-
 <style>
+
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+/* ===============================
+HEADER
+================================ */
 
 
 .page-header-card{
 
-background:white;
+    background:#f8fafc;
 
-border:1px solid #e5e7eb;
+    padding:25px;
 
-border-radius:24px;
+    border-radius:24px;
 
-padding:30px;
+    border:1px solid #e2e8f0;
 
-display:flex;
+    margin-bottom:25px;
 
-justify-content:space-between;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
-align-items:center;
+    display:flex;
 
-margin-bottom:25px;
+    justify-content:space-between;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    align-items:center;
 
 }
 
@@ -487,13 +553,13 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .page-label{
 
-font-size:11px;
+    font-size:10px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -501,13 +567,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-font-size:30px;
+    margin:8px 0;
 
-margin:10px 0;
+    font-size:24px;
 
-color:#172033;
+    font-weight:800;
 
-font-weight:800;
+    color:#1e293b;
 
 }
 
@@ -515,11 +581,11 @@ font-weight:800;
 
 .page-header-card p{
 
-color:#64748b;
+    margin:0;
 
-font-size:14px;
+    font-size:12px;
 
-margin:0;
+    color:#64748b;
 
 }
 
@@ -527,22 +593,34 @@ margin:0;
 
 
 
+/* ===============================
+BUTTON
+================================ */
+
 
 .btn-primary{
 
-background:#1e293b;
+    display:flex;
 
-color:white;
+    align-items:center;
 
-padding:12px 22px;
+    justify-content:center;
 
-border-radius:14px;
+    background:#334155;
 
-text-decoration:none;
+    color:white;
 
-font-size:13px;
+    padding:10px 18px;
 
-font-weight:700;
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    border:none;
 
 }
 
@@ -550,7 +628,7 @@ font-weight:700;
 
 .btn-primary:hover{
 
-background:#b8863b;
+    background:#1e293b;
 
 }
 
@@ -560,75 +638,156 @@ background:#b8863b;
 
 
 
+/* ===============================
+STAT CARD
+================================ */
 
 
 .stat-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(5,1fr);
 
-gap:18px;
+    gap:15px;
 
-margin-bottom:25px;
+    margin-bottom:25px;
 
 }
-
-
 
 
 
 .stat-card{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:22px;
+    border-radius:22px;
 
-padding:22px;
+    padding:18px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:15px;
+    gap:12px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.05);
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
 
+
+.stat-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    height:4px;
+
+    width:100%;
+
+    background:#334155;
+
+}
+
+
+
+.stat-card:nth-child(2)::before{
+
+    background:#2563eb;
+
+}
+
+
+.stat-card:nth-child(3)::before{
+
+    background:#16a34a;
+
+}
+
+
+.stat-card:nth-child(4)::before{
+
+    background:#f59e0b;
+
+}
+
+
+.stat-card:nth-child(5)::before{
+
+    background:#7c3aed;
+
+}
 
 
 
 .stat-icon{
 
-width:50px;
+    width:42px;
 
-height:50px;
+    height:42px;
 
-border-radius:16px;
+    border-radius:14px;
 
-background:#f8f3ea;
+    display:flex;
 
-display:flex;
+    align-items:center;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
+    font-size:18px;
 
-font-size:22px;
+    flex-shrink:0;
+
+    background:#f8fafc;
 
 }
 
+.stat-card:nth-child(1) .stat-icon{
+    background:#dbeafe;
+}
+
+
+.stat-card:nth-child(2) .stat-icon{
+    background:#fee2e2;
+}
+
+
+.stat-card:nth-child(3) .stat-icon{
+    background:#dcfce7;
+}
+
+
+.stat-card:nth-child(4) .stat-icon{
+    background:#fef3c7;
+}
+
+
+.stat-card:nth-child(5) .stat-icon{
+    background:#ede9fe;
+}
 
 
 .stat-card label{
 
-font-size:12px;
+    font-size:10px;
 
-color:#64748b;
+    color:#64748b;
+
+    font-weight:700;
 
 }
 
@@ -636,11 +795,13 @@ color:#64748b;
 
 .stat-card h2{
 
-font-size:28px;
+    margin:5px 0;
 
-margin:5px 0;
+    font-size:19px;
 
-color:#172033;
+    color:#1e293b;
+
+    font-weight:800;
 
 }
 
@@ -648,9 +809,37 @@ color:#172033;
 
 .stat-card small{
 
-font-size:11px;
+    font-size:10px;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+}
+
+
+
+
+
+
+/* ===============================
+ERROR
+================================ */
+
+
+.alert-error{
+
+    background:#fee2e2;
+
+    border:1px solid #fecaca;
+
+    color:#991b1b;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    margin-bottom:20px;
+
+    font-size:12px;
 
 }
 
@@ -660,59 +849,47 @@ color:#94a3b8;
 
 
 
-
-.success-alert{
-
-background:#f0fdf4;
-
-border:1px solid #bbf7d0;
-
-padding:15px;
-
-border-radius:16px;
-
-color:#166534;
-
-font-size:13px;
-
-font-weight:700;
-
-margin-bottom:20px;
-
-}
-
-
-
-
-
-
+/* ===============================
+MAIN PANEL
+================================ */
 
 
 .glass-panel{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:24px;
 
-padding:25px;
+    padding:20px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
 
 
+
+
+
+
+/* ===============================
+TABLE HEADER
+================================ */
+
+
 .table-header{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:20px;
+    margin-bottom:15px;
 
 }
 
@@ -720,11 +897,15 @@ margin-bottom:20px;
 
 .table-header h3{
 
-margin:0;
+    margin:0;
 
-font-size:18px;
+    padding-left:10px;
 
-color:#172033;
+    border-left:4px solid #334155;
+
+    font-size:15px;
+
+    color:#1e293b;
 
 }
 
@@ -732,9 +913,11 @@ color:#172033;
 
 .table-header p{
 
-font-size:13px;
+    margin:5px 0 0;
 
-color:#64748b;
+    font-size:11px;
+
+    color:#64748b;
 
 }
 
@@ -742,15 +925,51 @@ color:#64748b;
 
 .total-user{
 
-background:#f1f5f9;
+    background:#f1f5f9;
 
-padding:8px 15px;
+    padding:6px 14px;
 
-border-radius:999px;
+    border-radius:999px;
 
-font-size:12px;
+    font-size:11px;
 
-font-weight:700;
+    font-weight:700;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+FILTER
+================================ */
+
+
+form[method="GET"] input,
+form[method="GET"] select{
+
+    height:38px!important;
+
+    padding:0 12px!important;
+
+    border-radius:12px!important;
+
+    background:#f8fafc;
+
+    font-size:11px;
+
+}
+
+
+
+form[method="GET"] button{
+
+    height:38px;
+
+    padding:0 18px;
 
 }
 
@@ -761,11 +980,24 @@ font-weight:700;
 
 
 
+/* ===============================
+TABLE
+================================ */
+
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+}
+
+
+
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
 
@@ -773,15 +1005,15 @@ border-collapse:collapse;
 
 th{
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:14px;
+    padding:12px;
 
-font-size:12px;
+    text-align:left;
 
-color:#64748b;
+    font-size:10px;
 
-text-align:left;
+    color:#64748b;
 
 }
 
@@ -789,11 +1021,21 @@ text-align:left;
 
 td{
 
-padding:15px;
+    padding:12px;
 
-border-bottom:1px solid #e5e7eb;
+    border-bottom:1px solid #f1f5f9;
 
-font-size:13px;
+    font-size:12px;
+
+    color:#334155;
+
+}
+
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
 
 }
 
@@ -803,14 +1045,18 @@ font-size:13px;
 
 
 
+/* ===============================
+USER PROFILE
+================================ */
+
 
 .user-profile{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:12px;
+    gap:10px;
 
 }
 
@@ -818,23 +1064,25 @@ gap:12px;
 
 .avatar{
 
-width:40px;
+    width:36px;
 
-height:40px;
+    height:36px;
 
-border-radius:50%;
+    border-radius:50%;
 
-background:#1e293b;
+    background:#334155;
 
-color:white;
+    color:white;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
+    align-items:center;
 
-font-weight:800;
+    font-size:12px;
+
+    font-weight:800;
 
 }
 
@@ -842,7 +1090,9 @@ font-weight:800;
 
 .user-profile strong{
 
-display:block;
+    font-size:12px;
+
+    display:block;
 
 }
 
@@ -850,7 +1100,9 @@ display:block;
 
 .user-profile small{
 
-color:#94a3b8;
+    font-size:10px;
+
+    color:#94a3b8;
 
 }
 
@@ -859,27 +1111,23 @@ color:#94a3b8;
 
 
 
+
+/* ===============================
+ROLE
+================================ */
 
 
 .role{
 
-padding:7px 14px;
+    display:inline-flex;
 
-border-radius:999px;
+    padding:5px 10px;
 
-font-size:11px;
+    border-radius:999px;
 
-font-weight:700;
+    font-size:10px;
 
-}
-
-
-
-.role.admin{
-
-background:#dbeafe;
-
-color:#1d4ed8;
+    font-weight:700;
 
 }
 
@@ -887,9 +1135,19 @@ color:#1d4ed8;
 
 .role.owner{
 
-background:#fef3c7;
+    background:#fef3c7;
 
-color:#92400e;
+    color:#92400e;
+
+}
+
+
+
+.role.admin{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
 
 }
 
@@ -897,9 +1155,9 @@ color:#92400e;
 
 .role.keuangan{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
 }
 
@@ -907,9 +1165,9 @@ color:#166534;
 
 .role.karyawan{
 
-background:#f1f5f9;
+    background:#f1f5f9;
 
-color:#475569;
+    color:#475569;
 
 }
 
@@ -918,57 +1176,65 @@ color:#475569;
 
 
 
+
+
+/* ===============================
+ACTION
+================================ */
 
 .action{
 
-display:flex;
+    display:flex;
 
-gap:8px;
+    align-items:center;
+
+    gap:6px;
 
 }
-
 
 
 .action form{
 
-display:inline;
+    margin:0;
 
 }
+
 
 
 .detail,
 .edit,
 .delete{
 
-padding:8px 12px;
+    width:32px;
 
-border-radius:12px;
+    height:32px;
 
-font-size:12px;
+    border-radius:10px;
 
-font-weight:700;
+    display:flex;
 
-text-decoration:none;
+    align-items:center;
 
-border:none;
+    justify-content:center;
 
-cursor:pointer;
+    border:none;
 
-display:flex;
+    cursor:pointer;
 
-align-items:center;
+    text-decoration:none;
 
-gap:5px;
+    font-size:13px;
+
+    padding:0;
+
+    line-height:1;
 
 }
-
-
-
 .detail{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
 }
 
@@ -976,9 +1242,9 @@ color:#166534;
 
 .edit{
 
-background:#dbeafe;
+    background:#dbeafe;
 
-color:#1d4ed8;
+    color:#2563eb;
 
 }
 
@@ -986,19 +1252,18 @@ color:#1d4ed8;
 
 .delete{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#dc2626;
+    color:#dc2626;
 
 }
 
 
-
 .detail:hover{
 
-background:#166534;
+    background:#16a34a;
 
-color:white;
+    color:white;
 
 }
 
@@ -1006,9 +1271,9 @@ color:white;
 
 .edit:hover{
 
-background:#2563eb;
+    background:#2563eb;
 
-color:white;
+    color:white;
 
 }
 
@@ -1016,41 +1281,63 @@ color:white;
 
 .delete:hover{
 
-background:#dc2626;
+    background:#dc2626;
 
-color:white;
+    color:white;
 
 }
 
 
 
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-padding:40px;
+    padding:30px;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+    font-size:12px;
 
 }
 
 
 
 
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1300px){
+
+.stat-grid{
+
+grid-template-columns:repeat(3,1fr);
+
+}
+
+}
 
 
 
 @media(max-width:900px){
 
-
 .stat-grid{
 
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .page-header-card{
@@ -1059,20 +1346,23 @@ flex-direction:column;
 
 align-items:flex-start;
 
-gap:20px;
+gap:15px;
+
+}
 
 }
 
 
-.table-wrapper{
 
-overflow-x:auto;
+@media(max-width:600px){
+
+.stat-grid{
+
+grid-template-columns:1fr;
 
 }
 
-
 }
-
 
 
 </style>

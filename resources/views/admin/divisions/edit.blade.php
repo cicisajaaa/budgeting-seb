@@ -288,51 +288,32 @@ Perubahan nama divisi dapat mempengaruhi relasi data project, alokasi dana, dan 
 
 
 
-
-
-
-
-
 <style>
 
-
 /* ===============================
-HEADER CARD
+HEADER
 ================================ */
-
 
 .page-header-card{
 
+    background:#f8fafc;
 
-background:white;
+    border:1px solid #e2e8f0;
 
+    border-radius:22px;
 
-border:1px solid #e5e7eb;
+    padding:25px 30px;
 
+    display:flex;
 
-border-radius:24px;
+    justify-content:space-between;
 
+    align-items:center;
 
-padding:30px;
+    margin-bottom:20px;
 
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-margin-bottom:25px;
-
-
-box-shadow:
-
-
-0 10px 30px rgba(15,23,42,.06);
-
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -340,55 +321,39 @@ box-shadow:
 
 .page-label{
 
+    font-size:10px;
 
-font-size:11px;
+    letter-spacing:2px;
 
+    font-weight:800;
 
-letter-spacing:2px;
-
-
-font-weight:800;
-
-
-color:#94a3b8;
-
+    color:#64748b;
 
 }
-
 
 
 
 .page-header-card h1{
 
+    margin:8px 0;
 
-font-size:30px;
+    font-size:26px;
 
+    font-weight:800;
 
-margin:10px 0;
-
-
-color:#172033;
-
-
-font-weight:800;
-
+    color:#172033;
 
 }
-
 
 
 
 .page-header-card p{
 
+    margin:0;
 
-font-size:14px;
+    font-size:12px;
 
-
-color:#64748b;
-
-
-margin:0;
-
+    color:#64748b;
 
 }
 
@@ -398,39 +363,28 @@ margin:0;
 
 
 
-
-/* BACK BUTTON */
+/* ===============================
+BACK
+================================ */
 
 
 .btn-back{
 
+    background:white;
 
-background:#f8fafc;
+    border:1px solid #e2e8f0;
 
+    padding:10px 18px;
 
-border:1px solid #e2e8f0;
+    border-radius:12px;
 
+    text-decoration:none;
 
-padding:11px 20px;
+    color:#334155;
 
+    font-size:12px;
 
-border-radius:14px;
-
-
-text-decoration:none;
-
-
-color:#475569;
-
-
-font-size:13px;
-
-
-font-weight:700;
-
-
-transition:.2s;
-
+    font-weight:700;
 
 }
 
@@ -438,16 +392,11 @@ transition:.2s;
 
 .btn-back:hover{
 
+    background:#334155;
 
-background:#1e293b;
-
-
-color:white;
-
+    color:white;
 
 }
-
-
 
 
 
@@ -462,27 +411,19 @@ FORM CARD
 
 .form-card{
 
+    width:100%;
 
-background:white;
+    background:white;
 
+    border:1px solid #e2e8f0;
 
-border:1px solid #e5e7eb;
+    border-radius:22px;
 
+    padding:25px;
 
-border-radius:26px;
+    box-shadow:
 
-
-padding:35px;
-
-
-max-width:720px;
-
-
-box-shadow:
-
-
-0 15px 40px rgba(15,23,42,.06);
-
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -492,30 +433,24 @@ box-shadow:
 
 
 
-
-/* FORM HEADER */
+/* ===============================
+FORM HEADER
+================================ */
 
 
 .form-heading{
 
+    display:flex;
 
-display:flex;
+    align-items:center;
 
+    gap:12px;
 
-align-items:center;
+    padding-bottom:18px;
 
+    margin-bottom:20px;
 
-gap:15px;
-
-
-padding-bottom:22px;
-
-
-margin-bottom:30px;
-
-
-border-bottom:1px solid #f1f5f9;
-
+    border-bottom:1px solid #f1f5f9;
 
 }
 
@@ -523,30 +458,21 @@ border-bottom:1px solid #f1f5f9;
 
 .form-icon{
 
+    width:42px;
 
-width:50px;
+    height:42px;
 
+    border-radius:12px;
 
-height:50px;
+    background:#f1f5f9;
 
+    display:flex;
 
-border-radius:16px;
+    align-items:center;
 
+    justify-content:center;
 
-background:#dbeafe;
-
-
-display:flex;
-
-
-align-items:center;
-
-
-justify-content:center;
-
-
-font-size:22px;
-
+    font-size:18px;
 
 }
 
@@ -554,18 +480,13 @@ font-size:22px;
 
 .form-heading h3{
 
+    margin:0;
 
-margin:0;
+    font-size:16px;
 
+    font-weight:800;
 
-font-size:18px;
-
-
-font-weight:800;
-
-
-color:#172033;
-
+    color:#172033;
 
 }
 
@@ -573,15 +494,11 @@ color:#172033;
 
 .form-heading p{
 
+    margin:4px 0 0;
 
-margin-top:5px;
+    font-size:11px;
 
-
-font-size:13px;
-
-
-color:#64748b;
-
+    color:#64748b;
 
 }
 
@@ -591,19 +508,18 @@ color:#64748b;
 
 
 
-
-
-/* FORM */
+/* ===============================
+FORM
+================================ */
 
 
 .form-group{
 
+    display:flex;
 
-display:flex;
+    flex-direction:column;
 
-
-flex-direction:column;
-
+    margin-bottom:18px;
 
 }
 
@@ -611,199 +527,124 @@ flex-direction:column;
 
 .form-group label{
 
+    font-size:11px;
 
-font-size:12px;
+    font-weight:800;
 
+    color:#475569;
 
-font-weight:700;
-
-
-color:#475569;
-
-
-margin-bottom:8px;
-
+    margin-bottom:7px;
 
 }
 
 
+
+input,
+textarea{
+
+    width:100%;
+
+    border-radius:12px;
+
+    border:1px solid #dbe1e8;
+
+    background:#f8fafc;
+
+    padding:12px 14px;
+
+    font-size:13px;
+
+    color:#172033;
+
+}
 
 
 
 input{
 
-
-height:50px;
-
-
-border-radius:14px;
-
-
-border:1px solid #dbe3ef;
-
-
-background:#f8fafc;
-
-
-padding:0 16px;
-
-
-font-size:14px;
-
-
-outline:none;
-
-
-transition:.2s;
-
+    height:44px;
 
 }
-
-
-
-
-
-input:focus{
-
-
-background:white;
-
-
-border-color:#2563eb;
-
-
-box-shadow:
-
-
-0 0 0 4px rgba(37,99,235,.12);
-
-
-}
-
-
-
-
 
 
 
 textarea{
 
-    min-height:120px;
-
-    border-radius:14px;
-
-    border:1px solid #dbe3ef;
-
-    background:#f8fafc;
-
-    padding:15px;
-
-    font-size:14px;
+    min-height:100px;
 
     resize:none;
 
-    outline:none;
-
 }
 
 
 
+input:focus,
 textarea:focus{
+
+    outline:none;
 
     background:white;
 
-    border-color:#2563eb;
+    border-color:#334155;
 
     box-shadow:
-    0 0 0 4px rgba(37,99,235,.12);
+
+    0 0 0 3px rgba(51,65,85,.12);
 
 }
 
 
 
-/* BUTTON */
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
 
 
 .form-action{
 
+    margin-top:20px;
 
-margin-top:30px;
+    padding-top:18px;
 
+    border-top:1px solid #f1f5f9;
 
-display:flex;
+    display:flex;
 
-
-justify-content:flex-end;
-
+    justify-content:flex-end;
 
 }
-
-
 
 
 
 .btn-update{
 
+    background:#1e293b;
 
-background:
+    color:white;
 
+    border:none;
 
-linear-gradient(
+    padding:12px 25px;
 
-135deg,
+    border-radius:12px;
 
-#2563eb,
+    font-size:12px;
 
-#3b82f6
+    font-weight:800;
 
-);
-
-
-
-border:none;
-
-
-color:white;
-
-
-padding:13px 30px;
-
-
-border-radius:14px;
-
-
-font-size:13px;
-
-
-font-weight:800;
-
-
-cursor:pointer;
-
-
-box-shadow:
-
-
-0 10px 25px rgba(37,99,235,.25);
-
-
-transition:.2s;
-
+    cursor:pointer;
 
 }
-
-
 
 
 
 .btn-update:hover{
 
-
-background:#1d4ed8;
-
-
-transform:translateY(-2px);
-
+    background:#334155;
 
 }
 
@@ -813,46 +654,28 @@ transform:translateY(-2px);
 
 
 
-
-
-/* INFORMATION */
+/* ===============================
+INFO CARD
+================================ */
 
 
 .information-card{
 
+    margin-top:20px;
 
-margin-top:25px;
+    background:#f8fafc;
 
+    border:1px solid #e2e8f0;
 
-background:white;
+    border-radius:18px;
 
+    padding:18px;
 
-border:1px solid #e5e7eb;
+    display:flex;
 
+    align-items:center;
 
-border-radius:22px;
-
-
-padding:22px;
-
-
-display:flex;
-
-
-gap:15px;
-
-
-align-items:center;
-
-
-max-width:720px;
-
-
-box-shadow:
-
-
-0 10px 25px rgba(15,23,42,.05);
-
+    gap:12px;
 
 }
 
@@ -862,30 +685,21 @@ box-shadow:
 
 .information-icon{
 
+    width:38px;
 
-width:45px;
+    height:38px;
 
+    border-radius:11px;
 
-height:45px;
+    background:#dbeafe;
 
+    display:flex;
 
-border-radius:15px;
+    align-items:center;
 
+    justify-content:center;
 
-background:#eff6ff;
-
-
-display:flex;
-
-
-align-items:center;
-
-
-justify-content:center;
-
-
-font-size:20px;
-
+    font-size:17px;
 
 }
 
@@ -893,15 +707,11 @@ font-size:20px;
 
 .information-card h4{
 
+    margin:0;
 
-margin:0;
+    font-size:14px;
 
-
-font-size:15px;
-
-
-color:#172033;
-
+    color:#172033;
 
 }
 
@@ -909,18 +719,13 @@ color:#172033;
 
 .information-card p{
 
+    margin:5px 0 0;
 
-font-size:12px;
+    font-size:11px;
 
+    color:#64748b;
 
-color:#64748b;
-
-
-line-height:1.6;
-
-
-margin-top:6px;
-
+    line-height:1.5;
 
 }
 
@@ -930,77 +735,26 @@ margin-top:6px;
 
 
 
-
-/* ALERT */
+/* ===============================
+ALERT
+================================ */
 
 
 .alert-error{
 
+    background:#fef2f2;
 
-background:#fef2f2;
+    border:1px solid #fecaca;
 
+    color:#991b1b;
 
-border:1px solid #fecaca;
+    padding:13px;
 
+    border-radius:14px;
 
-color:#991b1b;
+    margin-bottom:18px;
 
-
-padding:15px;
-
-
-border-radius:16px;
-
-
-margin-bottom:20px;
-
-
-font-size:13px;
-
-
-}
-
-
-
-
-.alert-error ul{
-
-
-padding-left:20px;
-
-
-}
-
-
-
-
-
-.alert-success{
-
-
-background:#f0fdf4;
-
-
-border:1px solid #bbf7d0;
-
-
-color:#166534;
-
-
-padding:15px;
-
-
-border-radius:16px;
-
-
-margin-bottom:20px;
-
-
-font-size:13px;
-
-
-font-weight:700;
-
+    font-size:12px;
 
 }
 
@@ -1009,6 +763,10 @@ font-weight:700;
 
 
 
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:800px){
@@ -1016,24 +774,42 @@ font-weight:700;
 
 .page-header-card{
 
+    flex-direction:column;
 
-flex-direction:column;
+    align-items:flex-start;
 
-
-align-items:flex-start;
-
-
-gap:15px;
-
+    gap:15px;
 
 }
 
 
+
+.btn-back{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+
+
+.form-action{
+
+    justify-content:stretch;
+
+}
+
+
+
+.btn-update{
+
+    width:100%;
+
+}
 
 }
 
 </style>
-
-
 
 @endsection

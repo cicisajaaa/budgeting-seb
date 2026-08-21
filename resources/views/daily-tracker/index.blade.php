@@ -187,8 +187,6 @@ Penggunaan dana
 
 @forelse($tasks as $task)
 
-
-
 <div class="task-card">
 
 
@@ -210,15 +208,38 @@ Penggunaan dana
 
 
 </div>
+<span class="project-status
 
+@if(in_array($task->status,['selesai','done']))
 
+done
 
-<span class="status">
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
-{{strtoupper($task->status)}}
+progress
+
+@else
+
+todo
+
+@endif
+
+">
+@if(in_array($task->status,['selesai','done']))
+
+Selesai
+
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
+
+Sedang Dikerjakan
+
+@else
+
+Belum Dikerjakan
+
+@endif
 
 </span>
-
 
 
 </div>
@@ -238,11 +259,19 @@ Penggunaan dana
 Deadline
 </label>
 
-
 <strong>
-{{$task->deadline ?? '-'}}
-</strong>
 
+@if($task->deadline)
+
+{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
+</strong>
 </div>
 
 
@@ -257,7 +286,8 @@ Progress
 
 
 <strong>
-{{$task->progres_persen}}%</strong>
+{{number_format($task->progres_persen,0)}}%
+</strong>
 
 </div>
 
@@ -428,7 +458,16 @@ return $item['activity']->tanggal;
 {{$item['activity']->aktivitas}}
 
 </p>
+@if($item['activity']->catatan)
 
+<div style="margin-top:8px;color:#64748b;font-size:12px">
+
+Catatan:
+{{$item['activity']->catatan}}
+
+</div>
+
+@endif
 
 
 <span>

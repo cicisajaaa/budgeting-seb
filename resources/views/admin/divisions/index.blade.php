@@ -1,10 +1,9 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
-<div class="page-header">
+<div class="page-header-card">
 
 
 <div>
@@ -28,7 +27,8 @@ Kelola struktur organisasi, anggota, tugas, dan aktivitas setiap unit perusahaan
 
 
 
-<a href="{{route('admin.divisions.create')}}" class="btn-primary">
+<a href="{{route('admin.divisions.create')}}" 
+class="btn-primary">
 
 ＋ Tambah Divisi
 
@@ -41,33 +41,45 @@ Kelola struktur organisasi, anggota, tugas, dan aktivitas setiap unit perusahaan
 
 
 
-{{-- ================= STATISTIC ================= --}}
+@if(session('success'))
+
+<div class="success-alert">
+
+{{session('success')}}
+
+</div>
+
+@endif
 
 
-<div class="division-stat-grid">
 
 
 
-<div class="division-stat">
+{{-- STATISTIC --}}
 
 
-<div class="stat-icon green">
+<div class="stat-grid">
 
+
+
+<div class="stat-card">
+
+
+<div class="stat-icon">
 🏢
-
 </div>
 
 
 <div>
 
-<span>
+<label>
 Total Divisi
-</span>
+</label>
 
 
-<h3>
+<h2>
 {{$divisions->count()}}
-</h3>
+</h2>
 
 
 <small>
@@ -86,30 +98,28 @@ Unit organisasi aktif
 
 
 
-<div class="division-stat">
+<div class="stat-card">
 
 
-<div class="stat-icon blue">
-
+<div class="stat-icon">
 👥
-
 </div>
 
 
 <div>
 
-<span>
+<label>
 Total Anggota
-</span>
+</label>
 
 
-<h3>
+<h2>
 
 {{$divisions->sum(function($item){
 return $item->karyawan->count();
 })}}
 
-</h3>
+</h2>
 
 
 <small>
@@ -128,30 +138,28 @@ Karyawan terdaftar
 
 
 
-<div class="division-stat">
+<div class="stat-card">
 
 
-<div class="stat-icon orange">
-
+<div class="stat-icon">
 📝
-
 </div>
 
 
 <div>
 
-<span>
+<label>
 Total Task
-</span>
+</label>
 
 
-<h3>
+<h2>
 
 {{$divisions->sum(function($item){
 return $item->tugas->count();
 })}}
 
-</h3>
+</h2>
 
 
 <small>
@@ -175,17 +183,8 @@ Aktivitas pekerjaan
 
 
 
- 
-
-
-
-
-
-
-
 
 <div class="glass-panel">
-
 
 
 <div class="table-header">
@@ -207,16 +206,14 @@ Monitoring unit organisasi dan aktivitas kerja.
 
 
 
-<div class="total-data">
+<div class="total-user">
 
 {{$divisions->count()}} Divisi
 
 </div>
 
 
-
 </div>
-
 
 
 
@@ -281,13 +278,11 @@ Aksi
 <tbody>
 
 
-
 @forelse($divisions as $division)
 
 
 
 <tr>
-
 
 
 <td>
@@ -300,15 +295,13 @@ Aksi
 
 
 
-
-
 <td>
 
 
-<div class="division-name">
+<div class="user-profile">
 
 
-<div class="division-icon">
+<div class="avatar">
 
 🏢
 
@@ -318,9 +311,10 @@ Aksi
 
 <div>
 
-
 <strong>
+
 {{$division->nama_divisi}}
+
 </strong>
 
 
@@ -343,15 +337,9 @@ Aksi
 
 
 
-
-
-
-
 <td>
 
-
 <div class="mini-info">
-
 
 👥
 
@@ -359,9 +347,7 @@ Aksi
 
 Orang
 
-
 </div>
-
 
 </td>
 
@@ -369,15 +355,9 @@ Orang
 
 
 
-
-
-
-
 <td>
 
-
 <div class="mini-info">
-
 
 📝
 
@@ -385,9 +365,7 @@ Orang
 
 Task
 
-
 </div>
-
 
 </td>
 
@@ -395,15 +373,9 @@ Task
 
 
 
-
-
-
-
 <td>
 
-
 <div class="mini-info">
-
 
 📁
 
@@ -411,15 +383,9 @@ Task
 
 Project
 
-
 </div>
 
-
 </td>
-
-
-
-
 
 
 
@@ -427,19 +393,13 @@ Project
 
 <td>
 
-
-<span class="status-active">
+<span class="role karyawan">
 
 Aktif
 
 </span>
 
-
 </td>
-
-
-
-
 
 
 
@@ -452,6 +412,7 @@ Aktif
 
 
 <a href="{{route('admin.divisions.show',$division->id)}}"
+
 class="detail">
 
 👁
@@ -462,6 +423,7 @@ class="detail">
 
 
 <a href="{{route('admin.divisions.edit',$division->id)}}"
+
 class="edit">
 
 ✏️
@@ -471,8 +433,8 @@ class="edit">
 
 
 
-
 <form method="POST"
+
 action="{{route('admin.divisions.destroy',$division->id)}}">
 
 
@@ -482,6 +444,7 @@ action="{{route('admin.divisions.destroy',$division->id)}}">
 
 
 <button class="delete"
+
 onclick="return confirm('Hapus divisi ini?')">
 
 🗑
@@ -492,7 +455,6 @@ onclick="return confirm('Hapus divisi ini?')">
 </form>
 
 
-
 </div>
 
 
@@ -500,6 +462,7 @@ onclick="return confirm('Hapus divisi ini?')">
 
 
 </tr>
+
 
 
 
@@ -525,18 +488,15 @@ Belum ada divisi
 </tbody>
 
 
-
 </table>
 
 
+</div>
+
 
 </div>
 
 
-
-</div>
-
-@endsection
 
 <style>
 
@@ -544,16 +504,16 @@ Belum ada divisi
 GLOBAL
 ================================ */
 
-.page-header,
-.division-stat-grid,
-.glass-panel{
-
-    width:100%;
-
+*{
+    box-sizing:border-box;
 }
 
 
-
+.page-header-card,
+.stat-grid,
+.glass-panel{
+    width:100%;
+}
 
 
 
@@ -562,15 +522,15 @@ HEADER
 ================================ */
 
 
-.page-header{
+.page-header-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-    border-radius:24px;
+    border-radius:22px;
 
-    padding:30px;
+    padding:24px 28px;
 
     display:flex;
 
@@ -578,10 +538,10 @@ HEADER
 
     align-items:center;
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
     box-shadow:
-    0 10px 30px rgba(15,23,42,.06);
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -589,23 +549,25 @@ HEADER
 
 .page-label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
     font-weight:800;
 
-    color:#94a3b8;
+    color:#64748b;
 
 }
 
 
 
-.page-header h1{
+.page-header-card h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
+    font-size:25px;
+
+    font-weight:800;
 
     color:#172033;
 
@@ -613,17 +575,15 @@ HEADER
 
 
 
-.page-header p{
+.page-header-card p{
 
     margin:0;
 
+    font-size:12px;
+
     color:#64748b;
 
-    font-size:14px;
-
 }
-
-
 
 
 
@@ -636,23 +596,21 @@ BUTTON
 
 .btn-primary{
 
-
     background:#1e293b;
 
     color:white;
 
-    padding:13px 22px;
+    padding:11px 20px;
 
-    border-radius:14px;
-
-    font-size:13px;
-
-    font-weight:700;
+    border-radius:12px;
 
     text-decoration:none;
 
-    transition:.2s;
+    font-size:12px;
 
+    font-weight:700;
+
+    transition:.2s;
 
 }
 
@@ -673,126 +631,123 @@ BUTTON
 
 
 /* ===============================
-STAT CARD
+STATISTIC
 ================================ */
 
 
-.division-stat-grid{
-
+.stat-grid{
 
     display:grid;
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:18px;
+    gap:15px;
 
-    margin-bottom:25px;
-
+    margin-bottom:20px;
 
 }
 
 
 
 
-.division-stat{
-
+.stat-card{
 
     background:white;
 
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-    border-radius:22px;
+    border-radius:18px;
 
-    padding:22px;
+    padding:18px;
 
     display:flex;
 
     align-items:center;
 
-    gap:16px;
+    gap:12px;
 
-    box-shadow:
+    position:relative;
 
-    0 10px 30px rgba(15,23,42,.05);
-
+    overflow:hidden;
 
 }
+
+
+
+.stat-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:3px;
+
+    background:#334155;
+
+}
+
 
 
 
 .stat-icon{
 
+    width:42px;
 
-    width:52px;
+    height:42px;
 
-    height:52px;
+    border-radius:12px;
 
-    border-radius:16px;
+    background:#f1f5f9;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    font-size:23px;
+    align-items:center;
+
+    font-size:18px;
 
 }
 
 
 
-.stat-icon.green{
+.stat-card label{
 
-    background:#dcfce7;
-
-}
-
-
-
-.stat-icon.blue{
-
-    background:#dbeafe;
-
-}
-
-
-
-.stat-icon.orange{
-
-    background:#fef3c7;
-
-}
-
-
-
-
-.division-stat span{
-
-    font-size:12px;
+    font-size:10px;
 
     color:#64748b;
 
+    font-weight:700;
+
 }
 
 
 
-.division-stat h3{
+.stat-card h2{
 
-    margin:5px 0;
+    margin:4px 0;
 
-    font-size:26px;
+    font-size:23px;
 
     color:#172033;
 
+    font-weight:800;
+
 }
 
 
 
-.division-stat small{
+.stat-card small{
+
+    font-size:10px;
 
     color:#94a3b8;
-
-    font-size:11px;
 
 }
 
@@ -809,20 +764,19 @@ ALERT
 
 .success-alert{
 
-
     background:#f0fdf4;
 
     border:1px solid #bbf7d0;
 
     color:#166534;
 
-    padding:15px 18px;
+    padding:13px 16px;
 
-    border-radius:16px;
+    border-radius:14px;
 
-    margin-bottom:20px;
+    margin-bottom:18px;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
 
@@ -835,32 +789,33 @@ ALERT
 
 
 /* ===============================
-TABLE PANEL
+MAIN PANEL
 ================================ */
 
 
 .glass-panel{
 
-
     background:white;
 
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-    border-radius:24px;
+    border-radius:20px;
 
-    padding:25px;
+    padding:22px;
 
     box-shadow:
 
-    0 10px 30px rgba(15,23,42,.06);
-
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
 
 
-.table-header{
 
+
+
+
+.table-header{
 
     display:flex;
 
@@ -868,8 +823,7 @@ TABLE PANEL
 
     align-items:center;
 
-    margin-bottom:20px;
-
+    margin-bottom:18px;
 
 }
 
@@ -879,7 +833,13 @@ TABLE PANEL
 
     margin:0;
 
-    font-size:18px;
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    font-size:16px;
+
+    font-weight:800;
 
     color:#172033;
 
@@ -889,9 +849,9 @@ TABLE PANEL
 
 .table-header p{
 
-    margin-top:5px;
+    margin:5px 0;
 
-    font-size:13px;
+    font-size:11px;
 
     color:#64748b;
 
@@ -899,26 +859,19 @@ TABLE PANEL
 
 
 
+.total-user{
 
+    background:#f1f5f9;
 
-.total-data{
-
-
-    background:#eff6ff;
-
-    color:#2563eb;
-
-    padding:8px 16px;
+    padding:7px 14px;
 
     border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
 }
-
-
 
 
 
@@ -941,11 +894,9 @@ TABLE
 
 table{
 
-
     width:100%;
 
     border-collapse:collapse;
-
 
 }
 
@@ -953,17 +904,15 @@ table{
 
 th{
 
-
     background:#f8fafc;
 
-    padding:15px;
+    padding:12px;
 
     text-align:left;
 
-    font-size:12px;
+    font-size:10px;
 
     color:#64748b;
-
 
 }
 
@@ -971,30 +920,21 @@ th{
 
 td{
 
+    padding:13px;
 
-    padding:18px 15px;
+    font-size:12px;
 
     border-bottom:1px solid #f1f5f9;
 
-    font-size:13px;
-
-    color:#334155;
-
-
 }
 
 
 
-
-tr:hover{
-
+tbody tr:hover{
 
     background:#fafafa;
 
-
 }
-
-
 
 
 
@@ -1003,77 +943,68 @@ tr:hover{
 
 
 /* ===============================
-DIVISION INFO
+PROFILE
 ================================ */
 
 
-.division-name{
-
+.user-profile{
 
     display:flex;
 
     align-items:center;
 
-    gap:14px;
-
+    gap:10px;
 
 }
 
 
 
-.division-icon{
+.avatar{
 
+    width:38px;
 
-    width:45px;
+    height:38px;
 
-    height:45px;
+    border-radius:12px;
 
-    border-radius:15px;
+    background:#334155;
 
-    background:#eff6ff;
+    color:white;
 
     display:flex;
+
+    align-items:center;
 
     justify-content:center;
 
-    align-items:center;
+    font-size:16px;
 
-    font-size:20px;
-
+    font-weight:800;
 
 }
 
 
 
-.division-name strong{
-
+.user-profile strong{
 
     display:block;
 
-    font-size:14px;
+    font-size:12px;
 
     color:#172033;
 
-
 }
 
 
 
-.division-name small{
+.user-profile small{
 
-
-    display:block;
-
-    margin-top:5px;
+    font-size:10px;
 
     color:#94a3b8;
 
-    font-size:11px;
-
-    max-width:220px;
-
-
 }
+
 
 
 
@@ -1087,23 +1018,19 @@ MINI INFO
 
 .mini-info{
 
-
     background:#f8fafc;
 
-    padding:8px 12px;
+    padding:6px 10px;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#475569;
 
     width:max-content;
 
-
 }
-
-
 
 
 
@@ -1116,21 +1043,25 @@ STATUS
 ================================ */
 
 
-.status-active{
+.role{
 
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+
+.role.karyawan{
 
     background:#dcfce7;
 
     color:#166534;
-
-    padding:7px 14px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:700;
-
 
 }
 
@@ -1140,19 +1071,16 @@ STATUS
 
 
 
-
 /* ===============================
-ACTION
+ACTION BUTTON
 ================================ */
 
 
 .action{
 
-
     display:flex;
 
-    gap:8px;
-
+    gap:6px;
 
 }
 
@@ -1166,17 +1094,15 @@ ACTION
 
 
 
-
 .detail,
 .edit,
 .delete{
 
+    width:32px;
 
-    width:38px;
+    height:32px;
 
-    height:36px;
-
-    border-radius:12px;
+    border-radius:10px;
 
     display:flex;
 
@@ -1190,8 +1116,7 @@ ACTION
 
     text-decoration:none;
 
-    font-size:15px;
-
+    font-size:13px;
 
 }
 
@@ -1199,52 +1124,36 @@ ACTION
 
 .detail{
 
-
     background:#dcfce7;
 
-    color:#166534;
-
-
 }
-
 
 
 
 .edit{
 
-
     background:#dbeafe;
 
-    color:#2563eb;
-
-
 }
-
-
 
 
 
 .delete{
 
-
     background:#fee2e2;
 
-    color:#dc2626;
-
-
 }
-
-
 
 
 
 .detail:hover{
 
-    background:#166534;
+    background:#16a34a;
 
     color:white;
 
 }
+
 
 
 .edit:hover{
@@ -1254,6 +1163,7 @@ ACTION
     color:white;
 
 }
+
 
 
 .delete:hover{
@@ -1277,16 +1187,15 @@ EMPTY
 
 .empty{
 
-
     text-align:center;
 
-    padding:40px;
+    padding:35px;
 
     color:#94a3b8;
 
+    font-size:12px;
 
 }
-
 
 
 
@@ -1299,25 +1208,29 @@ RESPONSIVE
 ================================ */
 
 
-@media(max-width:1100px){
+@media(max-width:1000px){
 
-
-.division-stat-grid{
+.stat-grid{
 
     grid-template-columns:repeat(2,1fr);
 
 }
 
-
 }
 
 
 
-@media(max-width:900px){
+@media(max-width:700px){
 
 
-.page-header{
+.stat-grid{
 
+    grid-template-columns:1fr;
+
+}
+
+
+.page-header-card{
 
     flex-direction:column;
 
@@ -1325,22 +1238,33 @@ RESPONSIVE
 
     gap:15px;
 
-
 }
 
 
 
-.division-stat-grid{
+.btn-primary{
+
+    width:100%;
+
+    text-align:center;
+
+}
 
 
-    grid-template-columns:1fr;
+.table-header{
 
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:12px;
 
 }
 
 
 }
-
-
 
 </style>
+
+
+@endsection

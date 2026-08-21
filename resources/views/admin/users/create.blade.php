@@ -168,19 +168,22 @@ required>
 Role Pengguna
 </label>
 
-
 <select name="role" id="role">
 
-
-<option value="admin"
-{{old('role')=='admin'?'selected':''}}>
-Admin
+<option value="">
+-- Pilih Role --
 </option>
 
 
 <option value="owner"
 {{old('role')=='owner'?'selected':''}}>
 Owner
+</option>
+
+
+<option value="admin"
+{{old('role')=='admin'?'selected':''}}>
+Admin
 </option>
 
 
@@ -301,8 +304,29 @@ placeholder="Masukkan password"
 required>
 
 
+
 </div>
 
+<div class="form-group">
+
+
+<label>
+Konfirmasi Password
+</label>
+
+
+<input
+
+type="password"
+
+name="password_confirmation"
+
+placeholder="Ulangi password"
+
+required>
+
+
+</div>
 
 
 
@@ -341,120 +365,37 @@ required>
 
 
 
-
-
-
-<style>
-
-
-.employee-field{
-
-display:flex;
-
-}
-
-
-
-</style>
-
-
-
-
-
-
-
-<script>
-
-document.addEventListener(
-'DOMContentLoaded',
-function(){
-
-
-const role = document.getElementById('role');
-
-const fields = document.querySelectorAll('.employee-field');
-
-
-
-function toggleEmployee(){
-
-
-if(role.value === 'owner'){
-
-
-fields.forEach(function(field){
-
-field.style.display='none';
-
-
-field.querySelectorAll('input,select')
-.forEach(function(input){
-
-input.disabled=true;
-
-});
-
-
-});
-
-
-}else{
-
-
-fields.forEach(function(field){
-
-field.style.display='flex';
-
-
-field.querySelectorAll('input,select')
-.forEach(function(input){
-
-input.disabled=false;
-
-});
-
-
-});
-
-
-}
-
-
-}
-
-
-
-
-role.addEventListener(
-'change',
-toggleEmployee
-);
-
-
-toggleEmployee();
-
-
-});
-
-</script>
-
-
 <style>
 
 /* ===============================
-GLOBAL HEADER CARD
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+
+/* ===============================
+HEADER OWNER STYLE
 ================================ */
 
 
 .page-header-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e5e7eb;
+    padding:25px 30px;
 
     border-radius:24px;
 
-    padding:30px 32px;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -462,25 +403,19 @@ GLOBAL HEADER CARD
 
     align-items:center;
 
-    margin-bottom:25px;
-
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.06);
-
 }
 
 
 
 .page-label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
     font-weight:800;
 
-    color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -488,13 +423,13 @@ GLOBAL HEADER CARD
 
 .page-header-card h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
-
-    color:#172033;
+    font-size:28px;
 
     font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -506,9 +441,11 @@ GLOBAL HEADER CARD
 
     color:#64748b;
 
-    font-size:14px;
+    font-size:13px;
 
 }
+
+
 
 
 
@@ -521,18 +458,23 @@ BACK BUTTON
 
 .btn-back{
 
+    display:flex;
 
-    background:#f8fafc;
+    align-items:center;
 
-    border:1px solid #e2e8f0;
+    justify-content:center;
+
+    background:white;
 
     color:#334155;
 
-    padding:11px 22px;
+    border:1px solid #e2e8f0;
 
-    border-radius:14px;
+    padding:10px 20px;
 
-    font-size:13px;
+    border-radius:12px;
+
+    font-size:12px;
 
     font-weight:700;
 
@@ -540,20 +482,17 @@ BACK BUTTON
 
     transition:.2s;
 
-
 }
 
 
 
 .btn-back:hover{
 
+    background:#334155;
 
-    background:#ffffff;
+    color:white;
 
-    border-color:#b8863b;
-
-    color:#8b5e22;
-
+    border-color:#334155;
 
 }
 
@@ -564,20 +503,19 @@ BACK BUTTON
 
 
 /* ===============================
-ERROR ALERT
+ERROR
 ================================ */
 
 
 .alert-error{
 
-
-    background:#fef2f2;
+    background:#fee2e2;
 
     border:1px solid #fecaca;
 
     color:#991b1b;
 
-    padding:16px 18px;
+    padding:15px;
 
     border-radius:16px;
 
@@ -585,18 +523,15 @@ ERROR ALERT
 
     font-size:13px;
 
-
 }
 
 
 
 .alert-error strong{
 
-
     display:block;
 
     margin-bottom:8px;
-
 
 }
 
@@ -604,13 +539,12 @@ ERROR ALERT
 
 .alert-error ul{
 
-
     margin:0;
 
     padding-left:20px;
 
-
 }
+
 
 
 
@@ -618,40 +552,31 @@ ERROR ALERT
 
 
 /* ===============================
-FORM CARD
+MAIN PANEL
 ================================ */
 
 
-.form-card{
+.glass-panel{
 
+    background:white;
 
-    max-width:900px;
+    border:1px solid #e2e8f0;
 
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
 
 
-.glass-panel{
+.form-card{
 
-
-    background:white;
-
-
-    border:1px solid #e5e7eb;
-
-
-    border-radius:24px;
-
-
-    padding:30px;
-
-
-    box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.06);
-
+    width:100%;
 
 }
 
@@ -661,18 +586,23 @@ FORM CARD
 
 .panel-title{
 
+    display:flex;
 
-    font-size:18px;
+    align-items:center;
 
+    gap:10px;
+
+    font-size:17px;
 
     font-weight:800;
 
+    color:#1e293b;
 
-    color:#172033;
+    padding-left:10px;
 
+    border-left:4px solid #334155;
 
     margin-bottom:25px;
-
 
 }
 
@@ -689,30 +619,21 @@ FORM GRID
 
 .form-grid{
 
-
     display:grid;
-
 
     grid-template-columns:repeat(2,1fr);
 
-
-    gap:22px;
-
+    gap:20px;
 
 }
 
 
 
-
-
 .form-group{
-
 
     display:flex;
 
-
     flex-direction:column;
-
 
 }
 
@@ -722,18 +643,13 @@ FORM GRID
 
 .form-group label{
 
+    font-size:11px;
 
-    font-size:12px;
+    font-weight:700;
 
+    color:#64748b;
 
-    font-weight:800;
-
-
-    color:#475569;
-
-
-    margin-bottom:8px;
-
+    margin-bottom:7px;
 
 }
 
@@ -747,35 +663,33 @@ FORM GRID
 .form-group select{
 
 
-    width:100%;
+    height:44px;
 
+    padding:0 14px;
 
-    height:46px;
-
-
-    padding:0 15px;
-
-
-    border-radius:14px;
-
+    border-radius:12px;
 
     border:1px solid #e2e8f0;
 
-
     background:#f8fafc;
-
-
-    color:#172033;
-
 
     font-size:13px;
 
+    color:#334155;
 
     transition:.2s;
 
-
 }
 
+
+
+
+
+.form-group input::placeholder{
+
+    color:#94a3b8;
+
+}
 
 
 
@@ -788,20 +702,51 @@ FORM GRID
 
     outline:none;
 
-
     background:white;
 
-
-    border-color:#b8863b;
-
+    border-color:#334155;
 
     box-shadow:
 
-
-    0 0 0 3px rgba(184,134,59,.12);
-
+    0 0 0 3px rgba(51,65,85,.08);
 
 }
+
+
+
+
+
+
+
+
+/* ===============================
+EMPLOYEE FIELD
+================================ */
+
+
+.employee-field.hidden{
+
+    display:none!important;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PASSWORD STYLE
+================================ */
+
+
+input[type=password]{
+
+    letter-spacing:1px;
+
+}
+
 
 
 
@@ -815,17 +760,14 @@ ACTION BUTTON
 
 .form-action{
 
-
     margin-top:30px;
-
 
     display:flex;
 
-
     justify-content:flex-end;
 
-
 }
+
 
 
 
@@ -833,49 +775,62 @@ ACTION BUTTON
 .btn-save{
 
 
-    background:#1e293b;
+    display:flex;
 
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    background:#334155;
 
     color:white;
 
-
     border:none;
 
+    padding:12px 25px;
 
-    padding:13px 28px;
-
-
-    border-radius:14px;
-
+    border-radius:12px;
 
     font-size:13px;
 
-
-    font-weight:800;
-
+    font-weight:700;
 
     cursor:pointer;
 
-
     transition:.2s;
 
-
 }
-
-
 
 
 
 .btn-save:hover{
 
-
-    background:#b8863b;
-
-
-    transform:translateY(-2px);
-
+    background:#1e293b;
 
 }
+
+
+
+
+
+
+
+/* ===============================
+DISABLED
+================================ */
+
+
+input:disabled,
+select:disabled{
+
+    background:#f1f5f9;
+
+    cursor:not-allowed;
+
+}
+
 
 
 
@@ -888,30 +843,41 @@ RESPONSIVE
 ================================ */
 
 
-@media(max-width:900px){
+@media(max-width:1000px){
 
 
-.page-header-card{
+.form-grid{
 
+    grid-template-columns:1fr;
 
-    flex-direction:column;
-
-
-    align-items:flex-start;
-
-
-    gap:20px;
+}
 
 
 }
 
 
 
-.form-grid{
 
 
-    grid-template-columns:1fr;
+@media(max-width:700px){
 
+
+
+.page-header-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+
+
+.btn-back{
+
+    width:100%;
 
 }
 
@@ -919,9 +885,7 @@ RESPONSIVE
 
 .form-action{
 
-
     justify-content:stretch;
-
 
 }
 
@@ -929,22 +893,22 @@ RESPONSIVE
 
 .btn-save{
 
-
     width:100%;
 
+}
+
+
+
+.glass-panel{
+
+    padding:20px;
 
 }
 
 
-}
-
-.employee-field.hidden{
-display:none!important;
 }
 
 </style>
-
-
 
 
 @endsection

@@ -349,31 +349,42 @@ Belum ada anggota divisi
 
 
 
-
-
-
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+
+/* ===============================
+HEADER
+================================ */
 
 .page-header-card{
 
-background:white;
+    background:#f8fafc;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:22px;
 
-padding:30px;
+    padding:25px 30px;
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:25px;
+    margin-bottom:20px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -381,13 +392,13 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .page-label{
 
-font-size:11px;
+    font-size:10px;
 
-font-weight:800;
+    letter-spacing:2px;
 
-letter-spacing:2px;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -395,11 +406,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-font-size:30px;
+    margin:8px 0;
 
-margin:10px 0;
+    font-size:26px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -407,123 +420,188 @@ color:#172033;
 
 .page-header-card p{
 
-color:#64748b;
+    margin:0;
 
-font-size:14px;
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
 
+
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
-background:#f8fafc;
+    background:white;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-padding:11px 20px;
+    padding:10px 18px;
 
-border-radius:14px;
+    border-radius:12px;
 
-text-decoration:none;
+    color:#334155;
 
-color:#334155;
+    text-decoration:none;
 
-font-weight:700;
+    font-size:12px;
 
-font-size:13px;
+    font-weight:700;
+
+    transition:.2s;
+
+}
+
+
+
+.btn-back:hover{
+
+    background:#334155;
+
+    color:white;
 
 }
 
 
 
 
+
+
+
+
+/* ===============================
+MAIN GRID
+================================ */
 
 
 .detail-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:2fr 1fr;
+    grid-template-columns:2fr 1fr;
 
-gap:20px;
+    gap:20px;
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
 
 
+
+
+
+
+
+
+/* ===============================
+CARD
+================================ */
 
 
 .glass-panel{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:22px;
 
-padding:25px;
+    padding:22px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    margin-bottom:20px;
 
-margin-bottom:20px;
+    box-shadow:
+
+    0 8px 25px rgba(15,23,42,.05);
 
 }
+
+
+
 
 
 
 
 .panel-title{
 
-font-size:17px;
+    font-size:16px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#172033;
+    color:#172033;
 
-margin-bottom:20px;
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:18px;
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+INFO ITEM
+================================ */
 
 
 .info-item{
 
-background:#f8fafc;
+    display:flex;
 
-padding:15px;
+    justify-content:space-between;
 
-border-radius:14px;
+    align-items:center;
 
-margin-bottom:12px;
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:14px;
+
+    margin-bottom:10px;
 
 }
+
 
 
 
 .info-item span{
 
-display:block;
+    font-size:12px;
 
-font-size:12px;
-
-color:#64748b;
-
-margin-bottom:5px;
+    color:#64748b;
 
 }
+
 
 
 
 .info-item strong{
 
-color:#172033;
+    font-size:13px;
 
-font-size:14px;
+    color:#172033;
+
+    max-width:60%;
+
+    text-align:right;
 
 }
 
@@ -532,21 +610,27 @@ font-size:14px;
 
 
 
+/* ===============================
+STATISTIC COMPACT
+================================ */
+
 .stat-box{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:15px;
+    gap:12px;
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:15px;
+    border:1px solid #e2e8f0;
 
-border-radius:16px;
+    border-radius:14px;
 
-margin-bottom:12px;
+    padding:12px;
+
+    margin-bottom:10px;
 
 }
 
@@ -554,7 +638,21 @@ margin-bottom:12px;
 
 .stat-box div:first-child{
 
-font-size:25px;
+    width:36px;
+
+    height:36px;
+
+    border-radius:10px;
+
+    background:#f1f5f9;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:16px;
 
 }
 
@@ -562,9 +660,11 @@ font-size:25px;
 
 .stat-box span{
 
-font-size:12px;
+    display:block;
 
-color:#64748b;
+    font-size:10px;
+
+    color:#64748b;
 
 }
 
@@ -572,9 +672,13 @@ color:#64748b;
 
 .stat-box h2{
 
-margin:3px 0;
+    margin:2px 0 0;
 
-color:#172033;
+    font-size:20px;
+
+    color:#172033;
+
+    font-weight:800;
 
 }
 
@@ -582,84 +686,178 @@ color:#172033;
 
 
 
+/* ===============================
+TABLE
+================================ */
 
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
 }
+
 
 
 
 th{
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:14px;
+    padding:12px;
 
-text-align:left;
+    text-align:left;
 
-font-size:12px;
+    font-size:11px;
 
-color:#64748b;
+    font-weight:700;
+
+    color:#64748b;
 
 }
+
 
 
 
 td{
 
-padding:15px;
+    padding:14px;
 
-border-bottom:1px solid #e5e7eb;
+    font-size:13px;
 
-font-size:13px;
+    color:#334155;
+
+    border-bottom:1px solid #f1f5f9;
 
 }
 
 
 
+
+
+tbody tr:hover{
+
+    background:#fafafa;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+ROLE BADGE
+================================ */
+
+
+td:last-child{
+
+    font-weight:700;
+
+}
+
+
+
+
+
+
+/* ===============================
+EMPTY
+================================ */
 
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-padding:30px;
+    padding:35px;
 
-color:#94a3b8;
+    color:#94a3b8;
+
+    font-size:13px;
 
 }
 
 
+
+
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
 
+
 .detail-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
+
 
 
 .page-header-card{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:flex-start;
+    align-items:flex-start;
 
-gap:15px;
-
-}
+    gap:15px;
 
 }
 
+
+
+.btn-back{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+
+
+.info-item{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:5px;
+
+}
+
+
+
+.info-item strong{
+
+    max-width:100%;
+
+    text-align:left;
+
+}
+
+
+
+table{
+
+    min-width:600px;
+
+}
+
+
+}
 
 </style>
-
 
 @endsection

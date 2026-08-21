@@ -37,7 +37,7 @@ class DailyTrackerController extends Controller
         )
         ->with([
             'proyek',
-            'aktivitasTugas'
+            'aktivitasTugas.karyawan'
         ])
         ->latest()
         ->get();
@@ -60,43 +60,49 @@ class DailyTrackerController extends Controller
     | DETAIL TASK
     |--------------------------------------------------------------------------
     */
+public function show(Tugas $task)
+{
 
-    public function show(Tugas $task)
+
+    $karyawan = Auth::user()->karyawan;
+
+
+    if(!$karyawan)
     {
-
-        $karyawan = Auth::user()->karyawan;
-
-
-        if(!$karyawan)
-        {
-            abort(403);
-        }
-
-
-
-        if($task->karyawan_id != $karyawan->id)
-        {
-            abort(403);
-        }
-
-
-
-        $task->load([
-            'proyek',
-            'aktivitasTugas'
-        ]);
-
-
-
-        return view(
-            'employee.tracker.show',
-            compact('task')
-        );
-
+        abort(403);
     }
 
 
 
+    if($task->karyawan_id != $karyawan->id)
+    {
+        abort(403);
+    }
+
+
+
+    $task->load([
+        'proyek',
+        'aktivitasTugas.karyawan'
+    ]);
+
+
+
+    $activities = $task->aktivitasTugas()
+        ->latest('tanggal')
+        ->get();
+
+
+
+    return view(
+        'employee.tracker.show',
+        compact(
+            'task',
+            'activities'
+        )
+    );
+
+}
 
 
     /*
@@ -161,9 +167,8 @@ class DailyTrackerController extends Controller
 
 
 
-        $task = Tugas::findOrFail(
-            $request->task_id
-        );
+        $task = Tugas::with('proyek')
+            ->findOrFail($request->task_id);
 
 
 
@@ -258,27 +263,28 @@ class DailyTrackerController extends Controller
             ->max('progres');
 
 
-
         $task->update([
-
             'progres_persen'=>$progressBaru ?? 0
-
         ]);
 
 
-/*
-|--------------------------------------------------------------------------
-| UPDATE STATUS OTOMATIS
-|--------------------------------------------------------------------------
-*/
 
 
-$task->updateStatus();
+        if($task->progres_persen >= 100)
+{
+    $task->status = 'selesai';
+}
+elseif($task->progres_persen > 0)
+{
+    $task->status = 'sedang_dikerjakan';
+}
+else
+{
+    $task->status = 'belum_dikerjakan';
+}
 
 
-
-
-
+$task->save();
 
 /*
 |--------------------------------------------------------------------------
@@ -286,36 +292,13 @@ $task->updateStatus();
 |--------------------------------------------------------------------------
 */
 
-
-$project = $task->proyek;
-
+        $project = $task->proyek;
 
 
-if($project)
-{
-
-
-    $progressProject = $project
-
-        ->tugas()
-
-        ->avg('progres_persen');
-
-
-
-    $project->update([
-
-        'progres_keseluruhan' =>
-
-        $progressProject ?? 0
-
-    ]);
-
-
-}
-
-
-
+        if($project)
+        {
+            $project->refresh();
+        }
 
 
 

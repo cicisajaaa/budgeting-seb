@@ -254,29 +254,46 @@ required>
 
 
 
-
 <style>
+
+/* ===============================
+GLOBAL
+================================ */
+
+.page-header-card,
+.project-summary,
+.glass-panel{
+
+    width:100%;
+
+}
+
+
+/* ===============================
+HEADER
+================================ */
 
 
 .page-header-card{
 
-background:white;
+    background:#f8fafc;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-border-radius:24px;
+    border-radius:24px;
 
-padding:30px;
+    padding:30px 32px;
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:25px;
+    margin-bottom:25px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -284,13 +301,13 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .page-label{
 
-font-size:11px;
+    font-size:11px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -298,11 +315,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-font-size:30px;
+    font-size:30px;
 
-margin:10px 0;
+    margin:10px 0;
 
-color:#172033;
+    color:#1e293b;
+
+    font-weight:800;
 
 }
 
@@ -310,120 +329,184 @@ color:#172033;
 
 .page-header-card p{
 
-color:#64748b;
+    margin:0;
 
-font-size:14px;
+    font-size:14px;
 
-margin:0;
+    color:#64748b;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .btn-back{
 
-background:#f8fafc;
+    background:white;
 
-border:1px solid #e2e8f0;
+    border:1px solid #e2e8f0;
 
-padding:11px 20px;
+    padding:11px 22px;
 
-border-radius:14px;
+    border-radius:14px;
 
-text-decoration:none;
+    color:#334155;
 
-color:#334155;
+    text-decoration:none;
 
-font-size:13px;
+    font-size:13px;
 
-font-weight:700;
+    font-weight:700;
+
+    transition:.2s;
 
 }
 
 
 
+.btn-back:hover{
+
+    background:#334155;
+
+    color:white;
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+PROJECT SUMMARY
+================================ */
 
 
 .project-summary{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e5e7eb;
 
-border-radius:24px;
+    border-radius:24px;
 
-padding:25px;
+    padding:28px;
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:25px;
+    margin-bottom:25px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.06);
+
+    position:relative;
+
+    overflow:hidden;
 
 }
+
+
+
+.project-summary::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
+
+}
+
+
 
 
 
 .project-info{
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-gap:15px;
+    gap:15px;
 
 }
+
+
 
 
 
 .project-icon{
 
-width:55px;
+    width:55px;
 
-height:55px;
+    height:55px;
 
-border-radius:16px;
+    border-radius:16px;
 
-background:#f1f5f9;
+    background:#f1f5f9;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
 
-justify-content:center;
+    align-items:center;
 
-font-size:25px;
+    font-size:24px;
 
 }
+
+
+
 
 
 
 .project-info span,
 .budget-status span{
 
-font-size:12px;
+    font-size:12px;
 
-color:#64748b;
+    color:#64748b;
 
 }
+
+
 
 
 
 .project-info h2{
 
-margin:5px 0;
+    margin:5px 0;
 
-font-size:22px;
+    font-size:22px;
 
-color:#172033;
+    color:#172033;
 
 }
+
+
 
 
 
@@ -431,94 +514,93 @@ color:#172033;
 
 .budget-status h2{
 
-font-size:28px;
+    margin-top:5px;
 
-margin:5px 0;
+    font-size:28px;
 
-color:#166534;
+    color:#334155;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+FORM CARD
+================================ */
 
 
 .glass-panel{
 
-background:white;
+    background:white;
 
-border:1px solid #e5e7eb;
+    border:1px solid #e5e7eb;
 
-border-radius:24px;
+    border-radius:24px;
 
-padding:30px;
+    padding:30px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+    box-shadow:
 
-max-width:700px;
+    0 10px 30px rgba(15,23,42,.06);
 
 }
+
+
+
 
 
 
 .panel-title{
 
-font-size:18px;
+    font-size:18px;
 
-font-weight:800;
+    font-weight:800;
 
-margin-bottom:25px;
+    color:#172033;
 
-color:#172033;
+    margin-bottom:25px;
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+FORM
+================================ */
 
 
 .form-group{
 
-display:flex;
+    display:flex;
 
-flex-direction:column;
+    flex-direction:column;
 
-margin-bottom:20px;
+    margin-bottom:22px;
 
 }
+
+
 
 
 
 .form-group label{
 
-font-size:13px;
+    font-size:12px;
 
-font-weight:700;
+    font-weight:800;
 
-color:#475569;
+    color:#475569;
 
-margin-bottom:8px;
-
-}
-
-
-
-
-
-select,
-input{
-
-height:48px;
-
-border-radius:14px;
-
-border:1px solid #dbe1e8;
-
-background:#f8fafc;
-
-padding:0 15px;
-
-font-size:14px;
+    margin-bottom:8px;
 
 }
 
@@ -526,90 +608,153 @@ font-size:14px;
 
 
 
-select:focus,
-input:focus{
+.form-group select,
+.form-group input{
 
-outline:none;
 
-border-color:#2563eb;
+    height:46px;
 
-background:white;
+    width:100%;
+
+    border-radius:14px;
+
+    border:1px solid #dbe1e8;
+
+    background:#f8fafc;
+
+    padding:0 15px;
+
+    font-size:13px;
+
+    color:#172033;
+
+    transition:.2s;
 
 }
 
 
 
+
+.form-group select:focus,
+.form-group input:focus{
+
+
+    outline:none;
+
+    background:white;
+
+    border-color:#334155;
+
+    box-shadow:
+
+    0 0 0 3px rgba(51,65,85,.12);
+
+}
+
+
+
+
+
+
+
+
+/* ===============================
+PERCENT INPUT
+================================ */
 
 
 .percent-input{
 
-display:flex;
+    display:flex;
 
 }
-
-
 
 
 
 .percent-input input{
 
-flex:1;
+    flex:1;
 
-border-radius:14px 0 0 14px;
+    border-radius:14px 0 0 14px;
 
 }
+
+
 
 
 
 .percent-input span{
 
-display:flex;
+    width:55px;
 
-align-items:center;
+    display:flex;
 
-padding:0 18px;
+    align-items:center;
 
-background:#f1f5f9;
+    justify-content:center;
 
-border-radius:0 14px 14px 0;
+    background:#f1f5f9;
 
-font-weight:700;
+    border:1px solid #dbe1e8;
+
+    border-left:none;
+
+    border-radius:0 14px 14px 0;
+
+    font-weight:800;
+
+    color:#475569;
 
 }
 
 
 
+
+
+
+
+
+/* ===============================
+BUTTON
+================================ */
 
 
 .form-action{
 
-display:flex;
+    margin-top:30px;
 
-justify-content:flex-end;
+    padding-top:20px;
 
-margin-top:25px;
+    border-top:1px solid #e2e8f0;
+
+    display:flex;
+
+    justify-content:flex-end;
 
 }
-
 
 
 
 
 .btn-save{
 
-border:none;
+    background:#1e293b;
 
-background:#1e293b;
+    color:white;
 
-color:white;
+    border:none;
 
-padding:13px 25px;
+    padding:13px 28px;
 
-border-radius:14px;
+    border-radius:14px;
 
-font-weight:800;
+    font-size:13px;
 
-cursor:pointer;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s;
 
 }
 
@@ -617,12 +762,21 @@ cursor:pointer;
 
 .btn-save:hover{
 
-background:#2563eb;
+    background:#b8863b;
+
+    transform:translateY(-2px);
 
 }
 
 
 
+
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:800px){
@@ -631,11 +785,30 @@ background:#2563eb;
 .page-header-card,
 .project-summary{
 
-flex-direction:column;
 
-align-items:flex-start;
+    flex-direction:column;
 
-gap:15px;
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+
+
+
+.form-action{
+
+    justify-content:stretch;
+
+}
+
+
+
+
+.btn-save{
+
+    width:100%;
 
 }
 

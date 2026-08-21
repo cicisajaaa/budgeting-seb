@@ -29,7 +29,31 @@
 
 </div>
 
+@if(session('success'))
 
+<div class="success-alert">
+
+{{session('success')}}
+
+</div>
+
+@endif
+
+
+
+@if($errors->any())
+
+<div class="alert-error">
+
+@foreach($errors->all() as $error)
+
+{{$error}}
+
+@endforeach
+
+</div>
+
+@endif
 
 
 
@@ -437,10 +461,10 @@ class="btn-edit">
 </a>
 
 
+@if($user->role != 'owner')
 
 <form method="POST"
 action="{{route('admin.users.destroy',$user->id)}}">
-
 
 @csrf
 
@@ -457,14 +481,17 @@ onclick="return confirm('Hapus user ini?')">
 
 </form>
 
+@else
 
+<button class="btn-delete" disabled>
+🔒 Owner Tidak Dapat Dihapus
+</button>
+
+@endif
 </div>
 
 
 </div>
-
-
-
 
 
 
@@ -473,36 +500,41 @@ onclick="return confirm('Hapus user ini?')">
 
 <style>
 
+/* ===============================
+GLOBAL
+================================ */
 
-.page-header-card,
-.profile-card,
-.glass-panel,
-.action-card{
-
-background:white;
-
-border:1px solid #e5e7eb;
-
-box-shadow:
-0 10px 30px rgba(15,23,42,.06);
-
+*{
+    box-sizing:border-box;
 }
 
 
 
+/* ===============================
+HEADER
+================================ */
+
+
 .page-header-card{
 
-padding:30px;
+    background:#f8fafc;
 
-border-radius:24px;
+    padding:25px;
 
-display:flex;
+    border-radius:24px;
 
-justify-content:space-between;
+    border:1px solid #e2e8f0;
 
-align-items:center;
+    margin-bottom:25px;
 
-margin-bottom:25px;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
 
 }
 
@@ -510,13 +542,13 @@ margin-bottom:25px;
 
 .page-label{
 
-font-size:11px;
+    font-size:10px;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-font-weight:800;
+    font-weight:800;
 
-color:#94a3b8;
+    color:#64748b;
 
 }
 
@@ -524,11 +556,13 @@ color:#94a3b8;
 
 .page-header-card h1{
 
-font-size:30px;
+    margin:8px 0;
 
-margin:10px 0;
+    font-size:24px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#1e293b;
 
 }
 
@@ -536,30 +570,57 @@ color:#172033;
 
 .page-header-card p{
 
-color:#64748b;
+    margin:0;
 
-font-size:14px;
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
 
+
+
+
+
+/* ===============================
+BACK
+================================ */
 
 
 .btn-back{
 
-background:#f8fafc;
+    display:flex;
 
-border:1px solid #e2e8f0;
+    align-items:center;
 
-padding:11px 20px;
+    justify-content:center;
 
-border-radius:14px;
+    background:white;
 
-text-decoration:none;
+    border:1px solid #e2e8f0;
 
-color:#475569;
+    color:#334155;
 
-font-weight:700;
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+}
+
+
+
+.btn-back:hover{
+
+    background:#334155;
+
+    color:white;
 
 }
 
@@ -567,19 +628,83 @@ font-weight:700;
 
 
 
+
+/* ===============================
+ALERT
+================================ */
+
+
+.success-alert,
+.alert-error{
+
+    padding:14px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+
+.success-alert{
+
+    background:#dcfce7;
+
+    border:1px solid #bbf7d0;
+
+    color:#166534;
+
+}
+
+
+
+.alert-error{
+
+    background:#fee2e2;
+
+    border:1px solid #fecaca;
+
+    color:#991b1b;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+PROFILE
+================================ */
+
+
 .profile-card{
 
-padding:28px;
+    background:white;
 
-border-radius:24px;
+    border:1px solid #e2e8f0;
 
-display:flex;
+    border-radius:24px;
 
-align-items:center;
+    padding:20px;
 
-gap:20px;
+    display:flex;
 
-margin-bottom:25px;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -587,25 +712,25 @@ margin-bottom:25px;
 
 .avatar{
 
-width:75px;
+    width:55px;
 
-height:75px;
+    height:55px;
 
-border-radius:22px;
+    border-radius:18px;
 
-background:#1e293b;
+    background:#334155;
 
-color:white;
+    color:white;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-font-size:30px;
+    font-size:22px;
 
-font-weight:800;
+    font-weight:800;
 
 }
 
@@ -613,11 +738,13 @@ font-weight:800;
 
 .profile-info h2{
 
-margin:0;
+    margin:0;
 
-font-size:25px;
+    font-size:20px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -625,7 +752,11 @@ color:#172033;
 
 .profile-info p{
 
-color:#64748b;
+    margin:6px 0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -633,107 +764,113 @@ color:#64748b;
 
 .role-badge{
 
-padding:7px 15px;
+    display:inline-flex;
 
-border-radius:999px;
+    padding:5px 12px;
 
-font-size:12px;
+    border-radius:999px;
 
-font-weight:800;
+    font-size:10px;
 
-}
-
-
-
-.role-badge.admin{
-
-background:#e0e7ff;
-
-color:#3730a3;
+    font-weight:800;
 
 }
 
 
-.role-badge.owner{
-
-background:#fef3c7;
-
-color:#92400e;
-
-}
 
 
-.role-badge.keuangan{
-
-background:#dbeafe;
-
-color:#1d4ed8;
-
-}
 
 
-.role-badge.karyawan{
-
-background:#dcfce7;
-
-color:#166534;
-
-}
-
-
+/* ===============================
+GRID
+================================ */
 
 
 .detail-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
 
-gap:20px;
-
-margin-bottom:15px;
+    gap:18px;
 
 }
+
+
+
+
+
+
+
+/* ===============================
+PANEL
+================================ */
 
 
 .glass-panel{
 
-padding:25px;
+    background:white;
 
-border-radius:24px;
+    border:1px solid #e2e8f0;
 
-margin-bottom:15px;
+    border-radius:22px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
 }
+
 
 
 .panel-title{
 
-font-size:18px;
+    font-size:15px;
 
-font-weight:800;
+    font-weight:800;
 
-margin-bottom:20px;
+    color:#172033;
 
-color:#172033;
+    padding-left:10px;
+
+    border-left:4px solid #334155;
+
+    margin-bottom:18px;
 
 }
 
 
 
+
+
+
+
+/* ===============================
+INFO ITEM
+================================ */
+
+
 .info-item{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-background:#f8fafc;
+    align-items:center;
 
-padding:15px;
+    background:#f8fafc;
 
-border-radius:14px;
+    border:1px solid #e2e8f0;
 
-margin-bottom:12px;
+    padding:12px;
+
+    border-radius:12px;
+
+    margin-bottom:10px;
 
 }
 
@@ -741,9 +878,9 @@ margin-bottom:12px;
 
 .info-item span{
 
-color:#64748b;
+    font-size:11px;
 
-font-size:13px;
+    color:#64748b;
 
 }
 
@@ -751,7 +888,9 @@ font-size:13px;
 
 .info-item strong{
 
-color:#172033;
+    font-size:12px;
+
+    color:#172033;
 
 }
 
@@ -759,41 +898,28 @@ color:#172033;
 
 .active{
 
-color:#16a34a!important;
+    color:#16a34a!important;
 
 }
 
 
 
-.empty{
-
-text-align:center;
-
-padding:35px;
-
-color:#94a3b8;
-
-}
 
 
 
-.empty div{
 
-font-size:35px;
-
-}
-
-
-
+/* ===============================
+STAT
+================================ */
 
 
 .stat-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:15px;
+    gap:15px;
 
 }
 
@@ -801,11 +927,13 @@ gap:15px;
 
 .stat-box{
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:20px;
+    border:1px solid #e2e8f0;
 
-border-radius:18px;
+    padding:16px;
+
+    border-radius:16px;
 
 }
 
@@ -813,9 +941,9 @@ border-radius:18px;
 
 .stat-box span{
 
-color:#64748b;
+    font-size:11px;
 
-font-size:13px;
+    color:#64748b;
 
 }
 
@@ -823,28 +951,40 @@ font-size:13px;
 
 .stat-box strong{
 
-display:block;
+    display:block;
 
-font-size:30px;
+    margin-top:7px;
 
-margin-top:8px;
+    font-size:22px;
 
-color:#172033;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
 
 
 
+
+
+
+/* ===============================
+ACTIVITY
+================================ */
+
+
 .activity-item{
 
-background:#f8fafc;
+    background:#f8fafc;
 
-padding:15px;
+    border:1px solid #e2e8f0;
 
-border-radius:15px;
+    padding:14px;
 
-margin-bottom:10px;
+    border-radius:14px;
+
+    margin-bottom:10px;
 
 }
 
@@ -852,7 +992,9 @@ margin-bottom:10px;
 
 .activity-item strong{
 
-color:#172033;
+    font-size:12px;
+
+    color:#172033;
 
 }
 
@@ -860,9 +1002,11 @@ color:#172033;
 
 .activity-item p{
 
-font-size:13px;
+    margin:5px 0;
 
-color:#64748b;
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -870,24 +1014,66 @@ color:#64748b;
 
 .activity-item small{
 
-color:#94a3b8;
+    font-size:10px;
+
+    color:#94a3b8;
 
 }
 
 
 
 
+
+
+
+/* ===============================
+ACTION
+================================ */
+
+
 .action-card{
 
-padding:25px;
+    background:white;
 
-border-radius:24px;
+    border:1px solid #e2e8f0;
 
-display:flex;
+    border-radius:22px;
 
-justify-content:space-between;
+    padding:20px;
 
-align-items:center;
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
+
+}
+
+
+
+.action-card h3{
+
+    margin:0;
+
+    font-size:15px;
+
+    color:#172033;
+
+}
+
+
+
+.action-card p{
+
+    margin:5px 0 0;
+
+    font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -895,9 +1081,9 @@ align-items:center;
 
 .action{
 
-display:flex;
+    display:flex;
 
-gap:10px;
+    gap:10px;
 
 }
 
@@ -906,17 +1092,19 @@ gap:10px;
 .btn-edit,
 .btn-delete{
 
-padding:12px 18px;
+    padding:10px 16px;
 
-border-radius:14px;
+    border-radius:12px;
 
-font-weight:800;
+    font-size:11px;
 
-border:none;
+    font-weight:700;
 
-cursor:pointer;
+    border:none;
 
-text-decoration:none;
+    cursor:pointer;
+
+    text-decoration:none;
 
 }
 
@@ -924,9 +1112,9 @@ text-decoration:none;
 
 .btn-edit{
 
-background:#dbeafe;
+    background:#dbeafe;
 
-color:#1d4ed8;
+    color:#2563eb;
 
 }
 
@@ -934,33 +1122,43 @@ color:#1d4ed8;
 
 .btn-delete{
 
-background:#fee2e2;
+    background:#fee2e2;
 
-color:#dc2626;
+    color:#dc2626;
 
 }
 
 
 
 
-@media(max-width:900px){
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:1000px){
+
 
 .detail-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
 
 
+
+.page-header-card,
 .profile-card,
-.action-card,
-.page-header-card{
+.action-card{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:flex-start;
+    align-items:flex-start;
 
-gap:20px;
+    gap:15px;
 
 }
 
@@ -968,13 +1166,29 @@ gap:20px;
 
 .stat-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
+
+}
+
+
+
+.action{
+
+    width:100%;
+
+}
+
+
+
+.btn-edit,
+.btn-delete{
+
+    width:100%;
 
 }
 
 
 }
-
 
 </style>
 

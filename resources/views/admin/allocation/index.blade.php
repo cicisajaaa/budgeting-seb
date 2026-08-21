@@ -520,17 +520,18 @@ Teralokasi
 
 
 <td>
-
 <div class="action">
 
 
 <a href="{{route('admin.allocation.edit',$allocation->id)}}"
 
-class="edit">
+class="action-edit"
+title="Edit">
 
-Edit
+✏️
 
 </a>
+
 
 
 
@@ -544,14 +545,15 @@ action="{{route('admin.allocation.destroy',$allocation->id)}}">
 @method('DELETE')
 
 
-
 <button
 
-class="delete"
+class="action-delete"
 
-onclick="return confirm('Hapus pembagian dana ini?')">
+onclick="return confirm('Hapus pembagian dana ini?')"
 
-Hapus
+title="Hapus">
+
+🗑️
 
 </button>
 
@@ -560,7 +562,6 @@ Hapus
 
 
 </div>
-
 
 </td>
 
@@ -601,26 +602,32 @@ Belum ada pembagian dana
 
 
 
-
-
-
-
 <style>
 
 /* ===============================
-HEADER CARD
+GLOBAL
 ================================ */
 
+.page-header-card,
+.project-summary,
+.glass-panel{
+    width:100%;
+}
+
+
+/* ===============================
+HEADER
+================================ */
 
 .page-header-card{
 
-    background:white;
+    background:#f8fafc;
 
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
 
-    border-radius:24px;
+    border-radius:22px;
 
-    padding:30px 32px;
+    padding:25px 30px;
 
     display:flex;
 
@@ -628,54 +635,49 @@ HEADER CARD
 
     align-items:center;
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
     box-shadow:
-
-    0 10px 30px rgba(15,23,42,.06);
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
-
 .page-label{
 
-    font-size:11px;
+    font-size:10px;
 
     letter-spacing:2px;
 
     font-weight:800;
 
-    color:#94a3b8;
+    color:#64748b;
 
 }
-
 
 
 .page-header-card h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
-
-    color:#172033;
+    font-size:24px;
 
     font-weight:800;
 
-}
+    color:#172033;
 
+}
 
 
 .page-header-card p{
 
     margin:0;
 
-    font-size:14px;
-
     color:#64748b;
 
-}
+    font-size:12px;
 
+}
 
 
 
@@ -683,37 +685,34 @@ HEADER CARD
 
 .btn-back{
 
-    background:#f8fafc;
+    background:white;
 
     border:1px solid #e2e8f0;
 
-    padding:11px 20px;
+    padding:10px 18px;
 
-    border-radius:14px;
-
-    text-decoration:none;
+    border-radius:12px;
 
     color:#334155;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
+
+    text-decoration:none;
 
     transition:.2s;
 
 }
 
 
-
 .btn-back:hover{
 
-    background:#1e293b;
+    background:#334155;
 
     color:white;
 
 }
-
-
 
 
 
@@ -726,36 +725,48 @@ PROJECT SUMMARY
 
 .project-summary{
 
-
     background:white;
-
 
     border:1px solid #e5e7eb;
 
+    border-radius:22px;
 
-    border-radius:24px;
-
-
-    padding:25px;
-
+    padding:22px 25px;
 
     display:flex;
 
-
     justify-content:space-between;
-
 
     align-items:center;
 
-
-    margin-bottom:22px;
-
+    margin-bottom:20px;
 
     box-shadow:
+    0 5px 20px rgba(15,23,42,.05);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
 
 
-    0 10px 30px rgba(15,23,42,.06);
 
+.project-summary::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
 
 }
 
@@ -765,87 +776,57 @@ PROJECT SUMMARY
 
 .project-info{
 
-
     display:flex;
-
 
     align-items:center;
 
-
-    gap:15px;
-
+    gap:14px;
 
 }
-
-
-
 
 
 .project-icon{
 
+    width:48px;
 
-    width:55px;
+    height:48px;
 
-
-    height:55px;
-
-
-    border-radius:16px;
-
+    border-radius:15px;
 
     background:#f1f5f9;
 
-
     display:flex;
-
 
     justify-content:center;
 
-
     align-items:center;
 
-
-    font-size:24px;
-
+    font-size:22px;
 
 }
-
-
 
 
 
 .project-info span,
 .budget-status span{
 
-
     color:#64748b;
 
-
-    font-size:12px;
-
+    font-size:11px;
 
 }
-
-
 
 
 
 .project-info h2{
 
+    margin:4px 0;
 
-    margin-top:5px;
-
+    font-size:19px;
 
     color:#172033;
 
-
-    font-size:22px;
-
-
 }
-
-
-
 
 
 
@@ -853,30 +834,20 @@ PROJECT SUMMARY
 
 .budget-status{
 
-
-    width:250px;
-
+    width:240px;
 
 }
-
-
-
 
 
 .budget-status h2{
 
+    margin:5px 0 10px;
 
-    font-size:28px;
-
-
-    margin:5px 0;
-
+    font-size:23px;
 
     color:#172033;
 
-
 }
-
 
 
 
@@ -886,41 +857,26 @@ PROJECT SUMMARY
 
 .progress-track{
 
-
-    height:10px;
-
+    height:8px;
 
     background:#e2e8f0;
 
-
     border-radius:20px;
-
 
     overflow:hidden;
 
-
 }
-
-
-
 
 
 .progress-track div{
 
-
     height:100%;
 
-
-    background:#22c55e;
-
+    background:#334155;
 
     border-radius:20px;
 
-
 }
-
-
-
 
 
 
@@ -931,113 +887,78 @@ PROJECT SUMMARY
 ALERT
 ================================ */
 
-
 .success-alert,
 .warning-alert,
 .error-alert{
 
+    padding:14px 16px;
 
-    padding:14px 18px;
-
-
-    border-radius:16px;
-
+    border-radius:14px;
 
     margin-bottom:18px;
 
-
-    font-size:13px;
-
+    font-size:12px;
 
     font-weight:700;
 
-
 }
-
 
 
 .success-alert{
 
-
-    background:#f0fdf4;
-
+    background:#dcfce7;
 
     border:1px solid #bbf7d0;
 
-
     color:#166534;
 
-
 }
-
 
 
 .warning-alert{
 
-
-    background:#fffbeb;
-
+    background:#fef3c7;
 
     border:1px solid #fde68a;
 
-
     color:#92400e;
 
-
 }
-
 
 
 .error-alert{
 
-
-    background:#fef2f2;
-
+    background:#fee2e2;
 
     border:1px solid #fecaca;
 
-
     color:#991b1b;
 
-
 }
-
-
-
-
 
 
 
 
 
 /* ===============================
-PANEL CARD
+PANEL
 ================================ */
 
 
 .glass-panel{
 
-
     background:white;
-
 
     border:1px solid #e5e7eb;
 
+    border-radius:22px;
 
-    border-radius:24px;
+    padding:22px;
 
-
-    padding:25px;
-
-
-    margin-bottom:22px;
-
+    margin-bottom:20px;
 
     box-shadow:
-
-
-    0 10px 30px rgba(15,23,42,.06);
-
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -1045,22 +966,19 @@ PANEL CARD
 
 .panel-title{
 
-
-    font-size:17px;
-
+    font-size:16px;
 
     font-weight:800;
 
-
     color:#172033;
 
+    padding-left:10px;
 
-    margin-bottom:22px;
+    border-left:4px solid #334155;
 
+    margin-bottom:18px;
 
 }
-
-
 
 
 
@@ -1075,114 +993,71 @@ FORM
 
 .allocation-form{
 
-
     display:grid;
-
 
     grid-template-columns:2fr 1fr auto;
 
-
-    gap:18px;
-
+    gap:15px;
 
     align-items:end;
 
-
 }
-
-
 
 
 
 .form-group{
 
-
     display:flex;
-
 
     flex-direction:column;
 
-
 }
-
-
 
 
 
 .form-group label{
 
-
-    font-size:12px;
-
+    font-size:11px;
 
     font-weight:700;
 
+    color:#64748b;
 
-    color:#475569;
-
-
-    margin-bottom:8px;
-
+    margin-bottom:7px;
 
 }
 
 
 
+.form-group select,
+.form-group input{
 
+    height:42px;
 
-
-select,
-input{
-
-
-    height:46px;
-
-
-    border-radius:14px;
-
+    border-radius:12px;
 
     border:1px solid #dbe1e8;
 
-
     background:#f8fafc;
-
 
     padding:0 14px;
 
+    font-size:12px;
 
-    font-size:14px;
+}
 
+
+
+.form-group select:focus,
+.form-group input:focus{
 
     outline:none;
 
-
-}
-
-
-
-
-
-select:focus,
-input:focus{
-
-
     background:white;
 
-
-    border-color:#2563eb;
-
-
-    box-shadow:
-
-
-    0 0 0 3px rgba(37,99,235,.12);
-
+    border-color:#334155;
 
 }
-
-
-
-
 
 
 
@@ -1190,59 +1065,41 @@ input:focus{
 
 .percent-input{
 
-
     display:flex;
 
-
 }
-
-
 
 
 
 .percent-input input{
 
-
     flex:1;
 
-
-    border-radius:14px 0 0 14px;
-
+    border-radius:12px 0 0 12px;
 
 }
-
-
 
 
 
 .percent-input span{
 
+    width:40px;
 
     display:flex;
 
+    justify-content:center;
 
     align-items:center;
 
-
-    padding:0 16px;
-
-
     background:#f1f5f9;
 
+    border-radius:0 12px 12px 0;
 
-    color:#475569;
-
+    font-size:12px;
 
     font-weight:800;
 
-
-    border-radius:0 14px 14px 0;
-
-
 }
-
-
-
 
 
 
@@ -1250,49 +1107,33 @@ input:focus{
 
 .btn-save{
 
+    height:42px;
 
-    height:46px;
+    padding:0 22px;
 
-
-    padding:0 25px;
-
-
-    border:none;
-
-
-    border-radius:14px;
-
-
-    background:#1e293b;
-
+    background:#334155;
 
     color:white;
 
+    border:none;
+
+    border-radius:12px;
+
+    font-size:12px;
 
     font-weight:800;
 
-
     cursor:pointer;
 
-
-    transition:.2s;
-
-
 }
-
-
 
 
 
 .btn-save:hover{
 
-
-    background:#2563eb;
-
+    background:#1e293b;
 
 }
-
-
 
 
 
@@ -1307,86 +1148,55 @@ TABLE
 
 .table-header{
 
-
     display:flex;
-
 
     justify-content:space-between;
 
-
     align-items:center;
 
-
-    margin-bottom:20px;
-
+    margin-bottom:15px;
 
 }
-
-
 
 
 
 .table-header h3{
 
-
     margin:0;
 
-
-    font-size:18px;
-
+    font-size:16px;
 
     color:#172033;
 
-
 }
-
-
 
 
 
 .table-header p{
 
+    margin:5px 0;
 
-    margin-top:5px;
-
-
-    font-size:13px;
-
+    font-size:12px;
 
     color:#64748b;
 
-
 }
-
-
 
 
 
 .total-project{
 
-
     background:#f1f5f9;
 
-
-    color:#334155;
-
-
-    padding:8px 16px;
-
+    padding:6px 14px;
 
     border-radius:999px;
 
-
-    font-size:12px;
-
+    font-size:11px;
 
     font-weight:700;
 
-
 }
-
-
-
 
 
 
@@ -1394,72 +1204,47 @@ TABLE
 
 table{
 
-
     width:100%;
-
 
     border-collapse:collapse;
 
-
 }
-
-
 
 
 
 th{
 
-
     background:#f8fafc;
 
-
-    padding:14px;
-
-
-    text-align:left;
-
+    padding:12px;
 
     color:#64748b;
 
+    font-size:11px;
 
-    font-size:12px;
-
+    text-align:left;
 
 }
-
-
 
 
 
 td{
 
+    padding:13px;
 
-    padding:15px;
+    border-bottom:1px solid #f1f5f9;
 
-
-    border-bottom:1px solid #e5e7eb;
-
-
-    font-size:13px;
-
+    font-size:12px;
 
 }
-
-
-
 
 
 
 tr:hover{
 
-
     background:#fafafa;
 
-
 }
-
-
-
 
 
 
@@ -1468,135 +1253,60 @@ tr:hover{
 
 .division-name{
 
-
     display:flex;
-
 
     align-items:center;
 
-
     gap:10px;
-
-
-    color:#172033;
-
 
     font-weight:700;
 
+    color:#172033;
 
 }
 
 
 
 
+.percentage,
+.allocated{
 
+    display:inline-flex;
 
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
 
 
 
 .percentage{
 
-
     background:#dcfce7;
-
 
     color:#166534;
 
-
-    padding:7px 14px;
-
-
-    border-radius:999px;
-
-
-    font-size:12px;
-
-
-    font-weight:800;
-
-
 }
-
-
-
-
-
 
 
 
 .allocated{
 
-
     background:#dbeafe;
-
 
     color:#1d4ed8;
 
-
-    padding:7px 14px;
-
-
-    border-radius:999px;
-
-
-    font-size:12px;
-
-
-    font-weight:700;
-
-
 }
 
 
-
-
-
-
-
-
-
-.delete{
-
-
-    border:none;
-
-
-    background:#fee2e2;
-
-
-    color:#dc2626;
-
-
-    padding:8px 14px;
-
-
-    border-radius:12px;
-
-
-    font-size:12px;
-
-
-    font-weight:700;
-
-
-    cursor:pointer;
-
-
-}
-
-
-
-.delete:hover{
-
-
-    background:#dc2626;
-
-
-    color:white;
-
-
-}
-
+/* ===============================
+ACTION BUTTON
+================================ */
 
 
 .action{
@@ -1619,21 +1329,29 @@ tr:hover{
 
 
 
-.edit{
+.action-edit,
+.action-delete{
 
-    background:#dbeafe;
 
-    color:#2563eb;
+    width:34px;
 
-    padding:8px 14px;
+    height:34px;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    font-size:12px;
+    display:flex;
 
-    font-weight:700;
+    align-items:center;
+
+    justify-content:center;
 
     text-decoration:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:14px;
 
     transition:.2s;
 
@@ -1641,7 +1359,19 @@ tr:hover{
 
 
 
-.edit:hover{
+
+
+.action-edit{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+
+
+.action-edit:hover{
 
     background:#2563eb;
 
@@ -1652,17 +1382,33 @@ tr:hover{
 
 
 
-.empty{
 
+.action-delete{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+
+
+.action-delete:hover{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+
+.empty{
 
     text-align:center;
 
-
-    padding:30px;
-
+    padding:35px;
 
     color:#94a3b8;
-
 
 }
 
@@ -1671,7 +1417,9 @@ tr:hover{
 
 
 
-
+/* ===============================
+RESPONSIVE
+================================ */
 
 
 @media(max-width:900px){
@@ -1679,52 +1427,52 @@ tr:hover{
 
 .page-header-card{
 
-
     flex-direction:column;
-
 
     align-items:flex-start;
 
-
-    gap:20px;
-
+    gap:15px;
 
 }
-
-
 
 
 
 .project-summary{
 
-
     flex-direction:column;
-
 
     align-items:flex-start;
 
-
     gap:20px;
-
 
 }
 
 
+
+.budget-status{
+
+    width:100%;
+
+}
 
 
 
 .allocation-form{
 
-
     grid-template-columns:1fr;
-
 
 }
 
+
+
+.action{
+
+    flex-direction:column;
+
+}
 
 
 }
 
 </style>
-
 @endsection
