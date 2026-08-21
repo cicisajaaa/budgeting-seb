@@ -80,7 +80,9 @@ Monitoring pekerjaan, progress project dan aktivitas harian.
             </label>
 
             <h2>
-                {{$employeeTasks->count()}}
+
+            {{$taskChart['progress']}}
+
             </h2>
 
             <small>
@@ -151,9 +153,14 @@ Monitoring pekerjaan, progress project dan aktivitas harian.
 
             <h2>
 
-                {{$employeeTasks
-                ->whereIn('status',['berjalan','progress'])
-                ->count()}}
+        {{$employeeTasks
+        ->whereIn('status',
+        [
+            'berjalan',
+            'progress',
+            'sedang_dikerjakan'
+        ])
+        ->count()}}
 
             </h2>
 
@@ -410,14 +417,23 @@ Belum ada project
 
 
 
-
-
 <span>
 
-{{$task->status}}
+@if(in_array($task->status,['selesai','done']))
+
+Selesai
+
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
+
+Sedang Dikerjakan
+
+@else
+
+Belum Dikerjakan
+
+@endif
 
 </span>
-
 
 
 </div>
@@ -964,10 +980,7 @@ Belum ada aktivitas
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-
 <script>
-
 
 const canvas = document.getElementById('taskChart');
 
@@ -975,147 +988,130 @@ const canvas = document.getElementById('taskChart');
 if(canvas){
 
 
-new Chart(canvas,{
+    new Chart(canvas, {
 
 
-type:'doughnut',
+        type:'doughnut',
 
 
-
-data:{
-
-
-labels:[
-
-'Selesai',
-
-'Berjalan',
-
-'Belum Dikerjakan'
-
-],
+        data:{
 
 
+            labels:[
 
-datasets:[{
+                'Selesai',
 
+                'Berjalan',
 
-data:[
+                'Belum Dikerjakan'
 
-
-{{$employeeTasks
-->whereIn('status',['selesai','done'])
-->count()}},
+            ],
 
 
 
-{{$employeeTasks
-->whereIn('status',['berjalan','progress'])
-->count()}},
+            datasets:[{
+
+
+                data:[
+
+                    {{$taskChart['done']}},
+
+                    {{$taskChart['progress']}},
+
+                    {{$taskChart['todo']}}
+
+                ],
 
 
 
-{{$employeeTasks
-->whereIn('status',['belum_dikerjakan','todo'])
-->count()}}
+                borderWidth:0,
+
+
+                backgroundColor:[
+
+                    '#22c55e',
+
+                    '#3b82f6',
+
+                    '#f59e0b'
+
+                ]
+
+
+            }]
+
+
+        },
 
 
 
-],
+        options:{
+
+
+            responsive:true,
+
+
+            maintainAspectRatio:false,
+
+
+            cutout:'70%',
 
 
 
-borderWidth:0,
+            plugins:{
 
 
-
-backgroundColor:[
-
-'#22c55e',
-
-'#3b82f6',
-
-'#f59e0b'
-
-]
+                legend:{
 
 
-
-}]
-
-
-},
+                    position:'bottom'
 
 
-
-options:{
-
-
-responsive:true,
+                }
 
 
-maintainAspectRatio:false,
+            }
 
 
-cutout:'70%',
+        }
 
 
-
-plugins:{
-
-
-legend:{
-
-
-position:'bottom'
+    });
 
 
 }
-
-
-}
-
-
-
-}
-
-
-
-});
-
-
-}
-
 
 
 </script>
-
 <style>
 
-/* ===============================
+/* =================================
 GLOBAL
-================================ */
+================================= */
 
 .employee-dashboard{
     width:100%;
 }
 
 
-/* ===============================
-WELCOME
-================================ */
+/* =================================
+HEADER OWNER STYLE
+================================= */
 
 .employee-welcome{
 
-    background:#ffffff;
+    background:#f8fafc;
 
-    border:1px solid #e2e8f0;
-
-    padding:32px;
+    padding:25px;
 
     border-radius:24px;
 
-    color:#172033;
+    border:1px solid #e2e8f0;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -1123,39 +1119,41 @@ WELCOME
 
     align-items:center;
 
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
 }
+
 
 
 .welcome-label{
 
-    font-size:11px;
+    font-size:10px;
+
+    font-weight:700;
 
     letter-spacing:2px;
 
     color:#64748b;
 
-    font-weight:800;
-
 }
+
 
 
 .employee-welcome h1{
 
-    font-size:30px;
+    margin:8px 0;
 
-    margin:10px 0;
+    font-size:24px;
 
-    color:#172033;
+    font-weight:800;
+
+    color:#1e293b;
 
 }
 
 
+
 .employee-welcome p{
+
+    font-size:12px;
 
     color:#64748b;
 
@@ -1164,65 +1162,71 @@ WELCOME
 }
 
 
+
 .welcome-tags{
 
     display:flex;
 
     gap:10px;
 
-    margin-top:18px;
+    margin-top:15px;
 
 }
+
 
 
 .welcome-tags span{
 
     background:#f1f5f9;
 
-    color:#334155;
-
-    padding:8px 15px;
+    padding:7px 12px;
 
     border-radius:20px;
 
-    font-size:12px;
+    font-size:11px;
+
+    color:#334155;
 
     font-weight:600;
 
 }
 
 
+
 .today-card{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
-    padding:12px 22px;
+    padding:10px 18px;
 
-    border-radius:30px;
+    border-radius:20px;
 
-    font-weight:800;
+    font-size:12px;
+
+    font-weight:700;
 
 }
 
 
 
 
-/* ===============================
-STATISTICS
-================================ */
+
+/* =================================
+STAT CARD
+================================= */
 
 
 .employee-stats{
 
     display:grid;
 
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-    gap:16px;
+    gap:15px;
 
-    margin-bottom:22px;
+    margin-bottom:20px;
 
 }
 
@@ -1232,11 +1236,15 @@ STATISTICS
 
     background:white;
 
-    border:1px solid #e2e8f0;
-
     padding:18px;
 
-    border-radius:20px;
+    border-radius:22px;
+
+    border:1px solid #e2e8f0;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
 
     display:flex;
 
@@ -1244,28 +1252,77 @@ STATISTICS
 
     gap:14px;
 
-    transition:.25s;
+    position:relative;
+
+    overflow:hidden;
 
 }
 
 
 
-.stat-card:hover{
+.stat-card::before{
 
-    transform:translateY(-3px);
+    content:"";
 
-    box-shadow:
-    0 10px 25px rgba(15,23,42,.08);
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
 
 }
+
+
+
+.stat-card:nth-child(1)::before{
+
+    background:#334155;
+
+}
+
+
+.stat-card:nth-child(2)::before{
+
+    background:#2563eb;
+
+}
+
+
+.stat-card:nth-child(3)::before{
+
+    background:#16a34a;
+
+}
+
+
+.stat-card:nth-child(4)::before{
+
+    background:#f59e0b;
+
+}
+
+
+
+.stat-card:nth-child(5)::before{
+
+    background:#7c3aed;
+
+}
+
 
 
 
 .stat-icon{
 
-    width:46px;
+    width:45px;
 
-    height:46px;
+    height:45px;
 
     border-radius:14px;
 
@@ -1275,35 +1332,47 @@ STATISTICS
 
     align-items:center;
 
-    font-size:20px;
+    font-size:18px;
 
 }
 
 
+
+
 .stat-icon.green{
+
     background:#dcfce7;
+
 }
 
 
 .stat-icon.blue{
+
     background:#dbeafe;
+
 }
 
 
 .stat-icon.orange{
+
     background:#fef3c7;
+
 }
 
 
 .stat-icon.purple{
+
     background:#ede9fe;
+
 }
+
+
 
 
 
 .stat-card label{
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748b;
 
@@ -1313,17 +1382,19 @@ STATISTICS
 
 .stat-card h2{
 
-    margin:5px 0;
+    margin:8px 0;
 
-    font-size:24px;
+    font-size:19px;
 
-    color:#172033;
+    color:#1e293b;
 
 }
 
 
 
 .stat-card small{
+
+    font-size:11px;
 
     color:#94a3b8;
 
@@ -1333,18 +1404,16 @@ STATISTICS
 
 
 
-/* ===============================
+/* =================================
 GRID
-================================ */
+================================= */
 
 
 .employee-grid{
 
     display:grid;
 
-    grid-template-columns:
-    minmax(0,2fr)
-    minmax(320px,1fr);
+    grid-template-columns:1.7fr 1fr;
 
     gap:20px;
 
@@ -1354,20 +1423,24 @@ GRID
 
 
 
-/* ===============================
-PANEL
-================================ */
+/* =================================
+PANEL OWNER STYLE
+================================= */
 
 
 .employee-panel{
 
     background:white;
 
+    padding:20px;
+
+    border-radius:24px;
+
     border:1px solid #e2e8f0;
 
-    padding:22px;
+    box-shadow:
 
-    border-radius:22px;
+    0 5px 20px rgba(15,23,42,.05);
 
     margin-bottom:20px;
 
@@ -1377,13 +1450,13 @@ PANEL
 
 .panel-header{
 
-    font-size:17px;
+    font-size:15px;
 
     font-weight:800;
 
-    color:#172033;
+    color:#1e293b;
 
-    margin-bottom:18px;
+    margin-bottom:15px;
 
 }
 
@@ -1391,20 +1464,20 @@ PANEL
 
 
 
-/* ===============================
-PROJECT
-================================ */
+/* =================================
+PROJECT PROGRESS
+================================= */
 
 
 .project-item{
 
     background:#f8fafc;
 
-    padding:16px;
+    padding:12px;
 
-    border-radius:16px;
+    border-radius:15px;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
 }
 
@@ -1416,7 +1489,17 @@ PROJECT
 
     justify-content:space-between;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
+
+}
+
+
+
+.project-top strong{
+
+    font-size:13px;
+
+    color:#1e293b;
 
 }
 
@@ -1424,15 +1507,19 @@ PROJECT
 
 .project-top span{
 
-    color:#15803d;
+    font-size:12px;
 
-    font-weight:800;
+    font-weight:700;
+
+    color:#166534;
 
 }
 
 
 
 .progress-bar{
+
+    width:100%;
 
     height:8px;
 
@@ -1450,13 +1537,9 @@ PROJECT
 
     height:100%;
 
-    background:
+    background:#16a34a;
 
-    linear-gradient(
-    90deg,
-    #16a34a,
-    #22c55e
-    );
+    border-radius:20px;
 
 }
 
@@ -1464,9 +1547,9 @@ PROJECT
 
 
 
-/* ===============================
+/* =================================
 TASK
-================================ */
+================================= */
 
 
 .task-row{
@@ -1477,15 +1560,15 @@ TASK
 
     align-items:center;
 
-    padding:15px;
+    padding:12px;
 
     background:#f8fafc;
 
+    border-radius:15px;
+
     border:1px solid #e2e8f0;
 
-    border-radius:16px;
-
-    margin-bottom:12px;
+    margin-bottom:10px;
 
 }
 
@@ -1493,9 +1576,9 @@ TASK
 
 .task-row strong{
 
-    font-size:14px;
+    font-size:13px;
 
-    color:#172033;
+    color:#1e293b;
 
 }
 
@@ -1505,7 +1588,7 @@ TASK
 
     margin:5px 0 0;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748b;
 
@@ -1515,15 +1598,15 @@ TASK
 
 .task-row span{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
     padding:6px 12px;
 
     border-radius:20px;
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
@@ -1533,80 +1616,9 @@ TASK
 
 
 
-/* ===============================
-CHART
-================================ */
-
-
-.chart-box{
-
-    height:220px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-}
-
-
-#taskChart{
-
-    max-width:190px!important;
-
-    max-height:190px!important;
-
-}
-
-
-
-
-
-/* ===============================
-INFO
-================================ */
-
-
-.info-row{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:14px 0;
-
-    border-bottom:1px solid #f1f5f9;
-
-}
-
-
-
-.info-row span{
-
-    color:#64748b;
-
-    font-size:13px;
-
-}
-
-
-
-.info-row b{
-
-    color:#15803d;
-
-    font-size:13px;
-
-}
-
-
-
-
-
-/* ===============================
+/* =================================
 DEADLINE
-================================ */
+================================= */
 
 
 .deadline-card{
@@ -1617,13 +1629,13 @@ DEADLINE
 
     align-items:center;
 
-    padding:15px;
+    padding:12px;
 
     background:#f8fafc;
 
-    border-radius:16px;
+    border-radius:15px;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
 }
 
@@ -1639,9 +1651,9 @@ DEADLINE
 
 .deadline-card p{
 
-    margin:5px 0 0;
+    margin:5px 0;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748b;
 
@@ -1651,15 +1663,15 @@ DEADLINE
 
 .deadline-date{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
-    padding:7px 13px;
+    padding:6px 12px;
 
     border-radius:20px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -1669,20 +1681,106 @@ DEADLINE
 
 
 
-/* ===============================
+/* =================================
+INFO
+================================= */
+
+
+.info-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+
+
+.info-row span{
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+
+
+.info-row b{
+
+    font-size:12px;
+
+    color:#1e293b;
+
+}
+
+
+
+.active-status{
+
+    background:#dcfce7;
+
+    color:#166534!important;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+}
+
+
+
+
+
+/* =================================
+CHART
+================================= */
+
+
+.chart-box{
+
+    height:200px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+#taskChart{
+
+    max-width:170px!important;
+
+    max-height:170px!important;
+
+}
+
+
+
+
+
+/* =================================
 ACTIVITY
-================================ */
+================================= */
 
 
 .activity-card{
 
     display:flex;
 
-    align-items:flex-start;
+    align-items:center;
 
     gap:15px;
 
-    padding:15px 0;
+    padding:12px 0;
 
     border-bottom:1px solid #f1f5f9;
 
@@ -1692,15 +1790,13 @@ ACTIVITY
 
 .activity-dot{
 
-    width:10px;
+    width:9px;
 
-    height:10px;
+    height:9px;
 
-    background:#22c55e;
+    background:#16a34a;
 
     border-radius:50%;
-
-    margin-top:7px;
 
 }
 
@@ -1713,26 +1809,30 @@ ACTIVITY
 }
 
 
+
 .activity-content strong{
 
-    font-size:14px;
+    font-size:13px;
 
 }
+
 
 
 .activity-content p{
 
     margin:5px 0;
 
-    font-size:13px;
+    font-size:12px;
 
-    color:#475569;
+    color:#64748b;
 
 }
 
 
 
 .activity-content small{
+
+    font-size:11px;
 
     color:#94a3b8;
 
@@ -1742,15 +1842,15 @@ ACTIVITY
 
 .activity-percent{
 
-    background:#ecfdf5;
+    background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
-    padding:6px 12px;
+    padding:5px 12px;
 
     border-radius:20px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -1760,38 +1860,33 @@ ACTIVITY
 
 
 
+/* =================================
+EMPTY
+================================= */
+
+
 .empty-data{
 
     text-align:center;
 
-    color:#94a3b8;
-
     padding:25px;
 
+    color:#94a3b8;
+
+    font-size:12px;
+
 }
 
 
 
 
 
-/* ===============================
+/* =================================
 RESPONSIVE
-================================ */
+================================= */
 
 
-@media(max-width:1300px){
-
-.employee-stats{
-
-    grid-template-columns:repeat(3,1fr);
-
-}
-
-}
-
-
-
-@media(max-width:900px){
+@media(max-width:1200px){
 
 
 .employee-stats{
@@ -1801,11 +1896,19 @@ RESPONSIVE
 }
 
 
+}
+
+
+
+@media(max-width:900px){
+
+
 .employee-grid{
 
     grid-template-columns:1fr;
 
 }
+
 
 
 .employee-welcome{
@@ -1814,13 +1917,13 @@ RESPONSIVE
 
     align-items:flex-start;
 
-    gap:20px;
+    gap:15px;
 
 }
 
 
-
 }
+
 
 
 @media(max-width:600px){
@@ -1831,6 +1934,7 @@ RESPONSIVE
     grid-template-columns:1fr;
 
 }
+
 
 
 .task-row,
@@ -1847,6 +1951,457 @@ RESPONSIVE
 
 }
 
+
+/* =================================
+EMPLOYEE DASHBOARD COMPACT MODE
+SAMA DENGAN OWNER
+================================= */
+
+
+/* HEADER */
+
+.employee-welcome{
+
+    padding:25px;
+
+    border-radius:24px;
+
+}
+
+
+
+.welcome-label{
+
+    font-size:10px;
+
+}
+
+
+
+.employee-welcome h1{
+
+    font-size:24px;
+
+    margin:8px 0;
+
+}
+
+
+
+.employee-welcome p{
+
+    font-size:12px;
+
+}
+
+
+
+.welcome-tags span{
+
+    font-size:10px;
+
+    padding:6px 10px;
+
+}
+
+
+
+.today-card{
+
+    font-size:11px;
+
+    padding:9px 16px;
+
+}
+
+
+
+
+
+/* =================================
+STAT CARD
+================================= */
+
+
+.employee-stats{
+
+    gap:15px;
+
+}
+
+
+
+.stat-card{
+
+    padding:18px;
+
+    border-radius:22px;
+
+}
+
+
+
+.stat-icon{
+
+    width:40px;
+
+    height:40px;
+
+    font-size:16px;
+
+}
+
+
+
+.stat-card label{
+
+    font-size:10px;
+
+}
+
+
+
+.stat-card h2{
+
+    font-size:19px;
+
+    margin:6px 0;
+
+}
+
+
+
+.stat-card small{
+
+    font-size:10px;
+
+}
+
+
+
+
+
+/* =================================
+PANEL
+================================= */
+
+
+.employee-panel{
+
+    padding:20px;
+
+    border-radius:24px;
+
+}
+
+
+
+.panel-header{
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+/* =================================
+PROJECT PROGRESS
+================================= */
+
+
+.project-item{
+
+    padding:12px;
+
+}
+
+
+
+.project-top strong{
+
+    font-size:12px;
+
+}
+
+
+
+.project-top span{
+
+    font-size:11px;
+
+}
+
+
+
+
+
+.progress-bar{
+
+    height:7px;
+
+}
+
+
+
+
+
+/* =================================
+TASK
+================================= */
+
+
+.task-row{
+
+    padding:12px;
+
+}
+
+
+
+.task-row strong{
+
+    font-size:12px;
+
+}
+
+
+
+.task-row p{
+
+    font-size:10px;
+
+}
+
+
+
+.task-row span{
+
+    font-size:10px;
+
+    padding:5px 10px;
+
+}
+
+
+
+
+
+/* =================================
+DEADLINE
+================================= */
+
+
+.deadline-card{
+
+    padding:12px;
+
+}
+
+
+
+.deadline-card strong{
+
+    font-size:12px;
+
+}
+
+
+
+.deadline-card p{
+
+    font-size:10px;
+
+}
+
+
+
+.deadline-date{
+
+    font-size:10px;
+
+    padding:5px 10px;
+
+}
+
+
+
+
+
+/* =================================
+INFO ACCOUNT
+================================= */
+
+
+.info-row{
+
+    padding:10px 0;
+
+}
+
+
+
+.info-row span{
+
+    font-size:11px;
+
+}
+
+
+
+.info-row b{
+
+    font-size:11px;
+
+}
+
+
+
+
+
+.active-status{
+
+    padding:4px 10px;
+
+    font-size:10px;
+
+}
+
+
+
+
+
+/* =================================
+CHART
+================================= */
+
+
+.chart-box{
+
+    height:180px;
+
+}
+
+
+#taskChart{
+
+    max-width:150px!important;
+
+    max-height:150px!important;
+
+}
+
+
+
+
+
+/* =================================
+ACTIVITY
+================================= */
+
+
+.activity-card{
+
+    gap:12px;
+
+    padding:10px 0;
+
+}
+
+
+
+.activity-dot{
+
+    width:8px;
+
+    height:8px;
+
+}
+
+
+
+.activity-content strong{
+
+    font-size:12px;
+
+}
+
+
+
+.activity-content p{
+
+    font-size:11px;
+
+}
+
+
+
+.activity-content small{
+
+    font-size:10px;
+
+}
+
+
+
+.activity-percent{
+
+    font-size:10px;
+
+    padding:5px 10px;
+
+}
+
+
+
+
+
+/* =================================
+EMPTY
+================================= */
+
+
+.empty-data{
+
+    font-size:11px;
+
+    padding:20px;
+
+}
+
+
+
+
+
+/* =================================
+RESPONSIVE
+================================= */
+
+
+@media(max-width:1200px){
+
+.employee-stats{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+
+
+@media(max-width:600px){
+
+.employee-stats{
+
+    grid-template-columns:1fr;
+
+}
+
+}
 
 </style>
 

@@ -38,33 +38,35 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-
-        $totalProject = Proyek::count();
-
+$totalProject = Proyek::count();
 
 
-        $totalProjectAktif = Proyek::where(
-            'progres_keseluruhan',
-            '<',
-            100
-        )->count();
+$allProjects = Proyek::with('tugas')->get();
 
 
 
+$totalProjectAktif = $allProjects
+    ->filter(function($project){
 
-        $totalBudget = Proyek::sum(
-            'total_anggaran'
-        );
+        return $project->progres_keseluruhan < 100;
 
-
-
-
-        $totalProjectProgress = Proyek::avg(
-            'progres_keseluruhan'
-        );
+    })
+    ->count();
 
 
 
+$totalBudget = Proyek::sum(
+    'total_anggaran'
+);
+
+
+
+$totalProjectProgress = $allProjects
+    ->avg(function($project){
+
+        return $project->progres_keseluruhan;
+
+    });
 
 
         $projects = Proyek::with([
@@ -191,6 +193,15 @@ class DashboardController extends Controller
 
         ->get();
         
+
+
+        $financeProjects = Proyek::select(
+            'nama_proyek',
+            'total_anggaran'
+        )
+        ->latest()
+        ->take(10)
+        ->get();
 /*
 |--------------------------------------------------------------------------
 | DATA KEUANGAN
@@ -203,29 +214,15 @@ $totalDeposit = SetoranProyek::sum(
 );
 
 
-$totalTransactionExpense = TransaksiDana::sum(
+$totalExpense = TransaksiDana::sum(
     'jumlah'
 );
 
-
-$totalActivityExpense = AktivitasTugas::sum(
-    'anggaran_aktivitas'
-);
-
-
-$totalExpense = 
-    $totalTransactionExpense 
-    +
-    $totalActivityExpense;
-
-
-
-$sisaDana = max(
-    $totalDeposit - $totalExpense,
-    0
-);
-
-
+$sisaDana = RekeningBank::where(
+    'status',
+    true
+)
+->sum('saldo');
 
 $budgetUsage = 0;
 
@@ -485,21 +482,30 @@ if($user->role == 'karyawan')
     |--------------------------------------------------------------------------
     */
 
+    $employeeProjects = Proyek::whereHas(
 
-    $employeeProjects = $user
+        'tugas',
+        
+        function($query) use ($user){
 
-        ->projects()
+            $query->where(
 
-        ->with([
+                'karyawan_id',
 
-            'tugas.aktivitasTugas'
+                $user->karyawan->id
 
-        ])
+            );
 
-        ->latest()
+        }
+    )
+    ->with([
 
-        ->get();
+        'tugas.aktivitasTugas'
 
+    ])
+    ->latest()
+
+    ->get();
 
 
 
@@ -511,12 +517,11 @@ if($user->role == 'karyawan')
     |--------------------------------------------------------------------------
     */
 
+    $employeeTasks = Tugas::where(
 
-    $employeeTasks = Tugas::whereIn(
+        'karyawan_id',
 
-        'proyek_id',
-
-        $employeeProjects->pluck('id')
+        $user->karyawan->id
 
     )
 
@@ -525,15 +530,10 @@ if($user->role == 'karyawan')
         'proyek',
 
         'aktivitasTugas'
-
     ])
-
     ->latest()
 
     ->get();
-
-
-
 
 
 
@@ -543,78 +543,54 @@ if($user->role == 'karyawan')
     | STATUS TASK
     |--------------------------------------------------------------------------
     */
+$taskChart = [
 
+    'done'=>$employeeTasks
+        ->filter(function($task){
 
-    $taskChart = [
+            return in_array(
+                $task->status,
+                [
+                    'selesai',
+                    'done'
+                ]
+            );
 
-
-        'done'=>$employeeTasks
-
-        ->whereIn(
-
-            'status',
-
-            [
-
-                'selesai',
-
-                'done'
-
-            ]
-
-        )
-
+        })
         ->count(),
 
 
+    'progress'=>$employeeTasks
+        ->filter(function($task){
 
+            return in_array(
+                $task->status,
+                [
+                    'berjalan',
+                    'progress',
+                    'sedang_dikerjakan'
+                ]
+            );
 
-        'progress'=>$employeeTasks
-
-        ->whereIn(
-
-            'status',
-
-            [
-
-                'berjalan',
-
-                'progress',
-
-                'sedang_dikerjakan'
-
-            ]
-
-        )
-
+        })
         ->count(),
 
 
+    'todo'=>$employeeTasks
+        ->filter(function($task){
 
+            return in_array(
+                $task->status,
+                [
+                    'belum_dikerjakan',
+                    'todo'
+                ]
+            );
 
-        'todo'=>$employeeTasks
-
-        ->whereIn(
-
-            'status',
-
-            [
-
-                'belum_dikerjakan',
-
-                'todo'
-
-            ]
-
-        )
-
+        })
         ->count(),
 
-
-    ];
-
-
-
+];
 
 
 
@@ -862,6 +838,8 @@ if($user->role == 'karyawan')
 
 
             'totalBudget'=>$totalBudget,
+            
+            'financeProjects'=>$financeProjects,
 
 
             'totalProjectProgress'=>round(
@@ -921,7 +899,7 @@ if($user->role == 'karyawan')
             'totalExpense'=>$totalExpense,
 
 
-            'totalBudgetActivity'=>$totalActivityExpense,
+            'totalBudgetActivity'=>0,
 
 
             'budgetUsage'=>$budgetUsage,

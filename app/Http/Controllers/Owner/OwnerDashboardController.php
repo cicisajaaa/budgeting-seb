@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 
+
 use App\Models\Proyek;
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseRequest;
+use App\Models\PengajuanDana;
+use App\Models\TransaksiDana;
 use App\Models\Tugas;
+use App\Models\AktivitasTugas;
 
 
 
@@ -28,16 +30,37 @@ class OwnerDashboardController extends Controller
 
 
         $projects = Proyek::with([
+
             'tugas',
-            'aktivitasTugas'
+            'aktivitasTugas',
+            'perusahaan'
+
         ])
+
         ->latest()
+
         ->get();
 
+
+$financeProjects = $projects->map(function($project){
+
+    return [
+
+        'nama' => $project->nama_proyek,
+
+        'budget' => $project->total_anggaran,
+
+        'realisasi' => $project->total_realisasi,
+
+    ];
+
+});
 
 
 
         $totalProject = $projects->count();
+
+
 
 
 
@@ -52,11 +75,15 @@ class OwnerDashboardController extends Controller
 
 
 
-        $progressProject = $projects->avg(function($project){
 
-            return $project->progres_keseluruhan ?? 0;
 
-        });
+        $progressProject = round(
+            $projects->avg(function($project){
+
+                return $project->progres_keseluruhan ?? 0;
+
+            })
+        );
 
 
 
@@ -72,20 +99,80 @@ class OwnerDashboardController extends Controller
         */
 
 
-        $totalDeposit = ProjectDeposit::sum(
-            'jumlah_setoran'
-        );
+        // Dana yang benar-benar sudah dicairkan finance
 
+        $totalRealisasi = TransaksiDana::sum(
 
-
-        $totalExpense = ExpenseRequest::sum(
             'jumlah'
+
         );
 
 
 
-        $sisaDana = $totalDeposit - $totalExpense;
 
+
+        // Sisa seluruh budget proyek
+
+       $sisaBudgetProyek = $totalBudget - $totalRealisasi;
+
+
+
+
+
+
+
+        // Total pengajuan yang sudah disetujui
+
+        $totalApprovedExpense = PengajuanDana::where(
+
+            'status',
+
+            'approved'
+
+        )
+
+        ->sum('jumlah');
+
+
+
+
+
+
+
+        // Pengajuan yang masih menunggu approval
+
+        $pendingApproval = PengajuanDana::where(
+
+            'status',
+
+            'pending'
+
+        )
+
+        ->count();
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROJECT BUDGET MONITORING
+        |--------------------------------------------------------------------------
+        */
+
+
+        $criticalProjects = $projects->filter(function($project){
+
+
+            return $project->persentase_budget >= 90;
+
+
+        });
 
 
 
@@ -105,37 +192,36 @@ class OwnerDashboardController extends Controller
 
 
 
+
+
+
         $taskSelesai = Tugas::where(
+
             'status',
+
             'selesai'
+
         )
+
         ->count();
+
+
+
 
 
 
 
         $taskBerjalan = Tugas::where(
+
             'status',
+
             'sedang_dikerjakan'
+
         )
+
         ->count();
 
 
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | APPROVAL
-        |--------------------------------------------------------------------------
-        */
-
-
-        $pendingApproval = ExpenseRequest::where(
-            'status',
-            'pending'
-        )
-        ->count();
 
 
 
@@ -149,14 +235,18 @@ class OwnerDashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $recentTasks = AktivitasTugas::with([
 
-        $recentTasks = Tugas::with([
-            'proyek',
-            'karyawan',
-            'aktivitasTugas'
+            'tugas.proyek',
+
+            'karyawan'
+
         ])
+
         ->latest()
+
         ->take(5)
+
         ->get();
 
 
@@ -165,35 +255,65 @@ class OwnerDashboardController extends Controller
 
 
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
+
+
         return view(
+
             'dashboard.owner',
+
             compact(
+
 
                 'projects',
 
+
                 'totalProject',
+
 
                 'totalBudget',
 
-                'totalDeposit',
 
-                'totalExpense',
+                'totalRealisasi',
 
-                'sisaDana',
+
+                'sisaBudgetProyek',
+
+
+                'totalApprovedExpense',
+
 
                 'progressProject',
 
-                'totalTask',
-
-                'taskSelesai',
-
-                'taskBerjalan',
 
                 'pendingApproval',
 
-                'recentTasks'
+
+                'criticalProjects',
+
+
+                'totalTask',
+
+
+                'taskSelesai',
+
+
+                'taskBerjalan',
+
+
+                'recentTasks',
+
+                'financeProjects'
+
+
 
             )
+
         );
 
 

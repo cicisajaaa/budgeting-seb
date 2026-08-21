@@ -682,7 +682,16 @@ Saldo Divisi
 </a>
 
 
+<a href="{{route('finance.distribution')}}"
+class="{{request()->routeIs('finance.distribution')?'active':''}}">
 
+<div class="icon">
+📤
+</div>
+
+Distribusi Dana
+
+</a>
 
 
 <a href="{{route('expense.approval')}}"
@@ -698,13 +707,24 @@ Approval Dana
 @if(auth()->user()->unreadNotifications->count())
 
 <span class="menu-badge">
-
 {{auth()->user()->unreadNotifications->count()}}
-
 </span>
 
 @endif
 
+
+</a>
+
+
+
+<a href="{{route('expense.approval.history')}}"
+class="{{request()->routeIs('expense.approval.history')?'active':''}}">
+
+<div class="icon">
+📄
+</div>
+
+Riwayat Approval
 
 </a>
 

@@ -1,59 +1,24 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
 
 
-{{-- ================= WELCOME ================= --}}
+{{-- HEADER --}}
+<div class="dashboard-header">
 
-<div class="welcome-card">
-
-    <div>
-
-        <div class="welcome-label">
-            DASHBOARD ADMIN
-        </div>
+<span class="label">
+DASHBOARD ADMIN
+</span>
 
 
-        <h1>
-            Selamat Datang, {{auth()->user()->name}}
-        </h1>
+<h1>
+Dashboard Administrator
+</h1>
 
 
-        <p>
-            Monitoring pengguna, proyek, pengajuan dana, dan aktivitas sistem perusahaan.
-        </p>
-
-
-        <div class="welcome-tags">
-
-            <span>
-                ✓ User Management
-            </span>
-
-            <span>
-                ✓ Project Monitoring
-            </span>
-
-            <span>
-                ✓ Financial Control
-            </span>
-
-        </div>
-
-
-    </div>
-
-
-
-
-    <div class="welcome-status">
-
-        <span></span>
-
-        Sistem Aktif
-
-    </div>
+<p>
+Monitoring pengguna, project, keuangan, dan aktivitas sistem perusahaan.
+</p>
 
 
 </div>
@@ -62,34 +27,23 @@
 
 
 
-{{-- ================= STATISTIK ================= --}}
+{{-- KPI --}}
+<div class="kpi-grid">
 
 
-<div class="stat-grid">
+<div class="kpi-card">
 
+<span>
+Total Pengguna
+</span>
 
+<h2 class="blue">
+{{$totalUser}}
+</h2>
 
-<div class="stat-card">
-
-    <div class="stat-icon">
-        👥
-    </div>
-
-    <div>
-
-        <label>
-            Total Pengguna
-        </label>
-
-        <h2>
-            {{$totalUser}}
-        </h2>
-
-        <small>
-            Akun terdaftar
-        </small>
-
-    </div>
+<small>
+Akun terdaftar
+</small>
 
 </div>
 
@@ -97,27 +51,19 @@
 
 
 
-<div class="stat-card">
+<div class="kpi-card">
 
-    <div class="stat-icon">
-        📁
-    </div>
+<span>
+Total Project
+</span>
 
-    <div>
+<h2 class="gold">
+{{$totalProject}}
+</h2>
 
-        <label>
-            Total Project
-        </label>
-
-        <h2>
-            {{$totalProject}}
-        </h2>
-
-        <small>
-            Project sistem
-        </small>
-
-    </div>
+<small>
+Project perusahaan
+</small>
 
 </div>
 
@@ -125,27 +71,19 @@
 
 
 
-<div class="stat-card">
+<div class="kpi-card">
 
-    <div class="stat-icon">
-        🏢
-    </div>
+<span>
+Total Divisi
+</span>
 
-    <div>
+<h2 class="purple">
+{{$totalDivision}}
+</h2>
 
-        <label>
-            Total Divisi
-        </label>
-
-        <h2>
-            {{$totalDivision}}
-        </h2>
-
-        <small>
-            Unit organisasi
-        </small>
-
-    </div>
+<small>
+Unit organisasi
+</small>
 
 </div>
 
@@ -153,27 +91,19 @@
 
 
 
-<div class="stat-card">
+<div class="kpi-card">
 
-    <div class="stat-icon">
-        📝
-    </div>
+<span>
+Total Task
+</span>
 
-    <div>
+<h2 class="green">
+{{$totalTask}}
+</h2>
 
-        <label>
-            Total Task
-        </label>
-
-        <h2>
-            {{$totalTask}}
-        </h2>
-
-        <small>
-            Pekerjaan sistem
-        </small>
-
-    </div>
+<small>
+Aktivitas pekerjaan
+</small>
 
 </div>
 
@@ -181,27 +111,20 @@
 
 
 
-<div class="stat-card">
 
-    <div class="stat-icon money">
-        💰
-    </div>
+<div class="kpi-card">
 
-    <div>
+<span>
+Total Budget
+</span>
 
-        <label>
-            Pengajuan Dana
-        </label>
+<h2>
+Rp {{number_format($totalBudget,0,',','.')}}
+</h2>
 
-        <h2>
-            {{$totalExpenseRequest}}
-        </h2>
-
-        <small>
-            Total pengajuan
-        </small>
-
-    </div>
+<small>
+Seluruh project
+</small>
 
 </div>
 
@@ -209,64 +132,95 @@
 
 
 
-<div class="stat-card">
+<div class="kpi-card">
 
-    <div class="stat-icon pending">
-        ⏳
-    </div>
+<span>
+Realisasi Dana
+</span>
 
-    <div>
+<h2 class="red">
+Rp {{number_format($totalRealisasi,0,',','.')}}
+</h2>
 
-        <label>
-            Pending Approval
-        </label>
-
-        <h2>
-            {{$totalPendingExpense}}
-        </h2>
-
-        <small>
-            Menunggu finance
-        </small>
-
-    </div>
-
-</div>
-
-
+<small>
+Dana terpakai
+</small>
 
 </div>
 
 
 
 
-{{-- ================= CONTENT GRID ================= --}}
+
+<div class="kpi-card">
+
+<span>
+Sisa Budget
+</span>
+
+<h2 class="green">
+Rp {{number_format($sisaBudget,0,',','.')}}
+</h2>
+
+<small>
+Dana tersedia
+</small>
+
+</div>
+
+
+
+
+
+<div class="kpi-card">
+
+<span>
+Pending Approval
+</span>
+
+<h2 class="orange">
+{{$totalPendingExpense}}
+</h2>
+
+<small>
+Menunggu verifikasi
+</small>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+{{-- GRID CONTENT --}}
 
 <div class="dashboard-grid">
 
 
-{{-- ================= LEFT SIDE ================= --}}
 
 <div>
 
 
-{{-- MONITORING DANA --}}
 
-<div class="glass-panel">
+<div class="panel">
 
 
-<div class="panel-title">
-📊 Monitoring Pengajuan Dana
-</div>
+<h3>
+💰 Monitoring Pengajuan Dana
+</h3>
 
 
 
 <div class="info-row">
 
 <span>
-Menunggu Approval
+Pending
 </span>
-
 
 <b>
 {{$totalPendingExpense}}
@@ -276,20 +230,17 @@ Menunggu Approval
 
 
 
-
 <div class="info-row">
 
 <span>
 Disetujui
 </span>
 
-
-<b>
+<b class="green-text">
 {{$totalApprovedExpense}}
 </b>
 
 </div>
-
 
 
 
@@ -299,14 +250,68 @@ Disetujui
 Ditolak
 </span>
 
-
-<b>
+<b class="red-text">
 {{$totalRejectedExpense}}
 </b>
 
 </div>
 
 
+</div>
+
+
+
+
+
+
+
+
+<div class="panel">
+
+
+<h3>
+📁 Project Warning Budget
+</h3>
+
+
+@forelse($projectWarning as $project)
+
+
+<div class="project-item">
+
+
+<div>
+
+<strong>
+{{$project->nama_proyek}}
+</strong>
+
+
+<p>
+{{$project->perusahaan->nama_perusahaan ?? '-'}}
+</p>
+
+
+</div>
+
+
+<span>
+{{$project->persentase_budget}}%
+</span>
+
+
+</div>
+
+
+@empty
+
+<div class="empty">
+Semua budget project aman
+</div>
+
+
+@endforelse
+
 
 </div>
 
@@ -316,28 +321,22 @@ Ditolak
 
 
 
-{{-- PROJECT TERBARU --}}
+
+<div class="panel">
 
 
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
+<h3>
 📁 Project Terbaru
-
-</div>
-
+</h3>
 
 
 @forelse($recentProjects as $project)
 
 
-<div class="project-row">
+<div class="project-item">
 
 
 <div>
-
 
 <strong>
 {{$project->nama_proyek}}
@@ -352,7 +351,6 @@ Ditolak
 </div>
 
 
-
 <span>
 Project
 </span>
@@ -361,14 +359,10 @@ Project
 </div>
 
 
-
 @empty
 
-
 <div class="empty">
-
 Belum ada project
-
 </div>
 
 
@@ -380,256 +374,44 @@ Belum ada project
 
 
 
-
-
-
-
-
-{{-- RINGKASAN SISTEM --}}
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
-📊 Ringkasan Sistem
-
-</div>
-
-
-
-<div class="system-summary">
-
-
-
-<div class="summary-item">
-
-
-<div class="summary-icon">
-
-👥
-
-</div>
-
-
-
-<div>
-
-<span>
-Pengguna
-</span>
-
-
-<strong>
-{{$totalUser}}
-</strong>
-
-
-<small>
-Akun terdaftar
-</small>
-
-
-</div>
-
-
-
 </div>
 
 
 
 
 
-
-<div class="summary-item">
-
-
-<div class="summary-icon blue">
-
-📁
-
-</div>
-
-
-
-<div>
-
-<span>
-Project
-</span>
-
-
-<strong>
-{{$totalProject}}
-</strong>
-
-
-<small>
-Project perusahaan
-</small>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="summary-item">
-
-
-<div class="summary-icon green">
-
-📝
-
-</div>
-
-
-
-<div>
-
-<span>
-Task
-</span>
-
-
-<strong>
-{{$totalTask}}
-</strong>
-
-
-<small>
-Aktivitas pekerjaan
-</small>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="summary-item">
-
-
-<div class="summary-icon gold">
-
-🏢
-
-</div>
-
-
-
-<div>
-
-<span>
-Divisi
-</span>
-
-
-<strong>
-{{$totalDivision}}
-</strong>
-
-
-<small>
-Unit organisasi
-</small>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- ================= RIGHT SIDE ================= --}}
 
 
 <div>
 
 
 
-{{-- STATUS OPERASIONAL --}}
+<div class="panel">
+
+
+<h3>
+📌 Status Sistem
+</h3>
 
 
 
-<div class="glass-panel">
+<div class="system-item">
 
-
-<div class="panel-title">
-
-📌 Status Operasional Sistem
-
-</div>
-
-
-
-<div class="monitor-box">
-
-
-
-
-
-<div class="monitor-item">
-
-
-<div class="monitor-icon green">
-
+<div class="icon green-bg">
 ✓
-
 </div>
 
 
 <div>
 
 <strong>
-
-Sistem Berjalan Normal
-
+Sistem Aktif
 </strong>
 
-
 <p>
-
-Seluruh layanan utama aktif
-
+Seluruh layanan berjalan normal
 </p>
 
-
 </div>
 
 
@@ -639,33 +421,23 @@ Seluruh layanan utama aktif
 
 
 
+<div class="system-item">
 
-<div class="monitor-item">
-
-
-<div class="monitor-icon blue">
-
-📊
-
+<div class="icon blue-bg">
+👥
 </div>
 
 
 <div>
 
 <strong>
-
-{{$totalProject}} Project
-
+{{$totalUser}} User
 </strong>
 
-
 <p>
-
-Project sedang dimonitor
-
+Pengguna terdaftar
 </p>
 
-
 </div>
 
 
@@ -675,160 +447,75 @@ Project sedang dimonitor
 
 
 
+<div class="system-item">
 
-<div class="monitor-item">
-
-
-<div class="monitor-icon orange">
-
+<div class="icon orange-bg">
 ⏳
-
 </div>
 
 
 <div>
 
 <strong>
-
 {{$totalPendingExpense}} Pending
-
 </strong>
 
-
 <p>
-
-Menunggu approval dana
-
+Menunggu approval
 </p>
 
-
 </div>
 
 
 </div>
 
 
+</div>
 
 
 
 
-<div class="monitor-item">
 
 
-<div class="monitor-icon purple">
 
-📝
+<div class="panel">
 
+
+<h3>
+📝 Aktivitas Sistem Terbaru
+</h3>
+
+
+
+@forelse($recentAudit as $audit)
+
+
+<div class="audit-item">
+
+
+<div class="number">
+{{$loop->iteration}}
 </div>
 
 
 <div>
 
-<strong>
-
-{{$totalTask}} Task
-
-</strong>
-
-
-<p>
-
-Aktivitas pekerjaan sistem
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-{{-- AKTIVITAS SISTEM --}}
-
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
-📌 Aktivitas Sistem Terbaru
-
-</div>
-
-
-
-
-
-@forelse($recentAudit->take(5) as $audit)
-
-
-
-<div class="activity">
-
-
-<div class="activity-number">
-
-{{$loop->iteration}}
-
-</div>
-
-
-
-<div class="activity-content">
-
 
 <strong>
-
 {{$audit->aksi}}
-
 </strong>
 
 
-
 <p>
-
 {{$audit->deskripsi}}
-
 </p>
 
 
-
-
-<div class="activity-meta">
-
-
-<span>
-
-👤 {{$audit->pengguna->name ?? 'System'}}
-
-</span>
-
-
-<span>
-
-🕒 {{$audit->created_at->format('d M Y H:i')}}
-
-</span>
-
-
-
-</div>
+<small>
+{{$audit->pengguna->name ?? 'System'}}
+•
+{{$audit->created_at->format('d M Y H:i')}}
+</small>
 
 
 </div>
@@ -841,19 +528,14 @@ Aktivitas pekerjaan sistem
 
 @empty
 
-
 <div class="empty">
-
 Belum ada aktivitas
-
 </div>
-
 
 
 @endforelse
 
 
-
 </div>
 
 
@@ -862,67 +544,43 @@ Belum ada aktivitas
 
 
 
-
 </div>
+
 
 <style>
 
-/* ===============================
+/* =================================
 GLOBAL
-================================ */
+================================= */
 
-.welcome-card,
-.stat-card,
-.glass-panel{
-
-    background:white;
-
-    border:1px solid #e5e7eb;
-
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.06);
-
+*{
+    box-sizing:border-box;
 }
 
 
-/* ===============================
-WELCOME
-================================ */
+/* =================================
+HEADER
+================================= */
 
+.dashboard-header{
 
-.welcome-card{
+    background:#f8fafc;
 
     padding:30px;
 
-    border-radius:24px;
+    border-radius:20px;
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
+    border:1px solid #e2e8f0;
 
     margin-bottom:25px;
 
-    color:#172033;
-
-    position:relative;
-
-    overflow:hidden;
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
-
-.welcome-card::before{
-
-    content:none;
-
-}
-
-
-
-.welcome-label{
+.label{
 
     font-size:11px;
 
@@ -936,53 +594,27 @@ WELCOME
 
 
 
-.welcome-card h1{
-
-    font-size:28px;
+.dashboard-header h1{
 
     margin:10px 0;
 
-    color:#172033;
+    font-size:28px;
+
+    color:#1e293b;
+
+    font-weight:800;
 
 }
 
 
 
-.welcome-card p{
+.dashboard-header p{
 
     color:#64748b;
 
     font-size:14px;
 
-}
-
-
-
-.welcome-tags{
-
-    display:flex;
-
-    gap:10px;
-
-    margin-top:15px;
-
-}
-
-
-
-.welcome-tags span{
-
-    background:#f8f3ea;
-
-    color:#8b5e22;
-
-    padding:6px 14px;
-
-    border-radius:20px;
-
-    font-size:11px;
-
-    font-weight:700;
+    margin:0;
 
 }
 
@@ -990,59 +622,18 @@ WELCOME
 
 
 
-.welcome-status{
-
-    background:#f8fafc;
-
-    color:#334155;
-
-    padding:12px 18px;
-
-    border-radius:999px;
-
-    font-weight:700;
-
-    display:flex;
-
-    gap:8px;
-
-    align-items:center;
-
-    font-size:13px;
-
-}
+/* =================================
+KPI
+================================= */
 
 
-
-.welcome-status span{
-
-    width:8px;
-
-    height:8px;
-
-    background:#22c55e;
-
-    border-radius:50%;
-
-}
-
-
-
-
-
-
-/* ===============================
-STATISTIC
-================================ */
-
-
-.stat-grid{
+.kpi-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-    gap:18px;
+    gap:20px;
 
     margin-bottom:25px;
 
@@ -1050,64 +641,53 @@ STATISTIC
 
 
 
+.kpi-card{
 
-.stat-card{
+    background:white;
 
-    padding:20px;
+    padding:22px;
 
-    border-radius:20px;
+    border-radius:18px;
 
-    display:flex;
+    border:1px solid #e2e8f0;
 
-    align-items:center;
+    box-shadow:
 
-    gap:15px;
+    0 5px 20px rgba(15,23,42,.05);
 
-}
+    position:relative;
 
-
-
-.stat-icon{
-
-    width:45px;
-
-    height:45px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:14px;
-
-    background:#f8f3ea;
-
-    font-size:20px;
+    overflow:hidden;
 
 }
 
 
 
-.stat-icon.money{
+.kpi-card::before{
 
-    background:#fef3c7;
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#334155;
 
 }
 
 
 
-.stat-icon.pending{
-
-    background:#fee2e2;
-
-}
-
-
-
-.stat-card label{
+.kpi-card span{
 
     font-size:12px;
+
+    font-weight:700;
 
     color:#64748b;
 
@@ -1115,19 +695,21 @@ STATISTIC
 
 
 
-.stat-card h2{
+.kpi-card h2{
 
-    margin:5px 0;
+    margin:10px 0;
 
-    font-size:24px;
+    font-size:23px;
 
-    color:#172033;
+    font-weight:800;
+
+    color:#1e293b;
 
 }
 
 
 
-.stat-card small{
+.kpi-card small{
 
     font-size:11px;
 
@@ -1137,12 +719,53 @@ STATISTIC
 
 
 
+.blue{
+
+    color:#2563eb!important;
+
+}
+
+
+.green{
+
+    color:#16a34a!important;
+
+}
+
+
+.red{
+
+    color:#dc2626!important;
+
+}
+
+
+.orange{
+
+    color:#d97706!important;
+
+}
+
+
+.gold{
+
+    color:#8b5e22!important;
+
+}
+
+
+.purple{
+
+    color:#7c3aed!important;
+
+}
 
 
 
-/* ===============================
-CONTENT
-================================ */
+
+/* =================================
+LAYOUT
+================================= */
 
 
 .dashboard-grid{
@@ -1159,29 +782,41 @@ CONTENT
 
 
 
-.glass-panel{
 
-    border-radius:24px;
+/* =================================
+PANEL
+================================= */
+
+
+.panel{
+
+    background:white;
 
     padding:25px;
 
+    border-radius:20px;
+
+    border:1px solid #e2e8f0;
+
+    box-shadow:
+
+    0 5px 20px rgba(15,23,42,.05);
+
     margin-bottom:20px;
 
 }
 
 
 
+.panel h3{
 
-
-.panel-title{
+    margin:0 0 20px;
 
     font-size:17px;
 
+    color:#1e293b;
+
     font-weight:800;
-
-    color:#172033;
-
-    margin-bottom:20px;
 
 }
 
@@ -1190,9 +825,10 @@ CONTENT
 
 
 
-/* ===============================
-FINANCE MONITOR
-================================ */
+
+/* =================================
+INFO
+================================= */
 
 
 .info-row{
@@ -1201,9 +837,17 @@ FINANCE MONITOR
 
     justify-content:space-between;
 
-    padding:14px 0;
+    padding:15px 0;
 
-    border-bottom:1px solid #e5e7eb;
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+
+
+.info-row:last-child{
+
+    border-bottom:none;
 
 }
 
@@ -1221,7 +865,23 @@ FINANCE MONITOR
 
 .info-row b{
 
-    color:#8b5e22;
+    color:#334155;
+
+}
+
+
+
+.green-text{
+
+    color:#16a34a!important;
+
+}
+
+
+
+.red-text{
+
+    color:#dc2626!important;
 
 }
 
@@ -1229,12 +889,12 @@ FINANCE MONITOR
 
 
 
-/* ===============================
-PROJECT LIST
-================================ */
+/* =================================
+PROJECT ITEM
+================================= */
 
 
-.project-row{
+.project-item{
 
     display:flex;
 
@@ -1246,27 +906,27 @@ PROJECT LIST
 
     padding:15px;
 
-    border-radius:16px;
+    border-radius:15px;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
 
 }
 
 
 
-.project-row strong{
+.project-item strong{
 
     font-size:13px;
 
-    color:#172033;
+    color:#1e293b;
 
 }
 
 
 
-.project-row p{
+.project-item p{
 
-    margin-top:5px;
+    margin:5px 0 0;
 
     font-size:11px;
 
@@ -1276,13 +936,13 @@ PROJECT LIST
 
 
 
-.project-row span{
+.project-item span{
 
-    background:#f8f3ea;
+    background:#fef3c7;
 
-    color:#8b5e22;
+    color:#92400e;
 
-    padding:5px 12px;
+    padding:6px 12px;
 
     border-radius:20px;
 
@@ -1294,402 +954,204 @@ PROJECT LIST
 
 
 
-/* ===============================
-SYSTEM MONITOR
-================================ */
 
 
-.monitor-box{
+/* =================================
+SYSTEM
+================================= */
 
-display:flex;
 
-flex-direction:column;
-
-gap:12px;
-
-}
-
-
-
-.monitor-item{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-background:#f8fafc;
-
-padding:15px;
-
-border-radius:16px;
-
-}
-
-
-
-.monitor-icon{
-
-width:42px;
-
-height:42px;
-
-border-radius:14px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:18px;
-
-font-weight:800;
-
-}
-
-
-
-.monitor-icon.green{
-
-background:#dcfce7;
-
-color:#166534;
-
-}
-
-
-
-.monitor-icon.blue{
-
-background:#dbeafe;
-
-color:#2563eb;
-
-}
-
-
-
-.monitor-icon.orange{
-
-background:#fef3c7;
-
-color:#92400e;
-
-}
-
-
-
-.monitor-icon.purple{
-
-background:#ede9fe;
-
-color:#7c3aed;
-
-}
-
-
-
-
-.monitor-item strong{
-
-font-size:13px;
-
-color:#172033;
-
-display:block;
-
-}
-
-
-
-.monitor-item p{
-
-margin-top:4px;
-
-font-size:11px;
-
-color:#64748b;
-
-}
-
-/* ===============================
-SYSTEM SUMMARY
-================================ */
-
-
-.system-summary{
-
-display:flex;
-
-flex-direction:column;
-
-gap:12px;
-
-}
-
-
-
-
-
-.summary-item{
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-padding:14px;
-
-background:#f8fafc;
-
-border-radius:16px;
-
-border:1px solid #f1f5f9;
-
-}
-
-
-
-
-
-.summary-icon{
-
-width:40px;
-
-height:40px;
-
-border-radius:12px;
-
-background:#f8f3ea;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:18px;
-
-}
-
-
-
-.summary-icon.blue{
-
-background:#dbeafe;
-
-}
-
-
-
-.summary-icon.green{
-
-background:#dcfce7;
-
-}
-
-
-
-.summary-icon.gold{
-
-background:#fef3c7;
-
-}
-
-
-
-
-.summary-item span{
-
-display:block;
-
-font-size:11px;
-
-color:#64748b;
-
-}
-
-
-
-
-.summary-item strong{
-
-display:block;
-
-font-size:20px;
-
-color:#172033;
-
-line-height:1.2;
-
-}
-
-
-
-
-.summary-item small{
-
-font-size:10px;
-
-color:#94a3b8;
-
-}
-
-
-
-/* ===============================
-AUDIT
-================================ */
-
-
-.activity{
+.system-item{
 
     display:flex;
 
-    gap:12px;
+    align-items:center;
 
-    padding:14px 0;
+    gap:15px;
 
-    border-bottom:1px solid #e5e7eb;
+    padding:15px;
 
-}
+    background:#f8fafc;
 
-.activity{
+    border-radius:15px;
 
-display:flex;
-
-gap:15px;
-
-padding:15px 0;
-
-border-bottom:1px solid #e5e7eb;
+    margin-bottom:12px;
 
 }
 
 
 
-.activity-number{
+.icon{
 
-width:32px;
+    width:42px;
 
-height:32px;
+    height:42px;
 
-border-radius:50%;
+    border-radius:12px;
 
-background:#f8f3ea;
+    display:flex;
 
-color:#8b5e22;
+    align-items:center;
 
-display:flex;
+    justify-content:center;
 
-align-items:center;
-
-justify-content:center;
-
-font-size:12px;
-
-font-weight:800;
-
-flex-shrink:0;
+    font-weight:800;
 
 }
 
 
 
-.activity-content strong{
+.green-bg{
 
-font-size:13px;
+    background:#dcfce7;
 
-color:#172033;
-
-}
-
-
-
-.activity-content p{
-
-margin:5px 0;
-
-font-size:12px;
-
-color:#64748b;
-
-line-height:1.5;
+    color:#166534;
 
 }
 
 
 
-.activity-meta{
+.blue-bg{
 
-display:flex;
+    background:#dbeafe;
 
-gap:15px;
-
-font-size:11px;
-
-color:#94a3b8;
-
-}
-
-.activity-dot{
-
-    width:9px;
-
-    height:9px;
-
-    background:#b8863b;
-
-    border-radius:50%;
-
-    margin-top:5px;
+    color:#2563eb;
 
 }
 
 
 
-.activity strong{
+.orange-bg{
 
-    color:#172033;
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.system-item strong{
 
     font-size:13px;
 
-}
-
-
-
-.activity p{
-
-    color:#64748b;
-
-    font-size:12px;
-
-    margin:5px 0;
+    color:#1e293b;
 
 }
 
 
 
-.activity small{
+.system-item p{
 
-    color:#94a3b8;
+    margin:5px 0 0;
 
     font-size:11px;
 
+    color:#64748b;
+
 }
 
 
 
+
+
+/* =================================
+AUDIT
+================================= */
+
+
+.audit-item{
+
+    display:flex;
+
+    gap:15px;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+
+
+.audit-item:last-child{
+
+    border-bottom:none;
+
+}
+
+
+
+.number{
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:50%;
+
+    background:#f8f3ea;
+
+    color:#8b5e22;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:12px;
+
+    font-weight:800;
+
+}
+
+
+
+.audit-item strong{
+
+    font-size:13px;
+
+    color:#1e293b;
+
+}
+
+
+
+.audit-item p{
+
+    margin:5px 0;
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+
+
+.audit-item small{
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
+/* =================================
+EMPTY
+================================= */
 
 
 .empty{
 
     text-align:center;
 
-    padding:25px;
+    padding:30px;
 
     color:#94a3b8;
 
@@ -1701,15 +1163,15 @@ color:#94a3b8;
 
 
 
-/* ===============================
+/* =================================
 RESPONSIVE
-================================ */
+================================= */
 
 
-@media(max-width:1100px){
+@media(max-width:1200px){
 
 
-.stat-grid{
+.kpi-grid{
 
     grid-template-columns:repeat(2,1fr);
 
@@ -1731,18 +1193,6 @@ RESPONSIVE
 
 
 
-.welcome-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:20px;
-
-}
-
-
-
 }
 
 
@@ -1750,7 +1200,7 @@ RESPONSIVE
 @media(max-width:600px){
 
 
-.stat-grid{
+.kpi-grid{
 
     grid-template-columns:1fr;
 
@@ -1759,6 +1209,340 @@ RESPONSIVE
 
 }
 
+/* =================================
+MATCH OWNER DASHBOARD SIZE
+================================= */
 
+
+/* HEADER */
+
+.dashboard-header{
+
+    padding:25px;
+
+    border-radius:24px;
+
+}
+
+
+
+.label{
+
+    font-size:10px;
+
+}
+
+
+
+.dashboard-header h1{
+
+    font-size:24px;
+
+    margin:8px 0;
+
+}
+
+
+
+.dashboard-header p{
+
+    font-size:12px;
+
+}
+
+
+
+/* =================================
+KPI CARD
+================================= */
+
+
+.kpi-grid{
+
+    gap:15px;
+
+}
+
+
+
+.kpi-card{
+
+    padding:18px;
+
+    border-radius:22px;
+
+}
+
+
+
+.kpi-card span{
+
+    font-size:11px;
+
+}
+
+
+
+.kpi-card h2{
+
+    font-size:19px;
+
+    margin:8px 0;
+
+}
+
+
+
+.kpi-card small{
+
+    font-size:10px;
+
+}
+
+
+
+
+
+/* =================================
+CONTENT PANEL
+================================= */
+
+
+.panel{
+
+    padding:20px;
+
+    border-radius:24px;
+
+}
+
+
+
+.panel h3{
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+/* =================================
+INFO ROW
+================================= */
+
+
+.info-row{
+
+    padding:12px 0;
+
+}
+
+
+
+.info-row span{
+
+    font-size:12px;
+
+}
+
+
+
+.info-row b{
+
+    font-size:13px;
+
+}
+
+
+
+
+
+/* =================================
+PROJECT WARNING
+================================= */
+
+
+.project-item{
+
+    padding:12px;
+
+    border-radius:14px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.project-item strong{
+
+    font-size:12px;
+
+}
+
+
+
+.project-item p{
+
+    font-size:10px;
+
+}
+
+
+
+.project-item span{
+
+    font-size:10px;
+
+    padding:5px 10px;
+
+}
+
+
+
+
+
+/* =================================
+SYSTEM STATUS
+================================= */
+
+
+.system-item{
+
+    padding:12px;
+
+    gap:12px;
+
+}
+
+
+
+.icon{
+
+    width:38px;
+
+    height:38px;
+
+    font-size:14px;
+
+}
+
+
+
+.system-item strong{
+
+    font-size:12px;
+
+}
+
+
+
+.system-item p{
+
+    font-size:10px;
+
+}
+
+
+
+
+
+/* =================================
+AUDIT
+================================= */
+
+
+.audit-item{
+
+    gap:12px;
+
+    padding:12px 0;
+
+}
+
+
+
+.number{
+
+    width:28px;
+
+    height:28px;
+
+    font-size:11px;
+
+}
+
+
+
+.audit-item strong{
+
+    font-size:12px;
+
+}
+
+
+
+.audit-item p{
+
+    font-size:11px;
+
+}
+
+
+
+.audit-item small{
+
+    font-size:10px;
+
+}
+
+
+
+
+
+/* =================================
+EMPTY
+================================= */
+
+
+.empty{
+
+    padding:25px;
+
+    font-size:12px;
+
+}
+
+
+
+/* =================================
+RESPONSIVE
+================================= */
+
+
+@media(max-width:1200px){
+
+.kpi-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+
+@media(max-width:600px){
+
+.kpi-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+}
 </style>
 @endsection

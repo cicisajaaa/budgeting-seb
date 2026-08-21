@@ -8,6 +8,7 @@ use App\Models\Proyek;
 use App\Models\Divisi;
 use App\Models\Tugas;
 use App\Models\PengajuanDana;
+use App\Models\TransaksiDana;
 use App\Models\LogAudit;
 
 
@@ -43,7 +44,26 @@ class AdminDashboardController extends Controller
 
 
 
+/*
+|--------------------------------------------------------------------------
+| STATISTIK BUDGET PROJECT
+|--------------------------------------------------------------------------
+*/
 
+
+$totalBudget = Proyek::sum(
+    'total_anggaran'
+);
+
+
+
+$totalRealisasi = TransaksiDana::sum(
+    'jumlah'
+);
+
+
+
+$sisaBudget = $totalBudget - $totalRealisasi;
 
 
 
@@ -154,7 +174,34 @@ class AdminDashboardController extends Controller
 
 
 
+/*
+|--------------------------------------------------------------------------
+| PROJECT WARNING BUDGET
+|--------------------------------------------------------------------------
+*/
 
+
+$projectWarning = Proyek::with(
+
+    'perusahaan'
+
+)
+
+->get()
+
+->filter(function($project){
+
+    return $project->persentase_budget >= 75;
+
+})
+
+->sortByDesc(
+
+    'persentase_budget'
+
+)
+
+->take(5);
 
 
 
@@ -188,6 +235,14 @@ class AdminDashboardController extends Controller
 
                 'totalRejectedExpense',
 
+
+                'totalBudget',
+
+                'totalRealisasi',
+
+                'sisaBudget',
+
+                'projectWarning',
 
                 'recentUsers',
 

@@ -11,11 +11,11 @@
 DASHBOARD UTAMA
 </span>
 
-
 <h1>
 Selamat Datang, {{auth()->user()->name}}
 </h1>
 
+<div class="header-line"></div>
 
 <p>
 Pemantauan kondisi proyek, keuangan, dan aktivitas perusahaan secara menyeluruh.
@@ -83,19 +83,16 @@ Nilai keseluruhan proyek
 </div>
 
 
-
-
-
 <div class="summary-card">
 
 <span>
-Dana Masuk
+Dana Terealisasi
 </span>
 
 
 <h2>
 Rp {{number_format(
-$totalDeposit ?? 0,
+$totalRealisasi ?? 0,
 0,
 ',',
 '.'
@@ -104,26 +101,23 @@ $totalDeposit ?? 0,
 
 
 <p>
-Pembayaran pelanggan
+Dana yang sudah dicairkan
 </p>
 
 
 </div>
 
 
-
-
-
 <div class="summary-card">
 
 <span>
-Pengeluaran
+Total Dana Disetujui
 </span>
 
 
 <h2>
 Rp {{number_format(
-$totalExpense ?? 0,
+$totalApprovedExpense ?? 0,
 0,
 ',',
 '.'
@@ -132,12 +126,11 @@ $totalExpense ?? 0,
 
 
 <p>
-Dana digunakan
+Total dana approval
 </p>
 
 
 </div>
-
 
 
 </div>
@@ -157,16 +150,15 @@ Dana digunakan
 
 
 <div class="summary-card">
-
 <span>
-Saldo Perusahaan
+Sisa Budget Proyek
 </span>
 
 
 <h2 class="green">
 
 Rp {{number_format(
-$sisaDana ?? 0,
+$sisaBudgetProyek ?? 0,
 0,
 ',',
 '.'
@@ -176,9 +168,8 @@ $sisaDana ?? 0,
 
 
 <p>
-Dana tersedia
+Anggaran proyek yang belum digunakan
 </p>
-
 
 </div>
 
@@ -276,7 +267,6 @@ Menunggu persetujuan
 
 
 
-
 {{-- ================= KEUANGAN ================= --}}
 
 
@@ -288,7 +278,7 @@ Menunggu persetujuan
 
 
 <h3>
-📊 Ringkasan Keuangan
+Ringkasan Keuangan
 </h3>
 
 
@@ -298,14 +288,14 @@ Menunggu persetujuan
 <div class="finance-row">
 
 <span>
-Dana Masuk
+Dana Terealisasi
 </span>
 
 
 <strong class="green">
 
 Rp {{number_format(
-$totalDeposit ?? 0,
+$totalRealisasi ?? 0,
 0,
 ',',
 '.'
@@ -323,14 +313,14 @@ $totalDeposit ?? 0,
 <div class="finance-row">
 
 <span>
-Pengeluaran
+Total Approval Dana
 </span>
 
 
 <strong class="red">
 
 Rp {{number_format(
-$totalExpense ?? 0,
+$totalApprovedExpense ?? 0,
 0,
 ',',
 '.'
@@ -346,23 +336,21 @@ $totalExpense ?? 0,
 
 
 <div class="finance-row">
-
 <span>
-Saldo
+Sisa Budget
 </span>
 
 
 <strong class="green">
 
 Rp {{number_format(
-$sisaDana ?? 0,
+$sisaBudgetProyek ?? 0,
 0,
 ',',
 '.'
 )}}
 
 </strong>
-
 
 </div>
 
@@ -382,7 +370,7 @@ $sisaDana ?? 0,
 
 
 <h3>
-📌 Kondisi Perusahaan
+Kondisi Perusahaan
 </h3>
 
 
@@ -464,7 +452,7 @@ Task Selesai
 
 
 <h3>
-📁 Pemantauan Proyek
+Pemantauan Proyek
 </h3>
 
 
@@ -517,28 +505,74 @@ Status
 
 <tr>
 
-
 <td>
 
 <strong>
 
+<a href="{{ route('owner.project.detail',$project->id) }}"
+style="text-decoration:none;color:#1e293b">
+
 {{$project->nama_proyek}}
+
+</a>
 
 </strong>
 
-
 </td>
-
-
-
-
 
 <td>
 
-{{$project->progres_keseluruhan ?? 0}}%
+
+@php
+
+$progress = $project->progres_keseluruhan ?? 0;
+
+@endphp
+
+
+<div class="progress-wrapper">
+
+
+<div class="progress-bar">
+
+
+<div class="progress-fill
+
+@if($progress >= 80)
+
+progress-green
+
+@elseif($progress >= 50)
+
+progress-blue
+
+@else
+
+progress-yellow
+
+@endif"
+
+style="width:{{ $progress }}%">
+
+</div>
+
+
+</div>
+
+
+
+<span class="progress-number">
+
+{{ $progress }}%
+
+</span>
+
+
+
+</div>
+
 
 </td>
-
 
 
 
@@ -552,47 +586,28 @@ $project->total_anggaran ?? 0,
 '.'
 )}}
 
+<br>
+
+<small>
+Terpakai:
+{{ $project->persentase_budget ?? 0 }}%
+</small>
+
 </td>
-
-
-
-
-
 
 
 <td>
 
+<span class="status {{ $project->health_status['color'] }}">
 
-@if(($project->progres_keseluruhan ?? 0)>=100)
+<span class="status-dot"></span>
 
+{{ $project->health_status['label'] }}
 
-<span class="status selesai">
-Selesai
 </span>
-
-
-@elseif(($project->progres_keseluruhan ?? 0)>0)
-
-
-<span class="status berjalan">
-Berjalan
-</span>
-
-
-@else
-
-
-<span class="status pending">
-Belum Mulai
-</span>
-
-
-@endif
 
 
 </td>
-
-
 
 </tr>
 
@@ -620,7 +635,6 @@ Belum ada project
 
 </tbody>
 
-
 </table>
 
 
@@ -628,8 +642,46 @@ Belum ada project
 
 
 
+<div class="chart-grid">
 
 
+<div class="panel">
+
+<h3>
+Grafik Progress Proyek
+</h3>
+
+
+<div style="height:230px">
+
+<canvas id="projectProgressChart"></canvas>
+
+</div>
+
+
+</div>
+
+
+
+<div class="panel">
+
+<h3>
+Keuangan
+</h3>
+
+
+<div style="height:230px">
+
+<canvas id="financeChart"></canvas>
+
+</div>
+
+
+</div>
+
+
+
+</div>
 
 
 
@@ -642,7 +694,7 @@ Belum ada project
 
 
 <h3>
-📝 Aktivitas Pekerjaan Terbaru
+Aktivitas Pekerjaan Terbaru
 </h3>
 
 
@@ -690,7 +742,7 @@ Tanggal
 
 
 
-@forelse($recentTasks ?? [] as $task)
+@forelse($recentTasks ?? [] as $activity)
 
 
 
@@ -701,7 +753,7 @@ Tanggal
 
 <strong>
 
-{{$task->nama_tugas}}
+{{$activity->tugas->nama_tugas ?? '-'}}
 
 </strong>
 
@@ -714,7 +766,7 @@ Tanggal
 
 <td>
 
-{{$task->proyek->nama_proyek ?? '-'}}
+{{$activity->tugas->proyek->nama_proyek ?? '-'}}
 
 </td>
 
@@ -724,8 +776,7 @@ Tanggal
 
 <td>
 
-{{$task->karyawan->nama_karyawan ?? '-'}}
-
+{{$activity->karyawan->nama_karyawan ?? '-'}}
 </td>
 
 
@@ -734,8 +785,8 @@ Tanggal
 
 <td>
 
-{{$task->created_at
-? $task->created_at->format('d M Y')
+{{$activity->created_at
+? $activity->created_at->format('d M Y')
 : '-'}}
 
 </td>
@@ -785,20 +836,19 @@ Belum ada aktivitas
 
 <style>
 
-
 .dashboard-header{
 
-background:white;
+background:#f8fafc;
 
-padding:28px;
+padding:30px;
 
-border-radius:18px;
+border-radius:20px;
 
 border:1px solid #e2e8f0;
 
 margin-bottom:25px;
 
-box-shadow:0 5px 20px rgba(15,23,42,.05);
+box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -812,10 +862,9 @@ font-weight:700;
 
 letter-spacing:2px;
 
-color:#a67c2e;
+color:#64748b;
 
 }
-
 
 
 .dashboard-header h1{
@@ -868,8 +917,18 @@ border:1px solid #e2e8f0;
 
 box-shadow:0 5px 20px rgba(15,23,42,.05);
 
+transition:.3s;
+
 }
 
+
+.summary-card:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 10px 30px rgba(15,23,42,.08);
+
+}
 
 
 .summary-card span{
@@ -888,7 +947,7 @@ margin-top:10px;
 
 font-size:24px;
 
-color:#6b4f1d;
+color:#1e293b;
 
 }
 
@@ -902,7 +961,24 @@ color:#94a3b8;
 
 }
 
+.summary-card:nth-child(1){
+border-top:4px solid #334155;
+}
 
+
+.summary-card:nth-child(2){
+border-top:4px solid #2563eb;
+}
+
+
+.summary-card:nth-child(3){
+border-top:4px solid #16a34a;
+}
+
+
+.summary-card:nth-child(4){
+border-top:4px solid #f59e0b;
+}
 
 .green{
 
@@ -921,16 +997,13 @@ color:#dc2626!important;
 
 
 
-
-.content-grid{
+.chart-grid{
 
 display:grid;
 
-grid-template-columns:2fr 1fr;
+grid-template-columns:1.7fr 1fr;
 
 gap:20px;
-
-margin-bottom:20px;
 
 }
 
@@ -946,10 +1019,44 @@ border-radius:18px;
 
 border:1px solid #e2e8f0;
 
+box-shadow:0 5px 20px rgba(15,23,42,.05);
+
 margin-bottom:20px;
 
 }
 
+.panel h3{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+font-size:17px;
+
+font-weight:700;
+
+color:#1e293b;
+
+}
+
+
+.panel h3::before{
+
+content:"";
+
+width:4px;
+
+height:20px;
+
+margin-right:4px;
+
+background:#334155;
+
+border-radius:10px;
+
+}
 
 
 .finance-row,
@@ -966,7 +1073,23 @@ border-bottom:1px solid #f1f5f9;
 }
 
 
+.finance-row strong{
+display:block;
+font-weight:700;
+}
 
+tbody tr{
+
+transition:.2s;
+
+}
+
+
+tbody tr:hover{
+
+background:#f8fafc;
+
+}
 
 
 table{
@@ -1009,16 +1132,35 @@ font-size:14px;
 
 .status{
 
-padding:6px 12px;
+display:inline-flex;
 
-border-radius:20px;
+align-items:center;
+
+padding:7px 14px;
+
+border-radius:999px;
 
 font-size:12px;
 
 font-weight:700;
 
+letter-spacing:.2px;
+
 }
 
+.status-dot{
+
+width:8px;
+
+height:8px;
+
+border-radius:50%;
+
+background:currentColor;
+
+margin-right:6px;
+
+}
 
 
 .berjalan{
@@ -1049,7 +1191,129 @@ color:#92400e;
 
 }
 
+.kritis{
 
+background:#fee2e2;
+
+color:#b91c1c;
+
+}
+
+
+
+.perhatian{
+
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+
+
+.aman{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
+
+
+
+.success{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
+
+
+.warning{
+
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+
+.danger{
+
+background:#fee2e2;
+
+color:#b91c1c;
+
+}
+
+.progress-wrapper{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+width:180px;
+
+}
+
+
+.progress-number{
+
+font-size:14px;
+
+font-weight:600;
+
+color:#334155;
+
+}
+
+.progress-bar{
+
+width:120px;
+
+height:10px;
+
+background:#e2e8f0;
+
+border-radius:20px;
+
+overflow:hidden;
+
+}
+
+
+.progress-fill{
+
+height:100%;
+
+border-radius:20px;
+
+transition:.5s ease;
+
+}
+
+.progress-green{
+
+background:#16a34a;
+
+}
+
+
+.progress-blue{
+
+background:#2563eb;
+
+}
+
+
+.progress-yellow{
+
+background:#f59e0b;
+
+}
 
 
 
@@ -1071,9 +1335,521 @@ grid-template-columns:1fr;
 
 
 }
+/* ===============================
+COMPACT FONT MODE
+================================ */
 
+
+/* HEADER */
+
+.dashboard-header{
+
+    padding:25px;
+
+    border-radius:24px;
+
+}
+
+
+
+.label{
+
+    font-size:10px;
+
+}
+
+
+
+.dashboard-header h1{
+
+    font-size:24px;
+
+    margin:8px 0;
+
+}
+
+
+
+.dashboard-header p{
+
+    font-size:12px;
+
+}
+
+
+
+
+
+
+
+/* SUMMARY CARD */
+
+.summary-grid{
+
+    gap:15px;
+
+}
+
+
+
+.summary-card{
+
+    padding:18px;
+
+    border-radius:22px;
+
+}
+
+
+
+.summary-card span{
+
+    font-size:11px;
+
+}
+
+
+
+.summary-card h2{
+
+    font-size:19px;
+
+    margin:8px 0;
+
+}
+
+
+
+.summary-card p{
+
+    font-size:11px;
+
+}
+
+
+
+
+
+
+
+/* PANEL */
+
+.panel{
+
+    padding:20px;
+
+    border-radius:24px;
+
+}
+
+
+
+.panel h3{
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+.finance-row,
+.health-item{
+
+    padding:12px 0;
+
+}
+
+
+
+.finance-row span,
+.health-item span{
+
+    font-size:12px;
+
+}
+
+
+
+.finance-row strong,
+.health-item b{
+
+    font-size:13px;
+
+}
+
+
+
+
+
+
+
+/* TABLE */
+
+th{
+
+    padding:12px;
+
+    font-size:11px;
+
+}
+
+
+
+td{
+
+    padding:12px;
+
+    font-size:12px;
+
+}
+
+
+
+td strong{
+
+    font-size:13px;
+
+}
+
+
+
+td small{
+
+    font-size:10px;
+
+}
+
+
+
+
+
+
+
+/* STATUS BADGE */
+
+.status{
+
+    padding:6px 12px;
+
+    font-size:10px;
+
+}
+
+
+
+
+
+.status-dot{
+
+    width:7px;
+
+    height:7px;
+
+}
+
+
+
+
+
+
+
+/* PROGRESS */
+
+.progress-wrapper{
+
+    width:150px;
+
+}
+
+
+
+.progress-bar{
+
+    width:100px;
+
+    height:8px;
+
+}
+
+
+
+.progress-number{
+
+    font-size:12px;
+
+}
+
+
+
+
+
+
+
+/* CHART TITLE */
+
+.chart-grid .panel h3{
+
+    font-size:15px;
+
+}
+
+
+
+
+
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+
+.summary-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.summary-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+}
 
 </style>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+
+/*
+========================
+CHART PROGRESS PROJECT
+========================
+*/
+
+
+const projectLabels = @json(
+    $projects->pluck('nama_proyek')
+);
+
+
+const projectProgress = @json(
+    $projects->map(function($project){
+
+        return $project->progres_keseluruhan;
+
+    })
+);
+
+
+
+new Chart(
+
+document.getElementById('projectProgressChart'),
+
+{
+
+type:'bar',
+
+data:{
+
+
+labels:projectLabels,
+
+
+datasets:[{
+
+label:'Progress Proyek (%)',
+
+data:projectProgress,
+
+backgroundColor:[
+'#64748b',
+'#2563eb',
+'#16a34a'
+],
+
+borderRadius:8
+
+}]
+
+},
+
+
+options:{
+
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+    legend:{
+        display:false
+    }
+},
+
+scales:{
+
+
+y:{
+
+beginAtZero:true,
+
+max:100,
+
+
+ticks:{
+
+callback:function(value){
+
+return value+'%';
+
+}
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+);
+
+
+
+
+
+/*
+========================
+CHART KEUANGAN
+========================
+*/
+
+
+const financeData = @json($financeProjects);
+
+
+
+new Chart(
+
+document.getElementById('financeChart'),
+
+{
+
+
+type:'bar',
+
+
+data:{
+
+
+labels:financeData.map(item=>item.nama),
+
+
+datasets:[
+
+{
+label:'Budget',
+
+data:financeData.map(item=>item.budget),
+
+backgroundColor:'#2563eb'
+
+},
+
+
+{
+label:'Realisasi',
+
+data:financeData.map(item=>item.realisasi),
+
+backgroundColor:'#16a34a'
+
+}
+
+]
+
+
+},
+
+
+options:{
+
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+
+scales:{
+
+
+y:{
+
+
+beginAtZero:true,
+
+
+ticks:{
+
+
+callback:function(value){
+
+return 'Rp '+value.toLocaleString();
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+);
+
+
+
+});
+
+
+</script>
 
 @endsection
