@@ -9,7 +9,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::table('proyek', function (Blueprint $table) {
+        Schema::table('proyeks', function (Blueprint $table) {
 
             $table->dropColumn('progres_keseluruhan');
 
@@ -19,7 +19,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('proyek', function (Blueprint $table) {
+        Schema::table('proyeks', function (Blueprint $table) {
 
             $table->decimal(
                 'progres_keseluruhan',

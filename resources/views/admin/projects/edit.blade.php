@@ -6,7 +6,6 @@
 <div class="page-wrapper">
 
 
-{{-- ================= HEADER ================= --}}
 <div class="page-header-card">
 
 
@@ -23,7 +22,7 @@ Edit Project
 
 
 <p>
-Perbarui informasi project, anggaran, dan periode pelaksanaan.
+Perbarui informasi project, perusahaan, anggaran, dan periode pelaksanaan.
 </p>
 
 
@@ -31,8 +30,11 @@ Perbarui informasi project, anggaran, dan periode pelaksanaan.
 
 
 
-<a href="{{route('admin.projects.index')}}" class="btn-back">
+<a href="{{route('admin.projects.index')}}"
+class="btn-back">
+
 ← Kembali
+
 </a>
 
 
@@ -42,12 +44,12 @@ Perbarui informasi project, anggaran, dan periode pelaksanaan.
 
 
 
-{{-- ================= ERROR ================= --}}
-
 
 @if($errors->any())
 
+
 <div class="alert-error">
+
 
 <strong>
 Terjadi kesalahan:
@@ -69,15 +71,13 @@ Terjadi kesalahan:
 
 </div>
 
+
 @endif
 
 
 
 
 
-
-
-{{-- ================= FORM ================= --}}
 
 
 <div class="form-card">
@@ -105,22 +105,27 @@ action="{{route('admin.projects.update',$project->id)}}">
 
 
 
+
 <div class="form-grid">
+
+
+
+
 
 
 {{-- PERUSAHAAN --}}
 
+
 <div class="form-group">
 
+
 <label>
-Perusahaan
+Perusahaan *
 </label>
 
 
-<select
-name="perusahaan_id"
-required
->
+<select name="perusahaan_id"
+required>
 
 
 <option value="">
@@ -128,20 +133,22 @@ required
 </option>
 
 
+
 @foreach($perusahaans as $perusahaan)
 
 
 <option
 
-value="{{ $perusahaan->id }}"
+value="{{$perusahaan->id}}"
 
-{{ old('perusahaan_id',$project->perusahaan_id) == $perusahaan->id ? 'selected' : '' }}
+{{old('perusahaan_id',$project->perusahaan_id)==$perusahaan->id?'selected':''}}
 
 >
 
-{{ $perusahaan->nama_perusahaan }}
+{{$perusahaan->nama_perusahaan}}
 
 </option>
+
 
 
 @endforeach
@@ -153,12 +160,20 @@ value="{{ $perusahaan->id }}"
 </div>
 
 
+
+
+
+
+
+
 {{-- NAMA PROJECT --}}
+
 
 <div class="form-group">
 
+
 <label>
-Nama Project
+Nama Project *
 </label>
 
 
@@ -169,6 +184,8 @@ type="text"
 name="nama_proyek"
 
 value="{{old('nama_proyek',$project->nama_proyek)}}"
+
+placeholder="Nama project"
 
 required
 
@@ -202,14 +219,12 @@ name="pemilik_proyek"
 
 value="{{old('pemilik_proyek',$project->pemilik_proyek)}}"
 
-required
+placeholder="Nama pemilik project"
 
 >
 
 
 </div>
-
-
 
 
 
@@ -224,7 +239,7 @@ required
 
 
 <label>
-Total Anggaran
+Total Anggaran *
 </label>
 
 
@@ -244,6 +259,8 @@ name="total_anggaran"
 
 value="{{old('total_anggaran',$project->total_anggaran)}}"
 
+placeholder="0"
+
 required
 
 >
@@ -253,8 +270,6 @@ required
 
 
 </div>
-
-
 
 
 
@@ -269,7 +284,7 @@ required
 
 
 <label>
-Tanggal Mulai
+Tanggal Mulai *
 </label>
 
 
@@ -279,7 +294,10 @@ type="date"
 
 name="tanggal_mulai"
 
-value="{{old('tanggal_mulai',$project->tanggal_mulai)}}"
+value="{{old(
+'tanggal_mulai',
+$project->tanggal_mulai?->format('Y-m-d')
+)}}"
 
 required
 
@@ -287,8 +305,6 @@ required
 
 
 </div>
-
-
 
 
 
@@ -313,9 +329,10 @@ type="date"
 
 name="tanggal_selesai"
 
-value="{{old('tanggal_selesai',$project->tanggal_selesai)}}"
-
-required
+value="{{old(
+'tanggal_selesai',
+$project->tanggal_selesai?->format('Y-m-d')
+)}}"
 
 >
 
@@ -327,8 +344,8 @@ required
 
 
 
-</div>
 
+</div>
 
 
 
@@ -352,6 +369,7 @@ required
 
 
 
+
 </form>
 
 
@@ -365,44 +383,39 @@ required
 </div>
 
 
+
+
+
+
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
 
 .page-wrapper{
-    width:100%;
+width:100%;
 }
 
 
 
 
-/* ===============================
-HEADER
-================================ */
-
-
 .page-header-card{
 
-    background:#f8fafc;
+background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+border:1px solid #e2e8f0;
 
-    border-radius:24px;
+border-radius:24px;
 
-    padding:25px 30px;
+padding:25px 30px;
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    align-items:center;
+align-items:center;
 
-    margin-bottom:25px;
+margin-bottom:25px;
 
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -410,13 +423,13 @@ HEADER
 
 .page-label{
 
-    font-size:10px;
+font-size:10px;
 
-    letter-spacing:2px;
+letter-spacing:2px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#64748b;
+color:#64748b;
 
 }
 
@@ -424,13 +437,13 @@ HEADER
 
 .page-header-card h1{
 
-    margin:8px 0;
+margin:8px 0;
 
-    font-size:24px;
+font-size:24px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#1e293b;
+color:#1e293b;
 
 }
 
@@ -438,159 +451,126 @@ HEADER
 
 .page-header-card p{
 
-    margin:0;
+margin:0;
 
-    color:#64748b;
+font-size:12px;
 
-    font-size:12px;
+color:#64748b;
 
 }
 
 
 
-
-
-
-/* ===============================
-BACK
-================================ */
 
 
 .btn-back{
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    justify-content:center;
+justify-content:center;
 
-    background:white;
+background:white;
 
-    border:1px solid #e2e8f0;
+border:1px solid #e2e8f0;
 
-    color:#334155;
+color:#334155;
 
-    padding:10px 20px;
+padding:10px 20px;
 
-    border-radius:12px;
+border-radius:12px;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:700;
+font-weight:700;
 
-    text-decoration:none;
+text-decoration:none;
 
 }
-
-
 
 
 
 .btn-back:hover{
 
-    background:#334155;
+background:#334155;
 
-    color:white;
+color:white;
 
 }
 
 
 
-
-
-
-/* ===============================
-ERROR
-================================ */
 
 
 .alert-error{
 
-    background:#fee2e2;
+background:#fee2e2;
 
-    border:1px solid #fecaca;
+border:1px solid #fecaca;
 
-    color:#991b1b;
+color:#991b1b;
 
-    padding:14px;
+padding:14px;
 
-    border-radius:15px;
+border-radius:15px;
 
-    margin-bottom:20px;
+margin-bottom:20px;
 
-    font-size:12px;
+font-size:12px;
 
 }
 
 
 
-
-
-
-
-
-/* ===============================
-FORM CARD
-================================ */
 
 
 .form-card{
 
-    background:white;
+background:white;
 
-    border:1px solid #e2e8f0;
+border:1px solid #e2e8f0;
 
-    border-radius:22px;
+border-radius:22px;
 
-    padding:25px;
+padding:25px;
 
-    box-shadow:
-
-    0 5px 20px rgba(15,23,42,.05);
+box-shadow:0 5px 20px rgba(15,23,42,.05);
 
 }
-
 
 
 
 
 .card-title{
 
-    font-size:16px;
+font-size:16px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#172033;
+color:#172033;
 
-    padding-left:10px;
+padding-left:10px;
 
-    border-left:4px solid #334155;
+border-left:4px solid #334155;
 
-    margin-bottom:20px;
+margin-bottom:20px;
 
 }
 
 
 
-
-
-
-
-/* ===============================
-FORM GRID
-================================ */
 
 
 .form-grid{
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+gap:18px;
 
 }
-
 
 
 
@@ -598,28 +578,26 @@ FORM GRID
 
 .form-group{
 
-    display:flex;
+display:flex;
 
-    flex-direction:column;
+flex-direction:column;
 
 }
-
 
 
 
 
 .form-group label{
 
-    font-size:11px;
+font-size:11px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#64748b;
+color:#64748b;
 
-    margin-bottom:7px;
+margin-bottom:7px;
 
 }
-
 
 
 
@@ -628,21 +606,19 @@ FORM GRID
 .form-group select{
 
 
-    height:44px;
+height:44px;
 
-    width:100%;
+width:100%;
 
-    padding:0 14px;
+padding:0 14px;
 
-    border-radius:12px;
+border-radius:12px;
 
-    border:1px solid #dbe1e8;
+border:1px solid #dbe1e8;
 
-    background:#f8fafc;
+background:#f8fafc;
 
-    font-size:12px;
-
-    color:#172033;
+font-size:12px;
 
 }
 
@@ -651,99 +627,84 @@ FORM GRID
 .form-group input:focus,
 .form-group select:focus{
 
-    outline:none;
+outline:none;
 
-    background:white;
+background:white;
 
-    border-color:#334155;
+border-color:#334155;
 
-    box-shadow:
-
-    0 0 0 3px rgba(51,65,85,.12);
+box-shadow:0 0 0 3px rgba(51,65,85,.12);
 
 }
 
 
 
-
-
-
-
-/* ===============================
-MONEY
-================================ */
 
 
 .money-input{
 
-    height:44px;
+height:44px;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    border-radius:12px;
+border-radius:12px;
 
-    border:1px solid #dbe1e8;
+border:1px solid #dbe1e8;
 
-    background:#f8fafc;
+background:#f8fafc;
 
-    overflow:hidden;
+overflow:hidden;
 
 }
+
 
 
 
 .money-input span{
 
-    padding:0 14px;
+padding:0 14px;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#475569;
+color:#475569;
 
 }
+
 
 
 
 .money-input input{
 
-    flex:1;
+flex:1;
 
-    height:100%;
+height:100%;
 
-    border:none;
+border:none;
 
-    background:transparent;
+background:transparent;
 
 }
 
 
-
-
-
-
-/* ===============================
-BUTTON
-================================ */
 
 
 .form-action{
 
-    margin-top:25px;
+margin-top:25px;
 
-    padding-top:20px;
+padding-top:20px;
 
-    border-top:1px solid #f1f5f9;
+border-top:1px solid #f1f5f9;
 
-    display:flex;
+display:flex;
 
-    justify-content:flex-end;
+justify-content:flex-end;
 
 }
-
 
 
 
@@ -751,23 +712,21 @@ BUTTON
 .btn-update{
 
 
-    background:#334155;
+background:#334155;
 
-    color:white;
+color:white;
 
-    border:none;
+border:none;
 
-    padding:12px 25px;
+padding:12px 25px;
 
-    border-radius:12px;
+border-radius:12px;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:800;
+font-weight:800;
 
-    cursor:pointer;
-
-    transition:.2s;
+cursor:pointer;
 
 }
 
@@ -775,22 +734,12 @@ BUTTON
 
 .btn-update:hover{
 
-    background:#1e293b;
-
-    transform:translateY(-2px);
+background:#1e293b;
 
 }
 
 
 
-
-
-
-
-
-/* ===============================
-RESPONSIVE
-================================ */
 
 
 @media(max-width:900px){
@@ -798,40 +747,34 @@ RESPONSIVE
 
 .form-grid{
 
-    grid-template-columns:1fr;
+grid-template-columns:1fr;
 
 }
-
 
 
 .page-header-card{
 
-    flex-direction:column;
+flex-direction:column;
 
-    align-items:flex-start;
+align-items:flex-start;
 
-    gap:15px;
-
-}
-
-
-
-.form-action{
-
-    justify-content:stretch;
+gap:15px;
 
 }
-
 
 
 .btn-update{
 
-    width:100%;
+width:100%;
 
 }
 
 
 }
+
 
 </style>
+
+
+
 @endsection

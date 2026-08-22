@@ -494,7 +494,16 @@ Kelola Project
 </a>
 
 
+<a href="{{route('admin.perusahaan.index')}}"
+class="{{request()->routeIs('admin.perusahaan.*')?'active':''}}">
 
+<div class="icon">
+🏭
+</div>
+
+Kelola Perusahaan
+
+</a>
 
 
 <a href="{{route('admin.divisions.index')}}"

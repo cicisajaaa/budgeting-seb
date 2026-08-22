@@ -203,7 +203,7 @@ class ProjectController extends Controller
 
         $project->load([
 
-            'perusahaan',
+            'perusahaan.proyek',
 
             'tugas',
 
@@ -212,7 +212,6 @@ class ProjectController extends Controller
             'users'
 
         ]);
-
 
 
         return view(

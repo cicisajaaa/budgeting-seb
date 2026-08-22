@@ -5,8 +5,6 @@
 
 
 
-<!-- HEADER -->
-
 <div class="page-header-card">
 
 
@@ -29,7 +27,7 @@ Tambah Project
 
 <p>
 
-Buat project baru dan kelola informasi anggaran perusahaan.
+Buat project baru dan hubungkan dengan perusahaan.
 
 </p>
 
@@ -39,7 +37,8 @@ Buat project baru dan kelola informasi anggaran perusahaan.
 
 
 
-<a href="{{route('admin.projects.index')}}" class="btn-back">
+<a href="{{route('admin.projects.index')}}"
+class="btn-back">
 
 ← Kembali
 
@@ -56,7 +55,6 @@ Buat project baru dan kelola informasi anggaran perusahaan.
 
 
 
-
 @if($errors->any())
 
 
@@ -64,27 +62,19 @@ Buat project baru dan kelola informasi anggaran perusahaan.
 
 
 <strong>
-
 Terjadi kesalahan:
-
 </strong>
 
 
 <ul>
 
-
 @foreach($errors->all() as $error)
 
-
 <li>
-
-{{ $error }}
-
+{{$error}}
 </li>
 
-
 @endforeach
-
 
 </ul>
 
@@ -100,12 +90,8 @@ Terjadi kesalahan:
 
 
 
-
-
-<!-- FORM -->
-
-
 <div class="glass-panel form-card">
+
 
 
 <div class="panel-title">
@@ -119,10 +105,10 @@ Terjadi kesalahan:
 
 
 <form method="POST"
-
-action="{{ route('admin.projects.store') }}">
+action="{{route('admin.projects.store')}}">
 
 @csrf
+
 
 
 
@@ -131,44 +117,87 @@ action="{{ route('admin.projects.store') }}">
 
 
 
+
+{{-- PERUSAHAAN --}}
+
+
 <div class="form-group">
 
+
 <label>
-Perusahaan
+Perusahaan *
 </label>
 
-<select 
-    name="perusahaan_id"
-    required
->
+
+
+<select name="perusahaan_id"
+required>
+
 
 <option value="">
 -- Pilih Perusahaan --
 </option>
 
 
+
+@if($perusahaans->count())
+
+
 @foreach($perusahaans as $perusahaan)
 
-<option 
-    value="{{ $perusahaan->id }}"
-    {{ old('perusahaan_id') == $perusahaan->id ? 'selected' : '' }}
+
+<option value="{{$perusahaan->id}}"
+
+{{old('perusahaan_id')==$perusahaan->id?'selected':''}}
+
 >
 
-{{ $perusahaan->nama_perusahaan }}
+{{$perusahaan->nama_perusahaan}}
 
 </option>
+
 
 @endforeach
 
 
+
+@else
+
+
+<option value="">
+
+Belum ada perusahaan aktif
+
+</option>
+
+
+@endif
+
+
+
 </select>
 
+
+
 </div>
+
+
+
+
+
+
+
+
+{{-- NAMA PROJECT --}}
+
+
 <div class="form-group">
 
 
 <label>
-Nama Project
+
+Nama Project *
+
 </label>
 
 
@@ -195,11 +224,16 @@ required>
 
 
 
+{{-- PEMILIK PROJECT --}}
+
+
 <div class="form-group">
 
 
 <label>
+
 Project Owner
+
 </label>
 
 
@@ -212,9 +246,7 @@ name="pemilik_proyek"
 
 value="{{old('pemilik_proyek')}}"
 
-placeholder="Nama pemilik project"
-
-required>
+placeholder="Nama pemilik project">
 
 
 </div>
@@ -226,12 +258,18 @@ required>
 
 
 
+{{-- ANGGARAN --}}
+
+
 <div class="form-group">
 
 
 <label>
-Total Anggaran
+
+Total Anggaran *
+
 </label>
+
 
 
 
@@ -239,7 +277,9 @@ Total Anggaran
 
 
 <span>
+
 Rp
+
 </span>
 
 
@@ -269,13 +309,17 @@ required>
 
 
 
+{{-- TANGGAL MULAI --}}
+
+
 <div class="form-group">
 
 
 <label>
-Tanggal Mulai
-</label>
 
+Tanggal Mulai *
+
+</label>
 
 
 <input
@@ -298,13 +342,17 @@ required>
 
 
 
+{{-- TANGGAL SELESAI --}}
+
+
 <div class="form-group">
 
 
 <label>
-Tanggal Selesai
-</label>
 
+Tanggal Selesai
+
+</label>
 
 
 <input
@@ -322,11 +370,7 @@ value="{{old('tanggal_selesai')}}">
 
 
 
-
-
-
 </div>
-
 
 
 
@@ -350,23 +394,18 @@ value="{{old('tanggal_selesai')}}">
 
 
 
-
 </form>
 
 
+
 </div>
-
-
-
-
-
-
-
 <style>
+
 
 /* ===============================
 GLOBAL
 ================================ */
+
 
 *{
     box-sizing:border-box;
@@ -441,6 +480,7 @@ HEADER
     color:#64748b;
 
 }
+
 
 
 
@@ -523,17 +563,10 @@ ERROR
 
 
 
+
 /* ===============================
 FORM PANEL
 ================================ */
-
-
-.form-card{
-
-    width:100%;
-
-}
-
 
 
 .glass-panel{
@@ -551,8 +584,6 @@ FORM PANEL
     0 5px 20px rgba(15,23,42,.05);
 
 }
-
-
 
 
 
@@ -624,6 +655,7 @@ FORM GRID
 
 
 
+
 .form-group input,
 .form-group select{
 
@@ -652,8 +684,10 @@ FORM GRID
 
 
 
+
 .form-group input:focus,
 .form-group select:focus{
+
 
     background:white;
 
@@ -671,13 +705,13 @@ FORM GRID
 
 
 
-
 /* ===============================
 MONEY INPUT
 ================================ */
 
 
 .input-money{
+
 
     height:44px;
 
@@ -699,6 +733,7 @@ MONEY INPUT
 
 .input-money span{
 
+
     padding:0 14px;
 
     font-size:12px;
@@ -712,6 +747,7 @@ MONEY INPUT
 
 
 .input-money input{
+
 
     flex:1;
 
@@ -727,6 +763,7 @@ MONEY INPUT
 
 .input-money input:focus{
 
+
     box-shadow:none;
 
 }
@@ -738,11 +775,12 @@ MONEY INPUT
 
 
 /* ===============================
-ACTION
+BUTTON SAVE
 ================================ */
 
 
 .form-action{
+
 
     margin-top:30px;
 
@@ -761,6 +799,7 @@ ACTION
 
 
 .btn-save{
+
 
     background:#334155;
 
@@ -786,6 +825,7 @@ ACTION
 
 .btn-save:hover{
 
+
     background:#1e293b;
 
     transform:translateY(-2px);
@@ -806,46 +846,64 @@ RESPONSIVE
 @media(max-width:900px){
 
 
+
 .page-header-card{
+
 
     flex-direction:column;
 
+
     align-items:flex-start;
+
 
     gap:15px;
 
+
 }
+
+
 
 
 
 .form-grid{
 
+
     grid-template-columns:1fr;
 
+
 }
+
+
 
 
 
 .form-action{
 
+
     justify-content:stretch;
 
+
 }
+
+
 
 
 
 .btn-save{
 
+
     width:100%;
 
+
 }
 
 
+
 }
+
 
 
 </style>
-
 
 
 @endsection

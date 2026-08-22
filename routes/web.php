@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\AllocationController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\ProjectMemberController;
-
+use App\Http\Controllers\Admin\PerusahaanController;
 
 use App\Http\Controllers\BankAccountController;
 
@@ -465,7 +465,10 @@ Route::middleware([
     ->name('dashboard');
 
 
-
+Route::resource(
+    'perusahaan',
+    PerusahaanController::class
+);
 
     Route::resource(
         'users',

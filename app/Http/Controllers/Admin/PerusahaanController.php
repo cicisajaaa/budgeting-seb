@@ -3,63 +3,140 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Perusahaan;
 use Illuminate\Http\Request;
 
 class PerusahaanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+public function index()
+{
+    $perusahaans = Perusahaan::with('proyek')
+        ->latest()
+        ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    return view(
+        'admin.perusahaan.index',
+        compact('perusahaans')
+    );
+}
+
+
     public function create()
     {
-        //
+        return view(
+            'admin.perusahaan.create'
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+
+            'nama_perusahaan'=>'required',
+            'email'=>'nullable|email',
+            'status'=>'required'
+
+        ]);
+
+
+        Perusahaan::create([
+
+            'nama_perusahaan'=>$request->nama_perusahaan,
+            'alamat'=>$request->alamat,
+            'kontak'=>$request->kontak,
+            'email'=>$request->email,
+            'status'=>$request->status,
+
+        ]);
+
+
+        return redirect()
+            ->route('admin.perusahaan.index')
+            ->with(
+                'success',
+                'Perusahaan berhasil ditambahkan'
+            );
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+
+    public function show(Perusahaan $perusahaan)
     {
-        //
+
+        $perusahaan->load('proyek');
+
+        return view(
+            'admin.perusahaan.show',
+            compact('perusahaan')
+        );
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+
+    public function edit(Perusahaan $perusahaan)
     {
-        //
+
+        return view(
+            'admin.perusahaan.edit',
+            compact('perusahaan')
+        );
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+
+    public function update(Request $request, Perusahaan $perusahaan)
     {
-        //
+
+        $request->validate([
+
+            'nama_perusahaan'=>'required',
+            'email'=>'nullable|email',
+            'status'=>'required'
+
+        ]);
+
+
+        $perusahaan->update([
+
+            'nama_perusahaan'=>$request->nama_perusahaan,
+            'alamat'=>$request->alamat,
+            'kontak'=>$request->kontak,
+            'email'=>$request->email,
+            'status'=>$request->status,
+
+        ]);
+
+
+        return redirect()
+            ->route('admin.perusahaan.index')
+            ->with(
+                'success',
+                'Perusahaan berhasil diperbarui'
+            );
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+
+    public function destroy(Perusahaan $perusahaan)
     {
-        //
+
+        $perusahaan->delete();
+
+
+        return redirect()
+            ->route('admin.perusahaan.index')
+            ->with(
+                'success',
+                'Perusahaan berhasil dihapus'
+            );
+
     }
+
 }

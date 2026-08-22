@@ -3,7 +3,7 @@
 @section('content')
 
 
-{{-- ================= HEADER ================= --}}
+{{-- HEADER --}}
 
 <div class="project-detail-header">
 
@@ -21,7 +21,7 @@ PROJECT DETAIL
 
 
 <p>
-Detail informasi project, anggaran, progress, dan aktivitas.
+Detail informasi project, perusahaan, anggaran, progress, dan aktivitas.
 </p>
 
 
@@ -29,7 +29,8 @@ Detail informasi project, anggaran, progress, dan aktivitas.
 
 
 
-<a href="{{route('admin.projects.index')}}" class="btn-back">
+<a href="{{route('admin.projects.index')}}"
+class="btn-back">
 
 ← Kembali
 
@@ -42,7 +43,11 @@ Detail informasi project, anggaran, progress, dan aktivitas.
 
 
 
-{{-- ================= SUMMARY CARD ================= --}}
+
+
+
+
+{{-- SUMMARY --}}
 
 
 <div class="detail-grid">
@@ -70,7 +75,6 @@ Nama Project
 
 </div>
 
-
 </div>
 
 
@@ -93,14 +97,16 @@ Perusahaan
 
 
 <h3>
+
 {{$project->perusahaan->nama_perusahaan ?? '-'}}
+
 </h3>
 
 
 </div>
 
-
 </div>
+
 
 
 
@@ -135,8 +141,8 @@ $project->total_anggaran,
 
 </div>
 
-
 </div>
+
 
 
 
@@ -166,11 +172,6 @@ Progress
 
 </div>
 
-
-</div>
-
-
-
 </div>
 
 
@@ -179,9 +180,107 @@ Progress
 
 
 
+<div class="detail-card">
 
-{{-- ================= INFORMATION ================= --}}
+<div class="icon">
+🚦
+</div>
 
+
+<div>
+
+<span>
+Status Project
+</span>
+
+
+<h3>
+
+{{$project->status_project}}
+
+</h3>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+<div class="detail-card">
+
+<div class="icon">
+💳
+</div>
+
+
+<div>
+
+<span>
+Status Keuangan
+</span>
+
+
+<h3>
+
+{{$project->status_keuangan}}
+
+</h3>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+<div class="detail-card">
+
+<div class="icon">
+🏭
+</div>
+
+
+<div>
+
+<span>
+Project Perusahaan
+</span>
+
+
+<h3>
+
+{{$project->perusahaan?->proyek->count() ?? 0}}
+
+</h3>
+
+
+</div>
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- INFORMATION --}}
 
 
 <div class="glass-panel">
@@ -192,6 +291,7 @@ Progress
 📋 Informasi Project
 
 </div>
+
 
 
 
@@ -224,11 +324,50 @@ Perusahaan
 
 
 <td>
+<strong class="company-name">
+
 {{$project->perusahaan->nama_perusahaan ?? '-'}}
+
+</strong>
+
+
+@if($project->perusahaan)
+
+
+<div class="company-status">
+
+
+@if($project->perusahaan->status=='aktif')
+
+<span class="status-company">
+Aktif
+</span>
+
+
+@else
+
+
+<span class="status inactive">
+
+Nonaktif
+
+</span>
+
+
+@endif
+
+
+</div>
+
+
+@endif
+
 </td>
 
 
 </tr>
+
+
 
 
 
@@ -241,11 +380,15 @@ Pemilik Project
 
 
 <td>
+
 {{$project->pemilik_proyek ?? '-'}}
+
 </td>
 
 
 </tr>
+
+
 
 
 
@@ -259,14 +402,17 @@ Tanggal Mulai
 
 <td>
 
-{{\Carbon\Carbon::parse(
-$project->tanggal_mulai
-)->format('d M Y')}}
+
+{{$project->tanggal_mulai
+?->format('d M Y')}}
+
 
 </td>
 
 
 </tr>
+
+
 
 
 
@@ -280,23 +426,16 @@ Tanggal Selesai
 
 <td>
 
-@if($project->tanggal_selesai)
 
-{{\Carbon\Carbon::parse(
-$project->tanggal_selesai
-)->format('d M Y')}}
-
-@else
-
--
-
-@endif
+{{$project->tanggal_selesai
+?->format('d M Y') ?? '-'}}
 
 
 </td>
 
 
 </tr>
+
 
 
 
@@ -311,6 +450,7 @@ Total Anggaran
 
 <td>
 
+
 <strong>
 
 Rp {{number_format(
@@ -322,6 +462,7 @@ $project->total_anggaran,
 
 </strong>
 
+
 </td>
 
 
@@ -329,7 +470,9 @@ $project->total_anggaran,
 
 
 
+
 </table>
+
 
 
 </div>
@@ -342,10 +485,12 @@ $project->total_anggaran,
 
 
 
-{{-- ================= STATISTIC ================= --}}
+{{-- STATISTIK --}}
 
 
 <div class="stat-grid">
+
+
 
 
 
@@ -353,7 +498,9 @@ $project->total_anggaran,
 
 
 <div class="stat-icon">
+
 📝
+
 </div>
 
 
@@ -365,7 +512,9 @@ Total Tugas
 
 
 <h2>
+
 {{$project->tugas->count()}}
+
 </h2>
 
 
@@ -389,7 +538,9 @@ Aktivitas project
 
 
 <div class="stat-icon">
+
 👥
+
 </div>
 
 
@@ -401,7 +552,9 @@ Anggota Project
 
 
 <h2>
+
 {{$project->users->count()}}
+
 </h2>
 
 
@@ -421,11 +574,14 @@ User terlibat
 
 
 
+
 <div class="stat-card">
 
 
 <div class="stat-icon">
+
 🏛️
+
 </div>
 
 
@@ -437,7 +593,9 @@ Divisi Terlibat
 
 
 <h2>
+
 {{$project->alokasiDivisi->count()}}
+
 </h2>
 
 
@@ -453,6 +611,9 @@ Unit organisasi
 
 
 
+
+
+
 </div>
 
 
@@ -462,8 +623,8 @@ Unit organisasi
 
 
 
-{{-- ================= TASK ================= --}}
 
+{{-- TASK --}}
 
 
 <div class="glass-panel">
@@ -472,22 +633,22 @@ Unit organisasi
 <div class="table-header">
 
 
-<div>
-
 <h3>
-Daftar Tugas Project
+
+📝 Daftar Tugas Project
+
 </h3>
 
 
 <p>
-Monitoring pekerjaan dalam project.
+
+Monitoring pekerjaan project
+
 </p>
 
 
 </div>
 
-
-</div>
 
 
 
@@ -497,20 +658,22 @@ Monitoring pekerjaan dalam project.
 
 <thead>
 
-
 <tr>
 
 <th>
 No
 </th>
 
+
 <th>
 Nama Tugas
 </th>
 
+
 <th>
 Status
 </th>
+
 
 <th>
 Deadline
@@ -524,6 +687,7 @@ Deadline
 
 
 
+
 <tbody>
 
 
@@ -534,9 +698,10 @@ Deadline
 
 
 <td>
-{{$loop->iteration}}
-</td>
 
+{{$loop->iteration}}
+
+</td>
 
 
 <td>
@@ -546,35 +711,23 @@ Deadline
 </td>
 
 
-
 <td>
 
-
-<span class="status">
-
+<span class="task-status">
 {{$task->status}}
-
 </span>
+
 
 
 </td>
 
 
-
-
 <td>
 
-@if($task->deadline)
 
-{{\Carbon\Carbon::parse(
-$task->deadline
-)->format('d M Y')}}
-
-@else
-
--
-
-@endif
+{{$task->deadline
+? \Carbon\Carbon::parse($task->deadline)->format('d M Y')
+: '-'}}
 
 
 </td>
@@ -588,12 +741,12 @@ $task->deadline
 
 <tr>
 
-<td colspan="4" class="empty">
+<td colspan="4"
+class="empty">
 
 Belum ada tugas
 
 </td>
-
 
 </tr>
 
@@ -608,25 +761,22 @@ Belum ada tugas
 </table>
 
 
+
 </div>
+
+
 
 
 
 
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
-
 *{
     box-sizing:border-box;
 }
 
 
-/* ===============================
-HEADER
-================================ */
+/* HEADER */
 
 .project-detail-header{
 
@@ -634,9 +784,9 @@ HEADER
 
     border:1px solid #e2e8f0;
 
-    border-radius:22px;
+    border-radius:24px;
 
-    padding:24px 28px;
+    padding:25px 30px;
 
     display:flex;
 
@@ -644,10 +794,7 @@ HEADER
 
     align-items:center;
 
-    margin-bottom:20px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+    margin-bottom:25px;
 
 }
 
@@ -665,12 +812,11 @@ HEADER
 }
 
 
-
 .project-detail-header h1{
 
-    margin:8px 0;
+    font-size:24px;
 
-    font-size:25px;
+    margin:8px 0;
 
     font-weight:800;
 
@@ -679,10 +825,7 @@ HEADER
 }
 
 
-
 .project-detail-header p{
-
-    margin:0;
 
     font-size:12px;
 
@@ -692,24 +835,11 @@ HEADER
 
 
 
-
-
-
-
-/* ===============================
-BACK BUTTON
-================================ */
-
-
 .btn-back{
 
-    background:white;
+    background:#f1f5f9;
 
-    border:1px solid #e2e8f0;
-
-    color:#334155;
-
-    padding:10px 20px;
+    padding:10px 18px;
 
     border-radius:12px;
 
@@ -719,21 +849,7 @@ BACK BUTTON
 
     font-weight:700;
 
-    display:flex;
-
-    align-items:center;
-
-    transition:.2s;
-
-}
-
-
-
-.btn-back:hover{
-
-    background:#334155;
-
-    color:white;
+    color:#334155;
 
 }
 
@@ -741,18 +857,13 @@ BACK BUTTON
 
 
 
-
-
-/* ===============================
-SUMMARY CARD
-================================ */
-
+/* SUMMARY CARD */
 
 .detail-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:15px;
 
@@ -763,7 +874,6 @@ SUMMARY CARD
 
 
 .detail-card{
-
 
     background:white;
 
@@ -777,31 +887,9 @@ SUMMARY CARD
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-
-
-.detail-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    height:3px;
-
-    background:#334155;
+    min-height:90px;
 
 }
 
@@ -831,13 +919,11 @@ SUMMARY CARD
 
 .detail-card span{
 
-    display:block;
-
-    font-size:10px;
+    font-size:11px;
 
     color:#64748b;
 
-    font-weight:600;
+    font-weight:700;
 
 }
 
@@ -845,13 +931,13 @@ SUMMARY CARD
 
 .detail-card h3{
 
-    margin:4px 0 0;
+    margin:5px 0 0;
 
-    font-size:14px;
-
-    color:#172033;
+    font-size:15px;
 
     font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -861,9 +947,7 @@ SUMMARY CARD
 
 
 
-/* ===============================
-MAIN PANEL
-================================ */
+/* PANEL */
 
 
 .glass-panel{
@@ -872,19 +956,13 @@ MAIN PANEL
 
     border:1px solid #e2e8f0;
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:22px;
+    padding:25px;
 
     margin-bottom:20px;
 
-    box-shadow:
-
-    0 5px 20px rgba(15,23,42,.05);
-
 }
-
-
 
 
 
@@ -894,11 +972,9 @@ MAIN PANEL
 
     font-weight:800;
 
-    color:#172033;
+    border-left:4px solid #334155;
 
     padding-left:10px;
-
-    border-left:4px solid #334155;
 
     margin-bottom:18px;
 
@@ -910,10 +986,7 @@ MAIN PANEL
 
 
 
-
-/* ===============================
-DETAIL TABLE
-================================ */
+/* DETAIL TABLE */
 
 
 .detail-table{
@@ -928,11 +1001,11 @@ DETAIL TABLE
 
 .detail-table td{
 
-    padding:11px 12px;
+    padding:13px;
 
     border-bottom:1px solid #f1f5f9;
 
-    font-size:12px;
+    font-size:13px;
 
 }
 
@@ -950,11 +1023,15 @@ DETAIL TABLE
 
 
 
-.detail-table td:last-child{
 
-    color:#172033;
 
-    font-weight:600;
+.company-name{
+
+    display:block;
+
+    font-weight:800;
+
+    margin-bottom:8px;
 
 }
 
@@ -964,9 +1041,42 @@ DETAIL TABLE
 
 
 
-/* ===============================
-STATISTIC
-================================ */
+/* STATUS COMPANY */
+
+
+.company-status{
+
+    margin-top:5px;
+
+}
+
+
+
+.status-company{
+
+    display:inline-flex;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+
+
+/* STATISTIC */
 
 
 .stat-grid{
@@ -997,31 +1107,7 @@ STATISTIC
 
     align-items:center;
 
-    gap:12px;
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-
-
-.stat-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    height:3px;
-
-    background:#334155;
+    gap:14px;
 
 }
 
@@ -1043,86 +1129,11 @@ STATISTIC
 
     justify-content:center;
 
-    font-size:18px;
-
 }
 
 
 
 .stat-card label{
-
-    font-size:10px;
-
-    color:#64748b;
-
-    font-weight:700;
-
-}
-
-
-
-.stat-card h2{
-
-    margin:4px 0;
-
-    font-size:22px;
-
-    font-weight:800;
-
-    color:#172033;
-
-}
-
-
-
-.stat-card small{
-
-    font-size:10px;
-
-    color:#94a3b8;
-
-}
-
-
-
-
-
-
-
-/* ===============================
-TASK TABLE
-================================ */
-
-
-.table-header{
-
-    margin-bottom:15px;
-
-}
-
-
-
-.table-header h3{
-
-    margin:0;
-
-    padding-left:10px;
-
-    border-left:4px solid #334155;
-
-    font-size:15px;
-
-    font-weight:800;
-
-    color:#172033;
-
-}
-
-
-
-.table-header p{
-
-    margin:5px 0;
 
     font-size:11px;
 
@@ -1131,6 +1142,22 @@ TASK TABLE
 }
 
 
+
+.stat-card h2{
+
+    margin:5px 0;
+
+    font-size:20px;
+
+}
+
+
+
+
+
+
+
+/* TABLE */
 
 
 table{
@@ -1147,13 +1174,13 @@ th{
 
     background:#f8fafc;
 
-    padding:11px;
+    padding:12px;
 
-    text-align:left;
-
-    font-size:10px;
+    font-size:11px;
 
     color:#64748b;
+
+    text-align:left;
 
 }
 
@@ -1161,21 +1188,11 @@ th{
 
 td{
 
-    padding:12px;
-
-    font-size:12px;
-
-    color:#334155;
+    padding:13px;
 
     border-bottom:1px solid #f1f5f9;
 
-}
-
-
-
-tbody tr:hover{
-
-    background:#fafafa;
+    font-size:12px;
 
 }
 
@@ -1185,16 +1202,15 @@ tbody tr:hover{
 
 
 
-/* ===============================
-STATUS
-================================ */
+
+/* TASK STATUS */
 
 
-.status{
+.task-status{
 
     display:inline-flex;
 
-    padding:5px 11px;
+    padding:5px 12px;
 
     border-radius:999px;
 
@@ -1204,31 +1220,23 @@ STATUS
 
     font-size:10px;
 
-    font-weight:800;
+    font-weight:700;
 
 }
 
 
 
 
-
-
-
-/* ===============================
-EMPTY
-================================ */
 
 
 .empty{
 
     text-align:center;
 
-    padding:35px;
+    padding:40px;
 
     color:#94a3b8;
 
-    font-size:12px;
-
 }
 
 
@@ -1236,57 +1244,24 @@ EMPTY
 
 
 
+@media(max-width:1000px){
 
-/* ===============================
-RESPONSIVE
-================================ */
+.detail-grid{
 
-
-@media(max-width:1200px){
-
-    .detail-grid{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
+grid-template-columns:1fr;
 
 }
 
-
-
-@media(max-width:800px){
-
-
-.project-detail-header{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-
-}
-
-
-
-.detail-grid,
 
 .stat-grid{
 
-    grid-template-columns:1fr;
-
-}
-
-
-
-table{
-
-    min-width:700px;
+grid-template-columns:1fr;
 
 }
 
 
 }
+
 
 </style>
 
