@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +9,6 @@ use App\Models\Divisi;
 use App\Models\Karyawan;
 use App\Models\AktivitasTugas;
 
-use Carbon\Carbon;
 
 
 class Tugas extends Model
@@ -16,6 +16,7 @@ class Tugas extends Model
 
 
     protected $table = 'tugas';
+
 
 
 
@@ -47,37 +48,84 @@ class Tugas extends Model
 
 
 
-    protected $casts = [
 
-        'tanggal' => 'date',
 
-        'deadline' => 'date',
+    /*
+    |--------------------------------------------------------------------------
+    | DEFAULT VALUE
+    |--------------------------------------------------------------------------
+    */
+
+    protected $attributes = [
+
+        'status'=>'belum_dikerjakan',
+
+        'progres_persen'=>0
 
     ];
 
 
 
+
+
+    protected $casts = [
+
+        'tanggal'=>'date',
+
+        'deadline'=>'date',
+
+        'progres_persen'=>'decimal:2',
+
+    ];
+
+
+
+
+
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | Update Status Otomatis
+    | AUTO STATUS BERDASARKAN PROGRESS
     |--------------------------------------------------------------------------
     */
-
 
     protected static function booted()
     {
 
-        static::saving(function ($task) {
+        static::saving(function($task){
 
 
-            if($task->progres_persen >= 100)
+            /*
+            |--------------------------------------------------------------------------
+            | JIKA DIBATALKAN JANGAN DIUBAH OTOMATIS
+            |--------------------------------------------------------------------------
+            */
+
+            if($task->status === 'dibatalkan')
+            {
+
+                return;
+
+            }
+
+
+
+
+            $progress = $task->progres_persen ?? 0;
+
+
+
+
+            if($progress >= 100)
             {
 
                 $task->status = 'selesai';
 
             }
 
-            elseif($task->progres_persen > 0)
+            elseif($progress > 0)
             {
 
                 $task->status = 'sedang_dikerjakan';
@@ -92,7 +140,9 @@ class Tugas extends Model
             }
 
 
+
         });
+
 
     }
 
@@ -101,12 +151,14 @@ class Tugas extends Model
 
 
 
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Proyek
+    | RELASI PROJECT
     |--------------------------------------------------------------------------
     */
-
 
     public function proyek()
     {
@@ -127,12 +179,13 @@ class Tugas extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Divisi
+    | RELASI DIVISI
     |--------------------------------------------------------------------------
     */
-
 
     public function divisi()
     {
@@ -153,12 +206,13 @@ class Tugas extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Karyawan
+    | RELASI KARYAWAN
     |--------------------------------------------------------------------------
     */
-
 
     public function karyawan()
     {
@@ -179,12 +233,13 @@ class Tugas extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Aktivitas Tugas
+    | RELASI AKTIVITAS
     |--------------------------------------------------------------------------
     */
-
 
     public function aktivitasTugas()
     {
@@ -205,23 +260,46 @@ class Tugas extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Update Progress dari Aktivitas
+    | UPDATE PROGRESS DARI AKTIVITAS TERAKHIR
     |--------------------------------------------------------------------------
     */
-
 
     public function updateProgress()
     {
 
-        $progress = $this->aktivitasTugas()
 
-            ->max('progres');
+        if($this->status == 'dibatalkan')
+        {
+
+            return;
+
+        }
 
 
 
-        $this->progres_persen = $progress ?? 0;
+
+        $aktivitasTerakhir = $this->aktivitasTugas()
+
+            ->latest('tanggal')
+
+            ->first();
+
+
+
+
+
+        $this->progres_persen = $aktivitasTerakhir
+
+            ? $aktivitasTerakhir->progres
+
+            : 0;
+
+
+
 
 
         $this->save();
@@ -235,14 +313,42 @@ class Tugas extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Status Deadline
+    | AKTIVITAS TERAKHIR
     |--------------------------------------------------------------------------
     */
 
+    public function getAktivitasTerakhirAttribute()
+    {
 
-    public function statusDeadline()
+
+        return $this->aktivitasTugas()
+
+            ->latest('tanggal')
+
+            ->first();
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS DEADLINE
+    |--------------------------------------------------------------------------
+    */
+
+    public function getDeadlineStatusAttribute()
     {
 
 
@@ -251,7 +357,7 @@ class Tugas extends Model
 
             return [
 
-                'label'=>'Tidak Ada Tenggat',
+                'label'=>'Tidak Ada Deadline',
 
                 'color'=>'secondary'
 
@@ -262,23 +368,7 @@ class Tugas extends Model
 
 
 
-
-        $hariIni = now();
-
-
-        $tenggat = Carbon::parse(
-
-            $this->deadline
-
-        );
-
-
-
-
-
-
-
-        if($this->status == 'selesai')
+        if($this->status=='selesai')
         {
 
             return [
@@ -295,9 +385,7 @@ class Tugas extends Model
 
 
 
-
-
-        if($hariIni->gt($tenggat))
+        if(now()->gt($this->deadline))
         {
 
             return [
@@ -314,14 +402,12 @@ class Tugas extends Model
 
 
 
-
-
-        if($hariIni->diffInDays($tenggat) <= 3)
+        if(now()->diffInDays($this->deadline)<=3)
         {
 
             return [
 
-                'label'=>'Mendekati Tenggat',
+                'label'=>'Mendekati Deadline',
 
                 'color'=>'warning'
 
@@ -333,11 +419,9 @@ class Tugas extends Model
 
 
 
-
-
         return [
 
-            'label'=>'Normal',
+            'label'=>'Aman',
 
             'color'=>'success'
 
@@ -353,18 +437,29 @@ class Tugas extends Model
 
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | Accessor Status Progress
+    | STATUS PROGRESS
     |--------------------------------------------------------------------------
     */
-
 
     public function getStatusProgressAttribute()
     {
 
 
-        if($this->progres_persen >= 100)
+        if($this->status == 'dibatalkan')
+        {
+
+            return 'Dibatalkan';
+
+        }
+
+
+
+
+
+        if(($this->progres_persen ?? 0) >= 100)
         {
 
             return 'Selesai';
@@ -373,7 +468,9 @@ class Tugas extends Model
 
 
 
-        if($this->progres_persen > 0)
+
+
+        if(($this->progres_persen ?? 0) > 0)
         {
 
             return 'Berjalan';
@@ -382,11 +479,12 @@ class Tugas extends Model
 
 
 
+
+
         return 'Belum Dimulai';
 
 
     }
-
 
 
 

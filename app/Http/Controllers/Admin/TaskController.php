@@ -32,29 +32,20 @@ class TaskController extends Controller
         $tasks = Tugas::with([
 
             'proyek',
-
             'karyawan',
-
             'divisi'
 
         ])
-
         ->latest()
-
         ->get();
 
 
-
         return view(
-
             'admin.tasks.index',
-
             compact('tasks')
-
         );
 
     }
-
 
 
 
@@ -72,18 +63,21 @@ class TaskController extends Controller
     {
 
 
-        $task->load([
+$task->load([
 
-            'proyek',
+    'proyek',
+    'karyawan',
+    'divisi',
 
-            'karyawan',
+'aktivitasTugas'=>function($query){
 
-            'divisi',
+    $query->with('karyawan')
+          ->orderByDesc('tanggal')
+          ->orderByDesc('created_at');
 
-            'aktivitasTugas'
+}
 
-        ]);
-
+]);
 
 
         return view(
@@ -103,8 +97,6 @@ class TaskController extends Controller
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Form Tambah Task
@@ -115,14 +107,9 @@ class TaskController extends Controller
     {
 
 
-        $karyawan = Karyawan::with('divisi')
-
-            ->get();
-
-
+        $karyawan = Karyawan::with('divisi')->get();
 
         $divisi = Divisi::all();
-
 
 
 
@@ -133,9 +120,7 @@ class TaskController extends Controller
             compact(
 
                 'project',
-
                 'karyawan',
-
                 'divisi'
 
             )
@@ -151,90 +136,39 @@ class TaskController extends Controller
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Simpan Task
     |--------------------------------------------------------------------------
     */
 
-    public function store(
-
-        Request $request,
-
-        Proyek $project
-
-    )
+    public function store(Request $request, Proyek $project)
     {
 
 
         $request->validate([
 
 
-            'nama_tugas'=>
+            'nama_tugas'=>'required|string|max:255',
 
-            'required|string|max:255',
+            'divisi_id'=>'nullable|exists:divisi,id',
 
+            'karyawan_id'=>'nullable|exists:karyawan,id',
 
+            'tanggal'=>'required|date',
 
-            'divisi_id'=>
+            'aktivitas'=>'required|string',
 
-            'nullable|exists:divisi,id',
+            'prioritas'=>'required|in:Low,Medium,High',
 
+            'deadline'=>'nullable|date',
 
+            'progres_persen'=>'required|numeric|min:0|max:100',
 
-            'karyawan_id'=>
-
-            'nullable|exists:karyawan,id',
-
-
-
-            'tanggal'=>
-
-            'required|date',
-
-
-
-            'aktivitas'=>
-
-            'required|string',
-
-
-
-            'prioritas'=>
-
-            'required|in:Low,Medium,High',
-
-
-
-            'deadline'=>
-
-            'nullable|date',
-
-
-
-            'status'=>
-
-            'required|in:belum_dikerjakan,sedang_dikerjakan,selesai',
-
-
-
-            'progres_persen'=>
-
-            'required|numeric|min:0|max:100',
-
-
-
-            'catatan'=>
-
-            'nullable|string'
+            'catatan'=>'nullable|string'
 
 
         ]);
-
-
-
 
 
 
@@ -242,68 +176,26 @@ class TaskController extends Controller
         $task = $project->tugas()->create([
 
 
-            'nama_tugas'=>
+            'nama_tugas'=>$request->nama_tugas,
 
-            $request->nama_tugas,
+            'divisi_id'=>$request->divisi_id,
 
+            'karyawan_id'=>$request->karyawan_id,
 
+            'tanggal'=>$request->tanggal,
 
-            'divisi_id'=>
+            'aktivitas'=>$request->aktivitas,
 
-            $request->divisi_id,
+            'prioritas'=>$request->prioritas,
 
+            'deadline'=>$request->deadline,
 
+            'progres_persen'=>$request->progres_persen,
 
-            'karyawan_id'=>
-
-            $request->karyawan_id,
-
-
-
-            'tanggal'=>
-
-            $request->tanggal,
-
-
-
-            'aktivitas'=>
-
-            $request->aktivitas,
-
-
-
-            'prioritas'=>
-
-            $request->prioritas,
-
-
-
-            'deadline'=>
-
-            $request->deadline,
-
-
-
-            'status'=>
-
-            $request->status,
-
-
-
-            'progres_persen'=>
-
-            $request->progres_persen,
-
-
-
-            'catatan'=>
-
-            $request->catatan,
+            'catatan'=>$request->catatan,
 
 
         ]);
-
-
 
 
 
@@ -324,27 +216,20 @@ class TaskController extends Controller
 
 
 
-
         return redirect()
 
-            ->route(
+        ->route('admin.tasks.index')
 
-                'admin.tasks.index'
+        ->with(
 
-            )
+            'success',
 
-            ->with(
+            'Tugas berhasil ditambahkan'
 
-                'success',
-
-                'Tugas berhasil ditambahkan'
-
-            );
+        );
 
 
     }
-
-
 
 
 
@@ -365,20 +250,14 @@ class TaskController extends Controller
         $task->load([
 
             'proyek',
-
             'karyawan',
-
             'divisi'
 
         ]);
 
 
 
-        $karyawan = Karyawan::with('divisi')
-
-            ->get();
-
-
+        $karyawan = Karyawan::with('divisi')->get();
 
         $divisi = Divisi::all();
 
@@ -393,9 +272,7 @@ class TaskController extends Controller
             compact(
 
                 'task',
-
                 'karyawan',
-
                 'divisi'
 
             )
@@ -411,90 +288,76 @@ class TaskController extends Controller
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Update Task
     |--------------------------------------------------------------------------
     */
 
-    public function update(
-
-        Request $request,
-
-        Tugas $task
-
-    )
+    public function update(Request $request, Tugas $task)
     {
 
 
         $request->validate([
 
 
-            'nama_tugas'=>
+            'nama_tugas'=>'required|string|max:255',
 
-            'required|string|max:255',
+            'divisi_id'=>'nullable|exists:divisi,id',
 
+            'karyawan_id'=>'nullable|exists:karyawan,id',
 
+            'tanggal'=>'required|date',
 
-            'divisi_id'=>
+            'aktivitas'=>'required|string',
 
-            'nullable|exists:divisi,id',
+            'prioritas'=>'required|in:Low,Medium,High',
 
+            'deadline'=>'nullable|date',
 
+            'progres_persen'=>'required|numeric|min:0|max:100',
 
-            'karyawan_id'=>
-
-            'nullable|exists:karyawan,id',
-
-
-
-            'tanggal'=>
-
-            'required|date',
-
-
-
-            'aktivitas'=>
-
-            'required|string',
-
-
-
-            'prioritas'=>
-
-            'required|in:Low,Medium,High',
-
-
-
-            'deadline'=>
-
-            'nullable|date',
-
-
-
-            'status'=>
-
-            'required|in:belum_dikerjakan,sedang_dikerjakan,selesai',
-
-
-
-            'progres_persen'=>
-
-            'required|numeric|min:0|max:100',
-
-
-
-            'catatan'=>
-
-            'nullable|string'
+            'catatan'=>'nullable|string'
 
 
         ]);
 
 
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status Otomatis
+        |--------------------------------------------------------------------------
+        */
+
+        $status = $task->status;
+
+
+
+        if($task->status != 'dibatalkan'){
+
+
+            if($request->progres_persen >= 100){
+
+                $status = 'selesai';
+
+            }
+
+            elseif($request->progres_persen > 0){
+
+                $status = 'sedang_dikerjakan';
+
+            }
+
+            else{
+
+                $status = 'belum_dikerjakan';
+
+            }
+
+
+        }
 
 
 
@@ -503,67 +366,28 @@ class TaskController extends Controller
         $task->update([
 
 
-            'nama_tugas'=>
+            'nama_tugas'=>$request->nama_tugas,
 
-            $request->nama_tugas,
+            'divisi_id'=>$request->divisi_id,
 
+            'karyawan_id'=>$request->karyawan_id,
 
+            'tanggal'=>$request->tanggal,
 
-            'divisi_id'=>
+            'aktivitas'=>$request->aktivitas,
 
-            $request->divisi_id,
+            'prioritas'=>$request->prioritas,
 
+            'deadline'=>$request->deadline,
 
+            'progres_persen'=>$request->progres_persen,
 
-            'karyawan_id'=>
+            'status'=>$status,
 
-            $request->karyawan_id,
-
-
-
-            'tanggal'=>
-
-            $request->tanggal,
-
-
-
-            'aktivitas'=>
-
-            $request->aktivitas,
-
-
-
-            'prioritas'=>
-
-            $request->prioritas,
-
-
-
-            'deadline'=>
-
-            $request->deadline,
-
-
-
-            'status'=>
-
-            $request->status,
-
-
-
-            'progres_persen'=>
-
-            $request->progres_persen,
-
-
-
-            'catatan'=>
-
-            $request->catatan,
+            'catatan'=>$request->catatan,
 
 
         ]);
-
 
 
 
@@ -582,58 +406,20 @@ class TaskController extends Controller
         $task->aktivitasTugas()->create([
 
 
-            'karyawan_id'=>
+            'karyawan_id'=>$task->karyawan_id,
 
-            $task->karyawan_id,
+            'tanggal'=>now(),
 
+            'aktivitas'=>$request->aktivitas,
 
+            'progres'=>$request->progres_persen,
 
-            'tanggal'=>
+            'anggaran_aktivitas'=>0,
 
-            now(),
-
-
-
-            'aktivitas'=>
-
-            $request->aktivitas,
-
-
-
-            'progres'=>
-
-            $request->progres_persen,
-
-
-
-            'catatan'=>
-
-            $request->catatan 
-
-            ??
-
-            'Update task oleh Admin'
+            'catatan'=>$request->catatan ?? 'Update task oleh Admin'
 
 
         ]);
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Sinkronisasi Progress Task
-        |--------------------------------------------------------------------------
-        */
-
-
-        $task->updateProgress();
-
 
 
 
@@ -658,25 +444,23 @@ class TaskController extends Controller
 
 
 
-
-
         return redirect()
 
-            ->route(
+        ->route(
 
-                'admin.tasks.show',
+            'admin.tasks.show',
 
-                $task->id
+            $task->id
 
-            )
+        )
 
-            ->with(
+        ->with(
 
-                'success',
+            'success',
 
-                'Task berhasil diperbarui'
+            'Task berhasil diperbarui'
 
-            );
+        );
 
 
     }
@@ -687,30 +471,21 @@ class TaskController extends Controller
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
-    | Hapus Task
+    | Batalkan Task
     |--------------------------------------------------------------------------
     */
 
-    public function destroy(Tugas $task)
+    public function cancel(Tugas $task)
     {
 
 
-        if($task->aktivitasTugas()->count() > 0)
-        {
+        $task->update([
 
-            return back()->withErrors([
+            'status'=>'dibatalkan'
 
-                'task'=>
-
-                'Task tidak dapat dihapus karena memiliki aktivitas.'
-
-            ]);
-
-        }
+        ]);
 
 
 
@@ -718,11 +493,11 @@ class TaskController extends Controller
 
         AuditHelper::create(
 
-            'Hapus Task',
+            'Batalkan Task',
 
             'Manajemen Task',
 
-            'Admin menghapus task '.$task->nama_tugas
+            'Admin membatalkan task '.$task->nama_tugas
 
         );
 
@@ -731,28 +506,15 @@ class TaskController extends Controller
 
 
 
-        $task->delete();
+        return back()
 
+        ->with(
 
+            'success',
 
+            'Task berhasil dibatalkan'
 
-
-
-        return redirect()
-
-            ->route(
-
-                'admin.tasks.index'
-
-            )
-
-            ->with(
-
-                'success',
-
-                'Task berhasil dihapus'
-
-            );
+        );
 
 
     }

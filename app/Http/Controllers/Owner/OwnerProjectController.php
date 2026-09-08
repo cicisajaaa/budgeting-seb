@@ -11,22 +11,22 @@ class OwnerProjectController extends Controller
 {
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | LIST PROJECT OWNER
-    |--------------------------------------------------------------------------
-    */
-
-
     public function index()
     {
 
 
         $projects = Proyek::with([
 
+            'perusahaan',
+
             'tugas',
+
             'tugas.aktivitasTugas',
-            'tugas.karyawan'
+
+            'tugas.karyawan',
+
+            'tugas.divisi'
+
 
         ])
 
@@ -38,11 +38,7 @@ class OwnerProjectController extends Controller
 
 
 
-
-
         $totalProject = $projects->count();
-
-
 
 
 
@@ -58,53 +54,43 @@ class OwnerProjectController extends Controller
 
 
 
+        $projectBerjalan = $projects
 
+            ->filter(function($project){
 
-        $projectBerjalan = $projects->filter(function($project){
+                return $project->progres_keseluruhan > 0 
+                &&
+                $project->progres_keseluruhan < 100;
 
+            })
 
-            return $project->progres_keseluruhan < 100;
-
-
-        })
-
-        ->count();
-
-
-
+            ->count();
 
 
 
 
 
-        $projectSelesai = $projects->filter(function($project){
+        $projectSelesai = $projects
 
+            ->filter(function($project){
 
-            return $project->progres_keseluruhan >= 100;
+                return $project->progres_keseluruhan >= 100;
 
+            })
 
-        })
-
-        ->count();
-
-
-
+            ->count();
 
 
 
 
 
-        $averageProgress = $projects->avg(function($project){
+        $averageProgress = round(
 
+            $projects->avg(
+                'progres_keseluruhan'
+            ) ?? 0
 
-            return $project->progres_keseluruhan ?? 0;
-
-
-        });
-
-
-
-
+        );
 
 
 
@@ -142,14 +128,6 @@ class OwnerProjectController extends Controller
 
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | DETAIL PROJECT OWNER
-    |--------------------------------------------------------------------------
-    */
-
-
     public function show(Proyek $project)
     {
 
@@ -157,11 +135,57 @@ class OwnerProjectController extends Controller
         $project->load([
 
 
-            'tugas',
+            'perusahaan',
 
-            'tugas.aktivitasTugas',
+
+
+            'tugas' => function($query){
+
+
+                $query->orderByRaw("
+
+                    CASE
+
+                        WHEN status = 'belum_dikerjakan'
+                        THEN 1
+
+
+                        WHEN status IN (
+                            'sedang_dikerjakan',
+                            'berjalan',
+                            'progress'
+                        )
+                        THEN 2
+
+
+                        WHEN status IN (
+                            'selesai',
+                            'done'
+                        )
+                        THEN 3
+
+
+                        ELSE 4
+
+
+                    END
+
+                ");
+
+
+            },
+
+
+
+            'tugas.aktivitasTugas' => function($query){
+
+                $query->latest('tanggal');
+
+            },
+
 
             'tugas.karyawan',
+
 
             'tugas.divisi'
 
@@ -174,29 +198,23 @@ class OwnerProjectController extends Controller
 
 
 
-
-        $totalTask = $project
-
-            ->tugas
-
-            ->count();
+        $totalTask = $project->tugas->count();
 
 
 
 
 
 
+        $taskSelesai = $project->tugas
 
-
-        $taskSelesai = $project
-
-            ->tugas
-
-            ->where(
+            ->whereIn(
 
                 'status',
 
-                'selesai'
+                [
+                    'selesai',
+                    'done'
+                ]
 
             )
 
@@ -209,16 +227,17 @@ class OwnerProjectController extends Controller
 
 
 
+        $taskProgress = $project->tugas
 
-        $taskProgress = $project
-
-            ->tugas
-
-            ->where(
+            ->whereIn(
 
                 'status',
 
-                'sedang_dikerjakan'
+                [
+                    'sedang_dikerjakan',
+                    'berjalan',
+                    'progress'
+                ]
 
             )
 
@@ -231,10 +250,7 @@ class OwnerProjectController extends Controller
 
 
 
-
-        $taskTodo = $project
-
-            ->tugas
+        $taskTodo = $project->tugas
 
             ->where(
 
@@ -245,7 +261,6 @@ class OwnerProjectController extends Controller
             )
 
             ->count();
-
 
 
 
@@ -276,7 +291,6 @@ class OwnerProjectController extends Controller
 
 
     }
-
 
 
 }

@@ -260,37 +260,29 @@ public function transaksiDana()
 
         PengajuanDana::class,
 
-        'proyek_id',              // FK di tabel pengajuan_dana
+        'proyek_id',          
+        'pengajuan_dana_id',  
 
-        'pengajuan_dana_id',      // FK di tabel transaksi_dana
-
-        'id',                     // PK tabel proyek
-
-        'id'                      // PK tabel pengajuan_dana
+        'id',                 
+        'id'                  
 
     );
 
 }
 
 
+/*
+|--------------------------------------------------------------------------
+| Total Realisasi Dana
+|--------------------------------------------------------------------------
+*/
+public function getTotalRealisasiAttribute()
+{
 
+    return (float) $this->transaksiDana()
+        ->sum('transaksi_dana.jumlah');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Total Realisasi Dana
-    |--------------------------------------------------------------------------
-    */
-
-        public function getTotalRealisasiAttribute()
-        {
-
-            return (float) $this->transaksiDana()
-                ->sum('transaksi_dana.jumlah');
-
-        }
-
-
-
+}
 
 
     /*
@@ -441,39 +433,34 @@ public function getStatusKeuanganAttribute()
     | Progress Proyek Otomatis
     |--------------------------------------------------------------------------
     */
+public function getProgresKeseluruhanAttribute()
+{
 
-
-    public function getProgresKeseluruhanAttribute()
+    if($this->relationLoaded('tugas'))
     {
 
+        $progress = $this->tugas
+            ->pluck('progres_persen');
 
-        $totalTugas = $this->tugas()->count();
+    }
+    else
+    {
 
-
-
-        if($totalTugas == 0)
-        {
-
-            return 0;
-
-        }
-
-
-
-        return round(
-
-            $this->tugas()
-
-            ->avg('progres_persen')
-
-        );
-
+        $progress = $this->tugas()
+            ->pluck('progres_persen');
 
     }
 
 
+    if($progress->count() == 0)
+    {
+        return 0;
+    }
 
 
+    return round($progress->avg());
+
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -552,7 +539,11 @@ public function getDeadlineStatusAttribute()
 | Status Kesehatan Proyek
 |--------------------------------------------------------------------------
 */
-
+/*
+|--------------------------------------------------------------------------
+| Status Kesehatan Proyek
+|--------------------------------------------------------------------------
+*/
 public function getHealthStatusAttribute()
 {
 
@@ -561,31 +552,60 @@ public function getHealthStatusAttribute()
     $budget = $this->persentase_budget;
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Kondisi Kritis
+    | BELUM DIMULAI
     |--------------------------------------------------------------------------
     */
 
     if(
-        $budget >= 90 ||
+        $progress == 0 &&
+        $budget == 0 &&
+        $this->tugas->count() == 0
+    )
+    {
+
+        return [
+
+            'label'=>'Belum Dimulai',
+
+            'color'=>'normal',
+
+            'icon'=>'⚪'
+
+        ];
+
+    }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | KRITIS
+    |--------------------------------------------------------------------------
+    */
+
+    if(
+        $budget >= 90
+        ||
         (
-            $progress < 50 &&
             $this->deadline_status == 'terlambat'
+            &&
+            $progress < 80
         )
     )
     {
 
-return [
+        return [
 
-'label'=>'Kritis',
+            'label'=>'Kritis',
 
-'color'=>'kritis',
+            'color'=>'kritis',
 
-'icon'=>'🔴'
+            'icon'=>'🔴'
 
-];
+        ];
+
     }
 
 
@@ -593,28 +613,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Kondisi Perhatian
+    | PERHATIAN
     |--------------------------------------------------------------------------
     */
 
-    if(
-
-        $budget >= 75 ||
-
-        $progress < 50
-
-    )
+if(
+    ($progress > 0 && $progress < 50)
+    ||
+    $budget >= 75
+)
     {
 
-return [
+        return [
 
-'label'=>'Perhatian',
+            'label'=>'Perhatian',
 
-'color'=>'perhatian',
+            'color'=>'perhatian',
 
-'icon'=>'🟡'
+            'icon'=>'🟡'
 
-];
+        ];
+
     }
 
 
@@ -622,7 +641,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Kondisi Aman
+    | AMAN
     |--------------------------------------------------------------------------
     */
 
@@ -636,8 +655,8 @@ return [
 
     ];
 
-
 }
+
 
     /*
     |--------------------------------------------------------------------------

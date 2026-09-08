@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Tugas;
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -15,7 +13,7 @@ class EmployeeTaskController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL TASK KARYAWAN
+    | DETAIL TASK EMPLOYEE
     |--------------------------------------------------------------------------
     */
 
@@ -28,15 +26,6 @@ class EmployeeTaskController extends Controller
 
 
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | KEAMANAN AKSES
-        |--------------------------------------------------------------------------
-        */
-
-
         if(!$karyawan)
         {
 
@@ -47,6 +36,15 @@ class EmployeeTaskController extends Controller
 
 
 
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK PEMILIK TASK
+        |--------------------------------------------------------------------------
+        */
 
 
         if($task->karyawan_id != $karyawan->id)
@@ -63,37 +61,52 @@ class EmployeeTaskController extends Controller
 
 
 
-
         /*
         |--------------------------------------------------------------------------
         | LOAD DATA TASK
         |--------------------------------------------------------------------------
         */
+$task->load([
 
 
-        $task->load([
-
-            'proyek',
-
-            'aktivitasTugas'
-
-        ]);
+    'proyek.perusahaan',
 
 
+    'divisi',
+
+
+    'karyawan',
+
+'aktivitasTugas'=>function($query){
+
+    $query->with('karyawan');
+
+}
+
+
+]);
+
+
+$activities = $task->aktivitasTugas;
 
 
 
-        return view(
 
-            'employee.tasks.show',
+return view(
 
-            compact('task')
+    'employee.tasks.show',
 
-        );
+    compact(
 
+        'task',
+
+        'activities'
+
+    )
+
+);
 
     }
-
 
 
 }

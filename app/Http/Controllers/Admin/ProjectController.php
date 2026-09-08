@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 use App\Helpers\AuditHelper;
 
+
+
 class ProjectController extends Controller
 {
 
@@ -22,14 +24,85 @@ class ProjectController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
-    public function index()
+    public function index(Request $request)
     {
 
 
         $projects = Proyek::with('perusahaan')
+
+
+            // SEARCH PROJECT
+            ->when($request->search, function($query) use ($request){
+
+
+                $query->where(function($q) use ($request){
+
+
+                    $q->where(
+                        'nama_proyek',
+                        'like',
+                        '%'.$request->search.'%'
+                    )
+
+
+                    ->orWhere(
+                        'pemilik_proyek',
+                        'like',
+                        '%'.$request->search.'%'
+                    )
+
+
+                    ->orWhereHas(
+                        'perusahaan',
+                        function($perusahaan) use ($request){
+
+
+                            $perusahaan->where(
+                                'nama_perusahaan',
+                                'like',
+                                '%'.$request->search.'%'
+                            );
+
+
+                        }
+                    );
+
+
+                });
+
+
+            })
+
+
+
+            // FILTER PERUSAHAAN
+            ->when($request->perusahaan_id, function($query) use ($request){
+
+
+                $query->where(
+                    'perusahaan_id',
+                    $request->perusahaan_id
+                );
+
+
+            })
+
+
+
             ->latest()
+
             ->get();
+
+
+
+
+
+
+        $perusahaans = Perusahaan::where(
+            'status',
+            'aktif'
+        )->get();
+
 
 
 
@@ -41,7 +114,9 @@ class ProjectController extends Controller
 
             compact(
 
-                'projects'
+                'projects',
+
+                'perusahaans'
 
             )
 
@@ -65,19 +140,27 @@ class ProjectController extends Controller
     */
 
 
-        public function create()
-        {
-            $perusahaans = Perusahaan::where(
-                'status',
-                'aktif'
-            )->get();
+    public function create()
+    {
 
 
-            return view(
-                'admin.projects.create',
-                compact('perusahaans')
-            );
-        }
+        $perusahaans = Perusahaan::where(
+            'status',
+            'aktif'
+        )->get();
+
+
+
+        return view(
+
+            'admin.projects.create',
+
+            compact('perusahaans')
+
+        );
+
+
+    }
 
 
 
@@ -100,6 +183,7 @@ class ProjectController extends Controller
 
         $request->validate([
 
+
             'perusahaan_id'=>'required|exists:perusahaans,id',
 
 
@@ -109,13 +193,10 @@ class ProjectController extends Controller
             'tanggal_mulai'=>'required|date',
 
 
-
             'tanggal_selesai'=>'nullable|date',
 
 
-
             'pemilik_proyek'=>'nullable|string|max:255',
-
 
 
             'total_anggaran'=>'required|numeric|min:0',
@@ -130,23 +211,30 @@ class ProjectController extends Controller
 
 
 
-
         $project = Proyek::create([
+
 
             'perusahaan_id'=>$request->perusahaan_id,
 
+
             'nama_proyek'=>$request->nama_proyek,
+
 
             'tanggal_mulai'=>$request->tanggal_mulai,
 
+
             'tanggal_selesai'=>$request->tanggal_selesai,
 
+
             'pemilik_proyek'=>$request->pemilik_proyek,
+
 
             'total_anggaran'=>$request->total_anggaran,
 
 
         ]);
+
+
 
 
 
@@ -163,13 +251,14 @@ class ProjectController extends Controller
         );
 
 
+
+
+
+
+
         return redirect()
 
-            ->route(
-
-                'admin.projects.index'
-
-            )
+            ->route('admin.projects.index')
 
             ->with(
 
@@ -203,7 +292,8 @@ class ProjectController extends Controller
 
         $project->load([
 
-            'perusahaan.proyek',
+
+            'perusahaan',
 
             'tugas',
 
@@ -211,18 +301,18 @@ class ProjectController extends Controller
 
             'users'
 
+
         ]);
+
+
+
 
 
         return view(
 
             'admin.projects.show',
 
-            compact(
-
-                'project'
-
-            )
+            compact('project')
 
         );
 
@@ -254,12 +344,21 @@ class ProjectController extends Controller
         )->get();
 
 
+
+
+
         return view(
+
             'admin.projects.edit',
+
             compact(
+
                 'project',
+
                 'perusahaans'
+
             )
+
         );
 
 
@@ -286,23 +385,20 @@ class ProjectController extends Controller
 
         $request->validate([
 
+
             'perusahaan_id'=>'required|exists:perusahaans,id',
 
 
             'nama_proyek'=>'required|string|max:255',
 
 
-
             'tanggal_mulai'=>'required|date',
-
 
 
             'tanggal_selesai'=>'nullable|date',
 
 
-
             'pemilik_proyek'=>'nullable|string|max:255',
-
 
 
             'total_anggaran'=>'required|numeric|min:0',
@@ -317,47 +413,33 @@ class ProjectController extends Controller
 
 
 
-
-
         $project->update([
 
 
-            'perusahaan_id'=>
-            
-            $request->perusahaan_id,
+            'perusahaan_id'=>$request->perusahaan_id,
 
 
-            'nama_proyek'=>
-
-                $request->nama_proyek,
+            'nama_proyek'=>$request->nama_proyek,
 
 
-
-            'tanggal_mulai'=>
-
-                $request->tanggal_mulai,
+            'tanggal_mulai'=>$request->tanggal_mulai,
 
 
-
-            'tanggal_selesai'=>
-
-                $request->tanggal_selesai,
+            'tanggal_selesai'=>$request->tanggal_selesai,
 
 
-
-            'pemilik_proyek'=>
-
-                $request->pemilik_proyek,
+            'pemilik_proyek'=>$request->pemilik_proyek,
 
 
-
-            'total_anggaran'=>
-
-                $request->total_anggaran,
+            'total_anggaran'=>$request->total_anggaran,
 
 
 
         ]);
+
+
+
+
 
 
 
@@ -375,13 +457,11 @@ class ProjectController extends Controller
 
 
 
+
+
         return redirect()
 
-            ->route(
-
-                'admin.projects.index'
-
-            )
+            ->route('admin.projects.index')
 
             ->with(
 
@@ -407,67 +487,85 @@ class ProjectController extends Controller
     | DELETE PROJECT
     |--------------------------------------------------------------------------
     */
-public function destroy(Proyek $project)
-{
 
 
-    if(
-
-        $project->tugas()->count() > 0 ||
-
-        $project->alokasiDivisi()->count() > 0 ||
-
-        $project->users()->count() > 0 ||
-
-        $project->setoranProyek()->count() > 0
-
-    ){
-
-        return back()->withErrors([
-
-            'project'=>'Project tidak dapat dihapus karena masih memiliki tugas, anggota, alokasi, atau transaksi.'
-
-        ]);
-
-    }
+    public function destroy(Proyek $project)
+    {
 
 
+        if(
+
+            $project->tugas()->count() > 0 ||
+
+            $project->alokasiDivisi()->count() > 0 ||
+
+            $project->users()->count() > 0 ||
+
+            $project->setoranProyek()->count() > 0
+
+
+        ){
+
+
+            return back()->withErrors([
+
+
+                'project'=>
+
+                'Project tidak dapat dihapus karena masih memiliki tugas, anggota, alokasi, atau transaksi.'
 
 
 
-    AuditHelper::create(
+            ]);
 
-        'Hapus Project',
 
-        'Manajemen Project',
-
-        'Admin menghapus project '.$project->nama_proyek
-
-    );
+        }
 
 
 
 
 
-    $project->delete();
 
 
+        AuditHelper::create(
 
+            'Hapus Project',
 
+            'Manajemen Project',
 
-    return redirect()
-
-        ->route('admin.projects.index')
-
-        ->with(
-
-            'success',
-
-            'Project berhasil dihapus'
+            'Admin menghapus project '.$project->nama_proyek
 
         );
 
 
-}
+
+
+
+
+
+        $project->delete();
+
+
+
+
+
+
+
+        return redirect()
+
+            ->route('admin.projects.index')
+
+            ->with(
+
+                'success',
+
+                'Project berhasil dihapus'
+
+            );
+
+
+    }
+
+
 
 }
