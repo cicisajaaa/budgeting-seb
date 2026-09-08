@@ -92,7 +92,7 @@ Dana Terealisasi
 
 <h2>
 Rp {{number_format(
-$totalRealisasi ?? 0,
+$totalCairDana ?? 0,
 0,
 ',',
 '.'
@@ -111,7 +111,7 @@ Dana yang sudah dicairkan
 <div class="summary-card">
 
 <span>
-Total Dana Disetujui
+Dana Disetujui
 </span>
 
 
@@ -229,7 +229,44 @@ Seluruh pekerjaan
 
 </div>
 
+<div class="summary-card">
 
+<span>
+Total Aktivitas
+</span>
+
+<h2>
+{{$totalAktivitas ?? 0}}
+</h2>
+
+<p>
+Update pekerjaan karyawan
+</p>
+
+</div>
+
+<div class="summary-card">
+
+<span>
+Budget Aktivitas
+</span>
+
+<h2>
+
+Rp {{number_format(
+$totalAnggaranAktivitas ?? 0,
+0,
+',',
+'.'
+)}}
+
+</h2>
+
+<p>
+Penggunaan aktivitas
+</p>
+
+</div>
 
 
 
@@ -295,7 +332,7 @@ Dana Terealisasi
 <strong class="green">
 
 Rp {{number_format(
-$totalRealisasi ?? 0,
+$totalCairDana ?? 0,
 0,
 ',',
 '.'
@@ -499,7 +536,7 @@ Status
 
 
 
-@forelse($projects ?? [] as $project)
+@forelse($projects as $project)
 
 
 
@@ -1647,14 +1684,13 @@ CHART PROGRESS PROJECT
 ========================
 */
 
-
 const projectLabels = @json(
-    $projects->pluck('nama_proyek')
+    $progressProjects->pluck('nama_proyek')
 );
 
 
 const projectProgress = @json(
-    $projects->map(function($project){
+    $progressProjects->map(function($project){
 
         return $project->progres_keseluruhan;
 
@@ -1662,10 +1698,14 @@ const projectProgress = @json(
 );
 
 
+const progressCanvas = document.getElementById('projectProgressChart');
+
+
+if(progressCanvas){
 
 new Chart(
 
-document.getElementById('projectProgressChart'),
+progressCanvas,
 
 {
 
@@ -1742,8 +1782,7 @@ return value+'%';
 }
 
 );
-
-
+}
 
 
 
@@ -1758,21 +1797,21 @@ const financeData = @json($financeProjects);
 
 
 
+const financeCanvas = document.getElementById('financeChart');
+
+if(financeCanvas){
+
 new Chart(
 
-document.getElementById('financeChart'),
+financeCanvas,
 
 {
 
-
 type:'bar',
-
 
 data:{
 
-
 labels:financeData.map(item=>item.nama),
-
 
 datasets:[
 
@@ -1785,7 +1824,6 @@ backgroundColor:'#2563eb'
 
 },
 
-
 {
 label:'Realisasi',
 
@@ -1797,29 +1835,21 @@ backgroundColor:'#16a34a'
 
 ]
 
-
 },
 
-
 options:{
-
 
 responsive:true,
 
 maintainAspectRatio:false,
 
-
 scales:{
-
 
 y:{
 
-
 beginAtZero:true,
 
-
 ticks:{
-
 
 callback:function(value){
 
@@ -1827,27 +1857,22 @@ return 'Rp '+value.toLocaleString();
 
 }
 
+}
 
 }
 
+}
 
 }
 
-
 }
-
-
-}
-
-
-}
-
 
 );
 
-
+}
 
 });
+
 
 
 </script>

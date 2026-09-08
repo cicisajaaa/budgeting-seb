@@ -5,133 +5,201 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 
-
 use App\Models\Proyek;
 use App\Models\PengajuanDana;
-use App\Models\TransaksiDana;
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
-
+use App\Models\TransaksiDana;
 
 
 class OwnerDashboardController extends Controller
 {
 
 
-    public function index()
-    {
+public function index()
+{
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PROJECT DATA
-        |--------------------------------------------------------------------------
-        */
+/*
+|--------------------------------------------------------------------------
+| PROJECT DATA
+|--------------------------------------------------------------------------
+*/
 
 
-        $projects = Proyek::with([
+$projects = Proyek::with([
 
-            'tugas',
-            'aktivitasTugas',
-            'perusahaan'
+    'tugas',
+    'aktivitasTugas',
+    'perusahaan',
+    'transaksiDana'
 
-        ])
+])
 
-        ->latest()
+->get()
 
-        ->get();
+->sortByDesc(function($project){
+
+    return $project->tugas->count();
+
+})
+
+->unique('nama_proyek')
+
+->values();
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| FINANCE CHART DATA
+|--------------------------------------------------------------------------
+*/
 
 
 $financeProjects = $projects->map(function($project){
+
 
     return [
 
         'nama' => $project->nama_proyek,
 
-        'budget' => $project->total_anggaran,
 
-        'realisasi' => $project->total_realisasi,
+        'budget' => (float) $project->total_anggaran,
+
+
+        'realisasi' => (float) $project->transaksiDana->sum('jumlah'),
+
 
     ];
+
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| TOP PROGRESS PROJECT
+|--------------------------------------------------------------------------
+*/
+
+$progressProjects = $projects
+
+    ->sortByDesc(function($project){
+
+        return $project->progres_keseluruhan;
+
+    })
+
+    ->take(5)
+
+    ->values();
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| PROJECT SUMMARY
+|--------------------------------------------------------------------------
+*/
+
+
+$totalProject = $projects->count();
+
+
+
+$totalBudget = $projects->sum(function($project){
+
+    return (float) $project->total_anggaran;
 
 });
 
 
 
-        $totalProject = $projects->count();
 
 
 
+$totalRealisasi = TransaksiDana::sum('jumlah');
 
+$totalCairDana = $totalRealisasi;
 
 
-        $totalBudget = $projects->sum(function($project){
+$sisaBudgetProyek = $totalBudget - $totalRealisasi;
 
-            return $project->total_anggaran ?? 0;
 
-        });
 
 
 
 
 
+$progressProject = round(
 
+    $projects
+    ->filter(function($project){
 
-        $progressProject = round(
-            $projects->avg(function($project){
+        return $project->tugas->count() > 0;
 
-                return $project->progres_keseluruhan ?? 0;
+    })
+    ->avg(function($project){
 
-            })
-        );
+        return $project->progres_keseluruhan;
 
+    })
 
+);
 
 
 
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FINANCE DATA
-        |--------------------------------------------------------------------------
-        */
+/*
+|--------------------------------------------------------------------------
+| APPROVAL FINANCE
+|--------------------------------------------------------------------------
+*/
 
+$totalApprovedExpense = PengajuanDana::where(
+    'status',
+    'approved'
+)
+->sum('jumlah');
 
-        // Dana yang benar-benar sudah dicairkan finance
 
-        $totalRealisasi = TransaksiDana::sum(
 
-            'jumlah'
 
-        );
 
 
+$pendingApproval = PengajuanDana::where(
+    'status',
+    'pending'
+)
 
+->count();
 
 
-        // Sisa seluruh budget proyek
 
-       $sisaBudgetProyek = $totalBudget - $totalRealisasi;
 
 
 
 
 
+/*
+|--------------------------------------------------------------------------
+| PROJECT MONITORING
+|--------------------------------------------------------------------------
+*/
 
 
-        // Total pengajuan yang sudah disetujui
+$criticalProjects = $projects->filter(function($project){
 
-        $totalApprovedExpense = PengajuanDana::where(
 
-            'status',
+    return $project->persentase_budget >= 90;
 
-            'approved'
 
-        )
+});
 
-        ->sum('jumlah');
 
 
 
@@ -139,185 +207,142 @@ $financeProjects = $projects->map(function($project){
 
 
 
-        // Pengajuan yang masih menunggu approval
 
-        $pendingApproval = PengajuanDana::where(
+/*
+|--------------------------------------------------------------------------
+| TASK MONITORING
+|--------------------------------------------------------------------------
+*/
 
-            'status',
 
-            'pending'
+$totalTask = Tugas::count();
 
-        )
 
-        ->count();
 
+$taskSelesai = Tugas::where(
+    'status',
+    'selesai'
+)
 
+->count();
 
 
 
 
 
+$taskBerjalan = Tugas::where(
+    'status',
+    'sedang_dikerjakan'
+)
 
+->count();
 
-        /*
-        |--------------------------------------------------------------------------
-        | PROJECT BUDGET MONITORING
-        |--------------------------------------------------------------------------
-        */
 
 
-        $criticalProjects = $projects->filter(function($project){
 
 
-            return $project->persentase_budget >= 90;
 
 
-        });
 
 
+/*
+|--------------------------------------------------------------------------
+| AKTIVITAS TERBARU
+|--------------------------------------------------------------------------
+*/
 
+$recentTasks = AktivitasTugas::with([
 
+    'tugas.proyek',
 
+    'karyawan'
 
+])
 
+->latest('tanggal')
 
-        /*
-        |--------------------------------------------------------------------------
-        | TASK MONITORING
-        |--------------------------------------------------------------------------
-        */
+->get()
 
+->unique('tugas_id')
 
-        $totalTask = Tugas::count();
+->take(5)
 
+->values();
 
 
 
 
 
-        $taskSelesai = Tugas::where(
+/*
+|--------------------------------------------------------------------------
+| AKTIVITAS MONITORING
+|--------------------------------------------------------------------------
+*/
 
-            'status',
 
-            'selesai'
+$totalAktivitas = AktivitasTugas::count();
 
-        )
 
-        ->count();
 
+$totalAnggaranAktivitas = AktivitasTugas::sum(
+    'anggaran_aktivitas'
+);
 
 
 
 
 
 
-        $taskBerjalan = Tugas::where(
 
-            'status',
 
-            'sedang_dikerjakan'
+return view(
 
-        )
+    'dashboard.owner',
 
-        ->count();
+    compact(
 
+        'projects',
 
+        'totalProject',
 
+        'totalBudget',
 
+        'totalRealisasi',
 
+        'sisaBudgetProyek',
 
+        'totalApprovedExpense',
 
+        'totalCairDana',
 
+        'progressProject',
 
-        /*
-        |--------------------------------------------------------------------------
-        | AKTIVITAS TERBARU
-        |--------------------------------------------------------------------------
-        */
+        'pendingApproval',
 
-        $recentTasks = AktivitasTugas::with([
+        'criticalProjects',
 
-            'tugas.proyek',
+        'totalTask',
 
-            'karyawan'
+        'taskSelesai',
 
-        ])
+        'taskBerjalan',
 
-        ->latest()
+        'recentTasks',
 
-        ->take(5)
+        'financeProjects',
 
-        ->get();
+        'totalAktivitas',
 
+        'totalAnggaranAktivitas',
 
+        'progressProjects',
 
+    )
 
+);
 
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | RETURN VIEW
-        |--------------------------------------------------------------------------
-        */
-
-
-        return view(
-
-            'dashboard.owner',
-
-            compact(
-
-
-                'projects',
-
-
-                'totalProject',
-
-
-                'totalBudget',
-
-
-                'totalRealisasi',
-
-
-                'sisaBudgetProyek',
-
-
-                'totalApprovedExpense',
-
-
-                'progressProject',
-
-
-                'pendingApproval',
-
-
-                'criticalProjects',
-
-
-                'totalTask',
-
-
-                'taskSelesai',
-
-
-                'taskBerjalan',
-
-
-                'recentTasks',
-
-                'financeProjects'
-
-
-
-            )
-
-        );
-
-
-    }
+}
 
 
 }

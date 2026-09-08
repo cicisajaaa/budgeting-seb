@@ -488,14 +488,10 @@ if($user->role == 'karyawan')
         
         function($query) use ($user){
 
-            $query->where(
-
-                'karyawan_id',
-
-                $user->karyawan->id
-
-            );
-
+       $query->where(
+    'karyawan_id',
+    optional($user->karyawan)->id
+);
         }
     )
     ->with([
@@ -516,14 +512,13 @@ if($user->role == 'karyawan')
     | TASK BERDASARKAN PROJECT
     |--------------------------------------------------------------------------
     */
+$employeeTasks = Tugas::where(
 
-    $employeeTasks = Tugas::where(
+    'karyawan_id',
 
-        'karyawan_id',
+    optional($user->karyawan)->id
 
-        $user->karyawan->id
-
-    )
+)
 
     ->with([
 
