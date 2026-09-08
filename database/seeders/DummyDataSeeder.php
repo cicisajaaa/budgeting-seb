@@ -3,115 +3,447 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Project;
-use App\Models\Employee;
+
+use App\Models\User;
+use App\Models\Proyek;
+use App\Models\Karyawan;
 use App\Models\Tugas;
-use App\Models\ProjectDivisionAllocation;
+use App\Models\AlokasiProyekDivisi;
+
+use Illuminate\Support\Facades\Hash;
+
 use Carbon\Carbon;
+
+
 
 class DummyDataSeeder extends Seeder
 {
+
     public function run(): void
     {
-        // ==========================================
-        // 1. DATA PROYEK (Dari Rekap Project Manager) [cite: 634]
-        // ==========================================
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 1. DATA USER
+        |--------------------------------------------------------------------------
+        */
+
+
+        $users = [
+
+            [
+                'name'=>'TIRA',
+                'email'=>'tira@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'NAYA',
+                'email'=>'naya@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'BELA',
+                'email'=>'bela@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'RAUDAH',
+                'email'=>'raudah@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'SYIFA',
+                'email'=>'syifa@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'YUNICA',
+                'email'=>'yunica@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'YASMIN',
+                'email'=>'yasmin@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'MAULIDA',
+                'email'=>'maulida@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'AUREL',
+                'email'=>'aurel@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+            [
+                'name'=>'ASRIN',
+                'email'=>'asrin@gmail.com',
+                'password'=>Hash::make('password')
+            ],
+
+        ];
+
+
+$userIds = [];
+
+foreach($users as $user)
+{
+
+    $data = User::firstOrCreate(
+        [
+            'email'=>$user['email']
+        ],
+        $user
+    );
+
+
+    $userIds[$data->name] = $data->id;
+
+}
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2. DATA PROYEK
+        |--------------------------------------------------------------------------
+        */
+
+
         $projects = [
-            ['nama_project' => 'CV BERDIKARI', 'progress' => 0.00, 'budget' => 150000000],
-            ['nama_project' => 'CV SUNFAN JAYA PERSADA', 'progress' => 0.00, 'budget' => 50000000],
-            ['nama_project' => 'CV TIGA SERANGKAI BINUANG', 'progress' => 0.00, 'budget' => 80000000],
-            ['nama_project' => 'PT BERKAT BERSUJUD', 'progress' => 33.33, 'budget' => 120000000],
-            ['nama_project' => 'PT BANDANGAN TIRTA AGUNG', 'progress' => 75.00, 'budget' => 90000000],
-            ['nama_project' => 'PT PLANTINDO AGRO SUBUR', 'progress' => 75.00, 'budget' => 200000000],
-            ['nama_project' => 'PT DORISFA GUNUNG MULIA', 'progress' => 60.00, 'budget' => 150000000],
-            ['nama_project' => 'DINAS PERTANIAN KAB KAPUAS (RPU)', 'progress' => 100.00, 'budget' => 50000000]
+
+            [
+                'nama_proyek'=>'CV BERDIKARI',
+                'anggaran'=>150000000
+            ],
+
+            [
+                'nama_proyek'=>'CV SUNFAN JAYA PERSADA',
+                'anggaran'=>50000000
+            ],
+
+            [
+                'nama_proyek'=>'CV TIGA SERANGKAI BINUANG',
+                'anggaran'=>80000000
+            ],
+
+            [
+                'nama_proyek'=>'PT BERKAT BERSUJUD',
+                'anggaran'=>120000000
+            ],
+
+            [
+                'nama_proyek'=>'PT BANDANGAN TIRTA AGUNG',
+                'anggaran'=>90000000
+            ],
+
+            [
+                'nama_proyek'=>'PT PLANTINDO AGRO SUBUR',
+                'anggaran'=>200000000
+            ],
+
+            [
+                'nama_proyek'=>'PT DORISFA GUNUNG MULIA',
+                'anggaran'=>150000000
+            ],
+
+            [
+                'nama_proyek'=>'DINAS PERTANIAN KAB KAPUAS (RPU)',
+                'anggaran'=>50000000
+            ]
+
         ];
 
-        foreach ($projects as $p) {
-            Project::create([
-                'nama_project' => $p['nama_project'],
-                'total_budget' => $p['budget'],
-                'progress_keseluruhan' => $p['progress']
-            ]);
+
+
+        foreach($projects as $project)
+        {
+
+Proyek::firstOrCreate(
+[
+    'nama_proyek'=>$project['nama_proyek']
+],
+[
+    'total_anggaran'=>$project['anggaran']
+]);
         }
 
-        // ==========================================
-        // 2. DATA KARYAWAN & DIVISI [cite: 635]
-        // ==========================================
-        // (Asumsi ID Divisi berurutan dari 1-8 sesuai DivisionSeeder)
-        $employees = [
-            ['nama_karyawan' => 'TIRA', 'division_id' => 1],     // 1: UKL UPL [cite: 635]
-            ['nama_karyawan' => 'NAYA', 'division_id' => 2],     // 2: AMDAL [cite: 635]
-            ['nama_karyawan' => 'BELA', 'division_id' => 3],     // 3: PERTEK BMAL [cite: 635]
-            ['nama_karyawan' => 'RAUDAH', 'division_id' => 4],   // 4: PERTEK EMISI [cite: 635]
-            ['nama_karyawan' => 'SYIFA', 'division_id' => 5],    // 5: RINTEK LB3 [cite: 635]
-            ['nama_karyawan' => 'YUNICA', 'division_id' => 6],   // 6: RKAB [cite: 635]
-            ['nama_karyawan' => 'YASMIN', 'division_id' => 7],   // 7: PKKPRL [cite: 635]
-            ['nama_karyawan' => 'MAULIDA', 'division_id' => 8],  // 8: PEMANTAUAN [cite: 635]
-            ['nama_karyawan' => 'AUREL', 'division_id' => 1],    // Asumsi di UKL UPL/AMDAL [cite: 635]
-            ['nama_karyawan' => 'ASRIN', 'division_id' => 1]     // Asumsi di UKL UPL [cite: 635]
-        ];
 
-        foreach ($employees as $e) {
-            Employee::create($e);
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 3. DATA KARYAWAN
+        |--------------------------------------------------------------------------
+        */
+$employees = [
+
+[
+    'pengguna_id'=>$userIds['TIRA'],
+    'nama_karyawan'=>'TIRA',
+    'divisi_id'=>4
+],
+
+[
+    'pengguna_id'=>$userIds['NAYA'],
+    'nama_karyawan'=>'NAYA',
+    'divisi_id'=>5
+],
+
+[
+    'pengguna_id'=>$userIds['BELA'],
+    'nama_karyawan'=>'BELA',
+    'divisi_id'=>6
+],
+
+[
+    'pengguna_id'=>$userIds['RAUDAH'],
+    'nama_karyawan'=>'RAUDAH',
+    'divisi_id'=>7
+],
+
+[
+    'pengguna_id'=>$userIds['SYIFA'],
+    'nama_karyawan'=>'SYIFA',
+    'divisi_id'=>8
+],
+
+[
+    'pengguna_id'=>$userIds['YUNICA'],
+    'nama_karyawan'=>'YUNICA',
+    'divisi_id'=>9
+],
+
+[
+    'pengguna_id'=>$userIds['YASMIN'],
+    'nama_karyawan'=>'YASMIN',
+    'divisi_id'=>10
+],
+
+[
+    'pengguna_id'=>$userIds['MAULIDA'],
+    'nama_karyawan'=>'MAULIDA',
+    'divisi_id'=>11
+],
+
+[
+    'pengguna_id'=>$userIds['AUREL'],
+    'nama_karyawan'=>'AUREL',
+    'divisi_id'=>4
+],
+
+[
+    'pengguna_id'=>$userIds['ASRIN'],
+    'nama_karyawan'=>'ASRIN',
+    'divisi_id'=>4
+],
+
+];
+
+
+        foreach($employees as $employee)
+        {
+
+            Karyawan::firstOrCreate(
+[
+    'pengguna_id'=>$employee['pengguna_id']
+],
+$employee
+);
+
+
         }
 
-        // ==========================================
-        // 3. DATA ALOKASI BUDGET DEFAULT 
-        // ==========================================
-        // Simulasi jika klien membayar setoran untuk CV BERDIKARI
-        $projectBerdikari = Project::where('nama_project', 'CV BERDIKARI')->first();
-        ProjectDivisionAllocation::insert([
-            ['project_id' => $projectBerdikari->id, 'division_id' => 1, 'persentase' => 40.00], // UKL UPL
-            ['project_id' => $projectBerdikari->id, 'division_id' => 2, 'persentase' => 30.00], // AMDAL
-            ['project_id' => $projectBerdikari->id, 'division_id' => 3, 'persentase' => 30.00], // PERTEK BMAL
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 4. ALOKASI DIVISI PROYEK
+        |--------------------------------------------------------------------------
+        */
+
+
+        $berdikari = Proyek::where(
+            'nama_proyek',
+            'CV BERDIKARI'
+        )->first();
+
+foreach([
+
+    [
+        'proyek_id'=>$berdikari->id,
+        'divisi_id'=>4,
+        'persentase'=>40
+    ],
+
+    [
+        'proyek_id'=>$berdikari->id,
+        'divisi_id'=>5,
+        'persentase'=>30
+    ],
+
+    [
+        'proyek_id'=>$berdikari->id,
+        'divisi_id'=>6,
+        'persentase'=>30
+    ]
+
+] as $alokasi)
+{
+
+    AlokasiProyekDivisi::firstOrCreate(
+        [
+            'proyek_id'=>$alokasi['proyek_id'],
+            'divisi_id'=>$alokasi['divisi_id']
+        ],
+        $alokasi
+    );
+
+}
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 5. DATA TUGAS
+        |--------------------------------------------------------------------------
+        */
+
+
+        $tira = Karyawan::where(
+            'nama_karyawan',
+            'TIRA'
+        )->first();
+
+
+
+        $sunfan = Proyek::where(
+            'nama_proyek',
+            'CV SUNFAN JAYA PERSADA'
+        )->first();
+
+
+
+        Tugas::create([
+
+            'proyek_id'=>$sunfan->id,
+
+            'divisi_id'=>4,
+
+            'karyawan_id'=>$tira->id,
+
+            'tanggal'=>Carbon::create(2024,5,12),
+
+            'nama_tugas'=>'UKL UPL 01',
+
+            'aktivitas'=>'Perbaikan administrasi / Kendala: Pertek Air Limbah',
+
+            'prioritas'=>'Low',
+
+            'progres_persen'=>23,
+
+            'status'=>'sedang_dikerjakan'
+
         ]);
 
-        // ==========================================
-        // 4. DATA TASK / DAILY TRACKER [cite: 720, 1156]
-        // ==========================================
-        
-        // Task milik TIRA [cite: 720]
-        $sunfan = Project::where('nama_project', 'CV SUNFAN JAYA PERSADA')->first();
-        $tira = Employee::where('nama_karyawan', 'TIRA')->first();
-        Task::create([
-            'project_id' => $sunfan->id,
-            'division_id' => 1,
-            'employee_id' => $tira->id,
-            'tanggal' => Carbon::create(2024, 5, 12),
-            'nama_task' => 'UKL UPL 01',
-            'aktivitas' => 'Perbaikan administrasi / Kendala: Pertek Air Limbah',
-            'prioritas' => 'Low',
-            'status' => 'In Progress',
-            'progress_persen' => 23.00
+
+
+
+
+        $berkat = Proyek::where(
+            'nama_proyek',
+            'PT BERKAT BERSUJUD'
+        )->first();
+
+
+
+        Tugas::create([
+
+            'proyek_id'=>$berkat->id,
+
+            'divisi_id'=>4,
+
+            'karyawan_id'=>$tira->id,
+
+            'tanggal'=>Carbon::create(2024,6,24),
+
+            'nama_tugas'=>'AMDAL BARU 04',
+
+            'aktivitas'=>'Drafting SK',
+
+            'prioritas'=>'Medium',
+
+            'progres_persen'=>0,
+
+            'status'=>'belum_dikerjakan'
+
         ]);
 
-        $berkat = Project::where('nama_project', 'PT BERKAT BERSUJUD')->first();
-        Task::create([
-            'project_id' => $berkat->id,
-            'division_id' => 1,
-            'employee_id' => $tira->id,
-            'tanggal' => Carbon::create(2024, 6, 24),
-            'nama_task' => 'AMDAL BARU 04',
-            'aktivitas' => 'Drafting SK',
-            'prioritas' => 'Medium',
-            'status' => 'Pending',
-            'progress_persen' => 0.00
+
+
+
+
+
+
+        $tiga = Proyek::where(
+            'nama_proyek',
+            'CV TIGA SERANGKAI BINUANG'
+        )->first();
+
+
+
+        $aurel = Karyawan::where(
+            'nama_karyawan',
+            'AUREL'
+        )->first();
+
+
+
+
+        Tugas::create([
+
+            'proyek_id'=>$tiga->id,
+
+            'divisi_id'=>4,
+
+            'karyawan_id'=>$aurel->id,
+
+            'tanggal'=>Carbon::create(2025,12,22),
+
+            'nama_tugas'=>'ADDENDUM TIPE A 01',
+
+            'aktivitas'=>'Draft 70% (Kendala data series pemantauan, PKKPR, penapisan amdalnet)',
+
+            'prioritas'=>'Low',
+
+            'progres_persen'=>23,
+
+            'status'=>'sedang_dikerjakan'
+
         ]);
 
-        // Task milik AUREL [cite: 1156]
-        $tigaSerangkai = Project::where('nama_project', 'CV TIGA SERANGKAI BINUANG')->first();
-        $aurel = Employee::where('nama_karyawan', 'AUREL')->first();
-        Task::create([
-            'project_id' => $tigaSerangkai->id,
-            'division_id' => 1,
-            'employee_id' => $aurel->id,
-            'tanggal' => Carbon::create(2025, 12, 22),
-            'nama_task' => 'ADDENDUM TIPE A 01',
-            'aktivitas' => 'Draft 70% (Kendala: data series pemantauan, pkkpr, penapisan amdalnet)',
-            'prioritas' => 'Low',
-            'status' => 'In Progress',
-            'progress_persen' => 23.00
-        ]);
+
+
     }
+
 }
