@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use App\Models\PengajuanDana;
 use App\Models\User;
 use App\Models\RekeningBank;
-use App\Models\Proyek;
+
 
 class TransaksiDana extends Model
 {
-
 
     protected $table = 'transaksi_dana';
 
 
 
     protected $fillable = [
-
 
         'pengajuan_dana_id',
 
@@ -29,27 +28,18 @@ class TransaksiDana extends Model
 
         'tanggal',
 
-
     ];
-
-
-
 
 
 
 
     protected $casts = [
 
-
         'jumlah' => 'integer',
-
 
         'tanggal' => 'date',
 
-
     ];
-
-
 
 
 
@@ -59,10 +49,9 @@ class TransaksiDana extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Pengajuan Dana
+    | Relasi Pengajuan Dana
     |--------------------------------------------------------------------------
     */
-
 
     public function pengajuanDana()
     {
@@ -83,14 +72,11 @@ class TransaksiDana extends Model
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Penyetuju
+    | Relasi User Penyetuju
     |--------------------------------------------------------------------------
     */
-
 
     public function penyetuju()
     {
@@ -111,14 +97,11 @@ class TransaksiDana extends Model
 
 
 
-
-
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Rekening Bank
+    | Relasi Rekening Bank
     |--------------------------------------------------------------------------
     */
-
 
     public function rekeningBank()
     {
@@ -134,32 +117,5 @@ class TransaksiDana extends Model
     }
 
 
-/*
-|--------------------------------------------------------------------------
-| Relasi Project melalui Pengajuan Dana
-|--------------------------------------------------------------------------
-*/
-
-
-public function proyek()
-{
-
-    return $this->hasOneThrough(
-
-        Proyek::class,
-
-        PengajuanDana::class,
-
-        'id',
-
-        'id',
-
-        'pengajuan_dana_id',
-
-        'proyek_id'
-
-    );
-
-}
 
 }

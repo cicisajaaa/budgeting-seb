@@ -187,12 +187,10 @@ protected $fillable = [
 | Relasi Transaksi Dana
 |--------------------------------------------------------------------------
 */
-
-
 public function transaksiDana()
 {
 
-    return $this->hasOne(
+    return $this->hasMany(
 
         TransaksiDana::class,
 
