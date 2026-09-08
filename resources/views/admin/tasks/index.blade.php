@@ -25,9 +25,6 @@
 </div>
 
 
-
-
-
 <div class="task-stat-grid">
 
 
@@ -62,8 +59,6 @@
 
 
 
-
-
     <div class="task-stat">
 
         <div class="icon-box blue">
@@ -79,7 +74,7 @@
 
 
             <h3>
-            {{$tasks->where('status','sedang_dikerjakan')->count()}}
+                {{$tasks->where('status','sedang_dikerjakan')->count()}}
             </h3>
 
 
@@ -87,13 +82,9 @@
                 Sedang dikerjakan
             </small>
 
-
         </div>
 
     </div>
-
-
-
 
 
 
@@ -122,6 +113,78 @@
                 Task selesai
             </small>
 
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="task-stat">
+
+        <div class="icon-box orange">
+            ⚠️
+        </div>
+
+
+        <div>
+
+            <span>
+                Terlambat
+            </span>
+
+
+            <h3>
+                {{
+                    $tasks->filter(function($task){
+
+                        return $task->deadline
+                        && now()->gt($task->deadline)
+                        && $task->status != 'selesai'
+                        && $task->status != 'dibatalkan';
+
+                    })->count()
+                }}
+            </h3>
+
+
+            <small>
+                Melewati deadline
+            </small>
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="task-stat">
+
+        <div class="icon-box red">
+            ❌
+        </div>
+
+
+        <div>
+
+            <span>
+                Dibatalkan
+            </span>
+
+
+            <h3>
+                {{$tasks->where('status','dibatalkan')->count()}}
+            </h3>
+
+
+            <small>
+                Task dibatalkan
+            </small>
+
 
         </div>
 
@@ -129,13 +192,6 @@
 
 
 </div>
-
-
-
-
-
-
-
 
 
 <div class="glass-panel">
@@ -159,13 +215,48 @@
 
 
 
+<div style="display:flex;gap:10px;align-items:center">
 
-        <div class="total-data">
 
-            {{$tasks->count()}} Task
+<select id="filterStatus"
+class="filter-status">
 
-        </div>
+<option value="all">
+Semua
+</option>
 
+
+<option value="selesai">
+Selesai
+</option>
+
+
+<option value="sedang_dikerjakan">
+Sedang Dikerjakan
+</option>
+
+
+<option value="belum_dikerjakan">
+Belum Dikerjakan
+</option>
+
+
+<option value="dibatalkan">
+Dibatalkan
+</option>
+
+
+</select>
+
+
+<div class="total-data">
+
+{{$tasks->count()}} Task
+
+</div>
+
+
+</div>
 
     </div>
 
@@ -237,7 +328,7 @@ Detail
 @forelse($tasks as $task)
 
 
-<tr>
+<tr data-status="{{$task->status}}">
 
 
 
@@ -352,7 +443,7 @@ Project ID : {{$task->proyek_id}}
 
 <div class="progress-bar"
 
-style="width: {{$task->progres_persen ?? 0}}%">
+style="width: {{min($task->progres_persen ?? 0,100)}}%">
 
 </div>
 
@@ -378,22 +469,42 @@ style="width: {{$task->progres_persen ?? 0}}%">
 
 
 <td>
-
 <span class="badge-status
-@if($task->status == 'selesai')
+
+@if(
+    $task->deadline
+    && now()->gt($task->deadline)
+    && $task->status != 'selesai'
+)
+
+danger
+
+@elseif($task->status == 'selesai')
+
 success
 
 @elseif($task->status == 'sedang_dikerjakan')
+
 warning
 
 @else
+
 pending
 
 @endif
+
 ">
 
+@if(
+    $task->deadline
+    && now()->gt($task->deadline)
+    && $task->status != 'selesai'
+)
 
-@if($task->status == 'selesai')
+Terlambat
+
+
+@elseif($task->status == 'selesai')
 
 Selesai
 
@@ -556,18 +667,18 @@ HEADER
 STAT CARD
 ================================ */
 
-
 .task-stat-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(5,1fr);
 
     gap:16px;
 
     margin-bottom:20px;
 
 }
+
 
 
 
@@ -690,7 +801,11 @@ STAT CARD
 }
 
 
+.icon-box.red{
 
+    background:#fee2e2;
+
+}
 
 
 
@@ -1157,7 +1272,13 @@ STATUS BADGE
 }
 
 
+.badge-status.danger{
 
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
 
 
 
@@ -1251,15 +1372,42 @@ td[colspan="8"]{
 
 
 
+.filter-status{
 
+    border:1px solid #e2e8f0;
+
+    background:white;
+
+    padding:7px 12px;
+
+    border-radius:10px;
+
+    font-size:10px;
+
+    color:#334155;
+
+    font-weight:700;
+
+}
 
 
 /* ===============================
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:1100px){
+
+
+.task-stat-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+
+@media(max-width:600px){
 
 
 .task-stat-grid{
@@ -1268,6 +1416,7 @@ RESPONSIVE
 
 }
 
+}
 
 
 table{
@@ -1283,4 +1432,46 @@ table{
 
 </style>
 
+
+
+
+<script>
+
+document
+.getElementById('filterStatus')
+.addEventListener('change',function(){
+
+
+let value=this.value;
+
+
+document
+.querySelectorAll('tbody tr')
+.forEach(row=>{
+
+
+let status=row.dataset.status;
+
+
+
+if(value=='all' || status==value){
+
+    row.style.display='';
+
+}
+
+else{
+
+    row.style.display='none';
+
+}
+
+
+});
+
+
+});
+
+
+</script>
 @endsection

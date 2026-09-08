@@ -9,29 +9,21 @@
 
 <div>
 
-
 <div class="welcome-label">
-
 TASK DETAIL
-
 </div>
 
 
 
 <h1>
-
 {{ $task->nama_tugas }}
-
 </h1>
 
 
 
 <p>
-
 {{ $task->proyek->nama_proyek ?? '-' }}
-
 </p>
-
 
 
 </div>
@@ -39,8 +31,7 @@ TASK DETAIL
 
 
 
-
-<a href="{{ route('employee.project.index') }}"
+<a href="{{ route('daily-tracker.index') }}"
 class="back-btn">
 
 ← Kembali
@@ -48,7 +39,6 @@ class="back-btn">
 </a>
 
 
-
 </div>
 
 
@@ -56,26 +46,20 @@ class="back-btn">
 
 
 
+
+
+{{-- ===============================
+INFORMASI TASK
+================================ --}}
 
 
 
 <div class="glass-panel">
 
 
-<div class="panel-header">
-
-
 <h2>
-
 📌 Informasi Task
-
 </h2>
-
-
-</div>
-
-
-
 
 
 
@@ -83,52 +67,46 @@ class="back-btn">
 
 
 
-
-
 <div class="info-box">
 
-
 <label>
-
 Project
-
 </label>
 
-
-
 <strong>
-
 {{ $task->proyek->nama_proyek ?? '-' }}
-
 </strong>
-
-
 
 </div>
 
 
 
-
-
-
-
 <div class="info-box">
 
-
 <label>
-
 Prioritas
-
 </label>
 
 
+@php
 
-<strong>
+$priority = [
+    'high'=>'Tinggi',
+    'medium'=>'Sedang',
+    'low'=>'Rendah'
+];
 
-{{ $task->prioritas }}
+$key = strtolower($task->prioritas ?? 'low');
 
-</strong>
+@endphp
 
+
+
+<span class="priority {{ $key }}">
+
+{{ $priority[$key] ?? 'Rendah' }}
+
+</span>
 
 
 </div>
@@ -136,26 +114,26 @@ Prioritas
 
 
 
-
-
-
 <div class="info-box">
 
-
 <label>
-
 Deadline
-
 </label>
-
 
 
 <strong>
 
-{{ $task->deadline ?? '-' }}
+@if($task->deadline)
+
+{{ \Carbon\Carbon::parse($task->deadline)->format('d M Y') }}
+
+@else
+
+-
+
+@endif
 
 </strong>
-
 
 
 </div>
@@ -165,29 +143,66 @@ Deadline
 
 
 
+<div class="info-box">
+
+<label>
+PIC
+</label>
+
+
+<strong>
+
+{{ $task->karyawan->nama_karyawan ?? '-' }}
+
+</strong>
+
+
+</div>
+
+
+
+
 
 
 <div class="info-box">
 
-
 <label>
-
-Status
-
+Divisi
 </label>
 
 
+<strong>
+
+{{ $task->divisi->nama_divisi ?? '-' }}
+
+</strong>
+
+
+</div>
+
+
+
+
+<div class="info-box">
+
+<label>
+Status
+</label>
 
 <span class="
 status
 
-@if(in_array($task->status,['selesai','done']))
+@if($task->status == 'selesai')
 
 done
 
-@elseif(in_array($task->status,['berjalan','progress']))
+@elseif($task->status == 'sedang_dikerjakan')
 
 progress
+
+@elseif($task->status == 'dibatalkan')
+
+cancel
 
 @else
 
@@ -197,253 +212,73 @@ todo
 
 ">
 
+@if($task->status == 'selesai')
 
-{{ strtoupper($task->status) }}
+Selesai
+
+@elseif($task->status == 'sedang_dikerjakan')
+
+Sedang Dikerjakan
+
+@elseif($task->status == 'dibatalkan')
+
+Dibatalkan
+
+@else
+
+Belum Dikerjakan
+
+@endif
 
 
 </span>
 
 
-
 </div>
 
 
 
 
 
-</div>
+@if($task->deadline)
+
+<div class="info-box">
 
 
+<label>
+Deadline Status
+</label>
 
-</div>
-{{-- ================= PROGRESS ================= --}}
-
-
-<div class="glass-panel">
-
-
-<h2>
-
-📊 Progress Pekerjaan
-
-</h2>
+@php
+    $deadlineStatus = $task->deadline_status;
+@endphp
 
 
+@if($deadlineStatus['color']=='danger')
+
+<span class="deadline danger">
+⚠ {{ $deadlineStatus['label'] }}
+</span>
 
 
+@elseif($deadlineStatus['color']=='warning')
 
-<div class="progress-area">
-
-
-
-<div class="progress-track">
-
+<span class="deadline warning">
+⚠ {{ $deadlineStatus['label'] }}
+</span>
 
 
-<div class="progress-value"
+@else
+
+<span class="deadline aman">
+✓ {{ $deadlineStatus['label'] }}
+</span>
 
 
-style="width:{{ $task->progres_persen }}%">
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<div class="progress-number">
-
-
-{{ number_format($task->progres_persen,0) }}%
+@endif
 
 
 </div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-<a href="{{ route('daily-tracker.show',$task->id) }}"
-
-class="update-btn">
-
-
-📝 Update Progress
-
-
-</a>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- ================= DESKRIPSI ================= --}}
-
-
-
-<div class="glass-panel">
-
-
-
-<h2>
-
-📝 Deskripsi Pekerjaan
-
-</h2>
-
-
-
-
-<div class="description">
-
-
-
-{{ $task->aktivitas ?? 'Tidak ada deskripsi pekerjaan.' }}
-
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- ================= TIMELINE AKTIVITAS ================= --}}
-
-
-
-<div class="glass-panel">
-
-
-
-<h2>
-
-⏳ Timeline Aktivitas
-
-</h2>
-
-
-
-
-
-
-@forelse($task->aktivitasTugas as $activity)
-
-
-
-
-
-<div class="timeline-item">
-
-
-
-<div class="timeline-dot"></div>
-
-
-
-
-
-
-<div class="timeline-content">
-
-
-
-
-
-<strong>
-
-
-{{ \Carbon\Carbon::parse(
-
-$activity->tanggal
-
-)->format('d M Y') }}
-
-
-
-</strong>
-
-
-
-
-
-
-<p>
-
-
-{{ $activity->aktivitas }}
-
-
-</p>
-
-
-
-
-
-
-
-<div class="activity-progress">
-
-
-Progress :
-
-{{ $activity->progres ?? 0 }}%
-
-
-</div>
-
-
-
-
-
-
-
-@if($activity->catatan)
-
-
-
-<small>
-
-
-Catatan:
-
-{{ $activity->catatan }}
-
-
-
-</small>
-
-
 
 @endif
 
@@ -451,6 +286,8 @@ Catatan:
 
 
 
+</div>
+
 
 </div>
 
@@ -458,37 +295,328 @@ Catatan:
 
 
 
+
+
+
+
+{{-- ===============================
+PROGRESS
+================================ --}}
+
+
+<div class="glass-panel">
+
+
+<h2>
+📊 Progress Pekerjaan
+</h2>
+
+
+
+<div class="progress-container">
+
+
+    <div class="progress-header">
+
+
+        <span>
+            Progress Saat Ini
+        </span>
+
+
+        <strong>
+            {{ number_format($task->progres_persen ?? 0,0) }}%
+        </strong>
+
+
+    </div>
+
+
+
+
+    <div class="progress-track">
+
+
+        <div 
+        class="progress-value
+
+        @if(($task->progres_persen ?? 0) >= 100)
+
+            progress-green
+
+        @elseif(($task->progres_persen ?? 0) > 0)
+
+            progress-blue
+
+        @else
+
+            progress-yellow
+
+        @endif
+
+        "
+
+        style="
+        width:{{ min($task->progres_persen ?? 0,100) }}%
+        ">
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="progress-status">
+
+
+        @if(($task->progres_persen ?? 0) >= 100)
+
+            ✅ Task Selesai
+
+
+        @elseif(($task->progres_persen ?? 0) > 0)
+
+            🔄 Sedang Dikerjakan
+
+
+        @else
+
+            ⏳ Belum Dimulai
+
+
+        @endif
+
+
+    </div>
+
+
+
 </div>
 
 
 
 
+@if(
+    $task->status != 'dibatalkan'
+    &&
+    $task->status != 'selesai'
+)
+
+<a href="{{ route('daily-tracker.show',$task->id) }}"
+class="update-btn">
+
+✏️ Update Progress
+
+</a>
+
+@endif
+
+</div>
+
+
+
+
+
+
+
+
+
+
+{{-- ===============================
+DESKRIPSI
+================================ --}}
+
+
+
+<div class="glass-panel">
+
+
+<h2>
+📝 Deskripsi Pekerjaan
+</h2>
+
+
+
+<div class="description">
+
+
+{{ $task->aktivitas ?? 'Tidak ada deskripsi pekerjaan.' }}
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- ===============================
+TIMELINE
+================================ --}}
+
+
+<div class="glass-panel">
+
+
+<h2>
+⏳ Timeline Aktivitas
+</h2>
+
+
+
+
+@forelse($task->aktivitasTugas as $activity)
+
+
+<div class="timeline-item">
+
+
+    <div class="timeline-dot"></div>
+
+
+
+    <div class="timeline-content">
+
+
+
+        <div class="timeline-top">
+
+
+            <strong>
+                {{ \Carbon\Carbon::parse($activity->tanggal)->format('d M Y') }}
+            </strong>
+
+
+            <span class="activity-badge">
+
+                @if($activity->progres >= 100)
+
+                    Selesai
+
+                @elseif($activity->progres > 0)
+
+                    Berjalan
+
+                @else
+
+                    Belum Dimulai
+
+                @endif
+
+            </span>
+
+
+        </div>
+
+
+
+
+
+        <p class="activity-text">
+
+            {{ $activity->aktivitas }}
+
+        </p>
+
+
+
+
+
+        <div class="mini-progress">
+
+
+            <div class="mini-track">
+
+
+                <div class="mini-value"
+
+                style="
+                width:{{ $activity->progres ?? 0 }}%
+                ">
+
+                </div>
+
+
+            </div>
+
+
+            <span>
+
+                {{ $activity->progres ?? 0 }}%
+
+            </span>
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="activity-meta">
+
+
+            👤 {{ $activity->karyawan->nama_karyawan ?? '-' }}
+
+            |
+
+            📅
+            {{ \Carbon\Carbon::parse($activity->tanggal)->format('d M Y H:i') }}
+
+
+
+        </div>
+
+
+
+
+
+
+        @if($activity->catatan)
+
+
+        <div class="activity-note">
+
+            📝 {{ $activity->catatan }}
+
+        </div>
+
+
+        @endif
+
+
+
+
+    </div>
+
+
+
+</div>
 
 
 @empty
 
 
-
-
 <div class="empty">
-
 
 Belum ada aktivitas.
 
-
 </div>
-
-
 
 
 @endforelse
 
-
-
-
-
 </div>
-
 
 <style>
 
@@ -496,14 +624,14 @@ Belum ada aktivitas.
 GLOBAL
 ================================ */
 
-.task-container{
-    width:100%;
+*{
+    box-sizing:border-box;
 }
 
 
 
 /* ===============================
-HEADER OWNER STYLE
+HEADER
 ================================ */
 
 
@@ -564,12 +692,11 @@ HEADER OWNER STYLE
 
     margin:0;
 
-    color:#64748b;
-
     font-size:13px;
 
-}
+    color:#64748b;
 
+}
 
 
 
@@ -581,7 +708,7 @@ BACK BUTTON
 
 .back-btn{
 
-    background:#334155;
+    background:#0f172a;
 
     color:white;
 
@@ -601,7 +728,7 @@ BACK BUTTON
 
 .back-btn:hover{
 
-    background:#1e293b;
+    background:#334155;
 
 }
 
@@ -612,7 +739,7 @@ BACK BUTTON
 
 
 /* ===============================
-PANEL OWNER STYLE
+MAIN PANEL
 ================================ */
 
 
@@ -622,15 +749,15 @@ PANEL OWNER STYLE
 
     padding:25px;
 
-    border-radius:20px;
+    border-radius:22px;
 
     border:1px solid #e2e8f0;
 
     box-shadow:
 
-    0 5px 20px rgba(15,23,42,.05);
+    0 8px 25px rgba(15,23,42,.05);
 
-    margin-bottom:20px;
+    margin-bottom:22px;
 
 }
 
@@ -679,11 +806,13 @@ DETAIL GRID
 
     background:#f8fafc;
 
-    padding:18px;
+    padding:16px;
 
     border-radius:16px;
 
     border:1px solid #e2e8f0;
+
+    min-height:90px;
 
 }
 
@@ -702,7 +831,19 @@ DETAIL GRID
     margin-bottom:8px;
 
 }
+.info-box{
+    transition:.2s ease;
+}
 
+
+.info-box:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 8px 20px rgba(15,23,42,.08);
+
+}
 
 
 .info-box strong{
@@ -717,16 +858,67 @@ DETAIL GRID
 
 
 
+/* ===============================
+PRIORITY
+================================ */
+
+.priority{
+
+    display:inline-flex;
+
+    width:max-content;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+.priority.high{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+.priority.medium{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+.priority.low{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
 
 
 /* ===============================
-STATUS BADGE
+STATUS
 ================================ */
 
 
 .status{
 
     display:inline-flex;
+
+    width:max-content;
 
     padding:7px 14px;
 
@@ -769,37 +961,140 @@ STATUS BADGE
 }
 
 
+.status.cancel{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+
+
+/* ===============================
+DEADLINE
+================================ */
+
+
+.deadline{
+
+    display:inline-flex;
+
+    width:max-content;
+
+    padding:7px 14px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+
+.deadline.danger{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+
+.deadline.warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.deadline.aman{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
 
 
 
 
 
 /* ===============================
-PROGRESS OWNER STYLE
+PROGRESS
 ================================ */
 
+.progress-container{
 
-.progress-area{
+    background:#f8fafc;
 
-    display:flex;
+    padding:20px;
 
-    align-items:center;
+    border-radius:18px;
 
-    gap:15px;
+    border:1px solid #e2e8f0;
 
 }
 
 
 
+.progress-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:12px;
+
+}
+
+
+
+.progress-header span{
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#64748b;
+
+}
+
+
+
+.progress-header strong{
+
+    font-size:24px;
+
+    font-weight:900;
+
+    color:#1e293b;
+
+}
+
+
+
+
 .progress-track{
 
-    flex:1;
+    width:100%;
 
-    height:10px;
+    height:16px;
 
     background:#e2e8f0;
 
-    border-radius:20px;
+    border-radius:30px;
 
     overflow:hidden;
 
@@ -811,24 +1106,49 @@ PROGRESS OWNER STYLE
 
     height:100%;
 
+    border-radius:30px;
+
+    transition:.5s ease;
+
+}
+
+
+
+.progress-green{
+
     background:#16a34a;
 
-    border-radius:20px;
+}
+
+
+
+.progress-blue{
+
+    background:#2563eb;
 
 }
 
 
 
-.progress-number{
+.progress-yellow{
 
-    font-size:22px;
-
-    font-weight:800;
-
-    color:#1e293b;
+    background:#f59e0b;
 
 }
 
+
+
+.progress-status{
+
+    margin-top:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#64748b;
+
+}
 
 
 
@@ -845,11 +1165,11 @@ UPDATE BUTTON
 
     margin-top:20px;
 
-    background:#334155;
+    background:#0f172a;
 
     color:white;
 
-    padding:10px 20px;
+    padding:11px 22px;
 
     border-radius:12px;
 
@@ -865,7 +1185,7 @@ UPDATE BUTTON
 
 .update-btn:hover{
 
-    background:#1e293b;
+    background:#334155;
 
 }
 
@@ -905,7 +1225,7 @@ DESCRIPTION
 
 
 /* ===============================
-TIMELINE AUDIT STYLE
+TIMELINE
 ================================ */
 
 
@@ -941,15 +1261,17 @@ TIMELINE AUDIT STYLE
 
     margin-top:5px;
 
+    flex-shrink:0;
+
 }
 
 
 
 .timeline-content strong{
 
-    color:#1e293b;
-
     font-size:13px;
+
+    color:#1e293b;
 
 }
 
@@ -959,9 +1281,9 @@ TIMELINE AUDIT STYLE
 
     margin:8px 0;
 
-    color:#64748b;
-
     font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -1021,21 +1343,169 @@ EMPTY
 
 
 
+/* ===============================
+TIMELINE UPDATE
+================================ */
+
+
+.timeline-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.timeline-top strong{
+
+    font-size:13px;
+
+    color:#1e293b;
+
+}
+
+
+
+
+.activity-badge{
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+.activity-text{
+
+    font-size:13px;
+
+    color:#475569;
+
+    line-height:1.6;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+.mini-progress{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+
+
+.mini-track{
+
+    flex:1;
+
+    height:8px;
+
+    background:#e2e8f0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+
+.mini-value{
+
+    height:100%;
+
+    background:#2563eb;
+
+    border-radius:20px;
+
+}
+
+
+
+
+.mini-progress span{
+
+    font-size:12px;
+
+    font-weight:800;
+
+    color:#1e293b;
+
+}
+
+
+
+
+
+.activity-meta{
+
+    margin-top:15px;
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+
+
+.activity-note{
+
+    margin-top:12px;
+
+    padding:12px;
+
+    background:#f1f5f9;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    color:#475569;
+
+}
+
 
 /* ===============================
 RESPONSIVE
 ================================ */
 
 
-@media(max-width:1100px){
-
+@media(max-width:1200px){
 
 .detail-grid{
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
 }
-
 
 }
 
@@ -1046,11 +1516,11 @@ grid-template-columns:repeat(2,1fr);
 
 .welcome-card{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:flex-start;
+    align-items:flex-start;
 
-gap:15px;
+    gap:15px;
 
 }
 
@@ -1058,7 +1528,7 @@ gap:15px;
 
 .detail-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
 }
 
@@ -1066,9 +1536,9 @@ grid-template-columns:1fr;
 
 .progress-area{
 
-flex-direction:column;
+    flex-direction:column;
 
-align-items:flex-start;
+    align-items:flex-start;
 
 }
 
@@ -1076,7 +1546,7 @@ align-items:flex-start;
 
 .progress-track{
 
-width:100%;
+    width:100%;
 
 }
 
@@ -1084,12 +1554,13 @@ width:100%;
 
 .glass-panel{
 
-padding:20px;
+    padding:18px;
 
 }
 
 
 }
+
 
 
 </style>

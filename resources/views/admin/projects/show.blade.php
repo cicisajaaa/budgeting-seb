@@ -252,7 +252,7 @@ Status Keuangan
 <div>
 
 <span>
-Project Perusahaan
+Total Project Perusahaan
 </span>
 
 
@@ -863,7 +863,7 @@ Belum ada tugas
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:15px;
 

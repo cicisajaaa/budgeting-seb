@@ -125,6 +125,24 @@ Telah diselesaikan
 
 </div>
 
+<div class="summary-card">
+
+<span>
+Progress Rata-rata
+</span>
+
+
+<h2>
+{{number_format($averageProgress ?? 0,0)}}%
+</h2>
+
+
+<p>
+Perkembangan seluruh proyek
+</p>
+
+
+</div>
 
 
 </div>
@@ -167,6 +185,22 @@ Pemilik Proyek
 
 <th>
 Anggaran
+</th>
+
+
+
+<th>
+Realisasi
+</th>
+
+
+<th>
+Sisa Budget
+</th>
+
+
+<th>
+Kondisi
 </th>
 
 
@@ -245,7 +279,113 @@ $project->total_anggaran ?? 0,
 
 
 
+<td>
 
+Rp {{number_format(
+$project->total_realisasi ?? 0,
+0,
+',',
+'.'
+)}}
+
+</td>
+
+<td>
+
+Rp {{number_format(
+$project->sisa_budget ?? 0,
+0,
+',',
+'.'
+)}}
+
+</td>
+
+{{-- KONDISI PROJECT --}}
+
+<td>
+
+
+@php
+    $health = $project->health_status;
+@endphp
+
+
+
+<div class="health-card 
+
+@if($health['label']=='Kritis')
+
+health-critical
+
+@elseif($health['label']=='Perhatian')
+
+health-warning
+
+@else
+
+health-safe
+
+@endif
+
+">
+
+
+<div class="health-icon">
+
+@if($health['label']=='Kritis')
+
+🔴
+
+@elseif($health['label']=='Perhatian')
+
+🟡
+
+@else
+
+🟢
+
+@endif
+
+</div>
+
+
+
+<div class="health-info">
+
+
+<strong>
+{{$health['label']}}
+</strong>
+
+
+<span>
+
+@if($health['label']=='Kritis')
+
+Risiko Tinggi
+
+@elseif($health['label']=='Perhatian')
+
+Perlu Pantau
+@else
+
+Kondisi Stabil
+
+@endif
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</td>
+
+{{-- PROGRESS --}}
 
 <td>
 
@@ -254,44 +394,38 @@ $project->total_anggaran ?? 0,
 @endphp
 
 
-<div class="progress">
+<div class="progress-wrapper">
 
+    <div class="progress-bar">
 
-    <div class="progress-fill
+        <div class="progress-value
 
-    @if($progress >= 80)
+        @if($progress >= 80)
+            green
 
-        progress-green
+        @elseif($progress >= 50)
+            blue
 
-    @elseif($progress >= 50)
+        @else
+            yellow
 
-        progress-blue
+        @endif"
 
-    @else
-
-        progress-yellow
-
-    @endif"
-
-    style="width: {{ $progress }}%">
+        style="width:{{$progress}}%">
+        
+        </div>
 
     </div>
 
 
+    <span>
+        {{$progress}}%
+    </span>
+
 </div>
 
 
-<span class="progress-text">
-
-{{ $progress }}%
-
-</span>
-
-
 </td>
-
-
-
 
 
 
@@ -300,9 +434,33 @@ $project->total_anggaran ?? 0,
 
 @if($project->tanggal_selesai)
 
-{{\Carbon\Carbon::parse(
-$project->tanggal_selesai
-)->format('d M Y')}}
+@php
+$deadline = \Carbon\Carbon::parse($project->tanggal_selesai);
+@endphp
+
+
+<span class="deadline
+
+@if($deadline->isPast())
+
+deadline-danger
+
+@elseif(now()->diffInDays($deadline) <= 7)
+
+deadline-warning
+
+@else
+
+deadline-safe
+
+@endif
+
+">
+
+{{$deadline->format('d M Y')}}
+
+</span>
+
 
 @else
 
@@ -310,10 +468,7 @@ $project->tanggal_selesai
 
 @endif
 
-
 </td>
-
-
 
 
 
@@ -348,8 +503,8 @@ Berjalan
 
 @else
 
-<span class="status aman">
-Awal
+<span class="status awal">
+Belum Mulai
 </span>
 
 
@@ -391,7 +546,7 @@ Detail
 
 <tr>
 
-<td colspan="7" align="center">
+<td colspan="10" align="center">
 
 Belum terdapat data proyek
 
@@ -511,12 +666,11 @@ HEADER
 SUMMARY
 ================================ */
 
-
 .summary-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
 
     gap:15px;
 
@@ -577,7 +731,11 @@ SUMMARY
 
 }
 
+.summary-card:nth-child(5){
 
+    border-top:4px solid #7c3aed;
+
+}
 
 .summary-card span{
 
@@ -689,7 +847,9 @@ th{
 
     color:#64748b;
 
-    font-size:11px;
+    font-size:12px;
+
+    font-weight:800;
 
     font-weight:700;
 
@@ -737,8 +897,7 @@ td strong{
 PROGRESS
 ================================ */
 
-
-.progress{
+.project-progress{
 
     width:140px;
 
@@ -758,40 +917,35 @@ PROGRESS
 
 
 
-.progress-fill{
+.project-progress-fill{
 
     height:100%;
 
     border-radius:20px;
 
-    transition:.3s;
-
 }
 
 
 
-.progress-green{
+.project-progress-fill.progress-green{
 
     background:#16a34a;
 
 }
 
 
-
-.progress-blue{
+.project-progress-fill.progress-blue{
 
     background:#2563eb;
 
 }
 
 
-
-.progress-yellow{
+.project-progress-fill.progress-yellow{
 
     background:#f59e0b;
 
 }
-
 
 
 .progress-text{
@@ -808,7 +962,75 @@ PROGRESS
 
 
 
+.progress-wrapper{
 
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+
+
+.progress-bar{
+
+    width:100px;
+
+    height:8px;
+
+    background:#e2e8f0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+
+.progress-value{
+
+    height:100%;
+
+    border-radius:20px;
+
+}
+
+
+
+.progress-value.green{
+
+    background:#16a34a;
+
+}
+
+
+
+.progress-value.blue{
+
+    background:#2563eb;
+
+}
+
+
+
+.progress-value.yellow{
+
+    background:#f59e0b;
+
+}
+
+
+
+.progress-wrapper span{
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
 
 
 
@@ -845,6 +1067,14 @@ STATUS
 
 }
 
+
+.status.awal{
+
+    background:#f1f5f9;
+
+    color:#475569;
+
+}
 
 
 .selesai{
@@ -888,7 +1118,99 @@ STATUS
 
 
 
+/* ===============================
+PROJECT HEALTH CONDITION
+================================ */
 
+.health-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:5px 8px;
+
+    border-radius:10px;
+
+    min-width:95px;
+
+}
+
+
+.health-icon{
+
+    width:18px;
+
+    height:18px;
+
+    font-size:10px;
+
+}
+
+
+
+.health-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+.health-info strong{
+
+    font-size:10px;
+
+}
+
+
+.health-info span{
+
+    font-size:8px;
+
+}
+
+
+
+
+
+
+.health-safe{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    border:1px solid #bbf7d0;
+
+}
+
+
+
+.health-warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+    border:1px solid #fde68a;
+
+}
+
+
+
+.health-critical{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    border:1px solid #fecaca;
+
+}
 
 
 /* ===============================
@@ -991,6 +1313,47 @@ table{
 
 }
 
+
+.deadline{
+
+    padding:3px 6px;
+
+    border-radius:6px;
+
+    font-size:10px;
+
+    white-space:nowrap;
+
+}
+
+
+.deadline-safe{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.deadline-warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.deadline-danger{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
 </style>
 
 @endsection

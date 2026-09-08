@@ -132,21 +132,18 @@ Route::middleware('role:karyawan,admin')->group(function(){
     ->name('daily-tracker.index');
 
 
-
-    Route::get('/daily-tracker/{task}',[
-        DailyTrackerController::class,
-        'show'
-    ])
-    ->name('daily-tracker.show');
-
+Route::get('/daily-tracker/{task}',[
+    DailyTrackerController::class,
+    'show'
+])
+->name('daily-tracker.show');
 
 
-    Route::post('/daily-tracker',[
-        DailyTrackerController::class,
-        'store'
-    ])
-    ->name('daily-tracker.store');
-
+Route::post('/daily-tracker/{task}',[
+    DailyTrackerController::class,
+    'store'
+])
+->name('daily-tracker.store');
 
 
 
@@ -164,9 +161,6 @@ Route::middleware('role:karyawan,admin')->group(function(){
         'show'
     ])
     ->name('employee.task.show');
-
-
-
 
 
     /*
@@ -534,32 +528,21 @@ Route::put(
 )
 ->name('tasks.update');
 
+
+
+Route::put(
+    '/tasks/{task}/cancel',
+    [
+        TaskController::class,
+        'cancel'
+    ]
+)
+->name('tasks.cancel');
 /*
 |--------------------------------------------------------------------------
 | TASK BY PROJECT
 |--------------------------------------------------------------------------
 */
-
-
-Route::get(
-    '/projects/{project}/tasks/create',
-    [
-        TaskController::class,
-        'create'
-    ]
-)
-->name('tasks.create');
-
-
-
-Route::post(
-    '/projects/{project}/tasks',
-    [
-        TaskController::class,
-        'store'
-    ]
-)
-->name('tasks.store');
 
 
 
@@ -669,7 +652,6 @@ Route::post(
 )
 
 ->name('tasks.store');
-});
 });
 
 
@@ -885,6 +867,7 @@ OwnerReportController::class,
 ]
 )
 ->name('owner.report.performance.pdf');
+});
 });
 
 require __DIR__.'/auth.php';

@@ -26,14 +26,41 @@ Detail monitoring pekerjaan, progress, dan informasi pelaksanaan task.
 </div>
 
 
-
 <div style="display:flex;gap:10px;">
 
+
+@if($task->status != 'dibatalkan' && $task->status != 'selesai')
+
+
+<form action="{{route('admin.tasks.cancel',$task->id)}}" method="POST">
+
+@csrf
+@method('PUT')
+
+
+<button 
+type="submit"
+class="btn-cancel"
+onclick="return confirm('Yakin ingin membatalkan task ini?')">
+
+❌ Batalkan
+
+</button>
+
+
+</form>
+
+
+@endif
+
+
+@if($task->status != 'dibatalkan')
+
 <a href="{{route('admin.tasks.edit',$task->id)}}" class="btn-edit">
-
 ✏️ Edit
-
 </a>
+
+@endif
 
 
 <a href="{{route('admin.tasks.index')}}" class="btn-back">
@@ -41,6 +68,7 @@ Detail monitoring pekerjaan, progress, dan informasi pelaksanaan task.
 ← Kembali
 
 </a>
+
 
 </div>
 
@@ -223,16 +251,27 @@ Status
 
 $statusClass='pending';
 
+$statusLabel='Belum Dimulai';
+
 
 if($task->status=='selesai'){
 
     $statusClass='success';
+    $statusLabel='Selesai';
 
 }
 
-elseif($task->status=='berjalan'){
+elseif($task->status=='sedang_dikerjakan'){
 
     $statusClass='warning';
+    $statusLabel='Sedang Dikerjakan';
+
+}
+
+elseif($task->status=='dibatalkan'){
+
+    $statusClass='danger';
+    $statusLabel='Dibatalkan';
 
 }
 
@@ -241,9 +280,7 @@ elseif($task->status=='berjalan'){
 
 
 <span class="status-badge {{$statusClass}}">
-
-{{$task->status}}
-
+{{$statusLabel}}
 </span>
 
 
@@ -284,13 +321,12 @@ Progress Pekerjaan
 
 <div class="progress-bar"
 
-style="width:{{$task->progres_persen ?? 0}}%">
+style="width:{{min($task->progres_persen ?? 0,100)}}%">
 
 </div>
 
 
 </div>
-
 
 
 
@@ -298,8 +334,12 @@ style="width:{{$task->progres_persen ?? 0}}%">
 
 <div class="progress-info">
 
+@if($task->status == 'dibatalkan')
 
-@if(($task->progres_persen ?? 0) >=100)
+❌ Task dibatalkan
+
+
+@elseif(($task->progres_persen ?? 0) >=100)
 
 ✓ Task selesai
 
@@ -586,7 +626,34 @@ BUTTON
 
 }
 
+.btn-cancel{
 
+    background:#fee2e2;
+
+    border:1px solid #fecaca;
+
+    color:#dc2626;
+
+    padding:8px 16px;
+
+    border-radius:11px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+
+.btn-cancel:hover{
+
+    background:#dc2626;
+
+    color:white;
+
+}
 
 .btn-back{
 
@@ -843,6 +910,13 @@ STATUS
 
 
 
+.status-badge.danger{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
 
 
 

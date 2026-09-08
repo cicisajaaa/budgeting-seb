@@ -29,6 +29,7 @@ Informasi lengkap perkembangan proyek perusahaan.
 
 </div>
 
+
 <a href="{{route('owner.projects')}}" class="btn-back">
 
 Kembali ke Daftar Proyek
@@ -46,16 +47,14 @@ Kembali ke Daftar Proyek
 
 
 
-
-
 {{-- SUMMARY --}}
 
 
 <div class="summary-grid">
 
 
-<div class="summary-card">
 
+<div class="summary-card">
 
 <span>
 Total Anggaran
@@ -63,14 +62,12 @@ Total Anggaran
 
 
 <h2>
-
 Rp {{number_format(
 $project->total_anggaran ?? 0,
 0,
 ',',
 '.'
 )}}
-
 </h2>
 
 
@@ -87,16 +84,13 @@ Nilai proyek
 
 <div class="summary-card">
 
-
 <span>
 Progress Proyek
 </span>
 
 
 <h2>
-
 {{$project->progres_keseluruhan ?? 0}}%
-
 </h2>
 
 
@@ -113,16 +107,13 @@ Tingkat penyelesaian
 
 <div class="summary-card">
 
-
 <span>
 Total Pekerjaan
 </span>
 
 
 <h2>
-
 {{$totalTask ?? 0}}
-
 </h2>
 
 
@@ -139,16 +130,13 @@ Jumlah task proyek
 
 <div class="summary-card">
 
-
 <span>
 Task Selesai
 </span>
 
 
 <h2>
-
 {{$taskSelesai ?? 0}}
-
 </h2>
 
 
@@ -160,7 +148,36 @@ Pekerjaan selesai
 </div>
 
 
+
+
+
+<div class="summary-card">
+
+<span>
+Sisa Budget
+</span>
+
+
+<h2>
+Rp {{number_format(
+$project->sisa_budget ?? 0,
+0,
+',',
+'.'
+)}}
+</h2>
+
+
+<p>
+Dana tersedia
+</p>
+
+
 </div>
+
+
+</div>
+
 
 
 
@@ -182,7 +199,9 @@ Informasi Proyek
 
 
 
+
 <table>
+
 
 
 <tr>
@@ -190,6 +209,7 @@ Informasi Proyek
 <td>
 Nama Proyek
 </td>
+
 
 <td>
 {{$project->nama_proyek}}
@@ -200,11 +220,13 @@ Nama Proyek
 
 
 
+
 <tr>
 
 <td>
 Pemilik Proyek
 </td>
+
 
 <td>
 {{$project->pemilik_proyek ?? '-'}}
@@ -221,6 +243,7 @@ Pemilik Proyek
 <td>
 Tanggal Mulai
 </td>
+
 
 <td>
 
@@ -242,6 +265,7 @@ Tanggal Mulai
 Tanggal Selesai
 </td>
 
+
 <td>
 
 {{$project->tanggal_selesai
@@ -262,15 +286,36 @@ Tanggal Selesai
 Status Proyek
 </td>
 
+
 <td>
 
-<span class="status {{ $project->health_status['color'] ?? 'aman' }}">
 
-{{ $project->health_status['label'] ?? 'Berjalan' }}
+@if(($project->progres_keseluruhan ?? 0) >= 100)
 
+<span class="status success">
+Selesai
 </span>
 
+
+@elseif(($project->progres_keseluruhan ?? 0) > 0)
+
+<span class="status warning">
+Berjalan
+</span>
+
+
+@else
+
+<span class="status normal">
+Belum Mulai
+</span>
+
+
+@endif
+
+
 </td>
+
 
 </tr>
 
@@ -288,22 +333,30 @@ Status Proyek
 
 
 
+
 {{-- HEALTH PROJECT --}}
+
+
 
 <div class="health-grid">
 
 
+
 <div class="health-card">
+
 
 <h3>
 Keuangan Proyek
 </h3>
 
 
+
 <div>
+
 <span>
 Total Anggaran
 </span>
+
 
 <strong>
 Rp {{number_format(
@@ -313,45 +366,84 @@ $project->total_anggaran ?? 0,
 '.'
 )}}
 </strong>
+
+
 </div>
 
 
 
+
+
 <div>
+
 <span>
 Dana Terpakai
 </span>
 
+
 <strong>
 Rp {{number_format(
-($project->total_anggaran ?? 0) -
-($project->sisa_budget ?? 0),
+($project->total_anggaran ?? 0)-($project->sisa_budget ?? 0),
 0,
 ',',
 '.'
 )}}
 </strong>
+
+
 </div>
 
 
 
+
+
 <div>
+
 <span>
 Budget Terpakai
 </span>
+
 
 <strong>
 {{$project->persentase_budget ?? 0}}%
 </strong>
 
+
 </div>
 
 
 
+
+
 <div>
+
+<span>
+Penggunaan Budget
+</span>
+
+
+<div class="budget-progress">
+
+<div style="
+width:{{min($project->persentase_budget ?? 0,100)}}%
+">
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div>
+
 <span>
 Sisa Budget
 </span>
+
 
 <strong>
 Rp {{number_format(
@@ -362,10 +454,13 @@ $project->sisa_budget ?? 0,
 )}}
 </strong>
 
+
 </div>
 
 
 </div>
+
+
 
 
 
@@ -374,9 +469,48 @@ $project->sisa_budget ?? 0,
 <div class="health-card">
 
 
+
 <h3>
 Kondisi Proyek
 </h3>
+
+
+
+<div>
+
+<span>
+Kondisi
+</span>
+
+
+<strong>
+
+
+@if(($project->health_status['label'] ?? '') == 'Kritis')
+
+🔴 Kritis
+
+
+@elseif(($project->health_status['label'] ?? '') == 'Perhatian')
+
+🟡 Perhatian
+
+
+@else
+
+🟢 Aman
+
+
+@endif
+
+
+</strong>
+
+
+</div>
+
+
+
 
 
 <div>
@@ -385,25 +519,15 @@ Kondisi Proyek
 Progress
 </span>
 
+
 <strong>
 {{$project->progres_keseluruhan ?? 0}}%
 </strong>
 
-</div>
-
-
-
-<div>
-
-<span>
-Status Proyek
-</span>
-
-<strong>
-{{$project->health_status['label'] ?? 'Berjalan'}}
-</strong>
 
 </div>
+
+
 
 
 
@@ -413,23 +537,31 @@ Status Proyek
 Deadline
 </span>
 
+
 <strong>
+
 {{$project->tanggal_selesai
 ? $project->tanggal_selesai->format('d M Y')
 :'-'}}
+
 </strong>
 
+
 </div>
+
+
 
 
 
 <div>
 
 <span>
-Risiko
+Risiko Budget
 </span>
 
+
 <strong>
+
 
 @if(($project->persentase_budget ?? 0) >= 80)
 
@@ -437,11 +569,13 @@ Risiko
 Tinggi
 </span>
 
+
 @elseif(($project->persentase_budget ?? 0) >= 50)
 
 <span class="warning">
 Sedang
 </span>
+
 
 @else
 
@@ -449,17 +583,21 @@ Sedang
 Rendah
 </span>
 
+
 @endif
+
 
 </strong>
 
-</div>
-
 
 </div>
 
 
+
 </div>
+
+
+</div>l
 
 
 {{-- TASK --}}
@@ -482,25 +620,36 @@ Rendah
 
 <tr>
 
+
 <th>
 Nama Tugas
 </th>
+
 
 <th>
 PIC
 </th>
 
+
 <th>
 Divisi
 </th>
+
+
+<th>
+Prioritas
+</th>
+
 
 <th>
 Status
 </th>
 
+
 <th>
 Progress
 </th>
+
 
 <th>
 Update
@@ -527,9 +676,7 @@ Update
 
 
 <strong>
-
 {{$task->nama_tugas ?? '-'}}
-
 </strong>
 
 
@@ -537,13 +684,13 @@ Update
 
 
 <small>
-
 {{$task->aktivitas ?? '-'}}
-
 </small>
 
 
 </td>
+
+
 
 
 
@@ -555,6 +702,8 @@ Update
 
 
 
+
+
 <td>
 
 {{$task->divisi->nama_divisi ?? '-'}}
@@ -563,10 +712,48 @@ Update
 
 
 
+
+
 <td>
 
 
-@if($task->status == 'selesai')
+@if(($task->prioritas ?? '') == 'High')
+
+
+<span class="priority high">
+High
+</span>
+
+
+@elseif(($task->prioritas ?? '') == 'Medium')
+
+
+<span class="priority medium">
+Medium
+</span>
+
+
+@else
+
+
+<span class="priority low">
+Low
+</span>
+
+
+@endif
+
+
+</td>
+
+
+
+
+
+<td>
+
+
+@if(in_array($task->status,['selesai','done']))
 
 
 <span class="status success">
@@ -574,12 +761,14 @@ Selesai
 </span>
 
 
-@elseif($task->status == 'sedang_dikerjakan')
+
+@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
 
 <span class="status warning">
 Berjalan
 </span>
+
 
 
 @else
@@ -597,35 +786,50 @@ Belum Mulai
 
 
 
+
+
 <td>
+
+
 <div class="progress">
 
-    <div class="progress-fill
-    @if(($task->progres_persen ?? 0) >= 80)
 
-        progress-green
+<div class="progress-fill
 
-    @elseif(($task->progres_persen ?? 0) >= 50)
+@if(($task->progres_persen ?? 0)>=80)
 
-        progress-blue
+progress-green
 
-    @else
+@elseif(($task->progres_persen ?? 0)>=50)
 
-        progress-yellow
+progress-blue
 
-    @endif"
+@else
 
-    style="width:{{min($task->progres_persen ?? 0,100)}}%">
+progress-yellow
 
-    </div>
+@endif"
+
+style="
+width:{{min($task->progres_persen ?? 0,100)}}%
+">
 
 </div>
 
 
+</div>
+
+
+<strong>
 {{$task->progres_persen ?? 0}}%
+</strong>
 
 
 </td>
+
+
+
+
 
 <td>
 
@@ -654,7 +858,6 @@ Belum Mulai
 
 @else
 
-
 Belum ada update
 
 
@@ -664,8 +867,8 @@ Belum ada update
 </td>
 
 
-
 </tr>
+
 
 
 
@@ -674,7 +877,7 @@ Belum ada update
 
 <tr>
 
-<td colspan="6" align="center">
+<td colspan="7" align="center">
 
 Belum terdapat pekerjaan
 
@@ -696,12 +899,6 @@ Belum terdapat pekerjaan
 
 </div>
 
-
-
-
-
-
-
 <style>
 
 /* ===============================
@@ -710,6 +907,15 @@ GLOBAL
 
 *{
     box-sizing:border-box;
+}
+
+
+body{
+
+    font-family:Inter, system-ui, sans-serif;
+
+    color:#334155;
+
 }
 
 
@@ -770,7 +976,7 @@ HEADER
 
     margin:8px 0;
 
-    font-size:24px;
+    font-size:26px;
 
     font-weight:800;
 
@@ -792,6 +998,7 @@ HEADER
 
 
 
+
 .btn-back{
 
     background:#0f172a;
@@ -807,6 +1014,16 @@ HEADER
     font-weight:700;
 
     text-decoration:none;
+
+    transition:.2s;
+
+}
+
+
+
+.btn-back:hover{
+
+    background:#334155;
 
 }
 
@@ -825,7 +1042,7 @@ SUMMARY
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
 
     gap:15px;
 
@@ -891,6 +1108,7 @@ SUMMARY
 }
 
 
+
 .summary-card:nth-child(3)::before{
 
     background:#16a34a;
@@ -898,9 +1116,18 @@ SUMMARY
 }
 
 
+
 .summary-card:nth-child(4)::before{
 
     background:#f59e0b;
+
+}
+
+
+
+.summary-card:nth-child(5)::before{
+
+    background:#7c3aed;
 
 }
 
@@ -1014,11 +1241,13 @@ th{
 
     background:#f8fafc;
 
-    padding:12px;
+    padding:13px;
+
+    text-align:left;
 
     font-size:11px;
 
-    text-align:left;
+    font-weight:700;
 
     color:#64748b;
 
@@ -1028,13 +1257,13 @@ th{
 
 td{
 
-    padding:12px;
+    padding:13px;
 
     font-size:12px;
 
-    border-bottom:1px solid #f1f5f9;
-
     color:#334155;
+
+    border-bottom:1px solid #f1f5f9;
 
 }
 
@@ -1058,12 +1287,22 @@ td strong{
 
 
 
+small{
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+
 
 
 
 
 /* ===============================
-HEALTH CARD
+HEALTH GRID
 ================================ */
 
 
@@ -1091,29 +1330,47 @@ HEALTH CARD
 
     border:1px solid #e2e8f0;
 
+    box-shadow:
+
+    0 8px 20px rgba(15,23,42,.04);
+
 }
 
 
 
 .health-card h3{
 
+    margin:0 0 15px;
+
     font-size:15px;
 
-    margin-bottom:15px;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
 
 
-.health-card div{
+.health-card > div{
 
     display:flex;
 
     justify-content:space-between;
 
+    align-items:center;
+
     padding:12px 0;
 
     border-bottom:1px solid #f1f5f9;
+
+}
+
+
+
+.health-card > div:last-child{
+
+    border-bottom:none;
 
 }
 
@@ -1134,6 +1391,43 @@ HEALTH CARD
     font-size:12px;
 
     color:#172033;
+
+}
+
+
+
+
+
+
+
+/* ===============================
+BUDGET PROGRESS
+================================ */
+
+
+.budget-progress{
+
+    width:120px;
+
+    height:8px;
+
+    background:#e2e8f0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+
+.budget-progress div{
+
+    height:100%;
+
+    background:#2563eb;
+
+    border-radius:20px;
 
 }
 
@@ -1218,7 +1512,52 @@ STATUS
 
 
 
-.aman{
+
+
+
+
+/* ===============================
+PRIORITY
+================================ */
+
+
+.priority{
+
+    display:inline-flex;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+
+.priority.high{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+
+.priority.medium{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.priority.low{
 
     background:#dcfce7;
 
@@ -1233,7 +1572,7 @@ STATUS
 
 
 /* ===============================
-PROGRESS
+TASK PROGRESS
 ================================ */
 
 
@@ -1252,6 +1591,8 @@ PROGRESS
     display:inline-block;
 
     vertical-align:middle;
+
+    margin-right:8px;
 
 }
 
@@ -1295,20 +1636,6 @@ PROGRESS
 
 
 
-small{
-
-    font-size:11px;
-
-    color:#64748b;
-
-}
-
-
-
-
-
-
-
 /* ===============================
 RESPONSIVE
 ================================ */
@@ -1319,7 +1646,7 @@ RESPONSIVE
 
 .summary-grid{
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
 
 }
 
@@ -1336,6 +1663,14 @@ RESPONSIVE
     flex-direction:column;
 
     align-items:flex-start;
+
+}
+
+
+
+.summary-grid{
+
+    grid-template-columns:repeat(2,1fr);
 
 }
 
@@ -1362,6 +1697,7 @@ RESPONSIVE
 }
 
 
+
 .panel{
 
     overflow-x:auto;
@@ -1369,16 +1705,18 @@ RESPONSIVE
 }
 
 
+
 table{
 
-    min-width:850px;
+    min-width:900px;
 
 }
 
 
 }
+
+
 
 </style>
-
 
 @endsection

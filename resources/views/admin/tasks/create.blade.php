@@ -218,24 +218,19 @@ required></textarea>
 Prioritas
 </label>
 
-
 <select name="prioritas">
 
-
 <option value="Low">
-Low
+Rendah
 </option>
-
 
 <option value="Medium">
-Medium
+Sedang
 </option>
-
 
 <option value="High">
-High
+Tinggi
 </option>
-
 
 </select>
 
@@ -269,39 +264,18 @@ name="deadline">
 
 
 
-
-
 <div class="form-group">
 
 <label>
 Status
 </label>
 
-
-<select name="status">
-
-
-<option value="belum_dikerjakan">
-Belum Dikerjakan
-</option>
-
-
-<option value="sedang_dikerjakan">
-Sedang Dikerjakan
-</option>
-
-
-<option value="selesai">
-Selesai
-</option>
-
-
-</select>
-
+<input
+type="text"
+value="Otomatis berdasarkan Progress"
+readonly>
 
 </div>
-
-
 
 
 

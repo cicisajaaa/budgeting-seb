@@ -263,37 +263,6 @@ High
 
 
 
-<div class="form-group">
-
-<label>
-Status
-</label>
-
-<select name="status">
-
-<option value="belum_dikerjakan"
-{{$task->status=='belum_dikerjakan'?'selected':''}}>
-Belum Dikerjakan
-</option>
-
-
-<option value="sedang_dikerjakan"
-{{$task->status=='sedang_dikerjakan'?'selected':''}}>
-Sedang Dikerjakan
-</option>
-
-
-<option value="selesai"
-{{$task->status=='selesai'?'selected':''}}>
-Selesai
-</option>
-
-
-</select>
-</div>
-
-
-
 
 
 
@@ -318,6 +287,12 @@ max="100"
 value="{{old('progres_persen',$task->progres_persen)}}"
 
 required>
+
+
+
+<small style="color:#64748b;font-size:10px">
+Status otomatis mengikuti nilai progress.
+</small>
 
 
 </div>

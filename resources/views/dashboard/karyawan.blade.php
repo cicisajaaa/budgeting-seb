@@ -80,9 +80,7 @@ Monitoring pekerjaan, progress project dan aktivitas harian.
             </label>
 
             <h2>
-
-            {{$taskChart['progress']}}
-
+            {{$employeeTasks->count()}}
             </h2>
 
             <small>

@@ -5,101 +5,80 @@
 <div class="project-container">
 
 
-{{-- ================= PROJECT HEADER ================= --}}
-
 <div class="project-welcome-card">
-
 
     <div>
 
-
         <div class="project-welcome-label">
-
             PROYEK SAYA
-
         </div>
 
 
-
-
         <h1>
-
             Proyek Saya
-
         </h1>
 
 
-
-
         <p>
-
             Monitoring project dan tugas yang diberikan kepada kamu.
-
         </p>
 
-
-
     </div>
-
-
-
 
 
     <div class="project-date-box">
-
         {{date('d M Y')}}
-
     </div>
-
 
 
 </div>
 
 
-
-
-
-
-
-
-
-{{-- ================= LIST PROJECT ================= --}}
-
-
 @forelse($proyek as $project)
-
 
 
 <div class="project-panel">
 
 
-
-
-
+{{-- HEADER PROJECT --}}
 
 <div class="project-card-header">
 
 
-
-<div>
-
-
-
 <h2>
-
 📁 {{$project->nama_proyek}}
-
 </h2>
 
+
+<p>
+🏢 Perusahaan :
+<strong>
+{{$project->perusahaan->nama_perusahaan ?? '-'}}
+</strong>
+</p>
+
+
+
+@if($project->perusahaan)
+
+<p>
+📍 Alamat :
+{{$project->perusahaan->alamat ?? '-'}}
+</p>
+
+
+<p>
+☎ Kontak :
+{{$project->perusahaan->kontak ?? '-'}}
+</p>
+
+@endif
 
 
 
 <p>
-
 Pemilik :
-
 {{$project->pemilik_proyek ?? '-'}}
-
 </p>
 
 
@@ -108,10 +87,73 @@ Pemilik :
 
 
 
+
+{{-- INFO PROJECT --}}
+
+<div class="project-extra-info">
+
+
+<div>
+
+<span>
+📅 Periode Project
+</span>
+
+
+<strong>
+
+{{\Carbon\Carbon::parse($project->tanggal_mulai)->format('d M Y')}}
+
+-
+
+@if($project->tanggal_selesai)
+
+{{\Carbon\Carbon::parse($project->tanggal_selesai)->format('d M Y')}}
+
+@else
+
+Berjalan
+
+@endif
+
+</strong>
+
 </div>
 
 
 
+<div>
+
+<span>
+💰 Budget
+</span>
+
+
+<strong>
+Rp {{number_format($project->total_anggaran ?? 0,0,',','.')}}
+</strong>
+
+</div>
+
+
+
+
+<div>
+
+<span>
+👥 Anggota
+</span>
+
+
+<strong>
+{{$project->users?->count() ?? 0}} Orang
+</strong>
+
+</div>
+
+
+
+</div>
 
 
 
@@ -120,100 +162,77 @@ Pemilik :
 
 {{-- SUMMARY --}}
 
-
 <div class="project-summary-box">
-
 
 
 <div>
 
-
 <span>
-
 Total Tugas
-
 </span>
 
 
 <strong>
-
 {{$project->tugas->count()}}
-
 </strong>
-
 
 
 </div>
 
 
 
-
-
-
-
 <div>
 
-
 <span>
-
 Selesai
-
 </span>
 
 
 <strong>
 
 {{$project->tugas
-
-->whereIn(
-
-'status',
-
-[
-
-'selesai',
-
-'done'
-
-]
-
-)
-
+->whereIn('status',['selesai','done'])
 ->count()}}
 
 </strong>
 
 
-
 </div>
-
-
-
 
 
 
 
 <div>
 
-
 <span>
-
 Progress Project
-
 </span>
 
+
+<strong>
+{{$project->progres_keseluruhan ?? 0}}%
+</strong>
+
+
+</div>
+
+
+
+
+<div>
+
+<span>
+Project Perusahaan
+</span>
 
 
 <strong>
 
-
-{{$project->progres_keseluruhan}}%
-
+{{$project->perusahaan?->proyek?->count() ?? 0}}
 
 </strong>
 
 
-
 </div>
 
 
@@ -226,275 +245,312 @@ Progress Project
 
 
 
-
+{{-- AKTIVITAS --}}
 
 <h3 class="project-section-title">
-
-📌 Tugas Saya
-
+🕒 Aktivitas Terakhir
 </h3>
 
 
+@php
+
+$aktivitasTerakhir = $project->tugas
+->pluck('aktivitasTugas')
+->flatten()
+->sortByDesc('created_at')
+->take(3);
+
+@endphp
 
 
 
+@if($aktivitasTerakhir->count())
+
+
+@foreach($aktivitasTerakhir as $aktivitas)
+
+
+<div class="activity-item">
+
+
+<div class="activity-icon">
+✓
+</div>
+
+
+
+<div>
+
+<strong>
+{{$aktivitas->judul ?? 'Update Aktivitas'}}
+</strong>
+
+
+<p>
+{{$aktivitas->keterangan ?? $aktivitas->aktivitas ?? '-'}}
+</p>
+
+
+<small>
+
+{{\Carbon\Carbon::parse($aktivitas->created_at)
+->format('d M Y H:i')}}
+
+</small>
+
+
+</div>
+
+
+</div>
+
+
+@endforeach
+
+
+@else
+
+
+<p>
+Belum ada aktivitas
+</p>
+
+
+@endif
+
+
+
+
+{{-- TASK --}}
+
+<h3 class="project-section-title">
+    📌 Tugas Saya
+</h3>
+
+
+@if($project->tugas->count()==0)
+
+<div class="empty-box">
+    Belum ada tugas
+</div>
+
+@endif
 
 
 
 @foreach($project->tugas as $task)
 
 
-
 <div class="project-task-card">
 
 
+    {{-- BAGIAN KIRI --}}
 
+    <div class="project-task-main">
 
 
-<div class="project-task-main">
+        <div class="project-task-title">
 
+            <h4>
+                {{$task->nama_tugas}}
+            </h4>
 
+<small>
 
+Deadline:
 
+@if($task->deadline)
 
-<div class="project-task-title">
-
-
-
-<h4>
-
-{{$task->nama_tugas}}
-
-</h4>
-
-
-
-
-<p>
-
-{{$task->aktivitas ?? '-'}}
-
-</p>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="project-task-progress">
-
-
-
-<div class="project-progress-label">
-
-
-
-<span>
-
-Progress
-
-</span>
-
-
-
-
-<b>
-
-{{$task->progres_persen}}%
-
-</b>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="project-progress-track">
-
-
-
-<div
-
-class="project-progress-value"
-
-style="width:{{$task->progres_persen}}%"
-
->
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="project-activity-info">
-
-
-📝
-
-{{$task->aktivitasTugas->count()}}
-
-Aktivitas
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-{{-- ================= SIDE TASK ================= --}}
-
-
-<div class="project-task-side">
-
-
-
-
-
-@php
-
-$statusDeadline = $task->statusDeadline();
-
-@endphp
-
-
-
-
-
-
-<span class="project-deadline {{$statusDeadline['color']}}">
-
-
-{{$statusDeadline['label']}}
-
-
-</span>
-
-
-<span class="project-status
-
-@if(in_array($task->status,['selesai','done']))
-
-done
-
-@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
-
-progress
+{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
 
 @else
 
-todo
+-
 
 @endif
 
-">
 
-@if(in_array($task->status,['selesai','done']))
+<br>
 
-Selesai
 
-@elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
+Status:
 
-Sedang Dikerjakan
-
-@else
+@if($task->status == 'belum_dikerjakan')
 
 Belum Dikerjakan
 
+@elseif($task->status == 'sedang_dikerjakan')
+
+Sedang Dikerjakan
+
+@elseif(in_array($task->status,['selesai','done']))
+
+Selesai
+
+@else
+
+{{$task->status}}
+
 @endif
 
 
+</small>
+
+@if($task->deadline && !in_array($task->status,['selesai','done']))
+
+@if(\Carbon\Carbon::parse($task->deadline)->isPast())
+
+<span class="late-warning">
+⚠ Terlambat
 </span>
 
-
-
-<div class="project-button-group">
-
-
-
-<a href="{{route(
-
-'employee.task.show',
-
-$task->id
-
-)}}">
-
-
-Detail
-
-
-</a>
-
-
-
-
-
-
-@if(!in_array($task->status,['selesai','done']))
-
-<a href="{{route(
-
-'daily-tracker.show',
-
-$task->id
-
-)}}"
-
-class="project-update-btn">
-
-Update
-
-</a>
-
 @endif
 
+@endif
+            <p>
+                {{$task->aktivitas ?? '-'}}
+            </p>
+
+        </div>
+
+
+
+
+        <div class="project-progress-label">
+
+            <span>
+                Progress
+            </span>
+
+
+            <b>
+                {{number_format($task->progres_persen ?? 0,0)}}%
+            </b>
+
+
+        </div>
+
+
+
+
+
+        <div class="project-progress-track">
+
+
+            <div class="project-progress-value"
+            style="width:{{max(min($task->progres_persen ?? 0,100),0)}}%">
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="project-activity-info">
+
+            📝 {{$task->aktivitasTugas?->count() ?? 0}} Aktivitas
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    {{-- BAGIAN KANAN --}}
+
+    <div class="project-task-side">
+
+
+
+        <span class="project-status
+
+        @if(in_array($task->status,['selesai','done']))
+
+            done
+
+        @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
+
+            progress
+
+        @else
+
+            todo
+
+        @endif
+
+        ">
+
+
+        @if(in_array($task->status,['selesai','done']))
+
+            Selesai
+
+
+        @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
+
+            Sedang Dikerjakan
+
+
+        @elseif($task->status == 'belum_dikerjakan')
+
+            Belum Dikerjakan
+
+
+        @else
+
+            {{$task->status}}
+
+        @endif
+
+
+        </span>
+
+
+
+
+
+        <div class="project-button-group">
+
+
+            <a href="{{route('employee.task.show',$task->id)}}">
+
+                Detail
+
+            </a>
+
+
+
+
+            @if(!in_array($task->status,['selesai','done']))
+
+
+            <a href="{{route('daily-tracker.show',$task->id)}}"
+            class="project-update-btn">
+
+                Update
+
+            </a>
+
+
+            @endif
+
+
+
+        </div>
+
+
+    </div>
+
+
+
 
 </div>
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
 
 
 
@@ -503,44 +559,23 @@ Update
 
 
 
-
-</div>
-
-
-
-
-
+</div> {{-- tutup project-panel --}}
 
 
 @empty
 
 
-
-
 <div class="project-panel">
 
-
-Belum ada project.
-
-
+    Belum ada project.
 
 </div>
-
-
 
 
 @endforelse
 
 
-
-
-
-</div>
-
-
-
-
-
+</div> {{-- tutup project-container --}}
 <style>
 
 /* ===============================
@@ -551,14 +586,17 @@ GLOBAL
     width:100%;
 }
 
+
 .project-container *{
     box-sizing:border-box;
 }
 
 
 
+
+
 /* ===============================
-HEADER OWNER STYLE
+HEADER
 ================================ */
 
 
@@ -574,14 +612,14 @@ HEADER OWNER STYLE
 
     margin-bottom:25px;
 
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
     display:flex;
 
     justify-content:space-between;
 
     align-items:center;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -647,6 +685,7 @@ HEADER OWNER STYLE
 
 
 
+
 /* ===============================
 PROJECT PANEL
 ================================ */
@@ -662,11 +701,10 @@ PROJECT PANEL
 
     border:1px solid #e2e8f0;
 
-    box-shadow:
-
-    0 5px 20px rgba(15,23,42,.05);
-
     margin-bottom:20px;
+
+    box-shadow:
+    0 5px 20px rgba(15,23,42,.05);
 
 }
 
@@ -675,7 +713,7 @@ PROJECT PANEL
 
 
 /* ===============================
-PROJECT TITLE
+PROJECT HEADER
 ================================ */
 
 
@@ -695,11 +733,73 @@ PROJECT TITLE
 
 .project-card-header p{
 
-    margin:6px 0 0;
+    margin:6px 0;
+
+    font-size:12px;
 
     color:#64748b;
 
+}
+
+
+
+
+
+
+/* ===============================
+EXTRA INFO
+================================ */
+
+
+.project-extra-info{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+
+
+.project-extra-info div{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:15px;
+
+    padding:14px;
+
+}
+
+
+
+.project-extra-info span{
+
+    display:block;
+
+    font-size:10px;
+
+    color:#64748b;
+
+    font-weight:700;
+
+    margin-bottom:6px;
+
+}
+
+
+
+.project-extra-info strong{
+
     font-size:12px;
+
+    color:#1e293b;
 
 }
 
@@ -710,7 +810,7 @@ PROJECT TITLE
 
 
 /* ===============================
-SUMMARY CARD OWNER STYLE
+SUMMARY
 ================================ */
 
 
@@ -718,11 +818,11 @@ SUMMARY CARD OWNER STYLE
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:15px;
 
-    margin:20px 0;
+    margin:25px 0;
 
 }
 
@@ -775,7 +875,7 @@ SUMMARY CARD OWNER STYLE
 
 
 /* ===============================
-SECTION TITLE
+TITLE
 ================================ */
 
 
@@ -787,9 +887,9 @@ SECTION TITLE
 
     color:#1e293b;
 
-    padding-left:10px;
-
     border-left:4px solid #334155;
+
+    padding-left:10px;
 
     margin:25px 0 15px;
 
@@ -802,9 +902,89 @@ SECTION TITLE
 
 
 /* ===============================
-TASK CARD
+ACTIVITY
 ================================ */
 
+
+.activity-item{
+
+    display:flex;
+
+    gap:12px;
+
+    padding:14px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.activity-icon{
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:50%;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:800;
+
+}
+
+
+
+.activity-item strong{
+
+    font-size:12px;
+
+    color:#1e293b;
+
+}
+
+
+
+.activity-item p{
+
+    margin:5px 0;
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+
+.activity-item small{
+
+    font-size:10px;
+
+    color:#94a3b8;
+
+}
+
+
+
+/* ===============================
+TASK CARD
+================================ */
 
 .project-task-card{
 
@@ -812,7 +992,11 @@ TASK CARD
 
     justify-content:space-between;
 
-    gap:20px;
+    align-items:flex-start;
+
+    gap:25px;
+
+    width:100%;
 
     padding:18px;
 
@@ -837,10 +1021,20 @@ TASK CARD
     transform:translateY(-2px);
 
     box-shadow:
-
     0 8px 20px rgba(15,23,42,.06);
 
 }
+
+
+
+.project-task-main{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
 
 
 
@@ -883,7 +1077,9 @@ PROGRESS
 
     justify-content:space-between;
 
-    margin-bottom:8px;
+    margin-top:15px;
+
+    margin-bottom:7px;
 
     font-size:11px;
 
@@ -939,19 +1135,30 @@ PROGRESS
 
 
 
-
-
 /* ===============================
-BADGE STATUS
+SIDE TASK
 ================================ */
 
 
-.project-deadline,
+.project-task-side{
+
+    width:170px;
+
+    flex-shrink:0;
+
+}
+
+
+
+
+
 .project-status{
 
     display:block;
 
-    padding:6px 12px;
+    width:100%;
+
+    padding:7px 12px;
 
     border-radius:999px;
 
@@ -959,37 +1166,13 @@ BADGE STATUS
 
     font-weight:700;
 
-    margin-bottom:8px;
+    text-align:center;
+
+    margin-bottom:10px;
 
 }
 
 
-
-.project-deadline.danger{
-
-    background:#fee2e2;
-
-    color:#991b1b;
-
-}
-
-
-.project-deadline.warning{
-
-    background:#fef3c7;
-
-    color:#92400e;
-
-}
-
-
-.project-deadline.success{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-}
 
 
 
@@ -1002,6 +1185,9 @@ BADGE STATUS
 }
 
 
+
+
+
 .project-status.progress{
 
     background:#dbeafe;
@@ -1009,6 +1195,9 @@ BADGE STATUS
     color:#1d4ed8;
 
 }
+
+
+
 
 
 .project-status.todo{
@@ -1026,7 +1215,7 @@ BADGE STATUS
 
 
 /* ===============================
-BUTTON OWNER STYLE
+BUTTON
 ================================ */
 
 
@@ -1036,7 +1225,7 @@ BUTTON OWNER STYLE
 
     gap:8px;
 
-    margin-top:12px;
+    width:100%;
 
 }
 
@@ -1044,11 +1233,17 @@ BUTTON OWNER STYLE
 
 .project-button-group a{
 
+    flex:1;
+
+    text-align:center;
+
+    text-decoration:none;
+
     background:#334155;
 
     color:white;
 
-    padding:8px 16px;
+    padding:8px 10px;
 
     border-radius:10px;
 
@@ -1056,17 +1251,9 @@ BUTTON OWNER STYLE
 
     font-weight:700;
 
-    text-decoration:none;
-
 }
 
 
-
-.project-button-group a:hover{
-
-    background:#1e293b;
-
-}
 
 
 
@@ -1078,27 +1265,30 @@ BUTTON OWNER STYLE
 
 
 
-.project-update-btn:hover{
-
-    background:#1d4ed8!important;
-
-}
-
-
-
-
-
-
 
 /* ===============================
 RESPONSIVE
 ================================ */
 
 
-@media(max-width:1000px){
+@media(max-width:1200px){
 
 
 .project-summary-box{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+
+@media(max-width:900px){
+
+
+.project-extra-info{
 
     grid-template-columns:1fr;
 
@@ -1118,7 +1308,13 @@ RESPONSIVE
 
     width:100%;
 
-    text-align:left;
+}
+
+
+
+.project-summary-box{
+
+    grid-template-columns:1fr;
 
 }
 
@@ -1138,9 +1334,53 @@ RESPONSIVE
 }
 
 
+/* PERBAIKAN TASK SIDE */
+
+.project-task-side{
+
+    width:170px;
+    flex-shrink:0;
+
+}
+
+
+/* BUTTON AGAR RAPI */
+
+.project-button-group a{
+
+    flex:1;
+    text-align:center;
+
+}
+
+
+/* STATUS LEBIH RAPI */
+
+.project-status{
+
+    letter-spacing:.3px;
+
+}
+
+.late-warning{
+
+display:inline-block;
+
+margin-top:8px;
+
+background:#fee2e2;
+
+color:#b91c1c;
+
+padding:5px 10px;
+
+border-radius:999px;
+
+font-size:10px;
+
+font-weight:700;
+
+}
 
 </style>
-
-
-
 @endsection

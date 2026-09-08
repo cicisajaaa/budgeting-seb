@@ -319,7 +319,67 @@ Semua budget project aman
 
 
 
+<div class="panel">
 
+
+<h3>
+📊 Performance Project
+</h3>
+
+
+
+@forelse($projectPerformance as $project)
+
+
+<div class="project-progress">
+
+
+<div class="project-head">
+
+
+<strong>
+{{$project->nama_proyek}}
+</strong>
+
+
+<span>
+{{$project->progress_project}}%
+</span>
+
+
+</div>
+
+
+
+<div class="progress-track">
+
+
+<div class="progress-fill"
+style="
+width:{{$project->progress_project}}%
+">
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+@empty
+
+
+<div class="empty">
+Belum ada data project
+</div>
+
+
+@endforelse
+
+
+</div>
 
 
 <div class="panel">
@@ -1517,6 +1577,71 @@ EMPTY
 
 }
 
+
+.project-progress{
+
+    margin-bottom:18px;
+
+}
+
+
+.project-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+}
+
+
+.project-head strong{
+
+    font-size:13px;
+
+    color:#1e293b;
+
+}
+
+
+.project-head span{
+
+    font-size:12px;
+
+    font-weight:800;
+
+    color:#334155;
+
+}
+
+
+
+.progress-track{
+
+    width:100%;
+
+    height:8px;
+
+    background:#e2e8f0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+
+.progress-fill{
+
+    height:100%;
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
 
 
 /* =================================

@@ -307,7 +307,89 @@ Project
 
 </div>
 
+{{-- ================= FILTER PROJECT ================= --}}
 
+<form method="GET"
+action="{{route('admin.projects.index')}}"
+class="project-filter">
+
+
+<div class="filter-item">
+
+
+<input 
+type="text"
+name="search"
+value="{{request('search')}}"
+placeholder="🔍 Cari nama project..."
+>
+
+
+</div>
+
+
+
+
+<div class="filter-item">
+
+
+<select name="perusahaan_id">
+
+
+<option value="">
+Semua Perusahaan
+</option>
+
+
+@foreach($perusahaans as $perusahaan)
+
+
+<option value="{{$perusahaan->id}}"
+
+{{request('perusahaan_id')==$perusahaan->id?'selected':''}}
+
+>
+
+{{$perusahaan->nama_perusahaan}}
+
+</option>
+
+
+@endforeach
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+<button type="submit">
+
+Cari
+
+</button>
+
+
+
+
+
+@if(request('search') || request('perusahaan_id'))
+
+<a href="{{route('admin.projects.index')}}">
+
+Reset
+
+</a>
+
+@endif
+
+
+
+</form>
 
 
 
@@ -329,16 +411,17 @@ Project
 No
 </th>
 
-
 <th>
 Project
 </th>
-
 
 <th>
 Perusahaan
 </th>
 
+<th>
+Owner
+</th>
 
 <th>
 Budget
@@ -419,10 +502,7 @@ Project Perusahaan
 
 
 
-
-
 <td>
-
 
 <strong>
 
@@ -430,20 +510,14 @@ Project Perusahaan
 
 </strong>
 
-
-<br>
-
-
-<small>
-
-{{$project->pemilik_proyek ?? '-'}}
-
-</small>
-
-
 </td>
 
 
+<td>
+
+{{$project->pemilik_proyek ?? '-'}}
+
+</td>
 
 
 
@@ -682,7 +756,7 @@ title="Hapus">
 <tr>
 
 
-<td colspan="6" class="empty">
+<td colspan="7" class="empty">
 
 
 <div class="empty-icon">
@@ -1187,7 +1261,151 @@ TABLE HEADER
 }
 
 
+/* ===============================
+FILTER PROJECT
+================================ */
 
+
+.project-filter{
+
+display:flex;
+
+gap:12px;
+
+margin-bottom:20px;
+
+padding:15px;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+border-radius:15px;
+
+align-items:center;
+
+}
+
+
+
+.project-filter input,
+.project-filter select{
+
+height:40px;
+
+padding:0 14px;
+
+border-radius:10px;
+
+border:1px solid #dbe1e8;
+
+background:white;
+
+font-size:12px;
+
+outline:none;
+
+}
+
+
+
+.project-filter input{
+
+width:250px;
+
+}
+
+
+
+.project-filter select{
+
+width:220px;
+
+}
+
+
+
+.project-filter button{
+
+height:40px;
+
+padding:0 20px;
+
+border:none;
+
+border-radius:10px;
+
+background:#334155;
+
+color:white;
+
+font-size:12px;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+
+
+.project-filter button:hover{
+
+background:#1e293b;
+
+}
+
+
+
+.project-filter a{
+
+height:40px;
+
+display:flex;
+
+align-items:center;
+
+padding:0 18px;
+
+border-radius:10px;
+
+background:#fee2e2;
+
+color:#991b1b;
+
+text-decoration:none;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+
+@media(max-width:800px){
+
+
+.project-filter{
+
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+
+
+.project-filter input,
+.project-filter select{
+
+width:100%;
+
+}
+
+
+}
 
 
 

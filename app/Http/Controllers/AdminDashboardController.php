@@ -43,7 +43,37 @@ class AdminDashboardController extends Controller
         $totalTask = Tugas::count();
 
 
+$totalTaskBerjalan = Tugas::where(
+    'status',
+    'sedang_dikerjakan'
+)->count();
 
+
+
+$totalTaskSelesai = Tugas::where(
+    'status',
+    'selesai'
+)->count();
+
+
+
+$totalTaskBelum = Tugas::where(
+    'status',
+    'belum_dikerjakan'
+)->count();
+
+
+
+$totalTaskTerlambat = Tugas::where('status','!=','selesai')
+    ->whereNotNull('deadline')
+    ->whereDate('deadline','<',now())
+    ->count();
+
+
+
+$rataProgressTask = Tugas::avg(
+    'progres_persen'
+);
 /*
 |--------------------------------------------------------------------------
 | STATISTIK BUDGET PROJECT
@@ -115,7 +145,55 @@ $sisaBudget = $totalBudget - $totalRealisasi;
 
 
 
+/*
+|--------------------------------------------------------------------------
+| PROJECT PERFORMANCE
+|--------------------------------------------------------------------------
+*/
 
+
+$projectPerformance = Proyek::withCount([
+
+    'tugas'
+
+])
+
+->with([
+
+    'tugas'
+
+])
+
+->get()
+
+->map(function($project){
+
+
+    $total = $project->tugas->count();
+
+
+    $progress = $total > 0
+
+        ? round(
+            $project->tugas->avg('progres_persen'),
+            2
+        )
+
+        : 0;
+
+
+
+    $project->progress_project = $progress;
+
+
+    return $project;
+
+
+})
+
+->sortByDesc('progress_project')
+
+->take(5);
 
 
 
@@ -226,6 +304,16 @@ $projectWarning = Proyek::with(
 
                 'totalTask',
 
+                'totalTaskBerjalan',
+
+                'totalTaskSelesai',
+
+                'totalTaskBelum',
+
+                'totalTaskTerlambat',
+
+                'rataProgressTask',
+
 
                 'totalExpenseRequest',
 
@@ -248,7 +336,9 @@ $projectWarning = Proyek::with(
 
                 'recentProjects',
 
-                'recentAudit'
+                'recentAudit',
+
+                'projectPerformance'
 
             )
 
