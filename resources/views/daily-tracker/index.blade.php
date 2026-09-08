@@ -208,7 +208,7 @@ Penggunaan dana
 
 
 </div>
-<span class="project-status
+<span class="task-status
 
 @if(in_array($task->status,['selesai','done']))
 
@@ -319,19 +319,36 @@ Update
 
 
 
+<div class="task-progress">
 
-<div class="progress-bar">
 
+<div 
+class="task-progress-fill
 
-<div class="progress-value"
+@if($task->progres_persen >= 100)
 
-style="width:{{$task->progres_persen}}%">
+finish
+
+@elseif($task->progres_persen > 0)
+
+running
+
+@else
+
+empty
+
+@endif
+
+"
+
+style="
+width:{{min($task->progres_persen ?? 0,100)}}%
+">
 
 </div>
 
 
 </div>
-
 
 <div style="margin-top:20px;">
 
@@ -430,79 +447,90 @@ return $item['activity']->tanggal;
 
 
 
-
 @forelse($activities as $item)
 
 
 
-<div class="activity-item">
+<div class="activity-card">
 
 
-
-<div class="activity-dot"></div>
-
+<div class="activity-head">
 
 
-<div class="activity-content">
-
+<div>
 
 <h4>
-
 {{$item['task']}}
-
 </h4>
 
 
-<p>
-
-{{$item['activity']->aktivitas}}
-
-</p>
-@if($item['activity']->catatan)
-
-<div style="margin-top:8px;color:#64748b;font-size:12px">
-
-Catatan:
-{{$item['activity']->catatan}}
+<span>
+📁 {{$item['project']}}
+</span>
 
 </div>
 
-@endif
+
+
+<div class="activity-progress-badge">
+
+
+{{$item['activity']->progres ?? 0}}%
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="activity-body">
+
+
+<p>
+{{$item['activity']->aktivitas}}
+</p>
+
+
+
+<div class="activity-line">
 
 
 <span>
 
-📁 {{$item['project']}}
+👤 
+{{$item['activity']->karyawan->nama_karyawan ?? '-'}}
 
 </span>
 
 
 
+<span>
 
-<div class="activity-footer">
-
-
-Tanggal :
+📅
 
 {{Carbon\Carbon::parse(
 $item['activity']->tanggal
 )->format('d M Y')}}
 
+</span>
 
 
-&nbsp; | &nbsp;
+
+</div>
 
 
-Progress :
-
-{{$item['activity']->progres}}%
 
 
 @if($item['activity']->anggaran_aktivitas > 0)
 
-&nbsp; | &nbsp;
 
-Budget :
+<div class="budget-box">
+
+
+💰 Budget :
 
 Rp {{number_format(
 $item['activity']->anggaran_aktivitas,
@@ -511,19 +539,37 @@ $item['activity']->anggaran_aktivitas,
 '.'
 )}}
 
+
+</div>
+
+
 @endif
 
 
+
+
+@if($item['activity']->catatan)
+
+
+<div class="note-box">
+
+
+📝 {{$item['activity']->catatan}}
+
+
+</div>
+
+
+@endif
+
+
+
 </div>
 
 
 
-</div>
-
-
 
 </div>
-
 
 
 @empty
@@ -537,7 +583,6 @@ Belum ada aktivitas tercatat.
 
 
 @endforelse
-
 
 
 </div>
@@ -772,7 +817,21 @@ margin-bottom:15px;
 
 }
 
+.task-card{
 
+transition:.25s ease;
+
+}
+
+
+.task-card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+0 12px 25px rgba(15,23,42,.08);
+
+}
 
 .task-top{
 
@@ -806,17 +865,13 @@ color:#64748b;
 
 
 
+.task-status{
 
-
-.status{
-
-background:#f8f3ea;
-
-color:#8b5e22;
+display:inline-flex;
 
 padding:7px 14px;
 
-border-radius:20px;
+border-radius:999px;
 
 font-size:11px;
 
@@ -825,6 +880,34 @@ font-weight:800;
 }
 
 
+
+.task-status.todo{
+
+background:#f1f5f9;
+
+color:#475569;
+
+}
+
+
+
+.task-status.progress{
+
+background:#dbeafe;
+
+color:#1d4ed8;
+
+}
+
+
+
+.task-status.done{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
 
 
 
@@ -875,11 +958,9 @@ color:#172033;
 }
 
 
+.task-progress{
 
-
-.progress-bar{
-
-height:10px;
+height:12px;
 
 background:#e2e8f0;
 
@@ -891,13 +972,41 @@ overflow:hidden;
 
 
 
-.progress-value{
+.task-progress-fill{
 
 height:100%;
+
+border-radius:20px;
+
+transition:.4s ease;
+
+}
+
+
+
+.task-progress-fill.finish{
 
 background:#16a34a;
 
 }
+
+
+
+.task-progress-fill.running{
+
+background:#2563eb;
+
+}
+
+
+
+.task-progress-fill.empty{
+
+background:#94a3b8;
+
+}
+
+
 .btn-update{
 
 display:inline-block;
@@ -1005,6 +1114,171 @@ color:#64748b;
 
 }
 
+
+/* ===============================
+ACTIVITY CARD TIMELINE
+================================ */
+
+
+.activity-card{
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+border-radius:18px;
+
+padding:18px;
+
+margin-bottom:15px;
+
+transition:.25s ease;
+
+}
+
+
+
+.activity-card:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 10px 25px rgba(15,23,42,.08);
+
+}
+
+
+
+
+
+.activity-head{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:12px;
+
+}
+
+
+
+.activity-head h4{
+
+margin:0;
+
+font-size:15px;
+
+color:#1e293b;
+
+}
+
+
+
+
+.activity-head span{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+
+
+.activity-progress-badge{
+
+background:#dbeafe;
+
+color:#1d4ed8;
+
+padding:7px 14px;
+
+border-radius:999px;
+
+font-size:12px;
+
+font-weight:800;
+
+}
+
+
+
+
+
+.activity-body p{
+
+color:#475569;
+
+font-size:13px;
+
+line-height:1.6;
+
+margin-bottom:15px;
+
+}
+
+
+
+
+.activity-line{
+
+display:flex;
+
+gap:20px;
+
+font-size:12px;
+
+color:#64748b;
+
+flex-wrap:wrap;
+
+}
+
+
+
+
+
+.budget-box{
+
+margin-top:12px;
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:10px 14px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+
+.note-box{
+
+margin-top:12px;
+
+background:#fef3c7;
+
+color:#92400e;
+
+padding:12px 14px;
+
+border-radius:12px;
+
+font-size:12px;
+
+}
 
 
 .empty{

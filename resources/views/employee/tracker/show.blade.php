@@ -3,13 +3,7 @@
 
 @section('content')
 
-@if(session('error'))
 
-<div class="alert-error">
-    {{session('error')}}
-</div>
-
-@endif
 
 
 
@@ -19,32 +13,41 @@
 
 <div class="header-task">
 
+
 <div>
+
 
 <span class="label">
 UPDATE PROGRESS
 </span>
 
 
+
 <h1>
-{{ $task->nama_tugas }}
+{{$task->nama_tugas}}
 </h1>
 
 
+
 <p>
-📁 {{ $task->proyek->nama_proyek ?? '-' }}
+📁 {{$task->proyek?->nama_proyek ?? '-'}}
 </p>
+
 
 
 </div>
 
 
+
 <a href="{{route('daily-tracker.index')}}" class="back">
+    
 ← Kembali
+
 </a>
 
 
 </div>
+
 
 
 
@@ -63,10 +66,33 @@ Status
 
 
 <strong>
-{{strtoupper($task->status)}}
+
+@if($task->status=='belum_dikerjakan')
+
+Belum Dikerjakan
+
+@elseif($task->status=='sedang_dikerjakan')
+
+Sedang Dikerjakan
+
+@elseif($task->status=='selesai')
+
+Selesai
+
+@elseif($task->status=='dibatalkan')
+
+Dibatalkan
+
+@else
+
+{{ucfirst($task->status)}}
+
+@endif
+
 </strong>
 
 </div>
+
 
 
 
@@ -80,7 +106,17 @@ Deadline
 
 
 <strong>
-{{$task->deadline ?? '-'}}
+
+@if($task->deadline)
+
+{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
+
+@else
+
+-
+
+@endif
+
 </strong>
 
 </div>
@@ -95,10 +131,43 @@ Deadline
 Progress Saat Ini
 </label>
 
+<div class="progress-wrapper">
 
-<strong>
-{{$task->progres_persen ?? 0}}%
-</strong>
+    <div class="progress-header">
+
+        <strong>
+            {{$task->progres_persen ?? 0}}%
+        </strong>
+
+        <span>
+            Progress
+        </span>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+        <div 
+        class="progress-fill
+        @if(($task->progres_persen ?? 0) >= 100)
+            selesai
+        @elseif(($task->progres_persen ?? 0) > 0)
+            berjalan
+        @else
+            kosong
+        @endif
+        "
+        style="
+        width: {{$task->progres_persen ?? 0}}%;
+        ">
+        </div>
+
+    </div>
+
+
+</div>
+
 
 </div>
 
@@ -118,17 +187,13 @@ Progress Saat Ini
 
 
 
-<form action="{{route('daily-tracker.store')}}" method="POST">
+
+
+
+<form action="{{route('daily-tracker.store',$task->id)}}" method="POST">
+
 
 @csrf
-
-
-
-<input type="hidden"
-name="task_id"
-value="{{$task->id}}">
-
-
 
 
 
@@ -137,10 +202,15 @@ Aktivitas Hari Ini
 </label>
 
 
+
 <textarea
 name="aktivitas"
 placeholder="Tuliskan aktivitas yang dikerjakan..."
+@if(in_array($task->status,['selesai','dibatalkan']))
+readonly
+@endif
 required></textarea>
+
 
 
 
@@ -152,12 +222,23 @@ Progress (%)
 </label>
 
 
+
 <input 
 type="number"
 name="progres"
+
 min="{{$task->progres_persen ?? 0}}"
+
 max="100"
+
+step="1"
+
 value="{{$task->progres_persen ?? 0}}"
+
+@if($task->status=='selesai' || $task->status=='dibatalkan')
+disabled
+@endif
+
 required
 >
 
@@ -171,44 +252,91 @@ Anggaran Aktivitas
 
 <input 
 type="number"
+
 name="anggaran_aktivitas"
+
 min="0"
+
+@if($task->status=='selesai' || $task->status=='dibatalkan')
+disabled
+@endif
+
 placeholder="Masukkan penggunaan anggaran">
+
+
+
+
+
+
 
 <label>
 Catatan
 </label>
 
 
+
 <textarea
+
 name="catatan"
-placeholder="Catatan tambahan"></textarea>
+
+placeholder="Catatan tambahan"
+
+@if($task->status=='selesai' || $task->status=='dibatalkan')
+disabled
+@endif
+
+></textarea>
 
 
 
+@if($task->status == 'selesai')
 
+<div class="alert-success">
 
-<button type="submit" class="submit-update-btn">
+✅ Task sudah selesai. Update progress tidak tersedia lagi.
+
+</div>
+
+@elseif($task->status == 'dibatalkan')
+
+<div class="alert-error">
+
+❌ Task dibatalkan. Update progress tidak tersedia.
+
+</div>
+
+@else
+
+<button type="submit" 
+class="submit-update-btn">
+
 Simpan Update
+
 </button>
 
-
+@endif
 
 
 </form>
+
+
+
+
+
+
 
 
 <div class="employee-panel">
 
 
 <div class="panel-header">
+
 📝 Riwayat Aktivitas
+
 </div>
 
 
-
 @forelse($activities as $activity)
-
 
 <div class="activity-card">
 
@@ -221,57 +349,114 @@ Simpan Update
 </strong>
 
 
+
 <p>
-Progress:
-{{$activity->progres}}%
+Progress :
+{{$activity->progres ?? 0}}%
 </p>
 
 
+
+<p>
+Anggaran :
+Rp {{number_format($activity->anggaran_aktivitas ?? 0,0,',','.')}}
+</p>
+
+
+
+
+<div style="
+height:8px;
+background:#e2e8f0;
+border-radius:20px;
+overflow:hidden;
+">
+
+
+<div style="
+height:100%;
+width:{{$activity->progres ?? 0}}%;
+background:
+@if($activity->progres >= 100)
+#16a34a
+@elseif($activity->progres > 0)
+#f59e0b
+@else
+#94a3b8
+@endif
+;
+border-radius:20px;
+">
+</div>
+
+
+</div>
+
+
+
+
+
 <small>
-{{\Carbon\Carbon::parse($activity->tanggal)->format('d M Y')}}
+
+Oleh :
+{{$activity->karyawan->nama_karyawan ?? '-'}}
+
+<br>
+
+{{\Carbon\Carbon::parse($activity->tanggal)
+->format('d M Y')}}
+
 </small>
+
+
+
+
 
 
 @if($activity->catatan)
 
 <p>
-Catatan:
+
+Catatan :
 {{$activity->catatan}}
+
 </p>
 
 @endif
 
 
-</div>
 
 
 </div>
 
 
+</div>
 
 @empty
 
-
 <div class="empty-data">
-Belum ada aktivitas
-</div>
 
+Belum ada aktivitas
+
+</div>
 
 @endforelse
 
 
+
 </div>
+
+
+
 </div>
-
-
-
-
 
 <style>
+
 
 /* ===============================
 GLOBAL
 ================================ */
+
 
 .tracker-card{
     width:100%;
@@ -306,6 +491,7 @@ HEADER
     align-items:center;
 
 }
+
 
 
 
@@ -351,7 +537,9 @@ HEADER
 
 
 
-/* BUTTON BACK */
+/* ===============================
+BACK BUTTON
+================================ */
 
 
 .back{
@@ -384,8 +572,11 @@ HEADER
 
 
 
+
+
+
 /* ===============================
-INFO CARD
+INFO GRID
 ================================ */
 
 
@@ -402,8 +593,7 @@ INFO CARD
 }
 
 
-
-.info-grid div{
+.info-grid > div{
 
     background:white;
 
@@ -450,8 +640,119 @@ INFO CARD
 
 
 
+
+hr{
+
+    border:none;
+
+    border-top:1px solid #e2e8f0;
+
+    margin:25px 0;
+
+}
+
+
+
 /* ===============================
-FORM PANEL
+PROGRESS CARD
+================================ */
+
+.progress-wrapper{
+
+    margin-top:15px;
+
+}
+
+
+.progress-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:12px;
+
+}
+
+
+.progress-header strong{
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#1e293b;
+
+}
+
+
+.progress-header span{
+
+    font-size:12px;
+
+    color:#64748b;
+
+    font-weight:700;
+
+}
+
+
+
+
+.progress-bar{
+
+    width:100%;
+
+    height:10px;
+
+    background:#e2e8f0;
+
+    border-radius:50px;
+
+    overflow:hidden;
+
+}
+
+
+
+.progress-fill{
+
+    height:100%;
+
+    border-radius:50px;
+
+    transition:.5s ease;
+
+}
+
+
+
+.progress-fill.selesai{
+
+    background:#22c55e;
+
+}
+
+
+.progress-fill.berjalan{
+
+    background:#f59e0b;
+
+}
+
+
+.progress-fill.kosong{
+
+    background:#94a3b8;
+
+}
+
+
+
+/* ===============================
+FORM
 ================================ */
 
 
@@ -491,6 +792,8 @@ form label{
 
 
 
+
+
 textarea,
 input{
 
@@ -511,6 +814,8 @@ input{
 
 
 
+
+
 textarea{
 
     height:120px;
@@ -518,6 +823,7 @@ textarea{
     resize:none;
 
 }
+
 
 
 
@@ -533,11 +839,22 @@ input:focus{
 }
 
 
+input:disabled,
+textarea:disabled{
+
+    background:#e2e8f0;
+
+    cursor:not-allowed;
+
+    opacity:.7;
+
+}
+
 
 
 
 /* ===============================
-SUBMIT
+BUTTON
 ================================ */
 
 
@@ -577,65 +894,33 @@ SUBMIT
 
 
 
+
 /* ===============================
-STATUS
+ALERT
 ================================ */
 
 
-.status{
+.alert-success{
 
-    display:inline-flex;
+    background:#dcfce7;
 
-    padding:7px 14px;
+    border:1px solid #bbf7d0;
 
-    border-radius:999px;
+    color:#166534;
 
-    font-size:11px;
+    padding:15px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    font-size:13px;
 
     font-weight:700;
 
 }
 
 
-
-.status.progress{
-
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
-}
-
-
-
-.status.done{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-}
-
-
-
-.status.todo{
-
-    background:#f1f5f9;
-
-    color:#475569;
-
-}
-
-
-
-
-
-
-
-
-/* ===============================
-ALERT
-================================ */
 
 
 .alert-error{
@@ -690,6 +975,8 @@ ACTIVITY PANEL
 
 
 
+
+
 .panel-header{
 
     font-size:17px;
@@ -712,11 +999,6 @@ ACTIVITY PANEL
 
 
 
-/* ===============================
-ACTIVITY CARD
-================================ */
-
-
 .activity-card{
 
     background:#f8fafc;
@@ -733,6 +1015,8 @@ ACTIVITY CARD
 
 
 
+
+
 .activity-content strong{
 
     color:#1e293b;
@@ -740,6 +1024,8 @@ ACTIVITY CARD
     font-size:14px;
 
 }
+
+
 
 
 
@@ -755,6 +1041,8 @@ ACTIVITY CARD
 
 
 
+
+
 .activity-content small{
 
     color:#94a3b8;
@@ -765,17 +1053,24 @@ ACTIVITY CARD
 
 
 
-.activity-content p:last-child{
 
-    background:white;
 
-    padding:10px;
 
-    border-radius:12px;
 
-    border:1px solid #e2e8f0;
+.empty-data{
+
+    text-align:center;
+
+    padding:30px;
+
+    color:#94a3b8;
+
+    background:#f8fafc;
+
+    border-radius:15px;
 
 }
+
 
 
 
@@ -818,14 +1113,6 @@ RESPONSIVE
 @media(max-width:600px){
 
 
-.tracker-card{
-
-    padding:0;
-
-}
-
-
-
 .submit-update-btn{
 
     width:100%;
@@ -834,6 +1121,7 @@ RESPONSIVE
 
 
 }
+
 
 </style>
 

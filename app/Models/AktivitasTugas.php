@@ -36,6 +36,8 @@ class AktivitasTugas extends Model
 
 
 
+
+
     protected $casts = [
 
         'tanggal' => 'date',
@@ -46,35 +48,6 @@ class AktivitasTugas extends Model
 
     ];
 
-    /*
-
-    |--------------------------------------------------------------------------
-
-    | AUTO UPDATE PROGRESS TUGAS
-
-    |--------------------------------------------------------------------------
-
-    */
-
-    protected static function booted()
-
-    {
-
-        static::saved(function($aktivitas){
-
-            if($aktivitas->tugas)
-
-            {
-
-                $aktivitas->tugas->updateProgress();
-
-            }
-
-        });
-
-    }
-
-
 
 
 
@@ -83,7 +56,7 @@ class AktivitasTugas extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi Tugas
+    | RELASI TUGAS
     |--------------------------------------------------------------------------
     */
 
@@ -105,9 +78,12 @@ class AktivitasTugas extends Model
 
 
 
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Karyawan
+    | RELASI KARYAWAN
     |--------------------------------------------------------------------------
     */
 
@@ -124,6 +100,114 @@ class AktivitasTugas extends Model
         );
 
     }
+
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE AKTIVITAS TERBARU
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function scopeTerbaru($query)
+    {
+
+        return $query
+
+            ->orderByDesc('tanggal')
+
+            ->orderByDesc('created_at');
+
+    }
+
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS PROGRESS
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getStatusProgressAttribute()
+    {
+
+
+        $progress = $this->progres ?? 0;
+
+
+
+        if($progress >= 100)
+        {
+
+            return 'Selesai';
+
+        }
+
+
+
+        if($progress > 0)
+        {
+
+            return 'Berjalan';
+
+        }
+
+
+
+        return 'Belum Dimulai';
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORMAT ANGGARAN
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getFormatAnggaranAttribute()
+    {
+
+        return number_format(
+
+            $this->anggaran_aktivitas ?? 0,
+
+            0,
+
+            ',',
+
+            '.'
+
+        );
+
+    }
+
 
 
 

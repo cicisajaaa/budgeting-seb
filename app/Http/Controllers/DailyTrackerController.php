@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Tugas;
 use App\Models\AktivitasTugas;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Helpers\AuditHelper;
+
 
 
 class DailyTrackerController extends Controller
@@ -22,7 +26,19 @@ class DailyTrackerController extends Controller
     public function index()
     {
 
-        $karyawan = Auth::user()->karyawan;
+
+        $user = Auth::user();
+
+
+        if(!$user)
+        {
+            abort(403);
+        }
+
+
+
+        $karyawan = $user->karyawan;
+
 
 
         if(!$karyawan)
@@ -31,23 +47,65 @@ class DailyTrackerController extends Controller
         }
 
 
+
+
+
         $tasks = Tugas::where(
+
             'karyawan_id',
+
             $karyawan->id
+
         )
+
         ->with([
+
             'proyek',
+
             'aktivitasTugas.karyawan'
+
         ])
-        ->latest()
+
+
+        ->orderByRaw("
+
+            CASE
+
+                WHEN deadline IS NULL
+
+                THEN 1
+
+                ELSE 0
+
+            END
+
+        ")
+
+
+        ->orderBy(
+
+            'deadline',
+
+            'asc'
+
+        )
+
+
         ->get();
 
 
 
+
+
+
         return view(
+
             'daily-tracker.index',
+
             compact('tasks')
+
         );
+
 
     }
 
@@ -55,16 +113,117 @@ class DailyTrackerController extends Controller
 
 
 
+
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | DETAIL TASK
+    | DETAIL UPDATE TASK
     |--------------------------------------------------------------------------
     */
-public function show(Tugas $task)
+
+    public function show(Tugas $task)
+    {
+
+
+        $user = Auth::user();
+
+
+        if(!$user)
+        {
+            abort(403);
+        }
+
+
+
+        $karyawan = $user->karyawan;
+
+
+
+        if(!$karyawan)
+        {
+            abort(403);
+        }
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK PEMILIK TASK
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($task->karyawan_id != $karyawan->id)
+        {
+
+            abort(403);
+
+        }
+
+
+
+$task->load([
+
+    'proyek',
+
+    'karyawan',
+
+    'divisi',
+
+    'aktivitasTugas'=>function($query){
+
+        $query->with('karyawan')
+              ->latest('tanggal');
+
+    }
+
+]);
+
+
+$activities = $task->aktivitasTugas;
+
+
+
+
+
+        return view(
+
+            'employee.tracker.show',
+
+            compact(
+
+                'task',
+
+                'activities'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+public function update(Tugas $task)
 {
 
+    $user = Auth::user();
 
-    $karyawan = Auth::user()->karyawan;
+    if(!$user)
+    {
+        abort(403);
+    }
+
+
+    $karyawan = $user->karyawan;
 
 
     if(!$karyawan)
@@ -82,46 +241,32 @@ public function show(Tugas $task)
 
 
     $task->load([
-        'proyek',
-        'aktivitasTugas.karyawan'
+        'proyek'
     ]);
 
 
 
-    $activities = $task->aktivitasTugas()
-        ->latest('tanggal')
-        ->get();
-
-
-
     return view(
-        'employee.tracker.show',
-        compact(
-            'task',
-            'activities'
-        )
+        'employee.tracker.update',
+        compact('task')
     );
 
 }
 
 
+
     /*
     |--------------------------------------------------------------------------
-    | SIMPAN AKTIVITAS
+    | SIMPAN UPDATE AKTIVITAS
     |--------------------------------------------------------------------------
     */
 
-    public function store(Request $request)
+    public function store(Request $request, Tugas $task)
     {
 
 
+
         $request->validate([
-
-
-            'task_id'=>[
-                'required',
-                'exists:tugas,id'
-            ],
 
 
             'aktivitas'=>[
@@ -130,22 +275,33 @@ public function show(Tugas $task)
 
 
             'progres'=>[
+
                 'required',
-                'integer',
+
+                'numeric',
+
                 'min:0',
+
                 'max:100'
+
             ],
 
 
             'anggaran_aktivitas'=>[
+
                 'nullable',
+
                 'numeric',
+
                 'min:0'
+
             ],
 
 
             'catatan'=>[
+
                 'nullable'
+
             ]
 
 
@@ -155,11 +311,13 @@ public function show(Tugas $task)
 
 
 
-        $karyawan = Auth::user()->karyawan;
 
 
 
-        if(!$karyawan)
+        $user = Auth::user();
+
+
+        if(!$user)
         {
             abort(403);
         }
@@ -167,13 +325,12 @@ public function show(Tugas $task)
 
 
 
-        $task = Tugas::with('proyek')
-            ->findOrFail($request->task_id);
+        $karyawan = $user->karyawan;
 
 
 
 
-        if($task->karyawan_id != $karyawan->id)
+        if(!$karyawan)
         {
             abort(403);
         }
@@ -186,38 +343,161 @@ public function show(Tugas $task)
 
         /*
         |--------------------------------------------------------------------------
-        | SIMPAN AKTIVITAS TUGAS
+        | KEAMANAN TASK
+        |--------------------------------------------------------------------------
+        */
+
+
+        if($task->karyawan_id != $karyawan->id)
+        {
+
+            abort(403);
+
+        }
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TASK SELESAI
+        |--------------------------------------------------------------------------
+        */
+
+
+if(in_array($task->status,['selesai','dibatalkan']))
+{
+
+    return back()
+
+    ->withErrors([
+
+        'progres'=>
+
+        'Task sudah selesai atau dibatalkan dan tidak dapat diperbarui lagi.'
+
+    ]);
+
+}
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROGRESS TIDAK BOLEH TURUN
+        |--------------------------------------------------------------------------
+        */
+
+
+        $currentProgress = $task->progres_persen ?? 0;
+
+
+
+        if($request->progres < $currentProgress)
+        {
+
+            return back()
+
+            ->withErrors([
+
+                'progres'=>
+
+                'Progress tidak boleh lebih rendah dari progress sebelumnya.'
+
+            ]);
+
+        }
+
+
+
+
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN AKTIVITAS
         |--------------------------------------------------------------------------
         */
 
 
         AktivitasTugas::create([
 
+
             'tugas_id'=>$task->id,
+
 
             'karyawan_id'=>$karyawan->id,
 
+
             'tanggal'=>now(),
+
 
             'aktivitas'=>$request->aktivitas,
 
+
             'progres'=>$request->progres,
 
-            'anggaran_aktivitas'=>$request->anggaran_aktivitas ?? 0,
+
+            'anggaran_aktivitas'=>
+
+                $request->anggaran_aktivitas ?? 0,
+
 
             'catatan'=>$request->catatan
+
 
         ]);
 
 
 
 
-        // refresh data aktivitas terbaru
-        $task->refresh();
+
+
+/*
+|--------------------------------------------------------------------------
+| UPDATE PROGRESS + STATUS TASK
+|--------------------------------------------------------------------------
+*/
+
+$status = 'belum_dikerjakan';
+
+
+if($request->progres > 0 && $request->progres < 100)
+{
+
+    $status = 'sedang_dikerjakan';
+
+}
+
+
+elseif($request->progres >= 100)
+{
+
+    $status = 'selesai';
+
+}
 
 
 
+$task->update([
 
+    'progres_persen'=>$request->progres,
+
+    'status'=>$status
+
+]);
 
 
 
@@ -231,15 +511,23 @@ public function show(Tugas $task)
 
         AuditHelper::create(
 
+
             'Update Task Activity',
+
 
             'Manajemen Tugas',
 
-            'Menambahkan aktivitas pada tugas '.
-            $task->nama_tugas.
-            ' dengan progres '.
-            $request->progres.
+
+            'Menambahkan aktivitas pada tugas '
+
+            .$task->nama_tugas.
+
+            ' dengan progres '
+
+            .$request->progres.
+
             '%'
+
 
         );
 
@@ -251,70 +539,28 @@ public function show(Tugas $task)
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE PROGRESS TASK
-        |--------------------------------------------------------------------------
-        */
+return redirect()
 
+->route(
 
-        $progressBaru = $task
-            ->aktivitasTugas()
-            ->max('progres');
+    'daily-tracker.show',
 
+    $task->id
 
-        $task->update([
-            'progres_persen'=>$progressBaru ?? 0
-        ]);
+)
 
+        ->with(
 
+            'success',
 
+            'Aktivitas berhasil diperbarui'
 
-        if($task->progres_persen >= 100)
-{
-    $task->status = 'selesai';
-}
-elseif($task->progres_persen > 0)
-{
-    $task->status = 'sedang_dikerjakan';
-}
-else
-{
-    $task->status = 'belum_dikerjakan';
-}
-
-
-$task->save();
-
-/*
-|--------------------------------------------------------------------------
-| UPDATE PROGRESS PROJECT
-|--------------------------------------------------------------------------
-*/
-
-        $project = $task->proyek;
-
-
-        if($project)
-        {
-            $project->refresh();
-        }
-
-
-
-        return redirect()
-
-            ->route(
-                'daily-tracker.index'
-            )
-
-            ->with(
-                'success',
-                'Aktivitas berhasil diperbarui'
-            );
+        );
 
 
     }
+
+
 
 
 }
