@@ -93,8 +93,67 @@ required>
 </div>
 
 
+<div class="form-group">
+
+    <label>
+        Perusahaan
+    </label>
+
+    <select
+        name="perusahaan_id"
+        id="perusahaan_id"
+        required
+    >
+        <option value="">
+            -- Pilih Perusahaan --
+        </option>
+
+        @foreach($perusahaan as $item)
+
+            <option
+                value="{{ $item->id }}"
+                {{ old('perusahaan_id', $task->proyek->perusahaan_id ?? '') == $item->id ? 'selected' : '' }}
+            >
+                {{ $item->nama_perusahaan }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
 
 
+<div class="form-group">
+
+    <label>
+        Project
+    </label>
+
+    <select
+        name="proyek_id"
+        id="proyek_id"
+        required
+    >
+        <option value="">
+            -- Pilih Project --
+        </option>
+
+        @foreach($projects as $item)
+
+            <option
+                value="{{ $item->id }}"
+                data-perusahaan="{{ $item->perusahaan_id }}"
+                {{ old('proyek_id', $task->proyek_id) == $item->id ? 'selected' : '' }}
+            >
+                {{ $item->nama_proyek }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
 
 
 <div class="form-group">
@@ -264,39 +323,60 @@ High
 
 
 
-
-
-
 <div class="form-group">
 
-<label>
-Progress (%)
-</label>
+    <label>
+        Progress (%)
+    </label>
 
+    <div class="progress-input-wrapper">
 
-<input
+        <input
+            type="number"
+            id="progressInput"
+            name="progres_persen"
+            min="0"
+            max="100"
+            step="1"
+            value="{{ old('progres_persen', $task->progres_persen ?? 0) }}"
+            required
+        >
 
-type="number"
+        <span>%</span>
 
-name="progres_persen"
+    </div>
 
-min="0"
+    <div class="edit-progress-preview">
 
-max="100"
+        <div class="preview-bar">
+            <div
+                id="previewBar"
+                class="preview-bar-fill"
+                style="width: {{ min(max((float)($task->progres_persen ?? 0), 0), 100) }}%"
+            ></div>
+        </div>
 
-value="{{old('progres_persen',$task->progres_persen)}}"
+        <div class="preview-status">
 
-required>
+            <span>
+                Status otomatis:
+            </span>
 
+            <strong id="previewStatus">
+                @if(($task->progres_persen ?? 0) >= 100)
+                    Selesai
+                @elseif(($task->progres_persen ?? 0) > 0)
+                    Sedang Dikerjakan
+                @else
+                    Belum Dikerjakan
+                @endif
+            </strong>
 
+        </div>
 
-<small style="color:#64748b;font-size:10px">
-Status otomatis mengikuti nilai progress.
-</small>
-
+    </div>
 
 </div>
-
 
 </div>
 
@@ -776,7 +856,61 @@ ACTION
 
 
 
+/* ===============================
+   PROGRESS EDIT
+================================ */
 
+.progress-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.progress-input-wrapper input {
+    padding-right: 35px;
+}
+
+.progress-input-wrapper span {
+    position: absolute;
+    right: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+}
+
+.edit-progress-preview {
+    margin-top: 8px;
+}
+
+.preview-bar {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.preview-bar-fill {
+    height: 100%;
+    width: 0;
+    background: #334155;
+    border-radius: 20px;
+    transition: width .2s ease;
+}
+
+.preview-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    font-size: 9px;
+    color: #94a3b8;
+}
+
+.preview-status strong {
+    color: #334155;
+    font-size: 9px;
+}
 
 
 
@@ -827,5 +961,131 @@ RESPONSIVE
 }
 
 </style>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const input = document.getElementById('progressInput');
+    const bar = document.getElementById('previewBar');
+    const status = document.getElementById('previewStatus');
+
+    if (!input || !bar || !status) {
+        return;
+    }
+
+    function updateProgressPreview() {
+
+        let progress = parseFloat(input.value) || 0;
+
+        if (progress < 0) {
+            progress = 0;
+            input.value = 0;
+        }
+
+        if (progress > 100) {
+            progress = 100;
+            input.value = 100;
+        }
+
+        bar.style.width = progress + '%';
+
+        if (progress >= 100) {
+
+            status.textContent = 'Selesai';
+
+        } else if (progress > 0) {
+
+            status.textContent = 'Sedang Dikerjakan';
+
+        } else {
+
+            status.textContent = 'Belum Dikerjakan';
+
+        }
+    }
+
+    input.addEventListener('input', updateProgressPreview);
+
+    updateProgressPreview();
+
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const perusahaan = document.getElementById('perusahaan_id');
+    const project = document.getElementById('proyek_id');
+
+    if (!perusahaan || !project) {
+        return;
+    }
+
+    const allProjects = Array.from(
+        project.querySelectorAll('option[data-perusahaan]')
+    ).map(function (option) {
+
+        return {
+            id: option.value,
+            nama: option.textContent.trim(),
+            perusahaan_id: option.dataset.perusahaan
+        };
+
+    });
+
+    const currentProject = "{{ old('proyek_id', $task->proyek_id) }}";
+
+    function updateProjects() {
+
+        const perusahaanId = perusahaan.value;
+
+        project.innerHTML = '';
+
+        const defaultOption = document.createElement('option');
+
+        defaultOption.value = '';
+        defaultOption.textContent = '-- Pilih Project --';
+
+        project.appendChild(defaultOption);
+
+        allProjects.forEach(function (item) {
+
+            if (
+                perusahaanId === '' ||
+                item.perusahaan_id === perusahaanId
+            ) {
+
+                const option = document.createElement('option');
+
+                option.value = item.id;
+                option.textContent = item.nama;
+
+                if (currentProject == item.id) {
+                    option.selected = true;
+                }
+
+                project.appendChild(option);
+            }
+
+        });
+    }
+
+    perusahaan.addEventListener('change', function () {
+
+        // Saat perusahaan berubah,
+        // project lama harus dikosongkan.
+        project.value = '';
+
+        updateProjects();
+
+    });
+
+    updateProjects();
+
+});
+</script>
 
 @endsection

@@ -803,7 +803,7 @@ Tanggal
 
 <td>
 
-{{$activity->tugas->proyek->nama_proyek ?? '-'}}
+{{$activity->tugas->proyek?->nama_proyek ?? '-'}}
 
 </td>
 

@@ -31,6 +31,11 @@ Kelola informasi project, anggaran, progres, dan aktivitas perusahaan.
 
 
 
+<div style="display:flex;gap:10px;">
+
+<div class="header-action">
+
+
 <a href="{{route('admin.projects.create')}}"
 class="btn-primary">
 
@@ -39,42 +44,38 @@ class="btn-primary">
 </a>
 
 
+
+<form action="{{route('admin.projects.import')}}" 
+method="POST"
+enctype="multipart/form-data"
+class="import-form">
+
+@csrf
+
+
+<label class="import-button">
+
+📥 Import Excel
+
+<input 
+type="file"
+name="file"
+accept=".xlsx,.xls"
+required
+onchange="this.form.submit()"
+>
+
+</label>
+
+</form>
+
+
+</div>
 </div>
 
 
-
-
-@if(session('success'))
-
-<div class="success-alert">
-
-{{session('success')}}
-
 </div>
 
-@endif
-
-
-
-@if($errors->any())
-
-<div class="alert-error">
-
-<ul>
-
-@foreach($errors->all() as $error)
-
-<li>
-{{$error}}
-</li>
-
-@endforeach
-
-</ul>
-
-</div>
-
-@endif
 
 
 
@@ -1380,7 +1381,78 @@ font-size:12px;
 font-weight:700;
 
 }
+/* ===============================
+HEADER ACTION
+================================ */
 
+.header-action{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+
+.import-form{
+
+    margin:0;
+
+}
+
+
+
+.import-button{
+
+    height:40px;
+
+    padding:0 18px;
+
+    background:#16a34a;
+
+    color:white;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    box-shadow:
+    0 5px 15px rgba(22,163,74,.2);
+
+}
+
+
+
+.import-button:hover{
+
+    background:#15803d;
+
+    transform:translateY(-1px);
+
+}
+
+
+
+.import-button input{
+
+    display:none;
+
+}
 
 
 
@@ -1694,17 +1766,17 @@ BADGE
 ACTION ICON
 ================================ */
 
-
 .action{
 
     display:flex;
 
-    gap:6px;
+    gap:5px;
 
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+
+    align-items:center;
 
 }
-
 
 
 .action form{
@@ -1722,9 +1794,9 @@ ACTION ICON
 .task,
 .delete{
 
-    width:32px;
+    width:28px;
 
-    height:32px;
+    height:28px;
 
     border-radius:10px;
 
@@ -1943,6 +2015,40 @@ RESPONSIVE
 
 
 
+
+
+
+
+
+
+.btn-import{
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    border:none;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+.btn-import:hover{
+
+    background:#15803d;
+
+}
 }
 
 

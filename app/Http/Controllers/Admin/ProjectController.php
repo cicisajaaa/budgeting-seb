@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 
 use App\Helpers\AuditHelper;
 
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProjectImport;
 
 class ProjectController extends Controller
 {
@@ -475,7 +476,61 @@ class ProjectController extends Controller
     }
 
 
+/*
+|--------------------------------------------------------------------------
+| IMPORT PROJECT EXCEL
+|--------------------------------------------------------------------------
+*/
 
+public function import(Request $request)
+{
+
+
+    $request->validate([
+
+        'file'=>'required|mimes:xlsx,xls'
+
+    ]);
+
+
+
+    Excel::import(
+
+        new ProjectImport,
+
+        $request->file('file')
+
+    );
+
+
+
+    AuditHelper::create(
+
+        'Import Project',
+
+        'Manajemen Project',
+
+        'Admin melakukan import data project dari Excel'
+
+    );
+
+
+
+
+    return redirect()
+
+        ->route('admin.projects.index')
+
+        ->with(
+
+            'success',
+
+            'Data project berhasil diimport'
+
+        );
+
+
+}
 
 
 

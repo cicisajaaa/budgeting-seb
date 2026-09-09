@@ -122,7 +122,15 @@ Project
 
 
 
+<div class="info-item">
+    <span>
+        Perusahaan
+    </span>
 
+    <strong>
+        {{$task->proyek->perusahaan->nama_perusahaan ?? '-'}}
+    </strong>
+</div>
 
 
 <div class="info-item">
@@ -290,45 +298,33 @@ elseif($task->status=='dibatalkan'){
 
 
 
-
-
-
+@php
+    $progress = min(
+        max((float) ($task->progres_persen ?? 0), 0),
+        100
+    );
+@endphp
 
 <div class="progress-header">
 
+    <span>
+        Progress Pekerjaan
+    </span>
 
-<span>
-
-Progress Pekerjaan
-
-</span>
-
-
-<strong>
-
-{{$task->progres_persen ?? 0}}%
-
-</strong>
-
+    <strong>
+        {{ number_format($progress, 0) }}%
+    </strong>
 
 </div>
-
-
-
 
 <div class="progress-track">
 
-
-<div class="progress-bar"
-
-style="width:{{min($task->progres_persen ?? 0,100)}}%">
-
-</div>
-
+    <div
+        class="progress-bar"
+        style="width: {{ $progress }}%"
+    ></div>
 
 </div>
-
-
 
 
 
@@ -339,12 +335,12 @@ style="width:{{min($task->progres_persen ?? 0,100)}}%">
 ❌ Task dibatalkan
 
 
-@elseif(($task->progres_persen ?? 0) >=100)
+@elseif($progress >= 100)
 
 ✓ Task selesai
 
 
-@elseif(($task->progres_persen ?? 0)>0)
+@elseif($progress > 0)
 
 ⏳ Sedang berjalan
 
@@ -400,103 +396,88 @@ Belum dimulai
 
 
 
-
 {{-- RIWAYAT UPDATE AKTIVITAS --}}
-
 
 <div class="glass-panel activity-card">
 
+    <div class="panel-title">
+        📌 Riwayat Update Aktivitas
+    </div>
 
-<div class="panel-title">
+    @forelse($task->aktivitasTugas as $aktivitas)
 
-📌 Riwayat Update Aktivitas
+        <div class="timeline-item">
 
-</div>
+            {{-- TITIK TIMELINE --}}
+            <div class="timeline-marker"></div>
 
+            {{-- ISI --}}
+            <div class="timeline-content">
 
+               <div class="timeline-top">
 
+    <div>
+        <strong class="timeline-date">
+            @if($aktivitas->tanggal)
+                {{ \Carbon\Carbon::parse($aktivitas->tanggal)->format('d M Y') }}
+            @else
+                -
+            @endif
+        </strong>
 
-@forelse($task->aktivitasTugas as $aktivitas)
+        @if($aktivitas->karyawan)
+            <div class="timeline-pic">
+                PIC: {{ $aktivitas->karyawan->nama_karyawan }}
+            </div>
+        @else
+            <div class="timeline-pic">
+                PIC: -
+            </div>
+        @endif
+    </div>
 
-
-
-<div class="description-box" style="margin-bottom:12px">
-
-
-
-<strong>
-
-@if($aktivitas->tanggal)
-
-{{\Carbon\Carbon::parse($aktivitas->tanggal)->format('d M Y')}}
-
-@else
-
--
-
-@endif
-
-
-</strong>
-
-
-
-<p style="margin-top:8px">
-
-{{$aktivitas->aktivitas}}
-
-</p>
-
-
-
-
-<span>
-
-Progress:
-{{$aktivitas->progres}}%
-
-</span>
-
-
-
-
-
-@if($aktivitas->catatan)
-
-
-<p>
-
-Catatan:
-{{$aktivitas->catatan}}
-
-</p>
-
-
-@endif
-
-
-
+    <span class="timeline-progress">
+        {{ min(max((int) ($aktivitas->progres ?? 0), 0), 100) }}%
+    </span>
 
 </div>
 
+                <div class="timeline-activity">
+                    {{ $aktivitas->aktivitas ?? 'Tidak ada aktivitas' }}
+                </div>
 
+                @if($aktivitas->catatan)
 
-@empty
+                    <div class="timeline-note">
+                        <strong>Catatan:</strong>
+                        {{ $aktivitas->catatan }}
+                    </div>
 
+                @endif
 
-<div class="description-box">
+            </div>
 
-Belum ada update aktivitas.
+        </div>
+
+    @empty
+
+        <div class="timeline-empty">
+            <div class="timeline-empty-icon">
+                📋
+            </div>
+
+            <strong>
+                Belum ada update aktivitas
+            </strong>
+
+            <span>
+                Riwayat pekerjaan akan muncul di sini.
+            </span>
+        </div>
+
+    @endforelse
 
 </div>
-
-
-@endforelse
-
-
-
-</div>
-
 
 
 
@@ -1052,8 +1033,138 @@ ACTIVITY
 
 
 
+/* ===============================
+   TIMELINE AKTIVITAS
+================================ */
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    padding-bottom: 18px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+/* GARIS */
+.timeline-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    bottom: 0;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+/* TITIK */
+.timeline-marker {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    margin-top: 4px;
+    border-radius: 50%;
+    background: #334155;
+    border: 3px solid #e2e8f0;
+    position: relative;
+    z-index: 2;
+}
+
+/* CONTENT */
+.timeline-content {
+    flex: 1;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 13px 15px;
+}
+
+/* HEADER TIMELINE */
+.timeline-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.timeline-date {
+    font-size: 10px;
+    color: #64748b;
+}
+
+/* PROGRESS */
+.timeline-progress {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+/* AKTIVITAS */
+.timeline-activity {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #334155;
+    font-weight: 600;
+}
+
+/* CATATAN */
+.timeline-note {
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #64748b;
+}
+
+.timeline-note strong {
+    color: #334155;
+}
+
+/* EMPTY */
+.timeline-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+}
+
+.timeline-empty-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.timeline-empty strong {
+    font-size: 11px;
+    color: #334155;
+}
+
+.timeline-empty span {
+    margin-top: 4px;
+    font-size: 9px;
+    color: #94a3b8;
+}
 
 
+.timeline-pic {
+    margin-top: 3px;
+    font-size: 9px;
+    color: #94a3b8;
+    font-weight: 600;
+}
 /* ===============================
 RESPONSIVE
 ================================ */
