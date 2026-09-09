@@ -476,7 +476,14 @@ Route::resource(
         AdminProjectController::class
     );
 
-
+Route::post(
+    '/projects/import',
+    [
+        AdminProjectController::class,
+        'import'
+    ]
+)
+->name('projects.import');
 
     Route::resource(
         'divisions',
@@ -499,6 +506,14 @@ Route::get(
 ->name('tasks.index');
 
 
+Route::post(
+    '/tasks/import',
+    [
+        TaskController::class,
+        'import'
+    ]
+)
+->name('tasks.import');
 
 Route::get(
     '/tasks/{task}',

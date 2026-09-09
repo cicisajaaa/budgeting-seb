@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Tugas;
 use App\Models\Karyawan;
-
+use App\Models\Proyek;
 
 class AktivitasTugas extends Model
 {
@@ -78,7 +78,23 @@ class AktivitasTugas extends Model
 
 
 
+public function proyek()
+{
 
+    return $this->hasOneThrough(
+
+        Proyek::class,
+
+        Tugas::class,
+
+        'id',
+        'id',
+        'tugas_id',
+        'proyek_id'
+
+    );
+
+}
 
 
     /*
