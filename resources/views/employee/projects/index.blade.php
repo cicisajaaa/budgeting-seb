@@ -146,7 +146,11 @@ Rp {{number_format($project->total_anggaran ?? 0,0,',','.')}}
 
 
 <strong>
-{{$project->users?->count() ?? 0}} Orang
+{{$project->tugas
+    ->pluck('karyawan_id')
+    ->unique()
+    ->count()
+}} Orang
 </strong>
 
 </div>
@@ -210,7 +214,9 @@ Progress Project
 
 
 <strong>
-{{$project->progres_keseluruhan ?? 0}}%
+{{round(
+    $project->tugas->avg('progres_persen') ?? 0
+)}}%
 </strong>
 
 
@@ -282,7 +288,7 @@ $aktivitasTerakhir = $project->tugas
 <div>
 
 <strong>
-{{$aktivitas->judul ?? 'Update Aktivitas'}}
+{{$aktivitas->aktivitas ?? 'Update Aktivitas'}}
 </strong>
 
 
@@ -379,7 +385,11 @@ Status:
 
 Belum Dikerjakan
 
-@elseif($task->status == 'sedang_dikerjakan')
+@elseif(in_array($task->status,[
+    'sedang_dikerjakan',
+    'berjalan',
+    'progress'
+]))
 
 Sedang Dikerjakan
 
@@ -1304,13 +1314,6 @@ RESPONSIVE
 
 
 
-.project-task-side{
-
-    width:100%;
-
-}
-
-
 
 .project-summary-box{
 
@@ -1334,14 +1337,7 @@ RESPONSIVE
 }
 
 
-/* PERBAIKAN TASK SIDE */
 
-.project-task-side{
-
-    width:170px;
-    flex-shrink:0;
-
-}
 
 
 /* BUTTON AGAR RAPI */

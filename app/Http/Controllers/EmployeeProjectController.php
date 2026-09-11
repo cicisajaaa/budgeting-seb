@@ -139,12 +139,11 @@ END
 
                 ->with([
 
-                    'aktivitasTugas' => function($q){
+                'aktivitasTugas' => function($q){
 
-                        $q->latest()
-                          ->limit(3);
+                    $q->latest();
 
-                    },
+                },
 
 
                     'divisi',

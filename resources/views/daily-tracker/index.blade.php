@@ -2,10 +2,11 @@
 
 @section('content')
 
-<div class="daily-container">
+
+<div class="daily-wrapper">
 
 
-{{-- ================= HEADER ================= --}}
+{{-- HEADER --}}
 
 <div class="daily-header">
 
@@ -13,7 +14,7 @@
 <div>
 
 <span class="daily-label">
-AKTIVITAS HARIAN KARYAWAN
+EMPLOYEE WORK TRACKING
 </span>
 
 
@@ -23,7 +24,7 @@ Aktivitas Harian
 
 
 <p>
-Monitoring aktivitas dan perkembangan pekerjaan harian kamu.
+Pantau progres pekerjaan, deadline, dan aktivitas tugas kamu dalam satu sistem.
 </p>
 
 
@@ -31,22 +32,26 @@ Monitoring aktivitas dan perkembangan pekerjaan harian kamu.
 
 
 
-<div class="date-box">
+<div class="date-card">
 
+<div>
+📅
+</div>
+
+<span>
 {{date('d M Y')}}
+</span>
+
+</div>
+
 
 </div>
 
 
 
-</div>
 
 
-
-
-
-{{-- ================= SUMMARY ================= --}}
-
+{{-- SUMMARY --}}
 
 <div class="summary-grid">
 
@@ -54,9 +59,16 @@ Monitoring aktivitas dan perkembangan pekerjaan harian kamu.
 
 <div class="summary-card">
 
-<span>
+<div class="summary-icon blue">
+📋
+</div>
+
+
+<div>
+
+<label>
 Total Tugas
-</span>
+</label>
 
 <h2>
 {{$tasks->count()}}
@@ -69,14 +81,24 @@ Task diberikan
 </div>
 
 
+</div>
+
+
 
 
 
 <div class="summary-card">
 
-<span>
+<div class="summary-icon green">
+⚡
+</div>
+
+
+<div>
+
+<label>
 Total Aktivitas
-</span>
+</label>
 
 
 <h2>
@@ -94,7 +116,12 @@ return $task->aktivitasTugas->count();
 Update pekerjaan
 </p>
 
+
 </div>
+
+
+</div>
+
 
 
 
@@ -103,9 +130,17 @@ Update pekerjaan
 
 <div class="summary-card">
 
-<span>
+<div class="summary-icon orange">
+📊
+</div>
+
+
+<div>
+
+
+<label>
 Progress Rata-rata
-</span>
+</label>
 
 
 <h2>
@@ -122,7 +157,12 @@ $tasks->avg('progres_persen') ?? 0,
 Keseluruhan task
 </p>
 
+
 </div>
+
+
+</div>
+
 
 
 
@@ -131,26 +171,40 @@ Keseluruhan task
 
 <div class="summary-card">
 
-<span>
+<div class="summary-icon purple">
+💰
+</div>
+
+
+<div>
+
+
+<label>
 Anggaran Aktivitas
-</span>
+</label>
+
 
 <h2>
 
-Rp 
-{{ number_format(
-    $tasks->sum(function($task){
+Rp {{number_format(
 
-        return $task->aktivitasTugas
-            ->sum('anggaran_aktivitas');
+$tasks->sum(function($task){
 
-    }),
-    0,
-    ',',
-    '.'
-) }}
+return $task->aktivitasTugas
+->sum('anggaran_aktivitas');
+
+}),
+
+0,
+
+',',
+
+'.'
+
+)}}
 
 </h2>
+
 
 <p>
 Penggunaan dana
@@ -160,6 +214,8 @@ Penggunaan dana
 </div>
 
 
+</div>
+
 
 
 </div>
@@ -170,36 +226,53 @@ Penggunaan dana
 
 
 
-{{-- ================= TASK MONITORING ================= --}}
 
 
-<div class="panel">
+{{-- TASK MONITORING --}}
 
 
-<div class="panel-title">
+<div class="content-panel">
 
+
+<div class="panel-header">
+
+<div>
+
+<h3>
 📌 Pemantauan Tugas
+</h3>
+
+<span>
+Daftar pekerjaan yang sedang kamu kerjakan
+</span>
 
 </div>
 
 
+</div>
+
+
+
+
+
+<div class="task-grid">
 
 
 @forelse($tasks as $task)
 
+
+
 <div class="task-card">
 
 
-
-<div class="task-top">
+<div class="task-header">
 
 
 <div>
 
-
-<h3>
+<h4>
 {{$task->nama_tugas}}
-</h3>
+</h4>
 
 
 <p>
@@ -208,30 +281,36 @@ Penggunaan dana
 
 
 </div>
-<span class="task-status
+
+
+
+
+<span class="status-badge
 
 @if(in_array($task->status,['selesai','done']))
 
-done
+success
 
 @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
-progress
+warning
 
 @else
 
-todo
+neutral
 
 @endif
 
 ">
+
+
 @if(in_array($task->status,['selesai','done']))
 
 Selesai
 
 @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
-Sedang Dikerjakan
+Berjalan
 
 @else
 
@@ -239,7 +318,9 @@ Belum Dikerjakan
 
 @endif
 
+
 </span>
+
 
 
 </div>
@@ -249,8 +330,7 @@ Belum Dikerjakan
 
 
 
-<div class="task-info">
-
+<div class="task-detail">
 
 
 <div>
@@ -259,11 +339,12 @@ Belum Dikerjakan
 Deadline
 </label>
 
+
 <strong>
 
 @if($task->deadline)
 
-{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
+{{Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
 
 @else
 
@@ -272,8 +353,9 @@ Deadline
 @endif
 
 </strong>
-</div>
 
+
+</div>
 
 
 
@@ -286,8 +368,9 @@ Progress
 
 
 <strong>
-{{number_format($task->progres_persen,0)}}%
+{{$task->progres_persen ?? 0}}%
 </strong>
+
 
 </div>
 
@@ -302,67 +385,54 @@ Aktivitas
 
 
 <strong>
-
 {{$task->aktivitasTugas->count()}}
-
 Update
-
 </strong>
 
 
 </div>
 
 
-
 </div>
 
 
 
 
-<div class="task-progress">
 
 
-<div 
-class="task-progress-fill
 
-@if($task->progres_persen >= 100)
+<div class="progress-bar">
 
-finish
 
-@elseif($task->progres_persen > 0)
-
-running
-
-@else
-
-empty
-
-@endif
-
-"
+<div
 
 style="
 width:{{min($task->progres_persen ?? 0,100)}}%
-">
+"
+
+class="progress-fill">
 
 </div>
 
 
 </div>
 
-<div style="margin-top:20px;">
+
+
+
+
+
 
 <a href="{{route(
 'daily-tracker.show',
 $task->id
 )}}"
-class="btn-update">
+
+class="update-button">
 
 + Update Aktivitas
 
 </a>
-
-</div>
 
 
 
@@ -387,23 +457,29 @@ Belum ada task.
 </div>
 
 
+</div>
+
+{{-- TIMELINE AKTIVITAS --}}
 
 
+<div class="content-panel">
 
 
+<div class="panel-header">
 
+<div>
 
-
-{{-- ================= TIMELINE ================= --}}
-
-
-
-<div class="panel">
-
-
-<div class="panel-title">
-
+<h3>
 📝 Timeline Aktivitas
+</h3>
+
+
+<span>
+Riwayat update pekerjaan terbaru
+</span>
+
+
+</div>
 
 </div>
 
@@ -415,17 +491,18 @@ Belum ada task.
 
 $activities = collect();
 
+
 foreach($tasks as $task){
 
     foreach($task->aktivitasTugas as $activity){
 
         $activities->push([
 
-        'task'=>$task->nama_tugas,
+            'task'=>$task->nama_tugas,
 
-        'project'=>$task->proyek->nama_proyek ?? '-',
+            'project'=>$task->proyek->nama_proyek ?? '-',
 
-        'activity'=>$activity
+            'activity'=>$activity
 
         ]);
 
@@ -434,7 +511,7 @@ foreach($tasks as $task){
 }
 
 
-$activities=$activities->sortByDesc(function($item){
+$activities = $activities->sortByDesc(function($item){
 
 return $item['activity']->tanggal;
 
@@ -447,14 +524,25 @@ return $item['activity']->tanggal;
 
 
 
+
+<div class="timeline">
+
+
 @forelse($activities as $item)
 
 
 
-<div class="activity-card">
+<div class="timeline-item">
 
 
-<div class="activity-head">
+<div class="timeline-dot"></div>
+
+
+
+<div class="timeline-card">
+
+
+<div class="timeline-header">
 
 
 <div>
@@ -468,12 +556,12 @@ return $item['activity']->tanggal;
 📁 {{$item['project']}}
 </span>
 
+
 </div>
 
 
 
-<div class="activity-progress-badge">
-
+<div class="progress-badge">
 
 {{$item['activity']->progres ?? 0}}%
 
@@ -486,8 +574,6 @@ return $item['activity']->tanggal;
 
 
 
-<div class="activity-body">
-
 
 <p>
 {{$item['activity']->aktivitas}}
@@ -495,31 +581,28 @@ return $item['activity']->tanggal;
 
 
 
-<div class="activity-line">
+
+
+
+<div class="timeline-info">
 
 
 <span>
-
-👤 
-{{$item['activity']->karyawan->nama_karyawan ?? '-'}}
-
+👤 {{$item['activity']->karyawan->nama_karyawan ?? '-'}}
 </span>
 
 
-
 <span>
-
-📅
-
-{{Carbon\Carbon::parse(
+📅 {{Carbon\Carbon::parse(
 $item['activity']->tanggal
 )->format('d M Y')}}
-
 </span>
-
 
 
 </div>
+
+
+
 
 
 
@@ -527,23 +610,20 @@ $item['activity']->tanggal
 @if($item['activity']->anggaran_aktivitas > 0)
 
 
-<div class="budget-box">
+<div class="budget">
 
-
-💰 Budget :
-
-Rp {{number_format(
+💰 Rp {{number_format(
 $item['activity']->anggaran_aktivitas,
 0,
 ',',
 '.'
 )}}
 
-
 </div>
 
 
 @endif
+
 
 
 
@@ -551,11 +631,9 @@ $item['activity']->anggaran_aktivitas,
 @if($item['activity']->catatan)
 
 
-<div class="note-box">
-
+<div class="note">
 
 📝 {{$item['activity']->catatan}}
-
 
 </div>
 
@@ -567,9 +645,9 @@ $item['activity']->anggaran_aktivitas,
 </div>
 
 
-
-
 </div>
+
+
 
 
 @empty
@@ -585,18 +663,15 @@ Belum ada aktivitas tercatat.
 @endforelse
 
 
-</div>
-
-
-
-
-
-
 
 </div>
 
 
+</div>
 
+
+
+</div>
 
 
 
@@ -606,11 +681,12 @@ Belum ada aktivitas tercatat.
 <style>
 
 
-.daily-container{
+.daily-wrapper{
 
 width:100%;
 
 }
+
 
 
 
@@ -620,14 +696,13 @@ width:100%;
 
 .daily-header{
 
-
 background:white;
 
-border:1px solid #e5e7eb;
+border:1px solid #e2e8f0;
 
-padding:30px;
+border-radius:28px;
 
-border-radius:24px;
+padding:32px;
 
 display:flex;
 
@@ -637,7 +712,8 @@ align-items:center;
 
 margin-bottom:25px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.06);
+box-shadow:
+0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -645,11 +721,11 @@ box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 .daily-label{
 
-font-size:11px;
-
-letter-spacing:2px;
+font-size:10px;
 
 font-weight:800;
+
+letter-spacing:2px;
 
 color:#64748b;
 
@@ -663,6 +739,8 @@ font-size:30px;
 
 margin:10px 0;
 
+font-weight:800;
+
 color:#172033;
 
 }
@@ -671,28 +749,35 @@ color:#172033;
 
 .daily-header p{
 
+margin:0;
+
+font-size:13px;
+
 color:#64748b;
 
 }
 
 
 
+.date-card{
 
+background:#1e293b;
 
-.date-box{
+color:white;
 
-background:#f8f3ea;
+padding:15px 22px;
 
-color:#8b5e22;
+border-radius:18px;
 
-padding:12px 20px;
+display:flex;
 
-border-radius:30px;
+align-items:center;
+
+gap:10px;
 
 font-weight:700;
 
 }
-
 
 
 
@@ -721,19 +806,82 @@ background:white;
 
 border:1px solid #e5e7eb;
 
-padding:22px;
+border-radius:22px;
 
-border-radius:20px;
+padding:20px;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+box-shadow:
+0 8px 25px rgba(15,23,42,.05);
 
 }
 
 
 
-.summary-card span{
+.summary-icon{
 
-font-size:12px;
+width:45px;
+
+height:45px;
+
+border-radius:14px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:20px;
+
+}
+
+
+
+.summary-icon.blue{
+
+background:#dbeafe;
+
+}
+
+
+
+.summary-icon.green{
+
+background:#dcfce7;
+
+}
+
+
+
+.summary-icon.orange{
+
+background:#fef3c7;
+
+}
+
+
+
+.summary-icon.purple{
+
+background:#ede9fe;
+
+}
+
+
+
+.summary-card label{
+
+font-size:11px;
 
 color:#64748b;
+
+display:block;
 
 }
 
@@ -741,7 +889,9 @@ color:#64748b;
 
 .summary-card h2{
 
-margin:8px 0;
+margin:5px 0;
+
+font-size:22px;
 
 color:#172033;
 
@@ -751,11 +901,14 @@ color:#172033;
 
 .summary-card p{
 
-font-size:12px;
+font-size:10px;
 
 color:#94a3b8;
 
+margin:0;
+
 }
+
 
 
 
@@ -765,527 +918,50 @@ color:#94a3b8;
 /* PANEL */
 
 
-.panel{
+.content-panel{
 
 background:white;
 
 border:1px solid #e5e7eb;
 
-padding:25px;
+border-radius:26px;
 
-border-radius:24px;
+padding:28px;
 
 margin-bottom:25px;
 
-box-shadow:0 10px 30px rgba(15,23,42,.05);
-
-}
-
-
-
-.panel-title{
-
-font-size:18px;
-
-font-weight:800;
-
-margin-bottom:20px;
-
-color:#172033;
-
-}
-
-
-
-
-
-
-/* TASK */
-
-
-.task-card{
-
-background:#fafafa;
-
-border:1px solid #e5e7eb;
-
-padding:20px;
-
-border-radius:18px;
-
-margin-bottom:15px;
-
-}
-
-.task-card{
-
-transition:.25s ease;
-
-}
-
-
-.task-card:hover{
-
-transform:translateY(-4px);
-
 box-shadow:
-0 12px 25px rgba(15,23,42,.08);
-
-}
-
-.task-top{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
+0 10px 30px rgba(15,23,42,.05);
 
 }
 
 
 
-.task-top h3{
+.panel-header{
 
-color:#172033;
-
-margin-bottom:5px;
+margin-bottom:22px;
 
 }
 
 
 
-.task-top p{
-
-font-size:13px;
-
-color:#64748b;
-
-}
-
-
-
-.task-status{
-
-display:inline-flex;
-
-padding:7px 14px;
-
-border-radius:999px;
-
-font-size:11px;
-
-font-weight:800;
-
-}
-
-
-
-.task-status.todo{
-
-background:#f1f5f9;
-
-color:#475569;
-
-}
-
-
-
-.task-status.progress{
-
-background:#dbeafe;
-
-color:#1d4ed8;
-
-}
-
-
-
-.task-status.done{
-
-background:#dcfce7;
-
-color:#166534;
-
-}
-
-
-
-.task-info{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:15px;
-
-margin:20px 0;
-
-}
-
-
-
-
-
-.task-info div{
-
-background:white;
-
-padding:15px;
-
-border-radius:14px;
-
-}
-
-
-
-.task-info label{
-
-display:block;
-
-font-size:11px;
-
-color:#64748b;
-
-}
-
-
-
-.task-info strong{
-
-color:#172033;
-
-}
-
-
-.task-progress{
-
-height:12px;
-
-background:#e2e8f0;
-
-border-radius:20px;
-
-overflow:hidden;
-
-}
-
-
-
-.task-progress-fill{
-
-height:100%;
-
-border-radius:20px;
-
-transition:.4s ease;
-
-}
-
-
-
-.task-progress-fill.finish{
-
-background:#16a34a;
-
-}
-
-
-
-.task-progress-fill.running{
-
-background:#2563eb;
-
-}
-
-
-
-.task-progress-fill.empty{
-
-background:#94a3b8;
-
-}
-
-
-.btn-update{
-
-display:inline-block;
-
-background:#1e293b;
-
-color:white;
-
-padding:10px 18px;
-
-border-radius:12px;
-
-font-size:12px;
-
-font-weight:700;
-
-text-decoration:none;
-
-}
-
-
-.btn-update:hover{
-
-background:#334155;
-
-}
-
-
-
-
-
-
-/* ACTIVITY */
-
-
-.activity-item{
-
-display:flex;
-
-gap:15px;
-
-padding:18px 0;
-
-border-bottom:1px solid #e5e7eb;
-
-}
-
-
-
-.activity-dot{
-
-width:12px;
-
-height:12px;
-
-background:#16a34a;
-
-border-radius:50%;
-
-margin-top:8px;
-
-}
-
-
-
-.activity-content h4{
-
-margin-bottom:5px;
-
-color:#172033;
-
-}
-
-
-
-.activity-content p{
-
-color:#475569;
-
-margin-bottom:8px;
-
-}
-
-
-
-.activity-content span{
-
-font-size:12px;
-
-color:#8b5e22;
-
-font-weight:700;
-
-}
-
-
-
-.activity-footer{
-
-margin-top:8px;
-
-font-size:12px;
-
-color:#64748b;
-
-}
-
-
-/* ===============================
-ACTIVITY CARD TIMELINE
-================================ */
-
-
-.activity-card{
-
-background:#f8fafc;
-
-border:1px solid #e2e8f0;
-
-border-radius:18px;
-
-padding:18px;
-
-margin-bottom:15px;
-
-transition:.25s ease;
-
-}
-
-
-
-.activity-card:hover{
-
-transform:translateY(-3px);
-
-box-shadow:
-0 10px 25px rgba(15,23,42,.08);
-
-}
-
-
-
-
-
-.activity-head{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:12px;
-
-}
-
-
-
-.activity-head h4{
+.panel-header h3{
 
 margin:0;
 
-font-size:15px;
-
-color:#1e293b;
-
-}
-
-
-
-
-.activity-head span{
-
-font-size:12px;
-
-color:#64748b;
-
-}
-
-
-
-
-
-.activity-progress-badge{
-
-background:#dbeafe;
-
-color:#1d4ed8;
-
-padding:7px 14px;
-
-border-radius:999px;
-
-font-size:12px;
+font-size:17px;
 
 font-weight:800;
 
-}
-
-
-
-
-
-.activity-body p{
-
-color:#475569;
-
-font-size:13px;
-
-line-height:1.6;
-
-margin-bottom:15px;
+color:#172033;
 
 }
 
 
 
-
-.activity-line{
-
-display:flex;
-
-gap:20px;
+.panel-header span{
 
 font-size:12px;
-
-color:#64748b;
-
-flex-wrap:wrap;
-
-}
-
-
-
-
-
-.budget-box{
-
-margin-top:12px;
-
-background:#dcfce7;
-
-color:#166534;
-
-padding:10px 14px;
-
-border-radius:12px;
-
-font-size:12px;
-
-font-weight:700;
-
-}
-
-
-
-
-.note-box{
-
-margin-top:12px;
-
-background:#fef3c7;
-
-color:#92400e;
-
-padding:12px 14px;
-
-border-radius:12px;
-
-font-size:12px;
-
-}
-
-
-.empty{
-
-text-align:center;
-
-padding:25px;
 
 color:#94a3b8;
 
@@ -1295,8 +971,419 @@ color:#94a3b8;
 
 
 
+/* TASK */
 
-@media(max-width:1000px){
+
+.task-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:18px;
+
+}
+
+
+
+.task-card{
+
+border:1px solid #e2e8f0;
+
+border-radius:22px;
+
+padding:22px;
+
+background:#f8fafc;
+
+transition:.25s;
+
+}
+
+
+
+.task-card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+0 15px 30px rgba(15,23,42,.08);
+
+}
+
+
+
+.task-header{
+
+display:flex;
+
+justify-content:space-between;
+
+gap:15px;
+
+}
+
+
+
+.task-header h4{
+
+margin:0 0 6px;
+
+font-size:15px;
+
+color:#172033;
+
+}
+
+
+
+.task-header p{
+
+margin:0;
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.status-badge{
+
+padding:7px 13px;
+
+border-radius:999px;
+
+font-size:10px;
+
+font-weight:800;
+
+height:max-content;
+
+}
+
+
+
+.status-badge.success{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
+
+
+
+.status-badge.warning{
+
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+
+
+.status-badge.neutral{
+
+background:#e2e8f0;
+
+color:#475569;
+
+}
+
+
+
+
+
+.task-detail{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:10px;
+
+margin:20px 0;
+
+}
+
+
+
+.task-detail div{
+
+background:white;
+
+padding:12px;
+
+border-radius:14px;
+
+}
+
+
+
+.task-detail label{
+
+display:block;
+
+font-size:10px;
+
+color:#94a3b8;
+
+}
+
+
+
+.task-detail strong{
+
+font-size:13px;
+
+color:#172033;
+
+}
+
+
+
+.progress-bar{
+
+height:10px;
+
+background:#e2e8f0;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-bottom:18px;
+
+}
+
+
+
+.progress-fill{
+
+height:100%;
+
+background:#334155;
+
+border-radius:20px;
+
+}
+
+
+
+
+
+.update-button{
+
+display:block;
+
+text-align:center;
+
+background:#1e293b;
+
+color:white;
+
+padding:11px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+
+
+/* TIMELINE */
+
+
+.timeline{
+
+position:relative;
+
+padding-left:10px;
+
+}
+
+
+
+.timeline-item{
+
+display:flex;
+
+gap:15px;
+
+margin-bottom:18px;
+
+}
+
+
+
+.timeline-dot{
+
+width:12px;
+
+height:12px;
+
+background:#334155;
+
+border-radius:50%;
+
+margin-top:25px;
+
+}
+
+
+
+.timeline-card{
+
+flex:1;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+border-radius:18px;
+
+padding:18px;
+
+}
+
+
+
+.timeline-header{
+
+display:flex;
+
+justify-content:space-between;
+
+}
+
+
+
+.timeline-header h4{
+
+margin:0 0 5px;
+
+font-size:14px;
+
+}
+
+
+
+.timeline-header span{
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.progress-badge{
+
+background:#dbeafe;
+
+color:#1d4ed8;
+
+padding:6px 12px;
+
+border-radius:999px;
+
+font-size:11px;
+
+font-weight:800;
+
+}
+
+
+
+.timeline-card p{
+
+font-size:13px;
+
+color:#475569;
+
+line-height:1.5;
+
+}
+
+
+
+.timeline-info{
+
+display:flex;
+
+gap:20px;
+
+font-size:12px;
+
+color:#64748b;
+
+}
+
+
+
+.budget{
+
+margin-top:12px;
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:10px;
+
+border-radius:12px;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+.note{
+
+margin-top:10px;
+
+background:#fef3c7;
+
+color:#92400e;
+
+padding:10px;
+
+border-radius:12px;
+
+font-size:12px;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+padding:30px;
+
+color:#94a3b8;
+
+}
+
+
+
+
+@media(max-width:1100px){
 
 
 .summary-grid{
@@ -1305,6 +1392,12 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
+
+.task-grid{
+
+grid-template-columns:1fr;
+
+}
 
 
 }
@@ -1327,29 +1420,26 @@ flex-direction:column;
 
 align-items:flex-start;
 
-gap:15px;
+gap:20px;
 
 }
 
 
-
-.task-top{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:15px;
-
-}
-
-
-
-.task-info{
+.task-detail{
 
 grid-template-columns:1fr;
 
 }
+
+
+.timeline-header{
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
 
 
 }

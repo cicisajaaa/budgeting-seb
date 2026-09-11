@@ -31,7 +31,8 @@ TASK DETAIL
 
 
 
-<a href="{{ route('daily-tracker.index') }}"
+<a href="{{ route('employee.project.index') }}"
+
 class="back-btn">
 
 ← Kembali
@@ -406,9 +407,7 @@ PROGRESS
 
 <a href="{{ route('daily-tracker.show',$task->id) }}"
 class="update-btn">
-
 ✏️ Update Progress
-
 </a>
 
 @endif
@@ -473,7 +472,7 @@ TIMELINE
 
 
 
-@forelse($task->aktivitasTugas as $activity)
+@forelse($task->aktivitasTugas->sortByDesc('tanggal') as $activity)
 
 
 <div class="timeline-item">
@@ -494,25 +493,33 @@ TIMELINE
                 {{ \Carbon\Carbon::parse($activity->tanggal)->format('d M Y') }}
             </strong>
 
+                    
+        <span class="activity-badge
 
-            <span class="activity-badge">
+        @if($activity->progres >= 100)
+        done
+        @elseif($activity->progres > 0)
+        running
+        @else
+        todo
+        @endif
+        ">
 
-                @if($activity->progres >= 100)
+        @if($activity->progres >= 100)
 
-                    Selesai
+        Selesai
 
-                @elseif($activity->progres > 0)
+        @elseif($activity->progres > 0)
 
-                    Berjalan
+        Berjalan
 
-                @else
+        @else
 
-                    Belum Dimulai
+        Belum Dimulai
 
-                @endif
+        @endif
 
-            </span>
-
+        </span>
 
         </div>
 
@@ -1288,43 +1295,6 @@ TIMELINE
 }
 
 
-
-.activity-progress{
-
-    display:inline-flex;
-
-    padding:5px 12px;
-
-    border-radius:999px;
-
-    background:#dcfce7;
-
-    color:#166534;
-
-    font-size:11px;
-
-    font-weight:700;
-
-}
-
-
-
-.timeline-content small{
-
-    display:block;
-
-    margin-top:8px;
-
-    color:#64748b;
-
-}
-
-
-
-
-
-
-
 /* ===============================
 EMPTY
 ================================ */
@@ -1390,7 +1360,22 @@ TIMELINE UPDATE
 }
 
 
+.activity-badge.done{
+background:#dcfce7;
+color:#166534;
+}
 
+
+.activity-badge.running{
+background:#dbeafe;
+color:#1d4ed8;
+}
+
+
+.activity-badge.todo{
+background:#fef3c7;
+color:#92400e;
+}
 
 
 .activity-text{
@@ -1532,15 +1517,6 @@ RESPONSIVE
 
 }
 
-
-
-.progress-area{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-}
 
 
 

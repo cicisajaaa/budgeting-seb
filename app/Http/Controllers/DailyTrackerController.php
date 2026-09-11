@@ -369,7 +369,11 @@ public function update(Tugas $task)
         */
 
 
-if(in_array($task->status,['selesai','dibatalkan']))
+if(in_array($task->status,[
+    'selesai',
+    'done',
+    'dibatalkan'
+]))
 {
 
     return back()

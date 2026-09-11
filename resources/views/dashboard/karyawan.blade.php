@@ -1220,7 +1220,7 @@ STAT CARD
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(6,1fr);
 
     gap:15px;
 
