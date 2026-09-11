@@ -213,7 +213,14 @@ $totalIncome = $deposits->sum('jumlah_setoran');
 
 $totalExpense = $expenses->sum('jumlah');
 
+$totalCashIn =
+    $totalIncome +
+    $totalMutasiMasuk;
 
+
+$totalCashOut =
+    $totalExpense +
+    $totalMutasiKeluar;
 
 
         /*
@@ -233,32 +240,42 @@ $totalExpense = $expenses->sum('jumlah');
 
             $expenses->count();
 
+$totalMutasiTransaction = $mutasi->count();
 
 
 
 
 
+/*
+|--------------------------------------------------------------------------
+| SALDO BANK
+|--------------------------------------------------------------------------
+*/
+
+$banks = RekeningBank::where(
+    'status',
+    true
+)
+->get();
 
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | SALDO BANK
-        |--------------------------------------------------------------------------
-        */
+$totalBankSaldo = $banks->sum('saldo');
 
 
-        $banks = RekeningBank::where(
+$totalSaldoSistem = $banks->sum(function($bank){
 
-            'status',
+    return 
+    ($bank->saldo_awal ?? 0)
+        +
+        $bank->mutasiKeuangan()
+            ->where('jenis','masuk')
+            ->sum('nominal')
+        -
+        $bank->mutasiKeuangan()
+            ->where('jenis','keluar')
+            ->sum('nominal');
 
-            true
-
-        )
-
-        ->get();
-        $totalBankSaldo = $banks->sum('saldo');
-
+});
 
 
 
@@ -274,11 +291,15 @@ $totalExpense = $expenses->sum('jumlah');
                 'deposits',
                 'expenses',
                 'totalBankSaldo',
+                'totalSaldoSistem',
                 'totalIncome',
                 'totalExpense',
+                'totalCashIn',
+                'totalCashOut',
                 'banks',
                 'totalDepositTransaction',
                 'totalExpenseTransaction',
+                'totalMutasiTransaction',
                 'mutasi',
                 'totalMutasiMasuk',
                 'totalMutasiKeluar',
@@ -320,8 +341,7 @@ $totalExpense = $expenses->sum('jumlah');
 
     }
 
-
-    public function reconciliation()
+public function reconciliation()
 {
     $banks = RekeningBank::where(
         'status',
@@ -329,36 +349,53 @@ $totalExpense = $expenses->sum('jumlah');
     )->get();
 
 
-    $data = $banks->map(function($bank){
-
-        $masuk = $bank
-            ->mutasiKeuangan()
-            ->where('jenis','masuk')
-            ->sum('nominal');
+$data = $banks->map(function($bank){
 
 
-        $keluar = $bank
-            ->mutasiKeuangan()
-            ->where('jenis','keluar')
-            ->sum('nominal');
+    $totalMasuk = $bank
+        ->mutasiKeuangan()
+        ->where('jenis','masuk')
+        ->sum('nominal');
 
 
-$saldoSistem = $bank->saldo;
+    $totalKeluar = $bank
+        ->mutasiKeuangan()
+        ->where('jenis','keluar')
+        ->sum('nominal');
 
-        return [
 
-            'bank' => $bank,
 
-            'saldo_sistem' => $saldoSistem,
+    // perhitungan saldo berdasarkan transaksi sistem
+    $saldoSistem =
+        $bank->saldo_awal
+        + $totalMasuk
+        - $totalKeluar;
 
-            'saldo_rekening' => $bank->saldo,
 
-            'selisih' =>
-                $bank->saldo - $saldoSistem
 
-        ];
+    // saldo terakhir yang tersimpan pada rekening
+    $saldoRekening = $bank->saldo;
 
-    });
+
+
+  $selisih = round(
+    $saldoRekening - $saldoSistem,
+    0
+);
+
+
+return [
+    'bank' => $bank,
+    'saldo_sistem' => $saldoSistem,
+    'saldo_rekening' => $saldoRekening,
+    'selisih' => $selisih,
+    'status' =>
+        $selisih == 0
+        ? 'Seimbang'
+        : 'Perlu Pemeriksaan'
+];
+
+});
 
 
     return view(
@@ -366,5 +403,4 @@ $saldoSistem = $bank->saldo;
         compact('data')
     );
 }
-
 }

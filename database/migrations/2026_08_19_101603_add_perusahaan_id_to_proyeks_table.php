@@ -7,19 +7,21 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
-    public function up(): void
-    {
+public function up()
+{
+    if (Schema::hasTable('proyeks') &&
+        !Schema::hasColumn('proyeks', 'perusahaan_id')) {
+
         Schema::table('proyeks', function (Blueprint $table) {
 
-            $table->foreignId('perusahaan_id')
-                ->nullable()
-                ->after('id')
-                ->constrained('perusahaans')
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('perusahaan_id')
+                  ->nullable()
+                  ->after('id');
 
         });
-    }
 
+    }
+}
 
     public function down(): void
     {

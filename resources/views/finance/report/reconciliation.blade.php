@@ -144,13 +144,14 @@ Perhitungan sistem
 Total Selisih
 </label>
 
-
 <h2>
 Rp {{number_format(
-$data->sum('selisih'),
-0,
-',',
-'.'
+    $data->sum(function($item){
+        return abs($item['selisih']);
+    }),
+    0,
+    ',',
+    '.'
 )}}
 </h2>
 
@@ -184,9 +185,7 @@ Status Bank
 
 
 <h2>
-
-{{$data->where('selisih',0)->count()}}
-
+{{$data->where('status','Seimbang')->count()}}
 </h2>
 
 
@@ -256,6 +255,11 @@ Bank
 
 
 <th>
+No Rekening
+</th>
+
+
+<th>
 Saldo Sistem
 </th>
 
@@ -282,12 +286,9 @@ Status
 
 
 
-
 <tbody>
 
-
-@foreach($data as $item)
-
+@forelse($data as $item)
 
 <tr>
 
@@ -303,7 +304,9 @@ Status
 </td>
 
 
-
+<td>
+{{$item['bank']->nomor_rekening}}
+</td>
 
 <td>
 
@@ -336,8 +339,7 @@ $item['saldo_rekening'],
 <td>
 
 
-@if($item['selisih']==0)
-
+@if($item['status']=='Seimbang')
 
 <span class="status success">
 
@@ -351,13 +353,21 @@ Rp 0
 
 <span class="status danger">
 
-Rp {{number_format(
-$item['selisih'],
-0,
-',',
-'.'
-)}}
-
+@if($item['selisih'] < 0)
+    -Rp {{number_format(
+        abs($item['selisih']),
+        0,
+        ',',
+        '.'
+    )}}
+@else
+    Rp {{number_format(
+        $item['selisih'],
+        0,
+        ',',
+        '.'
+    )}}
+@endif
 </span>
 
 
@@ -371,29 +381,19 @@ $item['selisih'],
 
 <td>
 
-
-@if($item['selisih']==0)
-
+@if($item['status']=='Seimbang')
 
 <span class="status success">
-
 ✓ Seimbang
-
 </span>
-
 
 @else
 
-
 <span class="status danger">
-
-⚠ Periksa
-
+⚠ Perlu Pemeriksaan
 </span>
 
-
 @endif
-
 
 </td>
 
@@ -401,8 +401,17 @@ $item['selisih'],
 
 </tr>
 
+@empty
 
-@endforeach
+<tr>
+<td colspan="6" style="text-align:center;padding:30px;">
+Belum ada rekening bank aktif
+</td>
+</tr>
+
+@endforelse
+
+
 
 
 </tbody>

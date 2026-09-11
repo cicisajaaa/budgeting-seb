@@ -240,9 +240,9 @@ public function disburse(Request $request, $id)
 
         DB::transaction(function() use($request,$id){
 
-
-            $expenseRequest =
-                PengajuanDana::findOrFail($id);
+$expenseRequest =
+    PengajuanDana::lockForUpdate()
+    ->findOrFail($id);
 
 
 
@@ -297,7 +297,18 @@ if($expenseRequest->status != 'approved')
                 );
 
             }
+$cekTransaksi = TransaksiDana::where(
+    'pengajuan_dana_id',
+    $expenseRequest->id
+)->exists();
 
+
+if($cekTransaksi)
+{
+    throw new \Exception(
+        'Pengajuan dana ini sudah pernah dicairkan'
+    );
+}
 
 
             $transaksiDana = TransaksiDana::create([
@@ -422,10 +433,8 @@ $expenseRequest->update([
 
 
 
-
-        $expenseRequest = PengajuanDana::findOrFail($id);
-
-
+$expenseRequest =
+    PengajuanDana::findOrFail($id);
 
 
 
@@ -786,7 +795,8 @@ public function cancelApproval($id)
 
     try {
 
-        $expenseRequest = PengajuanDana::findOrFail($id);
+ $expenseRequest =
+    PengajuanDana::findOrFail($id);
 
 
         if($expenseRequest->status != 'approved')

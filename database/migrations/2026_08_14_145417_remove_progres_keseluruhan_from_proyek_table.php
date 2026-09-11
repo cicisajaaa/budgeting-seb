@@ -7,15 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
 
-    public function up(): void
-    {
+public function up()
+{
+    if (Schema::hasTable('proyeks') &&
+        Schema::hasColumn('proyeks','progres_keseluruhan')) {
+
         Schema::table('proyeks', function (Blueprint $table) {
-
             $table->dropColumn('progres_keseluruhan');
-
         });
-    }
 
+    }
+}
 
     public function down(): void
     {

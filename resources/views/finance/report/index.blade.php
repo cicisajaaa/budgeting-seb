@@ -128,14 +128,13 @@ Tampilkan
 
 
 
-<a href="{{route('finance.report.export')}}"
+<a href="{{route('finance.report.export',[
+'start_date'=>$startDate,
+'end_date'=>$endDate
+])}}"
 class="btn-export">
-
 ⬇ Export Excel
-
 </a>
-
-
 
 </form>
 
@@ -172,7 +171,7 @@ Total Pemasukan
 
 
 <h2>
-Rp {{number_format($totalIncome,0,',','.')}}
+Rp {{number_format($totalCashIn,0,',','.')}}
 </h2>
 
 
@@ -207,7 +206,7 @@ Total Pengeluaran
 
 
 <h2>
-Rp {{number_format($totalExpense,0,',','.')}}
+Rp {{number_format($totalCashOut,0,',','.')}}
 </h2>
 
 
@@ -242,7 +241,7 @@ Saldo Bersih
 
 
 <h2>
-Rp {{number_format($totalBankSaldo,0,',','.')}}
+Rp {{number_format($totalSaldoSistem ?? $totalBankSaldo,0,',','.')}}
 </h2>
 
 
@@ -277,7 +276,9 @@ Total Transaksi
 
 
 <h2>
-{{$totalDepositTransaction + $totalExpenseTransaction}}
+{{$totalDepositTransaction 
++ $totalExpenseTransaction
++ $totalMutasiTransaction}}
 </h2>
 
 
@@ -311,7 +312,7 @@ Aktivitas keuangan
 
 <div class="panel-title">
 
-📊 Financial Overview
+    Financial Overview
 
 </div>
 
@@ -330,7 +331,7 @@ Dana Masuk
 
 <strong class="income-text">
 
-Rp {{number_format($totalIncome,0,',','.')}}
+Rp {{number_format($totalCashIn,0,',','.')}}
 </strong>
 
 
@@ -348,8 +349,7 @@ Dana Keluar
 
 
 <strong class="expense-text">
-
-Rp {{number_format($totalExpense,0,',','.')}}
+Rp {{number_format($totalCashOut,0,',','.')}}
 </strong>
 
 
@@ -368,7 +368,7 @@ Saldo Bank Aktif
 
 <strong>
 
-Rp {{number_format($totalBankSaldo ?? 0,0,',','.')}}
+Rp {{number_format($totalSaldoSistem ?? 0,0,',','.')}}
 </strong>
 
 
@@ -383,11 +383,9 @@ Rp {{number_format($totalBankSaldo ?? 0,0,',','.')}}
 
 
 @php
-
 $usage = $totalIncome > 0 
-? ($totalExpense/$totalIncome)*100 
+? min(($totalExpense/$totalIncome)*100,100)
 : 0;
-
 @endphp
 
 
@@ -450,7 +448,7 @@ Persentase penggunaan dana berdasarkan transaksi.
 
 <div class="panel-title">
 
-💰 Riwayat Pembayaran Masuk
+Riwayat Pembayaran Masuk
 
 </div>
 
@@ -575,7 +573,7 @@ Belum ada pembayaran
 
 <div class="panel-title">
 
-💸 Riwayat Pengeluaran
+Riwayat Pengeluaran
 
 </div>
 
@@ -697,7 +695,95 @@ Belum ada pengeluaran
 </div>
 
 
+<div class="glass-panel">
 
+<div class="panel-title">
+Riwayat Mutasi Keuangan
+</div>
+
+
+<table>
+
+<thead>
+
+<tr>
+<th>Tanggal</th>
+<th>Jenis</th>
+<th>Nominal</th>
+<th>Keterangan</th>
+<th>Bank</th>
+</tr>
+
+</thead>
+
+
+<tbody>
+
+@forelse($mutasi as $item)
+
+<tr>
+
+<td>
+{{\Carbon\Carbon::parse($item->tanggal)->format('d M Y')}}
+</td>
+
+
+<td>
+
+@if($item->jenis=='masuk')
+
+<span class="income-text">
++ Masuk
+</span>
+
+@else
+
+<span class="expense-text">
+- Keluar
+</span>
+
+@endif
+
+</td>
+
+
+<td>
+Rp {{number_format($item->nominal,0,',','.')}}
+</td>
+
+
+<td>
+{{$item->keterangan}}
+</td>
+
+
+<td>
+{{$item->rekeningBank->nama_bank ?? '-'}}
+</td>
+
+
+</tr>
+
+
+@empty
+
+<tr>
+<td colspan="5" class="empty">
+Belum ada mutasi
+</td>
+</tr>
+
+
+@endforelse
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
 
 </div>
 
