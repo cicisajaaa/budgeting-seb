@@ -19,38 +19,38 @@ class BankAccountController extends Controller
     |--------------------------------------------------------------------------
     */
 
+public function index()
+{
 
-    public function index()
-    {
-
-
-        $banks = RekeningBank::latest()
-
-            ->get();
+    $banks = RekeningBank::latest()->get();
 
 
+    $totalBank = $banks->count();
 
+    $totalSaldo = $banks->sum('saldo');
 
-        return view(
+    $bankAktif = $banks
+        ->where('status', true)
+        ->count();
 
-            'finance.bank.index',
-
-            compact(
-
-                'banks'
-
-            )
-
-        );
-
-
-    }
+    $bankNonAktif = $banks
+        ->where('status', false)
+        ->count();
 
 
 
+    return view(
+        'finance.bank.index',
+        compact(
+            'banks',
+            'totalBank',
+            'totalSaldo',
+            'bankAktif',
+            'bankNonAktif'
+        )
+    );
 
-
-
+}
 
 
 

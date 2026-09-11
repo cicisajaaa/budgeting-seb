@@ -33,7 +33,19 @@ class DepositDistributionController extends Controller
         $totalDistribution = $distributions->sum(
             'nominal_diterima'
         );
+$totalTransaction = $distributions->count();
 
+
+$totalDivision = $distributions
+    ->pluck('divisi_id')
+    ->unique()
+    ->count();
+
+
+$totalProject = $distributions
+    ->pluck('setoranProyek.proyek_id')
+    ->unique()
+    ->count();
 
 
 
@@ -46,7 +58,14 @@ class DepositDistributionController extends Controller
 
                 'distributions',
 
-                'totalDistribution'
+                'totalDistribution',
+
+                'totalTransaction',
+
+                'totalDivision',
+
+                'totalProject'
+
 
             )
 

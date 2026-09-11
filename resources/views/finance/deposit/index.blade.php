@@ -86,7 +86,7 @@ Monitoring pembayaran project yang masuk dan transaksi keuangan perusahaan.
 
 
 
-<div class="summary-card">
+<div class="summary-card income-summary">
 
 
 <div class="summary-icon">
@@ -122,7 +122,7 @@ Seluruh pembayaran
 
 
 
-<div class="summary-card">
+<div class="summary-card transaction-summary">
 
 
 <div class="summary-icon">
@@ -158,7 +158,7 @@ Pembayaran masuk
 
 
 
-<div class="summary-card">
+<div class="summary-card project-summary">
 
 
 <div class="summary-icon">
@@ -193,8 +193,7 @@ Project aktif
 
 
 
-
-<div class="summary-card">
+<div class="summary-card bank-summary">
 
 
 <div class="summary-icon">
@@ -451,7 +450,7 @@ HEADER
 
     border-radius:24px;
 
-    padding:30px;
+    padding:25px;
 
     display:flex;
 
@@ -591,7 +590,14 @@ SUMMARY CARD
 }
 
 
+.summary-card:hover{
 
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 15px 35px rgba(15,23,42,.10);
+
+}
 
 
 .summary-card::before{
@@ -618,9 +624,9 @@ SUMMARY CARD
 
 .summary-icon{
 
-    width:45px;
+    width:42px;
 
-    height:45px;
+    height:42px;
 
     border-radius:14px;
 
@@ -673,7 +679,24 @@ SUMMARY CARD
 
 
 
+.income-summary::before{
+    background:#22c55e;
+}
 
+
+.transaction-summary::before{
+    background:#3b82f6;
+}
+
+
+.project-summary::before{
+    background:#8b5cf6;
+}
+
+
+.bank-summary::before{
+    background:#f59e0b;
+}
 
 
 /* ===============================
@@ -693,7 +716,7 @@ PANEL
     border-radius:24px;
 
 
-    padding:25px;
+    padding:18px;
 
 
     box-shadow:

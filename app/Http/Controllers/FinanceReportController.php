@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SetoranProyek;
 use App\Models\TransaksiDana;
+use App\Models\MutasiKeuangan;
 use App\Models\RekeningBank;
 
 use App\Exports\FinanceReportExport;
@@ -166,7 +167,26 @@ class FinanceReportController extends Controller
             ->get();
 
 
+$mutasiQuery = MutasiKeuangan::with(
+    'rekeningBank'
+);
 
+
+if($startDate && $endDate)
+{
+    $mutasiQuery->whereBetween(
+        'tanggal',
+        [
+            $startDate,
+            $endDate
+        ]
+    );
+}
+
+
+$mutasi = $mutasiQuery
+    ->latest()
+    ->get();
 
 
 
@@ -178,39 +198,20 @@ class FinanceReportController extends Controller
         | SUMMARY
         |--------------------------------------------------------------------------
         */
+$totalMutasiMasuk = $mutasi
+    ->where('jenis','masuk')
+    ->sum('nominal');
 
 
-        $totalIncome = $deposits->sum(
-
-            'jumlah_setoran'
-
-        );
+$totalMutasiKeluar = $mutasi
+    ->where('jenis','keluar')
+    ->sum('nominal');
 
 
+$totalIncome = $deposits->sum('jumlah_setoran');
 
 
-
-
-        $totalExpense = $expenses->sum(
-
-            'jumlah'
-
-        );
-
-
-
-
-
-
-        $balance = RekeningBank::where(
-            'status',
-            true
-        )
-        ->sum('saldo');
-
-
-
-
+$totalExpense = $expenses->sum('jumlah');
 
 
 
@@ -265,37 +266,27 @@ class FinanceReportController extends Controller
 
 
 
-        return view(
-
+           return view(
+            
             'finance.report.index',
 
             compact(
-
                 'deposits',
-
                 'expenses',
-
                 'totalBankSaldo',
-
                 'totalIncome',
-
                 'totalExpense',
-
-                'balance',
-
                 'banks',
-
                 'totalDepositTransaction',
-
                 'totalExpenseTransaction',
-
+                'mutasi',
+                'totalMutasiMasuk',
+                'totalMutasiKeluar',
                 'startDate',
-
                 'endDate'
-
             )
-
         );
+            
 
 
     }
@@ -330,5 +321,50 @@ class FinanceReportController extends Controller
     }
 
 
+    public function reconciliation()
+{
+    $banks = RekeningBank::where(
+        'status',
+        true
+    )->get();
+
+
+    $data = $banks->map(function($bank){
+
+        $masuk = $bank
+            ->mutasiKeuangan()
+            ->where('jenis','masuk')
+            ->sum('nominal');
+
+
+        $keluar = $bank
+            ->mutasiKeuangan()
+            ->where('jenis','keluar')
+            ->sum('nominal');
+
+
+$saldoSistem = $bank->saldo;
+
+        return [
+
+            'bank' => $bank,
+
+            'saldo_sistem' => $saldoSistem,
+
+            'saldo_rekening' => $bank->saldo,
+
+            'selisih' =>
+                $bank->saldo - $saldoSistem
+
+        ];
+
+    });
+
+
+    return view(
+        'finance.report.reconciliation',
+        compact('data')
+    );
+}
 
 }

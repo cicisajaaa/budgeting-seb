@@ -3,7 +3,13 @@
 @section('content')
 
 
+<div class="finance-wrapper">
+
+
+{{-- HEADER --}}
+
 <div class="welcome-card">
+
 
 <div>
 
@@ -23,7 +29,6 @@ pantau saldo aktif dan transaksi keuangan.
 </p>
 
 
-
 <div class="welcome-tags">
 
 <span>
@@ -40,7 +45,6 @@ pantau saldo aktif dan transaksi keuangan.
 ✓ Finance Control
 </span>
 
-
 </div>
 
 
@@ -48,10 +52,6 @@ pantau saldo aktif dan transaksi keuangan.
 
 
 </div>
-
-
-
-
 
 
 
@@ -60,10 +60,11 @@ pantau saldo aktif dan transaksi keuangan.
 
 {{-- SUMMARY --}}
 
+
 <div class="summary-grid">
 
 
-<div class="summary-card">
+<div class="summary-card bank-total">
 
 
 <div class="summary-icon">
@@ -79,7 +80,7 @@ Total Rekening
 
 
 <h2>
-{{count($banks)}}
+{{$totalBank}}
 </h2>
 
 
@@ -99,7 +100,7 @@ Rekening perusahaan
 
 
 
-<div class="summary-card">
+<div class="summary-card saldo-total">
 
 
 <div class="summary-icon">
@@ -110,17 +111,89 @@ Rekening perusahaan
 <div>
 
 <label>
-Total Saldo Bank
+Total Saldo
 </label>
 
 
 <h2>
-Rp {{number_format($banks->sum('saldo'),0,',','.')}}
+Rp {{number_format($totalSaldo,0,',','.')}}
 </h2>
 
 
 <small>
-Dana tersedia perusahaan
+Dana tersedia
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card aktif-total">
+
+
+<div class="summary-icon">
+🟢
+</div>
+
+
+<div>
+
+<label>
+Bank Aktif
+</label>
+
+
+<h2>
+{{$bankAktif}}
+</h2>
+
+
+<small>
+Rekening aktif
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="summary-card nonaktif-total">
+
+
+<div class="summary-icon">
+🔴
+</div>
+
+
+<div>
+
+<label>
+Bank Nonaktif
+</label>
+
+
+<h2>
+{{$bankNonAktif}}
+</h2>
+
+
+<small>
+Tidak digunakan
 </small>
 
 
@@ -140,15 +213,17 @@ Dana tersedia perusahaan
 
 
 
-<div class="glass-panel">
 
+{{-- BANK LIST --}}
+
+
+<div class="glass-panel">
 
 
 <div class="panel-header">
 
 
 <div>
-
 
 <div class="panel-title">
 🏦 Daftar Rekening Bank
@@ -165,13 +240,13 @@ Rekening aktif perusahaan
 
 
 
+
 <a href="{{route('finance.bank.create')}}"
 class="add-btn">
 
 + Tambah Rekening
 
 </a>
-
 
 
 </div>
@@ -230,34 +305,25 @@ class="add-btn">
 
 
 
-<div class="owner">
-
-{{$bank->nama_pemilik}}
-
-</div>
-
-
-
-
-
-
-
 <div class="bank-info">
 
 
 <div>
 
 <span>
-Nomor Rekening
+Pemilik
 </span>
 
 
 <b>
-{{$bank->nomor_rekening}}
+{{$bank->nama_pemilik}}
 </b>
 
 
 </div>
+
+
+
 
 
 <div>
@@ -273,6 +339,7 @@ Status
 
 
 </div>
+
 
 
 </div>
@@ -294,13 +361,13 @@ Saldo Rekening
 
 
 <h2>
-
 Rp {{number_format($bank->saldo,0,',','.')}}
-
 </h2>
 
 
 </div>
+
+
 
 
 
@@ -313,12 +380,14 @@ Rp {{number_format($bank->saldo,0,',','.')}}
 
 @if($bank->status)
 
+
 <span class="active">
 Aktif
 </span>
 
 
 @else
+
 
 <span class="inactive">
 Nonaktif
@@ -375,8 +444,6 @@ Hapus
 
 
 
-
-
 </div>
 
 
@@ -398,49 +465,47 @@ Belum ada rekening bank
 </div>
 
 
+</div>
+
+
 
 </div>
 
 
 
 
+
+
+
+
+
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
 
 .finance-wrapper{
-    width:100%;
+width:100%;
 }
 
 
 
-/* ===============================
-HEADER
-================================ */
+
+/* HEADER */
 
 
 .welcome-card{
 
-    background:#f8fafc;
+background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+border:1px solid #e2e8f0;
 
-    border-radius:24px;
+border-radius:24px;
 
-    padding:30px;
+padding:25px;
 
-    display:flex;
+margin-bottom:25px;
 
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:25px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+box-shadow:
+0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -448,13 +513,13 @@ HEADER
 
 .welcome-label{
 
-    font-size:10px;
+font-size:10px;
 
-    letter-spacing:2px;
+letter-spacing:2px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#64748b;
+color:#64748b;
 
 }
 
@@ -462,13 +527,13 @@ HEADER
 
 .welcome-card h1{
 
-    margin:10px 0;
+margin:10px 0;
 
-    font-size:24px;
+font-size:24px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#172033;
+color:#172033;
 
 }
 
@@ -476,25 +541,23 @@ HEADER
 
 .welcome-card p{
 
-    margin:0;
+margin:0;
 
-    font-size:13px;
+font-size:13px;
 
-    color:#64748b;
+color:#64748b;
 
 }
 
 
 
-
-
 .welcome-tags{
 
-    display:flex;
+display:flex;
 
-    gap:10px;
+gap:10px;
 
-    margin-top:15px;
+margin-top:15px;
 
 }
 
@@ -502,17 +565,17 @@ HEADER
 
 .welcome-tags span{
 
-    background:#f1f5f9;
+background:#f1f5f9;
 
-    color:#334155;
+padding:6px 12px;
 
-    padding:6px 12px;
+border-radius:999px;
 
-    border-radius:999px;
+font-size:10px;
 
-    font-size:10px;
+font-weight:700;
 
-    font-weight:700;
+color:#334155;
 
 }
 
@@ -521,20 +584,18 @@ HEADER
 
 
 
-/* ===============================
-SUMMARY
-================================ */
+/* SUMMARY */
 
 
 .summary-grid{
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(4,1fr);
 
-    gap:20px;
+gap:15px;
 
-    margin-bottom:25px;
+margin-bottom:25px;
 
 }
 
@@ -542,72 +603,102 @@ SUMMARY
 
 .summary-card{
 
-    background:white;
+background:white;
 
-    border:1px solid #e5e7eb;
+border:1px solid #e5e7eb;
 
-    border-radius:22px;
+border-radius:22px;
 
-    padding:22px;
+padding:16px;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    gap:18px;
+gap:14px;
 
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05);
+position:relative;
 
-    position:relative;
+overflow:hidden;
 
-    overflow:hidden;
+transition:.25s ease;
 
-    min-height:105px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05);
 
 }
+
+
+
+.summary-card:hover{
+
+transform:translateY(-4px);
+
+}
+
 
 
 
 .summary-card::before{
 
-    content:"";
+content:"";
 
-    position:absolute;
+position:absolute;
 
-    top:0;
+top:0;
 
-    left:0;
+left:0;
 
-    width:100%;
+height:4px;
 
-    height:4px;
+width:100%;
 
-    background:#334155;
+background:#334155;
 
 }
 
 
 
+.bank-total::before{
+background:#3b82f6;
+}
+
+
+.saldo-total::before{
+background:#22c55e;
+}
+
+
+.aktif-total::before{
+background:#16a34a;
+}
+
+
+.nonaktif-total::before{
+background:#ef4444;
+}
+
+
+
+
+
 .summary-icon{
 
-    width:52px;
+width:42px;
 
-    height:52px;
+height:42px;
 
-    border-radius:16px;
+border-radius:14px;
 
-    background:#dbeafe;
+background:#eff6ff;
 
-    display:flex;
+display:flex;
 
-    justify-content:center;
+align-items:center;
 
-    align-items:center;
+justify-content:center;
 
-    font-size:22px;
-
-    flex-shrink:0;
+font-size:18px;
 
 }
 
@@ -615,9 +706,9 @@ SUMMARY
 
 .summary-card label{
 
-    font-size:11px;
+font-size:11px;
 
-    color:#64748b;
+color:#64748b;
 
 }
 
@@ -625,48 +716,49 @@ SUMMARY
 
 .summary-card h2{
 
-    margin:5px 0;
+margin:5px 0;
 
-    font-size:22px;
+font-size:18px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#172033;
+color:#172033;
 
 }
+
+
 
 
 
 .summary-card small{
 
-    font-size:11px;
+font-size:10px;
 
-    color:#94a3b8;
+color:#94a3b8;
 
 }
 
 
 
-/* ===============================
-PANEL
-================================ */
+
+
+
+/* PANEL */
 
 
 .glass-panel{
 
-    background:white;
+background:white;
 
-    border:1px solid #e5e7eb;
+border:1px solid #e5e7eb;
 
-    border-radius:24px;
+border-radius:24px;
 
-    padding:25px;
+padding:18px;
 
-    margin-bottom:20px;
+box-shadow:
 
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.06);
+0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -674,13 +766,13 @@ PANEL
 
 .panel-header{
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    align-items:center;
+align-items:center;
 
-    margin-bottom:20px;
+margin-bottom:20px;
 
 }
 
@@ -688,11 +780,11 @@ PANEL
 
 .panel-title{
 
-    font-size:16px;
+font-size:16px;
 
-    font-weight:800;
+font-weight:800;
 
-    color:#172033;
+color:#172033;
 
 }
 
@@ -700,46 +792,31 @@ PANEL
 
 .panel-header small{
 
-    font-size:11px;
+font-size:11px;
 
-    color:#94a3b8;
+color:#94a3b8;
 
 }
 
 
 
-
-
-
-
-/* ===============================
-BUTTON
-================================ */
 
 
 .add-btn{
 
-    background:#1e293b;
+background:#1e293b;
 
-    color:white;
+color:white;
 
-    padding:12px 20px;
+padding:10px 18px;
 
-    border-radius:14px;
+border-radius:14px;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:700;
+font-weight:700;
 
-    text-decoration:none;
-
-}
-
-
-
-.add-btn:hover{
-
-    background:#334155;
+text-decoration:none;
 
 }
 
@@ -748,51 +825,57 @@ BUTTON
 
 
 
-
-/* ===============================
-BANK CARD
-================================ */
+/* BANK CARD */
 
 
 .bank-grid{
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(3,1fr);
 
-    gap:18px;
+gap:18px;
 
 }
-
 
 
 
 .bank-card{
 
-    background:white;
+background:white;
 
-    border:1px solid #e5e7eb;
+border:1px solid #e5e7eb;
 
-    border-radius:22px;
+border-radius:22px;
 
-    padding:22px;
+padding:18px;
 
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.05);
+transition:.25s ease;
 
 }
+
+
+
+.bank-card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:
+0 15px 35px rgba(15,23,42,.12);
+
+}
+
 
 
 
 
 .bank-top{
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    gap:14px;
+gap:14px;
 
 }
 
@@ -800,33 +883,31 @@ BANK CARD
 
 .bank-icon{
 
-    width:45px;
+width:42px;
 
-    height:45px;
+height:42px;
 
-    border-radius:14px;
+border-radius:14px;
 
-    background:#dbeafe;
+background:#eff6ff;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    justify-content:center;
-
-    font-size:18px;
+justify-content:center;
 
 }
 
 
 
+
+
 .bank-top h3{
 
-    margin:0;
+margin:0;
 
-    font-size:15px;
-
-    color:#172033;
+font-size:15px;
 
 }
 
@@ -834,31 +915,13 @@ BANK CARD
 
 .bank-top p{
 
-    margin-top:4px;
+margin-top:4px;
 
-    font-size:11px;
+font-size:11px;
 
-    color:#94a3b8;
-
-}
-
-
-
-
-
-.owner{
-
-    margin-top:15px;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    color:#475569;
+color:#94a3b8;
 
 }
-
-
 
 
 
@@ -866,13 +929,13 @@ BANK CARD
 
 .bank-info{
 
-    margin-top:15px;
+margin-top:15px;
 
-    padding:14px;
+padding:12px;
 
-    background:#f8fafc;
+background:#f8fafc;
 
-    border-radius:14px;
+border-radius:14px;
 
 }
 
@@ -880,13 +943,13 @@ BANK CARD
 
 .bank-info div{
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    margin-bottom:8px;
+margin-bottom:8px;
 
-    font-size:11px;
+font-size:11px;
 
 }
 
@@ -894,7 +957,7 @@ BANK CARD
 
 .bank-info div:last-child{
 
-    margin-bottom:0;
+margin-bottom:0;
 
 }
 
@@ -902,7 +965,7 @@ BANK CARD
 
 .bank-info span{
 
-    color:#64748b;
+color:#64748b;
 
 }
 
@@ -910,7 +973,7 @@ BANK CARD
 
 .bank-info b{
 
-    color:#172033;
+color:#172033;
 
 }
 
@@ -918,16 +981,9 @@ BANK CARD
 
 
 
-
-
-/* ===============================
-SALDO
-================================ */
-
-
 .saldo-box{
 
-    margin-top:18px;
+margin-top:15px;
 
 }
 
@@ -935,9 +991,9 @@ SALDO
 
 .saldo-box label{
 
-    font-size:11px;
+font-size:11px;
 
-    color:#94a3b8;
+color:#94a3b8;
 
 }
 
@@ -945,11 +1001,13 @@ SALDO
 
 .saldo-box h2{
 
-    margin:5px 0;
+margin:5px 0;
 
-    font-size:20px;
+font-size:22px;
 
-    color:#166534;
+font-weight:800;
+
+color:#16a34a;
 
 }
 
@@ -957,27 +1015,11 @@ SALDO
 
 
 
-
-
-
-/* ===============================
-STATUS
-================================ */
-
-
 .active{
 
-    background:#dcfce7;
+background:#dcfce7;
 
-    color:#166534;
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    font-size:10px;
-
-    font-weight:700;
+color:#166534;
 
 }
 
@@ -985,17 +1027,24 @@ STATUS
 
 .inactive{
 
-    background:#fee2e2;
+background:#fee2e2;
 
-    color:#dc2626;
+color:#dc2626;
 
-    padding:6px 12px;
+}
 
-    border-radius:999px;
 
-    font-size:10px;
 
-    font-weight:700;
+.active,
+.inactive{
+
+padding:6px 12px;
+
+border-radius:999px;
+
+font-size:10px;
+
+font-weight:700;
 
 }
 
@@ -1003,21 +1052,13 @@ STATUS
 
 
 
-
-
-
-/* ===============================
-ACTION
-================================ */
-
-
 .action{
 
-    display:flex;
+display:flex;
 
-    gap:10px;
+gap:10px;
 
-    margin-top:18px;
+margin-top:15px;
 
 }
 
@@ -1026,59 +1067,34 @@ ACTION
 .action a,
 .action button{
 
+background:#f1f5f9;
 
-    background:#f1f5f9;
+border:none;
 
-    border:none;
+padding:7px 12px;
 
-    padding:8px 14px;
+border-radius:12px;
 
-    border-radius:12px;
+font-size:10px;
 
-    font-size:11px;
+cursor:pointer;
 
-    color:#334155;
+text-decoration:none;
 
-    text-decoration:none;
-
-    cursor:pointer;
-
-}
-
-
-
-.action a:hover{
-
-    background:#dbeafe;
-
-    color:#2563eb;
+color:#334155;
 
 }
-
-
-
-.action button:hover{
-
-    background:#fee2e2;
-
-    color:#dc2626;
-
-}
-
-
-
-
 
 
 
 
 .empty{
 
-    text-align:center;
+text-align:center;
 
-    padding:40px;
+padding:40px;
 
-    color:#94a3b8;
+color:#94a3b8;
 
 }
 
@@ -1086,11 +1102,6 @@ ACTION
 
 
 
-
-
-/* ===============================
-RESPONSIVE
-================================ */
 
 
 @media(max-width:1200px){
@@ -1098,15 +1109,14 @@ RESPONSIVE
 
 .summary-grid{
 
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr);
 
 }
 
 
-
 .bank-grid{
 
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr);
 
 }
 
@@ -1121,25 +1131,15 @@ RESPONSIVE
 .summary-grid,
 .bank-grid{
 
-    grid-template-columns:1fr;
-
-}
-
-
-
-.welcome-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
+grid-template-columns:1fr;
 
 }
 
 
 }
+
 
 </style>
+
 
 @endsection

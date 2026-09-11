@@ -8,6 +8,7 @@ use App\Models\SetoranProyek;
 use App\Models\DistribusiSetoran;
 use App\Models\SaldoDivisi;
 use App\Models\RekeningBank;
+use App\Models\MutasiKeuangan;
 
 
 use Illuminate\Http\Request;
@@ -201,7 +202,31 @@ public function index()
 
 
 
+/*
+|--------------------------------------------------------------------------
+| CATAT MUTASI KEUANGAN
+|--------------------------------------------------------------------------
+*/
 
+MutasiKeuangan::create([
+
+    'rekening_bank_id' => $bank->id,
+
+    'jenis' => 'masuk',
+
+    'nominal' => $request->jumlah_setoran,
+
+    'referensi_type' => 'setoran_proyek',
+
+    'referensi_id' => $deposit->id,
+
+    'tanggal' => $request->tanggal_setoran,
+
+    'keterangan' => 'Pembayaran proyek',
+
+    'created_by' => auth()->id(),
+
+]);
 
 
 
