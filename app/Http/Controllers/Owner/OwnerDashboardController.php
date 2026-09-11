@@ -125,8 +125,10 @@ $totalRealisasi = TransaksiDana::sum('jumlah');
 $totalCairDana = $totalRealisasi;
 
 
-$sisaBudgetProyek = $totalBudget - $totalRealisasi;
-
+$sisaBudgetProyek = max(
+    0,
+    $totalBudget - $totalRealisasi
+);
 
 
 
@@ -134,21 +136,14 @@ $sisaBudgetProyek = $totalBudget - $totalRealisasi;
 
 
 $progressProject = round(
-
     $projects
     ->filter(function($project){
-
         return $project->tugas->count() > 0;
-
     })
     ->avg(function($project){
-
         return $project->progres_keseluruhan;
-
-    })
-
+    }) ?? 0
 );
-
 
 
 
@@ -291,7 +286,35 @@ $totalAnggaranAktivitas = AktivitasTugas::sum(
 
 
 
+$projects = $projects->map(function($project){
 
+    if($project->persentase_budget >= 90){
+
+        $project->health_status = [
+            'label' => 'Kritis',
+            'color' => 'danger'
+        ];
+
+    }elseif($project->progres_keseluruhan < 50){
+
+        $project->health_status = [
+            'label' => 'Perhatian',
+            'color' => 'warning'
+        ];
+
+    }else{
+
+        $project->health_status = [
+            'label' => 'Aman',
+            'color' => 'success'
+        ];
+
+    }
+
+
+    return $project;
+
+});
 
 
 

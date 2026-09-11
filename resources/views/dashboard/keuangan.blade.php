@@ -5,25 +5,24 @@
 <div class="finance-wrapper">
 
 
-{{-- ================= WELCOME ================= --}}
+{{-- HEADER --}}
+
 <div class="dashboard-title">
 
-<div>
+    <span class="welcome-label">
+        DASHBOARD KEUANGAN
+    </span>
 
-<div class="welcome-label">
-DASHBOARD KEUANGAN
-</div>
 
-<h1>
-Selamat Datang, 
-<span>{{auth()->user()->name}}</span>
-</h1>
+    <h1>
+        Selamat Datang,
+        <span>{{auth()->user()->name}}</span>
+    </h1>
 
-<p>
-Kelola transaksi, saldo, approval dan laporan keuangan perusahaan.
-</p>
 
-</div>
+    <p>
+        Kelola transaksi, saldo, approval dan laporan keuangan perusahaan.
+    </p>
 
 </div>
 
@@ -31,69 +30,34 @@ Kelola transaksi, saldo, approval dan laporan keuangan perusahaan.
 
 
 
-
-{{-- ================= STATISTIK ================= --}}
-
+{{-- KPI CARDS --}}
 
 <div class="finance-grid">
 
 
-<div class="finance-card">
+<div class="finance-card income-card">
 
-<div class="finance-icon green">
-💰
-</div>
+    <div class="finance-icon green">
+        💰
+    </div>
 
-<div>
+    <div>
 
-<label>
-Total Dana Masuk
-</label>
-
-
-<h2>
-Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
-</h2>
+        <label>
+            Total Dana Masuk
+        </label>
 
 
-<small>
-Pembayaran project
-</small>
+        <h2>
+            Rp {{number_format($totalDeposit ?? 0,0,',','.')}}
+        </h2>
 
 
-</div>
+        <small>
+            Total pemasukan
+        </small>
 
-</div>
-
-
-
-
-
-<div class="finance-card">
-
-<div class="finance-icon red">
-💸
-</div>
-
-
-<div>
-
-<label>
-Total Pengeluaran
-</label>
-
-
-<h2>
-Rp {{number_format($totalExpense ?? 0,0,',','.')}}
-</h2>
-
-
-<small>
-Dana digunakan
-</small>
-
-
-</div>
+    </div>
 
 </div>
 
@@ -101,63 +65,30 @@ Dana digunakan
 
 
 
-<div class="finance-card">
+<div class="finance-card expense-card">
 
-<div class="finance-icon blue">
-🏦
-</div>
-
-
-<div>
-
-<label>
-Saldo Perusahaan
-</label>
+    <div class="finance-icon red">
+        💸
+    </div>
 
 
-<h2>
-Rp {{number_format($sisaDana ?? 0,0,',','.')}}
-</h2>
+    <div>
+
+        <label>
+            Total Pengeluaran
+        </label>
 
 
-<small>
-Dana tersedia
-</small>
+        <h2>
+            Rp {{number_format($totalExpense ?? 0,0,',','.')}}
+        </h2>
 
 
-</div>
+        <small>
+            Dana digunakan
+        </small>
 
-</div>
-
-
-
-
-
-<div class="finance-card">
-
-<div class="finance-icon orange">
-🏢
-</div>
-
-
-<div>
-
-<label>
-Saldo Divisi
-</label>
-
-
-<h2>
-Rp {{number_format($totalSaldoDivisi ?? 0,0,',','.')}}
-</h2>
-
-
-<small>
-Distribusi anggaran
-</small>
-
-
-</div>
+    </div>
 
 </div>
 
@@ -165,93 +96,32 @@ Distribusi anggaran
 
 
 
-<div class="finance-card">
-
-<div class="finance-icon purple">
-🏧
-</div>
 
 
-<div>
+<div class="finance-card balance-card">
 
-<label>
-Saldo Rekening
-</label>
-
-
-<h2>
-Rp {{number_format($totalSaldoBank ?? 0,0,',','.')}}
-</h2>
+    <div class="finance-icon blue">
+        🏦
+    </div>
 
 
-<small>
-Bank aktif
-</small>
+    <div>
+
+        <label>
+            Saldo Aktif
+        </label>
 
 
-</div>
-
-</div>
-
-
+        <h2>
+            Rp {{number_format($sisaDana ?? 0,0,',','.')}}
+        </h2>
 
 
-<div class="finance-card">
+        <small>
+            Dana tersedia
+        </small>
 
-<div class="finance-icon yellow">
-⏳
-</div>
-
-
-<div>
-
-<label>
-Pending Approval
-</label>
-
-
-<h2 class="pending-number">
-{{$totalApprovalPending ?? 0}}
-</h2>
-
-
-<small>
-Menunggu proses
-</small>
-
-
-</div>
-
-</div>
-
-
-
-
-<div class="finance-card">
-
-<div class="finance-icon green">
-✓
-</div>
-
-
-<div>
-
-<label>
-Approved
-</label>
-
-
-<h2>
-{{$totalApprovalApproved ?? 0}}
-</h2>
-
-
-<small>
-Disetujui
-</small>
-
-
-</div>
+    </div>
 
 </div>
 
@@ -259,42 +129,49 @@ Disetujui
 
 
 
-<div class="finance-card">
 
-<div class="finance-icon red">
-✕
+
+<div class="finance-card approval-card">
+
+    <div class="finance-icon orange">
+        ⏳
+    </div>
+
+
+    <div>
+
+        <label>
+            Pending Approval
+        </label>
+
+
+        <h2>
+            {{$totalApprovalPending ?? 0}}
+        </h2>
+
+
+        <small>
+            Menunggu proses
+        </small>
+
+    </div>
+
+</div>
+
+
 </div>
 
 
-<div>
-
-<label>
-Rejected
-</label>
 
 
-<h2>
-{{$totalApprovalRejected ?? 0}}
-</h2>
 
 
-<small>
-Ditolak
-</small>
 
+{{-- MAIN GRID --}}
 
-</div>
-
-</div>
-
-
-</div>
-{{-- ================= MAIN DASHBOARD ================= --}}
 
 <div class="dashboard-grid">
 
-
-{{-- ================= LEFT ================= --}}
 
 <div class="finance-left">
 
@@ -302,16 +179,36 @@ Ditolak
 
 
 
-{{-- RINGKASAN KEUANGAN --}}
+{{-- CASH FLOW --}}
 
+<div class="glass-panel chart-panel">
+
+
+    <div class="panel-title">
+        📈 Cash Flow Perusahaan
+    </div>
+
+
+    <canvas id="cashFlowChart"></canvas>
+
+
+</div>
+
+
+
+
+
+
+
+
+{{-- RINGKASAN --}}
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-📊 Ringkasan Keuangan
+    📊 Ringkasan Keuangan
 </div>
-
 
 
 
@@ -324,14 +221,11 @@ Ditolak
 Total Budget Project
 </span>
 
-
 <b>
 Rp {{number_format($totalBudget ?? 0,0,',','.')}}
 </b>
 
-
 </div>
-
 
 
 
@@ -342,11 +236,9 @@ Rp {{number_format($totalBudget ?? 0,0,',','.')}}
 Jumlah Project
 </span>
 
-
 <b>
 {{$totalProject ?? 0}} Project
 </b>
-
 
 </div>
 
@@ -360,11 +252,9 @@ Jumlah Project
 Progress Project
 </span>
 
-
 <b>
 {{$totalProjectProgress ?? 0}}%
 </b>
-
 
 </div>
 
@@ -378,13 +268,12 @@ Progress Project
 Pengeluaran Bulan Ini
 </span>
 
-
 <b>
 Rp {{number_format($expenseThisMonth ?? 0,0,',','.')}}
 </b>
 
-
 </div>
+
 
 
 </div>
@@ -401,36 +290,27 @@ Rp {{number_format($expenseThisMonth ?? 0,0,',','.')}}
 
 {{-- KONDISI DANA --}}
 
-
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
 📈 Kondisi Dana
-
 </div>
 
 
-
-
-
 <div class="progress-head">
-
 
 <span>
 Dana Terpakai
 </span>
 
 
-
 <b>
-{{$budgetUsage ?? 0}}%
+{{ $totalDeposit > 0 ? round(($totalExpense/$totalDeposit)*100) : 0 }}%
 </b>
 
 
 </div>
-
 
 
 
@@ -439,22 +319,20 @@ Dana Terpakai
 
 <div class="progress-fill"
 
-style="width:{{$budgetUsage ?? 0}}%">
+style="width:{{ $totalDeposit > 0 ? round(($totalExpense/$totalDeposit)*100) : 0 }}%">
 
 </div>
 
 
 </div>
-
 
 
 
 <p class="description">
 
-Persentase penggunaan dana berdasarkan transaksi keuangan.
+Persentase penggunaan dana perusahaan.
 
 </p>
-
 
 
 </div>
@@ -466,21 +344,15 @@ Persentase penggunaan dana berdasarkan transaksi keuangan.
 
 
 
-
-{{-- APPROVAL TERBARU --}}
+{{-- APPROVAL --}}
 
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
-🔔 Pengajuan Menunggu Approval
-
+🔔 Approval Terbaru
 </div>
-
-
-
 
 
 <table>
@@ -494,27 +366,22 @@ Persentase penggunaan dana berdasarkan transaksi keuangan.
 Pemohon
 </th>
 
-
 <th>
 Project
 </th>
-
 
 <th>
 Nominal
 </th>
 
-
 <th>
 Status
 </th>
 
-
 </tr>
 
+
 </thead>
-
-
 
 
 <tbody>
@@ -527,42 +394,30 @@ Status
 
 
 <td>
-
 {{$approval->pengguna->name ?? '-'}}
-
 </td>
 
 
-
 <td>
-
 {{$approval->proyek->nama_proyek ?? '-'}}
-
 </td>
-
 
 
 <td>
-
 Rp {{number_format($approval->jumlah ?? 0,0,',','.')}}
-
 </td>
-
 
 
 <td>
 
 <span class="pending">
-
 Pending
-
 </span>
 
 </td>
 
 
 </tr>
-
 
 
 @empty
@@ -582,7 +437,6 @@ Tidak ada pengajuan
 @endforelse
 
 
-
 </tbody>
 
 
@@ -596,188 +450,10 @@ Tidak ada pengajuan
 
 
 
-
-
-
-
-{{-- TRANSAKSI TERBARU --}}
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
-🧾 Transaksi Terbaru
-
 </div>
 
 
 
-
-
-<div class="transaction-grid">
-
-
-
-{{-- PENGELUARAN --}}
-
-
-<div>
-
-
-<h4>
-💸 Pengeluaran
-</h4>
-
-
-
-@forelse($recentExpenses ?? [] as $expense)
-
-
-
-<div class="transaction-item">
-
-
-<div>
-
-<strong>
-{{$expense->pengajuanDana->judul ?? 'Pengeluaran Dana'}}
-</strong>
-
-
-
-<small>
-
-{{\Carbon\Carbon::parse($expense->tanggal)->format('d M Y')}}
-
-</small>
-
-
-</div>
-
-
-
-
-<b class="expense-value">
-
-- Rp {{number_format($expense->jumlah ?? 0,0,',','.')}}
-
-</b>
-
-
-
-</div>
-
-
-
-@empty
-
-
-<div class="empty-data">
-
-Belum ada transaksi
-
-</div>
-
-
-@endforelse
-
-
-
-</div>
-
-
-
-
-
-
-
-
-{{-- PEMASUKAN --}}
-
-
-<div>
-
-
-<h4>
-💰 Dana Masuk
-</h4>
-
-
-
-
-@forelse($recentDeposits ?? [] as $deposit)
-
-
-
-<div class="transaction-item">
-
-
-<div>
-
-
-<strong>
-Setoran Project
-</strong>
-
-
-
-<small>
-
-{{\Carbon\Carbon::parse($deposit->tanggal_setoran)->format('d M Y')}}
-
-</small>
-
-
-</div>
-
-
-
-
-<b class="income-value">
-
-+ Rp {{number_format($deposit->jumlah_setoran ?? 0,0,',','.')}}
-
-</b>
-
-
-
-</div>
-
-
-
-@empty
-
-
-<div class="empty-data">
-
-Belum ada pemasukan
-
-</div>
-
-
-@endforelse
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-</div>
-{{-- END FINANCE LEFT --}}
-{{-- ================= RIGHT ================= --}}
 
 
 <div class="finance-right">
@@ -786,24 +462,19 @@ Belum ada pemasukan
 
 
 
-{{-- FINANCIAL HEALTH --}}
+{{-- HEALTH --}}
 
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
 📊 Financial Health
-
 </div>
 
 
 
-
-
 <div class="health-item">
-
 
 <div>
 
@@ -813,7 +484,7 @@ Arus Dana
 
 
 <small>
-Pemasukan dan pengeluaran perusahaan
+Pemasukan dan pengeluaran
 </small>
 
 
@@ -821,15 +492,11 @@ Pemasukan dan pengeluaran perusahaan
 
 
 <span class="badge-success">
-
 Stabil
-
 </span>
 
 
 </div>
-
-
 
 
 
@@ -841,12 +508,12 @@ Stabil
 <div>
 
 <strong>
-Approval Dana
+Approval
 </strong>
 
 
 <small>
-Pengajuan menunggu keputusan
+Menunggu keputusan
 </small>
 
 
@@ -866,31 +533,27 @@ Pengajuan menunggu keputusan
 
 
 
-
-
 <div class="health-item">
 
 
 <div>
 
 <strong>
-Saldo Aktif
+Saldo
 </strong>
 
 
 <small>
-Dana tersedia perusahaan
+Dana tersedia
 </small>
 
 
 </div>
 
 
-
 <span class="badge-money">
 
 Rp {{number_format($sisaDana ?? 0,0,',','.')}}
-
 </span>
 
 
@@ -906,26 +569,19 @@ Rp {{number_format($sisaDana ?? 0,0,',','.')}}
 
 
 
-
-
-{{-- AUDIT TRAIL --}}
+{{-- AUDIT --}}
 
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
-📌 Aktivitas Sistem Terbaru
-
+📌 Aktivitas Sistem
 </div>
 
 
 
-
-
 @forelse($recentAudit ?? [] as $audit)
-
 
 
 <div class="activity-item">
@@ -934,56 +590,38 @@ Rp {{number_format($sisaDana ?? 0,0,',','.')}}
 <div class="activity-dot"></div>
 
 
-
-<div class="activity-content">
-
+<div>
 
 <strong>
-
 {{$audit->aksi}}
-
 </strong>
 
 
-
 <p>
-
 {{$audit->deskripsi}}
-
 </p>
-
 
 
 <small>
 
 {{$audit->pengguna->name ?? 'System'}}
-
 -
-
 {{$audit->created_at->format('d M Y H:i')}}
 
 </small>
 
 
-
 </div>
 
 
-
 </div>
-
-
 
 
 @empty
 
-
 <div class="empty-data">
-
-Belum ada aktivitas sistem
-
+Belum ada aktivitas
 </div>
-
 
 @endforelse
 
@@ -995,151 +633,33 @@ Belum ada aktivitas sistem
 
 
 
-
-
-
-
-{{-- RINGKASAN CEPAT --}}
+{{-- STATUS --}}
 
 
 <div class="glass-panel">
 
 
 <div class="panel-title">
-
-📅 Ringkasan Cepat
-
-</div>
-
-
-
-
-<div class="quick-summary">
-
-
-<div>
-
-
-<span>
-Pending Approval
-</span>
-
-
-<b>
-{{$totalApprovalPending ?? 0}}
-</b>
-
-
-</div>
-
-
-
-
-
-<div>
-
-
-<span>
-Project Aktif
-</span>
-
-
-<b>
-{{$totalProject ?? 0}}
-</b>
-
-
-</div>
-
-
-
-
-
-<div>
-
-
-<span>
-Saldo Tersedia
-</span>
-
-
-<b>
-
-Rp {{number_format($sisaDana ?? 0,0,',','.')}}
-
-</b>
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- STATUS SISTEM --}}
-
-
-<div class="glass-panel">
-
-
-<div class="panel-title">
-
 ⚡ Status Sistem
-
 </div>
 
 
 
-
-
 <div class="system-row">
-
-
 <span></span>
-
 Database Keuangan Aktif
-
-
 </div>
 
 
-
-
-
 <div class="system-row">
-
-
 <span></span>
-
 Transaksi Terintegrasi
-
-
 </div>
-
-
-
 
 
 <div class="system-row">
-
-
 <span></span>
-
 Audit Monitoring Berjalan
-
-
 </div>
 
 
@@ -1149,56 +669,37 @@ Audit Monitoring Berjalan
 
 
 
-
-
 </div>
-{{-- END FINANCE RIGHT --}}
-
 
 
 
 </div>
-{{-- END DASHBOARD GRID --}}
-
-
-
-
 
 
 </div>
-{{-- END FINANCE WRAPPER --}}
-
 
 
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
 
 .finance-wrapper{
     width:100%;
 }
 
 
-/* ===============================
-HEADER
-================================ */
+/* ================= HEADER ================= */
+
 
 .dashboard-title{
 
     background:#f8fafc;
-
     border:1px solid #e2e8f0;
-
-    border-radius:24px;
-
-    padding:30px;
-
+    border-radius:26px;
+    padding:25px;
     margin-bottom:25px;
 
     box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+    0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -1206,23 +707,19 @@ HEADER
 
 .welcome-label{
 
-    font-size:11px;
-
+    font-size:10px;
     letter-spacing:2px;
-
     font-weight:800;
-
     color:#64748b;
 
 }
-
 
 
 .dashboard-title h1{
 
     margin:10px 0;
 
-    font-size:30px;
+    font-size:24px;
 
     font-weight:800;
 
@@ -1231,10 +728,9 @@ HEADER
 }
 
 
-
 .dashboard-title h1 span{
 
-    color:#1e293b;
+    color:#334155;
 
 }
 
@@ -1246,7 +742,7 @@ HEADER
 
     color:#64748b;
 
-    font-size:14px;
+    font-size:13px;
 
 }
 
@@ -1254,9 +750,8 @@ HEADER
 
 
 
-/* ===============================
-STATISTIC CARD
-================================ */
+
+/* ================= KPI ================= */
 
 
 .finance-grid{
@@ -1265,7 +760,7 @@ STATISTIC CARD
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:20px;
+    gap:14px;
 
     margin-bottom:25px;
 
@@ -1274,15 +769,18 @@ STATISTIC CARD
 
 
 
+
 .finance-card{
+
 
     background:white;
 
     border:1px solid #e5e7eb;
 
-    border-radius:22px;
+    border-radius:24px;
 
-    padding:22px;
+    padding:16px;
+
 
     display:flex;
 
@@ -1290,15 +788,34 @@ STATISTIC CARD
 
     gap:15px;
 
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.05);
 
     position:relative;
 
     overflow:hidden;
 
+
+    transition:.25s ease;
+
+
+    box-shadow:
+
+    0 10px 30px rgba(15,23,42,.05);
+
 }
+
+
+
+
+.finance-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+
+    0 18px 40px rgba(15,23,42,.12);
+
+}
+
 
 
 
@@ -1323,23 +840,60 @@ STATISTIC CARD
 
 
 
+
+.income-card::before{
+
+    background:#22c55e;
+
+}
+
+
+.expense-card::before{
+
+    background:#ef4444;
+
+}
+
+
+.balance-card::before{
+
+    background:#3b82f6;
+
+}
+
+
+.approval-card::before{
+
+    background:#f59e0b;
+
+}
+
+
+
+
+
+
 .finance-icon{
 
-    width:52px;
 
-    height:52px;
+    width:42px;
+    height:42px;
+
+    font-size:18px;
 
     border-radius:16px;
 
-    display:flex;
 
-    align-items:center;
+    display:flex;
 
     justify-content:center;
 
-    font-size:23px;
+    align-items:center;
+
+
 
 }
+
 
 
 
@@ -1350,7 +904,6 @@ STATISTIC CARD
 }
 
 
-
 .finance-icon.red{
 
     background:#fee2e2;
@@ -1358,13 +911,11 @@ STATISTIC CARD
 }
 
 
-
 .finance-icon.blue{
 
     background:#dbeafe;
 
 }
-
 
 
 .finance-icon.orange{
@@ -1375,19 +926,6 @@ STATISTIC CARD
 
 
 
-.finance-icon.purple{
-
-    background:#ede9fe;
-
-}
-
-
-
-.finance-icon.yellow{
-
-    background:#fef3c7;
-
-}
 
 
 
@@ -1395,21 +933,22 @@ STATISTIC CARD
 
     display:block;
 
-    font-size:12px;
-
     color:#64748b;
+
+    font-size:12px;
 
 }
 
 
 
+
 .finance-card h2{
 
-    margin:5px 0;
-
-    font-size:22px;
+    margin:6px 0;
 
     color:#172033;
+
+    font-size:17px;
 
     font-weight:800;
 
@@ -1421,18 +960,6 @@ STATISTIC CARD
 
     color:#94a3b8;
 
-    font-size:11px;
-
-}
-
-
-
-
-
-.pending-number{
-
-    color:#92400e!important;
-
 }
 
 
@@ -1441,9 +968,7 @@ STATISTIC CARD
 
 
 
-/* ===============================
-MAIN GRID
-================================ */
+/* ================= MAIN GRID ================= */
 
 
 .dashboard-grid{
@@ -1452,7 +977,7 @@ MAIN GRID
 
     grid-template-columns:2fr 1fr;
 
-    gap:20px;
+    gap:15px;
 
 }
 
@@ -1461,26 +986,31 @@ MAIN GRID
 
 
 
-/* ===============================
-PANEL
-================================ */
+
+/* ================= PANEL ================= */
 
 
 .glass-panel{
 
+
     background:white;
+
 
     border:1px solid #e5e7eb;
 
+
     border-radius:24px;
 
-    padding:25px;
+
+    padding:18px;
+
 
     margin-bottom:20px;
 
+
     box-shadow:
 
-    0 10px 30px rgba(15,23,42,.06);
+    0 10px 30px rgba(15,23,42,.05);
 
 }
 
@@ -1490,7 +1020,7 @@ PANEL
 
 .panel-title{
 
-    font-size:18px;
+    font-size:14px;
 
     font-weight:800;
 
@@ -1506,20 +1036,45 @@ PANEL
 
 
 
-
-/* ===============================
-SUMMARY
-================================ */
+/* ================= CHART ================= */
 
 
-.finance-summary div,
-.quick-summary div{
+.chart-panel{
+
+    min-height:280px;
+
+}
+
+
+
+.chart-panel canvas{
+
+    width:100%!important;
+
+    height:220px!important;
+
+}
+
+
+
+
+
+
+
+
+/* ================= SUMMARY ================= */
+
+
+
+.finance-summary div{
 
     display:flex;
 
     justify-content:space-between;
 
+
     padding:14px 0;
+
 
     border-bottom:1px solid #f1f5f9;
 
@@ -1527,8 +1082,7 @@ SUMMARY
 
 
 
-.finance-summary span,
-.quick-summary span{
+.finance-summary span{
 
     color:#64748b;
 
@@ -1538,12 +1092,9 @@ SUMMARY
 
 
 
-.finance-summary b,
-.quick-summary b{
+.finance-summary b{
 
     color:#172033;
-
-    font-size:14px;
 
 }
 
@@ -1554,10 +1105,7 @@ SUMMARY
 
 
 
-
-/* ===============================
-PROGRESS
-================================ */
+/* ================= PROGRESS ================= */
 
 
 .progress-head{
@@ -1576,23 +1124,13 @@ PROGRESS
 
     color:#64748b;
 
-    font-size:13px;
-
-}
-
-
-
-.progress-head b{
-
-    color:#172033;
-
 }
 
 
 
 .progress-track{
 
-    height:10px;
+    height:12px;
 
     background:#e2e8f0;
 
@@ -1632,10 +1170,7 @@ PROGRESS
 
 
 
-
-/* ===============================
-TABLE
-================================ */
+/* ================= TABLE ================= */
 
 
 table{
@@ -1656,9 +1191,9 @@ th{
 
     text-align:left;
 
-    color:#64748b;
-
     font-size:12px;
+
+    color:#64748b;
 
 }
 
@@ -1666,13 +1201,11 @@ th{
 
 td{
 
-    padding:15px;
+    padding:14px;
 
     border-bottom:1px solid #e5e7eb;
 
     font-size:13px;
-
-    color:#334155;
 
 }
 
@@ -1687,14 +1220,13 @@ tr:hover{
 
 
 
-
 .pending{
 
     background:#fef3c7;
 
     color:#92400e;
 
-    padding:7px 14px;
+    padding:6px 12px;
 
     border-radius:999px;
 
@@ -1709,82 +1241,8 @@ tr:hover{
 
 
 
+/* ================= HEALTH ================= */
 
-
-/* ===============================
-TRANSACTION
-================================ */
-
-
-.transaction-grid{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:20px;
-
-}
-
-
-
-.transaction-item{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:14px 0;
-
-    border-bottom:1px solid #f1f5f9;
-
-}
-
-
-
-.transaction-item strong{
-
-    color:#172033;
-
-    display:block;
-
-}
-
-
-
-.transaction-item small{
-
-    color:#94a3b8;
-
-}
-
-
-
-.expense-value{
-
-    color:#dc2626;
-
-}
-
-
-
-.income-value{
-
-    color:#16a34a;
-
-}
-
-
-
-
-
-
-
-/* ===============================
-HEALTH
-================================ */
 
 
 .health-item{
@@ -1795,7 +1253,9 @@ HEALTH
 
     align-items:center;
 
-    padding:14px 0;
+
+    padding:15px 0;
+
 
     border-bottom:1px solid #f1f5f9;
 
@@ -1803,16 +1263,16 @@ HEALTH
 
 
 
+
 .health-item small{
 
     display:block;
 
+    margin-top:5px;
+
     color:#94a3b8;
 
-    margin-top:4px;
-
 }
-
 
 
 
@@ -1823,11 +1283,11 @@ HEALTH
 
     color:#166534;
 
-    padding:7px 14px;
+    padding:7px 12px;
 
     border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -1841,11 +1301,11 @@ HEALTH
 
     color:#92400e;
 
-    padding:7px 14px;
+    padding:7px 12px;
 
     border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
@@ -1867,11 +1327,7 @@ HEALTH
 
 
 
-
-
-/* ===============================
-ACTIVITY
-================================ */
+/* ================= ACTIVITY ================= */
 
 
 .activity-item{
@@ -1898,7 +1354,7 @@ ACTIVITY
 
     border-radius:50%;
 
-    margin-top:6px;
+    margin-top:7px;
 
 }
 
@@ -1916,9 +1372,9 @@ ACTIVITY
 
     margin:5px 0;
 
-    font-size:13px;
-
     color:#64748b;
+
+    font-size:13px;
 
 }
 
@@ -1936,10 +1392,7 @@ ACTIVITY
 
 
 
-
-/* ===============================
-SYSTEM STATUS
-================================ */
+/* ================= STATUS ================= */
 
 
 .system-row{
@@ -1974,15 +1427,11 @@ SYSTEM STATUS
 
 
 
-
-
-
-
 .empty-data{
 
     text-align:center;
 
-    padding:35px;
+    padding:30px;
 
     color:#94a3b8;
 
@@ -1994,11 +1443,7 @@ SYSTEM STATUS
 
 
 
-
-
-/* ===============================
-RESPONSIVE
-================================ */
+/* ================= RESPONSIVE ================= */
 
 
 @media(max-width:1200px){
@@ -2009,7 +1454,6 @@ RESPONSIVE
     grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .dashboard-grid{
@@ -2023,7 +1467,9 @@ RESPONSIVE
 
 
 
-@media(max-width:800px){
+
+
+@media(max-width:700px){
 
 
 .finance-grid{
@@ -2034,702 +1480,203 @@ RESPONSIVE
 
 
 
-.transaction-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.dashboard-title{
-
-    padding:25px;
-
-}
-
-
-}
-
-/* ===============================
-FONT COMPACT MODE
-================================ */
-
-
-.dashboard-title h1{
-    font-size:24px;
-}
-
-
-.dashboard-title p{
-    font-size:12px;
-}
-
-
-
-.welcome-label{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-.finance-card{
-
-    padding:16px;
-
-}
-
-
-
-.finance-icon{
-
-    width:42px;
-
-    height:42px;
-
-    font-size:18px;
-
-}
-
-
-
-.finance-card label{
-
-    font-size:10px;
-
-}
-
-
-
-.finance-card h2{
-
-    font-size:17px;
-
-}
-
-
-
-.finance-card small{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-.panel-title{
-
-    font-size:15px;
-
-    margin-bottom:15px;
-
-}
-
-
-
-.glass-panel{
-
-    padding:20px;
-
-}
-
-
-
-
-
-.finance-summary span,
-.quick-summary span{
-
-    font-size:12px;
-
-}
-
-
-
-.finance-summary b,
-.quick-summary b{
-
-    font-size:13px;
-
-}
-
-
-
-
-
-
-th{
-
-    font-size:11px;
-
-    padding:12px;
-
-}
-
-
-
-td{
-
-    font-size:12px;
-
-    padding:12px;
-
-}
-
-
-
-
-
-.transaction-item strong{
-
-    font-size:13px;
-
-}
-
-
-
-.transaction-item small{
-
-    font-size:11px;
-
-}
-
-
-
-.health-item strong{
-
-    font-size:13px;
-
-}
-
-
-
-.health-item small{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-.badge-success,
-.badge-warning{
-
-    font-size:10px;
-
-    padding:6px 12px;
-
-}
-
-
-
-
-
-.system-row{
-
-    font-size:12px;
-
-}
-
-
-
-.description{
-
-    font-size:12px;
-
-}
-
-
-/* =================================
-FINANCE DASHBOARD COMPACT MODE
-MATCH OWNER STYLE
-================================= */
-
-
-/* HEADER */
-
-.dashboard-title{
-
-    padding:25px;
-
-    border-radius:24px;
-
-}
-
-
-
-.welcome-label{
-
-    font-size:10px;
-
-}
-
-
-
-.dashboard-title h1{
-
-    font-size:24px;
-
-    margin:8px 0;
-
-}
-
-
-
-.dashboard-title p{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-STAT CARD
-================================= */
-
-
-.finance-grid{
-
-    gap:15px;
-
-}
-
-
-
-.finance-card{
-
-    padding:18px;
-
-    border-radius:22px;
-
-}
-
-
-
-.finance-icon{
-
-    width:40px;
-
-    height:40px;
-
-    font-size:16px;
-
-    border-radius:14px;
-
-}
-
-
-
-.finance-card label{
-
-    font-size:10px;
-
-}
-
-
-
-.finance-card h2{
-
-    font-size:17px;
-
-    margin:6px 0;
-
-}
-
-
-
-.finance-card small{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-PANEL
-================================= */
-
-
-.glass-panel{
-
-    padding:20px;
-
-    border-radius:24px;
-
-}
-
-
-
-.panel-title{
-
-    font-size:15px;
-
-    margin-bottom:15px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-SUMMARY
-================================= */
-
-
-.finance-summary div,
-.quick-summary div{
-
-    padding:10px 0;
-
-}
-
-
-
-.finance-summary span,
-.quick-summary span{
-
-    font-size:11px;
-
-}
-
-
-
-.finance-summary b,
-.quick-summary b{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-
-/* =================================
-PROGRESS
-================================= */
-
-
-.progress-head span{
-
-    font-size:11px;
-
-}
-
-
-
-.progress-head b{
-
-    font-size:12px;
-
-}
-
-
-
-.progress-track{
-
-    height:8px;
-
-}
-
-
-
-.description{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-
-
-
-/* =================================
-TABLE
-================================= */
-
-
-th{
-
-    padding:12px;
-
-    font-size:11px;
-
-}
-
-
-
-td{
-
-    padding:12px;
-
-    font-size:12px;
-
-}
-
-
-
-.pending{
-
-    font-size:10px;
-
-    padding:5px 10px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-TRANSACTION
-================================= */
-
-
-.transaction-grid{
-
-    gap:15px;
-
-}
-
-
-
-.transaction-item{
-
-    padding:10px 0;
-
-}
-
-
-
-.transaction-item strong{
-
-    font-size:12px;
-
-}
-
-
-
-.transaction-item small{
-
-    font-size:10px;
-
-}
-
-
-
-.expense-value,
-.income-value{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-HEALTH
-================================= */
-
-
-.health-item{
-
-    padding:10px 0;
-
-}
-
-
-
-.health-item strong{
-
-    font-size:12px;
-
-}
-
-
-
-.health-item small{
-
-    font-size:10px;
-
-}
-
-
-
-.badge-success,
-.badge-warning{
-
-    font-size:10px;
-
-    padding:5px 10px;
-
-}
-
-
-
-
-
-.badge-money{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-ACTIVITY
-================================= */
-
-
-.activity-item{
-
-    padding:10px 0;
-
-}
-
-
-
-.activity-dot{
-
-    width:8px;
-
-    height:8px;
-
-}
-
-
-
-.activity-content strong{
-
-    font-size:12px;
-
 }
 
-
-
-.activity-content p{
-
-    font-size:11px;
-
-}
-
-
-
-.activity-content small{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-
-
-/* =================================
-SYSTEM
-================================= */
-
-
-.system-row{
-
-    font-size:11px;
-
-}
-
-
-
-.system-row span{
-
-    width:8px;
-
-    height:8px;
-
-}
-
-
-
-
-
-
-.empty-data{
-
-    padding:25px;
-
-    font-size:11px;
-
-}
-
-
-
-
-
-/* =================================
-RESPONSIVE
-================================= */
-
-
-@media(max-width:1200px){
-
-.finance-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-}
-
-
-
-@media(max-width:800px){
-
-.finance-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-}
 
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+const chartElement = document.getElementById('cashFlowChart');
+
+
+if(chartElement){
+
+
+new Chart(chartElement, {
+
+
+type:'line',
+
+
+data:{
+
+
+labels:@json($cashFlowChart['labels']),
+
+
+datasets:[
+
+
+{
+
+label:'Dana Masuk',
+
+data:@json($cashFlowChart['income']),
+
+
+borderWidth:3,
+
+
+tension:.4,
+
+
+fill:true
+
+},
+
+
+
+{
+
+label:'Pengeluaran',
+
+data:@json($cashFlowChart['expense']),
+
+
+borderWidth:3,
+
+
+tension:.4,
+
+
+fill:true
+
+}
+
+
+]
+
+
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+
+maintainAspectRatio:false,
+
+
+interaction:{
+
+
+intersect:false,
+
+
+mode:'index'
+
+
+},
+
+
+
+plugins:{
+
+
+legend:{
+
+
+position:'bottom',
+
+
+labels:{
+
+
+padding:20,
+
+
+font:{
+
+
+size:12
+
+
+}
+
+
+}
+
+
+},
+
+
+
+tooltip:{
+
+
+callbacks:{
+
+
+label:function(context){
+
+
+return 'Rp ' +
+
+new Intl.NumberFormat('id-ID')
+.format(context.raw);
+
+
+}
+
+
+}
+
+
+}
+
+
+},
+
+
+
+scales:{
+
+
+y:{
+
+
+ticks:{
+
+
+callback:function(value){
+
+
+return 'Rp ' +
+
+new Intl.NumberFormat('id-ID')
+.format(value);
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+
+}
+
+
+
+});
+
+
+}
+
+
+</script>
 @endsection
+

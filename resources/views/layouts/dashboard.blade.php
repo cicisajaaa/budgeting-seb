@@ -25,8 +25,10 @@ Sahabat Eksplorasi Banua
 --cream:#f8fafc;
 --sidebar:#0f172a;
 
-}
+--background:#f8fafc;
+--text:#334155;
 
+}
 
 *{
 
@@ -197,11 +199,8 @@ letter-spacing:1px;
 
 
 .sidebar a:hover{
-
-background:rgba(166,124,46,.15);
-
+background:rgba(148,163,184,.15);
 color:white;
-
 }
 
 
@@ -212,13 +211,12 @@ color:white;
 
 .sidebar a.active{
 
-    background:#2b2415;
+    background:#334155;
+    border-left:4px solid #94a3b8;
 
     color:white;
 
     font-weight:600;
-
-    border-left:4px solid #8b6b2e;
 
     outline:none !important;
 
@@ -251,13 +249,9 @@ color:white;
 
 
 .sidebar a.active:focus,
-
 .sidebar a.active:focus-visible{
-
-    border-left:4px solid #8b6b2e;
-
+    border-left:4px solid #94a3b8;
 }
-
 
 
 
@@ -290,13 +284,6 @@ color:white;
 
 }
 
-.icon{
-
-width:25px;
-
-text-align:center;
-
-}
 
 
 
@@ -420,41 +407,42 @@ Enterprise Management System
 
 
 {{-- ================= DASHBOARD ================= --}}
-
-@if(auth()->user()->role!='owner')
+@if(in_array(auth()->user()->role,['admin','karyawan']))
 
 <div class="menu-title">
 MAIN
 </div>
-
 
 <a href="
 @if(auth()->user()->role=='admin')
 
 {{route('admin.dashboard')}}
 
+@elseif(auth()->user()->role=='karyawan')
+
+{{route('employee.dashboard')}}
+
 @else
 
 {{route('dashboard')}}
 
 @endif
+
 "
 
-class="{{request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') ? 'active':''}}">
+class="{{request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') || request()->routeIs('employee.dashboard') ? 'active':''}}">
 
 
 <div class="icon">
-⌂
-</div>
 
+⌂
+
+</div>
 
 Dashboard
 
-
 </a>
-
 @endif
-
 
 
 {{-- ================= ADMIN ================= --}}
@@ -646,7 +634,17 @@ Riwayat Aktivitas
 FINANCE
 </div>
 
+<a href="{{route('finance.dashboard')}}"
 
+class="{{request()->routeIs('finance.dashboard') || request()->is('finance/dashboard') ? 'active':''}}">
+
+<div class="icon">
+⌂
+</div>
+
+Dashboard Keuangan
+
+</a>
 
 
 <a href="{{route('finance.deposit')}}"
@@ -703,6 +701,14 @@ Distribusi Dana
 </a>
 
 
+<a href="{{route('finance.expense.index')}}"
+class="{{request()->routeIs('finance.expense.*')?'active':''}}">
+<div class="icon">
+💸
+</div>
+Riwayat Pengeluaran
+</a>
+
 <a href="{{route('expense.approval')}}"
 class="{{request()->routeIs('expense.approval')?'active':''}}">
 
@@ -712,11 +718,12 @@ class="{{request()->routeIs('expense.approval')?'active':''}}">
 
 Approval Dana
 
-
-@if(auth()->user()->unreadNotifications->count())
+@if(isset($pendingApproval) && $pendingApproval > 0)
 
 <span class="menu-badge">
-{{auth()->user()->unreadNotifications->count()}}
+
+{{$pendingApproval}}
+
 </span>
 
 @endif
@@ -727,7 +734,7 @@ Approval Dana
 
 
 <a href="{{route('expense.approval.history')}}"
-class="{{request()->routeIs('expense.approval.history')?'active':''}}">
+class="{{request()->routeIs('expense.approval.history*')?'active':''}}">
 
 <div class="icon">
 📄
@@ -753,7 +760,19 @@ Laporan
 </a>
 
 
+<a href="{{route('finance.reconciliation')}}"
 
+class="{{request()->routeIs('finance.reconciliation')?'active':''}}">
+
+<div class="icon">
+
+🏦
+
+</div>
+
+Rekonsiliasi Bank
+
+</a>
 @endif
 
 
@@ -790,8 +809,7 @@ Pengajuan Dana
 
 
 <a href="{{route('expense.myhistory')}}"
-class="{{request()->routeIs('expense.myhistory')?'active':''}}">
-
+class="{{request()->routeIs('expense.myhistory*')?'active':''}}">
 <div class="icon">
 📄
 </div>
@@ -910,22 +928,19 @@ Dashboard Karyawan
 
 <div class="notification">
 
-
-<a href="#" class="notification-btn">
+<button type="button" class="notification-btn" onclick="toggleNotification()">
 
 🔔
 
 @if(auth()->user()->unreadNotifications->count())
 
 <span class="badge">
-
 {{auth()->user()->unreadNotifications->count()}}
-
 </span>
 
 @endif
 
-</a>
+</button>
 
 
 
@@ -938,9 +953,12 @@ Dashboard Karyawan
 
 @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
 
+@if(Route::has('notification.read'))
 
 <a class="notification-item"
 href="{{route('notification.read',$notification->id)}}">
+
+@endif
 
 
 <strong>
@@ -963,6 +981,23 @@ href="{{route('notification.read',$notification->id)}}">
 @endforeach
 
 
+<div class="notification-footer">
+
+
+<form method="POST" action="{{route('notifications.readAll')}}">
+
+@csrf
+
+<button class="read-all">
+
+Tandai semua dibaca
+
+</button>
+
+</form>
+
+
+</div>
 
 @else
 
@@ -982,8 +1017,6 @@ Tidak ada notifikasi
 
 
 </div>
-
-
 
 
 
@@ -1138,15 +1171,14 @@ z-index:999;
 
 
 .system-name{
-
+    
 font-size:18px;
 
 font-weight:700;
 
-color:#6b4f1d;
+color:#1e293b;
 
 }
-
 
 .system-name span{
 
@@ -1199,7 +1231,7 @@ height:38px;
 
 border-radius:50%;
 
-background:#6b4f1d;
+background:#334155;
 
 display:flex;
 
@@ -1339,12 +1371,12 @@ position:relative;
 }
 
 
-
 .notification-btn{
 
 width:38px;
-
 height:38px;
+
+border:none;
 
 border-radius:12px;
 
@@ -1356,10 +1388,51 @@ justify-content:center;
 
 align-items:center;
 
-text-decoration:none;
+cursor:pointer;
+
+position:relative;
+
+font-size:18px;
 
 }
 
+.notification-footer{
+
+border-top:1px solid #e2e8f0;
+
+margin-top:10px;
+
+padding-top:10px;
+
+text-align:right;
+
+}
+
+
+.read-all{
+
+background:none;
+
+border:none;
+
+color:#2563eb;
+
+font-size:12px;
+
+font-weight:600;
+
+cursor:pointer;
+
+padding:5px;
+
+}
+
+
+.read-all:hover{
+
+text-decoration:underline;
+
+}
 
 .badge{
 
@@ -1414,8 +1487,7 @@ border-radius:8px;
 }
 
 
-
-.notification:hover .notification-box{
+.notification-box.show{
 
 display:block;
 
@@ -1547,7 +1619,39 @@ margin-bottom:20px;
 }
 </style>
 
+<script>
 
+function toggleNotification(){
+
+    let box = document.querySelector('.notification-box');
+
+    box.classList.toggle('show');
+
+}
+
+
+// klik luar tutup notif
+
+document.addEventListener('click',function(e){
+
+    let notif=document.querySelector('.notification');
+
+    let box=document.querySelector('.notification-box');
+
+
+    if(
+        notif &&
+        !notif.contains(e.target)
+    ){
+
+        box.classList.remove('show');
+
+    }
+
+});
+
+
+</script>
 </body>
 
 </html>

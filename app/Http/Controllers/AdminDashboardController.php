@@ -34,7 +34,28 @@ class AdminDashboardController extends Controller
 
         $totalProject = Proyek::count();
 
+// PROJECT STATUS BERDASARKAN PROGRESS TASK
 
+$projects = Proyek::with('tugas')->get();
+
+
+$totalProjectBerjalan = $projects->filter(function($project){
+
+    $progress = $project->tugas->avg('progres_persen') ?? 0;
+
+    return $progress > 0 && $progress < 100;
+
+})->count();
+
+
+
+$totalProjectSelesai = $projects->filter(function($project){
+
+    $progress = $project->tugas->avg('progres_persen') ?? 0;
+
+    return $progress >= 100;
+
+})->count();
 
         $totalDivision = Divisi::count();
 
@@ -86,11 +107,7 @@ $totalBudget = Proyek::sum(
 );
 
 
-
-$totalRealisasi = TransaksiDana::sum(
-    'jumlah'
-);
-
+$totalRealisasi = TransaksiDana::sum('jumlah');
 
 
 $sisaBudget = $totalBudget - $totalRealisasi;
@@ -258,28 +275,13 @@ $projectPerformance = Proyek::withCount([
 |--------------------------------------------------------------------------
 */
 
+$projectWarning = Proyek::with('perusahaan')
+    ->get()
+    ->filter(function($project){
 
-$projectWarning = Proyek::with(
+        return $project->persentase_budget >= 75;
 
-    'perusahaan'
-
-)
-
-->get()
-
-->filter(function($project){
-
-    return $project->persentase_budget >= 75;
-
-})
-
-->sortByDesc(
-
-    'persentase_budget'
-
-)
-
-->take(5);
+    });
 
 
 
@@ -299,6 +301,9 @@ $projectWarning = Proyek::with(
                 'totalUser',
 
                 'totalProject',
+
+                'totalProjectBerjalan',
+'totalProjectSelesai',
 
                 'totalDivision',
 

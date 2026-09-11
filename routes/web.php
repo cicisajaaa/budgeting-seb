@@ -10,6 +10,10 @@ use App\Http\Controllers\FinanceDepositController;
 use App\Http\Controllers\DepositDistributionController;
 use App\Http\Controllers\DivisionBalanceController;
 use App\Http\Controllers\FinanceReportController;
+use App\Http\Controllers\FinanceExpenseController;
+use App\Http\Controllers\FinanceDashboardController;
+
+
 
 use App\Http\Controllers\ExpenseRequestController;
 use App\Http\Controllers\ExpenseApprovalController;
@@ -32,7 +36,7 @@ use App\Http\Controllers\DailyTrackerController;
 
 use App\Http\Controllers\EmployeeProjectController;
 use App\Http\Controllers\EmployeeTaskController;
-
+use App\Http\Controllers\EmployeeDashboardController;
 
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use App\Http\Controllers\Owner\OwnerProjectController;
@@ -109,8 +113,14 @@ Route::get('/notification/read/{id}',[
 ])
 ->name('notification.read');
 
-
-
+Route::post(
+    '/notifications/read-all',
+    [
+        NotificationController::class,
+        'markAllRead'
+    ]
+)
+->name('notifications.readAll');
 
 
 
@@ -121,7 +131,7 @@ Route::get('/notification/read/{id}',[
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('role:karyawan,admin')->group(function(){
+Route::middleware('role:karyawan')->group(function(){
 
 
 
@@ -145,7 +155,11 @@ Route::post('/daily-tracker/{task}',[
 ])
 ->name('daily-tracker.store');
 
-
+Route::get(
+    '/employee/dashboard',
+    [EmployeeDashboardController::class,'index']
+)
+->name('employee.dashboard');
 
     Route::get('/my-project',[
         EmployeeProjectController::class,
@@ -176,7 +190,11 @@ Route::post('/daily-tracker/{task}',[
     ])
     ->name('expense.create');
 
-
+Route::get('/expense/divisions/{project}',[
+    ExpenseRequestController::class,
+    'getDivisions'
+])
+->name('expense.divisions');
 
     Route::post('/expense',[
         ExpenseRequestController::class,
@@ -259,9 +277,23 @@ Route::middleware('role:keuangan,owner')->group(function(){
     ->name('expense.reject');
 
 
+Route::post('/expense/{id}/disburse',[
 
+    ExpenseApprovalController::class,
+
+    'disburse'
+
+])
+
+->name('expense.disburse');
 });
 
+
+Route::put('/expense/{id}/cancel-approval',[
+    ExpenseApprovalController::class,
+    'cancelApproval'
+])
+->name('expense.cancelApproval');
 
 
 
@@ -277,6 +309,15 @@ Route::middleware('role:keuangan,owner')->group(function(){
 */
 Route::middleware('role:keuangan')->group(function(){
 
+
+    Route::get(
+    '/finance/dashboard',
+    [
+        FinanceDashboardController::class,
+        'index'
+    ]
+)
+->name('finance.dashboard');
 
     Route::get('/finance/deposit',[
         FinanceDepositController::class,
@@ -385,6 +426,56 @@ Route::middleware('role:keuangan,owner')->group(function(){
         'history'
     ])
     ->name('expense.approval.history');
+
+Route::get(
+    '/finance/reconciliation',
+    [
+        FinanceReportController::class,
+        'reconciliation'
+    ]
+)->name('finance.reconciliation');
+
+
+
+
+Route::get(
+    '/finance/expense',
+    [
+        FinanceExpenseController::class,
+        'index'
+    ]
+)
+->name('finance.expense.index');
+Route::get(
+    '/finance/expense/export/excel',
+    [
+        FinanceExpenseController::class,
+        'exportExcel'
+    ]
+)
+->name('finance.expense.export.excel');
+
+
+
+Route::get(
+    '/finance/expense/export/pdf',
+    [
+        FinanceExpenseController::class,
+        'exportPdf'
+    ]
+)
+->name('finance.expense.export.pdf');
+
+Route::get(
+    '/finance/expense/{transaction}',
+    [
+        FinanceExpenseController::class,
+        'show'
+    ]
+)
+->name('finance.expense.show');
+
+
 
 
 });

@@ -109,8 +109,42 @@ Perusahaan
 
 
 
+<div class="detail-card">
+
+<div class="icon">
+💰
+</div>
 
 
+<div>
+
+<span>
+Total Anggaran
+</span>
+
+
+<h3>
+
+@if($project->total_anggaran > 0)
+
+Rp {{number_format(
+$project->total_anggaran,
+0,
+',',
+'.'
+)}}
+
+@else
+
+Belum Ada Budget
+
+@endif
+
+</h3>
+
+</div>
+
+</div>
 
 
 <div class="detail-card">
@@ -123,14 +157,52 @@ Perusahaan
 <div>
 
 <span>
-Total Budget
+Sisa Budget
+</span>
+
+
+<h3>
+
+@if($project->total_anggaran > 0)
+
+Rp {{number_format(
+$project->sisa_budget,
+0,
+',',
+'.'
+)}}
+
+@else
+
+Belum Ada Budget
+
+@endif
+
+</h3>
+
+
+</div>
+
+</div>
+
+<div class="detail-card">
+
+<div class="icon">
+📉
+</div>
+
+
+<div>
+
+<span>
+Total Realisasi
 </span>
 
 
 <h3>
 
 Rp {{number_format(
-$project->total_anggaran,
+$project->total_realisasi,
 0,
 ',',
 '.'
@@ -142,9 +214,6 @@ $project->total_anggaran,
 </div>
 
 </div>
-
-
-
 
 
 
@@ -196,10 +265,21 @@ Status Project
 
 <h3>
 
-{{$project->status_project}}
+@if($project->progres_keseluruhan >= 100)
+
+Selesai
+
+@elseif($project->progres_keseluruhan > 0)
+
+Berjalan
+
+@else
+
+Belum Mulai
+
+@endif
 
 </h3>
-
 
 </div>
 
@@ -226,11 +306,24 @@ Status Keuangan
 
 
 <h3>
+@if($project->total_anggaran == 0)
 
-{{$project->status_keuangan}}
+Belum Ada Budget
 
+@elseif($project->total_realisasi > $project->total_anggaran)
+
+Over Budget
+
+@elseif($project->total_realisasi > 0)
+
+Berjalan
+
+@else
+
+Belum Digunakan
+
+@endif
 </h3>
-
 
 </div>
 
@@ -453,12 +546,20 @@ Total Anggaran
 
 <strong>
 
+@if($project->total_anggaran > 0)
+
 Rp {{number_format(
 $project->total_anggaran,
 0,
 ',',
 '.'
 )}}
+
+@else
+
+Belum Ada Budget
+
+@endif
 
 </strong>
 
@@ -469,7 +570,62 @@ $project->total_anggaran,
 </tr>
 
 
+<tr>
 
+<td>
+Total Realisasi
+</td>
+
+
+<td>
+
+<strong>
+
+Rp {{number_format(
+$project->total_realisasi,
+0,
+',',
+'.'
+)}}
+
+</strong>
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+Sisa Budget
+</td>
+
+<td>
+
+<strong>
+
+@if($project->total_anggaran > 0)
+
+Rp {{number_format(
+$project->sisa_budget,
+0,
+',',
+'.'
+)}}
+
+@else
+
+Belum Ada Budget
+
+@endif
+
+</strong>
+
+</td>
+
+</tr>
 
 </table>
 
