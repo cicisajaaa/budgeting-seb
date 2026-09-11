@@ -127,7 +127,27 @@
 
 
 
+<div class="finance-card balance-card">
 
+    <div class="finance-icon blue">
+        📊
+    </div>
+
+    <div>
+        <label>
+            Saldo Sistem
+        </label>
+
+        <h2>
+            Rp {{number_format($totalSaldoSistem ?? 0,0,',','.')}}
+        </h2>
+
+        <small>
+            Berdasarkan transaksi
+        </small>
+    </div>
+
+</div>
 
 
 
@@ -158,6 +178,30 @@
 
 </div>
 
+
+<div class="finance-card approval-card">
+
+    <div class="finance-icon orange">
+        📄
+    </div>
+
+    <div>
+
+        <label>
+            Total Transaksi
+        </label>
+
+        <h2>
+            {{$totalTransaction ?? 0}}
+        </h2>
+
+        <small>
+            Aktivitas keuangan
+        </small>
+
+    </div>
+
+</div>
 
 </div>
 
@@ -758,7 +802,7 @@ Audit Monitoring Berjalan
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:14px;
 

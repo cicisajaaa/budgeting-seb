@@ -42,6 +42,15 @@ $totalExpense = TransaksiDana::sum('jumlah');
 // Saldo aktif rekening perusahaan
 $totalSaldoBank = RekeningBank::sum('saldo');
 
+$totalSaldoSistem = RekeningBank::sum('saldo_awal')
+    +
+    DB::table('mutasi_keuangan')
+        ->where('jenis','masuk')
+        ->sum('nominal')
+    -
+    DB::table('mutasi_keuangan')
+        ->where('jenis','keluar')
+        ->sum('nominal');
 
 // Alias untuk card dashboard
 $sisaDana = $totalSaldoBank;
@@ -50,6 +59,12 @@ $sisaDana = $totalSaldoBank;
 // Total saldo seluruh divisi
 $totalSaldoDivisi = SaldoDivisi::sum('saldo');
 
+
+// Total transaksi keuangan
+$totalTransaction =
+    TransaksiDana::count()
+    +
+    SetoranProyek::count();
         /*
         |--------------------------------------------------------------------------
         | APPROVAL
@@ -275,6 +290,10 @@ $cashFlowChart = [
                 'totalSaldoDivisi',
 
                 'totalSaldoBank',
+
+                'totalTransaction',
+                
+                'totalSaldoSistem',
 
                 'totalApprovalPending',
 

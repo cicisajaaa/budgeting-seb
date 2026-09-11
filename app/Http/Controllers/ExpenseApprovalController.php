@@ -267,14 +267,26 @@ if($expenseRequest->status != 'approved')
 
 
 
-            if($bank->saldo < $expenseRequest->jumlah)
-            {
-
-                throw new \Exception(
-                    'Saldo rekening tidak mencukupi'
-                );
-
-            }
+if($bank->saldo < $expenseRequest->jumlah)
+{
+    throw new \Exception(
+        'Saldo rekening '.$bank->nama_bank.' tidak mencukupi. '.
+        'Saldo tersedia Rp '.
+        number_format(
+            $bank->saldo,
+            0,
+            ',',
+            '.'
+        ).
+        ', kebutuhan Rp '.
+        number_format(
+            $expenseRequest->jumlah,
+            0,
+            ',',
+            '.'
+        )
+    );
+}
 
 
 
@@ -289,14 +301,26 @@ if($expenseRequest->status != 'approved')
 
 
 
-            if($balance->saldo < $expenseRequest->jumlah)
-            {
-
-                throw new \Exception(
-                    'Saldo divisi tidak mencukupi'
-                );
-
-            }
+ if($balance->saldo < $expenseRequest->jumlah)
+{
+    throw new \Exception(
+        'Saldo divisi tidak mencukupi. '.
+        'Saldo tersedia Rp '.
+        number_format(
+            $balance->saldo,
+            0,
+            ',',
+            '.'
+        ).
+        ', kebutuhan Rp '.
+        number_format(
+            $expenseRequest->jumlah,
+            0,
+            ',',
+            '.'
+        )
+    );
+}
 $cekTransaksi = TransaksiDana::where(
     'pengajuan_dana_id',
     $expenseRequest->id
