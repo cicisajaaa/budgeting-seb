@@ -9,17 +9,17 @@
     <div>
 
         <div class="welcome-label">
-            RIWAYAT APPROVAL
+            RIWAYAT APPROVAL FINANCE
         </div>
 
 
         <h1>
-            History Pengeluaran Dana
+            Riwayat Approval Pengajuan Dana
         </h1>
 
 
         <p>
-            Monitoring seluruh pengajuan dana yang telah diproses.
+            Monitoring seluruh keputusan persetujuan dana karyawan.
         </p>
 
 
@@ -29,11 +29,9 @@
                 ✓ Approved
             </span>
 
-
             <span>
                 ✓ Rejected
             </span>
-
 
             <span>
                 ✓ Audit Keuangan
@@ -49,39 +47,191 @@
 
 
 
+@if(session('success'))
+
+<div class="success-box">
+    {{session('success')}}
+</div>
+
+@endif
+
+
+
+@if(session('error'))
+
+<div class="error-box">
+    {{session('error')}}
+</div>
+
+@endif
 
 
 
 
 
-
-<!-- FILTER -->
-
-<div class="glass-panel">
+{{-- SUMMARY --}}
 
 
-<div class="panel-title">
+<div class="summary-grid">
 
-🔎 Filter Riwayat Approval
+
+<div class="summary-card">
+
+<div class="summary-icon">
+📄
+</div>
+
+
+<div>
+
+<label>
+Total Diproses
+</label>
+
+
+<h2>
+{{$requests->count()}}
+</h2>
+
+
+<small>
+Seluruh approval
+</small>
+
+
+</div>
+
 
 </div>
 
 
 
 
-<form method="GET"
 
-action="{{route('expense.approval.history')}}"
+<div class="summary-card">
 
-class="filter-grid">
-
-
-
-
+<div class="summary-icon">
+✅
+</div>
 
 
 <div>
 
+<label>
+Approved
+</label>
+
+
+<h2>
+{{$requests->whereIn('status',['approved','selesai'])->count()}}
+</h2>
+
+
+<small>
+Disetujui finance
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon">
+❌
+</div>
+
+
+<div>
+
+<label>
+Rejected
+</label>
+
+
+<h2>
+{{$requests->where('status','rejected')->count()}}
+</h2>
+
+
+<small>
+Ditolak finance
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="summary-card">
+
+<div class="summary-icon">
+💰
+</div>
+
+
+<div>
+
+<label>
+Total Dana
+</label>
+
+
+<h2>
+Rp {{number_format($requests->sum('jumlah'),0,',','.')}}
+</h2>
+
+
+<small>
+Nilai pengajuan
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+{{-- FILTER --}}
+
+
+<div class="glass-panel">
+
+
+<div class="panel-title">
+🔎 Filter Riwayat Approval
+</div>
+
+
+
+<form method="GET"
+action="{{route('expense.approval.history')}}">
+
+
+<div class="filter-grid">
+
+
+
+<div>
 
 <label>
 Cari Pemohon
@@ -89,17 +239,11 @@ Cari Pemohon
 
 
 <input
-
 type="text"
-
 name="search"
-
 placeholder="Nama karyawan..."
-
 value="{{request('search')}}"
-
 >
-
 
 </div>
 
@@ -107,11 +251,7 @@ value="{{request('search')}}"
 
 
 
-
-
-
 <div>
-
 
 <label>
 Project
@@ -126,21 +266,12 @@ Semua Project
 </option>
 
 
-
 @foreach($projects as $project)
 
-
 <option value="{{$project->id}}"
-
-@if(request('proyek_id')==$project->id)
-selected
-@endif
-
->
-
+{{request('proyek_id')==$project->id?'selected':''}}>
 
 {{$project->nama_proyek}}
-
 
 </option>
 
@@ -157,11 +288,7 @@ selected
 
 
 
-
-
-
 <div>
-
 
 <label>
 Divisi
@@ -176,16 +303,11 @@ Semua Divisi
 </option>
 
 
-
 @foreach($divisions as $division)
 
 
 <option value="{{$division->id}}"
-
-@if(request('divisi_id')==$division->id)
-selected
-@endif
->
+{{request('divisi_id')==$division->id?'selected':''}}>
 
 
 {{$division->nama_divisi}}
@@ -204,18 +326,11 @@ selected
 
 
 
-
-
-
-
-
 <div>
-
 
 <label>
 Status
 </label>
-
 
 
 <div class="status-action">
@@ -231,58 +346,35 @@ Semua Status
 
 
 <option value="approved"
-
-@if(request('status')=='approved')
-
-selected
-
-@endif
-
->
-
+{{request('status')=='approved'?'selected':''}}>
 Approved
-
 </option>
-
 
 
 
 <option value="rejected"
-
-@if(request('status')=='rejected')
-
-selected
-
-@endif
-
->
-
+{{request('status')=='rejected'?'selected':''}}>
 Rejected
-
 </option>
 
 
+<option value="selesai"
+{{request('status')=='selesai'?'selected':''}}>
+Dana Dicairkan
+</option>
 
 </select>
 
 
 
-
-
 <button type="submit">
-
 🔎
-
 </button>
 
 
 
-
-
 <a href="{{route('expense.approval.history')}}">
-
 Reset
-
 </a>
 
 
@@ -293,29 +385,32 @@ Reset
 
 
 
-
+</div>
 
 
 </form>
 
 
-
 </div>
 
 
+{{-- TABLE --}}
 
-
-
-
-
-<!-- TABLE -->
 
 <div class="glass-panel">
 
 
-<div class="panel-title">
+<div class="panel-header">
 
-📄 Riwayat Pengajuan Pengeluaran
+<div class="panel-title">
+📄 Riwayat Pengajuan Dana
+</div>
+
+
+<small>
+Daftar pengajuan yang sudah diproses finance
+</small>
+
 
 </div>
 
@@ -346,12 +441,17 @@ Pemohon
 
 
 <th>
+Perusahaan
+</th>
+
+
+<th>
 Project
 </th>
 
 
 <th>
-Jumlah
+Nominal
 </th>
 
 
@@ -370,6 +470,11 @@ Catatan
 </th>
 
 
+<th>
+Aksi
+</th>
+
+
 </tr>
 
 
@@ -377,7 +482,10 @@ Catatan
 
 
 
+
+
 <tbody>
+
 
 
 @forelse($requests as $request)
@@ -390,7 +498,7 @@ Catatan
 
 <td>
 
-{{$request->created_at->format('d M Y')}}
+{{\Carbon\Carbon::parse($request->created_at)->format('d M Y')}}
 
 </td>
 
@@ -427,7 +535,23 @@ Catatan
 <td>
 
 
+{{$request->proyek?->perusahaan?->nama_perusahaan ?? '-'}}
+
+
+</td>
+
+
+
+
+
+<td>
+
+
+<strong>
+
 {{$request->proyek?->nama_proyek ?? '-'}}
+
+</strong>
 
 
 <br>
@@ -449,7 +573,12 @@ Catatan
 <td class="money">
 
 
-Rp {{number_format($request->jumlah,0,',','.')}}
+Rp {{number_format(
+$request->jumlah ?? 0,
+0,
+',',
+'.'
+)}}
 
 
 </td>
@@ -458,35 +587,42 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 
 
-<td>
 
+
+<td>
 
 @if($request->status=='approved')
 
-
-<span class="approved">
-
+<span class="status approved">
 ✓ Approved
-
 </span>
 
+
+@elseif($request->status=='selesai')
+
+<span class="status selesai">
+💰 Dana Dicairkan
+</span>
+
+
+@elseif($request->status=='rejected')
+
+<span class="status rejected">
+✕ Rejected
+</span>
 
 
 @else
 
-
-<span class="rejected">
-
-✕ Rejected
-
+<span class="status pending">
+⏳ Pending
 </span>
-
-
 
 @endif
 
-
 </td>
+
+
 
 
 
@@ -495,7 +631,7 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 <td>
 
 
-{{$request->penyetuju->name ?? '-'}}
+{{$request->penyetuju?->name ?? '-'}}
 
 
 <br>
@@ -506,12 +642,11 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 @if($request->disetujui_pada)
 
-{{\Carbon\Carbon::parse($request->disetujui_pada)->format('d M Y H:i')}}
+{{\Carbon\Carbon::parse($request->disetujui_pada)
+->format('d M Y H:i')}}
+
 
 @endif
-
-
-
 
 
 </small>
@@ -524,15 +659,19 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 
 
+
 <td>
+
 
 @if($request->catatan_persetujuan)
 
+
 <div class="note-box">
 
-{{ $request->catatan_persetujuan }}
+{{$request->catatan_persetujuan}}
 
 </div>
+
 
 @else
 
@@ -540,12 +679,35 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 
 @endif
 
+
 </td>
 
 
 
 
+
+
+
+<td>
+
+
+<a href="{{route('expense.approval.detail',$request->id)}}"
+
+class="detail-btn">
+
+Detail
+
+</a>
+
+
+</td>
+
+
+
+
+
 </tr>
+
 
 
 
@@ -556,9 +718,27 @@ Rp {{number_format($request->jumlah,0,',','.')}}
 <tr>
 
 
-<td colspan="7" class="empty">
+<td colspan="9" class="empty">
 
-Belum ada riwayat approval
+
+<div class="empty-icon">
+📄
+</div>
+
+
+<h3>
+
+Belum Ada Riwayat Approval
+
+</h3>
+
+
+<p>
+
+Belum ada pengajuan yang sudah diproses.
+
+</p>
+
 
 </td>
 
@@ -566,8 +746,9 @@ Belum ada riwayat approval
 </tr>
 
 
-
 @endforelse
+
+
 
 
 </tbody>
@@ -581,11 +762,14 @@ Belum ada riwayat approval
 
 </div>
 
+
 <style>
 
+
 /* ===============================
-HEADER
+WELCOME
 ================================ */
+
 
 .welcome-card{
 
@@ -624,7 +808,7 @@ HEADER
 
     margin:10px 0;
 
-    font-size:24px;
+    font-size:26px;
 
     font-weight:800;
 
@@ -638,17 +822,13 @@ HEADER
 
     margin:0;
 
-    font-size:13px;
-
     color:#64748b;
+
+    font-size:13px;
 
 }
 
 
-
-
-
-/* TAG */
 
 .welcome-tags{
 
@@ -666,9 +846,7 @@ HEADER
 
     background:#f1f5f9;
 
-    color:#334155;
-
-    padding:6px 12px;
+    padding:7px 14px;
 
     border-radius:999px;
 
@@ -676,10 +854,134 @@ HEADER
 
     font-weight:700;
 
+    color:#334155;
+
 }
 
 
 
+
+
+/* ===============================
+SUMMARY
+================================ */
+
+
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.summary-card{
+
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:22px;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 10px 25px rgba(15,23,42,.05);
+
+}
+
+
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    height:4px;
+
+    width:100%;
+
+    background:#334155;
+
+}
+
+
+
+.summary-icon{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:14px;
+
+    background:#f1f5f9;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
+
+}
+
+
+
+.summary-card label{
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+
+.summary-card h2{
+
+    margin:5px 0;
+
+    font-size:22px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.summary-card small{
+
+    font-size:10px;
+
+    color:#94a3b8;
+
+}
 
 
 
@@ -688,6 +990,7 @@ HEADER
 /* ===============================
 PANEL
 ================================ */
+
 
 
 .glass-panel{
@@ -703,8 +1006,7 @@ PANEL
     margin-bottom:20px;
 
     box-shadow:
-
-    0 10px 30px rgba(15,23,42,.06);
+    0 10px 30px rgba(15,23,42,.05);
 
 }
 
@@ -724,8 +1026,13 @@ PANEL
 
 
 
+.panel-header small{
 
+    color:#94a3b8;
 
+    font-size:11px;
+
+}
 
 
 
@@ -734,11 +1041,12 @@ FILTER
 ================================ */
 
 
+
 .filter-grid{
 
     display:grid;
 
-    grid-template-columns:1.3fr 1fr 1fr 1.3fr;
+    grid-template-columns:1.3fr 1fr 1fr 1.2fr;
 
     gap:15px;
 
@@ -752,27 +1060,25 @@ FILTER
 
     display:block;
 
+    margin-bottom:7px;
+
     font-size:11px;
 
     font-weight:700;
 
     color:#64748b;
 
-    margin-bottom:7px;
-
 }
 
 
 
 .filter-grid input,
+
 .filter-grid select{
-
-
-    height:42px;
 
     width:100%;
 
-    padding:0 12px;
+    height:42px;
 
     border-radius:12px;
 
@@ -780,26 +1086,11 @@ FILTER
 
     background:#f8fafc;
 
+    padding:0 12px;
+
     font-size:12px;
 
 }
-
-
-
-.filter-grid input:focus,
-.filter-grid select:focus{
-
-    outline:none;
-
-    border-color:#334155;
-
-    background:white;
-
-}
-
-
-
-
 
 
 
@@ -815,10 +1106,9 @@ FILTER
 
 .status-action button{
 
+    width:42px;
 
     height:42px;
-
-    width:42px;
 
     border:none;
 
@@ -836,7 +1126,6 @@ FILTER
 
 .status-action a{
 
-
     display:flex;
 
     align-items:center;
@@ -845,19 +1134,15 @@ FILTER
 
     background:#f1f5f9;
 
+    color:#334155;
+
     border-radius:12px;
 
     text-decoration:none;
 
     font-size:12px;
 
-    color:#475569;
-
 }
-
-
-
-
 
 
 
@@ -866,6 +1151,7 @@ FILTER
 /* ===============================
 TABLE
 ================================ */
+
 
 
 .table-wrapper{
@@ -880,7 +1166,9 @@ table{
 
     width:100%;
 
-    border-collapse:collapse;
+    border-collapse:separate;
+
+    border-spacing:0;
 
 }
 
@@ -888,18 +1176,19 @@ table{
 
 thead th{
 
-
     background:#f8fafc;
 
-    padding:14px;
+    padding:14px 16px;
 
     font-size:11px;
 
+    font-weight:800;
+
     color:#64748b;
 
-    font-weight:700;
-
     text-align:left;
+
+    border-bottom:1px solid #e2e8f0;
 
 }
 
@@ -907,14 +1196,15 @@ thead th{
 
 tbody td{
 
-
-    padding:14px;
+    padding:16px;
 
     font-size:12px;
 
     color:#334155;
 
     border-bottom:1px solid #f1f5f9;
+
+    vertical-align:middle;
 
 }
 
@@ -928,29 +1218,21 @@ tbody tr:hover{
 
 
 
-small{
+td strong{
 
-    font-size:10px;
+    color:#172033;
+
+}
+
+
+
+td small{
 
     color:#94a3b8;
 
-}
-
-
-
-
-
-
-.money{
-
-    color:#16a34a;
-
-    font-weight:800;
+    font-size:10px;
 
 }
-
-
-
 
 
 
@@ -966,6 +1248,23 @@ small{
 
 
 
+/* ===============================
+MONEY
+================================ */
+
+
+
+.money{
+
+    font-weight:800;
+
+    color:#15803d;
+
+    white-space:nowrap;
+
+}
+
+
 
 
 
@@ -974,11 +1273,12 @@ STATUS
 ================================ */
 
 
-.approved,
-.rejected{
 
+.status{
 
-    padding:6px 12px;
+    display:inline-flex;
+
+    padding:7px 14px;
 
     border-radius:999px;
 
@@ -986,13 +1286,11 @@ STATUS
 
     font-weight:700;
 
-    display:inline-block;
-
 }
 
 
 
-.approved{
+.status.approved{
 
     background:#dcfce7;
 
@@ -1000,13 +1298,29 @@ STATUS
 
 }
 
+.status.selesai{
 
+    background:#dbeafe;
 
-.rejected{
+    color:#1d4ed8;
+
+}
+
+.status.rejected{
 
     background:#fee2e2;
 
-    color:#dc2626;
+    color:#b91c1c;
+
+}
+
+
+
+.status.pending{
+
+    background:#fef3c7;
+
+    color:#92400e;
 
 }
 
@@ -1014,6 +1328,43 @@ STATUS
 
 
 
+/* ===============================
+BUTTON
+================================ */
+
+
+
+.detail-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 16px;
+
+    background:#334155;
+
+    color:white;
+
+    border-radius:10px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+}
+
+
+
+.detail-btn:hover{
+
+    background:#1e293b;
+
+}
 
 
 
@@ -1022,27 +1373,60 @@ NOTE
 ================================ */
 
 
+
 .note-box{
 
+    max-width:220px;
 
-    background:#f8fafc;
-
-    color:#475569;
-
-    padding:8px 12px;
+    padding:10px;
 
     border-radius:12px;
 
+    background:#f8fafc;
+
     font-size:11px;
 
-    max-width:200px;
+    color:#475569;
 
 }
 
 
 
+/* ===============================
+ALERT
+================================ */
 
 
+
+.success-box{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.error-box{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    margin-bottom:20px;
+
+}
 
 
 
@@ -1051,11 +1435,12 @@ EMPTY
 ================================ */
 
 
+
 .empty{
 
     text-align:center;
 
-    padding:35px;
+    padding:40px;
 
     color:#94a3b8;
 
@@ -1063,14 +1448,29 @@ EMPTY
 
 
 
+.empty-icon{
+
+    font-size:40px;
+
+}
 
 
 
+/* ===============================
+RESPONSIVE
+================================ */
 
 
-/* RESPONSIVE */
 
 @media(max-width:1100px){
+
+
+.summary-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
 
 .filter-grid{
 
@@ -1078,11 +1478,20 @@ EMPTY
 
 }
 
+
 }
 
 
 
 @media(max-width:700px){
+
+
+.summary-grid{
+
+    grid-template-columns:1fr;
+
+}
+
 
 .filter-grid{
 
@@ -1091,15 +1500,16 @@ EMPTY
 }
 
 
-.welcome-card{
+.status-action{
 
-    padding:25px;
+    flex-direction:column;
+
+}
+
 
 }
 
-}
+
 
 </style>
-
-
 @endsection

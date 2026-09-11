@@ -11,13 +11,13 @@
 
 <div class="header-left">
 
-
 <div class="header-label">
-
-PENGAJUAN DANA #{{ str_pad($request->id,4,'0',STR_PAD_LEFT) }}
-
+    PENGAJUAN DANA
 </div>
 
+<div class="request-number">
+    {{ $request->nomor_pengajuan ?? 'REQ-'.$request->id }}
+</div>
 
 
 <h1>
@@ -30,7 +30,7 @@ PENGAJUAN DANA #{{ str_pad($request->id,4,'0',STR_PAD_LEFT) }}
 
 <p>
 
-{{ $request->created_at->format('d M Y, H:i') }}
+{{ \Carbon\Carbon::parse($request->created_at)->format('d M Y, H:i') }}
 
 </p>
 
@@ -38,7 +38,7 @@ PENGAJUAN DANA #{{ str_pad($request->id,4,'0',STR_PAD_LEFT) }}
 
 <div class="requester">
 
-{{ $request->pengguna->name ?? 'Pengguna' }}
+{{ $request->pengguna?->name ?? 'Pengguna' }}
 
 </div>
 
@@ -71,40 +71,34 @@ Rp {{ number_format($request->jumlah,0,',','.') }}
 </div>
 
 
-
-
 @if($request->status == 'pending')
 
-
 <div class="status pending">
-
-Menunggu Persetujuan
-
+⏳ Menunggu Persetujuan
 </div>
 
 
 @elseif($request->status == 'approved')
 
-
 <div class="status approved">
-
-Dana Disetujui
-
+✓ Dana Disetujui
 </div>
 
 
-@else
+@elseif($request->status == 'selesai')
 
+<div class="status selesai">
+💰 Dana Dicairkan
+</div>
+
+
+@elseif($request->status == 'rejected')
 
 <div class="status rejected">
-
-Pengajuan Ditolak
-
+✕ Pengajuan Ditolak
 </div>
 
-
 @endif
-
 
 </div>
 
@@ -134,23 +128,45 @@ Pengajuan Ditolak
 
 
 <div class="timeline-step
-
-{{ $request->status != 'pending' ? 'active':'' }}">
+{{ $request->status != 'pending' ? 'active':'' }}>
 
 ✓ Diproses Finance
 
 </div>
 
 
+@if($request->status == 'approved')
 
-<div class="timeline-step
-
-{{ $request->status == 'approved' ? 'active':'' }}">
-
-✓ Dana Disetujui
-
+<div class="timeline-step active">
+✓ Disetujui Finance
 </div>
 
+
+@elseif($request->status == 'selesai')
+
+<div class="timeline-step active">
+✓ Disetujui Finance
+</div>
+
+<div class="timeline-step active">
+💰 Dana Dicairkan
+</div>
+
+
+@elseif($request->status == 'rejected')
+
+<div class="timeline-step rejected-step">
+✕ Pengajuan Ditolak
+</div>
+
+
+@else
+
+<div class="timeline-step">
+○ Menunggu Keputusan
+</div>
+
+@endif
 
 </div>
 
@@ -209,7 +225,7 @@ Perusahaan
 
 <strong>
 
-{{ $request->proyek->perusahaan->nama_perusahaan ?? '-' }}
+{{ $request->proyek?->perusahaan?->nama_perusahaan ?? '-' }}
 
 </strong>
 
@@ -250,7 +266,7 @@ Project
 
 <strong>
 
-{{ $request->proyek->nama_proyek ?? '-' }}
+ {{ $request->proyek?->nama_proyek ?? '-' }}
 
 </strong>
 
@@ -292,7 +308,7 @@ Divisi
 
 <strong>
 
-{{ $request->divisi->nama_divisi ?? '-' }}
+{{ $request->divisi?->nama_divisi ?? '-' }}
 
 </strong>
 
@@ -333,7 +349,7 @@ Jumlah Dana
 
 <strong class="money">
 
-Rp {{ number_format($request->jumlah,0,',','.') }}
+Rp {{number_format($request->jumlah ?? 0,0,',','.')}}
 
 </strong>
 
@@ -375,7 +391,7 @@ Total Budget Project
 
 <strong>
 
-Rp {{ number_format($request->proyek->total_anggaran ?? 0,0,',','.') }}
+Rp {{ number_format($request->proyek?->total_anggaran ?? 0,0,',','.') }}
 
 </strong>
 
@@ -417,8 +433,7 @@ Total Realisasi Dana
 
 <strong>
 
-Rp {{ number_format($request->proyek->total_realisasi ?? 0,0,',','.') }}
-
+Rp {{number_format($request->proyek?->total_realisasi ?? 0,0,',','.')}}
 </strong>
 
 
@@ -460,7 +475,7 @@ Sisa Budget
 <strong class="money">
     
 
-Rp {{ number_format($request->proyek->sisa_budget ?? 0,0,',','.') }}
+Rp {{ number_format($request->proyek?->sisa_budget ?? 0,0,',','.') }}
 
 
 </strong>
@@ -503,7 +518,7 @@ Tanggal Pengajuan
 
 <strong>
 
-{{ $request->created_at->format('d M Y') }}
+{{ \Carbon\Carbon::parse($request->created_at)->format('d M Y') }}
 
 </strong>
 
@@ -616,12 +631,13 @@ FILE
 
 <div>
 
-
-<strong>
+<a 
+href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
+target="_blank">
 
 {{ $request->bukti_pengajuan }}
 
-</strong>
+</a>
 
 
 <small>
@@ -637,12 +653,10 @@ Lampiran transaksi • {{ $fileSize }}
 </div>
 
 
-
+<div class="file-actions">
 
 <button
-
 onclick="openProof()"
-
 class="btn-view">
 
 Lihat Bukti
@@ -650,6 +664,17 @@ Lihat Bukti
 </button>
 
 
+<a 
+href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
+download
+class="btn-download">
+
+Download
+
+</a>
+
+
+</div>
 
 </div>
 
@@ -712,14 +737,10 @@ class="btn-close">
 
 @if(Str::endsWith($request->bukti_pengajuan,'.pdf'))
 
-
 <iframe
+class="proof-frame"
 
-src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}"
-
-width="100%"
-
-height="600">
+src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 </iframe>
 
@@ -729,8 +750,8 @@ height="600">
 
 
 
-<img
-
+<img 
+class="proof-image"
 src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 
@@ -777,10 +798,21 @@ Audit Trail Aktivitas
 
 <div class="audit-card">
 
-
 <div class="audit-icon">
 
+@if(str_contains(strtolower($log->aksi),'create'))
+
++
+
+@elseif(str_contains(strtolower($log->aksi),'approve'))
+
 ✓
+
+@else
+
+!
+
+@endif
 
 </div>
 
@@ -825,8 +857,7 @@ Audit Trail Aktivitas
 
 <div class="audit-meta">
 
-
-{{ $log->pengguna->name ?? 'System' }}
+{{ $log->pengguna?->name ?? 'System' }}
 
 
 •
@@ -900,7 +931,11 @@ Keputusan Finance
 
 
 
-@if($request->status == 'approved')
+@if(
+$request->status == 'approved'
+||
+$request->status == 'selesai'
+)
 
 
 
@@ -1029,7 +1064,7 @@ Diproses Oleh
 
 <strong>
 
-{{ $request->penyetuju->name ?? 'Finance' }}
+{{ $request->penyetuju?->name ?? 'Finance' }}
 
 </strong>
 
@@ -1073,7 +1108,115 @@ Tanggal
 
 
 
+@if($request->transaksiDana && $request->transaksiDana->count())
 
+<div class="card">
+
+<div class="card-title">
+💰 Informasi Pencairan Dana
+</div>
+
+
+<div class="info-grid">
+
+
+<div class="info-item">
+
+<div class="detail-icon">
+🏦
+</div>
+
+<div>
+
+<label>
+Bank
+</label>
+
+<strong>
+{{$request->transaksiDana->first()->rekeningBank->nama_bank ?? '-'}}
+</strong>
+
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="detail-icon">
+💳
+</div>
+
+<div>
+
+<label>
+Nomor Rekening
+</label>
+
+<strong>
+{{$request->transaksiDana->first()->rekeningBank->nomor_rekening ?? '-'}}
+</strong>
+
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="detail-icon">
+📅
+</div>
+
+<div>
+
+<label>
+Tanggal Cair
+</label>
+
+<strong>
+{{$request->transaksiDana->first()->tanggal->format('d M Y H:i')}}
+</strong>
+
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="detail-icon">
+💰
+</div>
+
+<div>
+
+<label>
+Nominal Cair
+</label>
+
+<strong class="money">
+Rp {{number_format(
+$request->transaksiDana->first()->jumlah,
+0,
+',',
+'.'
+)}}
+</strong>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+@endif
 
 
 
@@ -1145,11 +1288,20 @@ function closeProof(){
 }
 
 
+window.onclick=function(e){
+
+let modal=document.getElementById('modalProof');
+
+if(e.target == modal){
+
+modal.style.display='none';
+
+}
+
+}
+
 </script>
 
-
-
-@endsection
 
 
 
@@ -1167,8 +1319,9 @@ GLOBAL
 
 .detail-container{
     width:100%;
+    max-width:1400px;
+    margin:auto;
 }
-
 
 
 /* =================================
@@ -1200,6 +1353,10 @@ HEADER
 }
 
 
+.header-right{
+    width:260px;
+    text-align:right;
+}
 
 .header-label{
 
@@ -1267,21 +1424,31 @@ HEADER
 /* =================================
 AMOUNT
 ================================= */
-
-
-.header-right{
-
-    text-align:right;
-
+.card,
+.detail-header,
+.timeline-box{
+    animation:fade .3s ease;
 }
 
 
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
 
 .amount-card{
-
     background:white;
-
+    
     padding:18px;
+
+    margin-bottom:10px;
 
     border-radius:18px;
 
@@ -1360,7 +1527,13 @@ STATUS
 
 }
 
+.selesai{
 
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
 
 .rejected{
 
@@ -1431,7 +1604,10 @@ TIMELINE
 }
 
 
-
+.rejected-step{
+    background:#fee2e2;
+    color:#b91c1c;
+}
 
 
 
@@ -1490,7 +1666,7 @@ INFO GRID
 
     display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:15px;
 
@@ -1675,7 +1851,12 @@ DOCUMENT
 
 }
 
+.file-actions{
 
+    display:flex;
+
+    gap:10px;
+}
 
 .file-detail small{
 
@@ -1703,8 +1884,26 @@ DOCUMENT
 
     font-weight:700;
 
+    transition:.2s;
 }
 
+
+.btn-view:hover{
+
+    background:#1e293b;
+
+    cursor:pointer;
+}
+
+.btn-download{
+    background:#f1f5f9;
+    color:#334155;
+    padding:9px 18px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:700;
+    text-decoration:none;
+}
 
 
 
@@ -1772,7 +1971,7 @@ AUDIT TRAIL
 
     border-radius:50%;
 
-    background:#16a34a;
+    background:#334155;
 
     color:white;
 
@@ -1985,9 +2184,15 @@ BACK
 
     text-decoration:none;
 
+    margin-top:10px;
+
+    margin-bottom:30px;
+
 }
 
-
+.back:hover{
+    background:#1e293b;
+}
 
 
 
@@ -2017,9 +2222,7 @@ MODAL
 }
 
 
-
 .modal-content{
-
     background:white;
 
     padding:20px;
@@ -2028,8 +2231,25 @@ MODAL
 
     width:80%;
 
+    max-width:900px;
+
+    max-height:90vh;
+
+    overflow:auto;
 }
 
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.modal-head strong{
+    font-size:16px;
+    color:#1e293b;
+}
 
 
 .btn-close{
@@ -2047,9 +2267,58 @@ MODAL
 }
 
 
+.request-number{
+
+margin-top:8px;
+
+font-size:18px;
+
+font-weight:800;
+
+color:#334155;
+
+}
+
+.proof-frame{
+    width:100%;
+    height:600px;
+    border:none;
+    border-radius:15px;
+}
+
+.proof-image{
+
+max-width:100%;
+
+max-height:70vh;
+
+object-fit:contain;
+
+border-radius:16px;
+
+}
 
 
+@media(max-width:1100px){
 
+.info-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+
+@media(max-width:700px){
+
+.info-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
 /* =================================
 RESPONSIVE
 ================================= */
@@ -2086,7 +2355,23 @@ RESPONSIVE
 
 }
 
+.file-actions{
+margin-top:10px;
+}
 
+@media(max-width:900px){
+
+.header-right{
+    width:100%;
+    text-align:left;
+}
+
+}
 }
 
 </style>
+
+
+
+
+@endsection

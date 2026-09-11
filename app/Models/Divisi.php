@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\SaldoDivisi;
 
 class Divisi extends Model
 {
@@ -93,6 +93,17 @@ class Divisi extends Model
         );
 
     }
+
+
+public function saldoDivisi()
+{
+    return $this->hasMany(
+        SaldoDivisi::class,
+        'divisi_id'
+    );
+}
+
+
 
 
 

@@ -9,6 +9,8 @@ use App\Models\SaldoDivisi;
 use App\Models\RekeningBank;
 use App\Models\Proyek;
 use App\Models\Divisi;
+use App\Models\MutasiKeuangan;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,21 +27,24 @@ class ExpenseApprovalController extends Controller
 
     public function index()
     {
-        $requests = PengajuanDana::with([
+$requests = PengajuanDana::with([
 
-            'proyek.perusahaan',
+    'proyek.perusahaan',
+    'divisi',
+    'pengguna'
 
-            'divisi',
+])
 
-            'pengguna'
+->whereIn('status',[
 
-        ])
+    'pending',
+    'approved',
+    'selesai'
 
-        ->where('status','pending')
+])
 
-        ->latest()
-
-        ->get();
+->latest()
+->get();
 
 
 
@@ -62,218 +67,110 @@ class ExpenseApprovalController extends Controller
 
 
 
-
-
-
-
-    public function approve(Request $request,$id)
-    {
-
-
-        $request->validate([
-
-            'rekening_bank_id'=>'required',
-
-            'catatan_persetujuan'=>'nullable|string'
-
-        ]);
-
-
-
-
-        try{
-
-
-            $expenseRequest = DB::transaction(function() use($request,$id){
-
-
-                $expenseRequest = PengajuanDana::findOrFail($id);
-
-
-
-                if($expenseRequest->status != 'pending')
-                {
-
-                    throw new \Exception(
-                        'Pengajuan sudah diproses sebelumnya'
-                    );
-
-                }
-
-
-
-                $bank = RekeningBank::where(
-                    'id',
-                    $request->rekening_bank_id
-                )
-                ->where(
-                    'status',
-                    true
-                )
-                ->firstOrFail();
-
-
-
-                if($bank->saldo < $expenseRequest->jumlah)
-                {
-
-                    throw new \Exception(
-                        'Saldo rekening tidak mencukupi'
-                    );
-
-                }
-
-
-
-
-                $balance = SaldoDivisi::where([
-
-                    'proyek_id'=>$expenseRequest->proyek_id,
-
-                    'divisi_id'=>$expenseRequest->divisi_id
-
-                ])
-
-                ->first();
-
-
-
-
-
-                if(!$balance)
-                {
-
-                    throw new \Exception(
-                        'Saldo divisi project belum tersedia'
-                    );
-
-                }
-
-
-
-
-                if($balance->saldo < $expenseRequest->jumlah)
-                {
-
-                    throw new \Exception(
-                        'Saldo divisi tidak mencukupi'
-                    );
-
-                }
-
-
-
-
-$project = Proyek::findOrFail(
-    $expenseRequest->proyek_id
-);
-
-
-if(
-    $project->sisa_budget < $expenseRequest->jumlah
-)
+public function approve(Request $request, $id)
 {
 
-    throw new \Exception(
-        'Budget proyek tidak mencukupi'
-    );
+    $request->validate([
 
-}
+        'catatan_persetujuan'=>'nullable|string'
 
-                $expenseRequest->update([
+    ]);
 
 
-                    'status'=>'approved',
+    try {
 
 
-                    'disetujui_oleh'=>Auth::id(),
+        $expenseRequest = DB::transaction(function() use($request,$id){
 
 
-                    'disetujui_pada'=>now(),
-
-
-                    'catatan_persetujuan'=>
-
-                    $request->catatan_persetujuan
-
-                    ??
-
-                    'Disetujui oleh '.Auth::user()->name
-
-
-                ]);
+            $expenseRequest = PengajuanDana::findOrFail($id);
 
 
 
+            if($expenseRequest->status != 'pending')
+            {
 
-
-
-                TransaksiDana::create([
-
-
-                    'pengajuan_dana_id'=>$expenseRequest->id,
-
-
-                    'disetujui_oleh'=>Auth::id(),
-
-
-                    'rekening_bank_id'=>$bank->id,
-
-
-                    'jumlah'=>$expenseRequest->jumlah,
-
-
-                    'tanggal'=>now()
-
-
-                ]);
-
-
-
-
-
-
-
-                $bank->decrement(
-
-                    'saldo',
-
-                    $expenseRequest->jumlah
-
+                throw new \Exception(
+                    'Pengajuan sudah diproses sebelumnya'
                 );
 
+            }
 
 
 
+            $project = Proyek::findOrFail(
+                $expenseRequest->proyek_id
+            );
 
-                $balance->decrement(
 
-                    'saldo',
 
-                    $expenseRequest->jumlah
+            if($project->sisa_budget < $expenseRequest->jumlah)
+            {
 
+                throw new \Exception(
+                    'Budget proyek tidak mencukupi'
                 );
 
-            /*
-            |--------------------------------------------------------------------------
-            | AUDIT UPDATE SALDO
-            |--------------------------------------------------------------------------
-            */
+            }
 
-            AuditHelper::create(
 
-            'UPDATE SALDO',
 
-            'Keuangan',
+            $expenseRequest->update([
 
-            'Pencairan dana project '.
-            $project->nama_proyek.
-            ' sebesar Rp '.
+
+                'status'=>'approved',
+
+
+                'disetujui_oleh'=>Auth::id(),
+
+
+                'disetujui_pada'=>now(),
+
+
+                'catatan_persetujuan'=>
+
+                $request->catatan_persetujuan
+
+                ??
+
+                'Disetujui oleh '.Auth::user()->name
+
+
+            ]);
+
+
+
+            return $expenseRequest;
+
+
+        });
+
+
+
+
+
+        AuditHelper::create(
+
+            'APPROVE',
+
+            'Pengajuan Dana',
+
+            'Menyetujui pengajuan dana "' .
+
+            $expenseRequest->judul .
+
+            '" sebesar Rp ' .
+
             number_format(
+
                 $expenseRequest->jumlah,
+
                 0,
+
                 ',',
+
                 '.'
+
             ),
 
             $expenseRequest->id
@@ -282,107 +179,230 @@ if(
 
 
 
-                return $expenseRequest;
 
 
-            });
+        $expenseRequest->pengguna->notify(
 
+            new ExpenseStatusNotification(
 
+                $expenseRequest,
 
+                'approved'
 
+            )
 
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | AUDIT APPROVE
-            |--------------------------------------------------------------------------
-            */
-
-
-            AuditHelper::create(
-
-                'APPROVE',
-
-                'Pengajuan Dana',
-
-                'Menyetujui pengajuan dana "' .
-
-                $expenseRequest->judul .
-
-                '" sebesar Rp ' .
-
-                number_format(
-
-                    $expenseRequest->jumlah,
-
-                    0,
-
-                    ',',
-
-                    '.'
-
-                ),
-
-                $expenseRequest->id
-
-            );
+        );
 
 
 
 
+        return back()->with(
 
+            'success',
 
+            'Pengajuan berhasil disetujui'
 
-            $expenseRequest->pengguna->notify(
-
-                new ExpenseStatusNotification(
-
-                    $expenseRequest,
-
-                    'approved'
-
-                )
-
-            );
-
-
-
-
-
-
-
-            return back()->with(
-
-                'success',
-
-                'Pengajuan berhasil disetujui'
-
-            );
-
-
-
-        }
-
-        catch(\Exception $e)
-
-        {
-
-            return back()->with(
-
-                'error',
-
-                $e->getMessage()
-
-            );
-
-        }
+        );
 
 
     }
 
 
+    catch(\Exception $e)
 
+    {
+
+        return back()->with(
+
+            'error',
+
+            $e->getMessage()
+
+        );
+
+    }
+
+
+}
+
+
+public function disburse(Request $request, $id)
+{
+
+    $request->validate([
+
+        'rekening_bank_id'=>'required'
+
+    ]);
+
+
+    try {
+
+        DB::transaction(function() use($request,$id){
+
+
+            $expenseRequest =
+                PengajuanDana::findOrFail($id);
+
+
+
+if($expenseRequest->status != 'approved')
+{
+    throw new \Exception(
+        'Pengajuan sudah diproses atau belum siap dicairkan'
+    );
+}
+
+
+
+            $bank = RekeningBank::where(
+
+                'id',
+
+                $request->rekening_bank_id
+
+            )
+            ->where('status',true)
+            ->firstOrFail();
+
+
+
+            if($bank->saldo < $expenseRequest->jumlah)
+            {
+
+                throw new \Exception(
+                    'Saldo rekening tidak mencukupi'
+                );
+
+            }
+
+
+
+            $balance = SaldoDivisi::where([
+
+                'proyek_id'=>$expenseRequest->proyek_id,
+
+                'divisi_id'=>$expenseRequest->divisi_id
+
+            ])
+            ->firstOrFail();
+
+
+
+            if($balance->saldo < $expenseRequest->jumlah)
+            {
+
+                throw new \Exception(
+                    'Saldo divisi tidak mencukupi'
+                );
+
+            }
+
+
+
+            $transaksiDana = TransaksiDana::create([
+
+                'pengajuan_dana_id'=>$expenseRequest->id,
+
+                'disetujui_oleh'=>Auth::id(),
+
+                'rekening_bank_id'=>$bank->id,
+
+                'jumlah'=>$expenseRequest->jumlah,
+
+                'tanggal'=>now()
+
+            ]);
+
+
+
+            MutasiKeuangan::create([
+
+                'rekening_bank_id'=>$bank->id,
+
+                'jenis'=>'keluar',
+
+                'nominal'=>$expenseRequest->jumlah,
+
+                'referensi_type'=>'transaksi_dana',
+
+                'referensi_id'=>$transaksiDana->id,
+
+                'tanggal'=>now(),
+
+                'keterangan'=>'Pencairan dana '.$expenseRequest->judul,
+
+                'created_by'=>Auth::id()
+
+            ]);
+
+
+
+            $bank->decrement(
+                'saldo',
+                $expenseRequest->jumlah
+            );
+
+
+            $balance->decrement(
+                'saldo',
+                $expenseRequest->jumlah
+            );
+
+
+$expenseRequest->update([
+
+    'status'=>'selesai',
+
+    'disetujui_pada'=>now()
+
+]);
+
+
+            AuditHelper::create(
+
+    'DISBURSE',
+
+    'Pengajuan Dana',
+
+    'Pencairan dana pengajuan "' .
+    $expenseRequest->judul .
+    '" sebesar Rp ' .
+    number_format(
+        $expenseRequest->jumlah,
+        0,
+        ',',
+        '.'
+    ),
+
+    $expenseRequest->id
+
+);
+
+        });
+
+
+
+        return back()->with(
+            'success',
+            'Dana berhasil dicairkan'
+        );
+
+
+    }
+
+    catch(\Exception $e)
+
+    {
+
+        return back()->with(
+            'error',
+            $e->getMessage()
+        );
+
+    }
+
+}
 
 
 
@@ -558,19 +578,14 @@ if(
 
         ])
 
-        ->whereIn(
-
-            'status',
-
-            [
-
-                'approved',
-
-                'rejected'
-
-            ]
-
-        );
+->whereIn(
+    'status',
+    [
+        'approved',
+        'rejected',
+        'selesai'
+    ]
+);
 
 
 
@@ -712,51 +727,104 @@ if(
     | DETAIL APPROVAL FINANCE
     |--------------------------------------------------------------------------
     */
+public function detail($id)
+{
 
-    public function detail($id)
-    {
+    $expense = PengajuanDana::with([
 
+        'proyek.perusahaan',
 
-        $expense = PengajuanDana::with([
+        'proyek',
 
-            'proyek.perusahaan',
+        'divisi',
 
-            'proyek',
+        'pengguna',
 
-            'divisi',
+        'penyetuju',
 
-            'pengguna',
+        'auditLogs',
 
-            'penyetuju',
+        'transaksiDana.rekeningBank'
 
-            'auditLogs'
+    ])
 
-
-        ])
-
-        ->findOrFail($id);
-
+    ->findOrFail($id);
 
 
 
+    AuditHelper::create(
+
+        'VIEW',
+
+        'Pengajuan Dana',
+
+        'Melihat detail pengajuan dana: '.$expense->judul,
+
+        $expense->id
+
+    );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | AUDIT VIEW
-        |--------------------------------------------------------------------------
-        */
+
+    return view(
+
+        'expense.detail',
+
+        [
+
+            'request' => $expense
+
+        ]
+
+    );
+
+}
+
+
+public function cancelApproval($id)
+{
+
+    try {
+
+        $expenseRequest = PengajuanDana::findOrFail($id);
+
+
+        if($expenseRequest->status != 'approved')
+        {
+            return back()->with(
+                'error',
+                'Pengajuan tidak dapat dibatalkan'
+            );
+        }
+
+
+
+        $expenseRequest->update([
+
+            'status'=>'pending',
+
+            'disetujui_oleh'=>null,
+
+            'disetujui_pada'=>null,
+
+            'catatan_persetujuan'=>null
+
+        ]);
+
+
 
 
         AuditHelper::create(
 
-            'VIEW',
+            'CANCEL APPROVAL',
 
             'Pengajuan Dana',
 
-            'Melihat detail pengajuan dana: '.$expense->judul,
+            'Membatalkan persetujuan pengajuan dana "' .
+            $expenseRequest->judul .
+            '" karena dana belum dapat dicairkan',
 
-            $expense->id
+            $expenseRequest->id
 
         );
 
@@ -764,18 +832,50 @@ if(
 
 
 
+        $expenseRequest->pengguna->notify(
+
+            new ExpenseStatusNotification(
+
+                $expenseRequest,
+
+                'pending'
+
+            )
+
+        );
 
 
-        return view(
 
-        'expense.detail',
 
-        [
-            'request' => $expense
-        ]
 
-    );
+        return back()->with(
+
+            'success',
+
+            'Persetujuan berhasil dibatalkan dan dikembalikan ke pending'
+
+        );
+
 
     }
+
+
+    catch(\Exception $e)
+
+    {
+
+        return back()->with(
+
+            'error',
+
+            $e->getMessage()
+
+        );
+
+    }
+
+
+}
+
 
 }

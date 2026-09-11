@@ -170,6 +170,8 @@ Divisi
 
 name="divisi_id"
 
+id="divisi_id"
+
 required>
 
 
@@ -199,7 +201,19 @@ required>
 </div>
 
 
+<div id="division-info" class="project-info" style="display:none">
 
+    <div>
+        <label>
+            Saldo Divisi Tersedia
+        </label>
+
+        <strong id="division-balance">
+            -
+        </strong>
+    </div>
+
+</div>
 
 
 
@@ -1409,8 +1423,89 @@ preview.style.display='none';
 
 });
 
+const divisionSelect =
+document.getElementById('divisi_id');
 
 
+projectSelect.addEventListener(
+'change',
+function(){
+
+let projectId = this.value;
+
+
+divisionSelect.innerHTML =
+`
+<option value="">
+-- Pilih Divisi --
+</option>
+`;
+
+
+if(!projectId){
+    return;
+}
+
+
+fetch(
+'/expense/divisions/' + projectId
+)
+.then(response => response.json())
+.then(data => {
+
+
+data.forEach(item => {
+
+
+divisionSelect.innerHTML +=
+`
+ <option 
+value="${item.divisi.id}"
+data-saldo="${item.saldo}">
+${item.divisi.nama_divisi}
+- Saldo Rp ${Number(item.saldo).toLocaleString('id-ID')}
+</option>
+`;
+
+
+});
+
+
+
+});
+
+
+});
+
+
+const divisionInfo =
+document.getElementById('division-info');
+
+const divisionBalance =
+document.getElementById('division-balance');
+
+
+divisionSelect.addEventListener(
+'change',
+function(){
+
+let option =
+this.options[this.selectedIndex];
+
+if(!option.value)
+{
+    divisionInfo.style.display='none';
+    return;
+}
+
+divisionInfo.style.display='grid';
+
+divisionBalance.innerHTML =
+'Rp ' +
+Number(option.dataset.saldo)
+.toLocaleString('id-ID');
+
+});
 </script>
 
 

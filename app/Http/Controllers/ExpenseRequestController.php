@@ -58,8 +58,7 @@ class ExpenseRequestController extends Controller
         )
         ->with('perusahaan')
         ->get();
-        $divisions = Divisi::all();
-
+        $divisions = collect();
 
 
         return view(
@@ -562,6 +561,18 @@ if($project->sisa_budget < $request->jumlah)
 
     }
 
+
+    public function getDivisions(Proyek $project)
+{
+    $divisions = $project
+        ->saldoDivisi()
+        ->with('divisi')
+        ->where('saldo', '>', 0)
+        ->get();
+
+
+    return response()->json($divisions);
+}
 
 
 }

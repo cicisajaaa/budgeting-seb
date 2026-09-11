@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
-
 
 
 class NotificationController extends Controller
@@ -14,7 +12,6 @@ class NotificationController extends Controller
     public function index()
     {
 
-
         $notifications = auth()
             ->user()
             ->notifications()
@@ -22,16 +19,12 @@ class NotificationController extends Controller
             ->get();
 
 
-
         return view(
             'notification.index',
             compact('notifications')
         );
 
-
     }
-
-
 
 
 
@@ -40,41 +33,51 @@ class NotificationController extends Controller
     public function read($id)
     {
 
-
         $notification = auth()
             ->user()
             ->notifications()
             ->findOrFail($id);
 
 
-
-
-
         $notification->markAsRead();
-
-
 
 
 
         if(isset($notification->data['url']))
         {
 
-
             return redirect(
                 $notification->data['url']
             );
-
 
         }
 
 
 
-
-
         return back();
 
-
     }
+
+
+    public function markAllRead()
+{
+
+    auth()
+        ->user()
+        ->unreadNotifications
+        ->markAsRead();
+
+
+    return back()
+        ->with(
+            'success',
+            'Semua notifikasi sudah dibaca'
+        );
+
+}
+
+
+
 
 
 
