@@ -242,7 +242,7 @@ Saldo Bersih
 
 
 <h2>
-Rp {{number_format($balance,0,',','.')}}
+Rp {{number_format($totalBankSaldo,0,',','.')}}
 </h2>
 
 
