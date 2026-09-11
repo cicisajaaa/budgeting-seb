@@ -22,6 +22,8 @@ class PengajuanDana extends Model
 protected $fillable = [
 
 
+    'nomor_pengajuan',
+
     'pengguna_id',
 
     'proyek_id',
@@ -217,4 +219,58 @@ public function auditLogs()
     ->latest();
 
 }
+
+
+
+protected static function boot()
+{
+    parent::boot();
+
+
+    static::creating(function($pengajuan){
+
+        $tanggal = now()->format('Ym');
+
+
+        $last = self::where(
+            'nomor_pengajuan',
+            'like',
+            'REQ-'.$tanggal.'%'
+        )
+        ->latest('id')
+        ->first();
+
+
+        if($last){
+
+            $number = intval(
+                substr(
+                    $last->nomor_pengajuan,
+                    -4
+                )
+            ) + 1;
+
+        } else {
+
+            $number = 1;
+
+        }
+
+
+        $pengajuan->nomor_pengajuan =
+            'REQ-' .
+            $tanggal .
+            '-' .
+            str_pad(
+                $number,
+                4,
+                '0',
+                STR_PAD_LEFT
+            );
+
+    });
+}
+
+
+
 }

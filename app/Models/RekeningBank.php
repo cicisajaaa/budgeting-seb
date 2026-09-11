@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\SetoranProyek;
 use App\Models\TransaksiDana;
-
+use App\Models\MutasiKeuangan;
 
 class RekeningBank extends Model
 {
@@ -17,32 +17,32 @@ class RekeningBank extends Model
 
 
 
-    protected $fillable = [
+protected $fillable = [
+    'nama_bank',
 
-        'nama_bank',
+    'nomor_rekening',
 
-        'nomor_rekening',
+    'nama_pemilik',
 
-        'nama_pemilik',
+    'saldo',
 
-        'saldo',
+    'saldo_awal',
 
-        'status'
-
-    ];
-
-
+    'status'
+];
 
 
 
-    protected $casts = [
 
-        'saldo' => 'decimal:2',
 
-        'status' => 'boolean'
+protected $casts = [
 
-    ];
+    'saldo' => 'decimal:2',
 
+    'saldo_awal' => 'decimal:2',
+
+    'status' => 'boolean'
+];
 
 
 
@@ -95,5 +95,32 @@ class RekeningBank extends Model
     }
 
 
+public function saldoAktual()
+{
+    $masuk = $this->mutasiKeuangan()
+        ->where('jenis','masuk')
+        ->sum('nominal');
+
+
+    $keluar = $this->mutasiKeuangan()
+        ->where('jenis','keluar')
+        ->sum('nominal');
+
+
+    return $this->saldo_awal
+        + $masuk
+        - $keluar;
+}
+
+
+
+
+public function mutasiKeuangan()
+{
+    return $this->hasMany(
+        MutasiKeuangan::class,
+        'rekening_bank_id'
+    );
+}
 
 }
