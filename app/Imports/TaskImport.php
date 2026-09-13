@@ -205,6 +205,21 @@ class TaskImport implements ToModel, WithHeadingRow, SkipsEmptyRows
                 });
         }
 
+
+                if ($karyawan && $karyawan->divisi_id != $divisi->id) {
+
+            $this->failed++;
+
+            $this->errors[] =
+                "Karyawan tidak sesuai dengan divisi: "
+                . $namaPIC
+                . " | Divisi: "
+                . $namaDivisi
+                . " | Task: "
+                . $namaTugas;
+
+            return null;
+        }
         /*
         |--------------------------------------------------------------------------
         | 7. PRIORITAS

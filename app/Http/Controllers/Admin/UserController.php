@@ -664,20 +664,29 @@ if($request->password)
 
 
     }
-    else
+else
+{
 
+    if($user->karyawan)
     {
 
-        Karyawan::where(
+        if(
+            $user->karyawan->tugas()->count() > 0 ||
+            $user->karyawan->aktivitasTugas()->count() > 0
+        )
+        {
+            return back()
+                ->withErrors([
+                    'role'=>'User tidak dapat dilepas dari data karyawan karena masih memiliki histori tugas.'
+                ]);
+        }
 
-            'pengguna_id',
 
-            $user->id
-
-        )->delete();
-
+        $user->karyawan->delete();
 
     }
+
+}
 
 
 
@@ -747,7 +756,28 @@ public function destroy(User $user)
 
 
 
-    $user->delete();
+    if($user->karyawan)
+{
+
+    if(
+        $user->karyawan->tugas()->count() > 0 ||
+        $user->karyawan->aktivitasTugas()->count() > 0 ||
+        $user->karyawan->pengajuanDana()->count() > 0
+    )
+    {
+        return back()
+            ->withErrors([
+                'user'=>'User tidak dapat dihapus karena masih memiliki histori transaksi atau tugas.'
+            ]);
+    }
+
+
+    $user->karyawan->delete();
+
+}
+
+
+$user->delete();
 
 
 

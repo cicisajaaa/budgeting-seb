@@ -4,293 +4,639 @@ namespace App\Http\Controllers;
 
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\TransaksiDana;
 
+use App\Models\TransaksiDana;
 
 use App\Exports\FinanceExpenseExport;
 
 use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
+
+use App\Helpers\AuditHelper;
+
+
 
 class FinanceExpenseController extends Controller
 {
-    /**
-     * Daftar transaksi pengeluaran dana
-     */
-   public function index(Request $request)
-{
-
-    $query = TransaksiDana::with([
-
-        'pengajuanDana.proyek.perusahaan',
-        'pengajuanDana.divisi',
-        'pengajuanDana.pengguna',
-        'rekeningBank',
-
-    ]);
 
 
-
-    if($request->start_date && $request->end_date)
+    private function checkRole()
     {
 
-        $query->whereBetween(
-            'tanggal',
-            [
-                $request->start_date,
-                $request->end_date
-            ]
-        );
+        if(
+            !in_array(
+                auth()->user()->role,
+                [
+                    'admin',
+                    'keuangan',
+                    'owner'
+                ]
+            )
+        )
+        {
+            abort(403);
+        }
 
     }
 
 
 
 
- $transactions = $query
-    ->latest('tanggal')
-    ->get();
-
-
-
-    $totalExpense = $transactions->sum('jumlah');
-
-
-
-    $totalTransaction = $transactions->count();
 
 
 
 
 
-    $totalProject = $transactions
-
-        ->pluck('pengajuanDana.proyek_id')
-
-        ->unique()
-
-        ->count();
+    /*
+    |--------------------------------------------------------------------------
+    | DAFTAR TRANSAKSI PENGELUARAN
+    |--------------------------------------------------------------------------
+    */
 
 
+    public function index(Request $request)
+    {
 
-
-
-    $totalBank = $transactions
-
-        ->pluck('rekening_bank_id')
-
-        ->unique()
-
-        ->count();
+        $this->checkRole();
 
 
 
+        $query = TransaksiDana::with([
+
+            'pengajuanDana.proyek.perusahaan',
+
+            'pengajuanDana.divisi',
+
+            'pengajuanDana.pengguna',
+
+            'rekeningBank'
+
+        ]);
 
 
-    return view(
 
-        'finance.expense.index',
 
-        compact(
 
-            'transactions',
 
-            'totalExpense',
 
-            'totalTransaction',
-
-            'totalProject',
-
-            'totalBank',
-
-            'request'
-
+        if(
+            $request->filled('start_date')
+            &&
+            $request->filled('end_date')
         )
+        {
 
-    );
+            $query->whereBetween(
+
+                'tanggal',
+
+                [
+
+                    $request->start_date,
+
+                    $request->end_date
+
+                ]
+
+            );
+
+        }
 
 
-}
+
+
+
+
+
+        $transactions = $query
+
+            ->latest('tanggal')
+
+            ->get();
+
+
+
+
+
+
+
+        $totalExpense = $transactions->sum(
+            'jumlah'
+        );
+
+
+
+        $totalTransaction = $transactions->count();
+
+
+
+
+
+        $totalProject = $transactions
+
+            ->pluck(
+                'pengajuanDana.proyek_id'
+            )
+
+            ->unique()
+
+            ->count();
+
+
+
+
+
+
+
+        $totalBank = $transactions
+
+            ->pluck(
+                'rekening_bank_id'
+            )
+
+            ->unique()
+
+            ->count();
+
+
+
+
+
+
+
+        return view(
+
+            'finance.expense.index',
+
+            compact(
+
+                'transactions',
+
+                'totalExpense',
+
+                'totalTransaction',
+
+                'totalProject',
+
+                'totalBank',
+
+                'request'
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL TRANSAKSI
+    |--------------------------------------------------------------------------
+    */
 
 
     public function show($id)
-{
+    {
 
-    $transaction = TransaksiDana::with([
 
-        'pengajuanDana.proyek.perusahaan',
-
-        'pengajuanDana.divisi',
-
-        'pengajuanDana.pengguna',
-
-        'rekeningBank',
-
-        'penyetuju'
-
-    ])
-
-    ->findOrFail($id);
+        $this->checkRole();
 
 
 
-    return view(
 
-        'finance.expense.show',
+        $transaction = TransaksiDana::with([
 
-        compact('transaction')
+            'pengajuanDana.proyek.perusahaan',
 
-    );
+            'pengajuanDana.divisi',
 
-}
+            'pengajuanDana.pengguna',
 
-public function exportExcel()
-{
+            'rekeningBank',
 
+            'penyetuju'
 
-return Excel::download(
+        ])
 
-new FinanceExpenseExport,
-
-'laporan-pengeluaran-dana.xlsx'
-
-);
+        ->findOrFail($id);
 
 
-}
 
 
-public function exportPdf(Request $request)
-{
-    $query = TransaksiDana::with([
-        'pengajuanDana.proyek.perusahaan',
-        'pengajuanDana.divisi',
-        'pengajuanDana.pengguna',
-        'rekeningBank',
-        'penyetuju',
-    ]);
 
-    /*
-    |--------------------------------------------------------------------------
-    | FILTER TANGGAL
-    |--------------------------------------------------------------------------
-    */
 
-    if ($request->filled('start_date')) {
-        $query->whereDate('tanggal', '>=', $request->start_date);
-    }
 
-    if ($request->filled('end_date')) {
-        $query->whereDate('tanggal', '<=', $request->end_date);
+        return view(
+
+            'finance.expense.show',
+
+            compact(
+                'transaction'
+            )
+
+        );
+
+
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | AMBIL TRANSAKSI
-    |--------------------------------------------------------------------------
-    */
-
-    $transactions = $query
-        ->latest('tanggal')
-        ->get();
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL
-    |--------------------------------------------------------------------------
-    */
 
-    $totalExpense = $transactions->sum('jumlah');
 
-    $totalTransaction = $transactions->count();
+
+
+
+
 
 
     /*
     |--------------------------------------------------------------------------
-    | NAMA PERUSAHAAN
+    | EXPORT EXCEL
     |--------------------------------------------------------------------------
     */
 
-    $companyName = 'NAMA PERUSAHAAN';
 
-    $firstTransaction = $transactions->first();
+    public function exportExcel(Request $request)
+    {
 
-    if (
-        $firstTransaction &&
-        $firstTransaction->pengajuanDana &&
-        $firstTransaction->pengajuanDana->proyek &&
-        $firstTransaction->pengajuanDana->proyek->perusahaan
-    ) {
-        $companyName =
-            $firstTransaction
+
+        $this->checkRole();
+
+
+
+
+        AuditHelper::create(
+
+            'EXPORT',
+
+            'Laporan Finance',
+
+            'Export laporan pengeluaran dana Excel'
+
+        );
+
+
+
+
+
+
+
+        return Excel::download(
+
+            new FinanceExpenseExport(
+
+                $request->start_date,
+
+                $request->end_date
+
+            ),
+
+            'laporan-pengeluaran-dana.xlsx'
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT PDF
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function exportPdf(Request $request)
+    {
+
+
+        $this->checkRole();
+
+
+
+
+        $query = TransaksiDana::with([
+
+            'pengajuanDana.proyek.perusahaan',
+
+            'pengajuanDana.divisi',
+
+            'pengajuanDana.pengguna',
+
+            'rekeningBank',
+
+            'penyetuju',
+
+        ]);
+
+
+
+
+
+
+
+
+        if(
+            $request->filled('start_date')
+        )
+        {
+
+            $query->whereDate(
+
+                'tanggal',
+
+                '>=',
+
+                $request->start_date
+
+            );
+
+        }
+
+
+
+
+
+
+        if(
+            $request->filled('end_date')
+        )
+        {
+
+            $query->whereDate(
+
+                'tanggal',
+
+                '<=',
+
+                $request->end_date
+
+            );
+
+        }
+
+
+
+
+
+
+
+        $transactions = $query
+
+            ->latest('tanggal')
+
+            ->get();
+
+
+
+
+
+
+
+        $totalExpense = $transactions->sum(
+            'jumlah'
+        );
+
+
+
+        $totalTransaction = $transactions->count();
+
+
+
+
+
+
+
+        $companyName = config(
+            'app.name'
+        );
+
+
+
+
+
+
+
+
+        $firstTransaction = $transactions->first();
+
+
+
+        if(
+
+            $firstTransaction &&
+
+            $firstTransaction->pengajuanDana &&
+
+            $firstTransaction->pengajuanDana->proyek &&
+
+            $firstTransaction->pengajuanDana->proyek->perusahaan
+
+        )
+        {
+
+
+            $companyName =
+
+                $firstTransaction
+
                 ->pengajuanDana
+
                 ->proyek
+
                 ->perusahaan
+
                 ->nama_perusahaan
-                ?? 'NAMA PERUSAHAAN';
-    }
+
+                ??
+                $companyName;
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PERIODE
-    |--------------------------------------------------------------------------
-    */
+        }
 
-    if ($request->filled('start_date') && $request->filled('end_date')) {
 
-        $period = \Carbon\Carbon::parse($request->start_date)
+
+
+
+
+
+
+
+        if(
+
+            $request->filled('start_date')
+
+            &&
+
+            $request->filled('end_date')
+
+        )
+        {
+
+
+            $period =
+
+            \Carbon\Carbon::parse(
+                $request->start_date
+            )
             ->format('d-m-Y')
-            . ' s/d ' .
-            \Carbon\Carbon::parse($request->end_date)
+
+            .' s/d '.
+
+            \Carbon\Carbon::parse(
+                $request->end_date
+            )
             ->format('d-m-Y');
 
-    } elseif ($request->filled('start_date')) {
 
-        $period =
-            'Mulai ' .
-            \Carbon\Carbon::parse($request->start_date)
-                ->format('d-m-Y');
+        }
 
-    } elseif ($request->filled('end_date')) {
+        elseif(
+            $request->filled('start_date')
+        )
+        {
 
-        $period =
-            'Sampai ' .
-            \Carbon\Carbon::parse($request->end_date)
-                ->format('d-m-Y');
 
-    } else {
+            $period =
 
-        $period = 'Seluruh Periode Transaksi';
+            'Mulai '.
+
+            \Carbon\Carbon::parse(
+                $request->start_date
+            )
+            ->format('d-m-Y');
+
+
+        }
+
+        elseif(
+            $request->filled('end_date')
+        )
+        {
+
+
+            $period =
+
+            'Sampai '.
+
+            \Carbon\Carbon::parse(
+                $request->end_date
+            )
+            ->format('d-m-Y');
+
+
+        }
+
+        else
+        {
+
+
+            $period =
+            'Seluruh Periode Transaksi';
+
+
+        }
+
+
+
+
+
+
+
+
+        AuditHelper::create(
+
+            'EXPORT',
+
+            'Laporan Finance',
+
+            'Export laporan pengeluaran dana PDF'
+
+        );
+
+
+
+
+
+
+
+
+
+        $pdf = Pdf::loadView(
+
+            'finance.expense.pdf',
+
+            compact(
+
+                'transactions',
+
+                'totalExpense',
+
+                'totalTransaction',
+
+                'companyName',
+
+                'period'
+
+            )
+
+        );
+
+
+
+
+
+
+
+
+        $pdf->setPaper(
+
+            'a4',
+
+            'landscape'
+
+        );
+
+
+
+
+
+
+
+
+        return $pdf->download(
+
+            'laporan-pengeluaran-dana.pdf'
+
+        );
+
 
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PDF
-    |--------------------------------------------------------------------------
-    */
 
-    $pdf = Pdf::loadView(
-        'finance.expense.pdf',
-        compact(
-            'transactions',
-            'totalExpense',
-            'totalTransaction',
-            'companyName',
-            'period'
-        )
-    );
-
-
-    $pdf->setPaper('a4', 'landscape');
-
-
-    return $pdf->download(
-        'laporan-pengeluaran-dana.pdf'
-    );
-}
 }

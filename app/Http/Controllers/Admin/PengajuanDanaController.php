@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 
 use App\Models\PengajuanDana;
 use App\Models\TransaksiDana;
 
+use App\Helpers\AuditHelper;
+
 use Illuminate\Http\Request;
+
 
 
 class PengajuanDanaController extends Controller
@@ -20,9 +24,7 @@ class PengajuanDanaController extends Controller
         $pengajuan = PengajuanDana::with([
 
             'pengguna',
-
             'proyek',
-
             'divisi'
 
         ])
@@ -30,6 +32,7 @@ class PengajuanDanaController extends Controller
         ->latest()
 
         ->get();
+
 
 
         return view(
@@ -45,10 +48,57 @@ class PengajuanDanaController extends Controller
 
 
 
+
+
+
     public function approve(
         PengajuanDana $pengajuan
     )
     {
+
+
+        if($pengajuan->status != 'pending')
+        {
+
+            return back()
+                ->withErrors([
+
+                    'pengajuan'=>
+                    'Pengajuan sudah diproses.'
+
+                ]);
+
+        }
+
+
+
+
+
+
+        if(
+            TransaksiDana::where(
+                'pengajuan_dana_id',
+                $pengajuan->id
+            )
+            ->exists()
+        )
+        {
+
+            return back()
+                ->withErrors([
+
+                    'pengajuan'=>
+                    'Transaksi dana sudah dibuat.'
+
+                ]);
+
+        }
+
+
+
+
+
+
 
 
         $pengajuan->update([
@@ -60,6 +110,11 @@ class PengajuanDanaController extends Controller
             'disetujui_pada'=>now()
 
         ]);
+
+
+
+
+
 
 
 
@@ -77,7 +132,31 @@ class PengajuanDanaController extends Controller
 
 
 
-        return back()->with(
+
+
+
+
+
+        AuditHelper::create(
+
+            'Approve Pengajuan Dana',
+
+            'Finance',
+
+            'Menyetujui pengajuan dana ID '.$pengajuan->id
+
+        );
+
+
+
+
+
+
+
+
+        return back()
+
+        ->with(
 
             'success',
 
@@ -91,11 +170,39 @@ class PengajuanDanaController extends Controller
 
 
 
+
+
+
+
+
+
+
+
     public function reject(
         Request $request,
         PengajuanDana $pengajuan
     )
     {
+
+
+        if($pengajuan->status != 'pending')
+        {
+
+            return back()
+                ->withErrors([
+
+                    'pengajuan'=>
+                    'Pengajuan sudah diproses.'
+
+                ]);
+
+        }
+
+
+
+
+
+
 
 
         $pengajuan->update([
@@ -112,7 +219,31 @@ class PengajuanDanaController extends Controller
 
 
 
-        return back()->with(
+
+
+
+
+
+        AuditHelper::create(
+
+            'Reject Pengajuan Dana',
+
+            'Finance',
+
+            'Menolak pengajuan dana ID '.$pengajuan->id
+
+        );
+
+
+
+
+
+
+
+
+        return back()
+
+        ->with(
 
             'success',
 
@@ -122,6 +253,8 @@ class PengajuanDanaController extends Controller
 
 
     }
+
+
 
 
 }

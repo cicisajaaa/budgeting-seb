@@ -556,7 +556,11 @@ public function import(Request $request)
 
             $project->users()->count() > 0 ||
 
-            $project->setoranProyek()->count() > 0
+            $project->setoranProyek()->count() > 0 ||
+
+            $project->pengajuanDana()->count() > 0 ||
+
+            $project->transaksiDana()->count() > 0
 
 
         ){

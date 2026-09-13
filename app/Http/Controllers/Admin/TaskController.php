@@ -334,7 +334,20 @@ $task->load([
         ]);
 
 
+if ($request->filled('karyawan_id') && $request->filled('divisi_id')) {
 
+    $karyawan = Karyawan::findOrFail($request->karyawan_id);
+
+    if ($karyawan->divisi_id != $request->divisi_id) {
+
+        return back()
+            ->withErrors([
+                'karyawan_id' => 'Karyawan yang dipilih tidak sesuai dengan divisi.'
+            ])
+            ->withInput();
+
+    }
+}
 
         $task = $project->tugas()->create([
 

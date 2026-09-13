@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Project;
+use App\Models\Proyek;
 use App\Models\User;
 
 
@@ -14,7 +14,7 @@ class ProjectMemberController extends Controller
 {
 
 
-    public function index(Project $project)
+    public function index(Proyek $project)
     {
 
 
@@ -52,24 +52,30 @@ class ProjectMemberController extends Controller
 
     public function store(
         Request $request,
-        Project $project
+        Proyek $project
     )
     {
 
 
-        $request->validate([
+$request->validate([
+    'user_id' => [
+        'required',
+        'exists:users,id',
+        'integer'
+    ]
+]);
 
-            'user_id'=>'required'
+$user = User::where('id', $request->user_id)
+    ->where('role', 'karyawan')
+    ->firstOrFail();
 
-        ]);
 
 
-
-        $project
-            ->users()
-            ->syncWithoutDetaching([
-                $request->user_id
-            ]);
+ $project
+    ->users()
+    ->syncWithoutDetaching([
+        $user->id
+    ]);
 
 
 
@@ -88,7 +94,7 @@ class ProjectMemberController extends Controller
 
 
     public function destroy(
-        Project $project,
+        Proyek $project,
         User $user
     )
     {

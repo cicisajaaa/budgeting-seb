@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Owner;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
+
 use App\Http\Controllers\Controller;
+
 
 use App\Models\PengajuanDana;
 
@@ -13,33 +18,86 @@ use App\Models\PengajuanDana;
 use App\Helpers\AuditHelper;
 
 
+use App\Notifications\ExpenseStatusNotification;
+
+
+
 
 class OwnerApprovalController extends Controller
 {
 
 
+    private function checkRole()
+    {
+
+        if(
+            Auth::user()->role !== 'owner'
+        )
+        {
+            abort(403);
+        }
+
+    }
+
+
+
+
+
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | DAFTAR PENGAJUAN MENUNGGU APPROVAL OWNER
+    | DAFTAR PENGAJUAN OWNER
     |--------------------------------------------------------------------------
     */
 
-public function index()
-{
-    $requests = PengajuanDana::with([
-        'pengguna',
-        'proyek',
-        'divisi'
-    ])
-    ->latest()
-    ->get();
+
+    public function index()
+    {
 
 
-    return view(
-        'owner.approval.index',
-        compact('requests')
-    );
-} 
+        $this->checkRole();
+
+
+
+
+        $requests = PengajuanDana::with([
+
+            'pengguna',
+
+            'proyek',
+
+            'divisi'
+
+        ])
+
+        ->latest()
+
+        ->get();
+
+
+
+
+
+
+        return view(
+
+            'owner.approval.index',
+
+            compact(
+                'requests'
+            )
+
+        );
+
+
+    }
+
+
+
+
+
 
 
 
@@ -54,12 +112,25 @@ public function index()
     public function detail($id)
     {
 
-$expense = PengajuanDana::with([
-    'pengguna',
-    'proyek',
-    'divisi'
-])
-->findOrFail($id);
+
+        $this->checkRole();
+
+
+
+
+        $expense = PengajuanDana::with([
+
+            'pengguna',
+
+            'proyek',
+
+            'divisi'
+
+        ])
+
+        ->findOrFail($id);
+
+
 
 
 
@@ -68,7 +139,9 @@ $expense = PengajuanDana::with([
 
             'owner.approval.detail',
 
-            compact('expense')
+            compact(
+                'expense'
+            )
 
         );
 
@@ -83,10 +156,9 @@ $expense = PengajuanDana::with([
 
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | APPROVE PENGAJUAN
+    | APPROVE
     |--------------------------------------------------------------------------
     */
 
@@ -94,49 +166,42 @@ $expense = PengajuanDana::with([
     public function approve($id)
     {
 
-$expense = PengajuanDana::findOrFail($id);
+
+        $this->checkRole();
 
 
 
 
 
-        $expense->update([
+        try {
 
 
-            'status'=>'approved',
+            $expense = DB::transaction(function() use($id){
 
 
-            'disetujui_oleh'=>auth()->id(),
 
 
-            'disetujui_pada'=>now()
+                $expense = PengajuanDana::lockForUpdate()
 
-
-        ]);
-
+                    ->findOrFail($id);
 
 
 
 
 
 
+                if(
+                    $expense->status !== 'pending'
+                )
+                {
 
-        AuditHelper::create(
+                    throw new \Exception(
 
-            'Approve Expense Request',
+                        'Pengajuan sudah diproses.'
 
-            'Approval Dana',
+                    );
 
-            'Owner menyetujui pengajuan dana sebesar Rp '.
-
-            number_format(
-                $expense->jumlah,
-                0,
-                ',',
-                '.'
-            )
-
-        );
+                }
 
 
 
@@ -145,19 +210,129 @@ $expense = PengajuanDana::findOrFail($id);
 
 
 
-        return redirect()
+                $expense->update([
 
-            ->route(
-                'owner.approval'
-            )
 
-            ->with(
+                    'status'=>'approved',
 
-                'success',
 
-                'Pengajuan dana berhasil disetujui'
+                    'disetujui_oleh'=>Auth::id(),
+
+
+                    'disetujui_pada'=>now()
+
+
+                ]);
+
+
+
+
+
+
+
+                return $expense;
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+            AuditHelper::create(
+
+                'APPROVE',
+
+                'Approval Dana',
+
+                'Owner menyetujui pengajuan dana '.
+
+                $expense->judul.
+
+                ' sebesar Rp '.
+
+                number_format(
+
+                    $expense->jumlah,
+
+                    0,
+
+                    ',',
+
+                    '.'
+
+                ),
+
+                $expense->id
 
             );
+
+
+
+
+
+
+
+
+
+            $expense->pengguna->notify(
+
+                new ExpenseStatusNotification(
+
+                    $expense,
+
+                    'approved'
+
+                )
+
+            );
+
+
+
+
+
+
+
+
+            return redirect()
+
+                ->route(
+                    'owner.approval'
+                )
+
+                ->with(
+
+                    'success',
+
+                    'Pengajuan dana berhasil disetujui'
+
+                );
+
+
+
+        }
+
+
+        catch(\Exception $e)
+
+        {
+
+            return back()
+
+                ->with(
+
+                    'error',
+
+                    $e->getMessage()
+
+                );
+
+        }
 
 
     }
@@ -172,7 +347,7 @@ $expense = PengajuanDana::findOrFail($id);
 
     /*
     |--------------------------------------------------------------------------
-    | REJECT PENGAJUAN
+    | REJECT
     |--------------------------------------------------------------------------
     */
 
@@ -184,30 +359,18 @@ $expense = PengajuanDana::findOrFail($id);
         $id
 
     )
-
     {
 
 
-        $expense = PengajuanDana::findOrFail($id);
+        $this->checkRole();
 
 
 
 
 
-        $expense->update([
+        $request->validate([
 
-
-            'status'=>'rejected',
-
-
-            'disetujui_oleh'=>auth()->id(),
-
-
-            'disetujui_pada'=>now(),
-
-
-            'catatan_persetujuan'=>$request->catatan
-
+            'catatan'=>'required|string'
 
         ]);
 
@@ -218,22 +381,19 @@ $expense = PengajuanDana::findOrFail($id);
 
 
 
-        AuditHelper::create(
+        try {
 
-            'Reject Expense Request',
 
-            'Approval Dana',
+            $expense = DB::transaction(function() use(
+                $request,
+                $id
+            ){
 
-            'Owner menolak pengajuan dana sebesar Rp '.
 
-            number_format(
-                $expense->jumlah,
-                0,
-                ',',
-                '.'
-            )
 
-        );
+                $expense = PengajuanDana::lockForUpdate()
+
+                    ->findOrFail($id);
 
 
 
@@ -241,23 +401,162 @@ $expense = PengajuanDana::findOrFail($id);
 
 
 
+                if(
+                    $expense->status !== 'pending'
+                )
+                {
 
-        return redirect()
+                    throw new \Exception(
 
-            ->route(
-                'owner.approval'
-            )
+                        'Pengajuan sudah diproses.'
 
-            ->with(
+                    );
 
-                'success',
+                }
 
-                'Pengajuan dana ditolak'
+
+
+
+
+
+
+                $expense->update([
+
+
+
+                    'status'=>'rejected',
+
+
+
+                    'disetujui_oleh'=>Auth::id(),
+
+
+
+                    'disetujui_pada'=>now(),
+
+
+
+                    'catatan_persetujuan'=>
+
+                        $request->catatan
+
+
+
+                ]);
+
+
+
+
+
+
+
+                return $expense;
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+            AuditHelper::create(
+
+                'REJECT',
+
+                'Approval Dana',
+
+                'Owner menolak pengajuan dana '.
+
+                $expense->judul.
+
+                ' sebesar Rp '.
+
+                number_format(
+
+                    $expense->jumlah,
+
+                    0,
+
+                    ',',
+
+                    '.'
+
+                ),
+
+                $expense->id
 
             );
 
 
+
+
+
+
+
+
+
+            $expense->pengguna->notify(
+
+                new ExpenseStatusNotification(
+
+                    $expense,
+
+                    'rejected'
+
+                )
+
+            );
+
+
+
+
+
+
+
+
+            return redirect()
+
+                ->route(
+                    'owner.approval'
+                )
+
+                ->with(
+
+                    'success',
+
+                    'Pengajuan dana ditolak'
+
+                );
+
+
+
+        }
+
+
+        catch(\Exception $e)
+
+        {
+
+            return back()
+
+                ->with(
+
+                    'error',
+
+                    $e->getMessage()
+
+                );
+
+        }
+
+
     }
+
 
 
 }

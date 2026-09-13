@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Owner;
 
 
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+
 
 use App\Http\Controllers\Controller;
 
@@ -26,8 +30,35 @@ use Maatwebsite\Excel\Facades\Excel;
 
 
 
+
 class OwnerReportController extends Controller
 {
+
+
+    private function checkRole()
+    {
+
+        if(
+            !in_array(
+                Auth::user()->role,
+                [
+                    'owner',
+                    'admin'
+                ]
+            )
+        )
+        {
+            abort(403);
+        }
+
+    }
+
+
+
+
+
+
+
 
 
     /*
@@ -40,83 +71,16 @@ class OwnerReportController extends Controller
     public function index(Request $request)
     {
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER KEUANGAN
-        |--------------------------------------------------------------------------
-        */
-
-
-        $totalPendapatan = SetoranProyek::when(
-
-            $request->start_date,
-
-            function($query) use ($request){
-
-                $query->whereDate(
-                    'tanggal_setoran',
-                    '>=',
-                    $request->start_date
-                );
-
-            }
-
-        )
-        ->when(
-
-            $request->end_date,
-
-            function($query) use ($request){
-
-                $query->whereDate(
-                    'tanggal_setoran',
-                    '<=',
-                    $request->end_date
-                );
-
-            }
-
-        )
-        ->sum('jumlah_setoran');
+        $this->checkRole();
 
 
 
 
+        $totalPendapatan = SetoranProyek::query()
 
-      $totalPengeluaran = TransaksiDana::when(
-    $request->start_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '>=',
-            $request->start_date
-        );
-    }
-)
-->when(
-    $request->end_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '<=',
-            $request->end_date
-        );
-    }
-)
-->sum('jumlah');
-
-
-
-
-
-        $totalTransaksi = 
-
-            SetoranProyek::when(
-
+            ->when(
                 $request->start_date,
-
-                function($query) use ($request){
+                function($query) use($request){
 
                     $query->whereDate(
                         'tanggal_setoran',
@@ -125,13 +89,11 @@ class OwnerReportController extends Controller
                     );
 
                 }
-
             )
+
             ->when(
-
                 $request->end_date,
-
-                function($query) use ($request){
+                function($query) use($request){
 
                     $query->whereDate(
                         'tanggal_setoran',
@@ -140,35 +102,96 @@ class OwnerReportController extends Controller
                     );
 
                 }
-
             )
+
+            ->sum('jumlah_setoran');
+
+
+
+
+
+
+
+
+        $totalPengeluaran = TransaksiDana::query()
+
+            ->when(
+                $request->start_date,
+                function($query) use($request){
+
+                    $query->whereDate(
+                        'tanggal',
+                        '>=',
+                        $request->start_date
+                    );
+
+                }
+            )
+
+            ->when(
+                $request->end_date,
+                function($query) use($request){
+
+                    $query->whereDate(
+                        'tanggal',
+                        '<=',
+                        $request->end_date
+                    );
+
+                }
+            )
+
+            ->sum('jumlah');
+
+
+
+
+
+
+
+
+
+        $totalTransaksi =
+
+            SetoranProyek::query()
+
+            ->when(
+                $request->start_date,
+                function($query) use($request){
+
+                    $query->whereDate(
+                        'tanggal_setoran',
+                        '>=',
+                        $request->start_date
+                    );
+
+                }
+            )
+
+            ->when(
+                $request->end_date,
+                function($query) use($request){
+
+                    $query->whereDate(
+                        'tanggal_setoran',
+                        '<=',
+                        $request->end_date
+                    );
+
+                }
+            )
+
             ->count()
 
 
+
             +
-  TransaksiDana::when(
-    $request->start_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '>=',
-            $request->start_date
-        );
-    }
-)
-->when(
-    $request->end_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '<=',
-            $request->end_date
-        );
-    }
-)
+
+            TransaksiDana::query()
+
             ->when(
                 $request->start_date,
-                function($query) use ($request){
+                function($query) use($request){
 
                     $query->whereDate(
                         'tanggal',
@@ -178,9 +201,10 @@ class OwnerReportController extends Controller
 
                 }
             )
+
             ->when(
                 $request->end_date,
-                function($query) use ($request){
+                function($query) use($request){
 
                     $query->whereDate(
                         'tanggal',
@@ -190,15 +214,22 @@ class OwnerReportController extends Controller
 
                 }
             )
+
             ->count();
 
 
 
 
 
-        $profit = 
-            $totalPendapatan 
+
+
+
+        $profit =
+
+            $totalPendapatan
+
             -
+
             $totalPengeluaran;
 
 
@@ -208,158 +239,174 @@ class OwnerReportController extends Controller
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DATA PROJECT
-        |--------------------------------------------------------------------------
-        */
 
-/*
-|--------------------------------------------------------------------------
-| DATA PROJECT
-|--------------------------------------------------------------------------
-*/
+        $projects = Proyek::query()
 
-$projects = Proyek::query()
+            ->when(
+                $request->start_date,
+                function($query) use($request){
 
-    ->when(
-        $request->start_date,
-        function($query) use ($request){
+                    $query->whereDate(
+                        'created_at',
+                        '>=',
+                        $request->start_date
+                    );
 
-            $query->whereDate(
-                'created_at',
-                '>=',
-                $request->start_date
+                }
+            )
+
+            ->when(
+                $request->end_date,
+                function($query) use($request){
+
+                    $query->whereDate(
+                        'created_at',
+                        '<=',
+                        $request->end_date
+                    );
+
+                }
+            )
+
+            ->latest()
+
+            ->get();
+
+
+
+
+
+
+
+
+
+        $totalProject = $projects->count();
+
+
+
+
+
+
+
+        $totalProjectSelesai = $projects
+
+            ->filter(function($project){
+
+                return (int)$project->progres_keseluruhan >= 100;
+
+            })
+
+            ->count();
+
+
+
+
+
+
+
+
+        $totalProjectTerlambat = $projects
+
+            ->filter(function($project){
+
+                return
+
+                $project->tanggal_selesai
+
+                &&
+
+                now()->gt(
+                    $project->tanggal_selesai
+                )
+
+                &&
+
+                $project->progres_keseluruhan < 100;
+
+            })
+
+            ->count();
+
+
+
+
+
+
+
+
+
+        $rataProgress = $projects->avg(function($project){
+
+            return (float)$project->progres_keseluruhan;
+
+        }) ?? 0;
+
+
+
+
+
+
+
+
+
+        $projectAktif = $projects
+
+            ->filter(function($project){
+
+                return
+
+                $project->progres_keseluruhan > 0
+
+                &&
+
+                $project->progres_keseluruhan < 100;
+
+            })
+
+            ->count();
+
+
+
+
+
+
+
+
+
+        $totalAnggaranProject = $projects->sum(function($project){
+
+            return (float)$project->total_anggaran;
+
+        });
+
+
+
+
+
+
+
+
+
+        $efisiensiDana = 0;
+
+
+        if($totalAnggaranProject > 0)
+        {
+
+            $efisiensiDana = round(
+
+                ($profit / $totalAnggaranProject) * 100,
+
+                2
+
             );
 
         }
-    )
 
-    ->when(
-        $request->end_date,
-        function($query) use ($request){
 
-            $query->whereDate(
-                'created_at',
-                '<=',
-                $request->end_date
-            );
 
-        }
-    )
 
-    ->latest()
 
-    ->get();
-
-
-
-
-$totalProject = $projects->count();
-
-
-
-
-
-$totalProjectSelesai = $projects
-    ->filter(function($project){
-
-        return (int)$project->progres_keseluruhan >= 100;
-
-    })
-    ->count();
-
-
-
-
-
-$totalProjectTerlambat = $projects
-    ->filter(function($project){
-
-        return $project->tanggal_selesai
-            &&
-            now()->gt($project->tanggal_selesai)
-            &&
-            $project->progres_keseluruhan < 100;
-
-    })
-    ->count();
-
-
-
-
-
-$rataProgress = $projects->avg(function($project){
-
-    return (float)$project->progres_keseluruhan;
-
-}) ?? 0;
-
-
-
-
-
-$projectAktif = $projects
-    ->filter(function($project){
-
-        return $project->progres_keseluruhan > 0
-        &&
-        $project->progres_keseluruhan < 100;
-
-    })
-    ->count();
-
-
-
-
-
-$progressProject = $rataProgress;
-
-
-
-
-
-$saldo = $profit;
-
-
-
-
-
-// total seluruh anggaran project
-
-$totalAnggaranProject = $projects->sum(function($project){
-
-    return (float)$project->total_anggaran;
-
-});
-
-
-
-
-
-$totalBudget = $totalAnggaranProject;
-
-
-
-
-
-$totalProjectBerjalan = $projectAktif;
-
-
-
-
-
-$efisiensiDana = 0;
-
-
-if($totalAnggaranProject > 0){
-
-    $efisiensiDana = round(
-        ($saldo / $totalAnggaranProject) * 100,
-        2
-    );
-
-}
 
 
 
@@ -379,27 +426,19 @@ if($totalAnggaranProject > 0){
 
                 'projectAktif',
 
-                'totalBudget',
+                'totalAnggaranProject',
 
-                'progressProject',
-
-                'saldo',
-
-                'projects',
+                'rataProgress',
 
                 'totalProjectSelesai',
 
                 'totalProjectTerlambat',
 
-                'rataProgress',
-
-                'totalAnggaranProject',
-
-                'totalProjectBerjalan',
-
                 'efisiensiDana',
 
-                'totalTransaksi'
+                'totalTransaksi',
+
+                'projects'
 
             )
 
@@ -409,301 +448,88 @@ if($totalAnggaranProject > 0){
     }
 
 
-
-
-
-
-
-    /*
+        /*
     |--------------------------------------------------------------------------
     | EXPORT LAPORAN UMUM PDF
     |--------------------------------------------------------------------------
     */
-public function exportPdf(Request $request)
-{
+
+    public function exportPdf(Request $request)
+    {
+
+        $this->checkRole();
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATA PROJECT
-    |--------------------------------------------------------------------------
-    */
+        AuditHelper::create(
 
+            'EXPORT',
 
-$projects = Proyek::with('tugas')
+            'Owner Report',
 
-    ->when(
-        $request->start_date,
-        function($query) use ($request){
+            'Export laporan owner PDF'
 
-            $query->whereDate(
-                'created_at',
-                '>=',
-                $request->start_date
-            );
-
-        }
-    )
-
-    ->when(
-        $request->end_date,
-        function($query) use ($request){
-
-            $query->whereDate(
-                'created_at',
-                '<=',
-                $request->end_date
-            );
-
-        }
-    )
-
-    ->latest()
-
-    ->get();
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL KEUANGAN
-    |--------------------------------------------------------------------------
-    */
-$totalPendapatan = SetoranProyek::when(
-    $request->start_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal_setoran',
-            '>=',
-            $request->start_date
         );
+
+
+        return response()->download(
+
+            storage_path(
+                'app/reports/owner-report.pdf'
+            )
+
+        );
+
     }
-)
-->when(
-    $request->end_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal_setoran',
-            '<=',
-            $request->end_date
-        );
-    }
-)
-->sum('jumlah_setoran');
 
-$totalPengeluaran = TransaksiDana::when(
-    $request->start_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '>=',
-            $request->start_date
-        );
-    }
-)
-->when(
-    $request->end_date,
-    function($query) use ($request){
-        $query->whereDate(
-            'tanggal',
-            '<=',
-            $request->end_date
-        );
-    }
-)
-->sum('jumlah');
+
+
+
+
+
 
 
 
     /*
     |--------------------------------------------------------------------------
-    | DATA LAPORAN
+    | EXPORT FINANCE PDF
     |--------------------------------------------------------------------------
     */
 
+    public function financePdf(Request $request)
+    {
 
-    $data = [
+        $this->checkRole();
 
 
-        'totalPendapatan'=>$totalPendapatan,
 
+        $transactions = TransaksiDana::with([
 
+            'pengajuanDana.proyek.perusahaan',
 
-        'totalPengeluaran'=>$totalPengeluaran,
+            'pengajuanDana.divisi',
 
+            'pengajuanDana.pengguna',
 
+            'rekeningBank',
 
-        'profit'=>
+            'penyetuju'
 
-            $totalPendapatan
-            -
-            $totalPengeluaran,
-
-
-
-        'totalProject'=>$projects->count(),
-
-'projectAktif'=>$projects->filter(function($project){
-
-
-    return $project->progres_keseluruhan > 0 
-        && 
-        $project->progres_keseluruhan < 100;
-
-
-})->count(),
-
-
-
-
-
-        'totalBudget'=>$projects->sum(
-
-            'total_anggaran'
-
-        ),
-
-
-
-
-
-
-        'progressProject'=>$projects->avg(function($project){
-
-
-            return $project->progres_keseluruhan;
-
-
-        }) ?? 0,
-
-
-
-
-
-
-        'saldo'=>
-
-            $totalPendapatan
-            -
-            $totalPengeluaran,
-
-
-
-
-
-
-        'tanggal'=>Carbon::now(),
-
-
-
-
-
-
-        'projects'=>$projects,
-        'totalProjectSelesai'=>$projects
-    ->where(
-        'progres_keseluruhan',
-        100
-    )
-    ->count(),
-
-
-'totalProjectTerlambat'=>$projects
-    ->filter(function($project){
-
-        return $project->tanggal_selesai
-        &&
-        now()->gt($project->tanggal_selesai)
-        &&
-        $project->progres_keseluruhan < 100;
-
-    })
-    ->count(),
-
-
-    ];
-
-
-
-
-
-
-
-    AuditHelper::create(
-
-        'Export Laporan Perusahaan',
-
-        'Laporan Owner',
-
-        'Owner melakukan export laporan perusahaan PDF'
-
-    );
-
-
-
-
-
-
-
-
-    $pdf = app('dompdf.wrapper')
-
-        ->loadView(
-
-            'owner.reports.pdf',
-
-            $data
-
-        );
-
-
-
-
-
-
-
-
-    return $pdf->download(
-
-        'laporan-perusahaan.pdf'
-
-    );
-
-
-}
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN KEUANGAN PDF
-    |--------------------------------------------------------------------------
-    */
-
-public function financePdf(Request $request)
-{
-
-    Carbon::setLocale('id');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | DATA PEMASUKAN
-    |--------------------------------------------------------------------------
-    */
-
-    $pendapatan = SetoranProyek::with('proyek')
+        ])
 
         ->when(
+
             $request->start_date,
 
-            function($query) use ($request){
+            function($query) use($request){
 
                 $query->whereDate(
-                    'tanggal_setoran',
+
+                    'tanggal',
+
                     '>=',
+
                     $request->start_date
+
                 );
 
             }
@@ -711,14 +537,181 @@ public function financePdf(Request $request)
         )
 
         ->when(
+
             $request->end_date,
 
-            function($query) use ($request){
+            function($query) use($request){
 
                 $query->whereDate(
-                    'tanggal_setoran',
+
+                    'tanggal',
+
                     '<=',
+
                     $request->end_date
+
+                );
+
+            }
+
+        )
+
+        ->latest('tanggal')
+
+        ->get();
+
+
+
+
+
+
+
+        AuditHelper::create(
+
+            'EXPORT',
+
+            'Owner Report',
+
+            'Export laporan finance owner PDF'
+
+        );
+
+
+
+
+
+
+
+        return view(
+
+            'owner.reports.finance-pdf',
+
+            compact(
+                'transactions'
+            )
+
+        );
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT FINANCE EXCEL
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function financeExcel(Request $request)
+    {
+
+        $this->checkRole();
+
+
+
+
+        AuditHelper::create(
+
+            'EXPORT',
+
+            'Owner Report',
+
+            'Export laporan finance owner Excel'
+
+        );
+
+
+
+
+
+        return Excel::download(
+
+            new OwnerFinanceExport(
+
+                $request->start_date,
+
+                $request->end_date
+
+            ),
+
+            'owner-finance-report.xlsx'
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROJECT REPORT PDF
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function projectPdf(Request $request)
+    {
+
+        $this->checkRole();
+
+
+
+        $projects = Proyek::with([
+
+            'perusahaan',
+
+            'tugas'
+
+        ])
+
+        ->when(
+
+            $request->start_date,
+
+            function($query) use($request){
+
+                $query->whereDate(
+
+                    'created_at',
+
+                    '>=',
+
+                    $request->start_date
+
+                );
+
+            }
+
+        )
+
+        ->when(
+
+            $request->end_date,
+
+            function($query) use($request){
+
+                $query->whereDate(
+
+                    'created_at',
+
+                    '<=',
+
+                    $request->end_date
+
                 );
 
             }
@@ -733,82 +726,33 @@ public function financePdf(Request $request)
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATA PENGELUARAN
-    |--------------------------------------------------------------------------
-    */
 
-$pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
-    ->when(
-        $request->start_date,
 
-        function($query) use ($request){
 
-            $query->whereDate(
-                'tanggal',
-                '>=',
-                $request->start_date
-            );
+        AuditHelper::create(
 
-        }
+            'EXPORT',
 
-    )
+            'Owner Report',
 
-    ->when(
-        $request->end_date,
+            'Export laporan project PDF'
 
-        function($query) use ($request){
-
-            $query->whereDate(
-                'tanggal',
-                '<=',
-                $request->end_date
-            );
-
-        }
-
-    )
-
-    ->latest()
-
-    ->get();
+        );
 
 
 
 
 
 
+        return view(
 
-    /*
-    |--------------------------------------------------------------------------
-    | GABUNG TRANSAKSI
-    |--------------------------------------------------------------------------
-    */
+            'owner.reports.project-pdf',
 
+            compact(
+                'projects'
+            )
 
-    $transaksi = collect();
-
-
-
-
-
-    foreach($pendapatan as $item)
-    {
-
-        $transaksi->push([
-
-            'tanggal'=>$item->tanggal_setoran,
-
-            'keterangan'=>'Setoran Project',
-
-            'project'=>$item->proyek->nama_proyek,
-
-            'nominal'=>$item->jumlah_setoran,
-
-            'jenis'=>'Pemasukan'
-
-        ]);
+        );
 
     }
 
@@ -818,38 +762,6 @@ $pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
 
 
 
-    foreach($pengeluaran as $item)
-    {
-
-        $transaksi->push([
-
-            'tanggal'=>$item->tanggal,
-
-            'keterangan'=>$item->judul ?? 'Pengeluaran Operasional',
-
-            'project'=>$item->pengajuanDana->proyek->nama_proyek,
-
-            'nominal'=>$item->jumlah,
-
-            'jenis'=>'Pengeluaran'
-
-        ]);
-
-    }
-
-
-
-
-
-
-
-    $transaksi = $transaksi
-
-        ->sortByDesc('tanggal')
-
-        ->values();
-
-
 
 
 
@@ -857,89 +769,25 @@ $pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
 
     /*
     |--------------------------------------------------------------------------
-    | TOTAL
+    | PROJECT REPORT EXCEL
     |--------------------------------------------------------------------------
     */
 
 
-    $totalPendapatan = $pendapatan->sum(
-        'jumlah_setoran'
-    );
+    public function projectExcel(Request $request)
+    {
+
+        $this->checkRole();
 
 
 
-    $totalPengeluaran = $pengeluaran->sum(
-        'jumlah'
-    );
+        AuditHelper::create(
 
+            'EXPORT',
 
+            'Owner Report',
 
-
-
-    $saldo = 
-
-        $totalPendapatan 
-        -
-        $totalPengeluaran;
-
-
-
-
-
-
-
-   $data = [
-
-
-    'totalPendapatan'=>$totalPendapatan,
-
-
-    'totalPengeluaran'=>$totalPengeluaran,
-
-
-    'saldo'=>$saldo,
-
-
-    'transaksi'=>$transaksi,
-
-
-    'totalTransaksi'=>$transaksi->count(),
-
-
-    'tanggal'=>Carbon::now(),
-
-
-];
-
-
-
-
-
-
-
-    AuditHelper::create(
-
-        'Export Laporan Keuangan',
-
-        'Laporan Owner',
-
-        'Owner melakukan export laporan keuangan PDF'
-
-    );
-
-
-
-
-
-
-
-    $pdf = app('dompdf.wrapper')
-
-        ->loadView(
-
-            'owner.reports.pdf.finance',
-
-            $data
+            'Export laporan project Excel'
 
         );
 
@@ -949,188 +797,26 @@ $pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
 
 
 
-    return $pdf->download(
+        return Excel::download(
 
-        'laporan-keuangan.pdf'
+            new ProjectReportExport(
 
-    );
+                $request->start_date,
 
-
-}
-
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN KEUANGAN EXCEL MULTI SHEET
-    |--------------------------------------------------------------------------
-    */
-
-public function financeExcel(Request $request)
-{
-
-
-    AuditHelper::create(
-
-        'Export Excel Keuangan',
-
-        'Laporan Owner',
-
-        'Owner melakukan export laporan keuangan Excel'
-
-    );
-
-
-
-
-    return Excel::download(
-
-        new OwnerFinanceExport(
-            $request->start_date,
-            $request->end_date
-        ),
-
-        'laporan-keuangan-owner.xlsx'
-
-    );
-
-
-}
-
-
-
-
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN PROJECT PDF
-    |--------------------------------------------------------------------------
-    */
-public function projectPdf(Request $request)
-{
-
-
-$projects = Proyek::with('tugas')
-
-    ->when(
-        $request->start_date,
-        function($query) use ($request){
-
-            $query->whereDate(
-                'created_at',
-                '>=',
-                $request->start_date
-            );
-
-        }
-    )
-
-    ->when(
-        $request->end_date,
-        function($query) use ($request){
-
-            $query->whereDate(
-                'created_at',
-                '<=',
                 $request->end_date
-            );
 
-        }
-    )
+            ),
 
-    ->latest()
+            'project-report.xlsx'
 
-    ->get();
+        );
 
 
-
-$data=[
-
-    'projects'=>$projects
-
-];
-
-
-AuditHelper::create(
-
-    'Export Laporan Project',
-
-    'Laporan Owner',
-
-    'Owner melakukan export laporan project PDF'
-
-);
-
-
-
-$pdf = app('dompdf.wrapper')
-
-    ->loadView(
-
-        'owner.reports.pdf.project',
-
-        $data
-
-    );
-
-
-
-return $pdf->download(
-
-    'laporan-project.pdf'
-
-);
-
-
-}
+    }
 
 
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN PROJECT EXCEL
-    |--------------------------------------------------------------------------
-    */
-
-
-public function projectExcel(Request $request)
-{
-
-    AuditHelper::create(
-
-        'Export Excel Project',
-
-        'Laporan Owner',
-
-        'Owner melakukan export laporan project Excel'
-
-    );
-
-
-    return Excel::download(
-
-        new ProjectReportExport(
-
-            $request->start_date,
-
-            $request->end_date
-
-        ),
-
-        'laporan-project.xlsx'
-
-    );
-
-}
 
 
 
@@ -1145,144 +831,72 @@ public function projectExcel(Request $request)
     |--------------------------------------------------------------------------
     */
 
-public function performancePdf(Request $request)
-{
 
+    public function performancePdf(Request $request)
+    {
 
-$projects = Proyek::with('tugas')
+        $this->checkRole();
 
-    ->when(
-        $request->start_date,
-        function($query) use ($request){
 
-            $query->whereDate(
-                'created_at',
-                '>=',
-                $request->start_date
-            );
 
-        }
-    )
 
-    ->when(
-        $request->end_date,
-        function($query) use ($request){
+        $projects = Proyek::with([
 
-            $query->whereDate(
-                'created_at',
-                '<=',
-                $request->end_date
-            );
+            'tugas.karyawan',
 
-        }
-    )
+            'tugas.divisi'
 
-    ->latest()
+        ])
 
-    ->get();
+        ->latest()
 
+        ->get();
 
-$progress = $projects->avg(function($project){
 
-    return $project->progres_keseluruhan;
 
-}) ?? 0;
 
 
 
-$status = '';
 
-if($progress >= 75){
+        AuditHelper::create(
 
-    $status = 'Performa Sangat Baik';
+            'EXPORT',
 
-}
-elseif($progress >= 50){
+            'Owner Report',
 
-    $status = 'Performa Cukup Baik';
+            'Export performance project PDF'
 
-}
-else{
+        );
 
-    $status = 'Perlu Monitoring';
 
-}
 
 
 
 
-$data=[
 
 
-    'totalProject'=>$projects->count(),
+        return view(
 
+            'owner.reports.performance-pdf',
 
+            compact(
 
-    'projectAktif'=>$projects->filter(function($project){
+                'projects'
 
+            )
 
-        return $project->progres_keseluruhan > 0 
-            && 
-            $project->progres_keseluruhan < 100;
+        );
 
 
-    })->count(),
+    }
 
 
 
 
-    'projectSelesai'=>$projects->where(
 
-        'progres_keseluruhan',
 
-        '>=',
 
-        100
 
-    )->count(),
-
-
-
-
-
-    'progress'=>$progress,
-
-
-
-
-
-    'status'=>$status,
-
-    'tanggal'=>Carbon::now(),
-];
-AuditHelper::create(
-
-    'Export Laporan Performance',
-
-    'Laporan Owner',
-
-    'Owner melakukan export analisis performa PDF'
-
-);
-$pdf = app('dompdf.wrapper')
-
-    ->loadView(
-
-        'owner.reports.pdf.performance',
-
-        $data
-
-    );
-
-
-return $pdf->download(
-
-    'analisis-performa.pdf'
-
-);
-
-
-}
 
 
 
@@ -1293,34 +907,49 @@ return $pdf->download(
     |--------------------------------------------------------------------------
     */
 
-public function performanceExcel(Request $request)
-{
 
-    AuditHelper::create(
+    public function performanceExcel(Request $request)
+    {
 
-        'Export Excel Performance',
-
-        'Laporan Owner',
-
-        'Owner melakukan export analisis performa Excel'
-
-    );
+        $this->checkRole();
 
 
-    return Excel::download(
 
-        new PerformanceReportExport(
 
-            $request->start_date,
 
-            $request->end_date
+        AuditHelper::create(
 
-        ),
+            'EXPORT',
 
-        'analisis-performa.xlsx'
+            'Owner Report',
 
-    );
+            'Export performance project Excel'
 
-}
+        );
+
+
+
+
+
+
+
+        return Excel::download(
+
+            new PerformanceReportExport(
+
+                $request->start_date,
+
+                $request->end_date
+
+            ),
+
+            'performance-report.xlsx'
+
+        );
+
+
+    }
+
+
 
 }
