@@ -16,7 +16,7 @@ class BankAccountController extends Controller
     /*
     |--------------------------------------------------------------------------
     | LIST REKENING BANK
-    |--------------------------------------------------------------------------
+    |---------------------------------------------------------------------------
     */
 
 public function index()
@@ -123,37 +123,21 @@ public function index()
 
 
 
-
-
         RekeningBank::create([
 
+            'nama_bank' => $request->nama_bank,
 
+            'nomor_rekening' => $request->nomor_rekening,
 
-            'nama_bank'=>$request->nama_bank,
+            'nama_pemilik' => $request->nama_pemilik,
 
+            'saldo' => $request->saldo,
 
+            'saldo_awal' => $request->saldo,
 
-            'nomor_rekening'=>$request->nomor_rekening,
-
-
-
-            'nama_pemilik'=>$request->nama_pemilik,
-
-
-
-            'saldo'=>$request->saldo,
-
-
-
-            'status'=>$request->status
-
-
+            'status' => $request->status
 
         ]);
-
-
-
-
 
 
 
@@ -336,36 +320,27 @@ public function index()
     | HAPUS BANK
     |--------------------------------------------------------------------------
     */
+public function destroy(RekeningBank $bank)
+{
+    $hasHistory = $bank->mutasiKeuangan()->exists();
 
-
-    public function destroy(RekeningBank $bank)
-    {
-
-
-        $bank->delete();
-
-
-
-
+    if ($hasHistory) {
         return redirect()
-
-            ->route(
-
-                'finance.bank.index'
-
-            )
-
+            ->route('finance.bank.index')
             ->with(
-
-                'success',
-
-                'Rekening bank berhasil dihapus'
-
+                'error',
+                'Rekening bank tidak dapat dihapus karena sudah memiliki histori transaksi keuangan. Silakan nonaktifkan rekening.'
             );
-
-
     }
 
+    $bank->delete();
 
+    return redirect()
+        ->route('finance.bank.index')
+        ->with(
+            'success',
+            'Rekening bank berhasil dihapus'
+        );
+}
 
 }

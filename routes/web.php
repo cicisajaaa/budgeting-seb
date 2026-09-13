@@ -278,15 +278,10 @@ Route::middleware('role:keuangan,owner')->group(function(){
 
 
 Route::post('/expense/{id}/disburse',[
-
     ExpenseApprovalController::class,
-
     'disburse'
-
 ])
-
 ->name('expense.disburse');
-});
 
 
 Route::put('/expense/{id}/cancel-approval',[
@@ -295,7 +290,7 @@ Route::put('/expense/{id}/cancel-approval',[
 ])
 ->name('expense.cancelApproval');
 
-
+});
 
 
 

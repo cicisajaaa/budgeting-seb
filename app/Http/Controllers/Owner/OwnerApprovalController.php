@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\ExpenseRequest;
+use App\Models\PengajuanDana;
+
 
 use App\Helpers\AuditHelper;
 
@@ -23,59 +24,22 @@ class OwnerApprovalController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
-    public function index()
-    {
-$requests = ExpenseRequest::with([
-
-    'user',
-
-    'proyek',
-
-    'division'
-
-])
-
-->latest()
-
-->get();
+public function index()
+{
+    $requests = PengajuanDana::with([
+        'pengguna',
+        'proyek',
+        'divisi'
+    ])
+    ->latest()
+    ->get();
 
 
-
-$pendingRequests = ExpenseRequest::with([
-
-    'user',
-
-    'proyek',
-
-    'division'
-
-])
-
-->where(
-    'status',
-    'pending'
-)
-
-->latest()
-
-->get();
-
-
-        return view(
-
-            'owner.approval.index',
-
-            compact('requests')
-
-        );
-
-
-    }
-
-
-
-
+    return view(
+        'owner.approval.index',
+        compact('requests')
+    );
+} 
 
 
 
@@ -90,19 +54,12 @@ $pendingRequests = ExpenseRequest::with([
     public function detail($id)
     {
 
-
-        $expense = ExpenseRequest::with([
-
-            'user',
-
-            'proyek',
-
-            'division'
-
-        ])
-
-        ->findOrFail($id);
-
+$expense = PengajuanDana::with([
+    'pengguna',
+    'proyek',
+    'divisi'
+])
+->findOrFail($id);
 
 
 
@@ -137,8 +94,7 @@ $pendingRequests = ExpenseRequest::with([
     public function approve($id)
     {
 
-
-        $expense = ExpenseRequest::findOrFail($id);
+$expense = PengajuanDana::findOrFail($id);
 
 
 
@@ -232,7 +188,7 @@ $pendingRequests = ExpenseRequest::with([
     {
 
 
-        $expense = ExpenseRequest::findOrFail($id);
+        $expense = PengajuanDana::findOrFail($id);
 
 
 

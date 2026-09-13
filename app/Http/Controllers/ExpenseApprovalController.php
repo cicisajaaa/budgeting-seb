@@ -254,16 +254,13 @@ if($expenseRequest->status != 'approved')
 }
 
 
-
-            $bank = RekeningBank::where(
-
-                'id',
-
-                $request->rekening_bank_id
-
-            )
-            ->where('status',true)
-            ->firstOrFail();
+        $bank = RekeningBank::where(
+            'id',
+            $request->rekening_bank_id
+        )
+        ->where('status', true)
+        ->lockForUpdate()
+        ->firstOrFail();
 
 
 
@@ -288,16 +285,12 @@ if($bank->saldo < $expenseRequest->jumlah)
     );
 }
 
-
-
-            $balance = SaldoDivisi::where([
-
-                'proyek_id'=>$expenseRequest->proyek_id,
-
-                'divisi_id'=>$expenseRequest->divisi_id
-
-            ])
-            ->firstOrFail();
+        $balance = SaldoDivisi::where([
+            'proyek_id' => $expenseRequest->proyek_id,
+            'divisi_id' => $expenseRequest->divisi_id
+        ])
+        ->lockForUpdate()
+        ->firstOrFail();
 
 
 

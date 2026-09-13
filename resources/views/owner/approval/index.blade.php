@@ -245,42 +245,31 @@ $expense->jumlah ?? 0,
 
 <td>
 
+@if($expense->status == 'pending')
 
-@if($expense->status=='pending')
+    <span class="status waiting">
+        Menunggu Persetujuan
+    </span>
 
+@elseif($expense->status == 'approved')
 
-<span class="status waiting">
+    <span class="status approved">
+        Disetujui
+    </span>
 
-Menunggu Persetujuan
+@elseif($expense->status == 'rejected')
 
-</span>
+    <span class="status rejected">
+        Ditolak
+    </span>
 
+@elseif($expense->status == 'selesai')
 
-
-@elseif($expense->status=='approved')
-
-
-<span class="status approved">
-
-Disetujui
-
-</span>
-
-
-
-@else
-
-
-<span class="status rejected">
-
-Ditolak
-
-</span>
-
-
+    <span class="status selesai">
+        Selesai
+    </span>
 
 @endif
-
 
 </td>
 
@@ -737,7 +726,10 @@ STATUS
 }
 
 
-
+.selesai{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
 
 
 
