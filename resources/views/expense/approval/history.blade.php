@@ -26,7 +26,7 @@
         <div class="welcome-tags">
 
             <span>
-                ✓ Approved
+                ✓ Approved / Selesai
             </span>
 
             <span>
@@ -118,19 +118,16 @@ Seluruh approval
 <div>
 
 <label>
-Approved
+    Approved / Selesai
 </label>
 
-
 <h2>
-{{$requests->whereIn('status',['approved','selesai'])->count()}}
+    {{$requests->whereIn('status',['approved','selesai'])->count()}}
 </h2>
 
-
 <small>
-Disetujui finance
+    Disetujui atau sudah dicairkan
 </small>
-
 
 </div>
 
@@ -594,7 +591,7 @@ $request->jumlah ?? 0,
 @if($request->status=='approved')
 
 <span class="status approved">
-✓ Approved
+✓ Disetujui
 </span>
 
 
@@ -615,7 +612,7 @@ $request->jumlah ?? 0,
 @else
 
 <span class="status pending">
-⏳ Pending
+⏳ Menunggu Persetujuan
 </span>
 
 @endif

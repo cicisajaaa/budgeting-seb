@@ -85,11 +85,13 @@ $totalTaskBelum = Tugas::where(
 
 
 
-$totalTaskTerlambat = Tugas::where('status','!=','selesai')
+$totalTaskTerlambat = Tugas::whereNotIn('status', [
+    'selesai',
+    'dibatalkan'
+])
     ->whereNotNull('deadline')
     ->whereDate('deadline','<',now())
     ->count();
-
 
 
 $rataProgressTask = Tugas::avg(
@@ -208,8 +210,7 @@ $projectPerformance = Proyek::withCount([
 
 })
 
-->sortByDesc('progress_project')
-
+->sortByDesc('id')
 ->take(5);
 
 

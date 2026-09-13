@@ -10,8 +10,8 @@ use App\Http\Controllers\Controller;
 
 
 use App\Models\Proyek;
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseRequest;
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
 
 
 use App\Exports\OwnerFinanceExport;
@@ -48,7 +48,7 @@ class OwnerReportController extends Controller
         */
 
 
-        $totalPendapatan = ProjectDeposit::when(
+        $totalPendapatan = SetoranProyek::when(
 
             $request->start_date,
 
@@ -84,42 +84,27 @@ class OwnerReportController extends Controller
 
 
 
-        $totalPengeluaran = ExpenseRequest::where(
-    'status',
-    'approved'
+      $totalPengeluaran = TransaksiDana::when(
+    $request->start_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '>=',
+            $request->start_date
+        );
+    }
 )
 ->when(
-
-            $request->start_date,
-
-            function($query) use ($request){
-
-                $query->whereDate(
-                    'created_at',
-                    '>=',
-                    $request->start_date
-                );
-
-            }
-
-        )
-        ->when(
-
-            $request->end_date,
-
-            function($query) use ($request){
-
-                $query->whereDate(
-                    'created_at',
-                    '<=',
-                    $request->end_date
-                );
-
-            }
-
-        )
-        ->sum('jumlah');
-
+    $request->end_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '<=',
+            $request->end_date
+        );
+    }
+)
+->sum('jumlah');
 
 
 
@@ -127,7 +112,7 @@ class OwnerReportController extends Controller
 
         $totalTransaksi = 
 
-            ProjectDeposit::when(
+            SetoranProyek::when(
 
                 $request->start_date,
 
@@ -161,16 +146,32 @@ class OwnerReportController extends Controller
 
 
             +
-            ExpenseRequest::where(
-                'status',
-                'approved'
-            )
+  TransaksiDana::when(
+    $request->start_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '>=',
+            $request->start_date
+        );
+    }
+)
+->when(
+    $request->end_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '<=',
+            $request->end_date
+        );
+    }
+)
             ->when(
                 $request->start_date,
                 function($query) use ($request){
 
                     $query->whereDate(
-                        'created_at',
+                        'tanggal',
                         '>=',
                         $request->start_date
                     );
@@ -182,7 +183,7 @@ class OwnerReportController extends Controller
                 function($query) use ($request){
 
                     $query->whereDate(
-                        'created_at',
+                        'tanggal',
                         '<=',
                         $request->end_date
                     );
@@ -469,70 +470,49 @@ $projects = Proyek::with('tugas')
     | TOTAL KEUANGAN
     |--------------------------------------------------------------------------
     */
-
-
-    $totalPendapatan = ProjectDeposit::when(
-        $request->start_date,
-        function($query) use ($request){
-
-            $query->whereDate(
-                'tanggal_setoran',
-                '>=',
-                $request->start_date
-            );
-
-        }
-    )
-
-    ->when(
-        $request->end_date,
-        function($query) use ($request){
-
-            $query->whereDate(
-                'tanggal_setoran',
-                '<=',
-                $request->end_date
-            );
-
-        }
-    )
-
-    ->sum('jumlah_setoran');
-
-
-$totalPengeluaran = ExpenseRequest::where(
-    'status',
-    'approved'
-)
-
-->when(
+$totalPendapatan = SetoranProyek::when(
     $request->start_date,
     function($query) use ($request){
-
         $query->whereDate(
-            'created_at',
+            'tanggal_setoran',
             '>=',
             $request->start_date
         );
-
     }
 )
-
 ->when(
     $request->end_date,
     function($query) use ($request){
-
         $query->whereDate(
-            'created_at',
+            'tanggal_setoran',
             '<=',
             $request->end_date
         );
-
     }
 )
+->sum('jumlah_setoran');
 
+$totalPengeluaran = TransaksiDana::when(
+    $request->start_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '>=',
+            $request->start_date
+        );
+    }
+)
+->when(
+    $request->end_date,
+    function($query) use ($request){
+        $query->whereDate(
+            'tanggal',
+            '<=',
+            $request->end_date
+        );
+    }
+)
 ->sum('jumlah');
-
 
 
 
@@ -713,7 +693,7 @@ public function financePdf(Request $request)
     |--------------------------------------------------------------------------
     */
 
-    $pendapatan = ProjectDeposit::with('proyek')
+    $pendapatan = SetoranProyek::with('proyek')
 
         ->when(
             $request->start_date,
@@ -759,18 +739,14 @@ public function financePdf(Request $request)
     |--------------------------------------------------------------------------
     */
 
-    $pengeluaran = ExpenseRequest::where(
-        'status',
-        'approved'
-    )
-
+$pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
     ->when(
         $request->start_date,
 
         function($query) use ($request){
 
             $query->whereDate(
-                'created_at',
+                'tanggal',
                 '>=',
                 $request->start_date
             );
@@ -785,7 +761,7 @@ public function financePdf(Request $request)
         function($query) use ($request){
 
             $query->whereDate(
-                'created_at',
+                'tanggal',
                 '<=',
                 $request->end_date
             );
@@ -826,7 +802,7 @@ public function financePdf(Request $request)
 
             'keterangan'=>'Setoran Project',
 
-            'project'=>$item->proyek->nama_proyek ?? '-',
+            'project'=>$item->proyek->nama_proyek,
 
             'nominal'=>$item->jumlah_setoran,
 
@@ -847,11 +823,11 @@ public function financePdf(Request $request)
 
         $transaksi->push([
 
-            'tanggal'=>$item->created_at,
+            'tanggal'=>$item->tanggal,
 
             'keterangan'=>$item->judul ?? 'Pengeluaran Operasional',
 
-            'project'=>$item->proyek->nama_proyek ?? '-',
+            'project'=>$item->pengajuanDana->proyek->nama_proyek,
 
             'nominal'=>$item->jumlah,
 

@@ -115,36 +115,32 @@ public function index()
     }
 
 
+public function store(Request $request)
+{
+    $request->validate([
+        'proyek_id' => 'required|exists:proyek,id',
+        'rekening_bank_id' => 'required|exists:rekening_bank,id',
+        'jumlah_setoran' => 'required|numeric|min:1',
+        'tanggal_setoran' => 'required|date',
+    ]);
 
-    public function store(Request $request)
-    {
+    $project = Proyek::with('alokasiDivisi')
+        ->findOrFail($request->proyek_id);
 
+    $allocations = $project->alokasiDivisi;
 
-        $request->validate([
+    $totalPersentase = $allocations->sum('persentase');
 
+    if ($totalPersentase != 100) {
+        return back()
+            ->withInput()
+            ->with(
+                'error',
+                'Total alokasi divisi untuk proyek ini harus 100% sebelum pembayaran dapat disimpan.'
+            );
+    }
 
-            'proyek_id' => 'required|exists:proyek,id',
-
-
-            'rekening_bank_id' => 'required|exists:rekening_bank,id',
-
-
-            'jumlah_setoran' => 'required|numeric',
-
-
-            'tanggal_setoran' => 'required|date',
-
-
-        ]);
-
-
-
-
-
-
-        DB::transaction(function () use ($request) {
-
-
+    DB::transaction(function () use ($request, $project, $allocations) {
 
             /*
             |--------------------------------------------------------------------------
@@ -181,26 +177,18 @@ public function index()
             | UPDATE SALDO BANK
             |--------------------------------------------------------------------------
             */
+$bank = RekeningBank::where(
+    'id',
+    $request->rekening_bank_id
+)
+->where('status', true)
+->lockForUpdate()
+->firstOrFail();
 
-
-            $bank = RekeningBank::findOrFail(
-
-                $request->rekening_bank_id
-
-            );
-
-
-
-
-            $bank->increment(
-
-                'saldo',
-
-                $request->jumlah_setoran
-
-            );
-
-
+$bank->increment(
+    'saldo',
+    $request->jumlah_setoran
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -228,21 +216,6 @@ MutasiKeuangan::create([
 
 ]);
 
-
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | AMBIL ALOKASI DIVISI PROYEK
-            |--------------------------------------------------------------------------
-            */
-
-
-            $allocations = $deposit
-
-                ->proyek
-
-                ->alokasiDivisi;
 
 
 

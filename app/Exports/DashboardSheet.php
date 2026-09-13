@@ -118,14 +118,12 @@ public function array(): array
 
 
 
-        $aktif = $project
-            ->where(
-                'progres_keseluruhan',
-                '<',
-                100
-            )
-            ->count();
-
+      $aktif = $project
+    ->filter(function($project){
+        return $project->progres_keseluruhan > 0
+            && $project->progres_keseluruhan < 100;
+    })
+    ->count();
 
 
 
@@ -161,39 +159,26 @@ public function array(): array
 
 
 
-
 $totalSetoran = SetoranProyek::when(
-
     $this->startDate,
-
     function($query){
-
         $query->whereDate(
-            'created_at',
+            'tanggal_setoran',
             '>=',
             $this->startDate
         );
-
     }
-
 )
-
 ->when(
-
     $this->endDate,
-
     function($query){
-
         $query->whereDate(
-            'created_at',
+            'tanggal_setoran',
             '<=',
             $this->endDate
         );
-
     }
-
 )
-
 ->count();
 
 

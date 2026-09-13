@@ -119,13 +119,23 @@ $allowedProject = Proyek::whereHas(
 ->exists();
 
 
-
 if(!$allowedProject)
 {
     abort(403);
 }
-        $balance = SaldoDivisi::where([
 
+/*
+|--------------------------------------------------------------------------
+| CEK DIVISI KARYAWAN
+|--------------------------------------------------------------------------
+*/
+
+if($request->divisi_id != $employee->divisi_id)
+{
+    abort(403);
+}
+
+$balance = SaldoDivisi::where([
 
             'proyek_id' => $request->proyek_id,
 
@@ -561,18 +571,22 @@ if($project->sisa_budget < $request->jumlah)
 
     }
 
-
-    public function getDivisions(Proyek $project)
+public function getDivisions(Proyek $project)
 {
+    $employee = Auth::user()->karyawan;
+
+    if (!$employee) {
+        abort(403);
+    }
+
     $divisions = $project
         ->saldoDivisi()
         ->with('divisi')
+        ->where('divisi_id', $employee->divisi_id)
         ->where('saldo', '>', 0)
         ->get();
 
-
     return response()->json($divisions);
 }
-
 
 }

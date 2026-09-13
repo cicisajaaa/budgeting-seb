@@ -3,9 +3,9 @@
 namespace App\Exports;
 
 
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseRequest;
 use App\Models\Proyek;
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
 
 
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -85,363 +85,211 @@ class FinanceSummarySheet implements
 
 
 
-
-
 public function array(): array
 {
+    $pendapatan = SetoranProyek::when(
+        $this->startDate,
+        function($query){
+            $query->whereDate(
+                'tanggal_setoran',
+                '>=',
+                $this->startDate
+            );
+        }
+    )
+    ->when(
+        $this->endDate,
+        function($query){
+            $query->whereDate(
+                'tanggal_setoran',
+                '<=',
+                $this->endDate
+            );
+        }
+    )
+    ->sum('jumlah_setoran');
 
 
-$pendapatan = ProjectDeposit::when(
+    $pengeluaran = TransaksiDana::when(
+        $this->startDate,
+        function($query){
+            $query->whereDate(
+                'tanggal',
+                '>=',
+                $this->startDate
+            );
+        }
+    )
+    ->when(
+        $this->endDate,
+        function($query){
+            $query->whereDate(
+                'tanggal',
+                '<=',
+                $this->endDate
+            );
+        }
+    )
+    ->sum('jumlah');
 
-    $this->startDate,
 
-    function($query){
+    $saldo = $pendapatan - $pengeluaran;
 
-        $query->whereDate(
-            'tanggal_setoran',
-            '>=',
-            $this->startDate
-        );
 
+    $projects = Proyek::when(
+        $this->startDate,
+        function($query){
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $this->startDate
+            );
+        }
+    )
+    ->when(
+        $this->endDate,
+        function($query){
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $this->endDate
+            );
+        }
+    )
+    ->get();
+
+
+    $totalProject = $projects->count();
+
+
+$projectAktif = $projects
+    ->filter(function($project){
+        return $project->progres_keseluruhan > 0
+            && $project->progres_keseluruhan < 100;
+    })
+    ->count();
+
+    $totalAnggaran = $projects->sum(
+        'total_anggaran'
+    );
+
+
+    $efisiensi = 0;
+
+    if($totalAnggaran > 0)
+    {
+        $efisiensi =
+            ($saldo / $totalAnggaran) * 100;
     }
 
-)
 
-->when(
-
-    $this->endDate,
-
-    function($query){
-
-        $query->whereDate(
-            'tanggal_setoran',
-            '<=',
-            $this->endDate
-        );
-
-    }
-
-)
-
-->sum('jumlah_setoran');
-
-
-
-
-$pengeluaran = ExpenseRequest::when(
-
-    $this->startDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '>=',
-            $this->startDate
-        );
-
-    }
-
-)
-
-->when(
-
-    $this->endDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '<=',
-            $this->endDate
-        );
-
-    }
-
-)
-
-->where(
-    'status',
-    'approved'
-)
-
-->sum('jumlah');
-
-        $pengeluaran = ExpenseRequest::where(
-            'status',
-            'approved'
+    $totalTransaksi =
+        SetoranProyek::when(
+            $this->startDate,
+            function($query){
+                $query->whereDate(
+                    'tanggal_setoran',
+                    '>=',
+                    $this->startDate
+                );
+            }
         )
-        ->sum('jumlah');
+        ->when(
+            $this->endDate,
+            function($query){
+                $query->whereDate(
+                    'tanggal_setoran',
+                    '<=',
+                    $this->endDate
+                );
+            }
+        )
+        ->count()
 
+        +
 
-
-        $saldo = $pendapatan - $pengeluaran;
-
-
-
-       $totalProject = Proyek::when(
-
-    $this->startDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '>=',
-            $this->startDate
-        );
-
-    }
-
-)
-
-->when(
-
-    $this->endDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '<=',
-            $this->endDate
-        );
-
-    }
-
-)
-
-->count();
-
-
-
-        $projectAktif = Proyek::where(
-            'progres_keseluruhan',
-            '<',
-            100
+        TransaksiDana::when(
+            $this->startDate,
+            function($query){
+                $query->whereDate(
+                    'tanggal',
+                    '>=',
+                    $this->startDate
+                );
+            }
+        )
+        ->when(
+            $this->endDate,
+            function($query){
+                $query->whereDate(
+                    'tanggal',
+                    '<=',
+                    $this->endDate
+                );
+            }
         )
         ->count();
 
 
-
-
-        $totalAnggaran = Proyek::sum(
-            'total_anggaran'
-        );
-
-
-
-        $efisiensi = 0;
-
-
-        if($totalAnggaran > 0)
-        {
-
-            $efisiensi =
-            ($saldo / $totalAnggaran) * 100;
-
-        }
-
-
-
-
-
-
-        return [
-
-
-            [
-
-                'Keterangan',
-
-                'Nilai',
-
-                'Status'
-
-            ],
-
-
-
-
-            [
-
-                'Total Pendapatan',
-
-                $pendapatan,
-
-                'Positif'
-
-            ],
-
-
-
-
-            [
-
-                'Total Pengeluaran',
-
-                $pengeluaran,
-
-                'Pengeluaran'
-
-            ],
-
-
-
-
-            [
-
-                'Saldo Bersih',
-
-                $saldo,
-
-                'Stabil'
-
-            ],
-
-
-
-
-            [
-ProjectDeposit::when(
-
-    $this->startDate,
-
-    function($query){
-
-        $query->whereDate(
-            'tanggal_setoran',
-            '>=',
-            $this->startDate
-        );
-
-    }
-
-)
-
-->when(
-
-    $this->endDate,
-
-    function($query){
-
-        $query->whereDate(
-            'tanggal_setoran',
-            '<=',
-            $this->endDate
-        );
-
-    }
-
-)
-
-->count()
-
-
-+
-
-ExpenseRequest::when(
-
-    $this->startDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '>=',
-            $this->startDate
-        );
-
-    }
-
-)
-
-->when(
-
-    $this->endDate,
-
-    function($query){
-
-        $query->whereDate(
-            'created_at',
-            '<=',
-            $this->endDate
-        );
-
-    }
-
-)
-
-->count()
-
-            ],
-
-
-
-
-            [
-
-                'Total Project',
-
-                $totalProject,
-
-                'Project'
-
-            ],
-
-
-
-
-
-            [
-
-                'Project Aktif',
-
-                $projectAktif,
-
-                'Berjalan'
-
-            ],
-
-
-
-
-
-            [
-
-                'Total Anggaran Project',
-
-                $totalAnggaran,
-
-                'Budget'
-
-            ],
-
-
-
-
-            [
-
-                'Efisiensi Dana',
-
-                number_format(
-                    $efisiensi,
-                    2
-                ).' %',
-
-                'Evaluasi'
-
-            ],
-
-
-        ];
-
-    }
-
-
-
-
-
+    return [
+        [
+            'Keterangan',
+            'Nilai',
+            'Status'
+        ],
+
+        [
+            'Total Pendapatan',
+            $pendapatan,
+            'Positif'
+        ],
+
+        [
+            'Total Pengeluaran',
+            $pengeluaran,
+            'Pengeluaran'
+        ],
+
+        [
+            'Saldo Bersih',
+            $saldo,
+            'Stabil'
+        ],
+
+        [
+            'Total Transaksi',
+            $totalTransaksi,
+            'Transaksi'
+        ],
+
+        [
+            'Total Project',
+            $totalProject,
+            'Project'
+        ],
+
+        [
+            'Project Aktif',
+            $projectAktif,
+            'Berjalan'
+        ],
+
+        [
+            'Total Anggaran Project',
+            $totalAnggaran,
+            'Budget'
+        ],
+
+        [
+            'Efisiensi Dana',
+            number_format(
+                $efisiensi,
+                2
+            ).' %',
+            'Evaluasi'
+        ],
+    ];
+}
 
 
 
@@ -728,6 +576,13 @@ ExpenseRequest::when(
 
 
 
+                $sheet->getStyle(
+                    'B13'
+                )
+                ->getNumberFormat()
+                ->setFormatCode(
+                    '"Rp" #,##0'
+                );
 
 
                 $sheet->getStyle(

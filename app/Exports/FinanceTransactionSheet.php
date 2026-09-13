@@ -3,9 +3,8 @@
 namespace App\Exports;
 
 
-use App\Models\ProjectDeposit;
-use App\Models\ExpenseRequest;
-
+use App\Models\SetoranProyek;
+use App\Models\TransaksiDana;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -91,127 +90,65 @@ class FinanceTransactionSheet implements
 
 
 
-
-    public function collection()
+public function collection()
 {
-
-
-    $pemasukan = ProjectDeposit::with('proyek')
-
+    $pemasukan = SetoranProyek::with('proyek')
         ->when(
-
             $this->startDate,
-
             function($query){
-
                 $query->whereDate(
                     'tanggal_setoran',
                     '>=',
                     $this->startDate
                 );
-
             }
-
         )
-
         ->when(
-
             $this->endDate,
-
             function($query){
-
                 $query->whereDate(
                     'tanggal_setoran',
                     '<=',
                     $this->endDate
                 );
-
             }
-
         )
-
-        ->latest()
-
+        ->latest('tanggal_setoran')
         ->get();
 
-
-
-
-
-    $pengeluaran = ExpenseRequest::with('proyek')
-
-        ->where(
-            'status',
-            'approved'
-        )
-
+    $pengeluaran = TransaksiDana::with('pengajuanDana.proyek')
         ->when(
-
             $this->startDate,
-
             function($query){
-
                 $query->whereDate(
-                    'created_at',
+                    'tanggal',
                     '>=',
                     $this->startDate
                 );
-
             }
-
         )
-
         ->when(
-
             $this->endDate,
-
             function($query){
-
                 $query->whereDate(
-                    'created_at',
+                    'tanggal',
                     '<=',
                     $this->endDate
                 );
-
             }
-
         )
-
-        ->latest()
-
+        ->latest('tanggal')
         ->get();
 
-
-
-
-
-
-return $pemasukan
-    ->concat($pengeluaran)
-    ->sortByDesc(function($item){
-
-        return $item instanceof ProjectDeposit
-            ? $item->tanggal_setoran
-            : $item->created_at;
-
-    })
-    ->values();
-
-return $pemasukan
-    ->concat($pengeluaran)
-    ->sortByDesc(function($item){
-
-        return $item instanceof ProjectDeposit
-            ? $item->tanggal_setoran
-            : $item->created_at;
-
-    })
-    ->values();
+    return $pemasukan
+        ->concat($pengeluaran)
+        ->sortByDesc(function($item){
+            return $item instanceof SetoranProyek
+                ? $item->tanggal_setoran
+                : $item->tanggal;
+        })
+        ->values();
 }
-
-
-
-
 
 
 
@@ -243,81 +180,39 @@ return $pemasukan
 
 
 
-
-
-    public function map($row): array
+public function map($row): array
+{
+    if($row instanceof SetoranProyek)
     {
-
-
-        if(
-            isset($row->jumlah_setoran)
-        )
-        {
-
-
-            return [
-
-            $row->tanggal_setoran
-            ? \Carbon\Carbon::parse($row->tanggal_setoran)->format('d M Y')
-            : '-',
-
-
-
-                'Pemasukan',
-
-
-
-                $row->proyek->nama_proyek ?? '-',
-
-
-
-                'Setoran Proyek',
-
-
-
-                $row->jumlah_setoran ?? 0
-
-
-            ];
-
-
-        }
-
-
-
-
-
-
-
         return [
+            $row->tanggal_setoran
+                ? \Carbon\Carbon::parse($row->tanggal_setoran)->format('d M Y')
+                : '-',
 
-
-            $row->created_at
-            ? $row->created_at->format('d M Y')
-            : '-',
-
-
-
-            'Pengeluaran',
-
-
+            'Pemasukan',
 
             $row->proyek->nama_proyek ?? '-',
 
+            'Setoran Proyek',
 
-
-            $row->judul ?? 'Pengajuan Dana',
-
-
-
-            $row->jumlah ?? 0
-
-
+            $row->jumlah_setoran ?? 0
         ];
-
-
     }
 
+    return [
+        $row->tanggal
+            ? \Carbon\Carbon::parse($row->tanggal)->format('d M Y')
+            : '-',
+
+        'Pengeluaran',
+
+        $row->pengajuanDana->proyek->nama_proyek ?? '-',
+
+        $row->pengajuanDana->judul ?? 'Pengeluaran Dana',
+
+        $row->jumlah ?? 0
+    ];
+}
 
 
 
@@ -595,8 +490,7 @@ $sheet->getStyle(
 /*
 TOTAL
 */
-
-$totalMasuk = ProjectDeposit::when(
+$totalMasuk = SetoranProyek::when(
 
     $this->startDate,
 
@@ -633,45 +527,26 @@ $totalMasuk = ProjectDeposit::when(
 
 
 
-
-
-$totalKeluar = ExpenseRequest::where(
-    'status',
-    'approved'
-)
-
-->when(
-
+$totalKeluar = TransaksiDana::when(
     $this->startDate,
-
     function($query){
-
         $query->whereDate(
-            'created_at',
+            'tanggal',
             '>=',
             $this->startDate
         );
-
     }
-
 )
-
 ->when(
-
     $this->endDate,
-
     function($query){
-
         $query->whereDate(
-            'created_at',
+            'tanggal',
             '<=',
             $this->endDate
         );
-
     }
-
 )
-
 ->sum('jumlah');
 
 

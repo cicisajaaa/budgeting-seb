@@ -219,7 +219,7 @@ Aksi
 
 <td>
 
-{{ $expense->user->name ?? '-' }}
+{{ $expense->pengguna->name ?? '-' }}
 
 </td>
 
