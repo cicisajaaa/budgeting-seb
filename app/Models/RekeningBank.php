@@ -2,47 +2,52 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\SetoranProyek;
 use App\Models\TransaksiDana;
 use App\Models\MutasiKeuangan;
 
+
 class RekeningBank extends Model
 {
-
 
     protected $table = 'rekening_bank';
 
 
 
-protected $fillable = [
-    'nama_bank',
+    protected $fillable = [
 
-    'nomor_rekening',
+        'nama_bank',
 
-    'nama_pemilik',
+        'nomor_rekening',
 
-    'saldo',
+        'nama_pemilik',
 
-    'saldo_awal',
+        'saldo_awal',
 
-    'status'
-];
+        'status'
 
-
+    ];
 
 
 
-protected $casts = [
 
-    'saldo' => 'decimal:2',
 
-    'saldo_awal' => 'decimal:2',
 
-    'status' => 'boolean'
-];
+
+    protected $casts = [
+
+        'saldo' => 'decimal:2',
+
+        'saldo_awal' => 'decimal:2',
+
+        'status' => 'boolean'
+
+    ];
+
+
+
 
 
 
@@ -51,10 +56,9 @@ protected $casts = [
 
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Setoran Proyek
+    | RELASI SETORAN PROYEK
     |--------------------------------------------------------------------------
     */
-
 
     public function setoranProyek()
     {
@@ -74,12 +78,14 @@ protected $casts = [
 
 
 
+
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Transaksi Dana
+    | RELASI TRANSAKSI DANA
     |--------------------------------------------------------------------------
     */
-
 
     public function transaksiDana()
     {
@@ -95,32 +101,113 @@ protected $casts = [
     }
 
 
-public function saldoAktual()
-{
-    $masuk = $this->mutasiKeuangan()
-        ->where('jenis','masuk')
-        ->sum('nominal');
-
-
-    $keluar = $this->mutasiKeuangan()
-        ->where('jenis','keluar')
-        ->sum('nominal');
-
-
-    return $this->saldo_awal
-        + $masuk
-        - $keluar;
-}
 
 
 
 
-public function mutasiKeuangan()
-{
-    return $this->hasMany(
-        MutasiKeuangan::class,
-        'rekening_bank_id'
-    );
-}
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HITUNG SALDO AKTUAL
+    |--------------------------------------------------------------------------
+    */
+
+    public function saldoAktual()
+    {
+
+        $masuk = $this->mutasiKeuangan()
+
+            ->where(
+                'jenis',
+                'masuk'
+            )
+
+            ->sum('nominal');
+
+
+
+        $keluar = $this->mutasiKeuangan()
+
+            ->where(
+                'jenis',
+                'keluar'
+            )
+
+            ->sum('nominal');
+
+
+
+        return (float) $this->saldo_awal
+            + $masuk
+            - $keluar;
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI MUTASI KEUANGAN
+    |--------------------------------------------------------------------------
+    */
+
+    public function mutasiKeuangan()
+    {
+
+        return $this->hasMany(
+
+            MutasiKeuangan::class,
+
+            'rekening_bank_id'
+
+        );
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI SALDO
+    |--------------------------------------------------------------------------
+    */
+
+    protected static function booted()
+    {
+
+        static::saving(function($rekening){
+
+
+            if($rekening->saldo < 0)
+            {
+
+                throw new \Exception(
+
+                    'Saldo rekening tidak boleh negatif'
+
+                );
+
+            }
+
+
+        });
+
+
+    }
+
 
 }

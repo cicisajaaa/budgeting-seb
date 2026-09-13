@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use App\Models\Proyek;
 use App\Models\Divisi;
+
 
 class SaldoDivisi extends Model
 {
@@ -14,15 +16,19 @@ class SaldoDivisi extends Model
 
 
 
+
+
     protected $fillable = [
 
         'proyek_id',
 
         'divisi_id',
 
-        'saldo',
-
     ];
+
+
+
+
 
 
 
@@ -40,12 +46,13 @@ class SaldoDivisi extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Proyek
+    | RELASI DENGAN PROYEK
     |--------------------------------------------------------------------------
     */
-
 
     public function proyek()
     {
@@ -66,12 +73,13 @@ class SaldoDivisi extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi dengan Divisi
+    | RELASI DENGAN DIVISI
     |--------------------------------------------------------------------------
     */
-
 
     public function divisi()
     {
@@ -86,6 +94,42 @@ class SaldoDivisi extends Model
 
     }
 
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI SALDO
+    |--------------------------------------------------------------------------
+    */
+
+    protected static function booted()
+    {
+
+        static::saving(function($saldo){
+
+
+            if($saldo->saldo < 0)
+            {
+
+                throw new \Exception(
+
+                    'Saldo divisi tidak boleh negatif'
+
+                );
+
+            }
+
+
+        });
+
+
+    }
 
 
 }

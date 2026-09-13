@@ -343,8 +343,10 @@ class ExpenseApprovalController extends Controller
 
         $request->validate([
 
-            'rekening_bank_id'
-                =>'required'
+        'rekening_bank_id'=>[
+            'required',
+            'exists:rekening_bank,id'
+        ]
 
         ]);
 
@@ -479,18 +481,14 @@ class ExpenseApprovalController extends Controller
 
 
 
-                if(
-                    TransaksiDana::where(
-
-                        'pengajuan_dana_id',
-
-                        $expenseRequest->id
-
-                    )
-
-                    ->exists()
-
-                )
+if(
+    TransaksiDana::where(
+        'pengajuan_dana_id',
+        $expenseRequest->id
+    )
+    ->lockForUpdate()
+    ->exists()
+)
                 {
 
                     throw new \Exception(

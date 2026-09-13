@@ -21,31 +21,17 @@ class PengajuanDana extends Model
 
 protected $fillable = [
 
-
     'nomor_pengajuan',
-
     'pengguna_id',
-
     'proyek_id',
-
     'divisi_id',
-
     'judul',
-
     'keterangan',
-
     'bukti_pengajuan',
-
     'jumlah',
-
-    'status',
-
     'disetujui_oleh',
-
     'disetujui_pada',
-
     'catatan_persetujuan'
-
 
 ];
 
@@ -64,7 +50,11 @@ protected $fillable = [
     ];
 
 
+protected $attributes = [
 
+    'status'=>'pending'
+
+];
 
 
 
@@ -222,15 +212,11 @@ public function auditLogs()
 
 
 
-protected static function boot()
+protected static function booted()
 {
-    parent::boot();
-
-
     static::creating(function($pengajuan){
 
         $tanggal = now()->format('Ym');
-
 
         $last = self::where(
             'nomor_pengajuan',
@@ -241,26 +227,13 @@ protected static function boot()
         ->first();
 
 
-        if($last){
-
-            $number = intval(
-                substr(
-                    $last->nomor_pengajuan,
-                    -4
-                )
-            ) + 1;
-
-        } else {
-
-            $number = 1;
-
-        }
+        $number = $last
+            ? intval(substr($last->nomor_pengajuan,-4)) + 1
+            : 1;
 
 
         $pengajuan->nomor_pengajuan =
-            'REQ-' .
-            $tanggal .
-            '-' .
+            'REQ-'.$tanggal.'-'.
             str_pad(
                 $number,
                 4,
@@ -269,8 +242,17 @@ protected static function boot()
             );
 
     });
+
+
+    static::saving(function($pengajuan){
+
+        if($pengajuan->jumlah < 0)
+        {
+            throw new \Exception(
+                'Jumlah dana tidak boleh negatif'
+            );
+        }
+
+    });
 }
-
-
-
 }

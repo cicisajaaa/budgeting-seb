@@ -47,9 +47,11 @@ class TransaksiDana extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Pengajuan Dana
+    | RELASI PENGAJUAN DANA
     |--------------------------------------------------------------------------
     */
 
@@ -72,9 +74,11 @@ class TransaksiDana extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi User Penyetuju
+    | RELASI USER PENYETUJU
     |--------------------------------------------------------------------------
     */
 
@@ -97,9 +101,11 @@ class TransaksiDana extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi Rekening Bank
+    | RELASI REKENING BANK
     |--------------------------------------------------------------------------
     */
 
@@ -116,6 +122,74 @@ class TransaksiDana extends Model
 
     }
 
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI DATA TRANSAKSI
+    |--------------------------------------------------------------------------
+    */
+
+    protected static function booted()
+    {
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TRANSAKSI WAJIB MEMILIKI PENGAJUAN
+        |--------------------------------------------------------------------------
+        */
+
+        static::creating(function($transaksi){
+
+            if(!$transaksi->pengajuan_dana_id)
+            {
+
+                throw new \Exception(
+
+                    'Transaksi harus memiliki pengajuan dana'
+
+                );
+
+            }
+
+        });
+
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOMINAL TIDAK BOLEH NEGATIF
+        |--------------------------------------------------------------------------
+        */
+
+        static::saving(function($transaksi){
+
+
+            if($transaksi->jumlah < 0)
+            {
+
+                throw new \Exception(
+
+                    'Jumlah transaksi tidak boleh negatif'
+
+                );
+
+            }
+
+
+        });
+
+
+    }
 
 
 }
