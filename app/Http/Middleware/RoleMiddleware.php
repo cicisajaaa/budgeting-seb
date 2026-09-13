@@ -16,23 +16,17 @@ class RoleMiddleware
     ): Response
     {
 
-
         if(!auth()->check())
         {
             abort(401);
         }
 
 
-
-
         $userRole = strtolower(
             trim(
-                auth()->user()->role
-            )
+            auth()->user()->role ?? ''
+        )
         );
-
-
-
 
 
         $allowedRoles = array_map(
@@ -50,10 +44,6 @@ class RoleMiddleware
         );
 
 
-
-
-
-
         if(
             !in_array(
                 $userRole,
@@ -63,9 +53,6 @@ class RoleMiddleware
         {
             abort(403);
         }
-
-
-
 
 
         return $next($request);

@@ -42,9 +42,7 @@ class User extends Authenticatable
 
         'email',
 
-        'password',
-
-        'role'
+        'password'
 
 
     ];
@@ -65,7 +63,14 @@ class User extends Authenticatable
 
     ];
 
+public static array $roles = [
 
+    'owner',
+    'admin',
+    'keuangan',
+    'karyawan'
+
+];
 
 
 

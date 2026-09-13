@@ -12,6 +12,8 @@ use App\Models\Karyawan;
 use App\Models\Divisi;
 use App\Models\LogAudit;
 
+
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -282,13 +284,25 @@ public function index(Request $request)
             'password'=>'required|min:8|confirmed',
 
 
-            'role'=>'required|in:owner,admin,keuangan,karyawan',
+            'role'=>[
+                'required',
+                Rule::in(User::$roles)
+            ],
 
 
-            'nama_karyawan'=>'required_if:role,admin,keuangan,karyawan|string',
+            'nama_karyawan'=>[
+                'required_if:role,admin',
+                'required_if:role,keuangan',
+                'required_if:role,karyawan',
+                'string'
+            ],
 
-
-            'divisi_id'=>'required_if:role,admin,keuangan,karyawan|exists:divisi,id'
+            'divisi_id'=>[
+                'required_if:role,admin',
+                'required_if:role,keuangan',
+                'required_if:role,karyawan',
+                'exists:divisi,id'
+            ],
 
 
         ]);
@@ -555,7 +569,10 @@ public function update(Request $request, User $user)
 
         'email'=>'required|email|unique:users,email,'.$user->id,
 
-        'role'=>'required|in:owner,admin,keuangan,karyawan'
+        'role'=>[
+            'required',
+            Rule::in(User::$roles)
+        ]
 
     ]);
 
