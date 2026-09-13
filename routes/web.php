@@ -236,7 +236,7 @@ Route::get('/expense/divisions/{project}',[
 */
 
 
-Route::middleware('role:keuangan,owner')->group(function(){
+Route::middleware('role:keuangan')->group(function(){
 
 
 
@@ -283,12 +283,6 @@ Route::post('/expense/{id}/disburse',[
 ])
 ->name('expense.disburse');
 
-
-Route::put('/expense/{id}/cancel-approval',[
-    ExpenseApprovalController::class,
-    'cancelApproval'
-])
-->name('expense.cancelApproval');
 
 });
 
@@ -529,7 +523,7 @@ Route::delete('/profile',[
 
 Route::middleware([
 
-    'role:owner,admin'
+    'role:admin'
 
 ])
 ->prefix('admin')
@@ -911,11 +905,6 @@ Route::get('/audit/history/{tanggal}',
 
 
 
-    Route::get('/reports/performance/pdf',
-
-    [OwnerReportController::class,'performancePdf'])
-
-    ->name('report.performance.pdf');
 
 
 
