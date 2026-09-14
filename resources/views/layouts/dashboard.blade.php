@@ -1705,6 +1705,139 @@ display:block;
 
 }
 
+
+
+}
+
+
+
+
+@media(max-width:768px){
+
+.header{
+    height:70px;
+    padding:0 12px;
+}
+
+
+.system-name{
+    font-size:14px;
+    line-height:18px;
+}
+
+
+.header-subtitle{
+    font-size:11px;
+}
+
+
+.logout{
+    padding:8px 12px;
+    font-size:12px;
+}
+
+
+.notification-box{
+
+    position:absolute;
+
+    top:45px;
+
+    right:-40px;
+
+    width:280px;
+
+    z-index:9999;
+
+}
+
+.card,
+.dashboard-card{
+
+    padding:20px!important;
+
+}
+
+
+.card h3{
+
+    font-size:16px;
+
+}
+
+
+.card .number{
+
+    font-size:28px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.system-status{
+
+    position:fixed;
+    bottom:15px;
+    left:15px;
+
+    width:auto;
+    padding:8px 12px;
+
+    border-radius:20px;
+
+    background:#111827;
+
+    z-index:900;
+
+}
+
+
+.system-status-title{
+
+    display:none;
+
+}
+
+
+.system-online{
+
+    margin-top:0;
+
+    font-size:11px;
+
+}
+
+
+.online-dot{
+
+    width:7px;
+    height:7px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+    .profile-area{
+        gap:8px;
+    }
+
+
+    .avatar{
+        width:34px;
+        height:34px;
+        font-size:14px;
+    }
+
+
+    .logout{
+        padding:7px 10px;
+        border-radius:8px;
+    }
+
 }
 </style>
 
