@@ -12,6 +12,5 @@ deployment:
     - /bin/cp composer.json $DEPLOYPATH
     - /bin/cp composer.lock $DEPLOYPATH
 
-    - cd $DEPLOYPATH && composer install --no-dev --optimize-autoloader
     - cd $DEPLOYPATH && php artisan optimize:clear
     - cd $DEPLOYPATH && php artisan optimize
