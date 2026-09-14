@@ -385,7 +385,7 @@ border-radius:50%;
 <body>
 <aside class="sidebar">
 
-
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 <div class="brand">
 
 <img src="{{asset('images/logo-cv.png')}}">
@@ -888,6 +888,11 @@ System Online
 
 
 <div>
+
+<button class="mobile-menu" onclick="toggleSidebar()">
+    ☰
+</button>
+
 <div class="system-name">
 Sistem Manajemen Keuangan
 
@@ -1326,7 +1331,33 @@ color:#64748b;
 }
 
 
+.mobile-menu{
 
+display:none;
+
+border:none;
+background:#f1f5f9;
+width:38px;
+height:38px;
+border-radius:10px;
+font-size:20px;
+cursor:pointer;
+
+}
+
+
+
+@media(max-width:768px){
+
+.mobile-menu{
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+}
 
 /* CONTENT */
 .content{
@@ -1576,25 +1607,54 @@ border-radius:6px;
 margin-bottom:20px;
 
 }
-@media(max-width:900px){
-
-.sidebar{
-    width:70px;
-}
 
 
-.header{
-    left:70px;
-}
+@media(max-width:768px){
+
+    .sidebar{
+        left:-230px;
+        width:230px;
+        transition:.3s ease;
+    }
+
+    .sidebar.show{
+        left:0;
+    }
 
 
-.content{
+    .header{
+        left:0;
+        padding:0 15px;
+    }
 
-    margin-left:70px !important;
 
-    width:auto !important;
+    .content{
+        margin-left:0 !important;
+        padding:85px 15px 25px;
+        width:100% !important;
+    }
 
-}
+
+    .profile-info{
+        display:none;
+    }
+
+
+    .system-name{
+        font-size:14px;
+    }
+
+
+    .logout{
+        padding:8px 10px;
+        font-size:11px;
+    }
+
+
+    .notification-box{
+        width:calc(100vw - 30px);
+        right:-50px;
+    }
 
 }
 
@@ -1617,6 +1677,35 @@ margin-bottom:20px;
     color:white !important;
 
 }
+
+
+.sidebar-overlay{
+
+display:none;
+
+}
+
+
+@media(max-width:768px){
+
+.sidebar-overlay{
+
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.4);
+z-index:999;
+}
+
+.sidebar.show + .sidebar-overlay{
+
+display:block;
+
+}
+
+}
 </style>
 
 <script>
@@ -1626,6 +1715,13 @@ function toggleNotification(){
     let box = document.querySelector('.notification-box');
 
     box.classList.toggle('show');
+
+}
+
+function toggleSidebar(){
+
+    document.querySelector('.sidebar')
+    .classList.toggle('show');
 
 }
 
