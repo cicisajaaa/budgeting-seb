@@ -3,19 +3,14 @@
 @section('content')
 
 
-<div class="detail-container">
+<div class="detail-page">
 
 
 {{-- HEADER --}}
 
-<div class="dashboard-header">
-
-
-<div class="header-content">
-
+<div class="page-header">
 
 <div>
-
 
 <span class="label">
 MONITORING DANA
@@ -28,29 +23,132 @@ Detail Pengajuan Dana
 
 
 <p>
-Melihat informasi dan status pengajuan dana yang telah diproses oleh bagian keuangan.
+Informasi lengkap proses pengajuan dana dan keputusan bagian keuangan.
 </p>
 
 
 </div>
 
 
-
-
-<a href="{{route('owner.approval')}}"
-class="back-btn">
-
+<a href="{{route('owner.approval')}}" class="back-btn">
 ← Kembali
-
 </a>
 
 
+</div>
+
+
+
+
+
+
+{{-- STATUS UTAMA --}}
+
+
+@php
+
+$isApproved = in_array($expense->status,['approved','selesai']);
+
+$isPending = $expense->status == 'pending';
+
+@endphp
+
+
+
+<div class="status-card 
+@if($isApproved)
+approved-bg
+@elseif($isPending)
+pending-bg
+@else
+rejected-bg
+@endif
+">
+
+
+<div class="status-left">
+
+
+<div class="status-icon">
+
+@if($isApproved)
+
+✓
+
+@elseif($isPending)
+
+⏳
+
+@else
+
+✕
+
+@endif
+
+
+</div>
+
+
+
+<div>
+
+<span>
+
+STATUS PENGAJUAN
+
+</span>
+
+
+<h2>
+
+
+@if($isApproved)
+
+Disetujui
+
+@elseif($isPending)
+
+Menunggu Verifikasi
+
+@else
+
+Ditolak
+
+@endif
+
+
+</h2>
+
+
+
+<p>
+
+
+@if($isApproved)
+
+Pengajuan telah diverifikasi dan disetujui oleh bagian keuangan.
+
+@elseif($isPending)
+
+Pengajuan masih menunggu proses verifikasi.
+
+@else
+
+Pengajuan tidak disetujui oleh bagian keuangan.
+
+@endif
+
+
+</p>
+
 
 </div>
 
 
 </div>
 
+
+</div>
 
 
 
@@ -62,81 +160,86 @@ class="back-btn">
 {{-- INFORMASI --}}
 
 
-<div class="panel">
+
+<div class="section">
 
 
-<h3>
-📄 Informasi Pengajuan
-</h3>
+<div class="section-title">
 
+Informasi Pengajuan
 
-
-
-<div class="detail-grid">
+</div>
 
 
 
-<div class="detail-item">
+<div class="table-detail">
 
-<label>
+
+<div class="row">
+
+<span>
+Nomor Pengajuan
+</span>
+
+<strong>
+{{ $expense->nomor_pengajuan ?? '-' }}
+</strong>
+
+</div>
+
+
+
+<div class="row">
+
+<span>
 Project
-</label>
+</span>
 
-<b>
+<strong>
 {{ $expense->proyek->nama_proyek ?? '-' }}
-</b>
+</strong>
 
 </div>
 
 
 
 
+<div class="row">
 
-
-
-<div class="detail-item">
-
-<label>
+<span>
 Pengaju
-</label>
+</span>
 
-<b>
+<strong>
 {{ $expense->user->name ?? '-' }}
-</b>
+</strong>
 
 </div>
 
 
 
 
+<div class="row">
 
-
-
-<div class="detail-item">
-
-<label>
+<span>
 Judul Pengajuan
-</label>
+</span>
 
-<b>
+<strong>
 {{ $expense->judul ?? '-' }}
-</b>
+</strong>
 
 </div>
 
 
 
+<div class="row">
 
-
-
-
-<div class="detail-item">
-
-<label>
+<span>
 Jumlah Dana
-</label>
+</span>
 
-<b class="amount">
+<strong class="money">
 
 Rp {{number_format(
 $expense->jumlah ?? 0,
@@ -145,7 +248,29 @@ $expense->jumlah ?? 0,
 '.'
 )}}
 
-</b>
+</strong>
+
+</div>
+
+
+
+<div class="row">
+
+<span>
+Tanggal Pengajuan
+</span>
+
+<strong>
+
+{{optional($expense->created_at)->format('d M Y H:i') ?? '-'}}
+
+</strong>
+
+</div>
+
+
+</div>
+
 
 </div>
 
@@ -155,15 +280,29 @@ $expense->jumlah ?? 0,
 
 
 
-<div class="detail-item full">
 
-<label>
-Keterangan
-</label>
 
-<b>
-{{ $expense->keterangan ?? '-' }}
-</b>
+{{-- KETERANGAN --}}
+
+
+
+<div class="section">
+
+
+<div class="section-title">
+
+Keterangan Pengajuan
+
+</div>
+
+
+
+<div class="description">
+
+{{ $expense->keterangan ?? $expense->judul ?? '-' }}
+
+</div>
+
 
 </div>
 
@@ -174,176 +313,204 @@ Keterangan
 
 
 
-<div class="detail-item">
-
-<label>
-Status Pengajuan
-</label>
+{{-- TIMELINE --}}
 
 
 
-@if($expense->status == 'pending')
+<div class="section">
 
 
-<span class="status pending">
-Menunggu
-</span>
+<div class="section-title">
+
+Riwayat Proses
+
+</div>
 
 
 
-@elseif($expense->status == 'approved')
+<div class="timeline">
 
 
-<span class="status approved">
-Disetujui
-</span>
+<div class="timeline-item active">
+
+<div class="dot">
+✓
+</div>
 
 
+<div>
+
+<strong>
+Pengajuan Dibuat
+</strong>
+
+
+<p>
+Pengajuan dana telah dibuat oleh pemohon.
+</p>
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="timeline-item 
+@if(!$isPending)
+active
+@endif
+">
+
+
+<div class="dot">
+
+@if(!$isPending)
+
+✓
 
 @else
 
-
-<span class="status rejected">
-Ditolak
-</span>
-
-
+•
 
 @endif
 
 
-
 </div>
 
 
 
+<div>
 
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{{-- MONITORING --}}
-
-
-<div class="panel">
-
-
-<h3>
-📊 Monitoring Keputusan Pengajuan
-</h3>
-
-
-
-
-@if($expense->status == 'pending')
-
-
-
-<div class="info-box waiting-box">
-
-
-<span>
-⏳ Menunggu Verifikasi Keuangan
-</span>
+<strong>
+Verifikasi Keuangan
+</strong>
 
 
 <p>
-Pengajuan dana masih menunggu proses verifikasi dari bagian keuangan.
-Owner hanya memiliki akses untuk melihat perkembangan pengajuan.
-</p>
 
+@if($isPending)
 
-</div>
-
-
-
-
-
-
-
-@elseif($expense->status == 'approved')
-
-
-
-<div class="info-box approved-box">
-
-
-<span>
-✓ Pengajuan Disetujui
-</span>
-
-
-<p>
-Pengajuan dana telah disetujui oleh bagian keuangan dan dapat diproses sesuai prosedur perusahaan.
-</p>
-
-
-</div>
-
-
-
-
-
-
+Menunggu pemeriksaan keuangan.
 
 @else
 
+Telah diproses oleh bagian keuangan.
+
+@endif
 
 
-<div class="info-box rejected-box">
-
-
-<span>
-✕ Pengajuan Ditolak
-</span>
-
-
-<p>
-Pengajuan dana tidak disetujui oleh bagian keuangan.
 </p>
 
 
+</div>
 
+
+</div>
+
+
+
+
+
+
+
+<div class="timeline-item 
+@if($isApproved)
+active
+@endif
+">
+
+
+<div class="dot">
+
+@if($isApproved)
+
+✓
+
+@else
+
+•
+
+@endif
+
+</div>
+
+
+
+<div>
+
+<strong>
+Keputusan Akhir
+</strong>
+
+
+<p>
+
+
+@if($isApproved)
+
+Dana disetujui.
+
+@elseif(!$isPending)
+
+Dana ditolak.
+
+@else
+
+Menunggu keputusan.
+
+@endif
+
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- CATATAN --}}
 
 
 @if($expense->catatan)
 
 
-<div class="reason">
+<div class="section">
 
 
-<strong>
-Alasan Penolakan
-</strong>
+<div class="section-title">
+
+Catatan Keuangan
+
+</div>
 
 
-<p>
+
+<div class="note">
+
 {{ $expense->catatan }}
-</p>
-
 
 </div>
 
 
-
-@endif
-
-
-
 </div>
-
 
 
 @endif
@@ -352,14 +519,38 @@ Alasan Penolakan
 
 
 
+
+
+{{-- DOKUMEN --}}
+
+@if($expense->bukti_pengajuan)
+
+<div class="section">
+
+<div class="section-title">
+
+Lampiran Dokumen
+
 </div>
 
 
+<a href="{{asset('uploads/pengajuan/'.$expense->bukti_pengajuan)}}"
+target="_blank"
+class="document">
 
+📎 Buka Dokumen Pengajuan
 
+</a>
 
 
 </div>
+
+@endif
+
+
+</div>
+
+
 
 
 
@@ -369,48 +560,32 @@ Alasan Penolakan
 
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
 
-*{
-    box-sizing:border-box;
-}
+.detail-page{
 
+max-width:900px;
 
-/* ===============================
-HEADER
-================================ */
-
-
-.dashboard-header{
-
-    background:#f8fafc;
-
-    padding:25px;
-
-    border-radius:24px;
-
-    border:1px solid #e2e8f0;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
+margin:auto;
 
 }
 
+.page-header{
 
+background:#f8fafc;
 
-.header-content{
+padding:18px 22px;
 
-    display:flex;
+border-radius:12px;
 
-    justify-content:space-between;
+border:1px solid #e2e8f0;
 
-    align-items:center;
+display:flex;
 
-    gap:20px;
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
 
 }
 
@@ -418,71 +593,281 @@ HEADER
 
 .label{
 
-    font-size:10px;
+font-size:10px;
 
-    letter-spacing:2px;
+letter-spacing:2px;
 
-    font-weight:800;
+font-weight:700;
 
-    color:#64748b;
+color:#64748b;
+
+}
+
+
+.page-header h1{
+
+margin:6px 0;
+
+font-size:22px;
+
+color:#172033;
 
 }
 
 
 
-.dashboard-header h1{
+.page-header p{
 
-    font-size:24px;
+margin:0;
 
-    margin:8px 0;
+color:#64748b;
 
-    font-weight:800;
-
-    color:#172033;
+font-size:13px;
 
 }
 
-
-
-.dashboard-header p{
-
-    margin:0;
-
-    font-size:12px;
-
-    color:#64748b;
-
-}
-
-
-
-
-
-
-/* ===============================
-BACK BUTTON
-================================ */
 
 
 .back-btn{
 
-    display:inline-flex;
+background:#0f172a;
 
-    align-items:center;
+color:white;
 
-    padding:10px 18px;
+padding:10px 18px;
 
-    border-radius:12px;
+border-radius:10px;
 
-    background:#0f172a;
+text-decoration:none;
 
-    color:white;
+font-weight:700;
 
-    text-decoration:none;
+font-size:12px;
 
-    font-size:12px;
+}
 
-    font-weight:700;
+
+
+
+.status-card{
+
+padding:16px 20px;
+
+border-radius:12px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.status-left{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+
+.status-icon{
+
+width:38px;
+
+height:38px;
+
+font-size:18px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-weight:bold;
+
+}
+
+
+
+.status-card span{
+
+font-size:10px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+}
+
+
+
+.status-card h2{
+
+margin:5px 0;
+
+font-size:18px;
+
+}
+
+
+
+.status-card p{
+
+margin:0;
+
+font-size:12px;
+
+}
+
+
+
+.approved-bg{
+
+background:#f0fdf4;
+
+}
+
+
+
+.approved-bg .status-icon{
+
+background:#dcfce7;
+
+color:#166534;
+
+}
+
+
+
+.pending-bg{
+
+background:#fffbeb;
+
+}
+
+
+
+.pending-bg .status-icon{
+
+background:#fef3c7;
+
+color:#92400e;
+
+}
+
+
+
+.rejected-bg{
+
+background:#fef2f2;
+
+}
+
+
+
+.rejected-bg .status-icon{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+}
+
+
+
+
+.section{
+
+background:white;
+
+border:1px solid #e2e8f0;
+
+border-radius:12px;
+
+padding:18px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.section-title{
+
+font-size:14px;
+
+font-weight:800;
+
+border-left:4px solid #8B5E22;
+
+padding-left:10px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.table-detail .row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:14px 0;
+
+border-bottom:1px solid #f1f5f9;
+
+}
+
+
+
+.row span{
+
+color:#64748b;
+
+font-size:12px;
+
+}
+
+
+
+.row strong{
+
+color:#172033;
+font-size:12px;
+
+}
+
+
+
+.money{
+
+color:#15803d!important;
+
+font-size:18px;
+
+}
+
+
+
+.description{
+
+background:#f8fafc;
+
+padding:18px;
+
+border-radius:12px;
+
+color:#334155;
+
+line-height:1.6;
 
 }
 
@@ -490,132 +875,57 @@ BACK BUTTON
 
 
 
+.timeline-item{
 
-/* ===============================
-PANEL
-================================ */
+display:flex;
 
+gap:15px;
 
-.panel{
-
-    background:white;
-
-    padding:22px;
-
-    border-radius:24px;
-
-    border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
-    margin-bottom:22px;
+padding-bottom:20px;
 
 }
 
 
 
-.panel h3{
+.dot{
 
-    font-size:16px;
+width:28px;
 
-    font-weight:800;
+height:28px;
 
-    color:#172033;
+border-radius:50%;
 
-    margin-bottom:18px;
+background:#e2e8f0;
 
-    padding-left:10px;
+display:flex;
 
-    border-left:4px solid #334155;
+align-items:center;
 
-}
+justify-content:center;
 
-
-
-
-
-
-
-/* ===============================
-DETAIL GRID
-================================ */
-
-
-.detail-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:15px;
+font-weight:bold;
 
 }
 
 
 
-.detail-item{
+.timeline-item.active .dot{
 
-    background:#f8fafc;
+background:#dcfce7;
 
-    padding:16px;
-
-    border-radius:18px;
-
-    border:1px solid #e2e8f0;
+color:#166534;
 
 }
 
 
 
-.detail-item:hover{
+.timeline-item p{
 
-    background:white;
+margin:5px 0;
 
-}
+font-size:12px;
 
-
-
-.detail-item.full{
-
-    grid-column:span 2;
-
-}
-
-
-
-.detail-item label{
-
-    display:block;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    color:#64748b;
-
-    margin-bottom:7px;
-
-}
-
-
-
-.detail-item b{
-
-    font-size:13px;
-
-    color:#172033;
-
-}
-
-
-
-.amount{
-
-    font-size:18px!important;
-
-    color:#15803d!important;
+color:#64748b;
 
 }
 
@@ -623,435 +933,206 @@ DETAIL GRID
 
 
 
+.note{
 
-/* ===============================
-STATUS
-================================ */
+background:#fff7ed;
 
+border:1px solid #fed7aa;
 
-.status{
+padding:15px;
 
-    display:inline-flex;
+border-radius:12px;
 
-    padding:6px 13px;
-
-    border-radius:999px;
-
-    font-size:11px;
-
-    font-weight:700;
+color:#9a3412;
 
 }
 
 
 
-.pending{
+.document{
 
-    background:#fef3c7;
+display:inline-block;
 
-    color:#92400e;
+padding:10px 15px;
 
-}
+background:#334155;
 
+color:white;
 
+border-radius:8px;
 
-.approved{
+font-size:12px;
 
-    background:#dcfce7;
+font-weight:bold;
 
-    color:#166534;
-
-}
-
-
-
-.rejected{
-
-    background:#fee2e2;
-
-    color:#991b1b;
+text-decoration:none;
 
 }
 
 
 
 
+@media(max-width:700px){
+
+.page-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
 
 
+.table-detail .row{
 
-/* ===============================
-MONITORING BOX
-================================ */
+flex-direction:column;
 
+gap:5px;
 
-.info-box{
+}
 
-    padding:20px;
-
-    border-radius:18px;
-
-    border:1px solid #e2e8f0;
 
 }
 
 
 
-.info-box span{
+@media(max-width:480px){
 
-    display:inline-flex;
 
-    padding:7px 13px;
+.detail-page{
 
-    border-radius:999px;
+width:100%;
 
-    font-size:11px;
+}
 
-    font-weight:700;
+
+.page-header{
+
+padding:15px;
 
 }
 
 
 
-.info-box p{
+.page-header h1{
 
-    margin-top:12px;
-
-    font-size:12px;
-
-    line-height:1.6;
-
-    color:#64748b;
+font-size:19px;
 
 }
 
 
 
-.waiting-box{
+.page-header p{
 
-    background:#fffbeb;
-
-}
-
-
-
-.waiting-box span{
-
-    background:#fef3c7;
-
-    color:#92400e;
+font-size:11px;
 
 }
 
 
 
-.approved-box{
+.back-btn{
 
-    background:#f0fdf4;
+width:100%;
 
-}
-
-
-
-.approved-box span{
-
-    background:#dcfce7;
-
-    color:#166534;
+text-align:center;
 
 }
 
 
 
-.rejected-box{
+.status-card{
 
-    background:#fef2f2;
-
-}
-
-
-
-.rejected-box span{
-
-    background:#fee2e2;
-
-    color:#991b1b;
+padding:14px;
 
 }
 
 
 
+.status-card h2{
 
-
-
-
-/* ===============================
-REASON
-================================ */
-
-
-.reason{
-
-    margin-top:15px;
-
-    padding:14px;
-
-    background:white;
-
-    border-radius:12px;
-
-    border:1px solid #fecaca;
+font-size:16px;
 
 }
 
 
 
-.reason strong{
+.status-card p{
 
-    font-size:12px;
+font-size:11px;
 
-}
-
-
-
-.reason p{
-
-    margin:7px 0 0;
-
-    color:#991b1b;
+line-height:1.5;
 
 }
 
 
 
+.section{
 
-
-
-
-/* ===============================
-RESPONSIVE
-================================ */
-
-/* ===============================
-   RESPONSIVE
-================================ */
-
-@media(max-width:900px){
-
-    .dashboard-header{
-        padding:22px;
-        border-radius:20px;
-    }
-
-    .header-content{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-    }
-
-    .dashboard-header h1{
-        font-size:22px;
-        line-height:1.35;
-    }
-
-    .dashboard-header p{
-        font-size:11px;
-        line-height:1.5;
-    }
-
-    .back-btn{
-        width:100%;
-        justify-content:center;
-        box-sizing:border-box;
-        padding:11px 15px;
-        font-size:11px;
-    }
-
-
-    .panel{
-        padding:20px;
-        border-radius:20px;
-    }
-
-    .panel h3{
-        font-size:14px;
-        margin-bottom:15px;
-    }
-
-
-    .detail-grid{
-        grid-template-columns:1fr;
-        gap:11px;
-    }
-
-    .detail-item,
-    .detail-item.full{
-        grid-column:auto;
-        padding:14px;
-        border-radius:14px;
-        min-width:0;
-    }
-
-    .detail-item label{
-        font-size:9px;
-    }
-
-    .detail-item b{
-        font-size:11px;
-        line-height:1.5;
-        word-break:break-word;
-    }
-
-    .amount{
-        font-size:16px!important;
-    }
-
-
-    .status{
-        padding:5px 10px;
-        font-size:9px;
-    }
-
-
-    .info-box{
-        padding:16px;
-        border-radius:15px;
-    }
-
-    .info-box span{
-        font-size:9px;
-        padding:6px 10px;
-    }
-
-    .info-box p{
-        font-size:10px;
-        line-height:1.6;
-    }
-
-
-    .reason{
-        padding:12px;
-        margin-top:12px;
-    }
-
-    .reason strong{
-        font-size:10px;
-    }
-
-    .reason p{
-        font-size:10px;
-        line-height:1.5;
-        word-break:break-word;
-    }
+padding:14px;
 
 }
 
 
-@media(max-width:600px){
 
-    .dashboard-header{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:16px;
-    }
+.section-title{
 
-    .label{
-        font-size:8px;
-        letter-spacing:1.5px;
-    }
+font-size:13px;
 
-    .dashboard-header h1{
-        font-size:19px;
-        margin:7px 0;
-    }
-
-    .dashboard-header p{
-        font-size:10px;
-    }
-
-    .back-btn{
-        padding:10px 12px;
-        border-radius:10px;
-        font-size:9px;
-    }
+}
 
 
-    .panel{
-        padding:14px;
-        border-radius:17px;
-        margin-bottom:15px;
-    }
 
-    .panel h3{
-        font-size:12px;
-        padding-left:8px;
-        border-left-width:3px;
-    }
+.row span,
+.row strong{
+
+font-size:11px;
+
+}
 
 
-    .detail-grid{
-        gap:8px;
-    }
 
-    .detail-item,
-    .detail-item.full{
-        padding:12px;
-        border-radius:12px;
-    }
+.money{
 
-    .detail-item label{
-        font-size:8px;
-        margin-bottom:5px;
-    }
+font-size:15px!important;
 
-    .detail-item b{
-        font-size:9px;
-    }
-
-    .amount{
-        font-size:14px!important;
-    }
+}
 
 
-    .status{
-        padding:5px 8px;
-        font-size:8px;
-    }
+
+.description{
+
+font-size:11px;
+
+padding:12px;
+
+}
 
 
-    .info-box{
-        padding:13px;
-        border-radius:13px;
-    }
 
-    .info-box span{
-        font-size:8px;
-        padding:5px 8px;
-    }
+.document{
 
-    .info-box p{
-        font-size:9px;
-        line-height:1.55;
-        margin-top:9px;
-    }
+width:100%;
+
+text-align:center;
+
+}
 
 
-    .reason{
-        padding:10px;
-        border-radius:10px;
-    }
 
-    .reason strong{
-        font-size:9px;
-    }
+.timeline-item{
 
-    .reason p{
-        font-size:9px;
-        margin-top:5px;
-    }
+gap:10px;
+
+}
+
+
 
 }
 
 </style>
+
 
 
 @endsection

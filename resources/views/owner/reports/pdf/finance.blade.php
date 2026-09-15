@@ -308,12 +308,10 @@ color:#64748b;
 
 <div class="header">
 
-
 <img 
-src="{{public_path('images/logo-cv.png')}}"
+src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo-cv.png'))) }}"
 class="logo"
 >
-
 
 <div class="company">
 

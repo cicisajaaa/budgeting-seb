@@ -5,7 +5,6 @@
 
 <meta charset="utf-8">
 
-
 <title>
 Analisis Performa Perusahaan
 </title>
@@ -15,21 +14,25 @@ Analisis Performa Perusahaan
 
 body{
 
-font-family: DejaVu Sans, sans-serif;
+    font-family: DejaVu Sans, sans-serif;
 
-font-size:12px;
+    font-size:12px;
 
-color:#1e293b;
+    color:#1e293b;
+
+    margin:35px;
 
 }
 
 
 
+/* HEADER */
+
 .header{
 
-text-align:center;
+    text-align:center;
 
-margin-bottom:30px;
+    margin-bottom:25px;
 
 }
 
@@ -37,7 +40,7 @@ margin-bottom:30px;
 
 .logo{
 
-width:80px;
+    width:80px;
 
 }
 
@@ -45,13 +48,13 @@ width:80px;
 
 .company{
 
-font-size:18px;
+    font-size:18px;
 
-font-weight:bold;
+    font-weight:bold;
 
-color:#8B5E22;
+    color:#8B5E22;
 
-margin-top:10px;
+    margin-top:10px;
 
 }
 
@@ -59,11 +62,11 @@ margin-top:10px;
 
 .title{
 
-font-size:16px;
+    font-size:16px;
 
-font-weight:bold;
+    font-weight:bold;
 
-margin-top:5px;
+    margin-top:5px;
 
 }
 
@@ -71,35 +74,51 @@ margin-top:5px;
 
 .info{
 
-color:#64748b;
+    margin-top:8px;
 
-margin-top:8px;
+    color:#64748b;
 
-}
-
-.card-table{
-
-width:100%;
-
-border-collapse:separate;
-
-border-spacing:10px 0;
-
-margin-top:20px;
+    font-size:11px;
 
 }
 
 
 
-.card{
+.divider{
 
-border:1px solid #ddd;
+    margin-top:20px;
 
-padding:15px;
+    border-bottom:2px solid #8B5E22;
 
-border-radius:8px;
+}
 
-height:70px;
+
+
+/* SUMMARY */
+
+.summary-table{
+
+    width:100%;
+
+    border-collapse:separate;
+
+    border-spacing:10px;
+
+    margin-top:20px;
+
+}
+
+
+
+.summary-card{
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    height:70px;
 
 }
 
@@ -107,9 +126,11 @@ height:70px;
 
 .label{
 
-font-size:11px;
+    font-size:10px;
 
-color:#64748b;
+    color:#64748b;
+
+    text-transform:uppercase;
 
 }
 
@@ -117,13 +138,13 @@ color:#64748b;
 
 .value{
 
-font-size:22px;
+    font-size:22px;
 
-font-weight:bold;
+    font-weight:bold;
 
-margin-top:8px;
+    color:#1e293b;
 
-color:#1e293b;
+    margin-top:8px;
 
 }
 
@@ -131,9 +152,41 @@ color:#1e293b;
 
 
 
+/* SECTION */
+
+.section-title{
+
+    margin-top:25px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    color:#1e293b;
+
+    border-left:4px solid #8B5E22;
+
+    padding-left:8px;
+
+}
+
+
+
+
+
+/* PROGRESS */
+
 .progress-box{
 
-margin-top:25px;
+    margin-top:15px;
+
+}
+
+
+
+.progress-info{
+
+    margin-bottom:8px;
 
 }
 
@@ -141,13 +194,15 @@ margin-top:25px;
 
 .progress-bg{
 
-height:18px;
+    width:100%;
 
-width:100%;
+    height:18px;
 
-background:#e5e7eb;
+    background:#e5e7eb;
 
-border-radius:20px;
+    border-radius:20px;
+
+    overflow:hidden;
 
 }
 
@@ -155,33 +210,25 @@ border-radius:20px;
 
 .progress-fill{
 
-height:18px;
+    height:18px;
 
-background:#8B5E22;
-
-border-radius:20px;
-
-}
-
-
-.danger{
-
-background:#fee2e2;
-
-color:#991b1b;
+    background:#8B5E22;
 
 }
 
 
 
+
+
+/* EVALUATION */
 
 table{
 
-width:100%;
+    width:100%;
 
-border-collapse:collapse;
+    border-collapse:collapse;
 
-margin-top:25px;
+    margin-top:15px;
 
 }
 
@@ -189,9 +236,9 @@ margin-top:25px;
 
 td{
 
-padding:10px;
+    padding:12px;
 
-border-bottom:1px solid #ddd;
+    border-bottom:1px solid #e2e8f0;
 
 }
 
@@ -199,54 +246,77 @@ border-bottom:1px solid #ddd;
 
 td:first-child{
 
-font-weight:bold;
+    width:35%;
+
+    font-weight:bold;
+
+    color:#475569;
 
 }
 
-
-
-
-
-.footer{
-
-margin-top:30px;
-
-text-align:right;
-
-font-size:11px;
-
-color:#64748b;
-
-}
 
 
 .status{
 
-font-weight:bold;
+    display:inline-block;
 
-padding:6px 12px;
+    padding:6px 14px;
 
-border-radius:15px;
+    border-radius:20px;
+
+    font-weight:bold;
 
 }
+
 
 
 .good{
 
-background:#dcfce7;
+    background:#dcfce7;
 
-color:#166534;
+    color:#166534;
 
 }
+
 
 
 .warning{
 
-background:#fef3c7;
+    background:#fef3c7;
 
-color:#92400e;
+    color:#92400e;
 
 }
+
+
+
+.danger{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+
+
+
+/* FOOTER */
+
+.footer{
+
+    margin-top:35px;
+
+    text-align:right;
+
+    font-size:10px;
+
+    color:#64748b;
+
+}
+
+
 
 </style>
 
@@ -258,14 +328,16 @@ color:#92400e;
 <body>
 
 
-
-
 <div class="header">
 
 
 <img
-src="{{public_path('images/logo-cv.png')}}"
+
+src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('images/logo-cv.png')))}}"
+
 class="logo"
+
+
 >
 
 
@@ -287,33 +359,40 @@ ANALISIS PERFORMA PERUSAHAAN
 
 <div class="info">
 
-Tanggal :
+Tanggal Laporan :
+
 {{($tanggal ?? now())->format('d M Y')}}
 
 </div>
 
 
+<div class="divider"></div>
 
 
 </div>
 
 
 
-<table class="card-table">
+
+
+<table class="summary-table">
 
 <tr>
 
 
-<td class="card">
-
+<td class="summary-card">
 
 <div class="label">
+
 Total Project
+
 </div>
 
 
 <div class="value">
+
 {{$totalProject ?? 0}}
+
 </div>
 
 
@@ -321,16 +400,22 @@ Total Project
 
 
 
-<td class="card">
+
+
+<td class="summary-card">
 
 
 <div class="label">
+
 Project Aktif
+
 </div>
 
 
 <div class="value">
+
 {{$projectAktif ?? 0}}
+
 </div>
 
 
@@ -339,11 +424,14 @@ Project Aktif
 
 
 
-<td class="card">
+
+<td class="summary-card">
 
 
 <div class="label">
-Rata-rata Progress Project
+
+Rata-rata Progress
+
 </div>
 
 
@@ -359,11 +447,14 @@ Rata-rata Progress Project
 
 
 
-<td class="card">
+
+<td class="summary-card">
 
 
 <div class="label">
+
 Project Selesai
+
 </div>
 
 
@@ -377,6 +468,7 @@ Project Selesai
 </td>
 
 
+
 </tr>
 
 </table>
@@ -386,23 +478,38 @@ Project Selesai
 
 
 
+<div class="section-title">
+
+Progress Penyelesaian Project
+
+</div>
+
+
+
 <div class="progress-box">
 
 
-<p>
-Tingkat Penyelesaian Project :
+<div class="progress-info">
+
+Total penyelesaian :
+
 <strong>
+
 {{number_format($progress ?? 0,1)}}%
+
 </strong>
-</p>
+
+
+</div>
+
+
 
 <div class="progress-bg">
 
 
 <div class="progress-fill"
 
-style="width:
-{{min($progress ?? 0,100)}}%"
+style="width:{{min($progress ?? 0,100)}}%">
 
 </div>
 
@@ -416,49 +523,81 @@ style="width:
 
 
 
-<h3>
+
+
+<div class="section-title">
+
 Ringkasan Evaluasi
-</h3>
+
+</div>
+
+
+
 
 <table>
 
 
+
 <tr>
+
 
 <td>
 
 Status Operasional
 
 </td>
+
+
+
 <td>
+
+
 @if(($status ?? '') == 'Performa Sangat Baik')
 
+
 <span class="status good">
-{{ $status }}
+
+{{$status}}
+
 </span>
+
 
 @elseif(($status ?? '') == 'Performa Cukup Baik')
 
+
 <span class="status warning">
-{{ $status }}
+
+{{$status}}
+
 </span>
+
 
 @else
 
+
 <span class="status danger">
-{{ $status ?? 'Perlu Monitoring' }}
+
+{{$status ?? 'Perlu Monitoring'}}
+
 </span>
+
 
 @endif
 
+
 </td>
+
+
+
 </tr>
 
 
 
 
 
+
 <tr>
+
 
 <td>
 
@@ -480,7 +619,9 @@ Jumlah Project Berjalan
 
 
 
+
 <tr>
+
 
 <td>
 
@@ -491,8 +632,10 @@ Evaluasi Performa
 
 <td>
 
-Berdasarkan rata-rata progres 
+Berdasarkan rata-rata progres
+
 {{number_format($progress ?? 0,1)}}%
+
 dari seluruh project yang tercatat.
 
 </td>
@@ -513,11 +656,9 @@ dari seluruh project yang tercatat.
 
 <div class="footer">
 
-
 Dicetak oleh sistem pada
 
-{{$tanggal->format('d M Y H:i')}}
-
+{{($tanggal ?? now())->format('d M Y H:i')}}
 
 </div>
 

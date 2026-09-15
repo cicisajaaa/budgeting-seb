@@ -462,26 +462,105 @@ Saldo akhir
 
 
 
-
-
 {{-- PUSAT LAPORAN --}}
 
-
 <h2 class="section-title">
-Pusat Laporan
+    Pusat Laporan
 </h2>
-
-
 
 
 <div class="report-grid">
 
 
-
-
+{{-- LAPORAN KEUANGAN --}}
 
 <div class="report-card">
 
+<div class="report-icon">
+💰
+</div>
+
+
+<h3>
+Laporan Keuangan
+</h3>
+
+
+<p>
+Rekap pemasukan, pengeluaran, saldo, dan transaksi perusahaan.
+</p>
+
+
+<div class="button-group">
+
+
+<a href="{{route('owner.report.finance.pdf')}}"
+class="pdf">
+PDF
+</a>
+
+
+<a href="{{route('owner.report.finance.excel')}}"
+class="excel">
+Excel
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+{{-- LAPORAN PROJECT --}}
+
+<div class="report-card">
+
+<div class="report-icon">
+📁
+</div>
+
+
+<h3>
+Laporan Proyek
+</h3>
+
+
+<p>
+Detail progress proyek, anggaran, dan perkembangan pekerjaan.
+</p>
+
+
+<div class="button-group">
+
+
+<a href="{{route('owner.report.project.pdf')}}"
+class="pdf">
+PDF
+</a>
+
+
+<a href="{{route('owner.report.project.excel')}}"
+class="excel">
+Excel
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+{{-- ANALISIS PERFORMA --}}
+
+<div class="report-card">
 
 <div class="report-icon">
 📊
@@ -494,9 +573,8 @@ Analisis Performa
 
 
 <p>
-Evaluasi perkembangan bisnis perusahaan.
+Evaluasi perkembangan bisnis dan performa perusahaan.
 </p>
-
 
 
 <div class="button-group">
@@ -504,17 +582,13 @@ Evaluasi perkembangan bisnis perusahaan.
 
 <a href="{{route('owner.report.performance.pdf')}}"
 class="pdf">
-
 PDF
-
 </a>
 
 
 <a href="{{route('owner.report.performance.excel')}}"
 class="excel">
-
 Excel
-
 </a>
 
 
@@ -526,7 +600,6 @@ Excel
 
 
 </div>
-
 
 <style>
 
