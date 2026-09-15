@@ -808,6 +808,8 @@ Monitoring pekerjaan project
 
 
 
+<div class="table-wrapper">
+
 
 <table>
 
@@ -916,6 +918,8 @@ Belum ada tugas
 
 </table>
 
+
+</div>
 
 
 </div>
@@ -1324,7 +1328,15 @@ table{
 
 }
 
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
 
+.table-wrapper table{
+    min-width:550px;
+}
 
 th{
 
@@ -1398,23 +1410,137 @@ td{
 
 
 
-
-
 @media(max-width:1000px){
 
-.detail-grid{
+    .project-detail-header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-grid-template-columns:1fr;
+    .project-detail-header h1{
+        font-size:20px;
+        word-break:break-word;
+    }
+
+    .project-detail-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
+
+    .detail-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(3,1fr);
+        gap:12px;
+    }
+
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .detail-card{
+        padding:14px;
+    }
+
+    .detail-card h3{
+        font-size:14px;
+        word-break:break-word;
+    }
 
 }
 
 
-.stat-grid{
+@media(max-width:600px){
 
-grid-template-columns:1fr;
+    .project-detail-header{
+        padding:18px;
+        border-radius:18px;
+    }
 
-}
+    .project-detail-header h1{
+        font-size:19px;
+    }
 
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-card{
+        min-height:80px;
+        padding:14px;
+    }
+
+    .detail-card .icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+    }
+
+    .detail-card span{
+        font-size:10px;
+    }
+
+    .detail-card h3{
+        font-size:13px;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .stat-card{
+        padding:12px;
+        gap:8px;
+    }
+
+    .stat-icon{
+        width:34px;
+        height:34px;
+        font-size:14px;
+        flex-shrink:0;
+    }
+
+    .stat-card label{
+        font-size:9px;
+    }
+
+    .stat-card h2{
+        font-size:17px;
+    }
+
+    .glass-panel{
+        padding:15px;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .detail-table td{
+        padding:11px 8px;
+        font-size:11px;
+    }
+
+    .detail-table td:first-child{
+        width:120px;
+    }
+
+    .company-name{
+        word-break:break-word;
+    }
 
 }
 

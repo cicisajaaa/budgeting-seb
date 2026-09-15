@@ -767,49 +767,159 @@ ALERT
 /* ===============================
 RESPONSIVE
 ================================ */
+@media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-@media(max-width:800px){
+    .page-header-card h1{
+        font-size:21px;
+    }
 
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-.page-header-card{
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
 
-    flex-direction:column;
+    .form-card{
+        padding:20px;
+        border-radius:18px;
+    }
 
-    align-items:flex-start;
+    .form-heading{
+        align-items:flex-start;
+        gap:10px;
+    }
 
-    gap:15px;
+    .form-heading h3{
+        font-size:15px;
+    }
+
+    .form-heading p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-update{
+        width:100%;
+    }
+
+    .information-card{
+        padding:16px;
+        align-items:flex-start;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.btn-back{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    width:100%;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    text-align:center;
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .form-card{
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .form-heading{
+        padding-bottom:15px;
+        margin-bottom:18px;
+    }
+
+    .form-icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .form-heading h3{
+        font-size:14px;
+    }
+
+    .form-heading p{
+        font-size:10px;
+        line-height:1.4;
+    }
+
+    .form-group{
+        margin-bottom:18px;
+    }
+
+    .form-group label{
+        font-size:10px;
+    }
+
+    input{
+        height:42px;
+        font-size:12px;
+    }
+
+    textarea{
+        min-height:90px;
+        font-size:12px;
+    }
+
+    .form-action{
+        margin-top:20px;
+        padding-top:16px;
+    }
+
+    .btn-update{
+        width:100%;
+        height:42px;
+        padding:0 18px;
+        font-size:12px;
+    }
+
+    .information-card{
+        padding:14px;
+        gap:10px;
+    }
+
+    .information-icon{
+        width:36px;
+        height:36px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .information-card h4{
+        font-size:13px;
+    }
+
+    .information-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
 }
-
-
-
-.form-action{
-
-    justify-content:stretch;
-
-}
-
-
-
-.btn-update{
-
-    width:100%;
-
-}
-
-}
-
 </style>
 
 @endsection

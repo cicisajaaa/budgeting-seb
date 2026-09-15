@@ -399,10 +399,10 @@ Persentase penggunaan dana perusahaan.
 </div>
 
 
-<table>
+<div class="table-wrapper">
+    <table>
 
-
-<thead>
+        <thead>
 
 <tr>
 
@@ -486,6 +486,7 @@ Tidak ada pengajuan
 
 </table>
 
+</div>
 
 
 </div>
@@ -1489,42 +1490,354 @@ tr:hover{
 
 /* ================= RESPONSIVE ================= */
 
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:1200px){
 
+    .finance-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.finance-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-.dashboard-grid{
-
-    grid-template-columns:1fr;
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .dashboard-title{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .dashboard-title h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .dashboard-title p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .finance-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .finance-card > div:last-child{
+        min-width:0;
+    }
+
+    .finance-card label,
+    .finance-card h2,
+    .finance-card small{
+        word-break:break-word;
+    }
+
+    .finance-icon{
+        width:38px;
+        height:38px;
+        border-radius:13px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        margin-bottom:17px;
+    }
+
+    .finance-summary div{
+        gap:15px;
+    }
+
+    .finance-summary span,
+    .finance-summary b{
+        min-width:0;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .finance-summary b{
+        text-align:right;
+    }
+
+    .chart-panel{
+        min-height:260px;
+    }
+
+    .chart-panel canvas{
+        height:210px!important;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:650px;
+    }
+
+    .health-item{
+        gap:12px;
+    }
+
+    .health-item > div{
+        min-width:0;
+    }
+
+    .health-item strong,
+    .health-item small{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .health-item > span{
+        flex-shrink:0;
+    }
+
+    .activity-item{
+        align-items:flex-start;
+    }
+
+    .activity-item > div:last-child{
+        min-width:0;
+    }
+
+    .activity-item strong,
+    .activity-item p,
+    .activity-item small{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .system-row{
+        line-height:1.5;
+    }
+
 }
 
 
+@media(max-width:600px){
 
+    .dashboard-title{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-@media(max-width:700px){
+    .dashboard-title h1{
+        font-size:19px;
+        margin:7px 0;
+    }
 
+    .dashboard-title p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
-.finance-grid{
+    .finance-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
 
-    grid-template-columns:1fr;
+    .finance-card{
+        padding:12px;
+        border-radius:16px;
+        gap:8px;
+        align-items:flex-start;
+    }
+
+    .finance-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .finance-card label{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .finance-card h2{
+        font-size:14px;
+        line-height:1.35;
+        margin:4px 0;
+    }
+
+    .finance-card small{
+        display:block;
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .panel-title{
+        font-size:13px;
+        margin-bottom:15px;
+    }
+
+    .chart-panel{
+        min-height:235px;
+    }
+
+    .chart-panel canvas{
+        height:180px!important;
+    }
+
+    .finance-summary div{
+        padding:11px 0;
+        gap:10px;
+    }
+
+    .finance-summary span{
+        font-size:10px;
+    }
+
+    .finance-summary b{
+        font-size:10px;
+        text-align:right;
+    }
+
+    .progress-head{
+        font-size:10px;
+    }
+
+    .progress-track{
+        height:9px;
+    }
+
+    .description{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:650px;
+    }
+
+    th{
+        padding:11px 9px;
+        font-size:9px;
+    }
+
+    td{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    .pending{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .health-item{
+        padding:12px 0;
+        gap:8px;
+    }
+
+    .health-item strong{
+        font-size:10px;
+    }
+
+    .health-item small{
+        font-size:8px;
+    }
+
+    .badge-success,
+    .badge-warning{
+        padding:5px 8px;
+        font-size:8px;
+        flex-shrink:0;
+    }
+
+    .badge-money{
+        font-size:9px;
+        text-align:right;
+        word-break:break-word;
+    }
+
+    .activity-item{
+        gap:9px;
+        padding:10px 0;
+    }
+
+    .activity-dot{
+        width:8px;
+        height:8px;
+        margin-top:5px;
+        flex-shrink:0;
+    }
+
+    .activity-item strong{
+        font-size:10px;
+    }
+
+    .activity-item p{
+        font-size:9px;
+        line-height:1.5;
+        margin:4px 0;
+    }
+
+    .activity-item small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .system-row{
+        font-size:10px;
+        padding:8px 0;
+    }
+
+    .system-row span{
+        width:7px;
+        height:7px;
+        flex-shrink:0;
+    }
+
+    .empty-data{
+        padding:20px 10px;
+        font-size:10px;
+    }
 
 }
 
-
-
-}
 
 
 </style>

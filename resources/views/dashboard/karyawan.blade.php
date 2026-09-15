@@ -1883,521 +1883,389 @@ EMPTY
 RESPONSIVE
 ================================= */
 
-
 @media(max-width:1200px){
 
+    .employee-stats{
+        grid-template-columns:repeat(3,1fr);
+    }
 
-.employee-stats{
-
-    grid-template-columns:repeat(2,1fr);
+    .employee-grid{
+        grid-template-columns:1fr;
+    }
 
 }
-
-
-}
-
 
 
 @media(max-width:900px){
 
+    .employee-welcome{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+        border-radius:20px;
+    }
 
-.employee-grid{
+    .employee-welcome h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
 
-    grid-template-columns:1fr;
+    .employee-welcome p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+    .today-card{
+        width:100%;
+        text-align:center;
+        padding:10px 15px;
+        font-size:11px;
+    }
+
+    .employee-stats{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .stat-card{
+        padding:15px;
+        border-radius:18px;
+        gap:10px;
+        min-width:0;
+    }
+
+    .stat-icon{
+        width:38px;
+        height:38px;
+        border-radius:12px;
+        font-size:15px;
+        flex-shrink:0;
+    }
+
+    .stat-card label{
+        font-size:9px;
+    }
+
+    .stat-card h2{
+        font-size:17px;
+        margin:5px 0;
+    }
+
+    .stat-card small{
+        font-size:9px;
+        line-height:1.3;
+    }
+
+    .employee-panel{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .panel-header{
+        font-size:14px;
+    }
+
+    .project-top{
+        gap:10px;
+    }
+
+    .project-top strong{
+        min-width:0;
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .project-top span{
+        flex-shrink:0;
+    }
+
+    .task-row,
+    .deadline-card{
+        gap:10px;
+    }
+
+    .task-row > div,
+    .deadline-card > div:first-child{
+        min-width:0;
+    }
+
+    .task-row strong,
+    .deadline-card strong{
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .task-row p,
+    .deadline-card p{
+        word-break:break-word;
+    }
+
+    .task-row span,
+    .deadline-date{
+        flex-shrink:0;
+    }
+
+    .info-row{
+        gap:12px;
+    }
+
+    .info-row span,
+    .info-row b{
+        min-width:0;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .info-row b{
+        text-align:right;
+    }
+
+    .chart-box{
+        height:190px;
+    }
+
+    #taskChart{
+        max-width:155px!important;
+        max-height:155px!important;
+    }
+
+    .activity-card{
+        gap:10px;
+    }
+
+    .activity-content{
+        min-width:0;
+    }
+
+    .activity-content strong,
+    .activity-content p{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .activity-percent{
+        flex-shrink:0;
+    }
 
 }
-
-
-
-.employee-welcome{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-
-}
-
-
-}
-
 
 
 @media(max-width:600px){
 
-
-.employee-stats{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.task-row,
-.deadline-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:10px;
-
-}
-
-
-}
-
-
-/* =================================
-EMPLOYEE DASHBOARD COMPACT MODE
-SAMA DENGAN OWNER
-================================= */
-
-
-/* HEADER */
-
-.employee-welcome{
-
-    padding:25px;
-
-    border-radius:24px;
-
-}
-
-
-
-.welcome-label{
-
-    font-size:10px;
-
-}
-
-
-
-.employee-welcome h1{
-
-    font-size:24px;
-
-    margin:8px 0;
-
-}
-
-
-
-.employee-welcome p{
-
-    font-size:12px;
-
-}
-
-
-
-.welcome-tags span{
-
-    font-size:10px;
-
-    padding:6px 10px;
-
-}
-
-
-
-.today-card{
-
-    font-size:11px;
-
-    padding:9px 16px;
-
-}
-
-
-
-
-
-/* =================================
-STAT CARD
-================================= */
-
-
-.employee-stats{
-
-    gap:15px;
-
-}
-
-
-
-.stat-card{
-
-    padding:18px;
-
-    border-radius:22px;
-
-}
-
-
-
-.stat-icon{
-
-    width:40px;
-
-    height:40px;
-
-    font-size:16px;
-
-}
-
-
-
-.stat-card label{
-
-    font-size:10px;
-
-}
-
-
-
-.stat-card h2{
-
-    font-size:19px;
-
-    margin:6px 0;
-
-}
-
-
-
-.stat-card small{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-/* =================================
-PANEL
-================================= */
-
-
-.employee-panel{
-
-    padding:20px;
-
-    border-radius:24px;
-
-}
-
-
-
-.panel-header{
-
-    font-size:15px;
-
-    margin-bottom:15px;
-
-}
-
-
-
-
-
-/* =================================
-PROJECT PROGRESS
-================================= */
-
-
-.project-item{
-
-    padding:12px;
-
-}
-
-
-
-.project-top strong{
-
-    font-size:12px;
-
-}
-
-
-
-.project-top span{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-.progress-bar{
-
-    height:7px;
-
-}
-
-
-
-
-
-/* =================================
-TASK
-================================= */
-
-
-.task-row{
-
-    padding:12px;
-
-}
-
-
-
-.task-row strong{
-
-    font-size:12px;
-
-}
-
-
-
-.task-row p{
-
-    font-size:10px;
-
-}
-
-
-
-.task-row span{
-
-    font-size:10px;
-
-    padding:5px 10px;
-
-}
-
-
-
-
-
-/* =================================
-DEADLINE
-================================= */
-
-
-.deadline-card{
-
-    padding:12px;
-
-}
-
-
-
-.deadline-card strong{
-
-    font-size:12px;
-
-}
-
-
-
-.deadline-card p{
-
-    font-size:10px;
-
-}
-
-
-
-.deadline-date{
-
-    font-size:10px;
-
-    padding:5px 10px;
-
-}
-
-
-
-
-
-/* =================================
-INFO ACCOUNT
-================================= */
-
-
-.info-row{
-
-    padding:10px 0;
-
-}
-
-
-
-.info-row span{
-
-    font-size:11px;
-
-}
-
-
-
-.info-row b{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-.active-status{
-
-    padding:4px 10px;
-
-    font-size:10px;
-
-}
-
-
-
-
-
-/* =================================
-CHART
-================================= */
-
-
-.chart-box{
-
-    height:180px;
-
-}
-
-
-#taskChart{
-
-    max-width:150px!important;
-
-    max-height:150px!important;
-
-}
-
-
-
-
-
-/* =================================
-ACTIVITY
-================================= */
-
-
-.activity-card{
-
-    gap:12px;
-
-    padding:10px 0;
-
-}
-
-
-
-.activity-dot{
-
-    width:8px;
-
-    height:8px;
-
-}
-
-
-
-.activity-content strong{
-
-    font-size:12px;
-
-}
-
-
-
-.activity-content p{
-
-    font-size:11px;
-
-}
-
-
-
-.activity-content small{
-
-    font-size:10px;
-
-}
-
-
-
-.activity-percent{
-
-    font-size:10px;
-
-    padding:5px 10px;
-
-}
-
-
-
-
-
-/* =================================
-EMPTY
-================================= */
-
-
-.empty-data{
-
-    font-size:11px;
-
-    padding:20px;
-
-}
-
-
-
-
-
-/* =================================
-RESPONSIVE
-================================= */
-
-
-@media(max-width:1200px){
-
-.employee-stats{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-}
-
-
-
-@media(max-width:600px){
-
-.employee-stats{
-
-    grid-template-columns:1fr;
-
-}
+    .employee-welcome{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .employee-welcome h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .employee-welcome p{
+        font-size:10px;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+    .today-card{
+        padding:9px 12px;
+        border-radius:14px;
+        font-size:10px;
+    }
+
+    .employee-stats{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .stat-card{
+        padding:12px;
+        border-radius:16px;
+        gap:8px;
+    }
+
+    .stat-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .stat-card label{
+        font-size:8px;
+    }
+
+    .stat-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .stat-card small{
+        font-size:8px;
+    }
+
+    .employee-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .employee-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .panel-header{
+        font-size:13px;
+        margin-bottom:13px;
+    }
+
+    .project-item{
+        padding:10px;
+        border-radius:13px;
+    }
+
+    .project-top strong{
+        font-size:10px;
+    }
+
+    .project-top span{
+        font-size:10px;
+    }
+
+    .progress-bar{
+        height:6px;
+    }
+
+    .task-row{
+        padding:10px;
+        border-radius:13px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .task-row strong{
+        font-size:11px;
+    }
+
+    .task-row p{
+        font-size:9px;
+        margin-top:4px;
+    }
+
+    .task-row span{
+        font-size:8px;
+        padding:5px 9px;
+    }
+
+    .deadline-card{
+        padding:10px;
+        border-radius:13px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .deadline-card strong{
+        font-size:11px;
+    }
+
+    .deadline-card p{
+        font-size:9px;
+        margin:4px 0;
+    }
+
+    .deadline-date{
+        font-size:9px;
+        padding:5px 9px;
+    }
+
+    .info-row{
+        padding:9px 0;
+        gap:10px;
+    }
+
+    .info-row span,
+    .info-row b{
+        font-size:9px;
+    }
+
+    .active-status{
+        padding:4px 9px;
+        font-size:9px!important;
+    }
+
+    .chart-box{
+        height:175px;
+    }
+
+    #taskChart{
+        max-width:140px!important;
+        max-height:140px!important;
+    }
+
+    .activity-card{
+        gap:9px;
+        padding:9px 0;
+        align-items:flex-start;
+    }
+
+    .activity-dot{
+        width:7px;
+        height:7px;
+        margin-top:5px;
+        flex-shrink:0;
+    }
+
+    .activity-content strong{
+        font-size:10px;
+    }
+
+    .activity-content p{
+        font-size:9px;
+        margin:4px 0;
+    }
+
+    .activity-content small{
+        font-size:8px;
+    }
+
+    .activity-percent{
+        font-size:9px;
+        padding:4px 8px;
+    }
+
+    .empty-data{
+        padding:18px 10px;
+        font-size:10px;
+    }
 
 }
 

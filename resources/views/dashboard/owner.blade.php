@@ -495,11 +495,10 @@ Pemantauan Proyek
 
 
 
+<div class="table-wrapper">
+    <table>
 
-<table>
-
-
-<thead>
+        <thead>
 
 <tr>
 
@@ -674,6 +673,8 @@ Belum ada project
 
 </table>
 
+</div>
+
 
 </div>
 
@@ -726,20 +727,14 @@ Keuangan
 {{-- ================= TASK TERBARU ================= --}}
 
 
-
 <div class="panel">
 
+    <h3>
+        Aktivitas Pekerjaan Terbaru
+    </h3>
 
-<h3>
-Aktivitas Pekerjaan Terbaru
-</h3>
-
-
-
-
-
-<table>
-
+    <div class="table-wrapper">
+        <table>
 
 <thead>
 
@@ -859,6 +854,7 @@ Belum ada aktivitas
 
 </table>
 
+    </div>
 
 
 </div>
@@ -1353,318 +1349,269 @@ background:#f59e0b;
 }
 
 
+/* ================= RESPONSIVE ================= */
 
-@media(max-width:1000px){
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:750px;
+}
 
 
-.summary-grid{
+@media(max-width:1200px){
 
-grid-template-columns:repeat(2,1fr);
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+
+    .chart-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
 
-.content-grid{
+@media(max-width:900px){
 
-grid-template-columns:1fr;
+    .dashboard-header{
+        padding:22px;
+        border-radius:20px;
+    }
 
-}
+    .dashboard-header h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
 
+    .dashboard-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-}
-/* ===============================
-COMPACT FONT MODE
-================================ */
+    .summary-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+    }
 
+    .summary-card span,
+    .summary-card h2,
+    .summary-card p{
+        word-break:break-word;
+    }
 
-/* HEADER */
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+    }
 
-.dashboard-header{
+    .panel{
+        padding:18px;
+        border-radius:20px;
+        overflow:hidden;
+    }
 
-    padding:25px;
+    .panel h3{
+        font-size:14px;
+        line-height:1.4;
+    }
 
-    border-radius:24px;
+    .finance-row,
+    .health-item{
+        gap:12px;
+    }
 
-}
+    .finance-row span,
+    .health-item span,
+    .finance-row strong,
+    .health-item b{
+        min-width:0;
+        word-break:break-word;
+        line-height:1.5;
+    }
 
+    .finance-row strong,
+    .health-item b{
+        text-align:right;
+    }
 
+    .progress-wrapper{
+        width:150px;
+        max-width:100%;
+    }
 
-.label{
+    .progress-bar{
+        width:100px;
+    }
 
-    font-size:10px;
-
-}
-
-
-
-.dashboard-header h1{
-
-    font-size:24px;
-
-    margin:8px 0;
-
-}
-
-
-
-.dashboard-header p{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* SUMMARY CARD */
-
-.summary-grid{
-
-    gap:15px;
-
-}
-
-
-
-.summary-card{
-
-    padding:18px;
-
-    border-radius:22px;
-
-}
-
-
-
-.summary-card span{
-
-    font-size:11px;
-
-}
-
-
-
-.summary-card h2{
-
-    font-size:19px;
-
-    margin:8px 0;
+    .chart-grid{
+        gap:15px;
+    }
 
 }
-
-
-
-.summary-card p{
-
-    font-size:11px;
-
-}
-
-
-
-
-
-
-
-/* PANEL */
-
-.panel{
-
-    padding:20px;
-
-    border-radius:24px;
-
-}
-
-
-
-.panel h3{
-
-    font-size:15px;
-
-    margin-bottom:15px;
-
-}
-
-
-
-
-
-.finance-row,
-.health-item{
-
-    padding:12px 0;
-
-}
-
-
-
-.finance-row span,
-.health-item span{
-
-    font-size:12px;
-
-}
-
-
-
-.finance-row strong,
-.health-item b{
-
-    font-size:13px;
-
-}
-
-
-
-
-
-
-
-/* TABLE */
-
-th{
-
-    padding:12px;
-
-    font-size:11px;
-
-}
-
-
-
-td{
-
-    padding:12px;
-
-    font-size:12px;
-
-}
-
-
-
-td strong{
-
-    font-size:13px;
-
-}
-
-
-
-td small{
-
-    font-size:10px;
-
-}
-
-
-
-
-
-
-
-/* STATUS BADGE */
-
-.status{
-
-    padding:6px 12px;
-
-    font-size:10px;
-
-}
-
-
-
-
-
-.status-dot{
-
-    width:7px;
-
-    height:7px;
-
-}
-
-
-
-
-
-
-
-/* PROGRESS */
-
-.progress-wrapper{
-
-    width:150px;
-
-}
-
-
-
-.progress-bar{
-
-    width:100px;
-
-    height:8px;
-
-}
-
-
-
-.progress-number{
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* CHART TITLE */
-
-.chart-grid .panel h3{
-
-    font-size:15px;
-
-}
-
-
-
-
-
-
-/* MOBILE */
-
-@media(max-width:1000px){
-
-
-.summary-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-}
-
 
 
 @media(max-width:600px){
 
+    .dashboard-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-.summary-grid{
+    .label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-    grid-template-columns:1fr;
+    .dashboard-header h1{
+        font-size:19px;
+        margin:7px 0;
+    }
 
-}
+    .dashboard-header p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
 
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:15px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:16px;
+    }
+
+    .summary-card span{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .summary-card h2{
+        font-size:15px;
+        margin:5px 0;
+        line-height:1.35;
+    }
+
+    .summary-card p{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+
+    .content-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .chart-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+
+    .panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .panel h3{
+        font-size:13px;
+        margin-bottom:13px;
+    }
+
+
+    .finance-row,
+    .health-item{
+        padding:11px 0;
+        gap:10px;
+    }
+
+    .finance-row span,
+    .health-item span{
+        font-size:9px;
+    }
+
+    .finance-row strong,
+    .health-item b{
+        font-size:10px;
+        text-align:right;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:750px;
+    }
+
+    th{
+        padding:11px 9px;
+        font-size:9px;
+    }
+
+    td{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    td strong{
+        font-size:10px;
+    }
+
+    td small{
+        font-size:8px;
+    }
+
+
+    .status{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .status-dot{
+        width:6px;
+        height:6px;
+        margin-right:5px;
+    }
+
+
+    .progress-wrapper{
+        width:140px;
+        gap:8px;
+    }
+
+    .progress-bar{
+        width:90px;
+        height:7px;
+    }
+
+    .progress-number{
+        font-size:10px;
+    }
+
+
+    .chart-grid .panel > div{
+        height:200px!important;
+    }
 
 }
 

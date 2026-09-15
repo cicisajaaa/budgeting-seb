@@ -697,31 +697,100 @@ EMPTY
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:900px){
 
+    .member-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
 
-.member-grid{
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-    grid-template-columns:1fr;
+    .page-header-card h1{
+        font-size:20px;
+    }
+
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+    }
 
 }
 
 
 
-.page-header-card{
+@media(max-width:600px){
 
-    flex-direction:column;
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    align-items:flex-start;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    gap:15px;
+    .glass-panel{
+        padding:15px;
+    }
+
+    .glass-panel h3{
+        font-size:14px;
+    }
+
+    .member-item{
+        padding:11px;
+        gap:10px;
+    }
+
+    .member-profile{
+        min-width:0;
+        gap:10px;
+    }
+
+    .member-profile > div:last-child{
+        min-width:0;
+    }
+
+    .member-profile strong{
+        font-size:12px;
+        word-break:break-word;
+    }
+
+    .member-profile span{
+        font-size:10px;
+        word-break:break-word;
+    }
+
+    .avatar{
+        width:36px;
+        height:36px;
+        flex-shrink:0;
+    }
+
+    .btn-delete{
+        width:32px;
+        height:32px;
+        flex-shrink:0;
+    }
 
 }
-
-
-}
-
 </style>
 
 

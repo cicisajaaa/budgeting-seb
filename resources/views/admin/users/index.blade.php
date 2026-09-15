@@ -1353,12 +1353,87 @@ gap:15px;
 }
 
 
-
 @media(max-width:600px){
 
 .stat-grid{
 
-grid-template-columns:1fr;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+
+}
+
+.stat-card{
+
+    padding:14px;
+
+}
+
+
+.stat-icon{
+
+    width:36px;
+    height:36px;
+    font-size:15px;
+
+}
+
+
+.stat-card h2{
+
+    font-size:17px;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.page-header-card{
+
+    padding:18px;
+
+}
+
+
+.page-header-card h1{
+
+    font-size:20px;
+
+}
+
+
+.btn-primary{
+
+    width:100%;
+
+}
+
+}
+
+@media(max-width:600px){
+
+form[method="GET"]{
+
+    flex-direction:column;
+
+}
+
+
+form[method="GET"] input,
+form[method="GET"] select,
+form[method="GET"] button{
+
+    width:100%!important;
+
+}
+
+}
+
+@media(max-width:600px){
+
+table{
+
+    min-width:700px;
 
 }
 

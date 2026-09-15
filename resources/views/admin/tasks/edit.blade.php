@@ -919,44 +919,205 @@ ACTION
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-.page-header-card{
+    .page-header-card h1{
+        font-size:21px;
+    }
 
-    flex-direction:column;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    align-items:flex-start;
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:42px;
+    }
 
-    gap:15px;
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        margin-bottom:20px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .form-group{
+        min-width:0;
+    }
+
+    .form-group label{
+        font-size:10px;
+    }
+
+    .form-group input,
+    .form-group select{
+        height:42px;
+        font-size:12px;
+    }
+
+    .form-group textarea{
+        min-height:90px;
+        font-size:12px;
+    }
+
+    .progress-input-wrapper input{
+        padding-right:35px;
+    }
+
+    .progress-input-wrapper span{
+        font-size:11px;
+    }
+
+    .edit-progress-preview{
+        margin-top:8px;
+    }
+
+    .preview-status{
+        font-size:9px;
+        gap:10px;
+    }
+
+    .preview-status strong{
+        font-size:9px;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-save{
+        width:100%;
+        min-height:42px;
+    }
+
+    .alert-error{
+        font-size:10px;
+        line-height:1.5;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.form-grid{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    grid-template-columns:1fr;
+    .page-label{
+        font-size:9px;
+    }
 
-}
+    .page-header-card h1{
+        font-size:19px;
+    }
 
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
+    .btn-back{
+        min-height:42px;
+        font-size:12px;
+    }
 
-.form-action{
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
 
-    justify-content:stretch;
+    .panel-title{
+        font-size:14px;
+        margin-bottom:18px;
+    }
 
-}
+    .form-grid{
+        gap:15px;
+    }
 
+    .form-group{
+        gap:6px;
+        margin-bottom:10px;
+    }
 
+    .form-group label{
+        font-size:10px;
+    }
 
-.btn-save{
+    .form-group input,
+    .form-group select{
+        height:42px;
+        padding:0 12px;
+        font-size:12px;
+    }
 
-    width:100%;
+    .form-group textarea{
+        min-height:90px;
+        padding:11px 12px;
+        font-size:12px;
+    }
 
-}
+    .progress-input-wrapper input{
+        padding-right:35px;
+    }
 
+    .progress-input-wrapper span{
+        right:12px;
+        font-size:10px;
+    }
+
+    .preview-bar{
+        height:6px;
+    }
+
+    .preview-status{
+        margin-top:6px;
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .preview-status strong{
+        font-size:8px;
+    }
+
+    .form-action{
+        margin-top:20px;
+        padding-top:16px;
+    }
+
+    .btn-save{
+        width:100%;
+        min-height:42px;
+        padding:0 18px;
+        font-size:12px;
+    }
+
+    .alert-error{
+        padding:12px 14px;
+        font-size:10px;
+    }
 
 }
 

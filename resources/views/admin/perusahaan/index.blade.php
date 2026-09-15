@@ -1380,14 +1380,257 @@ margin-bottom:10px;
 }
 
 
-
 @media(max-width:1200px){
 
-.stat-grid{
-
-grid-template-columns:repeat(2,1fr);
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
+
+
+@media(max-width:900px){
+
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
+
+    .page-header-card h1{
+        font-size:21px;
+    }
+
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-primary{
+        width:100%;
+        min-height:42px;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .stat-card{
+        padding:14px;
+        min-height:90px;
+        gap:10px;
+    }
+
+    .stat-icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .stat-card label{
+        font-size:10px;
+    }
+
+    .stat-card h2{
+        font-size:18px;
+    }
+
+    .stat-card small{
+        font-size:9px;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-header p{
+        font-size:10px;
+        line-height:1.4;
+    }
+
+    .total-user{
+        font-size:10px;
+        padding:6px 12px;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    .user-profile{
+        min-width:0;
+    }
+
+    .user-profile strong{
+        word-break:break-word;
+    }
+
+    .user-profile small{
+        display:block;
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .action{
+        flex-wrap:nowrap;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .page-label{
+        font-size:9px;
+    }
+
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .btn-primary{
+        width:100%;
+        min-height:42px;
+        font-size:12px;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:12px;
+        gap:8px;
+        border-radius:16px;
+    }
+
+    .stat-icon{
+        width:34px;
+        height:34px;
+        font-size:14px;
+    }
+
+    .stat-card label{
+        font-size:8px;
+    }
+
+    .stat-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .stat-card small{
+        font-size:7px;
+        line-height:1.3;
+    }
+
+    .glass-panel{
+        padding:13px;
+        border-radius:18px;
+    }
+
+    .table-header{
+        margin-bottom:15px;
+    }
+
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-header p{
+        font-size:10px;
+    }
+
+    .total-user{
+        font-size:9px;
+        padding:6px 10px;
+    }
+
+    .table-wrapper table{
+        min-width:900px;
+    }
+
+    th{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    td{
+        padding:12px 9px;
+        font-size:11px;
+    }
+
+    .avatar{
+        width:34px;
+        height:34px;
+        flex-shrink:0;
+    }
+
+    .project-avatar{
+        font-size:14px;
+    }
+
+    .user-profile{
+        gap:9px;
+    }
+
+    .user-profile strong{
+        font-size:11px;
+    }
+
+    .user-profile small{
+        font-size:9px;
+    }
+
+    .status-badge{
+        padding:5px 10px;
+        font-size:9px;
+    }
+
+    .detail,
+    .edit,
+    .delete{
+        width:30px;
+        height:30px;
+    }
+
+    .empty{
+        padding:30px;
+        font-size:11px;
+    }
 
 }
 

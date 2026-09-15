@@ -741,38 +741,84 @@ background:#1e293b;
 
 
 
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-.form-grid{
+    .page-header-card h1{
+        font-size:20px;
+    }
 
-grid-template-columns:1fr;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+    }
+
+    .form-card{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .card-title{
+        font-size:14px;
+        margin-bottom:20px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-update{
+        width:100%;
+    }
 
 }
 
+@media(max-width:600px){
 
-.page-header-card{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-flex-direction:column;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-align-items:flex-start;
+    .form-card{
+        padding:16px;
+    }
 
-gap:15px;
+    .form-group label{
+        font-size:10px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .money-input{
+        height:42px;
+    }
+
+    .btn-back,
+    .btn-update{
+        height:42px;
+    }
 
 }
-
-
-.btn-update{
-
-width:100%;
-
-}
-
-
-}
-
-
 </style>
 
 

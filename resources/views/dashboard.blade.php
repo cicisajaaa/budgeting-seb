@@ -611,45 +611,127 @@ font-weight:700;
 
 
 
-
 @media(max-width:1000px){
 
-.finance-grid{
+    .finance-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-grid-template-columns:repeat(2,1fr);
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+
+    .welcome-card{
+        padding:24px;
+    }
 
 }
-
-
-.content-grid{
-
-grid-template-columns:1fr;
-
-}
-
-}
-
 
 
 @media(max-width:700px){
 
-.finance-grid{
+    .welcome-card{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+        padding:20px;
+        border-radius:20px;
+    }
 
-grid-template-columns:1fr;
+    .welcome-card h1{
+        font-size:22px;
+        line-height:1.4;
+    }
+
+    .welcome-card p{
+        font-size:12px;
+        line-height:1.6;
+        margin-bottom:0;
+    }
+
+    .date-box{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+    }
+
+    .finance-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .finance-card{
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .finance-card h2{
+        font-size:18px;
+        word-break:break-word;
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .panel{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .panel-title{
+        font-size:15px;
+    }
+
+    .finance-row{
+        font-size:12px;
+        gap:15px;
+    }
+
+    .finance-row strong{
+        text-align:right;
+        word-break:break-word;
+    }
+
+    table{
+        width:100%;
+    }
+
+    td{
+        padding:10px 0;
+        font-size:12px;
+    }
 
 }
 
 
-.welcome-card{
+@media(max-width:480px){
 
-flex-direction:column;
-align-items:flex-start;
-gap:20px;
+    .welcome-card{
+        padding:16px;
+    }
+
+    .welcome-card h1{
+        font-size:20px;
+    }
+
+    .finance-card{
+        padding:14px;
+    }
+
+    .card-icon{
+        width:40px;
+        height:40px;
+        font-size:18px;
+        flex-shrink:0;
+    }
+
+    .panel{
+        padding:15px;
+    }
 
 }
-
-}
-
 
 </style>
 

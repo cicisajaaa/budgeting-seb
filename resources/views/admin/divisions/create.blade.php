@@ -1002,55 +1002,168 @@ INFORMATION
 RESPONSIVE
 ================================ */
 
+@media(max-width:900px){
 
-@media(max-width:800px){
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
+    .page-header-card h1{
+        font-size:21px;
+    }
 
-.page-header-card{
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    flex-direction:column;
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
 
-    align-items:flex-start;
+    .form-card{
+        padding:20px;
+        border-radius:18px;
+    }
 
-    gap:15px;
+    .form-heading{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .form-heading h3{
+        font-size:15px;
+    }
+
+    .form-heading p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-save{
+        width:100%;
+    }
+
+    .information-grid{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.form-grid{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    grid-template-columns:1fr;
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+    }
+
+    .form-card{
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .form-heading{
+        padding-bottom:15px;
+        margin-bottom:18px;
+    }
+
+    .form-icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .form-heading h3{
+        font-size:14px;
+    }
+
+    .form-heading p{
+        font-size:10px;
+        line-height:1.4;
+    }
+
+    .form-group label{
+        font-size:10px;
+    }
+
+    input,
+    select{
+        height:42px;
+        font-size:12px;
+    }
+
+    textarea{
+        min-height:90px;
+        font-size:12px;
+    }
+
+    .form-action{
+        margin-top:20px;
+        padding-top:16px;
+    }
+
+    .btn-save{
+        width:100%;
+        height:42px;
+        padding:0 18px;
+        font-size:12px;
+    }
+
+    .information-grid{
+        gap:12px;
+    }
+
+    .information-card{
+        padding:14px;
+        align-items:flex-start;
+    }
+
+    .information-icon{
+        width:36px;
+        height:36px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .information-card h4{
+        font-size:13px;
+    }
+
+    .information-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
 }
-
-
-
-.information-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.form-action{
-
-    justify-content:stretch;
-
-}
-
-
-
-.btn-save{
-
-    width:100%;
-
-}
-
-
-}
-
 </style>
 
 

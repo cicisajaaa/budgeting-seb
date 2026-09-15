@@ -251,12 +251,11 @@ Jumlah Alokasi
 
 
 
+ <div class="table-wrapper">
 
-<table>
+    <table>
 
-
-<thead>
-
+        <thead>
 <tr>
 
 <th>
@@ -339,7 +338,7 @@ Belum ada anggota divisi
 
 
 </table>
-
+</div>
 
 
 </div>
@@ -690,6 +689,16 @@ STATISTIC COMPACT
 TABLE
 ================================ */
 
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:600px;
+}
+
 
 table{
 
@@ -792,69 +801,145 @@ EMPTY
 /* ===============================
 RESPONSIVE
 ================================ */
-
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-.detail-grid{
+    .page-header-card h1{
+        font-size:21px;
+        word-break:break-word;
+    }
 
-    grid-template-columns:1fr;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .info-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:5px;
+    }
+
+    .info-item span{
+        font-size:11px;
+    }
+
+    .info-item strong{
+        max-width:100%;
+        text-align:left;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .stat-box{
+        padding:11px;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.page-header-card{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    flex-direction:column;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    align-items:flex-start;
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
-    gap:15px;
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
 
-}
+    .panel-title{
+        font-size:14px;
+        margin-bottom:15px;
+    }
 
+    .info-item{
+        padding:12px;
+    }
 
+    .info-item span{
+        font-size:10px;
+    }
 
-.btn-back{
+    .info-item strong{
+        font-size:12px;
+    }
 
-    width:100%;
+    .stat-box{
+        padding:10px;
+        gap:10px;
+    }
 
-    text-align:center;
+    .stat-box div:first-child{
+        width:34px;
+        height:34px;
+        font-size:14px;
+        flex-shrink:0;
+    }
 
-}
+    .stat-box span{
+        font-size:9px;
+    }
 
+    .stat-box h2{
+        font-size:18px;
+    }
 
+    .table-wrapper table{
+        min-width:600px;
+    }
 
-.info-item{
+    th{
+        padding:11px 9px;
+        font-size:10px;
+    }
 
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:5px;
-
-}
-
-
-
-.info-item strong{
-
-    max-width:100%;
-
-    text-align:left;
-
-}
-
-
-
-table{
-
-    min-width:600px;
-
-}
-
+    td{
+        padding:12px 9px;
+        font-size:11px;
+    }
 
 }
 

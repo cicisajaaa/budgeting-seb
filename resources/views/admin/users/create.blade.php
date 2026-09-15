@@ -907,7 +907,141 @@ RESPONSIVE
 
 
 }
+@media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
+
+    .page-header-card h1{
+        font-size:22px;
+    }
+
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        min-height:42px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .panel-title{
+        font-size:15px;
+        margin-bottom:20px;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-save{
+        width:100%;
+        min-height:42px;
+    }
+
+    .alert-error{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .page-label{
+        font-size:9px;
+    }
+
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        height:42px;
+        font-size:12px;
+    }
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        margin-bottom:18px;
+    }
+
+    .form-grid{
+        gap:15px;
+    }
+
+    .form-group{
+        gap:6px;
+    }
+
+    .form-group label{
+        font-size:10px;
+        margin-bottom:0;
+    }
+
+    .form-group input,
+    .form-group select{
+        height:42px;
+        padding:0 12px;
+        font-size:12px;
+        width:100%;
+    }
+
+    .form-action{
+        margin-top:20px;
+    }
+
+    .btn-save{
+        width:100%;
+        height:42px;
+        padding:0 18px;
+        font-size:12px;
+    }
+
+    .alert-error{
+        padding:12px 14px;
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .alert-error ul{
+        padding-left:17px;
+    }
+
+}
 </style>
 
 

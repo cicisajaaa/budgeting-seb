@@ -778,43 +778,150 @@ BUTTON
 RESPONSIVE
 ================================ */
 
+@media(max-width:900px){
 
-@media(max-width:800px){
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
+    .page-header-card h1{
+        font-size:22px;
+    }
 
-.page-header-card,
-.project-summary{
+    .page-header-card p{
+        font-size:12px;
+        line-height:1.5;
+    }
 
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
 
-    flex-direction:column;
+    .project-summary{
+        flex-direction:column;
+        align-items:stretch;
+        gap:20px;
+        padding:20px;
+    }
 
-    align-items:flex-start;
+    .project-info h2{
+        font-size:18px;
+        word-break:break-word;
+    }
 
-    gap:20px;
+    .budget-status{
+        width:100%;
+    }
+
+    .budget-status h2{
+        font-size:24px;
+    }
+
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:15px;
+        margin-bottom:20px;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-save{
+        width:100%;
+    }
 
 }
 
 
+@media(max-width:600px){
 
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-.form-action{
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    justify-content:stretch;
+    .page-header-card p{
+        font-size:11px;
+    }
+
+    .project-summary{
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .project-info{
+        gap:10px;
+    }
+
+    .project-icon{
+        width:42px;
+        height:42px;
+        font-size:19px;
+        flex-shrink:0;
+    }
+
+    .project-info h2{
+        font-size:16px;
+    }
+
+    .budget-status h2{
+        font-size:21px;
+    }
+
+    .glass-panel{
+        padding:15px;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .form-group{
+        margin-bottom:18px;
+    }
+
+    .form-group label{
+        font-size:11px;
+    }
+
+    .form-group select,
+    .form-group input{
+        height:42px;
+        font-size:12px;
+    }
+
+    .percent-input span{
+        width:45px;
+    }
+
+    .form-action{
+        margin-top:20px;
+        padding-top:16px;
+    }
+
+    .btn-save{
+        width:100%;
+        height:42px;
+        padding:0 18px;
+        font-size:12px;
+    }
 
 }
-
-
-
-
-.btn-save{
-
-    width:100%;
-
-}
-
-
-}
-
 </style>
 
 

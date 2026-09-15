@@ -1257,18 +1257,6 @@ RESPONSIVE
 
 
 
-@media(max-width:600px){
-
-
-.kpi-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-}
-
 /* =================================
 MATCH OWNER DASHBOARD SIZE
 ================================= */
@@ -1664,9 +1652,212 @@ RESPONSIVE
 
 .kpi-grid{
 
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
 
 }
+
+
+.kpi-card{
+
+    padding:14px;
+    border-radius:16px;
+
+}
+
+
+.kpi-card span{
+
+    font-size:10px;
+
+}
+
+
+.kpi-card h2{
+
+    font-size:16px;
+
+}
+
+
+.kpi-card small{
+
+    font-size:9px;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.dashboard-header{
+
+    padding:18px;
+
+    border-radius:18px;
+
+}
+
+
+.dashboard-header h1{
+
+    font-size:20px;
+
+}
+
+
+.dashboard-header p{
+
+    font-size:11px;
+
+}
+
+}
+
+
+
+@media(max-width:600px){
+
+.project-item{
+
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+
+}
+
+
+.project-item strong{
+
+    display:block;
+    max-width:100%;
+
+    word-break:break-word;
+
+}
+
+
+.project-item span{
+
+    align-self:flex-end;
+
+}
+
+}
+
+
+
+@media(max-width:600px){
+
+.audit-item > div:last-child{
+
+    min-width:0;
+
+}
+
+
+.audit-item p{
+
+    word-break:break-word;
+
+}
+
+
+.audit-item small{
+
+    word-break:break-word;
+
+}
+
+}@media(max-width:600px){
+
+.system-item{
+
+    gap:10px;
+
+}
+
+
+.system-item p{
+
+    line-height:1.4;
+
+}
+
+}
+
+
+/* =================================
+MOBILE IMPROVEMENT
+================================= */
+
+@media(max-width:600px){
+
+    /* PROJECT ITEM */
+
+    .project-item{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+
+    }
+
+
+    .project-item strong{
+
+        word-break:break-word;
+
+    }
+
+
+    .project-item span{
+
+        align-self:flex-end;
+
+    }
+
+
+
+    /* AUDIT */
+
+    .audit-item > div:last-child{
+
+        min-width:0;
+
+    }
+
+
+    .audit-item p{
+
+        word-break:break-word;
+
+    }
+
+
+    .audit-item small{
+
+        word-break:break-word;
+
+    }
+
+
+
+    /* SYSTEM */
+
+    .system-item{
+
+        gap:10px;
+
+    }
+
+
+    .system-item p{
+
+        line-height:1.4;
+
+    }
+
 
 }
 </style>

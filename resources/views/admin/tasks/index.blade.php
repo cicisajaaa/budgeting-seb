@@ -706,11 +706,9 @@
 </div>
 
 
-
-
+<div class="table-wrapper">
 
 <table>
-
 
 <thead>
 
@@ -1053,12 +1051,11 @@ Belum ada task
 @endforelse
 
 
-
 </tbody>
-
 
 </table>
 
+</div>
 
 
 </div>
@@ -2865,40 +2862,333 @@ DEADLINE
 /* ===============================
 RESPONSIVE
 ================================ */
-
 @media(max-width:1100px){
 
+    .task-stat-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.task-stat-grid{
+    .table-header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:12px;
+    }
 
-    grid-template-columns:repeat(2,1fr);
+    .table-actions{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .task-filter-form{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:8px;
+    }
+
+    .filter-item{
+        width:100%;
+        min-width:0;
+    }
+
+    .search-item{
+        grid-column:1/-1;
+    }
+
+    .filter-search,
+    .filter-status,
+    .filter-button,
+    .reset-button{
+        width:100%;
+    }
+
+    .priority-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .pic-row,
+    .division-row{
+        gap:15px;
+    }
 
 }
+
+
+@media(max-width:900px){
+
+    .page-header-card{
+        padding:20px;
+    }
+
+    .page-header-card h1{
+        font-size:21px;
+    }
+
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .task-stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .task-stat{
+        padding:14px;
+        gap:10px;
+    }
+
+    .icon-box{
+        width:38px;
+        height:38px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .task-stat h3{
+        font-size:19px;
+    }
+
+    .priority-grid{
+        grid-template-columns:1fr;
+    }
+
+    .pic-row,
+    .division-row{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .pic-name,
+    .division-name{
+        width:100%;
+    }
+
+    .pic-progress,
+    .division-progress{
+        width:100%;
+    }
+
+    .glass-panel,
+    .priority-monitor,
+    .pic-monitor,
+    .division-monitor{
+        padding:16px;
+        border-radius:18px;
+    }
 
 }
 
 
 @media(max-width:600px){
 
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-.task-stat-grid{
+    .page-label{
+        font-size:9px;
+    }
 
-    grid-template-columns:1fr;
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .task-stat-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .task-stat{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .icon-box{
+        width:36px;
+        height:36px;
+        font-size:15px;
+    }
+
+    .task-stat span{
+        font-size:9px;
+    }
+
+    .task-stat h3{
+        font-size:18px;
+    }
+
+    .task-stat small{
+        font-size:8px;
+    }
+
+    .average-progress-bar{
+        max-width:none;
+    }
+
+    .glass-panel,
+    .priority-monitor,
+    .pic-monitor,
+    .division-monitor{
+        padding:14px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .table-header{
+        gap:10px;
+    }
+
+    .table-title h3,
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-title p,
+    .table-header p{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+    .table-actions{
+        flex-direction:column;
+        align-items:stretch;
+        gap:8px;
+    }
+
+    .import-button,
+    .total-data{
+        width:100%;
+        min-height:38px;
+    }
+
+    .task-filter-box{
+        padding:10px;
+    }
+
+    .task-filter-form{
+        grid-template-columns:1fr;
+        gap:8px;
+    }
+
+    .search-item{
+        grid-column:auto;
+    }
+
+    .filter-search,
+    .filter-status,
+    .filter-button,
+    .reset-button{
+        width:100%;
+        min-height:40px;
+    }
+
+    .priority-header h3,
+    .pic-header h3,
+    .division-header h3{
+        font-size:14px;
+    }
+
+    .priority-header p,
+    .pic-header p,
+    .division-header p{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+    .priority-card{
+        padding:12px;
+    }
+
+    .priority-icon{
+        width:36px;
+        height:36px;
+        flex-basis:36px;
+        font-size:15px;
+    }
+
+    .priority-info strong{
+        font-size:18px;
+    }
+
+    .priority-info small{
+        font-size:8px;
+    }
+
+    .pic-name strong,
+    .division-name strong{
+        font-size:11px;
+        word-break:break-word;
+    }
+
+    .pic-name small,
+    .division-name small{
+        font-size:8px;
+    }
+
+    .pic-progress-track,
+    .division-progress-track{
+        height:7px;
+    }
+
+    .pic-progress span,
+    .division-progress span{
+        width:35px;
+        font-size:9px;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    thead th{
+        padding:10px 9px;
+        font-size:9px;
+    }
+
+    tbody td{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    td strong{
+        font-size:11px;
+    }
+
+    td small{
+        font-size:8px;
+    }
+
+    .progress-wrapper,
+    .progress{
+        width:90px;
+    }
+
+    .badge-status{
+        font-size:8px;
+    }
+
+    .btn-detail{
+        min-height:32px;
+        padding:6px 10px;
+        font-size:9px;
+    }
 
 }
-
-}
-
-
-table{
-
-    min-width:900px;
-
-}
-
-
-}
-
 
 
 </style>

@@ -1138,55 +1138,279 @@ ACTION
 RESPONSIVE
 ================================ */
 
+@media(max-width:900px){
 
-@media(max-width:1000px){
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
+    .page-header-card h1{
+        font-size:21px;
+    }
 
-.detail-grid{
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    grid-template-columns:1fr;
+    .btn-back{
+        width:100%;
+        min-height:42px;
+    }
+
+    .profile-card{
+        padding:18px;
+        gap:12px;
+    }
+
+    .profile-info{
+        min-width:0;
+    }
+
+    .profile-info h2{
+        font-size:18px;
+        word-break:break-word;
+    }
+
+    .profile-info p{
+        font-size:11px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .info-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:5px;
+    }
+
+    .info-item span{
+        font-size:10px;
+    }
+
+    .info-item strong{
+        width:100%;
+        font-size:11px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(3,1fr);
+        gap:12px;
+    }
+
+    .stat-box{
+        padding:13px;
+    }
+
+    .stat-box span{
+        font-size:10px;
+    }
+
+    .stat-box strong{
+        font-size:19px;
+    }
+
+    .activity-item{
+        padding:12px;
+    }
+
+    .activity-item strong{
+        word-break:break-word;
+    }
+
+    .activity-item p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .action-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:18px;
+    }
+
+    .action-card h3{
+        font-size:14px;
+    }
+
+    .action-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .action{
+        width:100%;
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .btn-edit,
+    .btn-delete{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.page-header-card,
-.profile-card,
-.action-card{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    flex-direction:column;
+    .page-label{
+        font-size:9px;
+    }
 
-    align-items:flex-start;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    gap:15px;
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
-}
+    .btn-back{
+        height:42px;
+        font-size:12px;
+    }
 
+    .profile-card{
+        padding:15px;
+        border-radius:18px;
+        align-items:flex-start;
+    }
 
+    .avatar{
+        width:42px;
+        height:42px;
+        border-radius:14px;
+        font-size:17px;
+        flex-shrink:0;
+    }
 
-.stat-grid{
+    .profile-info h2{
+        font-size:16px;
+    }
 
-    grid-template-columns:1fr;
+    .profile-info p{
+        font-size:10px;
+        margin:4px 0;
+    }
 
-}
+    .role-badge{
+        padding:4px 10px;
+        font-size:9px;
+    }
 
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
 
+    .panel-title{
+        font-size:14px;
+        margin-bottom:15px;
+    }
 
-.action{
+    .info-item{
+        padding:11px;
+    }
 
-    width:100%;
+    .info-item span{
+        font-size:9px;
+    }
 
-}
+    .info-item strong{
+        font-size:11px;
+    }
 
+    .stat-grid{
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
+    }
 
+    .stat-box{
+        padding:11px 8px;
+        border-radius:14px;
+    }
 
-.btn-edit,
-.btn-delete{
+    .stat-box span{
+        font-size:8px;
+        line-height:1.3;
+    }
 
-    width:100%;
+    .stat-box strong{
+        margin-top:5px;
+        font-size:16px;
+    }
 
-}
+    .activity-item{
+        padding:11px;
+        border-radius:12px;
+    }
 
+    .activity-item strong{
+        font-size:11px;
+    }
+
+    .activity-item p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .activity-item small{
+        font-size:8px;
+    }
+
+    .action-card{
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .action-card h3{
+        font-size:14px;
+    }
+
+    .action-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .btn-edit,
+    .btn-delete{
+        height:42px;
+        font-size:11px;
+    }
 
 }
 

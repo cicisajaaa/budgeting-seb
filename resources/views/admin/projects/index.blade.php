@@ -1978,79 +1978,141 @@ RESPONSIVE
 
 }
 
-
-
 @media(max-width:800px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:18px;
+        padding:20px;
+    }
 
-.page-header-card{
+    .page-header-card h1{
+        font-size:20px;
+    }
 
-    flex-direction:column;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    align-items:flex-start;
+    .header-action{
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+    }
 
-    gap:15px;
+    .btn-primary,
+    .import-button{
+        width:100%;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .stat-card{
+        padding:14px;
+        min-height:90px;
+    }
+
+    .stat-card h2{
+        font-size:17px;
+    }
+
+    .stat-card label{
+        font-size:10px;
+    }
+
+    .stat-card small{
+        font-size:9px;
+    }
+
+    .stat-icon{
+        width:36px;
+        height:36px;
+        font-size:15px;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .project-filter{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .project-filter input,
+    .project-filter select,
+    .project-filter button,
+    .project-filter a{
+        width:100%;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    .user-profile strong{
+        max-width:260px;
+        word-break:break-word;
+    }
+
+    .action{
+        flex-wrap:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.stat-grid{
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-    grid-template-columns:1fr;
+    .stat-card{
+        gap:10px;
+        padding:12px;
+    }
 
-}
+    .stat-card h2{
+        font-size:16px;
+    }
 
+    .stat-card label{
+        font-size:9px;
+    }
 
+    .stat-card small{
+        font-size:8px;
+    }
 
-.table-header{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-
-}
-
-
-
-
-
-
-
-
-
-.btn-import{
-
-    background:#16a34a;
-
-    color:white;
-
-    padding:10px 18px;
-
-    border-radius:12px;
-
-    border:none;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.2s;
+    .glass-panel{
+        padding:14px;
+    }
 
 }
-
-
-.btn-import:hover{
-
-    background:#15803d;
-
-}
-}
-
 
 </style>
 

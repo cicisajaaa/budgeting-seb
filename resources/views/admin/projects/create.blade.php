@@ -842,65 +842,84 @@ BUTTON SAVE
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
+    .page-header-card h1{
+        font-size:20px;
+    }
 
-.page-header-card{
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
+    .btn-back{
+        width:100%;
+    }
 
-    flex-direction:column;
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
 
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+    }
 
-    align-items:flex-start;
+    .panel-title{
+        font-size:14px;
+        margin-bottom:20px;
+    }
 
+    .form-action{
+        justify-content:stretch;
+    }
 
-    gap:15px;
-
-
-}
-
-
-
-
-
-.form-grid{
-
-
-    grid-template-columns:1fr;
-
-
-}
-
-
-
-
-
-.form-action{
-
-
-    justify-content:stretch;
-
-
-}
-
-
-
-
-
-.btn-save{
-
-
-    width:100%;
-
+    .btn-save{
+        width:100%;
+    }
 
 }
 
+@media(max-width:600px){
 
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .glass-panel{
+        padding:16px;
+    }
+
+    .form-group label{
+        font-size:10px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .input-money{
+        height:42px;
+    }
+
+    .btn-back,
+    .btn-save{
+        height:42px;
+    }
 
 }
-
 
 
 </style>

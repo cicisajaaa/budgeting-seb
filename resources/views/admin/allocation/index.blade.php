@@ -397,15 +397,9 @@ Distribusi budget ke masing-masing divisi.
 
 
 
-
-
-
 <div class="table-wrapper">
 
-
 <table>
-
-
 
 <thead>
 
@@ -594,6 +588,7 @@ Belum ada pembagian dana
 
 </table>
 
+</div>
 
 </div>
 
@@ -1412,7 +1407,15 @@ ACTION BUTTON
 
 }
 
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
 
+.table-wrapper table{
+    min-width:600px;
+}
 
 
 
@@ -1421,58 +1424,118 @@ ACTION BUTTON
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-.page-header-card{
+    .page-header-card h1{
+        font-size:20px;
+    }
 
-    flex-direction:column;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    align-items:flex-start;
+    .btn-back{
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
 
-    gap:15px;
+    .project-summary{
+        flex-direction:column;
+        align-items:stretch;
+        gap:20px;
+        padding:20px;
+    }
+
+    .project-info h2{
+        font-size:17px;
+        word-break:break-word;
+    }
+
+    .budget-status{
+        width:100%;
+    }
+
+    .allocation-form{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+
+    .btn-save{
+        width:100%;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .action{
+        flex-direction:row;
+        flex-wrap:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.project-summary{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    flex-direction:column;
+    .project-summary{
+        padding:16px;
+        border-radius:18px;
+    }
 
-    align-items:flex-start;
+    .project-icon{
+        width:42px;
+        height:42px;
+        font-size:19px;
+    }
 
-    gap:20px;
+    .project-info h2{
+        font-size:16px;
+    }
+
+    .budget-status h2{
+        font-size:20px;
+    }
+
+    .glass-panel{
+        padding:15px;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-header p{
+        font-size:10px;
+        line-height:1.4;
+    }
 
 }
-
-
-
-.budget-status{
-
-    width:100%;
-
-}
-
-
-
-.allocation-form{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.action{
-
-    flex-direction:column;
-
-}
-
-
-}
-
 </style>
 @endsection

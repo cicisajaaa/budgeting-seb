@@ -1169,28 +1169,251 @@ ACTIVITY
 RESPONSIVE
 ================================ */
 
-
 @media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-.detail-grid{
+    .page-header-card h1{
+        font-size:20px;
+        word-break:break-word;
+        line-height:1.3;
+    }
 
-    grid-template-columns:1fr;
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .page-header-card > div:last-child{
+        width:100%;
+        display:flex !important;
+        flex-direction:column;
+        gap:10px !important;
+    }
+
+    .btn-cancel,
+    .btn-edit,
+    .btn-back{
+        width:100%;
+        min-height:42px;
+        justify-content:center;
+        box-sizing:border-box;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .glass-panel{
+        padding:18px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .info-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:5px;
+    }
+
+    .info-item span{
+        font-size:10px;
+    }
+
+    .info-item strong{
+        width:100%;
+        font-size:11px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .status-box{
+        gap:10px;
+    }
+
+    .status-badge{
+        flex-shrink:0;
+    }
+
+    .description-box{
+        font-size:11px;
+        line-height:1.6;
+        word-break:break-word;
+    }
+
+    .timeline-item{
+        gap:10px;
+    }
+
+    .timeline-content{
+        min-width:0;
+        padding:12px;
+    }
+
+    .timeline-top{
+        align-items:flex-start;
+    }
+
+    .timeline-date{
+        word-break:break-word;
+    }
+
+    .timeline-pic{
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .timeline-progress{
+        flex-shrink:0;
+    }
+
+    .timeline-activity,
+    .timeline-note{
+        word-break:break-word;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.page-header-card{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+    }
 
-    flex-direction:column;
+    .page-label{
+        font-size:8px;
+    }
 
-    align-items:flex-start;
+    .page-header-card h1{
+        font-size:19px;
+    }
 
-    gap:15px;
+    .page-header-card p{
+        font-size:10px;
+    }
 
-}
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
 
+    .panel-title{
+        font-size:14px;
+        padding-bottom:12px;
+        margin-bottom:13px;
+    }
+
+    .info-item{
+        padding:11px;
+    }
+
+    .info-item span{
+        font-size:9px;
+    }
+
+    .info-item strong{
+        font-size:11px;
+    }
+
+    .status-box{
+        margin-bottom:16px;
+    }
+
+    .status-box span:first-child{
+        font-size:10px;
+    }
+
+    .status-badge{
+        padding:5px 10px;
+        font-size:9px;
+    }
+
+    .progress-header{
+        font-size:10px;
+    }
+
+    .progress-info{
+        font-size:10px;
+    }
+
+    .description-box{
+        padding:12px;
+        font-size:11px;
+    }
+
+    .timeline-item{
+        gap:9px;
+        padding-bottom:15px;
+    }
+
+    .timeline-marker{
+        width:10px;
+        height:10px;
+        min-width:10px;
+        margin-top:5px;
+    }
+
+    .timeline-item:not(:last-child)::before{
+        left:4px;
+    }
+
+    .timeline-content{
+        padding:11px 12px;
+        border-radius:12px;
+    }
+
+    .timeline-top{
+        gap:8px;
+        margin-bottom:7px;
+    }
+
+    .timeline-date{
+        font-size:9px;
+    }
+
+    .timeline-pic{
+        font-size:8px;
+    }
+
+    .timeline-progress{
+        padding:4px 7px;
+        font-size:8px;
+    }
+
+    .timeline-activity{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .timeline-note{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .timeline-empty{
+        padding:25px 15px;
+    }
+
+    .timeline-empty strong{
+        font-size:10px;
+    }
+
+    .timeline-empty span{
+        font-size:8px;
+        line-height:1.4;
+    }
 
 }
 

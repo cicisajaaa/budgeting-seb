@@ -500,31 +500,135 @@ margin-bottom:20px;
 
 
 
+@media(max-width:900px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-@media(max-width:800px){
+    .page-header-card h1{
+        font-size:21px;
+    }
 
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-.form-grid{
+    .btn-secondary{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:42px;
+    }
 
-grid-template-columns:1fr;
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .form-action{
+        justify-content:stretch;
+    }
+
+    .btn-primary{
+        width:100%;
+        min-height:42px;
+    }
+
+    .alert-error{
+        font-size:11px;
+        line-height:1.5;
+    }
 
 }
 
 
-.page-header-card{
+@media(max-width:600px){
 
-flex-direction:column;
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-align-items:flex-start;
+    .page-label{
+        font-size:9px;
+    }
 
-gap:15px;
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .btn-secondary{
+        min-height:42px;
+        font-size:12px;
+    }
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .form-grid{
+        gap:15px;
+    }
+
+    .form-group{
+        gap:6px;
+    }
+
+    .form-group label{
+        font-size:10px;
+    }
+
+    input,
+    select{
+        height:42px;
+        padding:0 12px;
+        font-size:12px;
+    }
+
+    textarea{
+        min-height:90px;
+        padding:11px 12px;
+        font-size:12px;
+    }
+
+    .form-action{
+        margin-top:20px;
+    }
+
+    .btn-primary{
+        width:100%;
+        min-height:42px;
+        font-size:12px;
+    }
+
+    .alert-error{
+        padding:12px 14px;
+        font-size:10px;
+    }
 
 }
-
-
-}
-
 
 </style>
 

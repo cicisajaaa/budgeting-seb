@@ -1444,39 +1444,295 @@ tbody tr:hover{
 
 
 
+@media(max-width:1000px){
 
+    .page-header-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+    }
 
-@media(max-width:900px){
+    .page-header-card h1{
+        font-size:21px;
+        word-break:break-word;
+    }
 
+    .page-header-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-.stat-grid{
+    .header-action{
+        width:100%;
+        display:flex;
+        gap:10px;
+    }
 
-    grid-template-columns:1fr;
+    .btn-edit,
+    .btn-secondary{
+        flex:1;
+        justify-content:center;
+        min-height:42px;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .stat-card{
+        padding:14px;
+        min-height:90px;
+        gap:10px;
+    }
+
+    .stat-icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+    }
+
+    .stat-card label{
+        font-size:10px;
+    }
+
+    .stat-card h2{
+        font-size:17px;
+        word-break:break-word;
+    }
+
+    .company-title,
+    .budget-title{
+        font-size:14px!important;
+    }
+
+    .stat-card small{
+        font-size:9px;
+    }
+
+    .glass-panel{
+        padding:20px;
+        border-radius:18px;
+        overflow:hidden;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .info-grid p{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-header p{
+        font-size:10px;
+        line-height:1.4;
+    }
+
+    .total-user{
+        font-size:10px;
+        padding:6px 12px;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    .status-column,
+    .action-column{
+        white-space:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.info-grid{
+    .page-header-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    grid-template-columns:1fr;
+    .page-label{
+        font-size:9px;
+    }
+
+    .page-header-card h1{
+        font-size:19px;
+    }
+
+    .page-header-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .header-action{
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .btn-edit,
+    .btn-secondary{
+        width:100%;
+        flex:none;
+        justify-content:center;
+        min-height:42px;
+        font-size:12px;
+    }
+
+    .stat-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:13px;
+        min-height:82px;
+        gap:10px;
+        border-radius:16px;
+    }
+
+    .stat-icon{
+        width:36px;
+        height:36px;
+        font-size:15px;
+    }
+
+    .stat-card label{
+        font-size:9px;
+    }
+
+    .stat-card h2{
+        font-size:17px;
+        margin:4px 0;
+    }
+
+    .company-title,
+    .budget-title{
+        font-size:14px!important;
+    }
+
+    .stat-card small{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .company-status{
+        margin-top:6px;
+    }
+
+    .company-active,
+    .company-nonactive{
+        height:23px;
+        padding:0 10px;
+        font-size:9px;
+    }
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .table-header{
+        margin-bottom:15px;
+    }
+
+    .table-header h3{
+        font-size:14px;
+    }
+
+    .table-header p{
+        font-size:10px;
+    }
+
+    .total-user{
+        font-size:9px;
+        padding:6px 10px;
+    }
+
+    .info-grid{
+        gap:12px;
+    }
+
+    .info-grid > div{
+        padding-bottom:10px;
+    }
+
+    .info-grid label{
+        font-size:10px;
+    }
+
+    .info-grid p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:700px;
+    }
+
+    th{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    td{
+        padding:12px 9px;
+        font-size:11px;
+    }
+
+    .status-selesai,
+    .status-berjalan,
+    .status-belum{
+        min-width:90px;
+        height:26px;
+        padding:0 10px;
+        font-size:9px;
+    }
+
+    .action-column{
+        width:70px;
+    }
+
+    .detail-btn{
+        width:32px;
+        height:32px;
+        font-size:14px;
+    }
+
+    .empty{
+        padding:30px;
+        font-size:11px;
+    }
 
 }
-
-
-
-.page-header-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-}
-
-
-}
-
 
 
 </style>
