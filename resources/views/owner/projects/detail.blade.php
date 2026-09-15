@@ -597,7 +597,7 @@ Rendah
 </div>
 
 
-</div>l
+</div>
 
 
 {{-- TASK --}}
@@ -610,6 +610,7 @@ Rendah
 📌 Daftar Pekerjaan Proyek
 </h3>
 
+<div class="table-wrapper">
 
 
 <table>
@@ -896,6 +897,7 @@ Belum terdapat pekerjaan
 
 </table>
 
+</div>
 
 </div>
 
@@ -1635,86 +1637,316 @@ TASK PROGRESS
 
 
 
-
 /* ===============================
-RESPONSIVE
+   RESPONSIVE
 ================================ */
-
 
 @media(max-width:1200px){
 
+    .summary-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
 
-.summary-grid{
-
-    grid-template-columns:repeat(3,1fr);
+    .health-grid{
+        gap:14px;
+    }
 
 }
-
-
-}
-
 
 
 @media(max-width:900px){
 
+    .page-header{
+        padding:22px;
+        border-radius:20px;
+    }
 
-.header-top{
+    .header-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
 
-    flex-direction:column;
+    .page-header h1{
+        font-size:22px;
+        line-height:1.35;
+        word-break:break-word;
+    }
 
-    align-items:flex-start;
+    .page-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        padding:11px 14px;
+        font-size:10px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        padding:15px;
+        border-radius:18px;
+        min-width:0;
+    }
+
+    .summary-card span{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card p{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+
+    .panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel h3{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+
+    .health-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .health-card{
+        padding:17px;
+        border-radius:18px;
+    }
+
+    .health-card h3{
+        font-size:14px;
+    }
+
+    .health-card > div{
+        gap:12px;
+    }
+
+    .health-card span{
+        font-size:10px;
+    }
+
+    .health-card strong{
+        font-size:10px;
+        text-align:right;
+        word-break:break-word;
+    }
+
+
+    .budget-progress{
+        width:100px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:900px;
+    }
+
+    .table-wrapper th{
+        padding:11px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+    .table-wrapper td{
+        padding:11px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    .table-wrapper td strong{
+        font-size:10px;
+    }
+
+    .table-wrapper small{
+        font-size:8px;
+    }
+
+    .status,
+    .priority{
+        white-space:nowrap;
+    }
+
+    .progress{
+        width:90px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.summary-grid{
+    .page-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:16px;
+    }
 
-    grid-template-columns:repeat(2,1fr);
+    .label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .page-header h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .page-header p{
+        font-size:10px;
+    }
+
+    .btn-back{
+        padding:10px 12px;
+        border-radius:10px;
+        font-size:9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:16px;
+    }
+
+    .summary-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .summary-card span{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:5px 0;
+    }
+
+    .summary-card p{
+        font-size:8px;
+    }
+
+
+    .panel{
+        padding:14px;
+        border-radius:17px;
+        margin-bottom:15px;
+    }
+
+    .panel h3{
+        font-size:12px;
+        padding-left:8px;
+        border-left-width:3px;
+        margin-bottom:13px;
+    }
+
+
+    .health-grid{
+        gap:10px;
+        margin-bottom:15px;
+    }
+
+    .health-card{
+        padding:13px;
+        border-radius:15px;
+    }
+
+    .health-card h3{
+        font-size:12px;
+        margin-bottom:10px;
+    }
+
+    .health-card > div{
+        padding:10px 0;
+        gap:8px;
+    }
+
+    .health-card span{
+        font-size:8px;
+    }
+
+    .health-card strong{
+        font-size:8px;
+    }
+
+    .budget-progress{
+        width:80px;
+        height:7px;
+    }
+
+
+    .table-wrapper{
+        margin-top:5px;
+    }
+
+    .table-wrapper table{
+        min-width:850px;
+    }
+
+    .table-wrapper th{
+        padding:9px;
+        font-size:8px;
+    }
+
+    .table-wrapper td{
+        padding:9px;
+        font-size:9px;
+    }
+
+    .table-wrapper td strong{
+        font-size:9px;
+    }
+
+    .table-wrapper small{
+        font-size:7px;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+    .priority{
+        padding:4px 8px;
+        font-size:7px;
+    }
+
+    .progress{
+        width:80px;
+        height:7px;
+        margin-right:5px;
+    }
 
 }
-
-
-
-.health-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-}
-
-
-
-@media(max-width:700px){
-
-
-.summary-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.panel{
-
-    overflow-x:auto;
-
-}
-
-
-
-table{
-
-    min-width:900px;
-
-}
-
-
-}
-
 
 
 </style>

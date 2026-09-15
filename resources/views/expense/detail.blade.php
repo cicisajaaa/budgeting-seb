@@ -632,9 +632,8 @@ FILE
 <div>
 
 <a 
-href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
+href="{{url('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
 target="_blank">
-
 {{ $request->bukti_pengajuan }}
 
 </a>
@@ -663,9 +662,8 @@ Lihat Bukti
 
 </button>
 
-
 <a 
-href="{{asset('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
+href="{{url('uploads/pengajuan/'.$request->bukti_pengajuan)}}"
 download
 class="btn-download">
 
@@ -739,20 +737,16 @@ class="btn-close">
 
 <iframe
 class="proof-frame"
-
-src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
-
+src="{{ url('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 </iframe>
-
 
 
 @else
 
 
-
 <img 
 class="proof-image"
-src="{{ asset('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
+src="{{ url('uploads/pengajuan/'.$request->bukti_pengajuan) }}">
 
 
 

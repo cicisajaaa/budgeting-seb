@@ -165,6 +165,7 @@ Daftar Pemantauan Proyek
 
 
 
+<div class="table-wrapper">
 
 <table>
 
@@ -567,7 +568,7 @@ Belum terdapat data proyek
 
 </table>
 
-
+</div>
 </div>
 
 
@@ -1255,105 +1256,145 @@ BUTTON
 
 
 
-
 /* ===============================
 RESPONSIVE
 ================================ */
 
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:1000px;
+}
+
 
 @media(max-width:1200px){
 
+    .summary-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
 
-.summary-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-}
-
-
-
-@media(max-width:700px){
-
-
-.summary-grid{
-
-    grid-template-columns:1fr;
+    .table-wrapper table{
+        min-width:950px;
+    }
 
 }
 
 
+@media(max-width:900px){
 
-.dashboard-header{
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-    padding:20px;
+    .dashboard-header{
+        padding:20px;
+    }
+
+    .dashboard-header h1{
+        font-size:21px;
+    }
+
+    .panel{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .panel h3{
+        font-size:15px;
+    }
+
+    .table-wrapper table{
+        min-width:900px;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .summary-card{
+        min-height:auto;
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .summary-card h2{
+        font-size:18px;
+    }
+
+    .dashboard-header{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .dashboard-header h1{
+        font-size:19px;
+    }
+
+    .dashboard-header p{
+        font-size:11px;
+        line-height:1.6;
+    }
+
+    .panel{
+        padding:14px;
+        border-radius:18px;
+    }
+
+    .table-wrapper{
+        margin-left:-2px;
+        margin-right:-2px;
+    }
+
+    .table-wrapper table{
+        min-width:850px;
+    }
+
+    th{
+        padding:10px;
+        font-size:11px;
+    }
+
+    td{
+        padding:10px;
+        font-size:11px;
+    }
+
+    td strong{
+        font-size:12px;
+    }
+
+    .health-card{
+        min-width:90px;
+    }
+
+    .progress-bar{
+        width:80px;
+    }
+
+    .status{
+        padding:5px 9px;
+        font-size:9px;
+    }
+
+    .btn-detail{
+        padding:7px 12px;
+        font-size:10px;
+    }
 
 }
 
 
 
-.panel{
-
-    padding:18px;
-
-}
-
-
-
-table{
-
-    display:block;
-
-    overflow-x:auto;
-
-}
-
-
-}
-
-
-.deadline{
-
-    padding:3px 6px;
-
-    border-radius:6px;
-
-    font-size:10px;
-
-    white-space:nowrap;
-
-}
-
-
-.deadline-safe{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-}
-
-
-
-.deadline-warning{
-
-    background:#fef3c7;
-
-    color:#92400e;
-
-}
-
-
-
-.deadline-danger{
-
-    background:#fee2e2;
-
-    color:#b91c1c;
-
-}
 </style>
 
 @endsection
