@@ -1368,73 +1368,364 @@ BUTTON DETAIL
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
-
-.summary-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
-
-
 
 
 @media(max-width:900px){
 
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
 
-.summary-grid{
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
 
-    grid-template-columns:1fr;
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:14px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+    }
+
+    .panel-desc{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+
+    .filter-box{
+        flex-direction:column;
+        align-items:stretch;
+        gap:12px;
+    }
+
+    .filter-box > div{
+        width:100%;
+    }
+
+    .filter-box input{
+        width:100%;
+        box-sizing:border-box;
+        height:42px;
+        font-size:11px;
+    }
+
+    .filter-box button,
+    .filter-box a{
+        width:100%;
+        height:42px;
+        box-sizing:border-box;
+        justify-content:center;
+        text-align:center;
+        font-size:10px;
+    }
+
+
+    .panel-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .export-group{
+        width:100%;
+        display:flex;
+        gap:8px;
+    }
+
+    .export-btn{
+        flex:1;
+        text-align:center;
+        padding:9px 8px;
+        font-size:9px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:950px;
+    }
+
+    th{
+        padding:11px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+    td{
+        padding:11px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    td strong{
+        font-size:10px;
+    }
+
+    td small{
+        font-size:8px;
+    }
+
+    .expense-badge{
+        padding:5px 9px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+    .money{
+        padding:7px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+    .detail-btn{
+        padding:6px 10px;
+        font-size:8px;
+        white-space:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.filter-box{
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    flex-direction:column;
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-    align-items:stretch;
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .glass-panel{
+        padding:12px;
+        border-radius:17px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-desc{
+        font-size:8px;
+    }
+
+
+    .filter-box{
+        gap:10px;
+        margin-top:14px;
+    }
+
+    .filter-box label{
+        font-size:9px;
+        margin-bottom:6px;
+    }
+
+    .filter-box input{
+        height:40px;
+        font-size:10px;
+    }
+
+    .filter-box button,
+    .filter-box a{
+        height:40px;
+        font-size:9px;
+    }
+
+
+    .export-group{
+        gap:7px;
+    }
+
+    .export-btn{
+        padding:8px 6px;
+        border-radius:10px;
+        font-size:8px;
+    }
+
+
+    .table-wrapper table{
+        min-width:900px;
+    }
+
+    th{
+        padding:9px;
+        font-size:8px;
+    }
+
+    td{
+        padding:9px;
+        font-size:8px;
+    }
+
+    td strong{
+        font-size:9px;
+    }
+
+    td small{
+        font-size:7px;
+    }
+
+    .expense-badge{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+    .money{
+        padding:6px;
+        font-size:8px;
+    }
+
+    .detail-btn{
+        padding:6px 9px;
+        font-size:7px;
+    }
+
+
+    .empty{
+        padding:25px 10px;
+        font-size:9px;
+    }
 
 }
-
-
-
-.panel-header{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-}
-
-
-
-.export-group{
-
-    width:100%;
-
-}
-
-
-
-.export-btn{
-
-    flex:1;
-
-    text-align:center;
-
-}
-
-
-
-}
-
 
 </style>
 

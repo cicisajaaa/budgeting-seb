@@ -1102,43 +1102,402 @@ color:#94a3b8;
 
 
 
-
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-
-.bank-grid{
-
-grid-template-columns:repeat(2,1fr);
+    .bank-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:14px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-header{
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:9px;
+    }
+
+    .add-btn{
+        flex-shrink:0;
+        padding:9px 13px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+
+    .bank-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .bank-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .bank-top{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .bank-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        flex-shrink:0;
+    }
+
+    .bank-top > div:last-child{
+        min-width:0;
+    }
+
+    .bank-top h3{
+        font-size:13px;
+        word-break:break-word;
+    }
+
+    .bank-top p{
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .bank-info{
+        padding:10px;
+        border-radius:12px;
+    }
+
+    .bank-info div{
+        gap:8px;
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .bank-info b{
+        max-width:60%;
+        text-align:right;
+        word-break:break-word;
+    }
+
+
+    .saldo-box{
+        margin-top:13px;
+    }
+
+    .saldo-box label{
+        font-size:9px;
+    }
+
+    .saldo-box h2{
+        font-size:18px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+
+    .active,
+    .inactive{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+
+    .action{
+        gap:7px;
+        flex-wrap:wrap;
+    }
+
+    .action a,
+    .action button{
+        padding:7px 10px;
+        font-size:9px;
+    }
+
 }
 
 
+@media(max-width:600px){
 
-@media(max-width:800px){
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
 
-.summary-grid,
-.bank-grid{
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
 
-grid-template-columns:1fr;
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:17px;
+    }
+
+    .panel-header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:12px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-header small{
+        font-size:8px;
+    }
+
+    .add-btn{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        padding:11px 12px;
+        font-size:10px;
+    }
+
+
+    .bank-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .bank-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .bank-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .bank-top{
+        gap:9px;
+    }
+
+    .bank-top h3{
+        font-size:11px;
+    }
+
+    .bank-top p{
+        font-size:8px;
+    }
+
+
+    .bank-info{
+        padding:9px;
+        border-radius:10px;
+        margin-top:12px;
+    }
+
+    .bank-info div{
+        font-size:8px;
+        margin-bottom:6px;
+    }
+
+    .bank-info b{
+        max-width:58%;
+        font-size:8px;
+    }
+
+
+    .saldo-box{
+        margin-top:12px;
+    }
+
+    .saldo-box label{
+        font-size:8px;
+    }
+
+    .saldo-box h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+
+    .active,
+    .inactive{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+
+    .action{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:7px;
+        margin-top:12px;
+    }
+
+    .action a,
+    .action button{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        padding:8px 6px;
+        font-size:8px;
+    }
+
+
+    .empty{
+        padding:25px 12px;
+        font-size:9px;
+    }
 
 }
-
-
-}
-
-
 </style>
 
 

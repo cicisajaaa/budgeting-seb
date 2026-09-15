@@ -453,7 +453,7 @@ Riwayat Pembayaran Masuk
 </div>
 
 
-
+<div class="table-wrapper">
 
 <table>
 
@@ -552,7 +552,7 @@ Belum ada pembayaran
 
 
 </table>
-
+<div>
 
 
 </div>
@@ -1425,59 +1425,293 @@ tbody tr:hover{
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.summary-grid{
+    .overview-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-}
-
-
-
-@media(max-width:800px){
-
-
-.summary-grid,
-.overview-grid{
-
-    grid-template-columns:1fr;
+    .filter-area{
+        flex-wrap:wrap;
+    }
 
 }
 
 
+@media(max-width:900px){
 
-.filter-area{
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
 
-    flex-direction:column;
+    .welcome-card h1{
+        font-size:23px;
+        line-height:1.35;
+    }
 
-    align-items:flex-start;
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 10px;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+    }
+
+
+    .filter-area{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+        align-items:end;
+    }
+
+    .filter-area > div{
+        width:100%;
+    }
+
+    .filter-area input{
+        width:100%;
+        box-sizing:border-box;
+    }
+
+    .btn-filter,
+    .btn-export{
+        width:100%;
+        justify-content:center;
+        box-sizing:border-box;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        padding:15px;
+        gap:11px;
+        min-width:0;
+    }
+
+    .summary-icon{
+        width:42px;
+        height:42px;
+        border-radius:12px;
+        font-size:17px;
+        flex-shrink:0;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .overview-grid{
+        grid-template-columns:1fr;
+    }
+
+    .overview-item{
+        padding:15px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    thead th,
+    tbody td{
+        white-space:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.welcome-card{
+    .welcome-card{
+        padding:18px;
+        margin-bottom:15px;
+        border-radius:18px;
+    }
 
-    padding:22px;
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-}
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+    }
+
+    .welcome-tags{
+        margin-top:11px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
 
+    .glass-panel{
+        padding:14px;
+        margin-bottom:14px;
+        border-radius:17px;
+    }
 
-table{
+    .panel-title{
+        font-size:13px;
+        margin-bottom:15px;
+    }
 
-    display:block;
 
-    overflow-x:auto;
+    .filter-area{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
 
-}
+    .filter-area label{
+        font-size:9px;
+    }
 
+    .filter-area input{
+        height:40px;
+        font-size:11px;
+    }
+
+    .btn-filter,
+    .btn-export{
+        height:40px;
+        font-size:10px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .summary-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .summary-icon{
+        width:36px;
+        height:36px;
+        border-radius:10px;
+        font-size:15px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .overview-grid{
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .overview-item{
+        padding:13px;
+        border-radius:13px;
+    }
+
+    .overview-item span{
+        font-size:9px;
+        margin-bottom:6px;
+    }
+
+    .overview-item strong{
+        font-size:16px;
+    }
+
+
+    .usage-header{
+        font-size:10px;
+    }
+
+    .usage-box small{
+        font-size:9px;
+    }
+
+    .progress{
+        height:8px;
+        margin:9px 0;
+    }
+
+
+    .table-wrapper{
+        margin:0 -2px;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    thead th{
+        padding:11px;
+        font-size:9px;
+    }
+
+    tbody td{
+        padding:11px;
+        font-size:10px;
+    }
 
 }
 

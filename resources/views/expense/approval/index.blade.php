@@ -1435,38 +1435,437 @@ color:white;
 
 
 
+/* =========================
+   RESPONSIVE
+========================= */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:1000px;
+}
 
 
-@media(max-width:1100px){
+@media(max-width:1200px){
 
-
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .alert{
+        font-size:10px;
+        line-height:1.5;
+        padding:12px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label,
+    .summary-card h2,
+    .summary-card small{
+        word-break:break-word;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.35;
+    }
+
+    .summary-card small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .money-text{
+        font-size:14px!important;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-subtitle{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:1000px;
+    }
+
+    thead th{
+        padding:12px;
+        font-size:10px;
+    }
+
+    tbody td{
+        padding:12px;
+        font-size:10px;
+    }
+
+    small{
+        font-size:9px;
+    }
+
+    .division{
+        font-size:9px;
+        padding:5px 9px;
+        white-space:nowrap;
+    }
+
+    .status{
+        padding:6px 10px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+
+    .action-box{
+        width:180px;
+    }
+
+    .detail-btn,
+    .approve-btn,
+    .reject-btn,
+    .disburse-btn,
+    .cancel-approve-btn{
+        min-height:38px;
+        height:auto;
+        padding:8px 10px;
+        font-size:9px;
+        box-sizing:border-box;
+    }
+
+    .approval-action{
+        gap:6px;
+    }
+
+    .bank-select{
+        width:100%;
+        height:38px;
+        font-size:9px;
+        box-sizing:border-box;
+    }
+
+
+    .modal-box{
+        width:min(400px,calc(100% - 30px));
+        max-width:calc(100% - 30px);
+        box-sizing:border-box;
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .modal-box h3{
+        font-size:15px;
+        line-height:1.4;
+    }
+
+    .modal-box textarea{
+        width:100%;
+        box-sizing:border-box;
+        font-size:11px;
+    }
+
 }
 
 
+@media(max-width:600px){
 
-@media(max-width:700px){
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
 
-.summary-grid{
+    .alert{
+        padding:11px;
+        border-radius:12px;
+        font-size:9px;
+        line-height:1.5;
+    }
 
-grid-template-columns:1fr;
 
-}
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:16px;
+        gap:8px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .summary-card h2{
+        font-size:15px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+        line-height:1.3;
+    }
+
+    .money-text{
+        font-size:12px!important;
+    }
 
 
-.action-box{
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
 
-width:150px;
+    .panel-header{
+        margin-bottom:15px;
+    }
 
-}
+    .panel-title{
+        font-size:13px;
+    }
 
+    .panel-subtitle{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:1000px;
+    }
+
+    thead th{
+        padding:10px 8px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+    tbody td{
+        padding:10px 8px;
+        font-size:9px;
+    }
+
+    small{
+        font-size:8px;
+    }
+
+    .number,
+    .employee,
+    .project,
+    .nominal{
+        font-size:9px;
+        word-break:break-word;
+    }
+
+    .division{
+        padding:4px 8px;
+        font-size:8px;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:8px;
+    }
+
+
+    .action-box{
+        width:180px;
+        gap:7px;
+    }
+
+    .detail-btn,
+    .approve-btn,
+    .reject-btn,
+    .disburse-btn,
+    .cancel-approve-btn{
+        min-height:36px;
+        padding:7px 8px;
+        font-size:8px;
+        border-radius:9px;
+    }
+
+    .approval-action{
+        gap:6px;
+    }
+
+    .bank-select{
+        height:36px;
+        padding:0 8px;
+        font-size:8px;
+        border-radius:9px;
+    }
+
+
+    .modal{
+        padding:15px;
+        box-sizing:border-box;
+    }
+
+    .modal-box{
+        width:100%;
+        max-width:100%;
+        padding:15px;
+        border-radius:16px;
+    }
+
+    .modal-box h3{
+        font-size:13px;
+        margin-bottom:12px;
+    }
+
+    .modal-box textarea{
+        height:90px;
+        font-size:10px;
+        padding:9px;
+        border-radius:10px;
+    }
+
+    .modal-action{
+        gap:7px;
+        margin-top:12px;
+    }
+
+    .modal-action button{
+        height:40px;
+        font-size:10px;
+    }
+
+
+    .empty{
+        padding:25px 12px;
+        font-size:10px;
+    }
 
 }
 

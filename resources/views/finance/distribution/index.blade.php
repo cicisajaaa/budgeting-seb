@@ -257,8 +257,9 @@ Detail pembagian dana project ke setiap divisi
 
 
 
+<div class="table-wrapper">
 
-<table>
+    <table>
 
 
 <thead>
@@ -394,7 +395,7 @@ Belum ada distribusi dana
 
 
 </table>
-
+<div>
 
 
 
@@ -1029,43 +1030,325 @@ color:#16a34a;
 
 
 
+/* ===============================
+   TABLE WRAPPER
+================================ */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:650px;
+}
 
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
-
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
 
-@media(max-width:800px){
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
 
 
-.summary-grid{
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
 
-grid-template-columns:1fr;
+    .summary-card{
+        min-width:0;
+        padding:14px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:17px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-header{
+        margin-bottom:15px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        margin-top:5px;
+    }
+
+    .table-wrapper table{
+        min-width:650px;
+    }
+
+    th{
+        padding:11px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+    td{
+        padding:12px 11px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    td strong{
+        font-size:11px;
+    }
+
+    .date-box{
+        font-size:9px;
+    }
+
+    .division-badge{
+        padding:5px 9px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+    .money{
+        font-size:10px;
+    }
+
+
+    .total-footer{
+        margin-top:15px;
+        padding:14px;
+        border-radius:15px;
+        gap:10px;
+    }
+
+    .total-footer span{
+        font-size:9px;
+    }
+
+    .total-footer strong{
+        font-size:17px;
+        word-break:break-word;
+        text-align:right;
+    }
 
 }
 
 
-.welcome-tags{
+@media(max-width:600px){
 
-flex-wrap:wrap;
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+        line-height:1.35;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+        gap:8px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .glass-panel{
+        padding:12px;
+        border-radius:17px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-header small{
+        font-size:8px;
+    }
+
+
+    .table-wrapper{
+        margin-left:0;
+        margin-right:0;
+    }
+
+    .table-wrapper table{
+        min-width:600px;
+    }
+
+    th{
+        padding:9px;
+        font-size:8px;
+    }
+
+    td{
+        padding:10px 9px;
+        font-size:9px;
+    }
+
+    td strong{
+        font-size:10px;
+    }
+
+    .date-box{
+        font-size:8px;
+    }
+
+    .division-badge{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+    .money{
+        font-size:9px;
+    }
+
+
+    .total-footer{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:12px;
+        gap:5px;
+    }
+
+    .total-footer span{
+        font-size:8px;
+    }
+
+    .total-footer strong{
+        font-size:16px;
+        text-align:left;
+    }
 
 }
-
-
-}
-
-
 
 </style>
 

@@ -2323,50 +2323,645 @@ grid-template-columns:1fr;
 RESPONSIVE
 ================================= */
 
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media(max-width:1200px){
+
+    .info-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
 
 @media(max-width:900px){
 
+    .detail-header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:18px;
+        padding:20px;
+        border-radius:20px;
+    }
 
-.detail-header{
+    .header-left{
+        min-width:0;
+    }
 
-    flex-direction:column;
+    .header-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
 
-    align-items:flex-start;
+    .request-number{
+        font-size:16px;
+        word-break:break-word;
+    }
+
+    .header-left h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .header-left p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .requester{
+        max-width:100%;
+        font-size:9px;
+        word-break:break-word;
+    }
+
+
+    .header-right{
+        width:100%;
+        text-align:left;
+    }
+
+    .amount-card{
+        width:100%;
+        box-sizing:border-box;
+        padding:15px;
+    }
+
+    .amount-card small{
+        font-size:9px;
+    }
+
+    .amount-card strong{
+        font-size:19px;
+        word-break:break-word;
+    }
+
+    .status{
+        margin-top:8px;
+        font-size:9px;
+        padding:6px 10px;
+    }
+
+
+    .timeline-box{
+        grid-template-columns:1fr;
+        gap:8px;
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .timeline-step{
+        padding:10px;
+        font-size:10px;
+        line-height:1.4;
+    }
+
+
+    .card{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .card-title{
+        font-size:14px;
+        margin-bottom:17px;
+    }
+
+
+    .info-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .info-item{
+        min-width:0;
+        padding:13px;
+        gap:10px;
+    }
+
+    .detail-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        flex-shrink:0;
+    }
+
+    .info-item > div:last-child{
+        min-width:0;
+    }
+
+    .info-item label{
+        font-size:9px;
+    }
+
+    .info-item strong{
+        font-size:11px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+
+    .description-box{
+        padding:13px;
+        border-radius:13px;
+    }
+
+    .description-box label{
+        font-size:9px;
+    }
+
+    .description-box p{
+        font-size:11px;
+        line-height:1.6;
+        word-break:break-word;
+    }
+
+
+    .file-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:14px;
+    }
+
+    .file-detail{
+        min-width:0;
+        align-items:flex-start;
+    }
+
+    .file-detail > div:last-child{
+        min-width:0;
+    }
+
+    .file-detail a{
+        font-size:10px;
+        word-break:break-all;
+        line-height:1.5;
+    }
+
+    .file-detail small{
+        font-size:8px;
+        line-height:1.5;
+    }
+
+    .file-icon{
+        width:38px;
+        height:38px;
+        flex-shrink:0;
+    }
+
+    .file-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        margin-top:0;
+    }
+
+    .btn-view,
+    .btn-download{
+        min-height:40px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+        padding:8px 10px;
+        font-size:10px;
+    }
+
+
+    .audit-list{
+        padding-left:28px;
+    }
+
+    .audit-list:before{
+        left:10px;
+    }
+
+    .audit-card{
+        padding:13px;
+        min-width:0;
+    }
+
+    .audit-icon{
+        left:-28px;
+        width:24px;
+        height:24px;
+        font-size:10px;
+    }
+
+    .audit-header{
+        align-items:flex-start;
+        gap:8px;
+    }
+
+    .audit-header strong{
+        min-width:0;
+        font-size:11px;
+        word-break:break-word;
+    }
+
+    .audit-header span{
+        flex-shrink:0;
+        font-size:8px;
+        padding:4px 8px;
+    }
+
+    .audit-content p{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .audit-meta{
+        font-size:8px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .decision-header{
+        align-items:flex-start;
+        gap:10px;
+        padding:13px;
+    }
+
+    .decision-icon{
+        width:38px;
+        height:38px;
+        flex-shrink:0;
+    }
+
+    .decision-header strong{
+        font-size:12px;
+    }
+
+    .decision-header p{
+        font-size:10px;
+        line-height:1.5;
+        margin:4px 0 0;
+    }
+
+    .decision-note,
+    .decision-info div{
+        padding:13px;
+    }
+
+    .decision-note label,
+    .decision-info label{
+        font-size:9px;
+    }
+
+    .decision-note p{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .decision-info{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .decision-info strong{
+        font-size:10px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+
+    .back{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+        margin-bottom:20px;
+    }
+
+
+    .modal{
+        padding:15px;
+        box-sizing:border-box;
+    }
+
+    .modal-content{
+        width:100%;
+        max-width:100%;
+        max-height:90vh;
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .modal-head strong{
+        font-size:13px;
+    }
+
+    .btn-close{
+        padding:5px 10px;
+    }
+
+    .proof-frame{
+        height:65vh;
+    }
+
+    .proof-image{
+        max-width:100%;
+        max-height:65vh;
+    }
 
 }
 
 
-.info-grid,
-.decision-info,
-.timeline-box{
+@media(max-width:600px){
 
-    grid-template-columns:1fr;
+    .detail-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
 
-}
+    .header-label{
+        font-size:8px;
+    }
+
+    .request-number{
+        font-size:14px;
+        margin-top:6px;
+    }
+
+    .header-left h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .header-left p{
+        font-size:9px;
+    }
+
+    .requester{
+        padding:6px 10px;
+        font-size:8px;
+        margin-top:9px;
+    }
 
 
-.file-card{
+    .amount-card{
+        padding:12px;
+        border-radius:14px;
+        margin-bottom:8px;
+    }
 
-    flex-direction:column;
+    .amount-card small{
+        font-size:8px;
+    }
 
-    align-items:flex-start;
+    .amount-card strong{
+        font-size:16px;
+        margin-top:5px;
+    }
 
-    gap:15px;
+    .status{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
-}
 
-.file-actions{
-margin-top:10px;
-}
+    .timeline-box{
+        padding:12px;
+        border-radius:16px;
+        margin-bottom:15px;
+    }
 
-@media(max-width:900px){
+    .timeline-step{
+        padding:9px;
+        font-size:8px;
+        border-radius:11px;
+    }
 
-.header-right{
-    width:100%;
-    text-align:left;
-}
 
-}
+    .card{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .card-title{
+        font-size:13px;
+        margin-bottom:14px;
+    }
+
+
+    .info-grid{
+        grid-template-columns:1fr;
+        gap:8px;
+    }
+
+    .info-item{
+        padding:11px;
+        border-radius:13px;
+        gap:9px;
+    }
+
+    .detail-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .info-item label{
+        font-size:8px;
+    }
+
+    .info-item strong{
+        font-size:10px;
+    }
+
+
+    .description-box{
+        margin-top:15px;
+        padding:11px;
+        border-radius:12px;
+    }
+
+    .description-box label{
+        font-size:8px;
+    }
+
+    .description-box p{
+        font-size:9px;
+        line-height:1.6;
+        margin-top:6px;
+    }
+
+
+    .file-card{
+        padding:11px;
+        border-radius:13px;
+    }
+
+    .file-detail{
+        gap:9px;
+    }
+
+    .file-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:9px;
+    }
+
+    .file-detail a{
+        font-size:9px;
+    }
+
+    .file-detail small{
+        font-size:7px;
+    }
+
+    .file-actions{
+        grid-template-columns:1fr;
+        gap:7px;
+    }
+
+    .btn-view,
+    .btn-download{
+        min-height:40px;
+        font-size:9px;
+        border-radius:9px;
+    }
+
+
+    .audit-list{
+        padding-left:24px;
+    }
+
+    .audit-list:before{
+        left:8px;
+    }
+
+    .audit-card{
+        padding:11px;
+        border-radius:12px;
+    }
+
+    .audit-icon{
+        left:-24px;
+        width:20px;
+        height:20px;
+        font-size:9px;
+    }
+
+    .audit-header{
+        flex-direction:column;
+        gap:5px;
+    }
+
+    .audit-header strong{
+        font-size:10px;
+    }
+
+    .audit-header span{
+        align-self:flex-start;
+        font-size:7px;
+    }
+
+    .audit-content p{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .audit-meta{
+        font-size:7px;
+    }
+
+
+    .decision-header{
+        padding:11px;
+        border-radius:13px;
+    }
+
+    .decision-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+    }
+
+    .decision-header strong{
+        font-size:10px;
+    }
+
+    .decision-header p{
+        font-size:8px;
+    }
+
+    .decision-note,
+    .decision-info div{
+        padding:11px;
+        border-radius:12px;
+    }
+
+    .decision-note label,
+    .decision-info label{
+        font-size:8px;
+    }
+
+    .decision-note p{
+        font-size:9px;
+    }
+
+    .decision-info{
+        grid-template-columns:1fr;
+        gap:8px;
+    }
+
+    .decision-info strong{
+        font-size:9px;
+    }
+
+
+    .back{
+        min-height:40px;
+        font-size:10px;
+        padding:8px 15px;
+    }
+
+
+    .modal{
+        padding:10px;
+    }
+
+    .modal-content{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .modal-head{
+        margin-bottom:10px;
+    }
+
+    .modal-head strong{
+        font-size:11px;
+    }
+
+    .btn-close{
+        padding:4px 9px;
+        font-size:12px;
+    }
+
+    .proof-frame{
+        height:60vh;
+    }
+
+    .proof-image{
+        max-height:60vh;
+    }
+
 }
 
 </style>

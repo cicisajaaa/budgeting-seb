@@ -1118,49 +1118,401 @@ td:nth-child(8) {
 /* =========================
    RESPONSIVE
 ========================= */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media(max-width: 1100px) {
+@media(max-width:1200px){
 
-    .summary-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
 }
 
-@media(max-width: 700px) {
 
-    .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 22px;
+@media(max-width:900px){
+
+    .welcome-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:22px;
+        border-radius:20px;
     }
 
-    .create-btn {
-        width: 100%;
-        text-align: center;
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
     }
 
-    .summary-grid {
-        grid-template-columns: 1fr;
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
     }
 
-    .glass-panel {
-        padding: 16px;
-        border-radius: 16px;
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
     }
 
-    .filter-box {
-        flex-direction: column;
-        align-items: stretch;
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
     }
 
-    .filter-box > div {
-        min-width: 100%;
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+    .create-btn{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+        font-size:11px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:15px;
+        border-radius:17px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label,
+    .summary-card h2,
+    .summary-card small{
+        word-break:break-word;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:19px;
+    }
+
+    .summary-card small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+
+    .filter-box{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .filter-box > div{
+        min-width:100%;
+        width:100%;
+    }
+
+    .filter-box label{
+        font-size:9px;
+    }
+
+    .filter-box select{
+        width:100%;
+        height:42px;
+        box-sizing:border-box;
+        font-size:10px;
     }
 
     .filter-box button,
-    .filter-box a {
-        width: 100%;
+    .filter-box a{
+        width:100%;
+        height:42px;
+        font-size:10px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:1050px;
+    }
+
+    thead th{
+        padding:11px 9px;
+        font-size:9px;
+    }
+
+    tbody td{
+        padding:11px 9px;
+        font-size:10px;
+    }
+
+    td strong{
+        font-size:10px;
+    }
+
+    td small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .status{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .detail-btn{
+        min-height:36px;
+        padding:7px 11px;
+        font-size:9px;
+        box-sizing:border-box;
+    }
+
+
+    .empty{
+        padding:35px 15px;
+    }
+
+    .empty-icon{
+        font-size:32px;
+    }
+
+    .empty h3{
+        font-size:13px;
+    }
+
+    .empty p{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+    .create-btn{
+        height:42px;
+        font-size:10px;
+        border-radius:10px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+        gap:8px;
+        min-height:82px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0 2px;
+    }
+
+    .summary-card small{
+        font-size:7px;
+        line-height:1.3;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-header{
+        margin-bottom:14px;
+    }
+
+    .panel-header small{
+        font-size:8px;
+    }
+
+
+    .filter-box{
+        gap:8px;
+        margin-top:13px;
+    }
+
+    .filter-box label{
+        font-size:8px;
+        margin-bottom:5px;
+    }
+
+    .filter-box select{
+        height:40px;
+        padding:0 10px;
+        font-size:9px;
+        border-radius:9px;
+    }
+
+    .filter-box button,
+    .filter-box a{
+        height:40px;
+        font-size:9px;
+        border-radius:9px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:1050px;
+    }
+
+    thead th{
+        padding:10px 8px;
+        font-size:8px;
+    }
+
+    tbody td{
+        padding:10px 8px;
+        font-size:9px;
+    }
+
+    td strong{
+        font-size:9px;
+    }
+
+    td small{
+        font-size:7px;
+        line-height:1.4;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+    .detail-btn{
+        min-height:36px;
+        padding:7px 10px;
+        font-size:8px;
+        border-radius:8px;
+    }
+
+
+    .empty{
+        padding:25px 12px;
+    }
+
+    .empty-icon{
+        font-size:30px;
+    }
+
+    .empty h3{
+        font-size:11px;
+    }
+
+    .empty p{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .create-mini{
+        margin-top:10px;
+        padding:8px 12px;
+        font-size:8px;
     }
 
 }

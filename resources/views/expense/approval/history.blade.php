@@ -1458,51 +1458,403 @@ RESPONSIVE
 ================================ */
 
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
-@media(max-width:1100px){
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:1100px;
+}
 
 
-.summary-grid{
+@media(max-width:1200px){
 
-    grid-template-columns:repeat(2,1fr);
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .filter-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
-.filter-grid{
+@media(max-width:900px){
 
-    grid-template-columns:repeat(2,1fr);
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label,
+    .summary-card h2,
+    .summary-card small{
+        word-break:break-word;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.35;
+    }
+
+    .summary-card small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+
+    .filter-grid{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+
+    .filter-grid label{
+        font-size:10px;
+    }
+
+    .filter-grid input,
+    .filter-grid select{
+        height:42px;
+        font-size:11px;
+        box-sizing:border-box;
+    }
+
+    .status-action{
+        display:grid;
+        grid-template-columns:1fr 42px auto;
+        gap:8px;
+    }
+
+    .status-action select{
+        min-width:0;
+    }
+
+    .status-action button{
+        width:42px;
+        height:42px;
+    }
+
+    .status-action a{
+        min-height:42px;
+        justify-content:center;
+        box-sizing:border-box;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+    }
+
+    .table-wrapper table{
+        min-width:1100px;
+    }
+
+    thead th{
+        padding:12px;
+        font-size:10px;
+    }
+
+    tbody td{
+        padding:12px;
+        font-size:10px;
+    }
+
+    td small{
+        font-size:9px;
+    }
+
+    .status{
+        padding:6px 10px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
+    .note-box{
+        max-width:220px;
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .detail-btn{
+        min-height:38px;
+        padding:8px 13px;
+        font-size:9px;
+    }
 
 }
 
 
-}
+@media(max-width:600px){
+
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
 
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
 
-@media(max-width:700px){
+    .summary-card{
+        padding:12px;
+        border-radius:16px;
+        gap:8px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:15px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+        line-height:1.3;
+    }
 
 
-.summary-grid{
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
 
-    grid-template-columns:1fr;
+    .panel-title{
+        font-size:13px;
+        margin-bottom:14px;
+    }
 
-}
+    .panel-header small{
+        display:block;
+        font-size:9px;
+        line-height:1.4;
+    }
 
 
-.filter-grid{
+    .filter-grid{
+        gap:12px;
+    }
 
-    grid-template-columns:1fr;
+    .filter-grid label{
+        font-size:9px;
+        margin-bottom:5px;
+    }
 
-}
+    .filter-grid input,
+    .filter-grid select{
+        height:42px;
+        padding:0 10px;
+        font-size:10px;
+        border-radius:10px;
+    }
+
+    .status-action{
+        grid-template-columns:1fr 40px;
+        gap:7px;
+    }
+
+    .status-action select{
+        grid-column:1 / -1;
+    }
+
+    .status-action button{
+        width:40px;
+        height:40px;
+    }
+
+    .status-action a{
+        min-height:40px;
+        padding:0 12px;
+        font-size:10px;
+    }
 
 
-.status-action{
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
 
-    flex-direction:column;
+    .table-wrapper table{
+        min-width:1100px;
+    }
 
-}
+    thead th{
+        padding:10px 8px;
+        font-size:8px;
+    }
 
+    tbody td{
+        padding:10px 8px;
+        font-size:9px;
+    }
+
+    td small{
+        font-size:8px;
+    }
+
+    .divisi{
+        font-size:8px;
+    }
+
+    .money{
+        font-size:9px;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:8px;
+    }
+
+    .note-box{
+        max-width:200px;
+        padding:8px;
+        font-size:8px;
+        line-height:1.4;
+    }
+
+    .detail-btn{
+        min-height:36px;
+        padding:7px 11px;
+        font-size:8px;
+        border-radius:9px;
+    }
+
+    .empty{
+        padding:30px 15px;
+    }
+
+    .empty-icon{
+        font-size:32px;
+    }
+
+    .empty h3{
+        font-size:12px;
+    }
+
+    .empty p{
+        font-size:9px;
+    }
 
 }
 

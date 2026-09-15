@@ -1101,26 +1101,354 @@ BUTTON OWNER STYLE
 RESPONSIVE
 ================================= */
 
+/* =================================
+   RESPONSIVE
+================================= */
 
 @media(max-width:1000px){
 
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
 
-.form-grid,
-.project-info{
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
 
-    grid-template-columns:1fr;
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .error-box{
+        font-size:10px;
+        line-height:1.5;
+        padding:12px;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        margin-bottom:18px;
+    }
+
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .form-grid > div{
+        min-width:0;
+    }
+
+    label{
+        font-size:10px;
+    }
+
+    input,
+    select,
+    textarea{
+        width:100%;
+        box-sizing:border-box;
+        font-size:11px;
+    }
+
+    input,
+    select{
+        height:42px;
+    }
+
+    textarea{
+        height:100px;
+    }
+
+
+    .project-info{
+        grid-template-columns:1fr;
+        gap:10px;
+        padding:15px;
+        border-radius:18px;
+    }
+
+    .project-info div{
+        min-width:0;
+        padding:13px;
+    }
+
+    .project-info label{
+        font-size:9px;
+    }
+
+    .project-info strong{
+        font-size:11px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+
+    .division-info{
+        min-width:0;
+    }
+
+    .warning,
+    .safe{
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .upload-box{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+        padding:15px;
+    }
+
+    .upload-button{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+        font-size:10px;
+    }
+
+    #file-name{
+        max-width:100%;
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .upload-info{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .preview-card{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .preview-title{
+        font-size:10px;
+    }
+
+    .preview-image{
+        width:180px;
+        height:180px;
+        max-width:100%;
+    }
+
+
+    .approval-info{
+        padding:12px;
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .btn-submit{
+        width:100%;
+        min-height:42px;
+        padding:10px 18px;
+        font-size:11px;
+        box-sizing:border-box;
+    }
 
 }
 
 
-.upload-box{
+@media(max-width:600px){
 
-    flex-direction:column;
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    align-items:flex-start;
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-}
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
 
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+
+    .error-box{
+        padding:11px;
+        border-radius:12px;
+        font-size:9px;
+    }
+
+    .error-box ul{
+        padding-left:16px;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .panel-title{
+        font-size:13px;
+        margin-bottom:15px;
+    }
+
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .form-grid > div{
+        width:100%;
+    }
+
+    label{
+        font-size:9px;
+        margin-bottom:5px;
+    }
+
+    input,
+    select{
+        height:42px;
+        padding:0 10px;
+        font-size:10px;
+        border-radius:10px;
+    }
+
+    textarea{
+        height:90px;
+        padding:10px;
+        font-size:10px;
+        border-radius:10px;
+    }
+
+
+    .full-field{
+        margin-top:15px;
+    }
+
+
+    .project-info{
+        grid-template-columns:1fr;
+        gap:8px;
+        margin-top:15px;
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .project-info div{
+        padding:11px;
+        border-radius:12px;
+    }
+
+    .project-info label{
+        font-size:8px;
+    }
+
+    .project-info strong{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+
+    .warning,
+    .safe{
+        margin-top:6px;
+        font-size:8px;
+    }
+
+
+    .upload-section{
+        margin-top:15px;
+    }
+
+    .upload-box{
+        padding:12px;
+        border-radius:15px;
+        gap:8px;
+    }
+
+    .upload-button{
+        min-height:40px;
+        padding:8px 12px;
+        font-size:9px;
+        border-radius:10px;
+    }
+
+    #file-name{
+        font-size:8px;
+    }
+
+    .upload-info{
+        font-size:8px;
+    }
+
+
+    .preview-card{
+        padding:10px;
+        margin-top:10px;
+        border-radius:13px;
+    }
+
+    .preview-title{
+        font-size:9px;
+        margin-bottom:8px;
+    }
+
+    .preview-image{
+        width:150px;
+        height:150px;
+    }
+
+
+    .approval-info{
+        margin-top:15px;
+        padding:11px;
+        font-size:9px;
+        line-height:1.5;
+        border-left-width:3px;
+    }
+
+    .btn-submit{
+        width:100%;
+        min-height:42px;
+        margin-top:15px;
+        padding:9px 15px;
+        font-size:10px;
+        border-radius:11px;
+    }
 
 }
 

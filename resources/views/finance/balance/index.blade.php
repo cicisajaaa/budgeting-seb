@@ -1037,45 +1037,367 @@ EMPTY
 /* ===============================
 RESPONSIVE
 ================================ */
-
+/* =================================
+   RESPONSIVE
+================================= */
 
 @media(max-width:1200px){
 
-
-.balance-grid{
-
-
-    grid-template-columns:repeat(2,1fr);
-
+    .balance-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label,
+    .summary-card h2,
+    .summary-card small{
+        word-break:break-word;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+    }
+
+    .summary-card small{
+        font-size:8px;
+        line-height:1.4;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:9px;
+    }
+
+
+    .balance-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .balance-card{
+        min-width:0;
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .balance-header{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .division-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .balance-header > div:last-child{
+        min-width:0;
+    }
+
+    .balance-header h3{
+        font-size:13px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .balance-header p{
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .saldo-box{
+        margin-top:15px;
+    }
+
+    .saldo-box label{
+        font-size:9px;
+    }
+
+    .saldo-box h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+
+    .info-box{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .info-box div{
+        gap:10px;
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .info-box b{
+        min-width:0;
+        max-width:65%;
+        text-align:right;
+        word-break:break-word;
+    }
+
+
+    .active{
+        display:inline-flex;
+        align-items:center;
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+
+    .empty{
+        padding:30px 15px;
+        font-size:10px;
+    }
+
 }
 
 
+@media(max-width:600px){
 
-@media(max-width:800px){
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
 
 
-.balance-grid,
-.summary-grid{
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+        gap:8px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
 
 
-    grid-template-columns:1fr;
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-header{
+        margin-bottom:14px;
+    }
+
+    .panel-header small{
+        font-size:8px;
+    }
 
 
-}
+    .balance-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .balance-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .balance-header{
+        gap:9px;
+    }
+
+    .division-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .balance-header h3{
+        font-size:11px;
+        line-height:1.4;
+    }
+
+    .balance-header p{
+        font-size:8px;
+        line-height:1.4;
+    }
 
 
-.welcome-card{
+    .saldo-box{
+        margin-top:13px;
+    }
+
+    .saldo-box label{
+        font-size:8px;
+    }
+
+    .saldo-box h2{
+        font-size:16px;
+        margin-top:4px;
+    }
 
 
-    padding:25px;
+    .info-box{
+        padding:10px;
+        border-radius:11px;
+        margin-top:12px;
+    }
+
+    .info-box div{
+        font-size:8px;
+        gap:8px;
+        margin-bottom:7px;
+    }
+
+    .info-box b{
+        max-width:60%;
+        font-size:8px;
+        line-height:1.4;
+    }
 
 
-}
+    .active{
+        padding:5px 8px;
+        font-size:7px;
+    }
 
+
+    .empty{
+        padding:25px 12px;
+        font-size:9px;
+    }
 
 }
 

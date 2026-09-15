@@ -1018,30 +1018,309 @@ text-decoration:none;
 
 
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:900px){
 
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
 
-.summary-grid,
-.detail-grid{
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
 
-grid-template-columns:1fr;
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 9px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:14px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-header small{
+        font-size:9px;
+    }
+
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .detail-box{
+        padding:14px;
+        border-radius:13px;
+        min-width:0;
+    }
+
+    .detail-box label{
+        font-size:9px;
+    }
+
+    .detail-box h3{
+        margin-top:6px;
+        font-size:12px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .detail-box h3 small{
+        font-size:9px;
+        color:#94a3b8;
+    }
+
+
+    .status{
+        display:inline-flex;
+        align-items:center;
+        padding:5px 9px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+
+    .info-list div,
+    .approval-box div{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:5px;
+        padding:12px 0;
+        font-size:10px;
+    }
+
+    .info-list span,
+    .approval-box span{
+        font-size:9px;
+    }
+
+    .info-list b,
+    .approval-box b{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+        max-width:100%;
+    }
+
+    .info-list a{
+        word-break:break-word;
+    }
+
+
+    .back-btn{
+        width:100%;
+        box-sizing:border-box;
+        justify-content:center;
+        text-align:center;
+        padding:11px 15px;
+        font-size:10px;
+    }
 
 }
 
 
-.info-list div,
-.approval-box div{
+@media(max-width:600px){
 
-flex-direction:column;
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-gap:5px;
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .summary-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .glass-panel{
+        padding:14px;
+        border-radius:17px;
+        margin-bottom:14px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-header small{
+        font-size:8px;
+    }
+
+
+    .detail-grid{
+        gap:9px;
+    }
+
+    .detail-box{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .detail-box label{
+        font-size:8px;
+    }
+
+    .detail-box h3{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .detail-box h3 small{
+        font-size:8px;
+    }
+
+
+    .status{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+
+    .info-list div,
+    .approval-box div{
+        padding:10px 0;
+        gap:4px;
+        font-size:9px;
+    }
+
+    .info-list span,
+    .approval-box span{
+        font-size:8px;
+    }
+
+    .info-list b,
+    .approval-box b{
+        font-size:9px;
+    }
+
+
+    .back-btn{
+        padding:10px 12px;
+        border-radius:11px;
+        font-size:9px;
+    }
 
 }
-
-
-}
-
 
 </style>
 

@@ -722,31 +722,237 @@ color:#991b1b;
 
 
 
-
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
-
 
 
 @media(max-width:900px){
 
-.summary-grid{
+    .welcome-card{
+        padding:22px;
+        border-radius:20px;
+    }
 
-grid-template-columns:1fr;
+    .welcome-card h1{
+        font-size:22px;
+        line-height:1.35;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .welcome-tags{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .welcome-tags span{
+        font-size:9px;
+        padding:6px 10px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        min-width:0;
+        padding:14px;
+        gap:10px;
+        border-radius:18px;
+    }
+
+    .summary-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card > div:last-child{
+        min-width:0;
+    }
+
+    .summary-card label{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card small{
+        font-size:8px;
+    }
+
+
+    .glass-panel{
+        padding:18px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-desc{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:750px;
+    }
+
+    .table-wrapper th{
+        white-space:nowrap;
+        padding:12px;
+        font-size:10px;
+    }
+
+    .table-wrapper td{
+        white-space:nowrap;
+        padding:12px;
+        font-size:10px;
+    }
+
+    .status{
+        white-space:nowrap;
+        padding:5px 9px;
+        font-size:8px;
+    }
 
 }
 
+
+@media(max-width:600px){
+
+    .welcome-card{
+        padding:18px;
+        margin-bottom:18px;
+        border-radius:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+    }
+
+    .welcome-tags{
+        margin-top:11px;
+        gap:6px;
+    }
+
+    .welcome-tags span{
+        font-size:8px;
+        padding:5px 8px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:12px;
+        border-radius:16px;
+    }
+
+    .summary-icon{
+        width:35px;
+        height:35px;
+        border-radius:10px;
+        font-size:15px;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:15px;
+        margin:4px 0;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+
+    .glass-panel{
+        padding:14px;
+        border-radius:17px;
+    }
+
+    .panel-title{
+        font-size:13px;
+    }
+
+    .panel-desc{
+        font-size:8px;
+    }
+
+
+    .table-wrapper{
+        margin-top:10px;
+    }
+
+    .table-wrapper table{
+        min-width:700px;
+    }
+
+    .table-wrapper th{
+        padding:10px;
+        font-size:8px;
+    }
+
+    .table-wrapper td{
+        padding:10px;
+        font-size:9px;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
 }
-
-
 </style>
 
 

@@ -600,34 +600,186 @@ ALERT
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:900px){
 
+    .welcome-card{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+        padding:22px;
+        border-radius:20px;
+    }
 
-.form-grid{
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        padding:10px 15px;
+        font-size:10px;
+    }
 
 
-    grid-template-columns:1fr;
+    .error-box,
+    .success-box{
+        padding:12px;
+        border-radius:12px;
+        font-size:10px;
+        line-height:1.5;
+    }
 
+    .error-box ul{
+        padding-left:17px;
+    }
+
+
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .panel-title{
+        font-size:14px;
+        margin-bottom:18px;
+    }
+
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+
+    label{
+        font-size:11px;
+        margin-bottom:7px;
+    }
+
+
+    input,
+    select{
+        width:100%;
+        height:44px;
+        padding:0 12px;
+        border-radius:12px;
+        font-size:12px;
+        box-sizing:border-box;
+    }
+
+
+    .btn-submit{
+        width:100%;
+        box-sizing:border-box;
+        margin-top:20px;
+        padding:12px 20px;
+        border-radius:12px;
+        font-size:11px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.welcome-card{
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+        line-height:1.35;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
 
 
-    flex-direction:column;
+    .btn-back{
+        padding:10px 12px;
+        border-radius:11px;
+        font-size:9px;
+    }
 
 
-    align-items:flex-start;
+    .error-box,
+    .success-box{
+        padding:10px;
+        border-radius:10px;
+        margin-bottom:14px;
+        font-size:9px;
+    }
+
+    .error-box ul{
+        padding-left:15px;
+    }
 
 
-    gap:15px;
+    .glass-panel{
+        padding:15px;
+        border-radius:17px;
+    }
+
+    .panel-title{
+        font-size:13px;
+        margin-bottom:16px;
+    }
 
 
-}
+    .form-grid{
+        gap:13px;
+    }
 
+
+    label{
+        font-size:9px;
+        margin-bottom:6px;
+    }
+
+
+    input,
+    select{
+        height:42px;
+        padding:0 11px;
+        border-radius:11px;
+        font-size:11px;
+    }
+
+
+    .btn-submit{
+        margin-top:17px;
+        padding:12px 15px;
+        border-radius:11px;
+        font-size:10px;
+    }
 
 }
 
