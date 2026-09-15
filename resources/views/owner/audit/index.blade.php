@@ -740,51 +740,238 @@ EMPTY
 /* ===============================
 RESPONSIVE
 ================================ */
-
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:900px){
 
+    .dashboard-header{
+        padding:22px;
+        border-radius:20px;
+    }
 
-.filter-box{
+    .dashboard-header h1{
+        font-size:22px;
+        line-height:1.35;
+    }
 
-    flex-direction:column;
+    .dashboard-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
 
-    align-items:stretch;
+
+    .filter-box{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .filter-box select,
+    .filter-box input,
+    .filter-box button,
+    .history-btn{
+        width:100%;
+        min-width:0;
+        box-sizing:border-box;
+    }
+
+    .filter-box select,
+    .filter-box input{
+        height:40px;
+        font-size:11px;
+    }
+
+    .filter-box button,
+    .history-btn{
+        height:40px;
+        justify-content:center;
+        font-size:10px;
+    }
+
+
+    .panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel-title{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:7px;
+    }
+
+    .panel-title h3{
+        font-size:14px;
+        line-height:1.4;
+    }
+
+    .panel-title span{
+        font-size:9px;
+    }
+
+
+    .activity-row{
+        gap:11px;
+        padding:14px 4px;
+        align-items:flex-start;
+    }
+
+    .activity-icon{
+        width:36px;
+        height:36px;
+        border-radius:11px;
+        font-size:15px;
+    }
+
+    .activity-body{
+        min-width:0;
+    }
+
+    .activity-body h4{
+        font-size:12px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .user{
+        font-size:9px;
+    }
+
+    .activity-body p{
+        font-size:10px;
+        line-height:1.55;
+        word-break:break-word;
+    }
+
+    .activity-footer{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .module{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .time{
+        font-size:9px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.filter-box select,
-.filter-box input,
-.filter-box button,
-.history-btn{
+    .dashboard-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:16px;
+    }
 
-    width:100%;
+    .label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-}
+    .dashboard-header h1{
+        font-size:19px;
+        margin:7px 0;
+    }
 
-
-
-.activity-row{
-
-    flex-direction:column;
-
-}
-
-
-
-.panel-title{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:8px;
-
-}
+    .dashboard-header p{
+        font-size:10px;
+    }
 
 
+    .filter-box{
+        padding:13px;
+        border-radius:15px;
+        gap:8px;
+        margin-bottom:16px;
+    }
+
+    .filter-box select,
+    .filter-box input{
+        height:38px;
+        font-size:10px;
+        padding:0 10px;
+    }
+
+    .filter-box button,
+    .history-btn{
+        height:38px;
+        font-size:9px;
+    }
+
+
+    .panel{
+        padding:14px;
+        border-radius:17px;
+    }
+
+    .panel-title{
+        margin-bottom:10px;
+    }
+
+    .panel-title h3{
+        font-size:12px;
+    }
+
+    .panel-title span{
+        font-size:8px;
+    }
+
+
+    .activity-row{
+        gap:9px;
+        padding:12px 2px;
+    }
+
+    .activity-icon{
+        width:32px;
+        height:32px;
+        border-radius:9px;
+        font-size:13px;
+    }
+
+    .activity-body h4{
+        font-size:10px;
+        margin-bottom:4px;
+    }
+
+    .user{
+        font-size:8px;
+    }
+
+    .activity-body p{
+        font-size:9px;
+        line-height:1.5;
+        margin:6px 0;
+    }
+
+    .activity-footer{
+        gap:5px;
+    }
+
+    .module{
+        padding:4px 8px;
+        font-size:7px;
+    }
+
+    .time{
+        font-size:8px;
+    }
+
+
+    .empty{
+        padding:25px 12px;
+        font-size:10px;
+    }
 
 }
 

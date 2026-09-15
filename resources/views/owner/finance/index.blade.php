@@ -205,9 +205,172 @@ color:#dc2626;
 font-weight:700;
 
 }
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1200px){
+
+    .finance-cards{
+        grid-template-columns:repeat(2,1fr);
+        gap:15px;
+    }
+
+    .finance-card{
+        padding:20px;
+    }
+
+}
 
 
+@media(max-width:900px){
 
+    .finance-container{
+        margin-top:20px;
+    }
+
+    .finance-section{
+        padding:20px;
+        margin-top:20px;
+        border-radius:18px;
+    }
+
+    .finance-section h3{
+        font-size:16px;
+        margin-bottom:15px;
+    }
+
+
+    .finance-card{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .finance-icon{
+        width:40px;
+        height:40px;
+        border-radius:11px;
+        font-size:17px;
+        margin-bottom:12px;
+    }
+
+    .finance-label{
+        font-size:11px;
+    }
+
+    .finance-value{
+        font-size:21px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+
+    .chart{
+        height:210px;
+        border-radius:15px;
+        font-size:11px;
+        text-align:center;
+        padding:15px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:750px;
+    }
+
+    .table-wrapper th{
+        padding:12px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    .table-wrapper td{
+        padding:12px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .finance-container{
+        margin-top:10px;
+    }
+
+    .finance-cards{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .finance-card{
+        padding:14px;
+        border-radius:16px;
+    }
+
+    .finance-icon{
+        width:36px;
+        height:36px;
+        border-radius:10px;
+        font-size:15px;
+        margin-bottom:10px;
+    }
+
+    .finance-label{
+        font-size:9px;
+    }
+
+    .finance-value{
+        font-size:18px;
+        margin-top:5px;
+    }
+
+
+    .finance-section{
+        padding:14px;
+        margin-top:14px;
+        border-radius:16px;
+    }
+
+    .finance-section h3{
+        font-size:13px;
+        margin-bottom:12px;
+    }
+
+
+    .chart{
+        height:180px;
+        border-radius:13px;
+        font-size:10px;
+    }
+
+
+    .table-wrapper{
+        margin-top:5px;
+    }
+
+    .table-wrapper table{
+        min-width:700px;
+    }
+
+    .table-wrapper th{
+        padding:10px;
+        font-size:8px;
+    }
+
+    .table-wrapper td{
+        padding:10px;
+        font-size:9px;
+    }
+
+}
 
 </style>
 
@@ -389,6 +552,7 @@ Transaksi Terbaru
 
 </h3>
 
+<div class="table-wrapper">
 
 
 <table>
@@ -538,7 +702,7 @@ Pengeluaran
 
 </table>
 
-
+</div>
 </div>
 
 

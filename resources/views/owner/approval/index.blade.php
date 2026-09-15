@@ -135,7 +135,7 @@ Dana yang telah disetujui
 </h3>
 
 
-
+<div class="table-wrapper">
 
 <table>
 
@@ -330,7 +330,7 @@ Belum ada pengajuan dana
 
 </table>
 
-
+</div>
 </div>
 
 
@@ -782,30 +782,210 @@ BUTTON
 /* ===============================
 RESPONSIVE
 ================================ */
+/* ===============================
+   RESPONSIVE
+================================ */
 
+@media(max-width:1200px){
 
-@media(max-width:1000px){
-
-
-.summary-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-table{
-
-    display:block;
-
-    overflow-x:auto;
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .dashboard-header{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .dashboard-header h1{
+        font-size:22px;
+        line-height:1.35;
+    }
+
+    .dashboard-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .summary-card{
+        padding:15px;
+        border-radius:18px;
+        min-width:0;
+    }
+
+    .summary-card span{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .summary-card p{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+
+    .panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
+
+    .panel h3{
+        font-size:14px;
+        margin-bottom:15px;
+    }
+
+
+    .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .table-wrapper table{
+        min-width:850px;
+    }
+
+    .table-wrapper th{
+        padding:12px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    .table-wrapper td{
+        padding:12px;
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    .table-wrapper td strong{
+        font-size:11px;
+    }
+
+    .status{
+        padding:5px 9px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+    .btn-detail{
+        padding:7px 11px;
+        font-size:9px;
+        white-space:nowrap;
+    }
+
 }
 
+
+@media(max-width:600px){
+
+    .dashboard-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:16px;
+    }
+
+    .label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .dashboard-header h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .dashboard-header p{
+        font-size:10px;
+    }
+
+
+    .summary-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:16px;
+    }
+
+    .summary-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .summary-card span{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:5px 0;
+    }
+
+    .summary-card p{
+        font-size:8px;
+    }
+
+
+    .panel{
+        padding:14px;
+        border-radius:17px;
+    }
+
+    .panel h3{
+        font-size:12px;
+        padding-left:8px;
+        border-left-width:3px;
+    }
+
+
+    .table-wrapper{
+        margin-top:8px;
+    }
+
+    .table-wrapper table{
+        min-width:800px;
+    }
+
+    .table-wrapper th{
+        padding:10px;
+        font-size:8px;
+    }
+
+    .table-wrapper td{
+        padding:10px;
+        font-size:9px;
+    }
+
+    .table-wrapper td strong{
+        font-size:10px;
+    }
+
+    .status{
+        padding:5px 8px;
+        font-size:7px;
+    }
+
+    .btn-detail{
+        padding:6px 9px;
+        font-size:8px;
+    }
+
+}
 </style>
 
 

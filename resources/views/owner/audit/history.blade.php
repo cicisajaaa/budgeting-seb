@@ -231,30 +231,87 @@ BUTTON
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
-@media(max-width:700px){
+@media(max-width:900px){
 
+    .panel{
+        padding:20px;
+        border-radius:20px;
+    }
 
-.date-card{
+    .panel h2{
+        font-size:16px;
+        margin-bottom:15px;
+    }
 
-    flex-direction:column;
+    .date-card{
+        padding:14px;
+        border-radius:16px;
+        gap:12px;
+    }
 
-    align-items:flex-start;
+    .date-card h3{
+        font-size:13px;
+        line-height:1.4;
+    }
 
-    gap:15px;
+    .date-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .date-card a{
+        padding:8px 13px;
+        font-size:10px;
+        white-space:nowrap;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.date-card a{
+    .panel{
+        padding:14px;
+        border-radius:17px;
+    }
 
-    width:100%;
+    .panel h2{
+        font-size:14px;
+        padding-left:9px;
+        border-left-width:3px;
+        margin-bottom:12px;
+    }
 
-    text-align:center;
+    .date-card{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+        padding:12px;
+        margin-bottom:9px;
+        border-radius:13px;
+    }
 
-}
+    .date-card h3{
+        font-size:11px;
+        margin-bottom:4px;
+    }
 
+    .date-card p{
+        font-size:9px;
+    }
+
+    .date-card a{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        padding:9px 10px;
+        border-radius:9px;
+        font-size:9px;
+    }
 
 }
 

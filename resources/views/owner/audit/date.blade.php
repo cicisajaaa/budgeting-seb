@@ -629,38 +629,204 @@ EMPTY
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
-@media(max-width:800px){
+@media(max-width:900px){
+
+    .dashboard-header{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .header-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .dashboard-header h1{
+        font-size:22px;
+        line-height:1.35;
+    }
+
+    .dashboard-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        box-sizing:border-box;
+        padding:10px 14px;
+        font-size:10px;
+    }
 
 
-.header-top{
+    .panel{
+        padding:20px;
+        border-radius:20px;
+    }
 
-    flex-direction:column;
+    .panel-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
 
-    align-items:flex-start;
+    .panel-header h3{
+        font-size:14px;
+    }
+
+    .panel-header span{
+        font-size:9px;
+    }
+
+
+    .activity{
+        gap:12px;
+        padding:14px 0;
+        align-items:flex-start;
+    }
+
+    .activity-icon{
+        width:36px;
+        height:36px;
+        border-radius:11px;
+        font-size:15px;
+    }
+
+    .activity-content{
+        min-width:0;
+    }
+
+    .activity-content h4{
+        font-size:12px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .activity-content small{
+        font-size:9px;
+    }
+
+    .activity-content p{
+        font-size:10px;
+        line-height:1.55;
+        word-break:break-word;
+    }
+
+    .activity-footer{
+        flex-wrap:wrap;
+        gap:7px;
+    }
+
+    .module{
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .time{
+        font-size:9px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.activity{
+    .dashboard-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:16px;
+    }
 
-    flex-direction:column;
+    .label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-}
+    .dashboard-header h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .dashboard-header p{
+        font-size:10px;
+    }
+
+    .btn-back{
+        padding:10px 12px;
+        border-radius:10px;
+        font-size:9px;
+    }
 
 
+    .panel{
+        padding:14px;
+        border-radius:17px;
+    }
 
-.panel-header{
+    .panel-header{
+        margin-bottom:12px;
+    }
 
-    flex-direction:column;
+    .panel-header h3{
+        font-size:12px;
+        padding-left:8px;
+        border-left-width:3px;
+    }
 
-    align-items:flex-start;
+    .panel-header span{
+        font-size:8px;
+    }
 
-    gap:8px;
 
-}
+    .activity{
+        gap:9px;
+        padding:12px 0;
+    }
 
+    .activity-icon{
+        width:32px;
+        height:32px;
+        border-radius:9px;
+        font-size:13px;
+    }
+
+    .activity-content h4{
+        font-size:10px;
+    }
+
+    .activity-content small{
+        font-size:8px;
+    }
+
+    .activity-content p{
+        font-size:9px;
+        line-height:1.5;
+        margin:6px 0;
+    }
+
+    .activity-footer{
+        gap:5px;
+    }
+
+    .module{
+        padding:4px 8px;
+        font-size:7px;
+    }
+
+    .time{
+        font-size:8px;
+    }
+
+
+    .empty{
+        padding:25px 15px;
+        font-size:10px;
+    }
 
 }
 
