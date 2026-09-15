@@ -873,7 +873,7 @@ Belum ada aktivitas
 
 background:#f8fafc;
 
-padding:30px;
+padding:15px;
 
 border-radius:20px;
 
@@ -1361,11 +1361,10 @@ background:#f59e0b;
     min-width:750px;
 }
 
+@media(max-width:600px){
 
-@media(max-width:1200px){
-
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
+.summary-grid{
+    grid-template-columns:1fr;
     }
 
     .content-grid{
@@ -1484,12 +1483,15 @@ background:#f59e0b;
     }
 
 
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-        margin-bottom:15px;
-    }
+.summary-grid{
 
+    grid-template-columns:1fr;
+
+    gap:12px;
+
+    margin-bottom:15px;
+
+}
     .summary-card{
         padding:12px;
         border-radius:16px;
@@ -1560,7 +1562,7 @@ background:#f59e0b;
     }
 
     .table-wrapper table{
-        min-width:750px;
+        min-width:650px;
     }
 
     th{
@@ -1615,6 +1617,35 @@ background:#f59e0b;
 
 }
 
+@media(max-width:600px){
+
+.chart-grid .panel > div{
+    height:170px!important;
+}
+
+}
+
+
+.table-wrapper{
+position:relative;
+}
+
+
+.table-wrapper::after{
+
+content:"Geser →";
+
+position:absolute;
+
+right:10px;
+
+bottom:5px;
+
+font-size:10px;
+
+color:#94a3b8;
+
+}
 </style>
 
 
