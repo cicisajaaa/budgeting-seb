@@ -950,13 +950,13 @@ Route::get(
 
 
 Route::get(
-'/owner/report/performance/pdf',
+'/reports/performance/pdf',
 [
-OwnerReportController::class,
-'performancePdf'
+    OwnerReportController::class,
+    'performancePdf'
 ]
 )
-->name('owner.report.performance.pdf');
+->name('report.performance.pdf');
 });
 });
 
