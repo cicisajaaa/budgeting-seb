@@ -1655,17 +1655,27 @@ tr:hover{
     }
 
     .finance-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
+
+        grid-template-columns:1fr;
+
+        gap:12px;
+
         margin-bottom:18px;
+
     }
 
     .finance-card{
-        padding:12px;
+
+        padding:15px;
+
         border-radius:16px;
-        gap:8px;
-        align-items:flex-start;
+
+        gap:12px;
+
+        align-items:center;
+
     }
+
 
     .finance-icon{
         width:34px;
@@ -1840,6 +1850,38 @@ tr:hover{
 
 
 
+@media(max-width:600px){
+
+    .finance-card h2{
+
+        font-size:13px;
+
+        word-break:break-word;
+
+    }
+
+
+    .finance-card small{
+
+        font-size:9px;
+
+    }
+
+
+    .dashboard-title h1{
+
+        font-size:18px;
+
+    }
+
+
+    .dashboard-title p{
+
+        font-size:11px;
+
+    }
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

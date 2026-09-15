@@ -1197,14 +1197,11 @@ color:#64748b;
 
 
 .profile-area{
-
     display:flex;
 
     align-items:center;
 
-    gap:18px;
-
-    height:100%;
+    gap:10px;
 
 }
 
@@ -1818,6 +1815,48 @@ display:block;
     font-size:24px;
 
 }
+
+}
+
+/* GLOBAL MOBILE FIX */
+
+@media(max-width:768px){
+
+
+    .content{
+        padding:75px 12px 20px;
+        overflow-x:hidden;
+    }
+
+
+
+    .finance-container,
+    .audit-container,
+    .approval-container{
+        width:100%;
+    }
+
+
+
+    .finance-section,
+    .panel,
+    .glass-panel{
+        width:100%;
+        overflow:hidden;
+    }
+
+
+
+    table{
+        min-width:700px;
+    }
+
+
+    .table-wrapper{
+        overflow-x:auto;
+        width:100%;
+    }
+
 
 }
 </style>
