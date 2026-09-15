@@ -7,7 +7,7 @@
 
     <form action="{{ route('tasks.store', $project->id) }}" method="POST">
         @csrf
-        <table style="border: none; width: 100%; max-width: 600px;">
+        <table class="task-form-table">
             <tr>
                 <td style="border: none;"><label>Tanggal:</label></td>
                 <td style="border: none;"><input type="date" name="tanggal" required style="width: 100%; padding: 8px;"></td>
@@ -66,4 +66,79 @@
         <a href="{{ route('tasks.index', $project->id) }}" class="btn" style="background: #6c757d;">Batal</a>
     </form>
 </div>
+
+<style>
+.task-form-table{
+    border:none;
+    width:100%;
+    max-width:600px;
+}
+
+.task-form-table td{
+    border:none;
+    padding:8px 0;
+}
+
+.task-form-table input,
+.task-form-table select,
+.task-form-table textarea{
+    width:100%;
+    padding:8px;
+    box-sizing:border-box;
+}
+
+@media(max-width:600px){
+
+    .card{
+        width:100%;
+        padding:16px;
+        box-sizing:border-box;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+    .task-form-table,
+    .task-form-table tbody,
+    .task-form-table tr,
+    .task-form-table td{
+        display:block;
+        width:100%;
+    }
+
+    .task-form-table tr{
+        margin-bottom:12px;
+    }
+
+    .task-form-table td:first-child{
+        padding-bottom:5px;
+    }
+
+    .task-form-table td:last-child{
+        padding-top:0;
+    }
+
+    .task-form-table input,
+    .task-form-table select,
+    .task-form-table textarea{
+        width:100%;
+        min-height:42px;
+        font-size:14px;
+    }
+
+    .task-form-table textarea{
+        min-height:90px;
+    }
+
+    .btn{
+        display:block;
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+        margin-top:8px;
+    }
+
+}
+</style>
 @endsection

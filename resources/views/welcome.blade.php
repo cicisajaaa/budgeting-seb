@@ -1714,6 +1714,306 @@ box-shadow:
 
 }
 }
+
+/* ===============================
+MOBILE RESPONSIVE
+================================ */
+
+@media(max-width:600px){
+
+    body{
+        background-position:center top;
+        background-size:auto 100%;
+    }
+
+    .navbar{
+        height:70px;
+        padding:0 18px;
+    }
+
+    .brand{
+        gap:8px;
+    }
+
+    .brand img{
+        width:42px;
+        height:42px;
+    }
+
+    .brand-text{
+        font-size:12px;
+    }
+
+    .brand-text span{
+        font-size:9px;
+    }
+
+
+    /* HERO */
+
+    .hero{
+        min-height:100vh;
+        padding:100px 20px 50px;
+        align-items:flex-start;
+    }
+
+    .hero-left{
+        width:100%;
+    }
+
+    .logo-box{
+        width:85px;
+        height:85px;
+        margin-bottom:20px;
+    }
+
+    .company{
+        font-size:29px;
+        line-height:1.2;
+        letter-spacing:-.5px;
+    }
+
+    .system{
+        font-size:17px;
+        line-height:1.4;
+    }
+
+    .description{
+        font-size:13px;
+        line-height:1.7;
+        max-width:100%;
+    }
+
+
+    /* FEATURES */
+
+    .features{
+        flex-direction:column;
+        gap:10px;
+        margin-top:25px;
+    }
+
+    .feature{
+        width:100%;
+        padding:17px;
+        border-radius:15px;
+    }
+
+    .feature-icon{
+        font-size:21px;
+    }
+
+    .feature-title{
+        font-size:11px;
+    }
+
+    .feature-text{
+        font-size:10px;
+    }
+
+
+    /* LOGIN BUTTON */
+
+    .btn-login{
+        width:100%;
+        text-align:center;
+        padding:15px 20px;
+        margin-top:25px;
+        font-size:14px;
+    }
+
+    .status{
+        font-size:11px;
+        margin-top:20px;
+    }
+
+
+    /* SYSTEM SECTION */
+
+    .system-section{
+        padding:60px 18px;
+    }
+
+    .system-container h2{
+        font-size:25px;
+        line-height:1.3;
+    }
+
+    .section-desc{
+        font-size:12px;
+        line-height:1.7;
+    }
+
+    .system-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+        margin-top:30px;
+    }
+
+    .system-card{
+        width:100%;
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .system-card h3{
+        font-size:16px;
+    }
+
+    .system-card p,
+    .system-card li{
+        font-size:12px;
+        line-height:1.6;
+    }
+
+
+    /* LOGIN MODAL */
+
+    .login-overlay{
+        padding:15px;
+        align-items:center;
+        overflow-y:auto;
+    }
+
+    .login-box{
+        width:100%;
+        max-width:420px;
+        height:auto;
+        min-height:0;
+        flex-direction:column;
+        border-radius:22px;
+        overflow:hidden;
+    }
+
+    .login-left{
+        width:100%;
+        min-height:170px;
+        padding:25px 15px;
+    }
+
+    .login-left > div{
+        transform:none;
+    }
+
+    .login-logo{
+        width:75px;
+        height:75px;
+        padding:7px;
+        margin-bottom:10px;
+    }
+
+    .login-company{
+        font-size:17px;
+        padding:0;
+    }
+
+    .login-left p{
+        font-size:11px;
+    }
+
+
+    .login-right{
+        width:100%;
+        padding:25px 20px 20px;
+    }
+
+    .login-header{
+        margin-bottom:20px;
+    }
+
+    .login-title-small{
+        font-size:9px;
+        padding:5px 11px;
+        margin-bottom:10px;
+    }
+
+    .login-right h2{
+        font-size:23px;
+        white-space:normal;
+        line-height:1.3;
+        margin-bottom:8px;
+    }
+
+    .login-desc{
+        font-size:12px;
+        line-height:1.5;
+    }
+
+    .form-group{
+        margin-bottom:15px;
+    }
+
+    .form-group label{
+        font-size:12px;
+    }
+
+    .form-group input{
+        height:48px;
+        font-size:13px;
+    }
+
+    .remember{
+        font-size:12px;
+    }
+
+    .submit-btn{
+        width:100%;
+        height:48px;
+        margin-top:20px;
+    }
+
+    .close-login{
+        margin-top:15px;
+        font-size:11px;
+    }
+
+    .footer{
+        font-size:10px;
+        margin-top:12px;
+    }
+
+}
+
+
+@media(max-width:380px){
+
+    .brand-text{
+        font-size:11px;
+    }
+
+    .brand-text span{
+        font-size:8px;
+    }
+
+    .company{
+        font-size:26px;
+    }
+
+    .system{
+        font-size:15px;
+    }
+
+    .description{
+        font-size:12px;
+    }
+
+    .system-container h2{
+        font-size:22px;
+    }
+
+    .login-box{
+        border-radius:18px;
+    }
+
+    .login-right{
+        padding:22px 17px 18px;
+    }
+
+    .login-right h2{
+        font-size:21px;
+    }
+
+}
 </style>
 
 </head>

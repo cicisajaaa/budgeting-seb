@@ -1279,65 +1279,385 @@ BUTTON
 /* ===============================
 RESPONSIVE
 ================================ */
-
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
+    .project-summary-box{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.project-summary-box{
-
-    grid-template-columns:repeat(2,1fr);
+    .project-extra-info{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
-
-
-}
-
 
 
 @media(max-width:900px){
 
+    .project-welcome-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+        border-radius:20px;
+    }
 
-.project-extra-info{
+    .project-welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+    }
 
-    grid-template-columns:1fr;
+    .project-welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .project-date-box{
+        width:100%;
+        box-sizing:border-box;
+        text-align:center;
+    }
+
+
+    .project-panel{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .project-card-header h2{
+        font-size:17px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .project-card-header p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+
+    .project-extra-info{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .project-extra-info div{
+        padding:13px;
+        min-width:0;
+    }
+
+    .project-extra-info strong{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+
+    .project-summary-box{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .project-summary-box div{
+        padding:14px;
+        min-width:0;
+    }
+
+    .project-summary-box span{
+        font-size:10px;
+    }
+
+    .project-summary-box strong{
+        font-size:19px;
+        word-break:break-word;
+    }
+
+
+    .project-section-title{
+        font-size:14px;
+    }
+
+
+    .activity-item{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .activity-item > div:last-child{
+        min-width:0;
+    }
+
+    .activity-item strong,
+    .activity-item p,
+    .activity-item small{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .activity-icon{
+        width:30px;
+        height:30px;
+        flex-shrink:0;
+    }
+
+
+    .project-task-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:15px;
+    }
+
+    .project-task-main{
+        width:100%;
+        min-width:0;
+    }
+
+    .project-task-title h4{
+        font-size:13px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .project-task-title small{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .project-task-title p{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .project-task-side{
+        width:100%;
+    }
+
+    .project-status{
+        width:100%;
+        box-sizing:border-box;
+    }
+
+    .project-button-group{
+        width:100%;
+    }
+
+    .project-button-group a{
+        min-height:40px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+    }
+
+
+    .project-progress-label{
+        font-size:10px;
+    }
+
+    .project-activity-info{
+        font-size:10px;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.project-task-card{
+    .project-welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    flex-direction:column;
+    .project-welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .project-welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .project-welcome-card p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .project-date-box{
+        padding:9px 12px;
+        font-size:10px;
+    }
+
+
+    .project-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .project-card-header h2{
+        font-size:16px;
+    }
+
+    .project-card-header p{
+        font-size:10px;
+        line-height:1.5;
+        margin:5px 0;
+    }
+
+
+    .project-extra-info{
+        grid-template-columns:1fr;
+        gap:8px;
+        margin-top:15px;
+    }
+
+    .project-extra-info div{
+        padding:11px;
+        border-radius:13px;
+    }
+
+    .project-extra-info span{
+        font-size:8px;
+        margin-bottom:4px;
+    }
+
+    .project-extra-info strong{
+        font-size:10px;
+    }
+
+
+    .project-summary-box{
+        grid-template-columns:repeat(2,1fr);
+        gap:8px;
+        margin:18px 0;
+    }
+
+    .project-summary-box div{
+        padding:11px;
+        border-radius:14px;
+    }
+
+    .project-summary-box span{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .project-summary-box strong{
+        font-size:16px;
+        margin-top:5px;
+    }
+
+
+    .project-section-title{
+        font-size:13px;
+        padding-left:8px;
+        margin:20px 0 12px;
+    }
+
+
+    .activity-item{
+        padding:11px;
+        border-radius:12px;
+        gap:9px;
+    }
+
+    .activity-icon{
+        width:28px;
+        height:28px;
+        font-size:12px;
+    }
+
+    .activity-item strong{
+        font-size:10px;
+    }
+
+    .activity-item p{
+        font-size:9px;
+        margin:4px 0;
+    }
+
+    .activity-item small{
+        font-size:8px;
+    }
+
+
+    .project-task-card{
+        padding:12px;
+        border-radius:15px;
+        gap:12px;
+    }
+
+    .project-task-title h4{
+        font-size:11px;
+        line-height:1.45;
+    }
+
+    .project-task-title small{
+        font-size:8px;
+        line-height:1.5;
+    }
+
+    .project-task-title p{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+
+    .late-warning{
+        padding:4px 8px;
+        font-size:8px;
+        margin-top:6px;
+    }
+
+
+    .project-progress-label{
+        font-size:9px;
+        margin-top:12px;
+    }
+
+    .project-progress-track{
+        height:7px;
+    }
+
+    .project-activity-info{
+        margin-top:9px;
+        font-size:9px;
+    }
+
+
+    .project-status{
+        padding:6px 10px;
+        font-size:8px;
+        margin-bottom:8px;
+    }
+
+    .project-button-group{
+        gap:7px;
+    }
+
+    .project-button-group a{
+        min-height:40px;
+        padding:8px;
+        font-size:9px;
+        border-radius:9px;
+    }
+
+
+    .empty-box{
+        font-size:10px;
+        padding:18px;
+    }
 
 }
-
-
-
-
-.project-summary-box{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.project-welcome-card{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
-
-}
-
-
-}
-
-
-
 
 
 /* BUTTON AGAR RAPI */

@@ -1483,60 +1483,370 @@ color:#92400e;
 RESPONSIVE
 ================================ */
 
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media(max-width:1200px){
 
-.detail-grid{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
+    .detail-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
 
+@media(max-width:900px){
 
-@media(max-width:700px){
+    .welcome-card{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .welcome-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .welcome-card p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .back-btn{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+    }
 
 
-.welcome-card{
+    .glass-panel{
+        padding:20px;
+        border-radius:20px;
+        overflow:hidden;
+    }
 
-    flex-direction:column;
+    .glass-panel h2{
+        font-size:15px;
+        line-height:1.4;
+    }
 
-    align-items:flex-start;
 
-    gap:15px;
+    .detail-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .info-box{
+        min-width:0;
+        padding:14px;
+    }
+
+    .info-box label{
+        font-size:10px;
+    }
+
+    .info-box strong{
+        font-size:12px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+    .priority,
+    .status,
+    .deadline{
+        max-width:100%;
+        word-break:break-word;
+    }
+
+
+    .progress-container{
+        padding:16px;
+    }
+
+    .progress-header span{
+        font-size:10px;
+    }
+
+    .progress-header strong{
+        font-size:21px;
+    }
+
+    .progress-track{
+        width:100%;
+        height:13px;
+    }
+
+    .progress-status{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .update-btn{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+        font-size:11px;
+    }
+
+
+    .description{
+        font-size:11px;
+        line-height:1.6;
+        word-break:break-word;
+    }
+
+
+    .timeline-item{
+        gap:10px;
+        padding:14px;
+    }
+
+    .timeline-content{
+        min-width:0;
+        width:100%;
+    }
+
+    .timeline-top{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .timeline-top strong{
+        font-size:11px;
+        word-break:break-word;
+    }
+
+    .activity-badge{
+        flex-shrink:0;
+        font-size:9px;
+        padding:5px 9px;
+    }
+
+    .activity-text{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .mini-progress{
+        gap:8px;
+    }
+
+    .mini-progress span{
+        font-size:10px;
+        flex-shrink:0;
+    }
+
+    .activity-meta{
+        font-size:9px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .activity-note{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.detail-grid{
+    .welcome-card{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-    grid-template-columns:1fr;
+    .welcome-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
+
+    .welcome-card h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .welcome-card p{
+        font-size:10px;
+    }
+
+    .back-btn{
+        height:42px;
+        font-size:11px;
+    }
+
+
+    .glass-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:15px;
+    }
+
+    .glass-panel h2{
+        font-size:14px;
+        padding-left:8px;
+        margin-bottom:15px;
+    }
+
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .info-box{
+        min-height:75px;
+        padding:11px;
+        border-radius:13px;
+    }
+
+    .info-box label{
+        font-size:9px;
+        margin-bottom:5px;
+    }
+
+    .info-box strong{
+        font-size:11px;
+    }
+
+    .priority,
+    .status,
+    .deadline{
+        padding:5px 9px;
+        font-size:9px;
+    }
+
+
+    .progress-container{
+        padding:13px;
+        border-radius:15px;
+    }
+
+    .progress-header{
+        margin-bottom:9px;
+    }
+
+    .progress-header span{
+        font-size:9px;
+    }
+
+    .progress-header strong{
+        font-size:19px;
+    }
+
+    .progress-track{
+        height:10px;
+    }
+
+    .progress-status{
+        margin-top:9px;
+        font-size:9px;
+    }
+
+    .update-btn{
+        min-height:42px;
+        margin-top:15px;
+        padding:10px 15px;
+        font-size:10px;
+    }
+
+
+    .description{
+        padding:12px;
+        border-radius:13px;
+        font-size:10px;
+        line-height:1.6;
+    }
+
+
+    .timeline-item{
+        gap:8px;
+        padding:11px;
+        border-radius:13px;
+        margin-bottom:9px;
+    }
+
+    .timeline-dot{
+        width:9px;
+        height:9px;
+        margin-top:5px;
+    }
+
+    .timeline-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+        margin-bottom:8px;
+    }
+
+    .timeline-top strong{
+        font-size:9px;
+    }
+
+    .activity-badge{
+        font-size:8px;
+        padding:4px 8px;
+    }
+
+    .activity-text{
+        font-size:9px;
+        line-height:1.5;
+        margin-bottom:11px;
+    }
+
+    .mini-progress{
+        gap:7px;
+    }
+
+    .mini-track{
+        height:6px;
+    }
+
+    .mini-progress span{
+        font-size:9px;
+    }
+
+    .activity-meta{
+        margin-top:10px;
+        font-size:8px;
+        line-height:1.5;
+    }
+
+    .activity-note{
+        margin-top:9px;
+        padding:9px;
+        border-radius:10px;
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .empty{
+        padding:25px 12px;
+        font-size:10px;
+    }
 
 }
-
-
-
-
-.progress-track{
-
-    width:100%;
-
-}
-
-
-
-.glass-panel{
-
-    padding:18px;
-
-}
-
-
-}
-
 
 
 </style>

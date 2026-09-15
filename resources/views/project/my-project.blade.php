@@ -609,32 +609,142 @@ font-weight:700;
 
 
 
-
 @media(max-width:800px){
 
+    .project-container{
+        padding:5px;
+    }
 
-.project-info{
+    .project-header h1{
+        font-size:24px;
+    }
 
+    .project-header p{
+        font-size:12px;
+        line-height:1.5;
+        margin-bottom:20px;
+    }
 
-grid-template-columns:1fr;
+    .project-card{
+        padding:18px;
+        border-radius:20px;
+        margin-bottom:18px;
+    }
 
+    .project-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .project-top h2{
+        font-size:19px;
+        margin-bottom:5px;
+        word-break:break-word;
+    }
+
+    .project-top p{
+        font-size:12px;
+    }
+
+    .progress-badge{
+        padding:8px 14px;
+        font-size:12px;
+    }
+
+    .project-info{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin:18px 0;
+    }
+
+    .project-info div{
+        padding:13px;
+    }
+
+    .progress-title{
+        font-size:12px;
+    }
+
+    .progress-track{
+        height:12px;
+    }
+
+    .task-item{
+        flex-direction:column;
+        align-items:stretch;
+        gap:14px;
+        padding:14px;
+    }
+
+    .task-item strong{
+        font-size:13px;
+        word-break:break-word;
+    }
+
+    .task-item p{
+        font-size:12px;
+        line-height:1.5;
+    }
+
+    .mini-progress{
+        width:100%;
+        max-width:none;
+    }
+
+    .task-right{
+        text-align:left;
+        display:flex;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:8px;
+    }
+
+    .task-right br{
+        display:none;
+    }
+
+    .task-right small{
+        font-size:11px;
+    }
+
+    .task-right a{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:7px 12px;
+        background:#166534;
+        color:white;
+        border-radius:10px;
+        text-decoration:none;
+        font-size:11px;
+        font-weight:700;
+    }
 
 }
 
 
+@media(max-width:480px){
 
-.project-top{
+    .project-header h1{
+        font-size:21px;
+    }
 
+    .project-card{
+        padding:15px;
+    }
 
-flex-direction:column;
+    .project-top h2{
+        font-size:17px;
+    }
 
-align-items:flex-start;
+    .progress-badge{
+        font-size:11px;
+    }
 
-gap:15px;
-
-
-}
-
+    .project-info strong{
+        font-size:13px;
+    }
 
 }
 

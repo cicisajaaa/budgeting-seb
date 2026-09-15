@@ -1043,40 +1043,373 @@ color:#94a3b8;
 
 
 
+  /* ===============================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1200px){
+
+    .info-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
 
 @media(max-width:900px){
 
+    .task-hero{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+        padding:20px;
+        border-radius:20px;
+    }
 
-.info-grid{
+    .hero-label{
+        font-size:9px;
+        letter-spacing:1.5px;
+    }
 
-grid-template-columns:1fr;
+    .task-hero h1{
+        font-size:21px;
+        line-height:1.35;
+        word-break:break-word;
+    }
+
+    .task-hero p{
+        font-size:11px;
+        line-height:1.5;
+        word-break:break-word;
+    }
+
+    .back-btn{
+        width:100%;
+        min-height:42px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-sizing:border-box;
+    }
+
+
+    .info-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .info-card{
+        min-width:0;
+        padding:15px;
+        border-radius:18px;
+        gap:10px;
+    }
+
+    .info-icon{
+        width:38px;
+        height:38px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .info-card > div:last-child{
+        min-width:0;
+    }
+
+    .info-card span{
+        font-size:9px;
+    }
+
+    .info-card strong{
+        font-size:12px;
+        word-break:break-word;
+        line-height:1.5;
+    }
+
+
+    .progress-card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .progress-head{
+        font-size:11px;
+        gap:10px;
+    }
+
+    .progress-head strong{
+        font-size:12px;
+    }
+
+    .progress-track{
+        height:10px;
+    }
+
+
+    .form-card,
+    .history-card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .section-title{
+        font-size:14px;
+        margin-bottom:17px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    label{
+        font-size:10px;
+        margin-bottom:6px;
+    }
+
+    textarea,
+    input{
+        width:100%;
+        box-sizing:border-box;
+        font-size:11px;
+    }
+
+    textarea{
+        min-height:90px;
+    }
+
+    .save-btn{
+        min-height:42px;
+        height:42px;
+        font-size:11px;
+    }
+
+
+    .timeline-item{
+        gap:10px;
+        margin-bottom:14px;
+    }
+
+    .timeline-dot{
+        width:10px;
+        height:10px;
+        margin-top:20px;
+        flex-shrink:0;
+    }
+
+    .timeline-content{
+        min-width:0;
+        padding:14px;
+        border-radius:15px;
+    }
+
+    .timeline-top{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .timeline-top > div:first-child{
+        min-width:0;
+    }
+
+    .timeline-top h4{
+        font-size:11px;
+        line-height:1.4;
+        word-break:break-word;
+    }
+
+    .timeline-top span{
+        font-size:9px;
+        word-break:break-word;
+    }
+
+    .progress-badge{
+        flex-shrink:0;
+        padding:5px 9px;
+        font-size:8px;
+        white-space:nowrap;
+    }
+
+    .timeline-info{
+        flex-wrap:wrap;
+        gap:7px 12px;
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .note{
+        font-size:10px;
+        line-height:1.5;
+        word-break:break-word;
+    }
 
 }
 
 
+@media(max-width:600px){
 
-.form-grid{
+    .task-hero{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
 
-grid-template-columns:1fr;
+    .hero-label{
+        font-size:8px;
+    }
+
+    .task-hero h1{
+        font-size:19px;
+        margin:7px 0;
+    }
+
+    .task-hero p{
+        font-size:10px;
+    }
+
+    .back-btn{
+        height:42px;
+        font-size:10px;
+    }
+
+
+    .info-grid{
+        grid-template-columns:1fr;
+        gap:9px;
+        margin-bottom:18px;
+    }
+
+    .info-card{
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .info-icon{
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
+    }
+
+    .info-card span{
+        font-size:8px;
+    }
+
+    .info-card strong{
+        font-size:11px;
+    }
+
+
+    .progress-card{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .progress-head{
+        font-size:10px;
+        margin-bottom:9px;
+    }
+
+    .progress-head strong{
+        font-size:11px;
+    }
+
+    .progress-track{
+        height:8px;
+    }
+
+
+    .form-card,
+    .history-card{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .section-title{
+        font-size:13px;
+        margin-bottom:15px;
+    }
+
+    label{
+        font-size:9px;
+    }
+
+    textarea,
+    input{
+        padding:10px;
+        font-size:10px;
+        border-radius:11px;
+        margin-bottom:15px;
+    }
+
+    textarea{
+        min-height:85px;
+    }
+
+    .save-btn{
+        height:42px;
+        font-size:10px;
+        border-radius:11px;
+    }
+
+
+    .timeline-item{
+        gap:8px;
+        margin-bottom:10px;
+    }
+
+    .timeline-dot{
+        width:8px;
+        height:8px;
+        margin-top:18px;
+    }
+
+    .timeline-content{
+        padding:11px;
+        border-radius:13px;
+    }
+
+    .timeline-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:7px;
+    }
+
+    .timeline-top h4{
+        font-size:10px;
+    }
+
+    .timeline-top span{
+        font-size:8px;
+    }
+
+    .progress-badge{
+        padding:4px 8px;
+        font-size:8px;
+    }
+
+    .timeline-info{
+        flex-direction:column;
+        gap:4px;
+        font-size:8px;
+    }
+
+    .note{
+        padding:9px;
+        border-radius:10px;
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .empty{
+        padding:25px 12px;
+        font-size:10px;
+    }
 
 }
-
-
-
-.task-hero{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:20px;
-
-}
-
-
-
-}
-
 
 
 </style>

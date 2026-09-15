@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="task-header">
         <h2>Daily Tracker: {{ $project->nama_project }}</h2>
         <a href="{{ route('tasks.create', $project->id) }}" class="btn btn-success">+ Tambah Task Baru</a>
     </div>
@@ -11,7 +11,8 @@
 
 <div class="card">
     <h3>Daftar Tugas</h3>
-    <table>
+    <div class="table-wrapper">
+<table>
         <thead>
             <tr>
                 <th>Tanggal</th>
@@ -50,5 +51,78 @@
             @endforelse
         </tbody>
     </table>
+    </div>
 </div>
+
+<style>
+
+.task-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-wrapper table{
+    min-width:850px;
+}
+
+@media(max-width:700px){
+
+    .card{
+        padding:16px;
+        box-sizing:border-box;
+    }
+
+    .task-header{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .task-header h2{
+        font-size:20px;
+        line-height:1.4;
+        margin:0;
+    }
+
+    .task-header .btn{
+        width:100%;
+        text-align:center;
+        box-sizing:border-box;
+    }
+
+    .table-wrapper table{
+        min-width:800px;
+    }
+
+    th,
+    td{
+        white-space:nowrap;
+    }
+
+    td form{
+        min-width:120px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .card{
+        padding:14px;
+    }
+
+    .task-header h2{
+        font-size:18px;
+    }
+
+}
+
+</style>
 @endsection

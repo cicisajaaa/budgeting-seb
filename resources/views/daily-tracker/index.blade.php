@@ -1381,69 +1381,326 @@ color:#94a3b8;
 }
 
 
-
-
 @media(max-width:1100px){
 
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-
-.task-grid{
-
-grid-template-columns:1fr;
+    .task-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
 
+@media(max-width:900px){
+
+    .daily-header{
+        padding:24px;
+        border-radius:20px;
+    }
+
+    .daily-header h1{
+        font-size:24px;
+    }
+
+    .daily-header p{
+        font-size:11px;
+        line-height:1.5;
+    }
+
+    .date-card{
+        width:100%;
+        justify-content:center;
+    }
+
+    .content-panel{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .task-card{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .task-header{
+        align-items:flex-start;
+    }
+
+    .task-header > div{
+        min-width:0;
+    }
+
+    .task-header h4{
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .task-header p{
+        word-break:break-word;
+    }
+
+    .task-detail{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .timeline-card{
+        min-width:0;
+    }
+
+    .timeline-header{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .timeline-header > div:first-child{
+        min-width:0;
+    }
+
+    .timeline-header h4{
+        word-break:break-word;
+        line-height:1.4;
+    }
+
+    .timeline-header span{
+        word-break:break-word;
+    }
+
+    .timeline-info{
+        flex-wrap:wrap;
+        gap:8px 15px;
+    }
+
+    .timeline-info span{
+        word-break:break-word;
+    }
+
+    .timeline-card p{
+        word-break:break-word;
+    }
+
+    .budget,
+    .note{
+        word-break:break-word;
+        line-height:1.5;
+    }
+
 }
 
 
+@media(max-width:600px){
 
-@media(max-width:700px){
+    .daily-header{
+        padding:18px;
+        border-radius:18px;
+        margin-bottom:18px;
+        gap:15px;
+    }
 
+    .daily-label{
+        font-size:8px;
+        letter-spacing:1.5px;
+    }
 
-.summary-grid{
+    .daily-header h1{
+        font-size:20px;
+        margin:7px 0;
+    }
 
-grid-template-columns:1fr;
+    .daily-header p{
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .date-card{
+        width:100%;
+        padding:12px 15px;
+        border-radius:14px;
+        font-size:11px;
+    }
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .summary-card{
+        padding:13px;
+        border-radius:16px;
+        gap:10px;
+    }
+
+    .summary-icon{
+        width:36px;
+        height:36px;
+        border-radius:11px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .summary-card label{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:17px;
+        margin:4px 0;
+    }
+
+    .summary-card p{
+        font-size:8px;
+        line-height:1.3;
+    }
+
+    .content-panel{
+        padding:15px;
+        border-radius:18px;
+        margin-bottom:18px;
+    }
+
+    .panel-header{
+        margin-bottom:16px;
+    }
+
+    .panel-header h3{
+        font-size:14px;
+    }
+
+    .panel-header span{
+        display:block;
+        margin-top:4px;
+        font-size:10px;
+        line-height:1.4;
+    }
+
+    .task-grid{
+        gap:12px;
+    }
+
+    .task-card{
+        padding:14px;
+        border-radius:16px;
+    }
+
+    .task-header{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .task-header h4{
+        font-size:13px;
+    }
+
+    .task-header p{
+        font-size:10px;
+    }
+
+    .status-badge{
+        align-self:flex-start;
+        padding:6px 10px;
+        font-size:8px;
+    }
+
+    .task-detail{
+        grid-template-columns:repeat(3,1fr);
+        gap:7px;
+        margin:15px 0;
+    }
+
+    .task-detail div{
+        padding:9px 7px;
+        border-radius:11px;
+        min-width:0;
+    }
+
+    .task-detail label{
+        font-size:8px;
+    }
+
+    .task-detail strong{
+        font-size:10px;
+        word-break:break-word;
+    }
+
+    .progress-bar{
+        height:8px;
+        margin-bottom:14px;
+    }
+
+    .update-button{
+        padding:10px;
+        border-radius:12px;
+        font-size:10px;
+    }
+
+    .timeline{
+        padding-left:2px;
+    }
+
+    .timeline-item{
+        gap:9px;
+        margin-bottom:14px;
+    }
+
+    .timeline-dot{
+        width:9px;
+        height:9px;
+        flex-shrink:0;
+        margin-top:20px;
+    }
+
+    .timeline-card{
+        padding:12px;
+        border-radius:14px;
+    }
+
+    .timeline-header{
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .timeline-header h4{
+        font-size:11px;
+    }
+
+    .timeline-header span{
+        font-size:9px;
+        line-height:1.4;
+    }
+
+    .progress-badge{
+        align-self:flex-start;
+        padding:5px 9px;
+        font-size:8px;
+    }
+
+    .timeline-card p{
+        font-size:10px;
+        line-height:1.5;
+        margin:9px 0;
+    }
+
+    .timeline-info{
+        flex-direction:column;
+        gap:5px;
+        font-size:9px;
+    }
+
+    .budget,
+    .note{
+        padding:9px;
+        font-size:9px;
+    }
+
+    .empty{
+        padding:25px 15px;
+        font-size:10px;
+    }
 
 }
-
-
-.daily-header{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:20px;
-
-}
-
-
-.task-detail{
-
-grid-template-columns:1fr;
-
-}
-
-
-.timeline-header{
-
-flex-direction:column;
-
-gap:10px;
-
-}
-
-
-
-}
-
 
 </style>
 
