@@ -1020,39 +1020,25 @@ Tidak ada notifikasi
 
 
 
+<a href="{{ route('profile.edit') }}" class="profile">
 
-<div class="profile">
+    <div class="avatar">
+        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+    </div>
 
+    <div class="profile-info">
 
-<div class="avatar">
+        <b>
+            {{ auth()->user()->name }}
+        </b>
 
-{{strtoupper(substr(auth()->user()->name,0,1))}}
+        <span>
+            {{ ucfirst(auth()->user()->role) }}
+        </span>
 
-</div>
+    </div>
 
-
-<div class="profile-info">
-
-
-<b>
-
-{{auth()->user()->name}}
-
-</b>
-
-
-<span>
-
-{{ucfirst(auth()->user()->role)}}
-
-</span>
-
-
-</div>
-
-
-</div>
-
+</a>
 
 
 
@@ -1217,7 +1203,32 @@ gap:10px;
 
 }
 
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 4px 6px;
+    transition: .2s ease;
+}
 
+.profile:hover {
+    background: #f8fafc;
+}
+
+.profile:hover .profile-info b {
+    color: #1e293b;
+}
+
+.profile:focus,
+.profile:focus-visible,
+.profile:active {
+    outline: none;
+    box-shadow: none;
+}
 .avatar{
 
 width:38px;

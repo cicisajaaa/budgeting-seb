@@ -227,14 +227,15 @@
 
 <div class="glass-panel chart-panel">
 
-
     <div class="panel-title">
         📈 Cash Flow Perusahaan
     </div>
 
-
-    <canvas id="cashFlowChart"></canvas>
-
+    <div class="chart-scroll">
+        <div class="chart-inner">
+            <canvas id="cashFlowChart"></canvas>
+        </div>
+    </div>
 
 </div>
 
@@ -723,779 +724,490 @@ Audit Monitoring Berjalan
 
 </div>
 
-
 <style>
-
 
 .finance-wrapper{
     width:100%;
+    max-width:100%;
+    min-width:0;
 }
-
 
 /* ================= HEADER ================= */
 
-
 .dashboard-title{
-
     background:#f8fafc;
     border:1px solid #e2e8f0;
     border-radius:26px;
     padding:25px;
     margin-bottom:25px;
-
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.06);
-
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
 }
 
-
-
 .welcome-label{
-
     font-size:10px;
     letter-spacing:2px;
     font-weight:800;
     color:#64748b;
-
 }
-
 
 .dashboard-title h1{
-
     margin:10px 0;
-
     font-size:24px;
-
     font-weight:800;
-
     color:#172033;
-
 }
-
 
 .dashboard-title h1 span{
-
     color:#334155;
-
 }
-
-
 
 .dashboard-title p{
-
     margin:0;
-
     color:#64748b;
-
     font-size:13px;
-
 }
-
-
-
-
-
 
 /* ================= KPI ================= */
 
-
 .finance-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:14px;
-
     margin-bottom:25px;
-
+    min-width:0;
 }
-
-
-
-
 
 .finance-card{
-
-
     background:white;
-
     border:1px solid #e5e7eb;
-
     border-radius:24px;
-
     padding:16px;
-
-
     display:flex;
-
     align-items:center;
-
     gap:15px;
-
-
     position:relative;
-
     overflow:hidden;
-
-
+    min-width:0;
+    box-shadow:0 10px 30px rgba(15,23,42,.05);
     transition:.25s ease;
-
-
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.05);
-
 }
-
-
-
 
 .finance-card:hover{
-
     transform:translateY(-5px);
-
-    box-shadow:
-
-    0 18px 40px rgba(15,23,42,.12);
-
+    box-shadow:0 18px 40px rgba(15,23,42,.12);
 }
-
-
-
-
 
 .finance-card::before{
-
     content:"";
-
     position:absolute;
-
     top:0;
-
     left:0;
-
     width:100%;
-
     height:4px;
-
     background:#334155;
-
 }
-
-
-
 
 .income-card::before{
-
     background:#22c55e;
-
 }
-
 
 .expense-card::before{
-
     background:#ef4444;
-
 }
-
 
 .balance-card::before{
-
     background:#3b82f6;
-
 }
-
 
 .approval-card::before{
-
     background:#f59e0b;
-
 }
-
-
-
-
-
 
 .finance-icon{
-
-
     width:42px;
     height:42px;
-
+    min-width:42px;
     font-size:18px;
-
     border-radius:16px;
-
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
-
-
+    flex-shrink:0;
 }
-
-
-
 
 .finance-icon.green{
-
     background:#dcfce7;
-
 }
-
 
 .finance-icon.red{
-
     background:#fee2e2;
-
 }
-
 
 .finance-icon.blue{
-
     background:#dbeafe;
-
 }
-
 
 .finance-icon.orange{
-
     background:#fef3c7;
-
 }
 
-
-
-
-
+.finance-card > div:last-child{
+    min-width:0;
+    flex:1;
+}
 
 .finance-card label{
-
     display:block;
-
     color:#64748b;
-
     font-size:12px;
-
+    line-height:1.3;
 }
-
-
-
 
 .finance-card h2{
-
     margin:6px 0;
-
     color:#172033;
-
     font-size:17px;
-
     font-weight:800;
-
+    line-height:1.35;
+    overflow-wrap:anywhere;
 }
-
-
 
 .finance-card small{
-
+    display:block;
     color:#94a3b8;
-
+    font-size:11px;
+    line-height:1.3;
 }
-
-
-
-
-
-
 
 /* ================= MAIN GRID ================= */
 
-
 .dashboard-grid{
-
     display:grid;
-
-    grid-template-columns:2fr 1fr;
-
+    grid-template-columns:minmax(0,2fr) minmax(280px,1fr);
     gap:15px;
-
+    min-width:0;
 }
 
-
-
-
-
-
+.finance-left,
+.finance-right{
+    min-width:0;
+}
 
 /* ================= PANEL ================= */
 
-
 .glass-panel{
-
-
     background:white;
-
-
     border:1px solid #e5e7eb;
-
-
     border-radius:24px;
-
-
     padding:18px;
-
-
     margin-bottom:20px;
-
-
-    box-shadow:
-
-    0 10px 30px rgba(15,23,42,.05);
-
+    box-shadow:0 10px 30px rgba(15,23,42,.05);
+    min-width:0;
 }
-
-
-
-
 
 .panel-title{
-
     font-size:14px;
-
     font-weight:800;
-
     color:#172033;
-
     margin-bottom:20px;
-
 }
-
-
-
-
-
-
 
 /* ================= CHART ================= */
 
 
+
 .chart-panel{
-
-    min-height:280px;
-
+    position:relative;
+    height:300px;
+    min-height:300px;
+    overflow:hidden;
 }
 
+.chart-scroll{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+}
 
+.chart-inner{
+    position:relative;
+    width:100%;
+    min-width:0;
+    height:225px;
+}
 
-.chart-panel canvas{
-
+.chart-inner canvas{
+    display:block;
     width:100%!important;
-
-    height:220px!important;
-
+    height:225px!important;
 }
-
-
-
-
-
-
-
 
 /* ================= SUMMARY ================= */
 
-
+.finance-summary{
+    width:100%;
+    min-width:0;
+}
 
 .finance-summary div{
-
     display:flex;
-
     justify-content:space-between;
-
-
+    align-items:center;
+    gap:20px;
     padding:14px 0;
-
-
     border-bottom:1px solid #f1f5f9;
-
+    min-width:0;
 }
-
-
 
 .finance-summary span{
-
     color:#64748b;
-
     font-size:13px;
-
+    min-width:0;
+    overflow-wrap:anywhere;
 }
-
-
 
 .finance-summary b{
-
     color:#172033;
-
+    text-align:right;
+    min-width:0;
+    overflow-wrap:anywhere;
 }
-
-
-
-
-
-
-
 
 /* ================= PROGRESS ================= */
 
-
 .progress-head{
-
     display:flex;
-
     justify-content:space-between;
-
+    align-items:center;
+    gap:15px;
     margin-bottom:10px;
-
 }
 
-
+.progress-head span,
+.progress-head b{
+    min-width:0;
+    overflow-wrap:anywhere;
+}
 
 .progress-head span{
-
     color:#64748b;
-
 }
-
-
 
 .progress-track{
-
+    width:100%;
     height:12px;
-
     background:#e2e8f0;
-
     border-radius:20px;
-
     overflow:hidden;
-
 }
-
-
 
 .progress-fill{
-
     height:100%;
-
     background:#334155;
-
     border-radius:20px;
-
+    max-width:100%;
 }
-
-
 
 .description{
-
     margin-top:15px;
-
     color:#64748b;
-
     font-size:13px;
-
+    line-height:1.5;
 }
-
-
-
-
-
-
 
 /* ================= TABLE ================= */
 
+.table-wrapper{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+}
+
+.table-wrapper table{
+    width:100%;
+    min-width:650px;
+    border-collapse:collapse;
+}
 
 table{
-
     width:100%;
-
     border-collapse:collapse;
-
 }
-
-
 
 th{
-
     background:#f8fafc;
-
     padding:14px;
-
     text-align:left;
-
     font-size:12px;
-
     color:#64748b;
-
+    white-space:nowrap;
 }
-
-
 
 td{
-
     padding:14px;
-
     border-bottom:1px solid #e5e7eb;
-
     font-size:13px;
-
+    white-space:nowrap;
 }
-
-
 
 tr:hover{
-
     background:#fafafa;
-
 }
-
-
-
 
 .pending{
-
+    display:inline-block;
     background:#fef3c7;
-
     color:#92400e;
-
     padding:6px 12px;
-
     border-radius:999px;
-
     font-size:11px;
-
     font-weight:700;
-
 }
-
-
-
-
-
 
 /* ================= HEALTH ================= */
 
-
-
 .health-item{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-
+    gap:15px;
     padding:15px 0;
-
-
     border-bottom:1px solid #f1f5f9;
-
+    min-width:0;
 }
 
+.health-item > div{
+    min-width:0;
+    flex:1;
+}
 
-
+.health-item strong{
+    display:block;
+    color:#172033;
+    overflow-wrap:anywhere;
+}
 
 .health-item small{
-
     display:block;
-
     margin-top:5px;
-
     color:#94a3b8;
-
+    line-height:1.4;
+    overflow-wrap:anywhere;
 }
 
-
-
+.health-item > span{
+    flex-shrink:0;
+}
 
 .badge-success{
-
     background:#dcfce7;
-
     color:#166534;
-
     padding:7px 12px;
-
     border-radius:999px;
-
     font-size:11px;
-
     font-weight:700;
-
+    white-space:nowrap;
 }
-
-
 
 .badge-warning{
-
     background:#fef3c7;
-
     color:#92400e;
-
     padding:7px 12px;
-
     border-radius:999px;
-
     font-size:11px;
-
     font-weight:700;
-
+    white-space:nowrap;
 }
-
-
 
 .badge-money{
-
     color:#166534;
-
     font-weight:800;
-
+    text-align:right;
+    overflow-wrap:anywhere;
 }
-
-
-
-
-
-
 
 /* ================= ACTIVITY ================= */
 
-
 .activity-item{
-
     display:flex;
-
     gap:12px;
-
     padding:14px 0;
-
     border-bottom:1px solid #f1f5f9;
-
+    min-width:0;
 }
-
-
 
 .activity-dot{
-
     width:10px;
-
     height:10px;
-
     background:#334155;
-
     border-radius:50%;
-
     margin-top:7px;
-
+    flex-shrink:0;
 }
 
+.activity-item > div:last-child{
+    min-width:0;
+    flex:1;
+}
 
-
-.activity-content strong{
-
+.activity-item strong{
+    display:block;
     color:#172033;
-
+    overflow-wrap:anywhere;
 }
 
-
-
-.activity-content p{
-
+.activity-item p{
     margin:5px 0;
-
     color:#64748b;
-
     font-size:13px;
-
+    line-height:1.5;
+    overflow-wrap:anywhere;
 }
 
-
-
-.activity-content small{
-
+.activity-item small{
     color:#94a3b8;
-
+    line-height:1.4;
+    overflow-wrap:anywhere;
 }
-
-
-
-
-
-
 
 /* ================= STATUS ================= */
 
-
 .system-row{
-
     display:flex;
-
     align-items:center;
-
     gap:10px;
-
     padding:10px 0;
-
     color:#334155;
-
     font-size:13px;
-
+    line-height:1.5;
 }
-
-
 
 .system-row span{
-
     width:9px;
-
     height:9px;
-
     background:#22c55e;
-
     border-radius:50%;
-
+    flex-shrink:0;
 }
-
-
 
 .empty-data{
-
     text-align:center;
-
     padding:30px;
-
     color:#94a3b8;
-
 }
 
-
-
-
-
-
-
-/* ================= RESPONSIVE ================= */
-
-/* ================= RESPONSIVE ================= */
+/* ================= TABLET ================= */
 
 @media(max-width:1200px){
 
     .finance-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .dashboard-grid{
@@ -1504,132 +1216,7 @@ tr:hover{
 
 }
 
-
-@media(max-width:900px){
-
-    .dashboard-title{
-        padding:22px;
-        border-radius:20px;
-    }
-
-    .dashboard-title h1{
-        font-size:21px;
-        line-height:1.35;
-        word-break:break-word;
-    }
-
-    .dashboard-title p{
-        font-size:11px;
-        line-height:1.5;
-    }
-
-    .finance-card{
-        min-width:0;
-        padding:15px;
-        border-radius:18px;
-    }
-
-    .finance-card > div:last-child{
-        min-width:0;
-    }
-
-    .finance-card label,
-    .finance-card h2,
-    .finance-card small{
-        word-break:break-word;
-    }
-
-    .finance-icon{
-        width:38px;
-        height:38px;
-        border-radius:13px;
-        font-size:16px;
-        flex-shrink:0;
-    }
-
-    .glass-panel{
-        padding:18px;
-        border-radius:20px;
-        overflow:hidden;
-    }
-
-    .panel-title{
-        font-size:14px;
-        margin-bottom:17px;
-    }
-
-    .finance-summary div{
-        gap:15px;
-    }
-
-    .finance-summary span,
-    .finance-summary b{
-        min-width:0;
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .finance-summary b{
-        text-align:right;
-    }
-
-    .chart-panel{
-        min-height:260px;
-    }
-
-    .chart-panel canvas{
-        height:210px!important;
-    }
-
-    .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-    }
-
-    table{
-        min-width:650px;
-    }
-
-    .health-item{
-        gap:12px;
-    }
-
-    .health-item > div{
-        min-width:0;
-    }
-
-    .health-item strong,
-    .health-item small{
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .health-item > span{
-        flex-shrink:0;
-    }
-
-    .activity-item{
-        align-items:flex-start;
-    }
-
-    .activity-item > div:last-child{
-        min-width:0;
-    }
-
-    .activity-item strong,
-    .activity-item p,
-    .activity-item small{
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .system-row{
-        line-height:1.5;
-    }
-
-}
-
+/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
@@ -1645,41 +1232,36 @@ tr:hover{
     }
 
     .dashboard-title h1{
-        font-size:19px;
+        font-size:18px;
+        line-height:1.35;
         margin:7px 0;
+        overflow-wrap:anywhere;
     }
 
     .dashboard-title p{
-        font-size:10px;
+        font-size:11px;
         line-height:1.5;
     }
 
+    /* KPI 2 KOLOM */
+
     .finance-grid{
-
-        grid-template-columns:1fr;
-
-        gap:12px;
-
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
         margin-bottom:18px;
-
     }
 
     .finance-card{
-
-        padding:15px;
-
+        padding:13px;
         border-radius:16px;
-
-        gap:12px;
-
+        gap:9px;
         align-items:center;
-
     }
-
 
     .finance-icon{
         width:34px;
         height:34px;
+        min-width:34px;
         border-radius:10px;
         font-size:14px;
     }
@@ -1690,16 +1272,17 @@ tr:hover{
     }
 
     .finance-card h2{
-        font-size:14px;
+        font-size:12px;
         line-height:1.35;
         margin:4px 0;
     }
 
     .finance-card small{
-        display:block;
         font-size:8px;
         line-height:1.3;
     }
+
+    /* MAIN */
 
     .dashboard-grid{
         grid-template-columns:1fr;
@@ -1717,30 +1300,58 @@ tr:hover{
         margin-bottom:15px;
     }
 
-    .chart-panel{
-        min-height:235px;
-    }
+    /* CHART */
 
-    .chart-panel canvas{
-        height:180px!important;
-    }
+.chart-panel{
+    height:270px;
+    min-height:270px;
+    overflow:hidden;
+}
+
+.chart-scroll{
+    width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+}
+
+.chart-inner{
+    width:100%;
+    min-width:600px;
+    height:205px;
+}
+
+.chart-inner canvas{
+    width:600px!important;
+    min-width:600px!important;
+    height:205px!important;
+}
+
+    /* SUMMARY */
 
     .finance-summary div{
         padding:11px 0;
-        gap:10px;
+        gap:12px;
+        align-items:flex-start;
     }
 
     .finance-summary span{
         font-size:10px;
+        line-height:1.5;
+        flex:1;
     }
 
     .finance-summary b{
         font-size:10px;
-        text-align:right;
+        line-height:1.5;
+        max-width:55%;
     }
+
+    /* PROGRESS */
 
     .progress-head{
         font-size:10px;
+        gap:10px;
     }
 
     .progress-track{
@@ -1752,9 +1363,13 @@ tr:hover{
         line-height:1.5;
     }
 
+    /* APPROVAL TABLE */
+
     .table-wrapper{
         width:100%;
+        max-width:100%;
         overflow-x:auto;
+        overflow-y:hidden;
         -webkit-overflow-scrolling:touch;
     }
 
@@ -1777,6 +1392,8 @@ tr:hover{
         font-size:8px;
     }
 
+    /* HEALTH */
+
     .health-item{
         padding:12px 0;
         gap:8px;
@@ -1788,20 +1405,21 @@ tr:hover{
 
     .health-item small{
         font-size:8px;
+        line-height:1.4;
     }
 
     .badge-success,
     .badge-warning{
         padding:5px 8px;
         font-size:8px;
-        flex-shrink:0;
     }
 
     .badge-money{
         font-size:9px;
-        text-align:right;
-        word-break:break-word;
+        max-width:45%;
     }
+
+    /* ACTIVITY */
 
     .activity-item{
         gap:9px;
@@ -1812,7 +1430,6 @@ tr:hover{
         width:8px;
         height:8px;
         margin-top:5px;
-        flex-shrink:0;
     }
 
     .activity-item strong{
@@ -1830,6 +1447,8 @@ tr:hover{
         line-height:1.4;
     }
 
+    /* STATUS */
+
     .system-row{
         font-size:10px;
         padding:8px 0;
@@ -1838,7 +1457,6 @@ tr:hover{
     .system-row span{
         width:7px;
         height:7px;
-        flex-shrink:0;
     }
 
     .empty-data{
@@ -1848,42 +1466,49 @@ tr:hover{
 
 }
 
+/* ================= EXTRA SMALL ================= */
 
+@media(max-width:380px){
 
-@media(max-width:600px){
+    .finance-grid{
+        grid-template-columns:1fr;
+    }
 
     .finance-card h2{
-
         font-size:13px;
-
-        word-break:break-word;
-
     }
-
 
     .finance-card small{
-
         font-size:9px;
-
     }
-
 
     .dashboard-title h1{
-
-        font-size:18px;
-
+        font-size:17px;
     }
-
 
     .dashboard-title p{
-
-        font-size:11px;
-
+        font-size:10px;
     }
 
+.chart-panel{
+    height:260px;
+    min-height:260px;
 }
-</style>
 
+.chart-inner{
+    min-width:600px;
+    height:195px;
+}
+
+.chart-inner canvas{
+    width:600px!important;
+    min-width:600px!important;
+    height:195px!important;
+}
+
+}
+
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
