@@ -8,6 +8,7 @@ use App\Models\TransaksiDana;
 use App\Models\SaldoDivisi;
 use App\Models\RekeningBank;
 use App\Models\Proyek;
+use App\Models\Divisi;
 use App\Models\MutasiKeuangan;
 
 
@@ -850,7 +851,6 @@ if(
 
     }
 
-
 public function history()
 {
     $this->checkRole();
@@ -870,11 +870,25 @@ public function history()
     ->latest()
     ->get();
 
+
+    $projects = Proyek::orderBy('nama_proyek')
+        ->get();
+
+
+    $divisions = Divisi::orderBy('nama_divisi')
+        ->get();
+
+
     return view(
         'expense.approval.history',
-        compact('requests')
+        compact(
+            'requests',
+            'projects',
+            'divisions'
+        )
     );
 }
+
 
 
 public function detail($id)
