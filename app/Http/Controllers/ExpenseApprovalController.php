@@ -851,23 +851,48 @@ if(
     }
 
 
-        public function detail($id)
-    {
-        $this->checkRole();
+public function history()
+{
+    $this->checkRole();
 
-        $request = PengajuanDana::with([
-            'proyek.perusahaan',
-            'divisi',
-            'pengguna',
-            'penyetuju',
-            'transaksiDana.rekeningBank',
-            'auditLogs.pengguna'
-        ])->findOrFail($id);
+    $requests = PengajuanDana::with([
+        'proyek.perusahaan',
+        'divisi',
+        'pengguna',
+        'penyetuju',
+        'transaksiDana.rekeningBank'
+    ])
+    ->whereIn('status', [
+        'approved',
+        'selesai',
+        'rejected'
+    ])
+    ->latest()
+    ->get();
 
-        return view(
-            'expense.detail',
-            compact('request')
-        );
-    }
+    return view(
+        'expense.approval.history',
+        compact('requests')
+    );
+}
 
+
+public function detail($id)
+{
+    $this->checkRole();
+
+    $request = PengajuanDana::with([
+        'proyek.perusahaan',
+        'divisi',
+        'pengguna',
+        'penyetuju',
+        'transaksiDana.rekeningBank',
+        'auditLogs.pengguna'
+    ])->findOrFail($id);
+
+    return view(
+        'expense.detail',
+        compact('request')
+    );
+}
 }
