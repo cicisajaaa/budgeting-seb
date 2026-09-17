@@ -5,13 +5,15 @@
 <div class="project-container">
 
 
+{{-- ================= HEADER ================= --}}
+
 <div class="project-welcome-card">
 
-    <div>
+    <div class="welcome-content">
 
-        <div class="project-welcome-label">
+        <span class="project-label">
             PROYEK SAYA
-        </div>
+        </span>
 
 
         <h1>
@@ -27,11 +29,53 @@
 
 
     <div class="project-date-box">
-        {{date('d M Y')}}
+
+        {{ date('d M Y') }}
+
     </div>
 
 
 </div>
+
+
+
+{{-- ================= SEARCH ================= --}}
+
+
+<form method="GET"
+action="{{ route('employee.project.index') }}"
+class="project-search">
+
+
+<input
+type="text"
+name="search"
+value="{{ $search ?? '' }}"
+placeholder="Cari nama project..."
+>
+
+
+<button type="submit">
+    Cari
+</button>
+
+
+@if(!empty($search))
+
+<a href="{{ route('employee.project.index') }}">
+    Reset
+</a>
+
+@endif
+
+
+</form>
+
+
+
+
+
+{{-- ================= PROJECT LIST ================= --}}
 
 
 @forelse($proyek as $project)
@@ -40,47 +84,35 @@
 <div class="project-panel">
 
 
-{{-- HEADER PROJECT --}}
+
+{{-- PROJECT HEADER --}}
+
 
 <div class="project-card-header">
 
 
+<div>
+
+
 <h2>
-📁 {{$project->nama_proyek}}
+📁 {{ $project->nama_proyek }}
 </h2>
 
 
 <p>
-🏢 Perusahaan :
-<strong>
-{{$project->perusahaan->nama_perusahaan ?? '-'}}
-</strong>
+🏢
+{{ $project->perusahaan->nama_perusahaan ?? '-' }}
 </p>
 
 
-
-@if($project->perusahaan)
-
-<p>
-📍 Alamat :
-{{$project->perusahaan->alamat ?? '-'}}
-</p>
+</div>
 
 
-<p>
-☎ Kontak :
-{{$project->perusahaan->kontak ?? '-'}}
-</p>
+<span class="project-status-top">
 
-@endif
+Aktif
 
-
-
-<p>
-Pemilik :
-{{$project->pemilik_proyek ?? '-'}}
-</p>
-
+</span>
 
 
 </div>
@@ -88,27 +120,94 @@ Pemilik :
 
 
 
-{{-- INFO PROJECT --}}
 
-<div class="project-extra-info">
+{{-- DETAIL PERUSAHAAN --}}
+
+
+<div class="company-info">
+
+
+@if($project->perusahaan)
+
+<div>
+
+<span>
+Alamat
+</span>
+
+<strong>
+{{ $project->perusahaan->alamat ?? '-' }}
+</strong>
+
+</div>
 
 
 <div>
 
 <span>
-📅 Periode Project
+Kontak
+</span>
+
+<strong>
+{{ $project->perusahaan->kontak ?? '-' }}
+</strong>
+
+</div>
+
+
+@endif
+
+
+
+<div>
+
+<span>
+Pemilik Project
+</span>
+
+
+<strong>
+{{ $project->pemilik_proyek ?? '-' }}
+</strong>
+
+</div>
+
+
+</div>
+
+
+
+
+
+{{-- INFO PROJECT --}}
+
+
+<div class="project-info-grid">
+
+
+<div>
+
+<span>
+📅 Periode
 </span>
 
 
 <strong>
 
-{{\Carbon\Carbon::parse($project->tanggal_mulai)->format('d M Y')}}
+{{
+\Carbon\Carbon::parse($project->tanggal_mulai)
+->format('d M Y')
+}}
+
 
 -
 
 @if($project->tanggal_selesai)
 
-{{\Carbon\Carbon::parse($project->tanggal_selesai)->format('d M Y')}}
+{{
+\Carbon\Carbon::parse($project->tanggal_selesai)
+->format('d M Y')
+}}
 
 @else
 
@@ -118,7 +217,10 @@ Berjalan
 
 </strong>
 
+
 </div>
+
+
 
 
 
@@ -130,10 +232,18 @@ Berjalan
 
 
 <strong>
-Rp {{number_format($project->total_anggaran ?? 0,0,',','.')}}
+
+Rp {{ number_format(
+$project->total_anggaran ?? 0,
+0,
+',',
+'.'
+)}}
+
 </strong>
 
 </div>
+
 
 
 
@@ -146,11 +256,18 @@ Rp {{number_format($project->total_anggaran ?? 0,0,',','.')}}
 
 
 <strong>
-{{$project->tugas
-    ->pluck('karyawan_id')
-    ->unique()
-    ->count()
-}} Orang
+
+{{
+
+$project->tugas
+->pluck('karyawan_id')
+->unique()
+->count()
+
+}}
+
+ Orang
+
 </strong>
 
 </div>
@@ -166,20 +283,21 @@ Rp {{number_format($project->total_anggaran ?? 0,0,',','.')}}
 
 {{-- SUMMARY --}}
 
-<div class="project-summary-box">
+
+<div class="project-summary">
 
 
 <div>
 
 <span>
-Total Tugas
+Total Task
 </span>
 
-
 <strong>
-{{$project->tugas->count()}}
-</strong>
 
+{{ $project->tugas->count() }}
+
+</strong>
 
 </div>
 
@@ -191,15 +309,23 @@ Total Tugas
 Selesai
 </span>
 
-
 <strong>
 
-{{$project->tugas
-->whereIn('status',['selesai','done'])
-->count()}}
+{{
+
+$project->tugas
+->whereIn(
+'status',
+[
+'selesai',
+'done'
+]
+)
+->count()
+
+}}
 
 </strong>
-
 
 </div>
 
@@ -209,14 +335,17 @@ Selesai
 <div>
 
 <span>
-Progress Project
+Progress
 </span>
 
 
 <strong>
-{{round(
-    $project->tugas->avg('progres_persen') ?? 0
+
+{{ round(
+$project->tugas
+->avg('progres_persen') ?? 0
 )}}%
+
 </strong>
 
 
@@ -234,7 +363,9 @@ Project Perusahaan
 
 <strong>
 
-{{$project->perusahaan?->proyek?->count() ?? 0}}
+{{
+$project->perusahaan?->proyek?->count() ?? 0
+}}
 
 </strong>
 
@@ -242,19 +373,13 @@ Project Perusahaan
 </div>
 
 
-
 </div>
 
+{{-- ================= AKTIVITAS TERAKHIR ================= --}}
 
 
-
-
-
-
-{{-- AKTIVITAS --}}
-
-<h3 class="project-section-title">
-🕒 Aktivitas Terakhir
+<h3 class="section-title">
+    🕒 Aktivitas Terakhir
 </h3>
 
 
@@ -276,33 +401,51 @@ $aktivitasTerakhir = $project->tugas
 @foreach($aktivitasTerakhir as $aktivitas)
 
 
-<div class="activity-item">
+<div class="activity-card">
 
 
 <div class="activity-icon">
+
 ✓
+
 </div>
 
 
 
-<div>
+<div class="activity-content">
+
 
 <strong>
-{{$aktivitas->aktivitas ?? 'Update Aktivitas'}}
+
+{{ $aktivitas->aktivitas ?? 'Update Aktivitas' }}
+
 </strong>
 
 
+
 <p>
-{{$aktivitas->keterangan ?? $aktivitas->aktivitas ?? '-'}}
+
+{{
+$aktivitas->keterangan
+??
+$aktivitas->aktivitas
+??
+'-'
+}}
+
 </p>
+
 
 
 <small>
 
-{{\Carbon\Carbon::parse($aktivitas->created_at)
-->format('d M Y H:i')}}
+{{
+\Carbon\Carbon::parse($aktivitas->created_at)
+->format('d M Y H:i')
+}}
 
 </small>
+
 
 
 </div>
@@ -317,9 +460,11 @@ $aktivitasTerakhir = $project->tugas
 @else
 
 
-<p>
+<div class="empty-box">
+
 Belum ada aktivitas
-</p>
+
+</div>
 
 
 @endif
@@ -327,47 +472,77 @@ Belum ada aktivitas
 
 
 
-{{-- TASK --}}
 
-<h3 class="project-section-title">
-    📌 Tugas Saya
+
+
+{{-- ================= TASK ================= --}}
+
+
+
+<h3 class="section-title">
+
+📌 Tugas Saya
+
 </h3>
+
 
 
 @if($project->tugas->count()==0)
 
+
 <div class="empty-box">
-    Belum ada tugas
+
+Belum ada tugas
+
 </div>
 
+
 @endif
+
+
 
 
 
 @foreach($project->tugas as $task)
 
 
-<div class="project-task-card">
+
+<div class="task-card">
 
 
-    {{-- BAGIAN KIRI --}}
 
-    <div class="project-task-main">
+{{-- TASK CONTENT --}}
 
 
-        <div class="project-task-title">
+<div class="task-content">
 
-            <h4>
-                {{$task->nama_tugas}}
-            </h4>
 
-<small>
+<h4>
 
-Deadline:
+{{ $task->nama_tugas }}
+
+</h4>
+
+
+
+<div class="task-meta">
+
+
+<div>
+
+Deadline
+
+<br>
+
+<strong>
 
 @if($task->deadline)
 
-{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
+{{
+\Carbon\Carbon::parse($task->deadline)
+->format('d M Y')
+
+}}
 
 @else
 
@@ -376,191 +551,316 @@ Deadline:
 @endif
 
 
+</strong>
+
+
+</div>
+
+
+
+<div>
+
+Status
+
 <br>
 
 
-Status:
+<strong>
 
-@if($task->status == 'belum_dikerjakan')
-
-Belum Dikerjakan
-
-@elseif(in_array($task->status,[
-    'sedang_dikerjakan',
-    'berjalan',
-    'progress'
-]))
-
-Sedang Dikerjakan
-
-@elseif(in_array($task->status,['selesai','done']))
+@if(
+in_array(
+$task->status,
+[
+'selesai',
+'done'
+]
+)
+)
 
 Selesai
 
+
+@elseif(
+in_array(
+$task->status,
+[
+'sedang_dikerjakan',
+'berjalan',
+'progress'
+]
+)
+)
+
+Sedang Dikerjakan
+
+
 @else
 
-{{$task->status}}
+Belum Dikerjakan
+
 
 @endif
 
 
-</small>
+</strong>
 
-@if($task->deadline && !in_array($task->status,['selesai','done']))
 
-@if(\Carbon\Carbon::parse($task->deadline)->isPast())
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+@if(
+$task->deadline
+&&
+!in_array(
+$task->status,
+[
+'selesai',
+'done'
+]
+)
+)
+
+
+@if(
+\Carbon\Carbon::parse($task->deadline)
+->isPast()
+)
+
 
 <span class="late-warning">
+
 ⚠ Terlambat
+
 </span>
 
-@endif
 
 @endif
-            <p>
-                {{$task->aktivitas ?? '-'}}
-            </p>
 
-        </div>
 
+@endif
 
 
 
-        <div class="project-progress-label">
 
-            <span>
-                Progress
-            </span>
 
 
-            <b>
-                {{number_format($task->progres_persen ?? 0,0)}}%
-            </b>
+<div class="progress-header">
 
 
-        </div>
+<span>
 
+Progress
 
+</span>
 
 
 
-        <div class="project-progress-track">
+<strong>
 
+{{ number_format(
+$task->progres_persen ?? 0,
+0
+)}}%
 
-            <div class="project-progress-value"
-            style="width:{{max(min($task->progres_persen ?? 0,100),0)}}%">
-            </div>
+</strong>
 
 
-        </div>
 
+</div>
 
 
 
-        <div class="project-activity-info">
 
-            📝 {{$task->aktivitasTugas?->count() ?? 0}} Aktivitas
+<div class="progress-track">
 
-        </div>
 
+<div
+class="progress-fill"
+style="
+width:
+{{
+max(
+min(
+$task->progres_persen ?? 0,
+100
+),
+0
+)
+}}%
+">
 
-    </div>
+</div>
 
 
+</div>
 
 
 
 
 
-    {{-- BAGIAN KANAN --}}
 
-    <div class="project-task-side">
 
+<div class="task-footer">
 
 
-        <span class="project-status
+<span>
 
-        @if(in_array($task->status,['selesai','done']))
+📝
+{{
+$task->aktivitasTugas?->count() ?? 0
+}}
+Aktivitas
 
-            done
+</span>
 
-        @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
-            progress
 
-        @else
+<div class="task-button">
 
-            todo
 
-        @endif
+<a href="
+{{
+route(
+'employee.task.show',
+$task->id
+)
+}}
+">
 
-        ">
+Detail
 
+</a>
 
-        @if(in_array($task->status,['selesai','done']))
 
-            Selesai
 
 
-        @elseif(in_array($task->status,['sedang_dikerjakan','berjalan','progress']))
 
-            Sedang Dikerjakan
+@if(
+!in_array(
+$task->status,
+[
+'selesai',
+'done'
+]
+)
+)
 
 
-        @elseif($task->status == 'belum_dikerjakan')
+<a
+class="update-btn"
+href="
+{{
+route(
+'daily-tracker.show',
+$task->id
+)
+}}
+">
 
-            Belum Dikerjakan
+Update
 
+</a>
 
-        @else
 
-            {{$task->status}}
 
-        @endif
+@endif
 
 
-        </span>
 
+</div>
 
 
 
+</div>
 
-        <div class="project-button-group">
 
-
-            <a href="{{route('employee.task.show',$task->id)}}">
-
-                Detail
-
-            </a>
-
-
-
-
-            @if(!in_array($task->status,['selesai','done']))
-
-
-            <a href="{{route('daily-tracker.show',$task->id)}}"
-            class="project-update-btn">
-
-                Update
-
-            </a>
-
-
-            @endif
-
-
-
-        </div>
-
-
-    </div>
 
 
 
 
 </div>
+
+
+
+
+
+{{-- STATUS --}}
+
+
+<div class="task-status">
+
+
+@if(
+in_array(
+$task->status,
+[
+'selesai',
+'done'
+]
+)
+)
+
+
+<span class="done">
+
+Selesai
+
+</span>
+
+
+
+@elseif(
+in_array(
+$task->status,
+[
+'sedang_dikerjakan',
+'berjalan',
+'progress'
+]
+)
+)
+
+
+<span class="progress">
+
+Sedang Dikerjakan
+
+</span>
+
+
+
+@else
+
+
+<span class="todo">
+
+Belum Dikerjakan
+
+</span>
+
+
+
+@endif
+
+
+</div>
+
+
+
+
+
+</div>
+
+
 
 
 
@@ -569,15 +869,17 @@ Selesai
 
 
 
-</div> {{-- tutup project-panel --}}
+
+</div>
 
 
 @empty
 
 
-<div class="project-panel">
 
-    Belum ada project.
+<div class="project-panel empty-box">
+
+Belum ada project
 
 </div>
 
@@ -585,48 +887,42 @@ Selesai
 @endforelse
 
 
-</div> {{-- tutup project-container --}}
+
+</div>
+
 <style>
 
-/* ===============================
-GLOBAL
-================================ */
+*{
+    box-sizing:border-box;
+}
+
 
 .project-container{
     width:100%;
 }
 
 
-.project-container *{
-    box-sizing:border-box;
-}
 
-
-
-
-
-/* ===============================
-HEADER
-================================ */
+/* ================= HEADER ================= */
 
 
 .project-welcome-card{
 
     background:#f8fafc;
 
-    padding:25px 30px;
+    padding:25px;
 
-    border-radius:24px;
+    border-radius:22px;
 
     border:1px solid #e2e8f0;
-
-    margin-bottom:25px;
 
     display:flex;
 
     justify-content:space-between;
 
     align-items:center;
+
+    margin-bottom:15px;
 
     box-shadow:
     0 8px 25px rgba(15,23,42,.05);
@@ -635,13 +931,13 @@ HEADER
 
 
 
-.project-welcome-label{
+.project-label{
 
-    font-size:10px;
-
-    letter-spacing:2px;
+    font-size:11px;
 
     font-weight:800;
+
+    letter-spacing:2px;
 
     color:#64748b;
 
@@ -655,9 +951,7 @@ HEADER
 
     font-size:28px;
 
-    font-weight:800;
-
-    color:#1e293b;
+    color:#172033;
 
 }
 
@@ -669,7 +963,7 @@ HEADER
 
     color:#64748b;
 
-    font-size:13px;
+    font-size:14px;
 
 }
 
@@ -685,9 +979,9 @@ HEADER
 
     border-radius:999px;
 
-    font-size:12px;
-
     font-weight:700;
+
+    font-size:13px;
 
 }
 
@@ -695,10 +989,92 @@ HEADER
 
 
 
+/* ================= SEARCH ================= */
 
-/* ===============================
-PROJECT PANEL
-================================ */
+
+
+.project-search{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    border:1px solid #e2e8f0;
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.project-search input{
+
+    flex:1;
+
+    height:42px;
+
+    padding:0 15px;
+
+    border-radius:12px;
+
+    border:1px solid #cbd5e1;
+
+    font-size:14px;
+
+}
+
+
+
+.project-search button{
+
+    height:42px;
+
+    padding:0 25px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#0f172a;
+
+    color:white;
+
+    font-weight:700;
+
+}
+
+
+
+.project-search a{
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    background:#f1f5f9;
+
+    color:#334155;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+}
+
+
+
+
+
+/* ================= PROJECT CARD ================= */
+
 
 
 .project-panel{
@@ -721,21 +1097,27 @@ PROJECT PANEL
 
 
 
+.project-card-header{
 
-/* ===============================
-PROJECT HEADER
-================================ */
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
 
 
 .project-card-header h2{
 
     margin:0;
 
-    font-size:18px;
+    font-size:20px;
 
-    font-weight:800;
-
-    color:#1e293b;
+    color:#172033;
 
 }
 
@@ -743,9 +1125,7 @@ PROJECT HEADER
 
 .project-card-header p{
 
-    margin:6px 0;
-
-    font-size:12px;
+    margin:8px 0;
 
     color:#64748b;
 
@@ -753,15 +1133,28 @@ PROJECT HEADER
 
 
 
+.project-status-top{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    padding:7px 15px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
 
 
 
-/* ===============================
-EXTRA INFO
-================================ */
+/* ================= COMPANY INFO ================= */
 
 
-.project-extra-info{
+.company-info{
 
     display:grid;
 
@@ -775,29 +1168,29 @@ EXTRA INFO
 
 
 
-.project-extra-info div{
+.company-info div,
+.project-info-grid div{
 
     background:#f8fafc;
 
     border:1px solid #e2e8f0;
 
-    border-radius:15px;
+    padding:15px;
 
-    padding:14px;
+    border-radius:15px;
 
 }
 
 
 
-.project-extra-info span{
+.company-info span,
+.project-info-grid span{
 
     display:block;
 
-    font-size:10px;
+    font-size:11px;
 
     color:#64748b;
-
-    font-weight:700;
 
     margin-bottom:6px;
 
@@ -805,26 +1198,38 @@ EXTRA INFO
 
 
 
-.project-extra-info strong{
+.company-info strong,
+.project-info-grid strong{
 
-    font-size:12px;
+    font-size:13px;
 
-    color:#1e293b;
+    color:#172033;
 
 }
 
 
 
+/* ================= INFO ================= */
+
+
+.project-info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:15px;
+
+}
 
 
 
-
-/* ===============================
-SUMMARY
-================================ */
+/* ================= SUMMARY ================= */
 
 
-.project-summary-box{
+.project-summary{
 
     display:grid;
 
@@ -838,64 +1243,56 @@ SUMMARY
 
 
 
-.project-summary-box div{
+.project-summary div{
 
     background:#f8fafc;
 
     border:1px solid #e2e8f0;
 
-    border-radius:18px;
-
     padding:18px;
+
+    border-radius:18px;
 
 }
 
 
 
-.project-summary-box span{
+.project-summary span{
 
     display:block;
 
-    font-size:11px;
-
     color:#64748b;
 
-    font-weight:700;
+    font-size:12px;
 
 }
 
 
 
-.project-summary-box strong{
+.project-summary strong{
 
     display:block;
 
     margin-top:8px;
 
-    font-size:22px;
+    font-size:24px;
 
-    color:#1e293b;
+    color:#172033;
 
 }
 
 
 
+/* ================= TITLE ================= */
 
 
-
-
-/* ===============================
-TITLE
-================================ */
-
-
-.project-section-title{
+.section-title{
 
     font-size:16px;
 
     font-weight:800;
 
-    color:#1e293b;
+    color:#172033;
 
     border-left:4px solid #334155;
 
@@ -909,26 +1306,22 @@ TITLE
 
 
 
+/* ================= ACTIVITY ================= */
 
 
-/* ===============================
-ACTIVITY
-================================ */
-
-
-.activity-item{
+.activity-card{
 
     display:flex;
 
     gap:12px;
 
-    padding:14px;
+    padding:15px;
 
     background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+    border-radius:15px;
 
-    border-radius:14px;
+    border:1px solid #e2e8f0;
 
     margin-bottom:10px;
 
@@ -938,9 +1331,9 @@ ACTIVITY
 
 .activity-icon{
 
-    width:32px;
+    width:35px;
 
-    height:32px;
+    height:35px;
 
     border-radius:50%;
 
@@ -950,41 +1343,39 @@ ACTIVITY
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
 
-    font-weight:800;
+    justify-content:center;
+
+    font-weight:bold;
 
 }
 
 
 
-.activity-item strong{
+.activity-content strong{
 
-    font-size:12px;
+    color:#172033;
 
-    color:#1e293b;
+    font-size:13px;
 
 }
 
 
 
-.activity-item p{
+.activity-content p{
 
     margin:5px 0;
 
-    font-size:11px;
-
     color:#64748b;
+
+    font-size:12px;
 
 }
 
 
 
-.activity-item small{
-
-    font-size:10px;
+.activity-content small{
 
     color:#94a3b8;
 
@@ -992,104 +1383,78 @@ ACTIVITY
 
 
 
-/* ===============================
-TASK CARD
-================================ */
+/* ================= TASK ================= */
 
-.project-task-card{
 
-    display:flex;
+.task-card{
 
-    justify-content:space-between;
+    display:grid;
 
-    align-items:flex-start;
+    grid-template-columns:1fr 160px;
 
-    gap:25px;
+    gap:20px;
 
-    width:100%;
-
-    padding:18px;
-
-    background:#f8fafc;
+    background:#fff;
 
     border:1px solid #e2e8f0;
 
+    padding:20px;
+
     border-radius:18px;
 
-    margin-bottom:12px;
-
-    transition:.2s;
+    margin-bottom:15px;
 
 }
 
 
 
-.project-task-card:hover{
+.task-content h4{
 
-    background:white;
+    margin:0 0 12px;
 
-    transform:translateY(-2px);
+    font-size:16px;
 
-    box-shadow:
-    0 8px 20px rgba(15,23,42,.06);
-
-}
-
-
-
-.project-task-main{
-
-    flex:1;
-
-    min-width:0;
+    color:#172033;
 
 }
 
 
 
-
-.project-task-title h4{
-
-    margin:0 0 6px;
-
-    font-size:14px;
-
-    font-weight:800;
-
-    color:#1e293b;
-
-}
-
-
-
-.project-task-title p{
-
-    margin:0;
-
-    font-size:12px;
-
-    color:#64748b;
-
-}
-
-
-
-
-
-/* ===============================
-PROGRESS
-================================ */
-
-
-.project-progress-label{
+.task-meta{
 
     display:flex;
 
-    justify-content:space-between;
+    gap:30px;
 
-    margin-top:15px;
+    color:#64748b;
 
-    margin-bottom:7px;
+    font-size:12px;
+
+}
+
+
+
+.task-meta strong{
+
+    color:#172033;
+
+}
+
+
+
+.late-warning{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+    padding:5px 12px;
+
+    border-radius:999px;
 
     font-size:11px;
 
@@ -1097,17 +1462,21 @@ PROGRESS
 
 
 
-.project-progress-label b{
+.progress-header{
 
-    color:#166534;
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:15px;
 
 }
 
 
 
-.project-progress-track{
+.progress-track{
 
-    height:8px;
+    height:9px;
 
     background:#e2e8f0;
 
@@ -1119,74 +1488,100 @@ PROGRESS
 
 
 
-.project-progress-value{
+.progress-fill{
 
     height:100%;
 
     background:#16a34a;
 
-    border-radius:20px;
+}
+
+
+
+.task-footer{
+
+    margin-top:15px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
 
 }
 
 
 
-.project-activity-info{
-
-    margin-top:12px;
-
-    font-size:12px;
+.task-footer span{
 
     color:#64748b;
 
-}
-
-
-
-
-
-/* ===============================
-SIDE TASK
-================================ */
-
-
-.project-task-side{
-
-    width:170px;
-
-    flex-shrink:0;
+    font-size:12px;
 
 }
 
 
 
+.task-button{
+
+    display:flex;
+
+    gap:8px;
+
+}
 
 
-.project-status{
 
-    display:block;
+.task-button a{
 
-    width:100%;
+    padding:8px 15px;
 
-    padding:7px 12px;
+    border-radius:10px;
 
-    border-radius:999px;
+    background:#334155;
 
-    font-size:10px;
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
 
     font-weight:700;
 
-    text-align:center;
+}
 
-    margin-bottom:10px;
+
+
+.task-button .update-btn{
+
+    background:#2563eb;
 
 }
 
 
 
+/* STATUS */
 
 
-.project-status.done{
+.task-status span{
+
+    display:block;
+
+    text-align:center;
+
+    padding:8px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+
+.task-status .done{
 
     background:#dcfce7;
 
@@ -1196,9 +1591,7 @@ SIDE TASK
 
 
 
-
-
-.project-status.progress{
+.task-status .progress{
 
     background:#dbeafe;
 
@@ -1208,9 +1601,7 @@ SIDE TASK
 
 
 
-
-
-.project-status.todo{
+.task-status .todo{
 
     background:#f1f5f9;
 
@@ -1220,483 +1611,171 @@ SIDE TASK
 
 
 
+.empty-box{
 
-
-
-
-/* ===============================
-BUTTON
-================================ */
-
-
-.project-button-group{
-
-    display:flex;
-
-    gap:8px;
-
-    width:100%;
-
-}
-
-
-
-.project-button-group a{
-
-    flex:1;
+    padding:30px;
 
     text-align:center;
 
-    text-decoration:none;
-
-    background:#334155;
-
-    color:white;
-
-    padding:8px 10px;
-
-    border-radius:10px;
-
-    font-size:11px;
-
-    font-weight:700;
+    color:#94a3b8;
 
 }
 
 
 
-
-
-.project-update-btn{
-
-    background:#2563eb!important;
-
-}
-
-
-
-
-/* ===============================
-RESPONSIVE
-================================ */
-/* ===============================
-   RESPONSIVE
-================================ */
-
-@media(max-width:1200px){
-
-    .project-summary-box{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .project-extra-info{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
+/* ================= MOBILE ================= */
 
 
 @media(max-width:900px){
 
-    .project-welcome-card{
-        flex-direction:column;
-        align-items:stretch;
-        gap:15px;
-        padding:20px;
-        border-radius:20px;
-    }
 
-    .project-welcome-card h1{
-        font-size:21px;
-        line-height:1.35;
-    }
+.project-welcome-card{
 
-    .project-welcome-card p{
-        font-size:11px;
-        line-height:1.5;
-    }
+    flex-direction:column;
 
-    .project-date-box{
-        width:100%;
-        box-sizing:border-box;
-        text-align:center;
-    }
+    align-items:flex-start;
 
-
-    .project-panel{
-        padding:20px;
-        border-radius:20px;
-    }
-
-    .project-card-header h2{
-        font-size:17px;
-        line-height:1.4;
-        word-break:break-word;
-    }
-
-    .project-card-header p{
-        font-size:11px;
-        line-height:1.5;
-        word-break:break-word;
-    }
-
-
-    .project-extra-info{
-        grid-template-columns:1fr;
-        gap:10px;
-    }
-
-    .project-extra-info div{
-        padding:13px;
-        min-width:0;
-    }
-
-    .project-extra-info strong{
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-
-    .project-summary-box{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-    }
-
-    .project-summary-box div{
-        padding:14px;
-        min-width:0;
-    }
-
-    .project-summary-box span{
-        font-size:10px;
-    }
-
-    .project-summary-box strong{
-        font-size:19px;
-        word-break:break-word;
-    }
-
-
-    .project-section-title{
-        font-size:14px;
-    }
-
-
-    .activity-item{
-        align-items:flex-start;
-        gap:10px;
-    }
-
-    .activity-item > div:last-child{
-        min-width:0;
-    }
-
-    .activity-item strong,
-    .activity-item p,
-    .activity-item small{
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .activity-icon{
-        width:30px;
-        height:30px;
-        flex-shrink:0;
-    }
-
-
-    .project-task-card{
-        flex-direction:column;
-        align-items:stretch;
-        gap:15px;
-        padding:15px;
-    }
-
-    .project-task-main{
-        width:100%;
-        min-width:0;
-    }
-
-    .project-task-title h4{
-        font-size:13px;
-        line-height:1.4;
-        word-break:break-word;
-    }
-
-    .project-task-title small{
-        font-size:10px;
-        line-height:1.5;
-        word-break:break-word;
-    }
-
-    .project-task-title p{
-        font-size:10px;
-        line-height:1.5;
-        word-break:break-word;
-    }
-
-    .project-task-side{
-        width:100%;
-    }
-
-    .project-status{
-        width:100%;
-        box-sizing:border-box;
-    }
-
-    .project-button-group{
-        width:100%;
-    }
-
-    .project-button-group a{
-        min-height:40px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        box-sizing:border-box;
-    }
-
-
-    .project-progress-label{
-        font-size:10px;
-    }
-
-    .project-activity-info{
-        font-size:10px;
-    }
+    gap:15px;
 
 }
 
 
-@media(max-width:600px){
 
-    .project-welcome-card{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:18px;
-    }
+.project-date-box{
 
-    .project-welcome-label{
-        font-size:8px;
-        letter-spacing:1.5px;
-    }
+    width:100%;
 
-    .project-welcome-card h1{
-        font-size:19px;
-        margin:7px 0;
-    }
-
-    .project-welcome-card p{
-        font-size:10px;
-        line-height:1.5;
-    }
-
-    .project-date-box{
-        padding:9px 12px;
-        font-size:10px;
-    }
-
-
-    .project-panel{
-        padding:15px;
-        border-radius:18px;
-        margin-bottom:15px;
-    }
-
-    .project-card-header h2{
-        font-size:16px;
-    }
-
-    .project-card-header p{
-        font-size:10px;
-        line-height:1.5;
-        margin:5px 0;
-    }
-
-
-    .project-extra-info{
-        grid-template-columns:1fr;
-        gap:8px;
-        margin-top:15px;
-    }
-
-    .project-extra-info div{
-        padding:11px;
-        border-radius:13px;
-    }
-
-    .project-extra-info span{
-        font-size:8px;
-        margin-bottom:4px;
-    }
-
-    .project-extra-info strong{
-        font-size:10px;
-    }
-
-
-    .project-summary-box{
-        grid-template-columns:repeat(2,1fr);
-        gap:8px;
-        margin:18px 0;
-    }
-
-    .project-summary-box div{
-        padding:11px;
-        border-radius:14px;
-    }
-
-    .project-summary-box span{
-        font-size:8px;
-        line-height:1.3;
-    }
-
-    .project-summary-box strong{
-        font-size:16px;
-        margin-top:5px;
-    }
-
-
-    .project-section-title{
-        font-size:13px;
-        padding-left:8px;
-        margin:20px 0 12px;
-    }
-
-
-    .activity-item{
-        padding:11px;
-        border-radius:12px;
-        gap:9px;
-    }
-
-    .activity-icon{
-        width:28px;
-        height:28px;
-        font-size:12px;
-    }
-
-    .activity-item strong{
-        font-size:10px;
-    }
-
-    .activity-item p{
-        font-size:9px;
-        margin:4px 0;
-    }
-
-    .activity-item small{
-        font-size:8px;
-    }
-
-
-    .project-task-card{
-        padding:12px;
-        border-radius:15px;
-        gap:12px;
-    }
-
-    .project-task-title h4{
-        font-size:11px;
-        line-height:1.45;
-    }
-
-    .project-task-title small{
-        font-size:8px;
-        line-height:1.5;
-    }
-
-    .project-task-title p{
-        font-size:9px;
-        line-height:1.5;
-    }
-
-
-    .late-warning{
-        padding:4px 8px;
-        font-size:8px;
-        margin-top:6px;
-    }
-
-
-    .project-progress-label{
-        font-size:9px;
-        margin-top:12px;
-    }
-
-    .project-progress-track{
-        height:7px;
-    }
-
-    .project-activity-info{
-        margin-top:9px;
-        font-size:9px;
-    }
-
-
-    .project-status{
-        padding:6px 10px;
-        font-size:8px;
-        margin-bottom:8px;
-    }
-
-    .project-button-group{
-        gap:7px;
-    }
-
-    .project-button-group a{
-        min-height:40px;
-        padding:8px;
-        font-size:9px;
-        border-radius:9px;
-    }
-
-
-    .empty-box{
-        font-size:10px;
-        padding:18px;
-    }
-
-}
-
-
-/* BUTTON AGAR RAPI */
-
-.project-button-group a{
-
-    flex:1;
     text-align:center;
 
 }
 
 
-/* STATUS LEBIH RAPI */
 
-.project-status{
+.company-info,
+.project-info-grid{
 
-    letter-spacing:.3px;
+    grid-template-columns:1fr;
+
+}
+
+
+
+.project-summary{
+
+    grid-template-columns:repeat(2,1fr);
 
 }
 
-.late-warning{
 
-display:inline-block;
 
-margin-top:8px;
+.task-card{
 
-background:#fee2e2;
-
-color:#b91c1c;
-
-padding:5px 10px;
-
-border-radius:999px;
-
-font-size:10px;
-
-font-weight:700;
+    grid-template-columns:1fr;
 
 }
+
+
+
+.task-status{
+
+    order:-1;
+
+}
+
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.project-panel{
+
+    padding:15px;
+
+}
+
+
+
+.project-welcome-card h1{
+
+    font-size:22px;
+
+}
+
+
+
+.project-search{
+
+    flex-direction:column;
+
+}
+
+
+
+.project-search button,
+.project-search a{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+
+
+.project-summary{
+
+    grid-template-columns:1fr 1fr;
+
+}
+
+
+
+.project-summary strong{
+
+    font-size:18px;
+
+}
+
+
+
+.task-meta{
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+
+.task-footer{
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+    gap:12px;
+
+}
+
+
+
+.task-button a{
+
+    flex:1;
+
+    text-align:center;
+
+}
+
+
+}
+
 
 </style>
+
 @endsection

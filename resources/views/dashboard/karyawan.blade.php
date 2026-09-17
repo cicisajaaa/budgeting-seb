@@ -1081,81 +1081,71 @@ if(canvas){
 
 
 </script>
+
 <style>
 
-/* =================================
+/* ===============================
 GLOBAL
-================================= */
+================================ */
 
 .employee-dashboard{
     width:100%;
+    min-width:0;
+}
+
+.employee-dashboard *{
+    box-sizing:border-box;
 }
 
 
-/* =================================
-HEADER OWNER STYLE
-================================= */
+/* ===============================
+WELCOME
+================================ */
 
 .employee-welcome{
 
     background:#f8fafc;
-
     padding:25px;
-
     border-radius:24px;
-
     border:1px solid #e2e8f0;
+    margin-bottom:22px;
 
-    margin-bottom:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
 
     box-shadow:
     0 8px 25px rgba(15,23,42,.05);
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
 }
-
 
 
 .welcome-label{
 
     font-size:10px;
-
-    font-weight:700;
-
+    font-weight:800;
     letter-spacing:2px;
-
     color:#64748b;
 
 }
-
 
 
 .employee-welcome h1{
 
     margin:8px 0;
-
     font-size:24px;
-
     font-weight:800;
-
-    color:#1e293b;
+    color:#172033;
 
 }
 
 
-
 .employee-welcome p{
 
-    font-size:12px;
-
-    color:#64748b;
-
     margin:0;
+    font-size:12px;
+    color:#64748b;
 
 }
 
@@ -1164,9 +1154,8 @@ HEADER OWNER STYLE
 .welcome-tags{
 
     display:flex;
-
-    gap:10px;
-
+    gap:8px;
+    flex-wrap:wrap;
     margin-top:15px;
 
 }
@@ -1176,16 +1165,12 @@ HEADER OWNER STYLE
 .welcome-tags span{
 
     background:#f1f5f9;
+    padding:6px 12px;
+    border-radius:999px;
 
-    padding:7px 12px;
-
-    border-radius:20px;
-
-    font-size:11px;
-
-    color:#334155;
-
-    font-weight:600;
+    font-size:10px;
+    font-weight:700;
+    color:#475569;
 
 }
 
@@ -1194,37 +1179,35 @@ HEADER OWNER STYLE
 .today-card{
 
     background:#dcfce7;
-
     color:#166534;
 
     padding:10px 18px;
-
-    border-radius:20px;
+    border-radius:999px;
 
     font-size:12px;
-
     font-weight:700;
+
+    white-space:nowrap;
 
 }
 
 
 
-
-
-/* =================================
-STAT CARD
-================================= */
+/* ===============================
+STATISTIC
+================================ */
 
 
 .employee-stats{
 
     display:grid;
 
-    grid-template-columns:repeat(6,1fr);
+    grid-template-columns:
+    repeat(5,minmax(0,1fr));
 
     gap:15px;
 
-    margin-bottom:20px;
+    margin-bottom:22px;
 
 }
 
@@ -1236,16 +1219,15 @@ STAT CARD
 
     padding:18px;
 
-    border-radius:22px;
+    border-radius:20px;
 
     border:1px solid #e2e8f0;
 
     box-shadow:
-
     0 5px 20px rgba(15,23,42,.05);
 
-    display:flex;
 
+    display:flex;
     align-items:center;
 
     gap:14px;
@@ -1265,52 +1247,38 @@ STAT CARD
     position:absolute;
 
     top:0;
-
     left:0;
-
-    width:100%;
 
     height:4px;
 
-    background:#334155;
+    width:100%;
 
 }
 
 
 
 .stat-card:nth-child(1)::before{
-
-    background:#334155;
-
+    background:#2563eb;
 }
 
 
 .stat-card:nth-child(2)::before{
-
-    background:#2563eb;
-
+    background:#16a34a;
 }
 
 
 .stat-card:nth-child(3)::before{
-
-    background:#16a34a;
-
+    background:#f59e0b;
 }
 
 
 .stat-card:nth-child(4)::before{
-
-    background:#f59e0b;
-
+    background:#7c3aed;
 }
 
 
-
 .stat-card:nth-child(5)::before{
-
-    background:#7c3aed;
-
+    background:#059669;
 }
 
 
@@ -1318,59 +1286,48 @@ STAT CARD
 
 .stat-icon{
 
-    width:45px;
+    width:42px;
+    height:42px;
 
-    height:45px;
-
-    border-radius:14px;
+    border-radius:13px;
 
     display:flex;
-
+    align-items:center;
     justify-content:center;
 
-    align-items:center;
+    font-size:17px;
 
-    font-size:18px;
+    flex-shrink:0;
 
 }
-
-
 
 
 .stat-icon.green{
-
     background:#dcfce7;
-
 }
-
 
 .stat-icon.blue{
-
     background:#dbeafe;
-
 }
-
 
 .stat-icon.orange{
-
     background:#fef3c7;
-
 }
-
 
 .stat-icon.purple{
-
     background:#ede9fe;
-
 }
-
 
 
 
 
 .stat-card label{
 
-    font-size:11px;
+    display:block;
+
+    font-size:10px;
+
+    font-weight:700;
 
     color:#64748b;
 
@@ -1380,11 +1337,13 @@ STAT CARD
 
 .stat-card h2{
 
-    margin:8px 0;
+    margin:5px 0;
 
-    font-size:19px;
+    font-size:20px;
 
-    color:#1e293b;
+    font-weight:800;
+
+    color:#172033;
 
 }
 
@@ -1392,7 +1351,7 @@ STAT CARD
 
 .stat-card small{
 
-    font-size:11px;
+    font-size:10px;
 
     color:#94a3b8;
 
@@ -1400,18 +1359,17 @@ STAT CARD
 
 
 
-
-
-/* =================================
-GRID
-================================= */
+/* ===============================
+MAIN GRID
+================================ */
 
 
 .employee-grid{
 
     display:grid;
 
-    grid-template-columns:1.7fr 1fr;
+    grid-template-columns:
+    1.7fr 1fr;
 
     gap:20px;
 
@@ -1420,19 +1378,13 @@ GRID
 
 
 
-
-/* =================================
-PANEL OWNER STYLE
-================================= */
-
-
 .employee-panel{
 
     background:white;
 
     padding:20px;
 
-    border-radius:24px;
+    border-radius:22px;
 
     border:1px solid #e2e8f0;
 
@@ -1446,13 +1398,14 @@ PANEL OWNER STYLE
 
 
 
+
 .panel-header{
 
     font-size:15px;
 
     font-weight:800;
 
-    color:#1e293b;
+    color:#172033;
 
     margin-bottom:15px;
 
@@ -1460,11 +1413,9 @@ PANEL OWNER STYLE
 
 
 
-
-
-/* =================================
+/* ===============================
 PROJECT PROGRESS
-================================= */
+================================ */
 
 
 .project-item{
@@ -1473,7 +1424,7 @@ PROJECT PROGRESS
 
     padding:12px;
 
-    border-radius:15px;
+    border-radius:14px;
 
     margin-bottom:10px;
 
@@ -1487,6 +1438,8 @@ PROJECT PROGRESS
 
     justify-content:space-between;
 
+    gap:10px;
+
     margin-bottom:8px;
 
 }
@@ -1497,7 +1450,7 @@ PROJECT PROGRESS
 
     font-size:13px;
 
-    color:#1e293b;
+    color:#172033;
 
 }
 
@@ -1507,7 +1460,7 @@ PROJECT PROGRESS
 
     font-size:12px;
 
-    font-weight:700;
+    font-weight:800;
 
     color:#166534;
 
@@ -1515,11 +1468,12 @@ PROJECT PROGRESS
 
 
 
+
 .progress-bar{
 
-    width:100%;
-
     height:8px;
+
+    width:100%;
 
     background:#e2e8f0;
 
@@ -1543,11 +1497,9 @@ PROJECT PROGRESS
 
 
 
-
-
-/* =================================
+/* ===============================
 TASK
-================================= */
+================================ */
 
 
 .task-row{
@@ -1558,11 +1510,13 @@ TASK
 
     align-items:center;
 
+    gap:15px;
+
     padding:12px;
 
     background:#f8fafc;
 
-    border-radius:15px;
+    border-radius:14px;
 
     border:1px solid #e2e8f0;
 
@@ -1576,7 +1530,7 @@ TASK
 
     font-size:13px;
 
-    color:#1e293b;
+    color:#172033;
 
 }
 
@@ -1602,21 +1556,21 @@ TASK
 
     padding:6px 12px;
 
-    border-radius:20px;
+    border-radius:999px;
 
     font-size:10px;
 
     font-weight:700;
 
+    white-space:nowrap;
+
 }
 
 
 
-
-
-/* =================================
+/* ===============================
 DEADLINE
-================================= */
+================================ */
 
 
 .deadline-card{
@@ -1627,11 +1581,13 @@ DEADLINE
 
     align-items:center;
 
+    gap:15px;
+
     padding:12px;
 
     background:#f8fafc;
 
-    border-radius:15px;
+    border-radius:14px;
 
     margin-bottom:10px;
 
@@ -1667,7 +1623,7 @@ DEADLINE
 
     padding:6px 12px;
 
-    border-radius:20px;
+    border-radius:999px;
 
     font-size:11px;
 
@@ -1677,11 +1633,9 @@ DEADLINE
 
 
 
-
-
-/* =================================
+/* ===============================
 INFO
-================================= */
+================================ */
 
 
 .info-row{
@@ -1690,7 +1644,9 @@ INFO
 
     justify-content:space-between;
 
-    padding:12px 0;
+    gap:15px;
+
+    padding:11px 0;
 
     border-bottom:1px solid #f1f5f9;
 
@@ -1712,7 +1668,9 @@ INFO
 
     font-size:12px;
 
-    color:#1e293b;
+    color:#172033;
+
+    text-align:right;
 
 }
 
@@ -1726,22 +1684,20 @@ INFO
 
     padding:5px 12px;
 
-    border-radius:20px;
+    border-radius:999px;
 
 }
 
 
 
-
-
-/* =================================
+/* ===============================
 CHART
-================================= */
+================================ */
 
 
 .chart-box{
 
-    height:200px;
+    height:220px;
 
     display:flex;
 
@@ -1755,19 +1711,17 @@ CHART
 
 #taskChart{
 
-    max-width:170px!important;
+    max-width:180px!important;
 
-    max-height:170px!important;
+    max-height:180px!important;
 
 }
 
 
 
-
-
-/* =================================
+/* ===============================
 ACTIVITY
-================================= */
+================================ */
 
 
 .activity-card{
@@ -1776,7 +1730,7 @@ ACTIVITY
 
     align-items:center;
 
-    gap:15px;
+    gap:12px;
 
     padding:12px 0;
 
@@ -1792,9 +1746,9 @@ ACTIVITY
 
     height:9px;
 
-    background:#16a34a;
-
     border-radius:50%;
+
+    background:#16a34a;
 
 }
 
@@ -1803,6 +1757,8 @@ ACTIVITY
 .activity-content{
 
     flex:1;
+
+    min-width:0;
 
 }
 
@@ -1830,7 +1786,7 @@ ACTIVITY
 
 .activity-content small{
 
-    font-size:11px;
+    font-size:10px;
 
     color:#94a3b8;
 
@@ -1844,11 +1800,11 @@ ACTIVITY
 
     color:#166534;
 
-    padding:5px 12px;
+    padding:5px 10px;
 
-    border-radius:20px;
+    border-radius:999px;
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
@@ -1856,18 +1812,16 @@ ACTIVITY
 
 
 
-
-
-/* =================================
+/* ===============================
 EMPTY
-================================= */
+================================ */
 
 
 .empty-data{
 
-    text-align:center;
-
     padding:25px;
+
+    text-align:center;
 
     color:#94a3b8;
 
@@ -1877,395 +1831,256 @@ EMPTY
 
 
 
+/* ===============================
+RESPONSIVE TABLET
+================================ */
 
-
-/* =================================
-RESPONSIVE
-================================= */
 
 @media(max-width:1200px){
 
-    .employee-stats{
-        grid-template-columns:repeat(3,1fr);
-    }
 
-    .employee-grid{
-        grid-template-columns:1fr;
-    }
+.employee-stats{
+
+    grid-template-columns:
+    repeat(3,1fr);
 
 }
+
+
+}
+
+
+
 
 
 @media(max-width:900px){
 
-    .employee-welcome{
-        flex-direction:column;
-        align-items:stretch;
-        gap:15px;
-        padding:20px;
-        border-radius:20px;
-    }
 
-    .employee-welcome h1{
-        font-size:21px;
-        line-height:1.35;
-        word-break:break-word;
-    }
+.employee-grid{
 
-    .employee-welcome p{
-        font-size:11px;
-        line-height:1.5;
-    }
-
-    .welcome-tags{
-        flex-wrap:wrap;
-        gap:7px;
-    }
-
-    .welcome-tags span{
-        font-size:9px;
-        padding:6px 9px;
-    }
-
-    .today-card{
-        width:100%;
-        text-align:center;
-        padding:10px 15px;
-        font-size:11px;
-    }
-
-    .employee-stats{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
-
-    .stat-card{
-        padding:15px;
-        border-radius:18px;
-        gap:10px;
-        min-width:0;
-    }
-
-    .stat-icon{
-        width:38px;
-        height:38px;
-        border-radius:12px;
-        font-size:15px;
-        flex-shrink:0;
-    }
-
-    .stat-card label{
-        font-size:9px;
-    }
-
-    .stat-card h2{
-        font-size:17px;
-        margin:5px 0;
-    }
-
-    .stat-card small{
-        font-size:9px;
-        line-height:1.3;
-    }
-
-    .employee-panel{
-        padding:18px;
-        border-radius:20px;
-    }
-
-    .panel-header{
-        font-size:14px;
-    }
-
-    .project-top{
-        gap:10px;
-    }
-
-    .project-top strong{
-        min-width:0;
-        word-break:break-word;
-        line-height:1.4;
-    }
-
-    .project-top span{
-        flex-shrink:0;
-    }
-
-    .task-row,
-    .deadline-card{
-        gap:10px;
-    }
-
-    .task-row > div,
-    .deadline-card > div:first-child{
-        min-width:0;
-    }
-
-    .task-row strong,
-    .deadline-card strong{
-        word-break:break-word;
-        line-height:1.4;
-    }
-
-    .task-row p,
-    .deadline-card p{
-        word-break:break-word;
-    }
-
-    .task-row span,
-    .deadline-date{
-        flex-shrink:0;
-    }
-
-    .info-row{
-        gap:12px;
-    }
-
-    .info-row span,
-    .info-row b{
-        min-width:0;
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .info-row b{
-        text-align:right;
-    }
-
-    .chart-box{
-        height:190px;
-    }
-
-    #taskChart{
-        max-width:155px!important;
-        max-height:155px!important;
-    }
-
-    .activity-card{
-        gap:10px;
-    }
-
-    .activity-content{
-        min-width:0;
-    }
-
-    .activity-content strong,
-    .activity-content p{
-        word-break:break-word;
-        line-height:1.5;
-    }
-
-    .activity-percent{
-        flex-shrink:0;
-    }
+    grid-template-columns:1fr;
 
 }
 
 
+
+.employee-welcome{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.stat-card{
+
+    padding:15px;
+
+}
+
+
+
+}
+
+
+
+
+/* ===============================
+MOBILE
+================================ */
+
+
 @media(max-width:600px){
 
-    .employee-welcome{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:18px;
-    }
 
-    .welcome-label{
-        font-size:8px;
-        letter-spacing:1.5px;
-    }
+.employee-welcome{
 
-    .employee-welcome h1{
-        font-size:19px;
-        margin:7px 0;
-    }
+    padding:18px;
 
-    .employee-welcome p{
-        font-size:10px;
-    }
+    border-radius:18px;
 
-    .welcome-tags{
-        gap:6px;
-        margin-top:12px;
-    }
+}
 
-    .welcome-tags span{
-        font-size:8px;
-        padding:5px 8px;
-    }
 
-    .today-card{
-        padding:9px 12px;
-        border-radius:14px;
-        font-size:10px;
-    }
 
-    .employee-stats{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-        margin-bottom:18px;
-    }
+.employee-welcome h1{
 
-    .stat-card{
-        padding:12px;
-        border-radius:16px;
-        gap:8px;
-    }
+    font-size:19px;
 
-    .stat-icon{
-        width:34px;
-        height:34px;
-        border-radius:10px;
-        font-size:14px;
-    }
+}
 
-    .stat-card label{
-        font-size:8px;
-    }
 
-    .stat-card h2{
-        font-size:16px;
-        margin:4px 0;
-    }
 
-    .stat-card small{
-        font-size:8px;
-    }
+.employee-welcome p{
 
-    .employee-grid{
-        grid-template-columns:1fr;
-        gap:0;
-    }
+    font-size:10px;
 
-    .employee-panel{
-        padding:15px;
-        border-radius:18px;
-        margin-bottom:15px;
-    }
+}
 
-    .panel-header{
-        font-size:13px;
-        margin-bottom:13px;
-    }
 
-    .project-item{
-        padding:10px;
-        border-radius:13px;
-    }
 
-    .project-top strong{
-        font-size:10px;
-    }
+.today-card{
 
-    .project-top span{
-        font-size:10px;
-    }
+    width:100%;
 
-    .progress-bar{
-        height:6px;
-    }
+    text-align:center;
 
-    .task-row{
-        padding:10px;
-        border-radius:13px;
-        flex-direction:column;
-        align-items:flex-start;
-    }
+}
 
-    .task-row strong{
-        font-size:11px;
-    }
 
-    .task-row p{
-        font-size:9px;
-        margin-top:4px;
-    }
 
-    .task-row span{
-        font-size:8px;
-        padding:5px 9px;
-    }
+.employee-stats{
 
-    .deadline-card{
-        padding:10px;
-        border-radius:13px;
-        flex-direction:column;
-        align-items:flex-start;
-    }
+    grid-template-columns:
+    repeat(2,1fr);
 
-    .deadline-card strong{
-        font-size:11px;
-    }
+    gap:10px;
 
-    .deadline-card p{
-        font-size:9px;
-        margin:4px 0;
-    }
+}
 
-    .deadline-date{
-        font-size:9px;
-        padding:5px 9px;
-    }
 
-    .info-row{
-        padding:9px 0;
-        gap:10px;
-    }
 
-    .info-row span,
-    .info-row b{
-        font-size:9px;
-    }
+.stat-card{
 
-    .active-status{
-        padding:4px 9px;
-        font-size:9px!important;
-    }
+    flex-direction:column;
 
-    .chart-box{
-        height:175px;
-    }
+    align-items:flex-start;
 
-    #taskChart{
-        max-width:140px!important;
-        max-height:140px!important;
-    }
+    padding:12px;
 
-    .activity-card{
-        gap:9px;
-        padding:9px 0;
-        align-items:flex-start;
-    }
+    border-radius:15px;
 
-    .activity-dot{
-        width:7px;
-        height:7px;
-        margin-top:5px;
-        flex-shrink:0;
-    }
+}
 
-    .activity-content strong{
-        font-size:10px;
-    }
 
-    .activity-content p{
-        font-size:9px;
-        margin:4px 0;
-    }
 
-    .activity-content small{
-        font-size:8px;
-    }
+.stat-icon{
 
-    .activity-percent{
-        font-size:9px;
-        padding:4px 8px;
-    }
+    width:35px;
 
-    .empty-data{
-        padding:18px 10px;
-        font-size:10px;
-    }
+    height:35px;
+
+}
+
+
+
+.stat-card h2{
+
+    font-size:17px;
+
+}
+
+
+
+.stat-card label{
+
+    font-size:9px;
+
+}
+
+
+
+.stat-card small{
+
+    font-size:8px;
+
+}
+
+
+
+.employee-panel{
+
+    padding:15px;
+
+    border-radius:17px;
+
+}
+
+
+
+.panel-header{
+
+    font-size:13px;
+
+}
+
+
+
+.task-row,
+
+.deadline-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.task-row span{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+
+
+.info-row{
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+
+
+.info-row b{
+
+    text-align:left;
+
+}
+
+
+
+.chart-box{
+
+    height:180px;
+
+}
+
+
+
+#taskChart{
+
+    max-width:140px!important;
+
+    max-height:140px!important;
+
+}
+
+
+
+.activity-card{
+
+    align-items:flex-start;
+
+}
+
+
+
+.activity-percent{
+
+    font-size:9px;
+
+}
+
+
 
 }
 

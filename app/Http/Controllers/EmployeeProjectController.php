@@ -4,39 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyek;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 class EmployeeProjectController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
 
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    if(!$user)
+        if(!$user)
+        {
+            abort(401);
+        }
 
-    {
 
-        abort(401);
+        $karyawan = $user->karyawan;
 
-    }
 
-    $karyawan = $user->karyawan;
+        if(!$karyawan)
+        {
+            abort(403);
+        }
 
-    if(!$karyawan)
 
-    {
 
-        abort(403);
+        $search = trim(
+            $request->get('search','')
+        );
 
-    }
 
 
         $proyek = Proyek::whereHas(
+
             'tugas',
-            function ($query) use ($karyawan) {
+
+            function($query) use ($karyawan){
 
                 $query->where(
                     'karyawan_id',
@@ -44,19 +50,35 @@ class EmployeeProjectController extends Controller
                 );
 
             }
+
         )
+
+        ->when($search !== '', function($query) use ($search){
+
+            $query->where(
+                'nama_proyek',
+                'like',
+                '%'.$search.'%'
+            );
+
+        })
+
 
 
         ->with([
 
+
             'perusahaan:id,nama_perusahaan,alamat,kontak',
 
+
             'perusahaan.proyek:id,perusahaan_id,nama_proyek',
+
 
             'users:id,name',
 
 
-            'tugas' => function ($query) use ($karyawan) {
+
+            'tugas'=>function($query) use ($karyawan){
 
 
                 $query->where(
@@ -65,70 +87,54 @@ class EmployeeProjectController extends Controller
                 )
 
 
-                /*
-                ==================================
-                URUTAN TASK
-                1. Belum dikerjakan
-                2. Sedang dikerjakan
-                3. Selesai
-                ==================================
-                */
-
-
                 ->orderByRaw("
-CASE
 
-    WHEN status NOT IN ('selesai','done')
-    AND deadline < CURDATE()
-    THEN 1
-
-
-    WHEN status IN (
-        'sedang_dikerjakan',
-        'berjalan',
-        'progress'
-    )
-    THEN 2
-
-
-    WHEN status = 'belum_dikerjakan'
-    THEN 3
-
-
-    WHEN status IN (
-        'selesai',
-        'done'
-    )
-    THEN 4
-
-
-    ELSE 5
-
-END
-")
-
-
-
-                /*
-                Deadline kosong taruh terakhir
-                */
-
-                ->orderByRaw("
                 CASE
 
-                    WHEN deadline IS NULL
+                    WHEN status NOT IN ('selesai','done')
+                    AND deadline < CURDATE()
                     THEN 1
 
-                    ELSE 0
+
+                    WHEN status IN (
+                        'sedang_dikerjakan',
+                        'berjalan',
+                        'progress'
+                    )
+                    THEN 2
+
+
+                    WHEN status='belum_dikerjakan'
+                    THEN 3
+
+
+                    WHEN status IN (
+                        'selesai',
+                        'done'
+                    )
+                    THEN 4
+
+
+                    ELSE 5
 
                 END
+
                 ")
 
 
 
-                /*
-                Deadline terdekat dulu
-                */
+                ->orderByRaw("
+
+                CASE
+
+                    WHEN deadline IS NULL
+                    THEN 1
+                    ELSE 0
+
+                END
+
+                ")
+
 
                 ->orderBy(
                     'deadline',
@@ -139,11 +145,11 @@ END
 
                 ->with([
 
-                'aktivitasTugas' => function($q){
+                    'aktivitasTugas'=>function($q){
 
-                    $q->latest();
+                        $q->latest();
 
-                },
+                    },
 
 
                     'divisi',
@@ -156,13 +162,18 @@ END
 
             }
 
+
         ])
+
 
 
         ->latest()
 
 
+
         ->get();
+
+
 
 
 
@@ -171,7 +182,11 @@ END
             'employee.projects.index',
 
             compact(
-                'proyek'
+
+                'proyek',
+
+                'search'
+
             )
 
         );
