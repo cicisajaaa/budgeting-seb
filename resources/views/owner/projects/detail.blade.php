@@ -900,1026 +900,607 @@ Belum terdapat pekerjaan
 </div>
 
 </div>
-
 <style>
-
-/* ===============================
-GLOBAL
-================================ */
 
 *{
     box-sizing:border-box;
 }
 
-
 body{
-
-    font-family:Inter, system-ui, sans-serif;
-
+    font-family:Inter,system-ui,sans-serif;
     color:#334155;
-
 }
 
-
-
 /* ===============================
-HEADER
+   HEADER
 ================================ */
-
 
 .page-header{
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:24px;
-
+    background:#fff;
+    padding:18px 22px;
+    border-radius:18px;
     border:1px solid #e2e8f0;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
+    margin-bottom:15px;
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
 }
-
-
 
 .header-top{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    gap:20px;
-
+    gap:15px;
 }
-
-
 
 .label{
-
-    font-size:10px;
-
-    letter-spacing:2px;
-
+    font-size:9px;
+    letter-spacing:1.7px;
     font-weight:800;
-
     color:#64748b;
-
 }
-
-
 
 .page-header h1{
-
-    margin:8px 0;
-
-    font-size:26px;
-
+    margin:6px 0;
+    font-size:21px;
+    line-height:1.3;
     font-weight:800;
-
     color:#172033;
-
 }
-
-
 
 .page-header p{
-
     margin:0;
-
-    font-size:12px;
-
+    font-size:10px;
     color:#64748b;
-
 }
-
-
-
 
 .btn-back{
-
     background:#0f172a;
-
-    color:white;
-
-    padding:10px 18px;
-
-    border-radius:12px;
-
-    font-size:12px;
-
+    color:#fff;
+    padding:8px 14px;
+    border-radius:9px;
+    font-size:10px;
     font-weight:700;
-
     text-decoration:none;
-
-    transition:.2s;
-
+    white-space:nowrap;
 }
-
-
 
 .btn-back:hover{
-
     background:#334155;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-SUMMARY
+   SUMMARY
 ================================ */
-
 
 .summary-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(5,1fr);
-
-    gap:15px;
-
-    margin-bottom:22px;
-
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:15px;
 }
-
-
 
 .summary-card{
-
-    background:white;
-
-    padding:18px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:13px 14px;
+    min-width:0;
+    min-height:82px;
+    border-radius:15px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 20px rgba(15,23,42,.04);
-
+    box-shadow:0 5px 15px rgba(15,23,42,.035);
     position:relative;
-
     overflow:hidden;
-
 }
-
-
 
 .summary-card::before{
-
     content:"";
-
     position:absolute;
-
     top:0;
-
     left:0;
-
     width:100%;
-
-    height:4px;
-
+    height:3px;
     background:#334155;
-
 }
-
-
 
 .summary-card:nth-child(1)::before{
-
     background:#334155;
-
 }
-
 
 .summary-card:nth-child(2)::before{
-
     background:#2563eb;
-
 }
-
-
 
 .summary-card:nth-child(3)::before{
-
     background:#16a34a;
-
 }
-
-
 
 .summary-card:nth-child(4)::before{
-
     background:#f59e0b;
-
 }
-
-
 
 .summary-card:nth-child(5)::before{
-
     background:#7c3aed;
-
 }
-
-
 
 .summary-card span{
-
-    font-size:11px;
-
+    display:block;
+    font-size:9px;
     color:#64748b;
-
-    font-weight:700;
-
+    font-weight:600;
 }
-
-
 
 .summary-card h2{
-
-    margin:8px 0;
-
-    font-size:20px;
-
+    margin:5px 0;
+    font-size:17px;
+    line-height:1.25;
     font-weight:800;
-
     color:#172033;
-
+    overflow-wrap:anywhere;
 }
-
-
 
 .summary-card p{
-
     margin:0;
-
-    font-size:11px;
-
+    font-size:8px;
     color:#94a3b8;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-PANEL
+   PANEL
 ================================ */
-
 
 .panel{
-
-    background:white;
-
-    padding:22px;
-
-    border-radius:24px;
-
+    background:#fff;
+    padding:17px;
+    border-radius:17px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
-    margin-bottom:22px;
-
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
+    margin-bottom:15px;
+    min-width:0;
 }
-
-
 
 .panel h3{
-
-    font-size:16px;
-
+    font-size:14px;
     font-weight:800;
-
     color:#172033;
-
-    padding-left:10px;
-
-    border-left:4px solid #334155;
-
-    margin-bottom:18px;
-
+    padding-left:8px;
+    border-left:3px solid #334155;
+    margin:0 0 12px;
 }
 
-
-
-
-
-
-
 /* ===============================
-TABLE
+   INFO TABLE
 ================================ */
 
-
-table{
-
+.panel > table{
     width:100%;
-
     border-collapse:collapse;
-
 }
 
-
-
-th{
-
-    background:#f8fafc;
-
-    padding:13px;
-
-    text-align:left;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    color:#64748b;
-
-}
-
-
-
-td{
-
-    padding:13px;
-
-    font-size:12px;
-
-    color:#334155;
-
+.panel > table tr{
     border-bottom:1px solid #f1f5f9;
-
 }
 
-
-
-tbody tr:hover{
-
-    background:#f8fafc;
-
+.panel > table tr:last-child{
+    border-bottom:none;
 }
 
-
-
-td strong{
-
-    font-size:13px;
-
-    color:#172033;
-
+.panel > table td{
+    padding:9px 5px;
+    font-size:10px;
 }
 
-
-
-small{
-
-    font-size:11px;
-
+.panel > table td:first-child{
+    width:35%;
     color:#64748b;
-
+    font-weight:600;
 }
 
-
-
-
-
-
+.panel > table td:last-child{
+    color:#172033;
+    font-weight:700;
+}
 
 /* ===============================
-HEALTH GRID
+   HEALTH
 ================================ */
-
 
 .health-grid{
-
     display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:18px;
-
-    margin-bottom:22px;
-
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:15px;
 }
-
-
 
 .health-card{
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:15px;
+    border-radius:17px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 20px rgba(15,23,42,.04);
-
+    box-shadow:0 5px 16px rgba(15,23,42,.035);
+    min-width:0;
 }
-
-
 
 .health-card h3{
-
-    margin:0 0 15px;
-
-    font-size:15px;
-
+    margin:0 0 10px;
+    font-size:13px;
     font-weight:800;
-
     color:#172033;
-
 }
-
-
 
 .health-card > div{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    padding:12px 0;
-
+    gap:10px;
+    padding:9px 0;
     border-bottom:1px solid #f1f5f9;
-
 }
-
-
 
 .health-card > div:last-child{
-
     border-bottom:none;
-
 }
-
-
 
 .health-card span{
-
-    font-size:12px;
-
+    font-size:9px;
     color:#64748b;
-
 }
-
-
 
 .health-card strong{
-
-    font-size:12px;
-
+    font-size:10px;
     color:#172033;
-
+    text-align:right;
+    overflow-wrap:anywhere;
 }
-
-
-
-
-
-
-
-/* ===============================
-BUDGET PROGRESS
-================================ */
-
 
 .budget-progress{
-
-    width:120px;
-
-    height:8px;
-
+    width:100px;
+    height:7px;
     background:#e2e8f0;
-
     border-radius:20px;
-
     overflow:hidden;
-
 }
-
-
 
 .budget-progress div{
-
     height:100%;
-
     background:#2563eb;
-
     border-radius:20px;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-STATUS
+   STATUS
 ================================ */
-
 
 .status{
-
     display:inline-flex;
-
     align-items:center;
-
-    gap:6px;
-
-    padding:6px 12px;
-
+    gap:5px;
+    padding:5px 9px;
     border-radius:999px;
-
-    font-size:10px;
-
+    font-size:8px;
     font-weight:700;
-
+    white-space:nowrap;
 }
-
-
 
 .status::before{
-
     content:"●";
-
-    font-size:8px;
-
+    font-size:6px;
 }
-
-
 
 .success{
-
     background:#dcfce7;
-
     color:#166534;
-
 }
-
-
 
 .warning{
-
     background:#fef3c7;
-
     color:#92400e;
-
 }
-
-
 
 .danger{
-
     background:#fee2e2;
-
     color:#b91c1c;
-
 }
-
-
 
 .normal{
-
     background:#e0f2fe;
-
     color:#0369a1;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-PRIORITY
+   PRIORITY
 ================================ */
-
 
 .priority{
-
     display:inline-flex;
-
-    padding:5px 10px;
-
+    padding:4px 8px;
     border-radius:999px;
-
-    font-size:10px;
-
+    font-size:8px;
     font-weight:700;
-
+    white-space:nowrap;
 }
-
-
 
 .priority.high{
-
     background:#fee2e2;
-
     color:#b91c1c;
-
 }
-
-
 
 .priority.medium{
-
     background:#fef3c7;
-
     color:#92400e;
-
 }
-
-
 
 .priority.low{
-
     background:#dcfce7;
-
     color:#166534;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-TASK PROGRESS
+   TASK TABLE
 ================================ */
 
+.table-wrapper{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    position:relative;
+}
 
-.progress{
+.table-wrapper table{
+    width:100%;
+    min-width:850px;
+    border-collapse:collapse;
+}
 
-    width:120px;
+.table-wrapper th{
+    background:#f8fafc;
+    padding:9px 10px;
+    text-align:left;
+    font-size:9px;
+    font-weight:700;
+    color:#64748b;
+    white-space:nowrap;
+}
 
-    height:8px;
-
-    background:#e2e8f0;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    display:inline-block;
-
+.table-wrapper td{
+    padding:9px 10px;
+    font-size:9px;
+    color:#334155;
+    border-bottom:1px solid #f1f5f9;
     vertical-align:middle;
-
-    margin-right:8px;
-
 }
 
-
-
-.progress-fill{
-
-    height:100%;
-
-    border-radius:20px;
-
+.table-wrapper tbody tr:hover{
+    background:#f8fafc;
 }
 
-
-
-.progress-green{
-
-    background:#16a34a;
-
+.table-wrapper td strong{
+    font-size:10px;
+    color:#172033;
 }
 
-
-
-.progress-blue{
-
-    background:#2563eb;
-
+.table-wrapper small{
+    font-size:8px;
+    color:#64748b;
 }
-
-
-
-.progress-yellow{
-
-    background:#f59e0b;
-
-}
-
-
-
-
-
 
 /* ===============================
-   RESPONSIVE
+   TASK PROGRESS
+================================ */
+
+.progress{
+    width:85px;
+    height:6px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:5px;
+}
+
+.progress-fill{
+    height:100%;
+    border-radius:20px;
+}
+
+.progress-green{
+    background:#16a34a;
+}
+
+.progress-blue{
+    background:#2563eb;
+}
+
+.progress-yellow{
+    background:#f59e0b;
+}
+
+/* ===============================
+   1200px
 ================================ */
 
 @media(max-width:1200px){
 
     .summary-grid{
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
     }
-
-    .health-grid{
-        gap:14px;
-    }
-
 }
 
+/* ===============================
+   900px
+================================ */
 
 @media(max-width:900px){
 
     .page-header{
-        padding:22px;
-        border-radius:20px;
-    }
-
-    .header-top{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-    }
-
-    .page-header h1{
-        font-size:22px;
-        line-height:1.35;
-        word-break:break-word;
-    }
-
-    .page-header p{
-        font-size:11px;
-        line-height:1.5;
-    }
-
-    .btn-back{
-        width:100%;
-        box-sizing:border-box;
-        text-align:center;
-        padding:11px 14px;
-        font-size:10px;
-    }
-
-
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
-
-    .summary-card{
-        padding:15px;
-        border-radius:18px;
-        min-width:0;
-    }
-
-    .summary-card span{
-        font-size:9px;
-    }
-
-    .summary-card h2{
-        font-size:17px;
-        line-height:1.4;
-        word-break:break-word;
-    }
-
-    .summary-card p{
-        font-size:9px;
-        line-height:1.4;
-    }
-
-
-    .panel{
-        padding:20px;
-        border-radius:20px;
-        overflow:hidden;
-    }
-
-    .panel h3{
-        font-size:14px;
-        line-height:1.4;
-    }
-
-
-    .health-grid{
-        grid-template-columns:1fr;
-        gap:12px;
-    }
-
-    .health-card{
         padding:17px;
-        border-radius:18px;
-    }
-
-    .health-card h3{
-        font-size:14px;
-    }
-
-    .health-card > div{
-        gap:12px;
-    }
-
-    .health-card span{
-        font-size:10px;
-    }
-
-    .health-card strong{
-        font-size:10px;
-        text-align:right;
-        word-break:break-word;
-    }
-
-
-    .budget-progress{
-        width:100px;
-    }
-
-
-    .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-    }
-
-    .table-wrapper table{
-        min-width:900px;
-    }
-
-    .table-wrapper th{
-        padding:11px;
-        font-size:9px;
-        white-space:nowrap;
-    }
-
-    .table-wrapper td{
-        padding:11px;
-        font-size:10px;
-        white-space:nowrap;
-    }
-
-    .table-wrapper td strong{
-        font-size:10px;
-    }
-
-    .table-wrapper small{
-        font-size:8px;
-    }
-
-    .status,
-    .priority{
-        white-space:nowrap;
-    }
-
-    .progress{
-        width:90px;
-    }
-
-}
-
-
-@media(max-width:600px){
-
-    .page-header{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:16px;
-    }
-
-    .label{
-        font-size:8px;
-        letter-spacing:1.5px;
     }
 
     .page-header h1{
         font-size:19px;
-        margin:7px 0;
     }
 
-    .page-header p{
-        font-size:10px;
+    .header-top{
+        align-items:flex-start;
     }
-
-    .btn-back{
-        padding:10px 12px;
-        border-radius:10px;
-        font-size:9px;
-    }
-
 
     .summary-grid{
-        grid-template-columns:1fr;
-        gap:10px;
-        margin-bottom:16px;
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
-
-    .summary-card{
-        padding:13px;
-        border-radius:16px;
-    }
-
-    .summary-card span{
-        font-size:8px;
-    }
-
-    .summary-card h2{
-        font-size:16px;
-        margin:5px 0;
-    }
-
-    .summary-card p{
-        font-size:8px;
-    }
-
-
-    .panel{
-        padding:14px;
-        border-radius:17px;
-        margin-bottom:15px;
-    }
-
-    .panel h3{
-        font-size:12px;
-        padding-left:8px;
-        border-left-width:3px;
-        margin-bottom:13px;
-    }
-
 
     .health-grid{
-        gap:10px;
-        margin-bottom:15px;
+        grid-template-columns:1fr;
     }
 
-    .health-card{
-        padding:13px;
-        border-radius:15px;
-    }
-
-    .health-card h3{
-        font-size:12px;
-        margin-bottom:10px;
-    }
-
-    .health-card > div{
-        padding:10px 0;
-        gap:8px;
-    }
-
-    .health-card span{
-        font-size:8px;
-    }
-
-    .health-card strong{
-        font-size:8px;
-    }
-
-    .budget-progress{
-        width:80px;
-        height:7px;
-    }
-
-
-    .table-wrapper{
-        margin-top:5px;
+    .panel{
+        padding:15px;
     }
 
     .table-wrapper table{
         min-width:850px;
     }
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .page-header{
+        padding:15px;
+        border-radius:15px;
+        margin-bottom:12px;
+    }
+
+    .header-top{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .label{
+        font-size:8px;
+        letter-spacing:1.4px;
+    }
+
+    .page-header h1{
+        font-size:17px;
+        margin:5px 0;
+    }
+
+    .page-header p{
+        font-size:9px;
+        line-height:1.5;
+    }
+
+    .btn-back{
+        width:100%;
+        text-align:center;
+        padding:9px;
+        font-size:9px;
+        border-radius:9px;
+    }
+
+    /* SUMMARY */
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        margin-bottom:12px;
+    }
+
+    .summary-card{
+        min-height:72px;
+        padding:10px;
+        border-radius:13px;
+    }
+
+    .summary-card span{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:14px;
+        margin:4px 0;
+    }
+
+    .summary-card p{
+        font-size:7px;
+    }
+
+    /* PANEL */
+
+    .panel{
+        padding:12px;
+        border-radius:14px;
+        margin-bottom:12px;
+    }
+
+    .panel h3{
+        font-size:11px;
+        padding-left:7px;
+        margin-bottom:9px;
+    }
+
+    /* INFO */
+
+    .panel > table td{
+        padding:8px 3px;
+        font-size:8px;
+    }
+
+    .panel > table td:first-child{
+        width:38%;
+    }
+
+    /* HEALTH */
+
+    .health-grid{
+        gap:9px;
+        margin-bottom:12px;
+    }
+
+    .health-card{
+        padding:12px;
+        border-radius:14px;
+    }
+
+    .health-card h3{
+        font-size:11px;
+        margin-bottom:8px;
+    }
+
+    .health-card > div{
+        padding:8px 0;
+    }
+
+    .health-card span{
+        font-size:8px;
+    }
+
+    .health-card strong{
+        font-size:8px;
+    }
+
+    .budget-progress{
+        width:75px;
+        height:6px;
+    }
+
+    /* TASK TABLE */
+
+    .table-wrapper table{
+        min-width:820px;
+    }
 
     .table-wrapper th{
-        padding:9px;
+        padding:8px;
         font-size:8px;
     }
 
     .table-wrapper td{
-        padding:9px;
-        font-size:9px;
+        padding:8px;
+        font-size:8px;
     }
 
     .table-wrapper td strong{
@@ -1931,23 +1512,65 @@ TASK PROGRESS
     }
 
     .status{
-        padding:5px 8px;
+        padding:4px 7px;
         font-size:7px;
     }
 
     .priority{
-        padding:4px 8px;
+        padding:4px 7px;
         font-size:7px;
     }
 
     .progress{
-        width:80px;
-        height:7px;
-        margin-right:5px;
+        width:70px;
+        height:6px;
     }
-
 }
 
+/* ===============================
+   SMALL MOBILE
+================================ */
+
+@media(max-width:380px){
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .summary-card{
+        min-height:68px;
+    }
+
+    .health-grid{
+        grid-template-columns:1fr;
+    }
+
+    .table-wrapper table{
+        min-width:800px;
+    }
+}
+
+/* ===============================
+   MOBILE SCROLL INDICATOR
+================================ */
+
+.table-wrapper::after{
+    display:none;
+}
+
+@media(max-width:600px){
+
+    .table-wrapper::after{
+        content:"Geser →";
+        display:block;
+        position:absolute;
+        right:8px;
+        bottom:4px;
+        font-size:9px;
+        color:#94a3b8;
+        pointer-events:none;
+    }
+}
 
 </style>
 

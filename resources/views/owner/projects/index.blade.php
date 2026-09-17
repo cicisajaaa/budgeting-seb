@@ -157,13 +157,47 @@ Perkembangan seluruh proyek
 
 <div class="panel">
 
-
 <h3>
 Daftar Pemantauan Proyek
 </h3>
 
+<form method="GET"
+      action="{{ route('owner.projects') }}"
+      class="project-search">
 
+    <input
+        type="text"
+        name="search"
+        value="{{ $search ?? '' }}"
+        placeholder="Cari nama proyek..."
+    >
 
+    <button type="submit">
+        Cari
+    </button>
+
+    @if(!empty($search))
+        <a href="{{ route('owner.projects') }}">
+            Reset
+        </a>
+    @endif
+
+</form>
+
+<div class="search-info">
+
+    @if(!empty($search))
+
+        Hasil pencarian untuk
+        <strong>"{{ $search }}"</strong>
+
+    @else
+
+        Menampilkan seluruh proyek perusahaan
+
+    @endif
+
+</div>
 
 <div class="table-wrapper">
 
@@ -575,784 +609,555 @@ Belum terdapat data proyek
 
 
 
-
-
 <style>
 
 /* ===============================
-GLOBAL
+   GLOBAL
 ================================ */
 
 *{
     box-sizing:border-box;
 }
 
-
 body{
-    font-family:Inter, system-ui, sans-serif;
+    font-family:Inter,system-ui,sans-serif;
 }
 
-
 /* ===============================
-HEADER
+   HEADER
 ================================ */
 
-
 .dashboard-header{
-
     background:#f8fafc;
-
-    padding:25px;
-
-    border-radius:24px;
-
+    padding:20px 24px;
+    border-radius:18px;
     border:1px solid #e2e8f0;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
+    margin-bottom:16px;
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
 }
-
-
 
 .label{
-
-    font-size:10px;
-
-    letter-spacing:2px;
-
+    font-size:9px;
+    letter-spacing:1.8px;
     font-weight:800;
-
     color:#64748b;
-
 }
-
-
 
 .dashboard-header h1{
-
-    margin:8px 0;
-
-    font-size:24px;
-
-    line-height:1.3;
-
+    margin:6px 0;
+    font-size:21px;
+    line-height:1.25;
     color:#172033;
-
     font-weight:800;
-
 }
-
-
 
 .dashboard-header p{
-
     margin:0;
-
-    font-size:12px;
-
+    font-size:11px;
     color:#64748b;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-SUMMARY
+   SUMMARY
 ================================ */
 
 .summary-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(5,1fr);
-
-    gap:15px;
-
-    margin-bottom:22px;
-
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:16px;
 }
-
-
 
 .summary-card{
-
-    background:white;
-
-    padding:18px;
-
-    min-height:105px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:14px 16px;
+    min-height:92px;
+    border-radius:17px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 20px rgba(15,23,42,.04);
-
+    box-shadow:0 5px 16px rgba(15,23,42,.035);
     position:relative;
-
     overflow:hidden;
-
 }
-
-
 
 .summary-card:nth-child(1){
-
-    border-top:4px solid #334155;
-
+    border-top:3px solid #334155;
 }
-
 
 .summary-card:nth-child(2){
-
-    border-top:4px solid #2563eb;
-
+    border-top:3px solid #2563eb;
 }
-
 
 .summary-card:nth-child(3){
-
-    border-top:4px solid #16a34a;
-
+    border-top:3px solid #16a34a;
 }
 
-
 .summary-card:nth-child(4){
-
-    border-top:4px solid #f59e0b;
-
+    border-top:3px solid #f59e0b;
 }
 
 .summary-card:nth-child(5){
-
-    border-top:4px solid #7c3aed;
-
+    border-top:3px solid #7c3aed;
 }
 
 .summary-card span{
-
-    font-size:11px;
-
+    display:block;
+    font-size:10px;
     color:#64748b;
-
     font-weight:600;
-
 }
-
-
 
 .summary-card h2{
-
-    margin:8px 0;
-
-    font-size:20px;
-
+    margin:5px 0;
+    font-size:18px;
+    line-height:1.2;
     color:#172033;
-
     font-weight:800;
-
+    overflow-wrap:anywhere;
 }
-
-
 
 .summary-card p{
-
     margin:0;
-
-    font-size:11px;
-
+    font-size:10px;
     color:#94a3b8;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-PANEL
+   PANEL
 ================================ */
-
 
 .panel{
-
-    background:white;
-
-    padding:22px;
-
-    border-radius:24px;
-
+    background:#fff;
+    padding:18px;
+    border-radius:18px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
-    margin-bottom:22px;
-
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
+    margin-bottom:16px;
 }
-
-
 
 .panel h3{
-
-    font-size:16px;
-
+    font-size:14px;
     font-weight:800;
-
     color:#172033;
-
-    margin:0 0 18px;
-
+    margin:0 0 13px;
 }
-
-
-
-
-
-
 
 /* ===============================
-TABLE
+   SEARCH
 ================================ */
 
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-}
-
-
-
-th{
-
-    padding:13px;
-
-    text-align:left;
-
-    background:#f8fafc;
-
-    color:#64748b;
-
-    font-size:12px;
-
-    font-weight:800;
-
-    font-weight:700;
-
-}
-
-
-
-td{
-
-    padding:13px;
-
-    border-bottom:1px solid #f1f5f9;
-
-    font-size:12px;
-
-    color:#334155;
-
-}
-
-
-
-tbody tr:hover{
-
-    background:#f8fafc;
-
-}
-
-
-
-td strong{
-
-    color:#172033;
-
-    font-size:13px;
-
-}
-
-
-
-
-
-
-
-/* ===============================
-PROGRESS
-================================ */
-
-.project-progress{
-
-    width:140px;
-
-    height:8px;
-
-    background:#e2e8f0;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    display:inline-block;
-
-    vertical-align:middle;
-
-}
-
-
-
-.project-progress-fill{
-
-    height:100%;
-
-    border-radius:20px;
-
-}
-
-
-
-.project-progress-fill.progress-green{
-
-    background:#16a34a;
-
-}
-
-
-.project-progress-fill.progress-blue{
-
-    background:#2563eb;
-
-}
-
-
-.project-progress-fill.progress-yellow{
-
-    background:#f59e0b;
-
-}
-
-
-.progress-text{
-
-    margin-left:8px;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    color:#334155;
-
-}
-
-
-
-.progress-wrapper{
-
+.project-search{
     display:flex;
-
     align-items:center;
-
     gap:8px;
-
+    margin-bottom:6px;
 }
 
-
-
-.progress-bar{
-
-    width:100px;
-
-    height:8px;
-
-    background:#e2e8f0;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-}
-
-
-
-.progress-value{
-
-    height:100%;
-
-    border-radius:20px;
-
-}
-
-
-
-.progress-value.green{
-
-    background:#16a34a;
-
-}
-
-
-
-.progress-value.blue{
-
-    background:#2563eb;
-
-}
-
-
-
-.progress-value.yellow{
-
-    background:#f59e0b;
-
-}
-
-
-
-.progress-wrapper span{
-
+.project-search input{
+    flex:1;
+    min-width:0;
+    height:36px;
+    padding:0 12px;
+    border:1px solid #e2e8f0;
+    border-radius:9px;
+    background:#fff;
+    color:#334155;
     font-size:11px;
-
-    font-weight:700;
-
+    outline:none;
 }
 
-
-
-/* ===============================
-STATUS
-================================ */
-
-
-.status{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    font-size:10px;
-
-    font-weight:700;
-
+.project-search input:focus{
+    border-color:#94a3b8;
 }
 
-
-
-.status::before{
-
-    content:"●";
-
-    font-size:8px;
-
-}
-
-
-.status.awal{
-
-    background:#f1f5f9;
-
-    color:#475569;
-
-}
-
-
-.selesai{
-
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
-}
-
-
-
-.berjalan{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-}
-
-
-
-.aman{
-
-    background:#fef3c7;
-
-    color:#92400e;
-
-}
-
-
-
-.terlambat{
-
-    background:#fee2e2;
-
-    color:#b91c1c;
-
-}
-
-
-
-
-/* ===============================
-PROJECT HEALTH CONDITION
-================================ */
-
-.health-card{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:5px;
-
-    padding:5px 8px;
-
-    border-radius:10px;
-
-    min-width:95px;
-
-}
-
-
-.health-icon{
-
-    width:18px;
-
-    height:18px;
-
-    font-size:10px;
-
-}
-
-
-
-.health-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-
-.health-info strong{
-
-    font-size:10px;
-
-}
-
-
-.health-info span{
-
-    font-size:8px;
-
-}
-
-
-
-
-
-
-.health-safe{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-    border:1px solid #bbf7d0;
-
-}
-
-
-
-.health-warning{
-
-    background:#fef3c7;
-
-    color:#92400e;
-
-    border:1px solid #fde68a;
-
-}
-
-
-
-.health-critical{
-
-    background:#fee2e2;
-
-    color:#991b1b;
-
-    border:1px solid #fecaca;
-
-}
-
-
-/* ===============================
-BUTTON
-================================ */
-
-
-.btn-detail{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:8px 16px;
-
-    border-radius:12px;
-
+.project-search button{
+    height:36px;
+    padding:0 16px;
+    border:none;
+    border-radius:9px;
     background:#0f172a;
-
-    color:white;
-
-    text-decoration:none;
-
+    color:#fff;
     font-size:11px;
-
     font-weight:700;
-
+    cursor:pointer;
 }
 
-
-
-.btn-detail:hover{
-
+.project-search button:hover{
     background:#334155;
-
 }
 
+.project-search a{
+    height:36px;
+    padding:0 13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:#f1f5f9;
+    color:#334155;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:700;
+}
 
+.search-info{
+    margin-bottom:10px;
+    font-size:10px;
+    color:#94a3b8;
+}
 
-
-
+.search-info strong{
+    color:#475569;
+}
 
 /* ===============================
-RESPONSIVE
+   TABLE
 ================================ */
 
 .table-wrapper{
     width:100%;
+    max-width:100%;
     overflow-x:auto;
+    overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
 }
 
 .table-wrapper table{
-    min-width:1000px;
+    width:100%;
+    min-width:950px;
+    border-collapse:collapse;
 }
 
+th{
+    padding:10px 11px;
+    text-align:left;
+    background:#f8fafc;
+    color:#64748b;
+    font-size:10px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+td{
+    padding:10px 11px;
+    border-bottom:1px solid #f1f5f9;
+    font-size:10px;
+    color:#334155;
+    vertical-align:middle;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+td strong{
+    color:#172033;
+    font-size:11px;
+}
+
+/* ===============================
+   PROGRESS
+================================ */
+
+.progress-wrapper{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    min-width:105px;
+}
+
+.progress-bar{
+    width:70px;
+    height:6px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-value{
+    height:100%;
+    border-radius:20px;
+}
+
+.progress-value.green{
+    background:#16a34a;
+}
+
+.progress-value.blue{
+    background:#2563eb;
+}
+
+.progress-value.yellow{
+    background:#f59e0b;
+}
+
+.progress-wrapper span{
+    font-size:10px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+/* ===============================
+   HEALTH
+================================ */
+
+.health-card{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:4px 7px;
+    border-radius:8px;
+    min-width:88px;
+}
+
+.health-icon{
+    width:15px;
+    height:15px;
+    font-size:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.health-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.health-info strong{
+    font-size:9px;
+    line-height:1.1;
+}
+
+.health-info span{
+    font-size:7px;
+    line-height:1.1;
+}
+
+.health-safe{
+    background:#dcfce7;
+    color:#166534;
+    border:1px solid #bbf7d0;
+}
+
+.health-warning{
+    background:#fef3c7;
+    color:#92400e;
+    border:1px solid #fde68a;
+}
+
+.health-critical{
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fecaca;
+}
+
+/* ===============================
+   STATUS
+================================ */
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:5px 9px;
+    border-radius:999px;
+    font-size:9px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.status::before{
+    content:"●";
+    font-size:7px;
+}
+
+.status.awal{
+    background:#f1f5f9;
+    color:#475569;
+}
+
+.status.selesai{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.status.berjalan{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.status.terlambat{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+/* ===============================
+   DEADLINE
+================================ */
+
+.deadline{
+    font-size:10px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+
+.btn-detail{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 12px;
+    border-radius:9px;
+    background:#0f172a;
+    color:#fff;
+    text-decoration:none;
+    font-size:9px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.btn-detail:hover{
+    background:#334155;
+}
+
+/* ===============================
+   TABLE SCROLL INDICATOR
+================================ */
+
+.table-wrapper::after{
+    display:none;
+}
+
+/* ===============================
+   1200px
+================================ */
 
 @media(max-width:1200px){
 
     .summary-grid{
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
     }
 
     .table-wrapper table{
         min-width:950px;
     }
-
 }
 
+/* ===============================
+   900px
+================================ */
 
 @media(max-width:900px){
 
     .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .dashboard-header{
-        padding:20px;
-    }
-
-    .dashboard-header h1{
-        font-size:21px;
-    }
-
-    .panel{
-        padding:18px;
-        border-radius:18px;
-    }
-
-    .panel h3{
-        font-size:15px;
-    }
-
-    .table-wrapper table{
-        min-width:900px;
-    }
-
-}
-
-
-@media(max-width:600px){
-
-    .summary-grid{
-        grid-template-columns:1fr;
-        gap:12px;
-    }
-
-    .summary-card{
-        min-height:auto;
-        padding:16px;
-        border-radius:18px;
-    }
-
-    .summary-card h2{
-        font-size:18px;
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .dashboard-header{
         padding:18px;
-        border-radius:18px;
     }
 
     .dashboard-header h1{
         font-size:19px;
     }
 
+    .panel{
+        padding:15px;
+        border-radius:16px;
+    }
+
+    .table-wrapper table{
+        min-width:900px;
+    }
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .dashboard-header{
+        padding:16px;
+        border-radius:15px;
+        margin-bottom:12px;
+    }
+
+    .dashboard-header h1{
+        font-size:17px;
+    }
+
     .dashboard-header p{
-        font-size:11px;
-        line-height:1.6;
+        font-size:10px;
+        line-height:1.5;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+        margin-bottom:12px;
+    }
+
+    .summary-card{
+        min-height:82px;
+        padding:12px;
+        border-radius:14px;
+    }
+
+    .summary-card span{
+        font-size:9px;
+    }
+
+    .summary-card h2{
+        font-size:16px;
+        margin:4px 0;
+    }
+
+    .summary-card p{
+        font-size:9px;
     }
 
     .panel{
-        padding:14px;
-        border-radius:18px;
+        padding:12px;
+        border-radius:15px;
+    }
+
+    .panel h3{
+        font-size:13px;
+        margin-bottom:11px;
+    }
+
+    .project-search{
+        display:grid;
+        grid-template-columns:1fr auto;
+        gap:7px;
+    }
+
+    .project-search input{
+        width:100%;
+        height:35px;
+    }
+
+    .project-search button{
+        height:35px;
+        padding:0 14px;
+    }
+
+    .project-search a{
+        grid-column:1 / -1;
+        height:32px;
+    }
+
+    .search-info{
+        margin-bottom:9px;
+        font-size:9px;
     }
 
     .table-wrapper{
-        margin-left:-2px;
-        margin-right:-2px;
+        margin:0;
     }
 
     .table-wrapper table{
@@ -1360,40 +1165,63 @@ RESPONSIVE
     }
 
     th{
-        padding:10px;
-        font-size:11px;
-    }
-
-    td{
-        padding:10px;
-        font-size:11px;
-    }
-
-    td strong{
-        font-size:12px;
-    }
-
-    .health-card{
-        min-width:90px;
-    }
-
-    .progress-bar{
-        width:80px;
-    }
-
-    .status{
-        padding:5px 9px;
+        padding:9px;
         font-size:9px;
     }
 
-    .btn-detail{
-        padding:7px 12px;
+    td{
+        padding:9px;
+        font-size:9px;
+    }
+
+    td strong{
         font-size:10px;
     }
 
+    .health-card{
+        min-width:85px;
+    }
+
+    .progress-wrapper{
+        min-width:95px;
+    }
+
+    .progress-bar{
+        width:60px;
+    }
+
+    .btn-detail{
+        padding:6px 10px;
+        font-size:9px;
+    }
 }
 
+/* ===============================
+   SMALL MOBILE
+================================ */
 
+@media(max-width:380px){
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .summary-card{
+        min-height:75px;
+    }
+
+    .project-search{
+        grid-template-columns:1fr;
+    }
+
+    .project-search button{
+        width:100%;
+    }
+
+    .project-search a{
+        width:100%;
+    }
+}
 
 </style>
 

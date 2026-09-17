@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Owner;
 
 
 use App\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
 use App\Models\Proyek;
 use App\Models\PengajuanDana;
 use App\Models\Tugas;
@@ -15,8 +15,7 @@ use App\Models\TransaksiDana;
 class OwnerDashboardController extends Controller
 {
 
-
-public function index()
+public function index(Request $request)
 {
 
 
@@ -48,7 +47,26 @@ $projects = Proyek::with([
 
 ->values();
 
+/* =========================================
+| PROJECT DASHBOARD SEARCH
+========================================= */
 
+$search = $request->get('search');
+
+$dashboardProjects = $projects
+    ->when($search, function($collection) use ($search) {
+        return $collection->filter(function($project) use ($search) {
+            return str_contains(
+                strtolower($project->nama_proyek),
+                strtolower($search)
+            );
+        });
+    })
+    ->sortByDesc(function($project){
+        return $project->created_at;
+    })
+    ->take(10)
+    ->values();
 
 
 /*
@@ -84,18 +102,11 @@ $financeProjects = $projects->map(function($project){
 */
 
 $progressProjects = $projects
-
     ->sortByDesc(function($project){
-
-        return $project->progres_keseluruhan;
-
+        return $project->created_at;
     })
-
     ->take(5)
-
     ->values();
-
-
 
 
 /*
@@ -154,13 +165,11 @@ $progressProject = round(
 | APPROVAL FINANCE
 |--------------------------------------------------------------------------
 */
-
-$totalApprovedExpense = PengajuanDana::where(
+$totalApprovedExpense = PengajuanDana::whereIn(
     'status',
-    'approved'
+    ['approved', 'selesai']
 )
 ->sum('jumlah');
-
 
 
 
@@ -323,8 +332,11 @@ return view(
     'dashboard.owner',
 
     compact(
-
         'projects',
+
+        'dashboardProjects',
+
+        'search',
 
         'totalProject',
 

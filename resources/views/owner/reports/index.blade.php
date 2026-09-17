@@ -600,749 +600,386 @@ Excel
 
 
 </div>
-
 <style>
-
-/* ===============================
-GLOBAL
-================================ */
-
 *{
     box-sizing:border-box;
 }
 
-
+body{
+    font-family:Inter,system-ui,sans-serif;
+    color:#334155;
+}
 
 /* ===============================
-HEADER
+   HEADER
 ================================ */
-
 
 .dashboard-header{
-
     background:#f8fafc;
-
-    padding:25px;
-
-    border-radius:24px;
-
+    padding:18px 22px;
+    border-radius:18px;
     border:1px solid #e2e8f0;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
+    margin-bottom:15px;
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
 }
-
-
 
 .label{
-
-    font-size:10px;
-
-    letter-spacing:2px;
-
+    font-size:9px;
+    letter-spacing:1.7px;
     font-weight:800;
-
     color:#64748b;
-
 }
-
-
 
 .dashboard-header h1{
-
-    margin:8px 0;
-
-    font-size:24px;
-
+    margin:6px 0;
+    font-size:21px;
+    line-height:1.3;
     color:#172033;
-
     font-weight:800;
-
 }
-
-
 
 .dashboard-header p{
-
     margin:0;
-
-    font-size:12px;
-
+    font-size:10px;
+    line-height:1.5;
     color:#64748b;
-
 }
-
-
-
-
-
-
 
 /* ===============================
-FILTER
+   FILTER
 ================================ */
 
-
 .report-filter{
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:14px;
+    border-radius:16px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-    0 8px 20px rgba(15,23,42,.04);
-
+    box-shadow:0 5px 16px rgba(15,23,42,.035);
     display:flex;
-
-    gap:15px;
-
+    gap:10px;
     align-items:end;
-
-    margin-bottom:22px;
-
+    margin-bottom:15px;
 }
-
-
 
 .report-filter div{
-
     flex:1;
-
+    min-width:0;
 }
-
-
 
 .report-filter label{
-
     display:block;
-
-    font-size:11px;
-
+    font-size:9px;
     font-weight:700;
-
     color:#64748b;
-
-    margin-bottom:6px;
-
+    margin-bottom:5px;
 }
-
-
 
 .report-filter input,
 .report-filter select{
-
     width:100%;
-
-    height:40px;
-
-    border-radius:12px;
-
+    height:36px;
+    border-radius:9px;
     border:1px solid #e2e8f0;
-
-    padding:0 12px;
-
-    font-size:12px;
-
+    padding:0 10px;
+    font-size:10px;
+    color:#334155;
+    background:#fff;
 }
-
-
 
 .report-filter button{
-
-    height:40px;
-
-    padding:0 22px;
-
+    height:36px;
+    padding:0 17px;
     border:none;
-
-    border-radius:12px;
-
+    border-radius:9px;
     background:#0f172a;
-
-    color:white;
-
-    font-size:12px;
-
+    color:#fff;
+    font-size:10px;
     font-weight:700;
-
+    cursor:pointer;
 }
 
-
-
-
-
-
-
 /* ===============================
-KPI GRID
+   KPI
 ================================ */
-
 
 .kpi-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:15px;
-
-    margin-bottom:22px;
-
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:15px;
 }
-
-
 
 .kpi-card{
-
-    background:white;
-
-    padding:18px;
-
-    min-height:110px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:13px 14px;
+    min-height:82px;
+    border-radius:15px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 20px rgba(15,23,42,.04);
-
+    box-shadow:0 5px 15px rgba(15,23,42,.035);
     position:relative;
-
     overflow:hidden;
-
 }
-
-
 
 .kpi-card::before{
-
     content:"";
-
     position:absolute;
-
     top:0;
-
     left:0;
-
     width:100%;
-
-    height:4px;
-
+    height:3px;
     background:#334155;
-
 }
-
-
-
-.kpi-card span{
-
-    font-size:11px;
-
-    color:#64748b;
-
-    font-weight:700;
-
-}
-
-
-
-.kpi-card h2{
-
-    margin:8px 0;
-
-    font-size:20px;
-
-    font-weight:800;
-
-    color:#172033;
-
-}
-
-
-
-.kpi-card small{
-
-    font-size:11px;
-
-    color:#94a3b8;
-
-}
-
-
-
 
 .income::before{
-
-background:#16a34a;
-
+    background:#16a34a;
 }
-
 
 .expense::before{
-
-background:#dc2626;
-
+    background:#dc2626;
 }
-
 
 .profit::before{
-
-background:#2563eb;
-
+    background:#2563eb;
 }
-
 
 .project::before{
-
-background:#f59e0b;
-
+    background:#f59e0b;
 }
-
 
 .selesai-card::before{
-
-background:#16a34a;
-
+    background:#16a34a;
 }
-
 
 .warning-card::before{
-
-background:#dc2626;
-
+    background:#dc2626;
 }
-
 
 .progress-card::before{
-
-background:#2563eb;
-
+    background:#2563eb;
 }
-
 
 .transaction-card::before{
-
-background:#7c3aed;
-
+    background:#7c3aed;
 }
 
+.kpi-card span{
+    display:block;
+    font-size:9px;
+    color:#64748b;
+    font-weight:600;
+}
 
+.kpi-card h2{
+    margin:5px 0;
+    font-size:17px;
+    line-height:1.25;
+    font-weight:800;
+    color:#172033;
+    overflow-wrap:anywhere;
+}
 
-
-
-
+.kpi-card small{
+    font-size:8px;
+    color:#94a3b8;
+}
 
 /* ===============================
-PANEL
+   PANEL
 ================================ */
-
 
 .panel{
-
-    background:white;
-
-    padding:22px;
-
-    border-radius:24px;
-
+    background:#fff;
+    padding:16px;
+    border-radius:17px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
-    margin-bottom:22px;
-
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
+    margin-bottom:15px;
+    min-width:0;
 }
-
-
 
 .panel h3{
-
-    margin:0 0 18px;
-
-    font-size:16px;
-
+    margin:0 0 12px;
+    font-size:14px;
     font-weight:800;
-
     color:#172033;
-
+    padding-left:8px;
+    border-left:3px solid #334155;
 }
 
-
-
-
-
-
-
 /* ===============================
-ANALYSIS SUMMARY
+   ANALYSIS
 ================================ */
-
 
 .summary-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:15px;
-
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
 }
-
-
 
 .summary-card{
-
     background:#f8fafc;
-
-    padding:18px;
-
-    border-radius:18px;
-
+    padding:13px;
+    min-width:0;
+    border-radius:14px;
     border:1px solid #e2e8f0;
-
 }
-
-
 
 .summary-card span{
-
-    font-size:11px;
-
+    display:block;
+    font-size:9px;
     color:#64748b;
-
-    font-weight:700;
-
+    font-weight:600;
 }
-
-
 
 .summary-card h2{
-
-    margin:8px 0;
-
-    font-size:18px;
-
+    margin:5px 0;
+    font-size:16px;
+    line-height:1.25;
     color:#172033;
-
+    font-weight:800;
+    overflow-wrap:anywhere;
 }
-
-
 
 .summary-card small{
-
-    font-size:11px;
-
+    font-size:8px;
     color:#94a3b8;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-REPORT CENTER
+   REPORT CENTER
 ================================ */
-
 
 .section-title{
-
-    font-size:18px;
-
+    font-size:16px;
     font-weight:800;
-
     color:#172033;
-
-    margin:22px 0 15px;
-
+    margin:18px 0 11px;
 }
-
-
 
 .report-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:15px;
-
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
 }
-
-
 
 .report-card{
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:15px;
+    border-radius:16px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 20px rgba(15,23,42,.04);
-
-    min-height:230px;
-
+    box-shadow:0 5px 16px rgba(15,23,42,.035);
+    min-height:175px;
     display:flex;
-
     flex-direction:column;
-
 }
-
-
 
 .report-icon{
-
-    width:42px;
-
-    height:42px;
-
+    width:36px;
+    height:36px;
     background:#f8fafc;
-
-    border-radius:14px;
-
+    border-radius:10px;
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
-    font-size:20px;
-
-    margin-bottom:14px;
-
+    font-size:17px;
+    margin-bottom:10px;
 }
-
-
 
 .report-card h3{
-
-    font-size:15px;
-
-    margin:0 0 8px;
-
+    margin:0 0 6px;
+    padding:0;
+    border:none;
+    font-size:13px;
     color:#172033;
-
 }
-
-
 
 .report-card p{
-
-    font-size:12px;
-
-    color:#64748b;
-
+    margin:0;
+    font-size:10px;
     line-height:1.5;
-
+    color:#64748b;
     flex:1;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-BUTTON
+   BUTTON
 ================================ */
-
 
 .button-group{
-
     display:flex;
-
-    gap:8px;
-
+    gap:6px;
 }
-
-
 
 .button-group a{
-
-    padding:8px 14px;
-
-    border-radius:10px;
-
-    font-size:11px;
-
+    padding:7px 12px;
+    border-radius:8px;
+    font-size:9px;
     font-weight:700;
-
     text-decoration:none;
-
+    text-align:center;
 }
-
-
 
 .pdf{
-
     background:#fee2e2;
-
     color:#b91c1c;
-
 }
-
-
 
 .excel{
-
     background:#dcfce7;
-
     color:#166534;
-
 }
-
-
-
-
-
-
 
 /* ===============================
-TABLE
+   COLOR
 ================================ */
-
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-}
-
-
-
-th{
-
-    padding:12px;
-
-    background:#f8fafc;
-
-    text-align:left;
-
-    font-size:11px;
-
-    color:#64748b;
-
-}
-
-
-
-td{
-
-    padding:12px;
-
-    border-bottom:1px solid #f1f5f9;
-
-    font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* ===============================
-COLOR
-================================ */
-
 
 .green{
-
     color:#16a34a!important;
-
 }
-
 
 .red{
-
     color:#dc2626!important;
-
 }
-
 
 .blue{
-
     color:#2563eb!important;
-
 }
-
 
 .purple{
-
     color:#7c3aed!important;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-RESPONSIVE
-================================ */
-/* ===============================
-RESPONSIVE
+   RESPONSIVE
 ================================ */
 
 @media(max-width:1200px){
 
     .kpi-grid{
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
     }
 
     .report-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
     }
-
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
 }
-
 
 @media(max-width:900px){
 
     .dashboard-header{
-        padding:20px;
+        padding:17px;
     }
 
     .dashboard-header h1{
-        font-size:21px;
+        font-size:19px;
     }
 
     .report-filter{
         flex-wrap:wrap;
-        align-items:stretch;
     }
 
     .report-filter div{
-        min-width:calc(50% - 8px);
+        min-width:calc(50% - 6px);
     }
 
     .report-filter button{
@@ -1350,127 +987,186 @@ RESPONSIVE
     }
 
     .kpi-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .report-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .summary-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
-    .panel{
-        padding:18px;
-        border-radius:18px;
+    .report-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
-
 }
-
 
 @media(max-width:600px){
 
     .dashboard-header{
-        padding:18px;
-        border-radius:18px;
+        padding:15px;
+        border-radius:15px;
+        margin-bottom:12px;
+    }
+
+    .label{
+        font-size:8px;
+        letter-spacing:1.4px;
     }
 
     .dashboard-header h1{
-        font-size:19px;
-        line-height:1.35;
+        font-size:17px;
+        margin:5px 0;
     }
 
     .dashboard-header p{
-        font-size:11px;
-        line-height:1.6;
+        font-size:9px;
+        line-height:1.5;
     }
 
+    /* FILTER */
+
     .report-filter{
-        padding:16px;
-        border-radius:18px;
-        gap:12px;
+        padding:12px;
+        border-radius:14px;
+        gap:9px;
+        margin-bottom:12px;
     }
 
     .report-filter div{
         min-width:100%;
     }
 
+    .report-filter label{
+        font-size:8px;
+    }
+
     .report-filter input,
     .report-filter select,
     .report-filter button{
-        height:42px;
+        height:36px;
+        font-size:9px;
     }
 
-    .kpi-grid,
-    .summary-grid,
-    .report-grid{
-        grid-template-columns:1fr;
-        gap:12px;
+    /* KPI */
+
+    .kpi-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        margin-bottom:12px;
     }
 
     .kpi-card{
-        min-height:auto;
-        padding:16px;
-        border-radius:18px;
+        min-height:72px;
+        padding:10px;
+        border-radius:13px;
+    }
+
+    .kpi-card span{
+        font-size:8px;
     }
 
     .kpi-card h2{
-        font-size:18px;
-        word-break:break-word;
+        font-size:13px;
+        margin:4px 0;
     }
 
-    .summary-card{
-        padding:16px;
-        border-radius:16px;
+    .kpi-card small{
+        font-size:7px;
     }
 
-    .summary-card h2{
-        font-size:17px;
-        word-break:break-word;
-    }
+    /* PANEL */
 
     .panel{
-        padding:14px;
-        border-radius:18px;
+        padding:12px;
+        border-radius:14px;
+        margin-bottom:12px;
     }
 
     .panel h3{
-        font-size:15px;
+        font-size:12px;
+        margin-bottom:10px;
     }
 
+    /* ANALYSIS */
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .summary-card{
+        padding:10px;
+        border-radius:12px;
+    }
+
+    .summary-card span{
+        font-size:8px;
+    }
+
+    .summary-card h2{
+        font-size:13px;
+    }
+
+    .summary-card small{
+        font-size:7px;
+    }
+
+    /* REPORT */
+
     .section-title{
-        font-size:16px;
+        font-size:14px;
+        margin:15px 0 9px;
+    }
+
+    .report-grid{
+        grid-template-columns:1fr;
+        gap:9px;
     }
 
     .report-card{
-        min-height:200px;
-        padding:17px;
-        border-radius:18px;
+        min-height:150px;
+        padding:13px;
+        border-radius:14px;
+    }
+
+    .report-icon{
+        width:32px;
+        height:32px;
+        font-size:15px;
+        border-radius:9px;
+        margin-bottom:8px;
     }
 
     .report-card h3{
-        font-size:14px;
+        font-size:12px;
     }
 
     .report-card p{
-        font-size:11px;
-    }
-
-    .button-group{
-        width:100%;
+        font-size:9px;
     }
 
     .button-group a{
         flex:1;
-        text-align:center;
-        padding:9px 10px;
+        padding:7px 8px;
+        font-size:8px;
     }
-
 }
 
-</style>
+@media(max-width:380px){
 
+    .kpi-grid,
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .kpi-card{
+        min-height:68px;
+    }
+
+    .summary-card{
+        min-height:65px;
+    }
+}
+</style>
 
 
 @endsection

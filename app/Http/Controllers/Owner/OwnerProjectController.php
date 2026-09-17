@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Owner;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Proyek;
 
@@ -11,7 +11,7 @@ class OwnerProjectController extends Controller
 {
 
 
-    public function index()
+    public function index(Request $request)
     {
 
 
@@ -93,7 +93,24 @@ class OwnerProjectController extends Controller
         );
 
 
+/* =========================================
+| SEARCH PROJECT
+========================================= */
 
+$search = trim($request->get('search', ''));
+
+if ($search !== '') {
+
+    $projects = $projects->filter(function($project) use ($search) {
+
+        return str_contains(
+            strtolower($project->nama_proyek ?? ''),
+            strtolower($search)
+        );
+
+    })->values();
+
+}
 
 
         return view(
@@ -103,6 +120,8 @@ class OwnerProjectController extends Controller
             compact(
 
                 'projects',
+
+                'search',
 
                 'totalProject',
 

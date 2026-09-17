@@ -87,26 +87,21 @@ Seluruh pengajuan dana perusahaan
 
 
 <div class="summary-card approved-card">
-
 <span>
 Total Dana Disetujui
 </span>
 
-
 <h2>
-
 Rp {{number_format(
-$requests->where('status','approved')->sum('jumlah'),
+$requests->whereIn('status',['approved','selesai'])->sum('jumlah'),
 0,
 ',',
 '.'
 )}}
-
 </h2>
 
-
 <p>
-Dana yang telah disetujui
+Total nominal pengajuan yang telah disetujui
 </p>
 
 
@@ -340,591 +335,342 @@ Belum ada pengajuan dana
 
 
 
-
-
 <style>
-
-/* ===============================
-GLOBAL
-================================ */
 
 *{
     box-sizing:border-box;
 }
 
-
+body{
+    font-family:Inter,system-ui,sans-serif;
+    color:#334155;
+}
 
 /* ===============================
-HEADER
+   HEADER
 ================================ */
-
 
 .dashboard-header{
-
     background:#f8fafc;
-
-    padding:25px;
-
-    border-radius:24px;
-
+    padding:18px 22px;
+    border-radius:18px;
     border:1px solid #e2e8f0;
-
-    margin-bottom:22px;
-
-    box-shadow:
-    0 8px 25px rgba(15,23,42,.05);
-
+    margin-bottom:15px;
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
 }
-
-
 
 .label{
-
-    font-size:10px;
-
-    letter-spacing:2px;
-
+    font-size:9px;
+    letter-spacing:1.7px;
     font-weight:800;
-
     color:#64748b;
-
 }
-
-
 
 .dashboard-header h1{
-
-    font-size:24px;
-
-    margin:8px 0;
-
+    margin:6px 0;
+    font-size:21px;
+    line-height:1.3;
     font-weight:800;
-
     color:#172033;
-
 }
-
-
 
 .dashboard-header p{
-
     margin:0;
-
-    font-size:12px;
-
+    font-size:10px;
+    line-height:1.5;
     color:#64748b;
-
 }
 
-
-
-
-
-
 /* ===============================
-SUMMARY
+   SUMMARY
 ================================ */
-
 
 .summary-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:16px;
-
-    margin-bottom:22px;
-
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:15px;
 }
-
-
 
 .summary-card{
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:22px;
-
+    background:#fff;
+    padding:14px 15px;
+    min-height:82px;
+    border-radius:15px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 5px 20px rgba(15,23,42,.05);
-
+    box-shadow:0 5px 15px rgba(15,23,42,.035);
     position:relative;
-
     overflow:hidden;
-
 }
-
-
 
 .summary-card::before{
-
     content:"";
-
     position:absolute;
-
     top:0;
-
     left:0;
-
-    height:4px;
-
     width:100%;
-
+    height:3px;
     background:#334155;
-
 }
-
-
 
 .waiting-card::before{
-
     background:#f59e0b;
-
 }
-
-
 
 .total-card::before{
-
     background:#2563eb;
-
 }
-
-
 
 .approved-card::before{
-
     background:#16a34a;
-
 }
-
-
 
 .summary-card span{
-
-    font-size:11px;
-
-    font-weight:700;
-
+    display:block;
+    font-size:9px;
+    font-weight:600;
     color:#64748b;
-
 }
-
-
 
 .summary-card h2{
-
-    font-size:20px;
-
-    margin:8px 0;
-
+    margin:5px 0;
+    font-size:18px;
+    line-height:1.25;
     font-weight:800;
-
     color:#172033;
-
+    overflow-wrap:anywhere;
 }
-
-
 
 .summary-card p{
-
-    font-size:11px;
-
+    margin:0;
+    font-size:8px;
+    line-height:1.4;
     color:#94a3b8;
-
 }
 
-
-
-
-
-
-
 /* ===============================
-PANEL
+   PANEL
 ================================ */
-
 
 .panel{
-
-    background:white;
-
-    padding:22px;
-
-    border-radius:24px;
-
+    background:#fff;
+    padding:17px;
+    border-radius:17px;
     border:1px solid #e2e8f0;
-
-    box-shadow:
-
-    0 8px 25px rgba(15,23,42,.05);
-
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
+    margin-bottom:15px;
+    min-width:0;
 }
-
-
 
 .panel h3{
-
-    font-size:16px;
-
+    font-size:14px;
     font-weight:800;
-
     color:#172033;
-
-    margin-bottom:18px;
-
-    padding-left:10px;
-
-    border-left:4px solid #334155;
-
+    margin:0 0 12px;
+    padding-left:8px;
+    border-left:3px solid #334155;
 }
-
-
-
-
-
-
-
 
 /* ===============================
-TABLE
+   TABLE
 ================================ */
 
-
-table{
-
+.table-wrapper{
     width:100%;
-
-    border-collapse:collapse;
-
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    position:relative;
 }
 
-
+.table-wrapper table{
+    width:100%;
+    min-width:800px;
+    border-collapse:collapse;
+}
 
 th{
-
-    padding:12px;
-
+    padding:10px 11px;
     text-align:left;
-
-    font-size:11px;
-
+    font-size:9px;
     font-weight:700;
-
     color:#64748b;
-
     background:#f8fafc;
-
+    white-space:nowrap;
 }
-
-
 
 td{
-
-    padding:13px;
-
-    font-size:12px;
-
-    border-bottom:1px solid #f1f5f9;
-
+    padding:10px 11px;
+    font-size:10px;
     color:#334155;
-
+    border-bottom:1px solid #f1f5f9;
+    vertical-align:middle;
 }
 
+tbody tr{
+    transition:.15s ease;
+}
 
-
-tr:hover{
-
+tbody tr:hover{
     background:#f8fafc;
-
 }
-
-
 
 td strong{
-
-    font-size:13px;
-
+    font-size:10px;
     color:#172033;
-
 }
-
-
-
-
-
-.nominal{
-
-    font-weight:800;
-
-    white-space:nowrap;
-
-    color:#15803d;
-
-}
-
-
-
-
-
-
-
 
 /* ===============================
-STATUS
+   NOMINAL
 ================================ */
 
+.nominal{
+    font-weight:800;
+    white-space:nowrap;
+    color:#15803d;
+}
+
+/* ===============================
+   STATUS
+================================ */
 
 .status{
-
     display:inline-flex;
-
-    padding:6px 12px;
-
+    align-items:center;
+    padding:5px 9px;
     border-radius:999px;
-
-    font-size:10px;
-
+    font-size:8px;
     font-weight:700;
-
+    white-space:nowrap;
 }
-
-
 
 .waiting{
-
     background:#fef3c7;
-
     color:#92400e;
-
 }
-
-
 
 .approved{
-
     background:#dcfce7;
-
     color:#166534;
-
 }
-
-
 
 .rejected{
-
     background:#fee2e2;
-
     color:#991b1b;
-
 }
-
 
 .selesai{
     background:#dbeafe;
     color:#1d4ed8;
 }
 
-
-
-
 /* ===============================
-BUTTON
+   BUTTON
 ================================ */
-
 
 .btn-detail{
-
     display:inline-flex;
-
     align-items:center;
-
     justify-content:center;
-
-    padding:8px 15px;
-
-    border-radius:10px;
-
+    padding:6px 11px;
+    border-radius:8px;
     background:#0f172a;
-
-    color:white;
-
-    font-size:11px;
-
+    color:#fff;
+    font-size:9px;
     font-weight:700;
-
     text-decoration:none;
-
+    white-space:nowrap;
 }
-
-
 
 .btn-detail:hover{
-
     background:#334155;
-
-    color:white;
-
+    color:#fff;
 }
 
-
-
-
-
-
-
 /* ===============================
-RESPONSIVE
-================================ */
-/* ===============================
-   RESPONSIVE
+   1200px
 ================================ */
 
 @media(max-width:1200px){
 
     .summary-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
     }
-
 }
 
+/* ===============================
+   900px
+================================ */
 
 @media(max-width:900px){
 
     .dashboard-header{
-        padding:22px;
-        border-radius:20px;
+        padding:17px;
     }
 
     .dashboard-header h1{
-        font-size:22px;
-        line-height:1.35;
+        font-size:19px;
     }
-
-    .dashboard-header p{
-        font-size:11px;
-        line-height:1.5;
-    }
-
 
     .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:9px;
     }
 
     .summary-card{
-        padding:15px;
-        border-radius:18px;
-        min-width:0;
+        padding:13px;
     }
-
-    .summary-card span{
-        font-size:9px;
-    }
-
-    .summary-card h2{
-        font-size:17px;
-        line-height:1.4;
-        word-break:break-word;
-    }
-
-    .summary-card p{
-        font-size:9px;
-        line-height:1.4;
-    }
-
 
     .panel{
-        padding:20px;
-        border-radius:20px;
-        overflow:hidden;
-    }
-
-    .panel h3{
-        font-size:14px;
-        margin-bottom:15px;
-    }
-
-
-    .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
+        padding:15px;
     }
 
     .table-wrapper table{
-        min-width:850px;
+        min-width:800px;
     }
-
-    .table-wrapper th{
-        padding:12px;
-        font-size:10px;
-        white-space:nowrap;
-    }
-
-    .table-wrapper td{
-        padding:12px;
-        font-size:10px;
-        white-space:nowrap;
-    }
-
-    .table-wrapper td strong{
-        font-size:11px;
-    }
-
-    .status{
-        padding:5px 9px;
-        font-size:8px;
-        white-space:nowrap;
-    }
-
-    .btn-detail{
-        padding:7px 11px;
-        font-size:9px;
-        white-space:nowrap;
-    }
-
 }
 
-
+/* ===============================
+   MOBILE
+================================ */
 @media(max-width:600px){
 
+    /* HEADER */
+
     .dashboard-header{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:16px;
+        padding:16px;
+        border-radius:16px;
+        margin-bottom:13px;
     }
 
     .label{
-        font-size:8px;
+        font-size:9px;
         letter-spacing:1.5px;
     }
 
     .dashboard-header h1{
         font-size:19px;
-        margin:7px 0;
+        margin:6px 0;
     }
 
     .dashboard-header p{
         font-size:10px;
+        line-height:1.5;
     }
 
+    /* SUMMARY */
 
     .summary-grid{
-        grid-template-columns:1fr;
-        gap:10px;
-        margin-bottom:16px;
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+        margin-bottom:13px;
     }
 
     .summary-card{
-        padding:13px;
-        border-radius:16px;
+        min-height:76px;
+        padding:11px;
+        border-radius:14px;
     }
 
     .summary-card span{
@@ -932,60 +678,97 @@ RESPONSIVE
     }
 
     .summary-card h2{
-        font-size:16px;
-        margin:5px 0;
+        font-size:15px;
+        margin:4px 0;
     }
 
     .summary-card p{
         font-size:8px;
     }
 
+    /* PANEL */
 
     .panel{
-        padding:14px;
-        border-radius:17px;
+        padding:13px;
+        border-radius:15px;
+        margin-bottom:12px;
     }
 
     .panel h3{
         font-size:12px;
-        padding-left:8px;
-        border-left-width:3px;
+        padding-left:7px;
+        margin-bottom:10px;
     }
 
+    /* TABLE */
 
     .table-wrapper{
-        margin-top:8px;
+        width:100%;
+        overflow-x:auto;
+        overflow-y:hidden;
+        -webkit-overflow-scrolling:touch;
     }
 
     .table-wrapper table{
         min-width:800px;
     }
 
-    .table-wrapper th{
-        padding:10px;
+    th{
+        padding:9px;
         font-size:8px;
     }
 
-    .table-wrapper td{
-        padding:10px;
+    td{
+        padding:9px;
         font-size:9px;
     }
 
-    .table-wrapper td strong{
+    td strong{
         font-size:10px;
+    }
+
+    .nominal{
+        font-size:9px;
     }
 
     .status{
         padding:5px 8px;
-        font-size:7px;
-    }
-
-    .btn-detail{
-        padding:6px 9px;
         font-size:8px;
     }
 
+    .btn-detail{
+        padding:6px 10px;
+        font-size:8px;
+    }
+
+    /* SCROLL INDICATOR */
+
+    .table-wrapper::after{
+        content:"Geser →";
+        display:block;
+        position:absolute;
+        right:8px;
+        bottom:4px;
+        font-size:8px;
+        color:#94a3b8;
+        pointer-events:none;
+    }
 }
+/* ===============================
+   SMALL MOBILE
+================================ */
+
+@media(max-width:380px){
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .summary-card{
+        min-height:68px;
+    }
+}
+
 </style>
 
 
