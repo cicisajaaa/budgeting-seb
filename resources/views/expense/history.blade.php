@@ -2,6 +2,24 @@
 
 @section('content')
 
+@php
+
+$totalApproved = $requests
+    ->whereIn('status',['approved','selesai'])
+    ->count();
+
+
+$totalDanaApproved = $requests
+    ->whereIn('status',['approved','selesai'])
+    ->sum('jumlah');
+
+
+$totalDana = $requests
+    ->sum('jumlah');
+
+@endphp
+
+
 <div class="welcome-card">
 
     <div>
@@ -10,13 +28,16 @@
             EMPLOYEE FINANCE PORTAL
         </div>
 
+
         <h1>
             Riwayat Pengajuan Dana
         </h1>
 
+
         <p>
             Monitoring status permintaan dana project secara real-time.
         </p>
+
 
         <div class="welcome-tags">
 
@@ -34,7 +55,9 @@
 
         </div>
 
+
     </div>
+
 
 
     <a href="{{route('expense.create')}}"
@@ -51,20 +74,16 @@
 
 
 
-
 {{-- SUMMARY --}}
-
 
 <div class="summary-grid">
 
 
 <div class="summary-card">
 
-
 <div class="summary-icon">
 📄
 </div>
-
 
 <div>
 
@@ -85,16 +104,13 @@ Seluruh pengajuan dana
 
 </div>
 
-
 </div>
 
 
 
 
 
-
 <div class="summary-card">
-
 
 <div class="summary-icon">
 ⏳
@@ -120,16 +136,13 @@ Sedang diproses finance
 
 </div>
 
-
 </div>
 
 
 
 
 
-
 <div class="summary-card">
-
 
 <div class="summary-icon">
 ✅
@@ -144,27 +157,24 @@ Disetujui
 
 
 <h2>
-{{$requests->where('status','approved')->count()}}
+{{$totalApproved}}
 </h2>
 
 
 <small>
-Pengajuan berhasil
+Rp {{number_format($totalDanaApproved,0,',','.')}}
 </small>
 
 
 </div>
 
-
 </div>
-
 
 
 
 
 
 <div class="summary-card">
-
 
 <div class="summary-icon">
 ❌
@@ -190,14 +200,50 @@ Perlu diperiksa
 
 </div>
 
-
-</div>
-
-
 </div>
 
 
 
+
+
+<div class="summary-card">
+
+<div class="summary-icon">
+💰
+</div>
+
+
+<div>
+
+<label>
+Total Dana
+</label>
+
+
+<h2>
+
+{{number_format(
+$totalDana/1000000,
+1,
+',',
+'.'
+)}} JT
+
+</h2>
+
+
+<small>
+Seluruh nominal pengajuan
+</small>
+
+
+</div>
+
+</div>
+
+
+
+</div>
 
 
 
@@ -211,9 +257,8 @@ Perlu diperiksa
 
 
 <div class="panel-title">
-🔎 Filter Status Pengajuan
+🔎 Filter Pengajuan Dana
 </div>
-
 
 
 
@@ -226,11 +271,29 @@ action="{{route('expense.myhistory')}}">
 
 <div>
 
-
 <label>
-Status Pengajuan
+Cari Pengajuan
 </label>
 
+
+<input
+type="text"
+name="search"
+value="{{request('search')}}"
+placeholder="Nomor / Judul pengajuan"
+>
+
+
+</div>
+
+
+
+
+<div>
+
+<label>
+Status
+</label>
 
 
 <select name="status">
@@ -241,12 +304,10 @@ Semua Status
 </option>
 
 
-
 <option value="pending"
 {{request('status')=='pending'?'selected':''}}>
 Menunggu
 </option>
-
 
 
 <option value="approved"
@@ -255,12 +316,16 @@ Disetujui
 </option>
 
 
-
 <option value="rejected"
 {{request('status')=='rejected'?'selected':''}}>
 Ditolak
 </option>
 
+
+<option value="selesai"
+{{request('status')=='selesai'?'selected':''}}>
+Selesai
+</option>
 
 
 </select>
@@ -277,8 +342,6 @@ Filter
 </button>
 
 
-
-
 <a href="{{route('expense.myhistory')}}">
 Reset
 </a>
@@ -292,8 +355,6 @@ Reset
 
 
 </div>
-
-
 
 
 
@@ -378,9 +439,8 @@ Aksi
 
 </tr>
 
+
 </thead>
-
-
 
 
 
@@ -406,7 +466,6 @@ Aksi
 
 
 
-
 <td>
 
 {{\Carbon\Carbon::parse($request->created_at)->format('d M Y')}}
@@ -418,19 +477,15 @@ Aksi
 
 <td>
 
-
 <strong>
 {{$request->judul}}
 </strong>
 
-
 <br>
-
 
 <small>
 {{$request->keterangan ?? '-'}}
 </small>
-
 
 </td>
 
@@ -438,9 +493,7 @@ Aksi
 
 
 
-
 <td>
-
 
 <strong>
 {{$request->proyek->nama_proyek ?? '-'}}
@@ -448,7 +501,6 @@ Aksi
 
 
 <br>
-
 
 <small>
 {{$request->divisi->nama_divisi ?? '-'}}
@@ -461,12 +513,9 @@ Aksi
 
 
 
-
 <td>
 
-
 {{$request->proyek->perusahaan->nama_perusahaan ?? '-'}}
-
 
 </td>
 
@@ -474,10 +523,7 @@ Aksi
 
 
 
-
-
 <td class="money">
-
 
 Rp {{number_format(
 $request->jumlah ?? 0,
@@ -486,9 +532,7 @@ $request->jumlah ?? 0,
 '.'
 )}}
 
-
 </td>
-
 
 
 
@@ -497,44 +541,39 @@ $request->jumlah ?? 0,
 <td>
 
 
-@if($request->status == 'pending')
+@if($request->status=='pending')
 
-    <span class="status pending">
-        ● Menunggu
-    </span>
+<span class="status pending">
+● Menunggu
+</span>
 
-@elseif($request->status == 'approved')
 
-    <span class="status approved">
-        ● Disetujui
-    </span>
+@elseif(in_array($request->status,['approved','selesai']))
 
-@elseif($request->status == 'rejected')
 
-    <span class="status rejected">
-        ● Ditolak
-    </span>
+<span class="status approved">
+● Disetujui
+</span>
 
-@elseif($request->status == 'selesai')
 
-    <span class="status selesai">
-        ● Selesai
-    </span>
+@elseif($request->status=='rejected')
+
+
+<span class="status rejected">
+● Ditolak
+</span>
+
 
 @endif
 
 
-
 </td>
 
 
 
 
 
-
-
 <td>
-
 
 <a href="{{route('expense.detail',$request->id)}}"
 class="detail-btn">
@@ -542,7 +581,6 @@ class="detail-btn">
 Detail
 
 </a>
-
 
 </td>
 
@@ -555,24 +593,28 @@ Detail
 @empty
 
 
-
-
 <tr>
 
-<td colspan="8" class="empty-cell">
+<td colspan="8"
+class="empty-cell">
+
+
 <div class="empty">
 
 <div class="empty-icon">
 📄
 </div>
 
+
 <h3>
 Belum Ada Pengajuan Dana
 </h3>
 
+
 <p>
-Belum ada transaksi pengajuan dana untuk akun ini.
+Belum ada transaksi pengajuan dana.
 </p>
+
 
 <a href="{{route('expense.create')}}"
 class="create-mini">
@@ -581,13 +623,14 @@ class="create-mini">
 
 </a>
 
+
 </div>
+
 
 </td>
 
 
 </tr>
-
 
 
 @endforelse
@@ -597,927 +640,1041 @@ class="create-mini">
 </tbody>
 
 
-
 </table>
 
 
-
 </div>
 
 
-
 </div>
-
-
-
-
-
 
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-/* =========================
-   WELCOME
-========================= */
 
-.welcome-card {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 22px;
-    padding: 30px;
-    margin-bottom: 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 25px;
-    box-shadow: 0 8px 25px rgba(15, 23, 42, .05);
+body{
+
+    font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+    color:#334155;
+
 }
 
-.welcome-label {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: #64748b;
-}
-
-.welcome-card h1 {
-    margin: 8px 0;
-    font-size: 25px;
-    font-weight: 800;
-    color: #172033;
-}
-
-.welcome-card p {
-    margin: 0;
-    font-size: 13px;
-    color: #64748b;
-}
-
-.welcome-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-}
-
-.welcome-tags span {
-    background: #eef2f7;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 700;
-    color: #475569;
-}
-
-.create-btn {
-    flex-shrink: 0;
-    background: #1e293b;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 6px 15px rgba(15, 23, 42, .12);
-    transition: .2s;
-}
-
-.create-btn:hover {
-    background: #0f172a;
-    transform: translateY(-1px);
-}
 
 
 /* =========================
-   SUMMARY
+WELCOME
 ========================= */
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 22px;
+
+.welcome-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    margin-bottom:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.05);
+
 }
 
-.summary-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 17px;
-    padding: 17px;
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    min-height: 88px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 5px 18px rgba(15, 23, 42, .035);
+
+
+.welcome-label{
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    font-weight:800;
+
+    color:#64748b;
+
 }
 
-.summary-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
+
+
+.welcome-card h1{
+
+    margin:8px 0;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    color:#172033;
+
 }
 
-.summary-card:nth-child(1)::before {
-    background: #2563eb;
+
+
+.welcome-card p{
+
+    margin:0;
+
+    font-size:13px;
+
+    color:#64748b;
+
 }
 
-.summary-card:nth-child(2)::before {
-    background: #f59e0b;
+
+
+.welcome-tags{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-top:15px;
+
 }
 
-.summary-card:nth-child(3)::before {
-    background: #16a34a;
+
+
+.welcome-tags span{
+
+    background:#eef2f7;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color:#475569;
+
 }
 
-.summary-card:nth-child(4)::before {
-    background: #dc2626;
+
+
+.create-btn{
+
+    background:#0f172a;
+
+    color:white;
+
+    padding:12px 22px;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    white-space:nowrap;
+
 }
 
-.summary-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 18px;
+
+
+
+
+.create-btn:hover{
+
+    background:#334155;
+
 }
 
-.summary-card:nth-child(1) .summary-icon {
-    background: #dbeafe;
-}
-
-.summary-card:nth-child(2) .summary-icon {
-    background: #fef3c7;
-}
-
-.summary-card:nth-child(3) .summary-icon {
-    background: #dcfce7;
-}
-
-.summary-card:nth-child(4) .summary-icon {
-    background: #fee2e2;
-}
-
-.summary-card label {
-    display: block;
-    font-size: 10px;
-    font-weight: 700;
-    color: #64748b;
-}
-
-.summary-card h2 {
-    margin: 4px 0 2px;
-    font-size: 22px;
-    font-weight: 800;
-    color: #172033;
-}
-
-.summary-card small {
-    font-size: 9px;
-    color: #94a3b8;
-}
 
 
 /* =========================
-   PANEL
+SUMMARY
 ========================= */
 
-.glass-panel {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 20px;
-    padding: 22px;
-    margin-bottom: 18px;
-    box-shadow: 0 8px 25px rgba(15, 23, 42, .04);
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(5,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+
 }
 
-.panel-header {
-    margin-bottom: 18px;
+
+
+.summary-card{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:90px;
+
+    box-shadow:
+    0 5px 18px rgba(15,23,42,.04);
+
 }
 
-.panel-title {
-    font-size: 15px;
-    font-weight: 800;
-    color: #172033;
-    border-left: 4px solid #334155;
-    padding-left: 10px;
+
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    height:100%;
+
+    width:4px;
+
+    background:#2563eb;
+
 }
 
-.panel-header small {
-    display: block;
-    margin-top: 5px;
-    margin-left: 14px;
-    font-size: 11px;
-    color: #94a3b8;
+
+
+.summary-card:nth-child(2)::before{
+
+    background:#f59e0b;
+
 }
+
+
+.summary-card:nth-child(3)::before{
+
+    background:#16a34a;
+
+}
+
+
+.summary-card:nth-child(4)::before{
+
+    background:#dc2626;
+
+}
+
+
+.summary-card:nth-child(5)::before{
+
+    background:#7c3aed;
+
+}
+
+
+
+.summary-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+
+.summary-card:nth-child(1) .summary-icon{
+
+    background:#dbeafe;
+
+}
+
+
+.summary-card:nth-child(2) .summary-icon{
+
+    background:#fef3c7;
+
+}
+
+
+.summary-card:nth-child(3) .summary-icon{
+
+    background:#dcfce7;
+
+}
+
+
+.summary-card:nth-child(4) .summary-icon{
+
+    background:#fee2e2;
+
+}
+
+
+.summary-card:nth-child(5) .summary-icon{
+
+    background:#ede9fe;
+
+}
+
+
+
+.summary-card label{
+
+    display:block;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color:#64748b;
+
+}
+
+
+
+.summary-card h2{
+
+    margin:5px 0 2px;
+
+    font-size:21px;
+
+    font-weight:800;
+
+    color:#172033;
+
+}
+
+
+
+.summary-card small{
+
+    font-size:9px;
+
+    color:#94a3b8;
+
+}
+
 
 
 /* =========================
-   FILTER
+PANEL
 ========================= */
 
-.filter-box {
-    display: flex;
-    align-items: flex-end;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 16px;
+
+.glass-panel{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    margin-bottom:18px;
+
+    box-shadow:
+    0 8px 25px rgba(15,23,42,.04);
+
 }
 
-.filter-box > div {
-    min-width: 220px;
+
+
+.panel-title{
+
+    font-size:15px;
+
+    font-weight:800;
+
+    color:#172033;
+
+    border-left:4px solid #334155;
+
+    padding-left:10px;
+
 }
 
-.filter-box label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 10px;
-    font-weight: 700;
-    color: #64748b;
+
+
+.panel-header small{
+
+    display:block;
+
+    margin-top:6px;
+
+    margin-left:14px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
 }
 
-.filter-box select {
-    width: 100%;
-    height: 40px;
-    border-radius: 10px;
-    border: 1px solid #dbe2ea;
-    background: #fff;
-    padding: 0 12px;
-    font-size: 11px;
-    color: #334155;
-    outline: none;
+
+
+/* =========================
+FILTER
+========================= */
+
+
+.filter-box{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:18px;
+
 }
 
-.filter-box select:focus {
-    border-color: #94a3b8;
+
+
+.filter-box > div{
+
+    min-width:220px;
+
 }
+
+
+
+.filter-box label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color:#64748b;
+
+}
+
+
+
+.filter-box input,
+.filter-box select{
+
+    height:42px;
+
+    width:100%;
+
+    padding:0 12px;
+
+    border-radius:10px;
+
+    border:1px solid #cbd5e1;
+
+    font-size:11px;
+
+    background:white;
+
+}
+
+
 
 .filter-box button,
-.filter-box a {
-    height: 40px;
-    padding: 0 18px;
-    border-radius: 10px;
-    border: none;
-    font-size: 11px;
-    font-weight: 700;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.filter-box a{
+
+
+    height:42px;
+
+    padding:0 18px;
+
+    border-radius:10px;
+
+    border:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
 }
 
-.filter-box button {
-    background: #334155;
-    color: #fff;
+
+
+.filter-box button{
+
+    background:#334155;
+
+    color:white;
+
 }
 
-.filter-box button:hover {
-    background: #1e293b;
+
+
+.filter-box a{
+
+    background:#f1f5f9;
+
+    color:#334155;
+
 }
 
-.filter-box a {
-    background: #f1f5f9;
-    color: #475569;
-}
-
-.filter-box a:hover {
-    background: #e2e8f0;
-}
 
 
 /* =========================
-   TABLE
+TABLE
 ========================= */
 
-.table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 15px;
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:15px;
+
 }
 
-table {
-    width: 100%;
-    min-width: 1050px;
-    border-collapse: separate;
-    border-spacing: 0;
+
+
+table{
+
+    width:100%;
+
+    min-width:1050px;
+
+    border-collapse:collapse;
+
 }
 
-thead th {
-    background: #f8fafc;
-    padding: 13px 14px;
-    font-size: 10px;
-    font-weight: 800;
-    color: #64748b;
-    text-align: left;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-    border-bottom: 1px solid #e2e8f0;
-    white-space: nowrap;
+
+
+thead th{
+
+    background:#f8fafc;
+
+    padding:13px;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    color:#64748b;
+
+    text-align:left;
+
+    white-space:nowrap;
+
 }
 
-tbody td {
-    padding: 14px;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 11px;
-    color: #475569;
-    vertical-align: middle;
+
+
+tbody td{
+
+    padding:14px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:11px;
+
+    color:#475569;
+
 }
 
-tbody tr:last-child td {
-    border-bottom: none;
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
 }
 
-tbody tr {
-    transition: background .15s ease;
+
+
+td strong{
+
+    color:#172033;
+
 }
 
-tbody tr:hover {
-    background: #fafbfc;
+
+
+td small{
+
+    color:#94a3b8;
+
 }
 
-td strong {
-    color: #172033;
-    font-weight: 700;
-}
-
-td small {
-    display: inline-block;
-    margin-top: 3px;
-    color: #94a3b8;
-    font-size: 10px;
-    line-height: 1.4;
-}
 
 
 /* =========================
-   TABLE COLUMN
+MONEY
 ========================= */
 
-td:nth-child(1) {
-    min-width: 145px;
+
+.money{
+
+    font-weight:800;
+
+    color:#15803d;
+
+    white-space:nowrap;
+
 }
 
-td:nth-child(2) {
-    white-space: nowrap;
-}
-
-td:nth-child(3) {
-    min-width: 190px;
-    max-width: 230px;
-}
-
-td:nth-child(4) {
-    min-width: 160px;
-}
-
-td:nth-child(5) {
-    min-width: 150px;
-}
-
-td:nth-child(6) {
-    text-align: right;
-    white-space: nowrap;
-}
-
-td:nth-child(7) {
-    min-width: 115px;
-}
-
-td:nth-child(8) {
-    text-align: center;
-    white-space: nowrap;
-}
 
 
 /* =========================
-   MONEY
+STATUS
 ========================= */
 
-.money {
-    font-weight: 800;
-    color: #166534;
+
+.status{
+
+    display:inline-flex;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
 }
+
+
+
+.pending{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+.approved{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.rejected{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
 
 
 /* =========================
-   STATUS
+BUTTON
 ========================= */
 
-.status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 700;
-    white-space: nowrap;
+
+.detail-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 14px;
+
+    background:#334155;
+
+    color:white;
+
+    border-radius:9px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
 }
 
-.pending {
-    background: #fef3c7;
-    color: #92400e;
+
+
+.detail-btn:hover{
+
+    background:#0f172a;
+
 }
 
-.approved {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.rejected {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
-.selesai {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
 
 
 /* =========================
-   DETAIL BUTTON
+EMPTY
 ========================= */
 
-.detail-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #334155;
-    color: #fff;
-    padding: 7px 13px;
-    border-radius: 9px;
-    font-size: 10px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: .2s;
+
+.empty{
+
+    text-align:center;
+
+    padding:50px;
+
 }
 
-.detail-btn:hover {
-    background: #0f172a;
-    transform: translateY(-1px);
+
+
+.empty-icon{
+
+    font-size:40px;
+
 }
+
+
+.empty h3{
+
+    font-size:15px;
+
+    color:#172033;
+
+}
+
+
+
+.empty p{
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+}
+
+
+
+.create-mini{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    padding:9px 15px;
+
+    background:#334155;
+
+    color:white;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:10px;
+
+}
+
+
+
+
 
 
 /* =========================
-   EMPTY
+TABLET
 ========================= */
 
-.empty-cell {
-    padding: 0 !important;
-}
-
-.empty {
-    text-align: center;
-    padding: 50px 20px;
-    color: #94a3b8;
-}
-
-.empty-icon {
-    font-size: 38px;
-    margin-bottom: 10px;
-}
-
-.empty h3 {
-    margin: 0 0 6px;
-    font-size: 15px;
-    color: #172033;
-}
-
-.empty p {
-    margin: 0;
-    font-size: 11px;
-    color: #94a3b8;
-}
-
-.create-mini {
-    display: inline-block;
-    margin-top: 12px;
-    background: #334155;
-    color: #fff;
-    padding: 9px 15px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media(max-width:1200px){
 
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
+
+.summary-grid{
+
+    grid-template-columns:
+    repeat(3,1fr);
 
 }
+
+
+}
+
+
+
+
+
+/* =========================
+MOBILE
+========================= */
 
 
 @media(max-width:900px){
 
-    .welcome-card{
-        flex-direction:column;
-        align-items:stretch;
-        gap:15px;
-        padding:22px;
-        border-radius:20px;
-    }
 
-    .welcome-label{
-        font-size:9px;
-        letter-spacing:1.5px;
-    }
+.welcome-card{
 
-    .welcome-card h1{
-        font-size:21px;
-        line-height:1.35;
-        word-break:break-word;
-    }
+    flex-direction:column;
 
-    .welcome-card p{
-        font-size:11px;
-        line-height:1.5;
-        word-break:break-word;
-    }
-
-    .welcome-tags{
-        flex-wrap:wrap;
-        gap:7px;
-    }
-
-    .welcome-tags span{
-        font-size:9px;
-        padding:6px 9px;
-    }
-
-    .create-btn{
-        width:100%;
-        min-height:42px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        box-sizing:border-box;
-        font-size:11px;
-    }
-
-
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
-
-    .summary-card{
-        min-width:0;
-        padding:15px;
-        border-radius:17px;
-        gap:10px;
-    }
-
-    .summary-icon{
-        width:38px;
-        height:38px;
-        font-size:16px;
-        flex-shrink:0;
-    }
-
-    .summary-card > div:last-child{
-        min-width:0;
-    }
-
-    .summary-card label,
-    .summary-card h2,
-    .summary-card small{
-        word-break:break-word;
-    }
-
-    .summary-card label{
-        font-size:9px;
-    }
-
-    .summary-card h2{
-        font-size:19px;
-    }
-
-    .summary-card small{
-        font-size:8px;
-        line-height:1.4;
-    }
-
-
-    .glass-panel{
-        padding:20px;
-        border-radius:20px;
-        overflow:hidden;
-    }
-
-    .panel-title{
-        font-size:14px;
-        line-height:1.4;
-    }
-
-    .panel-header small{
-        font-size:9px;
-        line-height:1.5;
-    }
-
-
-    .filter-box{
-        flex-direction:column;
-        align-items:stretch;
-        gap:10px;
-    }
-
-    .filter-box > div{
-        min-width:100%;
-        width:100%;
-    }
-
-    .filter-box label{
-        font-size:9px;
-    }
-
-    .filter-box select{
-        width:100%;
-        height:42px;
-        box-sizing:border-box;
-        font-size:10px;
-    }
-
-    .filter-box button,
-    .filter-box a{
-        width:100%;
-        height:42px;
-        font-size:10px;
-    }
-
-
-    .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-    }
-
-    table{
-        min-width:1050px;
-    }
-
-    thead th{
-        padding:11px 9px;
-        font-size:9px;
-    }
-
-    tbody td{
-        padding:11px 9px;
-        font-size:10px;
-    }
-
-    td strong{
-        font-size:10px;
-    }
-
-    td small{
-        font-size:8px;
-        line-height:1.4;
-    }
-
-    .status{
-        padding:5px 9px;
-        font-size:8px;
-    }
-
-    .detail-btn{
-        min-height:36px;
-        padding:7px 11px;
-        font-size:9px;
-        box-sizing:border-box;
-    }
-
-
-    .empty{
-        padding:35px 15px;
-    }
-
-    .empty-icon{
-        font-size:32px;
-    }
-
-    .empty h3{
-        font-size:13px;
-    }
-
-    .empty p{
-        font-size:9px;
-        line-height:1.5;
-    }
+    align-items:stretch;
 
 }
+
+
+
+.create-btn{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+
+
+.summary-grid{
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+}
+
+
+
+.filter-box{
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+}
+
+
+
+.filter-box > div{
+
+    width:100%;
+
+}
+
+
+
+.filter-box button,
+.filter-box a{
+
+    width:100%;
+
+}
+
+
+
+.glass-panel{
+
+    padding:16px;
+
+}
+
+
+
+}
+
+
 
 
 @media(max-width:600px){
 
-    .welcome-card{
-        padding:18px;
-        border-radius:18px;
-        margin-bottom:18px;
-    }
-
-    .welcome-label{
-        font-size:8px;
-        letter-spacing:1.5px;
-    }
-
-    .welcome-card h1{
-        font-size:19px;
-        margin:7px 0;
-    }
-
-    .welcome-card p{
-        font-size:10px;
-    }
-
-    .welcome-tags{
-        gap:6px;
-        margin-top:12px;
-    }
-
-    .welcome-tags span{
-        font-size:8px;
-        padding:5px 8px;
-    }
-
-    .create-btn{
-        height:42px;
-        font-size:10px;
-        border-radius:10px;
-    }
 
 
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-        margin-bottom:18px;
-    }
+.welcome-card{
 
-    .summary-card{
-        padding:12px;
-        border-radius:15px;
-        gap:8px;
-        min-height:82px;
-    }
+    padding:18px;
 
-    .summary-icon{
-        width:34px;
-        height:34px;
-        border-radius:10px;
-        font-size:14px;
-    }
-
-    .summary-card label{
-        font-size:8px;
-        line-height:1.3;
-    }
-
-    .summary-card h2{
-        font-size:16px;
-        margin:4px 0 2px;
-    }
-
-    .summary-card small{
-        font-size:7px;
-        line-height:1.3;
-    }
-
-
-    .glass-panel{
-        padding:15px;
-        border-radius:18px;
-        margin-bottom:15px;
-    }
-
-    .panel-title{
-        font-size:13px;
-    }
-
-    .panel-header{
-        margin-bottom:14px;
-    }
-
-    .panel-header small{
-        font-size:8px;
-    }
-
-
-    .filter-box{
-        gap:8px;
-        margin-top:13px;
-    }
-
-    .filter-box label{
-        font-size:8px;
-        margin-bottom:5px;
-    }
-
-    .filter-box select{
-        height:40px;
-        padding:0 10px;
-        font-size:9px;
-        border-radius:9px;
-    }
-
-    .filter-box button,
-    .filter-box a{
-        height:40px;
-        font-size:9px;
-        border-radius:9px;
-    }
-
-
-    .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-    }
-
-    table{
-        min-width:1050px;
-    }
-
-    thead th{
-        padding:10px 8px;
-        font-size:8px;
-    }
-
-    tbody td{
-        padding:10px 8px;
-        font-size:9px;
-    }
-
-    td strong{
-        font-size:9px;
-    }
-
-    td small{
-        font-size:7px;
-        line-height:1.4;
-    }
-
-    .status{
-        padding:5px 8px;
-        font-size:7px;
-    }
-
-    .detail-btn{
-        min-height:36px;
-        padding:7px 10px;
-        font-size:8px;
-        border-radius:8px;
-    }
-
-
-    .empty{
-        padding:25px 12px;
-    }
-
-    .empty-icon{
-        font-size:30px;
-    }
-
-    .empty h3{
-        font-size:11px;
-    }
-
-    .empty p{
-        font-size:8px;
-        line-height:1.4;
-    }
-
-    .create-mini{
-        margin-top:10px;
-        padding:8px 12px;
-        font-size:8px;
-    }
+    border-radius:18px;
 
 }
 
+
+
+.welcome-card h1{
+
+    font-size:20px;
+
+}
+
+
+
+.welcome-card p{
+
+    font-size:11px;
+
+}
+
+
+
+.welcome-tags span{
+
+    font-size:8px;
+
+}
+
+
+
+.summary-grid{
+
+    grid-template-columns:
+    1fr;
+
+    gap:10px;
+
+}
+
+
+
+.summary-card{
+
+    min-height:90px;
+
+    padding:15px;
+
+}
+
+
+
+.summary-card h2{
+
+    font-size:20px;
+
+}
+
+
+
+.summary-icon{
+
+    width:40px;
+
+    height:40px;
+
+}
+
+
+
+.glass-panel{
+
+    padding:14px;
+
+    border-radius:16px;
+
+}
+
+
+
+.panel-title{
+
+    font-size:13px;
+
+}
+
+
+
+table{
+
+    min-width:1050px;
+
+}
+
+
+
+thead th{
+
+    font-size:8px;
+
+    padding:10px;
+
+}
+
+
+
+tbody td{
+
+    font-size:9px;
+
+    padding:10px;
+
+}
+
+
+
+.status{
+
+    font-size:8px;
+
+}
+
+
+
+.detail-btn{
+
+    font-size:8px;
+
+    padding:7px 10px;
+
+}
+
+
+
+}
+
+
+
+
 </style>
-
-
 @endsection

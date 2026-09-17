@@ -552,7 +552,6 @@ Belum ada pembayaran
 
 
 </table>
-<div>
 
 
 </div>
@@ -562,7 +561,7 @@ Belum ada pembayaran
 
 
 
-
+</div>
 
 
 {{-- EXPENSE --}}
@@ -570,15 +569,13 @@ Belum ada pembayaran
 
 <div class="glass-panel">
 
-
 <div class="panel-title">
 
 Riwayat Pengeluaran
 
 </div>
 
-
-
+<div class="table-wrapper">
 
 <table>
 
@@ -690,17 +687,16 @@ Belum ada pengeluaran
 
 </table>
 
-
-
 </div>
 
-
+</div>
 <div class="glass-panel">
 
 <div class="panel-title">
 Riwayat Mutasi Keuangan
 </div>
 
+<div class="table-wrapper">
 
 <table>
 
@@ -781,7 +777,6 @@ Belum ada mutasi
 
 
 </table>
-
 
 </div>
 
@@ -1715,7 +1710,419 @@ RESPONSIVE
 
 }
 
+/* ===============================
+   MOBILE TABLE & WIDTH FIX
+================================ */
 
+.report-wrapper,
+.glass-panel,
+.summary-grid,
+.summary-card,
+.overview-grid,
+.overview-item,
+.filter-area{
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+}
+
+.summary-card > div:last-child{
+    min-width:0;
+}
+
+.summary-card h2,
+.summary-card label,
+.summary-card small{
+    overflow-wrap:anywhere;
+}
+
+.filter-area input{
+    max-width:100%;
+    box-sizing:border-box;
+}
+
+.table-wrapper{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    box-sizing:border-box;
+}
+
+.table-wrapper table{
+    min-width:700px;
+}
+
+@media(max-width:600px){
+
+    .report-wrapper{
+        width:100%;
+        max-width:100%;
+        overflow:hidden;
+    }
+
+    .glass-panel{
+        width:100%;
+        max-width:100%;
+        overflow:hidden;
+    }
+
+    .filter-area{
+        width:100%;
+        max-width:100%;
+    }
+
+    .filter-area > div,
+    .filter-area button,
+    .filter-area a{
+        width:100%;
+        max-width:100%;
+        box-sizing:border-box;
+    }
+
+    .summary-grid{
+        width:100%;
+        max-width:100%;
+    }
+
+    .summary-card{
+        width:100%;
+        max-width:100%;
+    }
+
+    .overview-grid{
+        width:100%;
+        max-width:100%;
+    }
+
+    .table-wrapper{
+        width:100%;
+        max-width:100%;
+        margin:0;
+        padding-bottom:4px;
+    }
+
+    .table-wrapper table{
+        min-width:700px;
+    }
+
+}
+
+
+
+/* =========================================
+   FINAL MOBILE REPORT FIX
+========================================= */
+
+.report-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.glass-panel,
+.welcome-card,
+.summary-grid,
+.summary-card,
+.overview-grid,
+.overview-item {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* FILTER */
+.filter-area {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.filter-area > div {
+    min-width: 0;
+}
+
+.filter-area input {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* SUMMARY */
+.summary-card > div:last-child {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.summary-card h2 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/* TABLE CONTAINER */
+.table-wrapper {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* TABLE */
+.table-wrapper table {
+    width: 100%;
+    min-width: 680px;
+    margin: 0;
+}
+
+/* TABLE CELLS */
+.table-wrapper th,
+.table-wrapper td {
+    white-space: nowrap;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .report-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .welcome-card {
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 12px;
+        border-radius: 16px;
+    }
+
+    .welcome-card h1 {
+        font-size: 18px;
+        line-height: 1.3;
+        margin: 6px 0;
+    }
+
+    .welcome-card p {
+        font-size: 10px;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .welcome-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .welcome-tags span {
+        font-size: 8px;
+        padding: 5px 8px;
+    }
+
+    /* PANEL */
+
+    .glass-panel {
+        width: 100%;
+        max-width: 100%;
+        padding: 13px;
+        margin-bottom: 12px;
+        border-radius: 16px;
+        box-sizing: border-box;
+    }
+
+    .panel-title {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    /* FILTER */
+
+    .filter-area {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        width: 100%;
+    }
+
+    .filter-area > div {
+        width: 100%;
+    }
+
+    .filter-area label {
+        display: block;
+        font-size: 9px;
+        margin-bottom: 5px;
+    }
+
+    .filter-area input {
+        width: 100%;
+        height: 39px;
+        font-size: 11px;
+        padding: 0 11px;
+    }
+
+    .btn-filter,
+    .btn-export {
+        width: 100%;
+        height: 39px;
+        justify-content: center;
+        box-sizing: border-box;
+        font-size: 10px;
+    }
+
+    /* SUMMARY */
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+        width: 100%;
+    }
+
+    .summary-card {
+        width: 100%;
+        padding: 12px;
+        border-radius: 15px;
+    }
+
+    .summary-icon {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    .summary-card label {
+        font-size: 8px;
+    }
+
+    .summary-card h2 {
+        font-size: 15px;
+        line-height: 1.3;
+        margin: 3px 0;
+    }
+
+    .summary-card small {
+        font-size: 7px;
+    }
+
+    /* OVERVIEW */
+
+    .overview-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .overview-item {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .overview-item span {
+        font-size: 9px;
+        margin-bottom: 5px;
+    }
+
+    .overview-item strong {
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    /* USAGE */
+
+    .usage-header {
+        font-size: 10px;
+    }
+
+    .usage-box small {
+        display: block;
+        font-size: 8px;
+        line-height: 1.4;
+    }
+
+    /* TABLE */
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    .table-wrapper table {
+        min-width: 680px;
+    }
+
+    .table-wrapper th {
+        padding: 10px;
+        font-size: 9px;
+    }
+
+    .table-wrapper td {
+        padding: 10px;
+        font-size: 9px;
+    }
+
+}
+
+/* =========================================
+   SMALL PHONE
+========================================= */
+
+@media (max-width: 380px) {
+
+    .glass-panel {
+        padding: 11px;
+    }
+
+    .welcome-card {
+        padding: 14px;
+    }
+
+    .welcome-card h1 {
+        font-size: 17px;
+    }
+
+    .summary-card h2 {
+        font-size: 14px;
+    }
+
+    .table-wrapper table {
+        min-width: 650px;
+    }
+
+}
+
+
+
+/* JARAK ANTAR PANEL RIWAYAT */
+
+.glass-panel + .glass-panel {
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+
+    .glass-panel + .glass-panel {
+        margin-top: 14px;
+    }
+
+}
 </style>
 
 

@@ -851,5 +851,23 @@ if(
     }
 
 
+        public function detail($id)
+    {
+        $this->checkRole();
+
+        $request = PengajuanDana::with([
+            'proyek.perusahaan',
+            'divisi',
+            'pengguna',
+            'penyetuju',
+            'transaksiDana.rekeningBank',
+            'auditLogs.pengguna'
+        ])->findOrFail($id);
+
+        return view(
+            'expense.detail',
+            compact('request')
+        );
+    }
 
 }

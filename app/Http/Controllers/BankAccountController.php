@@ -27,7 +27,9 @@ public function index()
 
     $totalBank = $banks->count();
 
-    $totalSaldo = $banks->sum('saldo');
+    $totalSaldo = $banks->sum(function ($bank) {
+    return $bank->saldoAktual();
+});
 
     $bankAktif = $banks
         ->where('status', true)
@@ -122,23 +124,13 @@ public function index()
 
 
 
-
-        RekeningBank::create([
-
-            'nama_bank' => $request->nama_bank,
-
-            'nomor_rekening' => $request->nomor_rekening,
-
-            'nama_pemilik' => $request->nama_pemilik,
-
-            'saldo' => $request->saldo,
-
-            'saldo_awal' => $request->saldo,
-
-            'status' => $request->status
-
-        ]);
-
+RekeningBank::create([
+    'nama_bank' => $request->nama_bank,
+    'nomor_rekening' => $request->nomor_rekening,
+    'nama_pemilik' => $request->nama_pemilik,
+    'saldo_awal' => $request->saldo,
+    'status' => $request->status
+]);
 
 
 
@@ -248,45 +240,37 @@ public function index()
 {
 
 
-    $request->validate([
+$request->validate([
 
+    'nama_bank' => 'required|string|max:255',
 
-        'nama_bank'=>'required|string|max:255',
+    'nomor_rekening' => 'required|string|max:255',
 
+    'nama_pemilik' => 'required|string|max:255',
 
-        'nomor_rekening'=>'required|string|max:255',
+    'saldo_awal' => 'required|numeric|min:0',
 
+    'status' => 'required'
 
-        'nama_pemilik'=>'required|string|max:255',
-
-
-        'status'=>'required'
-
-
-    ]);
+]);
 
 
 
 
 
+$bank->update([
 
-    $bank->update([
+    'nama_bank' => $request->nama_bank,
 
+    'nomor_rekening' => $request->nomor_rekening,
 
-        'nama_bank'=>$request->nama_bank,
+    'nama_pemilik' => $request->nama_pemilik,
 
+    'saldo_awal' => $request->saldo_awal,
 
-        'nomor_rekening'=>$request->nomor_rekening,
+    'status' => $request->status
 
-
-        'nama_pemilik'=>$request->nama_pemilik,
-
-
-        'status'=>$request->status
-
-
-    ]);
-
+]);
 
 
 
@@ -322,14 +306,14 @@ public function index()
     */
 public function destroy(RekeningBank $bank)
 {
-    $hasHistory = $bank->mutasiKeuangan()->exists();
+    $jumlahMutasi = $bank->mutasiKeuangan()->count();
 
-    if ($hasHistory) {
+    if ($jumlahMutasi > 0) {
         return redirect()
             ->route('finance.bank.index')
             ->with(
                 'error',
-                'Rekening bank tidak dapat dihapus karena sudah memiliki histori transaksi keuangan. Silakan nonaktifkan rekening.'
+                'Rekening '.$bank->nama_bank.' tidak dapat dihapus karena memiliki '.$jumlahMutasi.' histori transaksi keuangan. Silakan nonaktifkan rekening.'
             );
     }
 

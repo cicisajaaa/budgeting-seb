@@ -175,22 +175,17 @@ required>
 
 
 <div>
-
 <label>
-Saldo Rekening
+Saldo Awal Rekening
 </label>
 
-
 <input
-
 type="number"
-
-name="saldo"
-
-value="{{$bank->saldo}}"
-
+name="saldo_awal"
+value="{{$bank->saldo_awal}}"
+min="0"
+step="0.01"
 required>
-
 
 </div>
 

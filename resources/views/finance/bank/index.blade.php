@@ -351,22 +351,17 @@ Status
 
 
 
-
 <div class="saldo-box">
 
+    <label>
+        Saldo Rekening
+    </label>
 
-<label>
-Saldo Rekening
-</label>
-
-
-<h2>
-Rp {{number_format($bank->saldo,0,',','.')}}
-</h2>
-
+    <h2>
+        Rp {{number_format($bank->saldoAktual(),0,',','.')}}
+    </h2>
 
 </div>
-
 
 
 

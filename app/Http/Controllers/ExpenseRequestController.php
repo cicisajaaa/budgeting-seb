@@ -586,21 +586,23 @@ class ExpenseRequestController extends Controller
 
 
 
-
-        if(
-            $request->filled('status')
-        )
-        {
-
-            $query->where(
-
-                'status',
-
-                $request->status
-
-            );
-
-        }
+if($request->filled('status'))
+{
+    if($request->status === 'approved')
+    {
+        $query->whereIn(
+            'status',
+            ['approved', 'selesai']
+        );
+    }
+    else
+    {
+        $query->where(
+            'status',
+            $request->status
+        );
+    }
+}
 
 
 

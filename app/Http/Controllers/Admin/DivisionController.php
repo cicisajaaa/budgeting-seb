@@ -143,13 +143,11 @@ class DivisionController extends Controller
     {
 
 
-        $division->load([
-
-            'karyawan',
-
-            'alokasiProyekDivisi'
-
-        ]);
+ $division->load([
+    'karyawan.pengguna',
+    'tugas',
+    'alokasiProyekDivisi'
+]);
 
 
 
