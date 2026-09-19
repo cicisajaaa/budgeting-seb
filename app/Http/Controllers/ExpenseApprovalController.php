@@ -69,17 +69,12 @@ class ExpenseApprovalController extends Controller
 
         ])
 
-        ->whereIn(
-
-            'status',
-
-            [
-                'pending',
-                'approved',
-                'selesai'
-            ]
-
-        )
+->whereIn('status', [
+    'pending',
+    'approved',
+    'selesai',
+    'rejected'
+])
 
         ->latest()
 
@@ -771,7 +766,6 @@ if(
 
 
 
-
                 return $expenseRequest;
 
 
@@ -909,4 +903,56 @@ public function detail($id)
         compact('request')
     );
 }
+
+public function cancelApproval($id)
+{
+    $this->checkRole();
+
+
+    $request = PengajuanDana::findOrFail($id);
+
+
+    if($request->status !== 'approved')
+    {
+        return back()->with(
+            'error',
+            'Pengajuan belum dalam status approved.'
+        );
+    }
+
+
+    $request->update([
+
+        'status'=>'pending',
+
+        'disetujui_oleh'=>null,
+
+        'disetujui_pada'=>null,
+
+        'catatan_persetujuan'=>null
+
+    ]);
+
+
+AuditHelper::create(
+
+    'CANCEL_APPROVAL',
+
+    'Pengajuan Dana',
+
+    'Membatalkan persetujuan pengajuan dana '
+    .$request->judul,
+
+    $request->id
+
+);
+
+
+    return back()->with(
+        'success',
+        'Persetujuan berhasil dibatalkan.'
+    );
+}
+
+
 }

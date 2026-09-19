@@ -92,58 +92,31 @@ class ExpenseSheet implements
     public function array(): array
     {
 
-
-        $data = TransaksiDana::with([
-
-            'pengajuanDana.proyek',
-
-            'rekeningBank'
-
-        ])
-
-        ->when(
-
-            $this->startDate,
-
-            function($query){
-
-                $query->whereDate(
-
-                    'created_at',
-
-                    '>=',
-
-                    $this->startDate
-
-                );
-
-            }
-
-        )
-
-        ->when(
-
-            $this->endDate,
-
-            function($query){
-
-                $query->whereDate(
-
-                    'created_at',
-
-                    '<=',
-
-                    $this->endDate
-
-                );
-
-            }
-
-        )
-
-        ->latest()
-
-        ->get();
+$dataTransaksi = TransaksiDana::with([
+    'pengajuanDana.proyek',
+    'rekeningBank'
+])
+->when(
+    $this->startDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+    }
+)
+->when(
+    $this->endDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+    }
+)
+->get();
 
 
 
@@ -214,7 +187,7 @@ class ExpenseSheet implements
 
                 'Total Data',
 
-                $data->count().' Transaksi',
+                $dataTransaksi->count().' Transaksi',
 
                 ''
 
@@ -261,42 +234,32 @@ class ExpenseSheet implements
 
 
 
+foreach($dataTransaksi as $item)
+{
+
+    $rows[] = [
+
+        optional(
+            $item->created_at
+        )->format('d M Y'),
 
 
-        foreach($data as $item)
-        {
+        $item->pengajuanDana->proyek->nama_proyek ?? '-',
 
 
-            $rows[] = [
+        $item->rekeningBank->nama_bank ?? '-',
 
 
-                optional(
-                    $item->created_at
-                )
-                ->format('d M Y'),
+        $item->jumlah ?? 0,
 
 
+        'Pengeluaran'
+
+    ];
+
+}
 
 
-                $item->pengajuanDana->proyek->nama_proyek ?? '-',
-
-
-
-                $item->rekeningBank->nama_bank ?? '-',
-
-
-
-                $item->jumlah ?? 0,
-
-
-
-                'Pengeluaran'
-
-
-            ];
-
-
-        }
 
 
 

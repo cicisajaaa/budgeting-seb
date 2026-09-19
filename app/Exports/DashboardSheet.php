@@ -6,7 +6,7 @@ namespace App\Exports;
 use App\Models\Proyek;
 use App\Models\SetoranProyek;
 use App\Models\TransaksiDana;
-
+use App\Models\MutasiKeuangan;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -222,14 +222,87 @@ $totalDana = TransaksiDana::when(
 
 
 
+$transaksi =
 
-$transaksi = 
-    $totalSetoran 
-    +
-    $totalDana;
+$totalSetoran
+
++
+
+$totalDana;
+
+$totalIncome = SetoranProyek::when(
+    $this->startDate,
+    function($query){
+        $query->whereDate(
+            'tanggal_setoran',
+            '>=',
+            $this->startDate
+        );
+    }
+)
+->when(
+    $this->endDate,
+    function($query){
+        $query->whereDate(
+            'tanggal_setoran',
+            '<=',
+            $this->endDate
+        );
+    }
+)
+->sum('jumlah_setoran');
 
 
+$totalExpense = TransaksiDana::when(
+    $this->startDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+    }
+)
+->when(
+    $this->endDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+    }
+)
+->sum('jumlah');
 
+
+$totalMutasiMasuk = MutasiKeuangan::where(
+    'jenis',
+    'masuk'
+)
+->sum('nominal');
+
+
+$totalMutasiKeluar = MutasiKeuangan::where(
+    'jenis',
+    'keluar'
+)
+->sum('nominal');
+
+
+$totalCashIn =
+$totalIncome +
+$totalMutasiMasuk;
+
+
+$totalCashOut =
+$totalExpense +
+$totalMutasiKeluar;
+
+
+$saldoBersih =
+$totalCashIn -
+$totalCashOut;
 
         $totalAnggaran = $project
             ->sum(
@@ -425,7 +498,30 @@ $terbaru = $project
                 $monitoring.' Project'
             ],
 
+[
+    'INFORMASI KEUANGAN',
+    '',
+    '',
+    ''
+],
 
+
+[
+    'Total Pemasukan',
+    $totalCashIn,
+
+    'Total Pengeluaran',
+    $totalCashOut
+],
+
+
+[
+    'Saldo Bersih',
+    $saldoBersih,
+
+    '',
+    ''
+],
 
 
 

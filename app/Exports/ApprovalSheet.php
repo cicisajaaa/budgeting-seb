@@ -36,7 +36,21 @@ class ApprovalSheet implements
     WithCustomStartCell
 
 {
+    protected $startDate;
 
+    protected $endDate;
+
+
+
+
+    public function __construct(
+        $startDate = null,
+        $endDate = null
+    )
+    {
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
 
     public function title(): string
     {
@@ -65,33 +79,49 @@ class ApprovalSheet implements
     public function array(): array
     {
 
+$requests = PengajuanDana::with([
+    'pengguna',
+    'proyek',
+    'divisi',
+    'penyetuju'
+])
+->whereIn(
+    'status',
+[
+    'approved',
+    'rejected',
+    'selesai'
+]
+)
 
-        $requests = PengajuanDana::with([
+->when(
+    $this->startDate,
+    function($query){
 
-            'pengguna',
-            'proyek',
-            'divisi',
-            'penyetuju'
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
 
-        ])
+    }
+)
 
-        ->whereIn(
+->when(
+    $this->endDate,
+    function($query){
 
-            'status',
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
 
-            [
+    }
+)
 
-                'approved',
-
-                'rejected'
-
-            ]
-
-        )
-
-        ->latest()
-
-        ->get();
+->latest()
+->get();
 
 
 

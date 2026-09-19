@@ -97,12 +97,12 @@ Approved
 
 
 <h2>
-{{ $requests->where('status','approved')->count() }}
+{{ $requests->whereNotNull('disetujui_oleh')->count() }}
 </h2>
 
 
 <small>
-Disetujui finance
+Telah disetujui finance
 </small>
 
 
@@ -159,15 +159,13 @@ Rp
 Total Dana
 </label>
 
-
 <h2 class="money-text">
 
-Rp {{number_format(
-$requestAmount ?? 
-$requests->whereIn('status',['approved','selesai'])->sum('jumlah'),
-0,
-',',
-'.'
+Rp {{ number_format(
+    $requests->where('status','selesai')->sum('jumlah'),
+    0,
+    ',',
+    '.'
 )}}
 
 </h2>
@@ -359,31 +357,30 @@ Selesai
 Rejected
 </option>
 
+<option value="pending"
+{{request('status')=='pending'?'selected':''}}>
+Pending
+</option>
 
 </select>
 
 
 </div>
 
+<div class="filter-action">
+
+    <button>
+        🔎 Cari
+    </button>
 
 </div>
 
 
+<div class="filter-action">
 
-
-
-<div class="filter-button">
-
-
-<button>
-🔎 Cari
-</button>
-
-
-<a href="{{route('expense.approval.history')}}">
-Reset
-</a>
-
+    <a href="{{route('expense.approval.history')}}">
+        Reset
+    </a>
 
 </div>
 
@@ -451,6 +448,9 @@ Divisi
 Nominal
 </th>
 
+<th>
+Rekening Cair
+</th>
 
 <th>
 Status
@@ -630,8 +630,37 @@ $request->jumlah ?? 0,
 
 </td>
 
+<td>
+
+@if($request->transaksiDana->count())
+
+@php
+$transaksi = $request->transaksiDana->first();
+@endphp
 
 
+<div class="rekening-box">
+
+<strong>
+{{ $transaksi->rekeningBank->nama_bank ?? '-' }}
+</strong>
+
+<small>
+{{ $transaksi->rekeningBank->nomor_rekening ?? '-' }}
+</small>
+
+</div>
+
+
+@else
+
+<span class="text-muted">
+Belum dicairkan
+</span>
+
+@endif
+
+</td>
 
 
 
@@ -772,7 +801,7 @@ Detail
 <tr>
 
 
-<td colspan="8">
+<td colspan="9">
 
 
 <div class="empty-state">
@@ -1147,82 +1176,154 @@ PANEL
 
 
 
-
-
-/* =========================
-FILTER
-========================= */
-
-
 .filter-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:
+    1.4fr 1fr 1fr 1fr auto auto;
 
-    gap:15px;
+    gap:14px;
+
+    align-items:end;
+
+}
+
+.filter-grid > div{
+    display:flex;
+    flex-direction:column;
+}
+
+
+.filter-grid label{
+    margin-bottom:8px;
+    font-size:12px;
+    font-weight:700;
+    color:#475569;
+}
+
+
+.filter-grid input,
+.filter-grid select{
+
+    width:100%;
+    height:44px;
+
+    border-radius:12px;
+
+    border:1px solid #cbd5e1;
+
+    background:#ffffff;
+
+    padding:0 14px;
+
+    font-size:13px;
+
+    color:#1e293b;
+
+    transition:.2s;
 
 }
 
 
+.filter-grid input::placeholder{
 
-.filter-grid label{
+    color:#94a3b8;
 
-    display:block;
+}
 
-    margin-bottom:6px;
 
-    font-size:11px;
+.filter-grid input:focus,
+.filter-grid select:focus{
 
-    font-weight:700;
+    outline:none;
+
+    border-color:#64748b;
+
+    box-shadow:
+    0 0 0 3px rgba(100,116,139,.12);
+
+}
+
+
+.filter-action{
+
+    display:flex;
+
+    align-items:flex-end;
+
+}
+
+
+.filter-action button,
+.filter-action a{
+
+    height:44px;
+
+    padding:0 22px;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    white-space:nowrap;
+
+}
+
+
+.filter-action button{
+
+    background:#334155;
+
+    color:white;
+
+    border:none;
+
+}
+
+
+.filter-action a{
+
+    background:#f1f5f9;
 
     color:#475569;
 
 }
-
-
-
-.filter-grid input,
-
-.filter-grid select{
-
-    width:100%;
-
-    height:42px;
-
-    border-radius:10px;
-
-    border:1px solid #cbd5e1;
-
-    padding:0 12px;
-
-    font-size:13px;
-
-}
-
-
-
+/* BUTTON */
 .filter-button{
 
     display:flex;
 
-    gap:10px;
+    gap:12px;
 
-    margin-top:18px;
+    margin-top:0;
 
 }
 
+.filter-grid{
 
+    margin-bottom:20px;
+
+}
 
 .filter-button button,
-
 .filter-button a{
 
-    height:36px;
+    height:40px;
 
-    padding:0 18px;
+    padding:0 22px;
 
-    border-radius:10px;
+    border-radius:12px;
 
     font-size:12px;
 
@@ -1239,7 +1340,6 @@ FILTER
 }
 
 
-
 .filter-button button{
 
     background:#334155;
@@ -1248,8 +1348,16 @@ FILTER
 
     border:none;
 
+    cursor:pointer;
+
 }
 
+
+.filter-button button:hover{
+
+    background:#1e293b;
+
+}
 
 
 .filter-button a{
@@ -1261,6 +1369,11 @@ FILTER
 }
 
 
+.filter-button a:hover{
+
+    background:#e2e8f0;
+
+}
 
 
 
@@ -1341,7 +1454,35 @@ small{
 
 
 
+.rekening-box{
 
+    background:#f8fafc;
+
+    padding:8px 10px;
+
+    border-radius:10px;
+
+    border:1px solid #e2e8f0;
+
+}
+
+
+.rekening-box strong{
+
+    font-size:12px;
+
+    color:#1e293b;
+
+}
+
+
+.rekening-box small{
+
+    font-size:10px;
+
+    color:#64748b;
+
+}
 
 
 

@@ -24,32 +24,39 @@ class FinanceReportExport implements WithMultipleSheets
     public function sheets(): array
     {
 
-        return [
+       return [
 
-            new DashboardSheet(
-                $this->startDate,
-                $this->endDate
-            ),
+    new DashboardSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            new IncomeSheet(
-                $this->startDate,
-                $this->endDate
-            ),
+    new IncomeSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            new ExpenseSheet(
-                $this->startDate,
-                $this->endDate
-            ),
+    new ExpenseSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            
+    new BalanceSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            new BalanceSheet(),
+    new BankBalanceSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            new BankBalanceSheet(),
+    new ApprovalSheet(
+        $this->startDate,
+        $this->endDate
+    ),
 
-            new ApprovalSheet(),
-
-        ];
+];
 
     }
 

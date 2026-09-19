@@ -543,88 +543,57 @@ public function import(Request $request)
     |--------------------------------------------------------------------------
     */
 
+public function destroy(Proyek $project)
+{
 
-    public function destroy(Proyek $project)
-    {
+    if(
+        $project->alokasiDivisi()->count() > 0 ||
+        $project->users()->count() > 0 ||
+        $project->setoranProyek()->count() > 0 ||
+        $project->pengajuanDana()->count() > 0 ||
+        $project->transaksiDana()->count() > 0
+    ){
 
+        return back()->withErrors([
 
-        if(
+            'project'=>
+            'Project tidak dapat dihapus karena masih memiliki data keuangan atau anggota terkait.'
 
-            $project->tugas()->count() > 0 ||
-
-            $project->alokasiDivisi()->count() > 0 ||
-
-            $project->users()->count() > 0 ||
-
-            $project->setoranProyek()->count() > 0 ||
-
-            $project->pengajuanDana()->count() > 0 ||
-
-            $project->transaksiDana()->count() > 0
-
-
-        ){
-
-
-            return back()->withErrors([
-
-
-                'project'=>
-
-                'Project tidak dapat dihapus karena masih memiliki tugas, anggota, alokasi, atau transaksi.'
-
-
-
-            ]);
-
-
-        }
-
-
-
-
-
-
-
-        AuditHelper::create(
-
-            'Hapus Project',
-
-            'Manajemen Project',
-
-            'Admin menghapus project '.$project->nama_proyek
-
-        );
-
-
-
-
-
-
-
-        $project->delete();
-
-
-
-
-
-
-
-        return redirect()
-
-            ->route('admin.projects.index')
-
-            ->with(
-
-                'success',
-
-                'Project berhasil dihapus'
-
-            );
-
+        ]);
 
     }
 
 
+    // hapus aktivitas tugas
+    foreach($project->tugas as $tugas){
 
+        $tugas->aktivitasTugas()->delete();
+
+    }
+
+
+    // hapus tugas project
+    $project->tugas()->delete();
+
+
+
+    AuditHelper::create(
+        'Hapus Project',
+        'Manajemen Project',
+        'Admin menghapus project '.$project->nama_proyek
+    );
+
+
+    $project->delete();
+
+
+
+    return redirect()
+        ->route('admin.projects.index')
+        ->with(
+            'success',
+            'Project berhasil dihapus'
+        );
+
+}
 }

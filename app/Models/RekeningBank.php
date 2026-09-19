@@ -15,22 +15,21 @@ class RekeningBank extends Model
     protected $table = 'rekening_bank';
 
 
+protected $fillable = [
 
-    protected $fillable = [
+    'nama_bank',
 
-        'nama_bank',
+    'nomor_rekening',
 
-        'nomor_rekening',
+    'nama_pemilik',
 
-        'nama_pemilik',
+    'saldo_awal',
 
-        'saldo_awal',
+    'saldo',
 
-        'status'
+    'status'
 
-    ];
-
-
+];
 
 
 

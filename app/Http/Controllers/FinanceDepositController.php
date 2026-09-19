@@ -13,6 +13,7 @@ use App\Models\MutasiKeuangan;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\AuditHelper;
 
 
 
@@ -340,6 +341,14 @@ MutasiKeuangan::create([
 
             }
 
+ AuditHelper::create(
+    'DEPOSIT',
+    'Setoran Proyek',
+    'Mencatat pembayaran proyek '
+    .$project->nama_proyek
+    .' sebesar Rp '
+    .number_format($deposit->jumlah_setoran, 0, ',', '.')
+);
 
 
         });

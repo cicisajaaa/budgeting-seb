@@ -125,11 +125,19 @@ public function index()
 
 
 RekeningBank::create([
+
     'nama_bank' => $request->nama_bank,
+
     'nomor_rekening' => $request->nomor_rekening,
+
     'nama_pemilik' => $request->nama_pemilik,
+
     'saldo_awal' => $request->saldo,
+
+    'saldo' => $request->saldo,
+
     'status' => $request->status
+
 ]);
 
 
@@ -257,7 +265,6 @@ $request->validate([
 
 
 
-
 $bank->update([
 
     'nama_bank' => $request->nama_bank,
@@ -271,7 +278,6 @@ $bank->update([
     'status' => $request->status
 
 ]);
-
 
 
 

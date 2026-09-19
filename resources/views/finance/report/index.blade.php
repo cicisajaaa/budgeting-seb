@@ -241,9 +241,8 @@ Saldo Bersih
 
 
 <h2>
-Rp {{number_format($totalSaldoSistem ?? $totalBankSaldo,0,',','.')}}
+Rp {{number_format($totalCashIn - $totalCashOut,0,',','.')}}
 </h2>
-
 
 <small>
 Keuangan tersedia
@@ -276,9 +275,9 @@ Total Transaksi
 
 
 <h2>
-{{$totalDepositTransaction 
-+ $totalExpenseTransaction
-+ $totalMutasiTransaction}}
+
+{{$totalDepositTransaction + $totalExpenseTransaction}}
+
 </h2>
 
 
@@ -362,13 +361,13 @@ Rp {{number_format($totalCashOut,0,',','.')}}
 <div class="overview-item">
 
 <span>
-Saldo Bank Aktif
+Saldo Berjalan
 </span>
 
 
 <strong>
 
-Rp {{number_format($totalSaldoSistem ?? 0,0,',','.')}}
+Rp {{number_format($totalCashIn - $totalCashOut,0,',','.')}}
 </strong>
 
 
@@ -381,11 +380,14 @@ Rp {{number_format($totalSaldoSistem ?? 0,0,',','.')}}
 
 
 
-
 @php
-$usage = $totalIncome > 0 
-? min(($totalExpense/$totalIncome)*100,100)
+
+$usage = $totalCashIn > 0
+
+? min(($totalCashOut/$totalCashIn)*100,100)
+
 : 0;
+
 @endphp
 
 
@@ -634,21 +636,21 @@ Nominal
 
 <td>
 
-{{$expense->pengajuanDana->pengguna->name ?? '-'}}
+{{$expense->pengajuanDana?->pengguna?->name ?? '-'}}
 
 </td>
 
 
 <td>
 
-{{$expense->pengajuanDana->proyek->nama_proyek ?? '-'}}
+{{$expense->pengajuanDana?->proyek?->nama_proyek ?? '-'}}
 
 </td>
 
 
 <td>
 
-{{$expense->pengajuanDana->divisi->nama_divisi ?? '-'}}
+{{$expense->pengajuanDana?->divisi?->nama_divisi ?? '-'}}
 
 </td>
 

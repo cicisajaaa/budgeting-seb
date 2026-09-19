@@ -91,59 +91,31 @@ class IncomeSheet implements
     public function array(): array
     {
 
-
-        $data = SetoranProyek::with([
-
-            'proyek',
-            'rekeningBank'
-
-        ])
-
-        ->when(
-
-            $this->startDate,
-
-            function($query){
-
-                $query->whereDate(
-
-                    'created_at',
-
-                    '>=',
-
-                    $this->startDate
-
-                );
-
-            }
-
-        )
-
-        ->when(
-
-            $this->endDate,
-
-            function($query){
-
-                $query->whereDate(
-
-                    'created_at',
-
-                    '<=',
-
-                    $this->endDate
-
-                );
-
-            }
-
-        )
-
-        ->latest()
-
-        ->get();
-
-
+$dataSetoran = SetoranProyek::with([
+    'proyek',
+    'rekeningBank'
+])
+->when(
+    $this->startDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '>=',
+            $this->startDate
+        );
+    }
+)
+->when(
+    $this->endDate,
+    function($query){
+        $query->whereDate(
+            'created_at',
+            '<=',
+            $this->endDate
+        );
+    }
+)
+->get();
 
 
 
@@ -197,20 +169,13 @@ class IncomeSheet implements
 
 
 
-            [
-
-                'Status Laporan',
-
-                'Dana Masuk Project',
-
-                'Total Data',
-
-                $data->count().' Transaksi',
-
-                ''
-
-            ],
-
+[
+    'Status Laporan',
+    'Dana Masuk Project',
+    'Total Data',
+    $dataSetoran->count().' Transaksi',
+    ''
+],
 
 
             [
@@ -254,41 +219,31 @@ class IncomeSheet implements
 
 
 
+foreach($dataSetoran as $item)
+{
 
-        foreach($data as $item)
-        {
+    $rows[]=[
 
-
-            $rows[]=[
-
-
-                \Carbon\Carbon::parse(
-                    $item->tanggal_setoran
-                )
-                ->format('d M Y'),
+        \Carbon\Carbon::parse(
+            $item->tanggal_setoran
+        )
+        ->format('d M Y'),
 
 
-
-                $item->proyek->nama_proyek ?? '-',
-
+        $item->proyek->nama_proyek ?? '-',
 
 
-                $item->rekeningBank->nama_bank ?? '-',
+        $item->rekeningBank->nama_bank ?? '-',
 
 
-
-                $item->jumlah_setoran ?? 0,
-
+        $item->jumlah_setoran ?? 0,
 
 
-                'Dana Masuk'
+        'Dana Masuk'
 
+    ];
 
-            ];
-
-
-        }
-
+}
 
 
 

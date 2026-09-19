@@ -226,25 +226,17 @@ class BankBalanceSheet implements
 
 
 
-
-
 $data->push([
-
 
     'nama_bank'=>$bank->nama_bank ?? '-',
 
-
     'nomor_rekening'=>$bank->nomor_rekening ?? '-',
 
-
-    'saldo_awal'=>$bank->saldo ?? 0,
-
+    'saldo_saat_ini'=>$bank->saldo ?? 0,
 
     'mutasi'=>$masuk-$keluar,
 
-
-    'saldo_akhir'=>($bank->saldo ?? 0)+($masuk-$keluar)
-
+    'saldo_akhir'=>$bank->saldo ?? 0
 
 ]);
 
@@ -349,19 +341,13 @@ $data->push([
 
 
 
-            [
-
-                'BANK',
-
-                'NOMOR REKENING',
-
-                'SALDO AWAL',
-
-                'MUTASI',
-
-                'SALDO AKHIR'
-
-            ]
+[
+    'BANK',
+    'NOMOR REKENING',
+    'SALDO SAAT INI',
+    'MUTASI PERIODE',
+    'SALDO AKHIR'
+]
 
         ];
 
@@ -375,34 +361,19 @@ $data->push([
 
         foreach($data as $item)
         {
+$rows[]=[
 
+    $item['nama_bank'],
 
-            $rows[]=[
+    $item['nomor_rekening'],
 
+    $item['saldo_saat_ini'],
 
+    $item['mutasi'],
 
-                $item['nama_bank'],
+    $item['saldo_akhir']
 
-
-
-                $item['nomor_rekening'],
-
-
-
-                $item['saldo_awal'],
-
-
-
-                $item['mutasi'],
-
-
-
-                $item['saldo_akhir']
-
-
-
-            ];
-
+];
 
         }
 

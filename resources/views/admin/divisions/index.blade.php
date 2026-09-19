@@ -40,21 +40,6 @@ class="btn-primary">
 
 
 
-
-@if(session('success'))
-
-<div class="success-alert">
-
-{{session('success')}}
-
-</div>
-
-@endif
-
-
-
-
-
 {{-- STATISTIC --}}
 
 
@@ -750,40 +735,6 @@ STATISTIC
     color:#94a3b8;
 
 }
-
-
-
-
-
-
-
-/* ===============================
-ALERT
-================================ */
-
-
-.success-alert{
-
-    background:#f0fdf4;
-
-    border:1px solid #bbf7d0;
-
-    color:#166534;
-
-    padding:13px 16px;
-
-    border-radius:14px;
-
-    margin-bottom:18px;
-
-    font-size:12px;
-
-    font-weight:700;
-
-}
-
-
-
 
 
 

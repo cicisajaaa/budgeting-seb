@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 
+use Illuminate\Support\Facades\DB;
 use App\Helpers\AuditHelper;
 use App\Models\User;
 use App\Models\Karyawan;
@@ -743,73 +744,30 @@ else
     | DELETE
     |--------------------------------------------------------------------------
     */
-
 public function destroy(User $user)
 {
 
+    DB::transaction(function() use($user){
 
-    if($user->role == 'owner')
-    {
+        if($user->karyawan)
+        {
 
-        return back()->withErrors([
+            $user->karyawan->tugas()->delete();
 
-            'role'=>'Owner tidak dapat dihapus.'
+            $user->karyawan->delete();
 
-        ]);
-
-    }
-
+        }
 
 
-    AuditHelper::create(
+        $user->delete();
 
-        'Hapus User',
+    });
 
-        'Manajemen User',
 
-        'Admin menghapus user '.$user->name
-
+    return back()->with(
+        'success',
+        'User berhasil dihapus'
     );
-
-
-
-    if($user->karyawan)
-{
-
-    if(
-        $user->karyawan->tugas()->count() > 0 ||
-        $user->karyawan->aktivitasTugas()->count() > 0 ||
-        $user->karyawan->pengajuanDana()->count() > 0
-    )
-    {
-        return back()
-            ->withErrors([
-                'user'=>'User tidak dapat dihapus karena masih memiliki histori transaksi atau tugas.'
-            ]);
-    }
-
-
-    $user->karyawan->delete();
-
-}
-
-
-$user->delete();
-
-
-
-    return redirect()
-
-        ->route('admin.users.index')
-
-        ->with(
-
-            'success',
-
-            'User berhasil dihapus'
-
-        );
-
 
 }
 

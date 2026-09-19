@@ -22,15 +22,27 @@ class PengajuanDana extends Model
 protected $fillable = [
 
     'nomor_pengajuan',
+
     'pengguna_id',
+
     'proyek_id',
+
     'divisi_id',
+
     'judul',
+
     'keterangan',
+
     'bukti_pengajuan',
+
     'jumlah',
+
+    'status',
+
     'disetujui_oleh',
+
     'disetujui_pada',
+
     'catatan_persetujuan'
 
 ];

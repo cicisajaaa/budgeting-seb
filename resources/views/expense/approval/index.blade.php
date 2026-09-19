@@ -555,14 +555,13 @@ Cairkan
 
 
 </form>
-
 <form method="POST"
 action="{{route('expense.cancelApproval',$request->id)}}">
 
 @csrf
-@method('PUT')
 
 <button 
+type="submit"
 class="cancel-approve-btn"
 onclick="return confirm('Kembalikan pengajuan ini ke status pending?')">
 

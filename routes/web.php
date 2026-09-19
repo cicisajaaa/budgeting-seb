@@ -246,7 +246,10 @@ Route::middleware('role:keuangan')->group(function(){
     ])
     ->name('expense.approval');
 
-
+Route::post(
+    '/expense/approval/{id}/cancel',
+    [ExpenseApprovalController::class,'cancelApproval']
+)->name('expense.cancelApproval');
 
     /*
     | DETAIL APPROVAL
