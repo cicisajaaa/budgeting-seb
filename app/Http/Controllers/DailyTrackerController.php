@@ -22,93 +22,93 @@ class DailyTrackerController extends Controller
     | LIST DAILY TRACKER
     |--------------------------------------------------------------------------
     */
+public function index(Request $request)
+{
+    $user = Auth::user();
 
-    public function index()
-    {
-
-
-        $user = Auth::user();
-
-
-        if(!$user)
-        {
-            abort(403);
-        }
-
-
-
-        $karyawan = $user->karyawan;
-
-
-
-        if(!$karyawan)
-        {
-            abort(403);
-        }
-
-
-
-
-
-        $tasks = Tugas::where(
-
-            'karyawan_id',
-
-            $karyawan->id
-
-        )
-
-        ->with([
-
-            'proyek',
-
-            'aktivitasTugas.karyawan'
-
-        ])
-
-
-        ->orderByRaw("
-
-            CASE
-
-                WHEN deadline IS NULL
-
-                THEN 1
-
-                ELSE 0
-
-            END
-
-        ")
-
-
-        ->orderBy(
-
-            'deadline',
-
-            'asc'
-
-        )
-
-
-        ->get();
-
-
-
-
-
-
-        return view(
-
-            'daily-tracker.index',
-
-            compact('tasks')
-
-        );
-
-
+    if (!$user) {
+        abort(403);
     }
 
+    $karyawan = $user->karyawan;
+
+    if (!$karyawan) {
+        abort(403);
+    }
+
+    $startDate = $request->get('start_date');
+    $endDate = $request->get('end_date');
+
+    $tasks = Tugas::where(
+        'karyawan_id',
+        $karyawan->id
+    )
+    ->with([
+        'proyek',
+        'aktivitasTugas.karyawan'
+    ])
+    ->when($startDate, function ($query) use ($startDate) {
+        $query->whereHas('aktivitasTugas', function ($q) use ($startDate) {
+            $q->whereDate('tanggal', '>=', $startDate);
+        });
+    })
+    ->when($endDate, function ($query) use ($endDate) {
+        $query->whereHas('aktivitasTugas', function ($q) use ($endDate) {
+            $q->whereDate('tanggal', '<=', $endDate);
+        });
+    })
+    ->orderByRaw("
+        CASE
+            WHEN deadline IS NULL
+            THEN 1
+            ELSE 0
+        END
+    ")
+    ->orderBy(
+        'deadline',
+        'asc'
+    )
+    ->get();
+
+    // Filter aktivitas sesuai periode
+    foreach ($tasks as $task) {
+
+        $task->setRelation(
+            'aktivitasTugas',
+            $task->aktivitasTugas
+                ->filter(function ($activity) use ($startDate, $endDate) {
+
+                    $tanggal = \Carbon\Carbon::parse(
+                        $activity->tanggal
+                    );
+
+                    if ($startDate && $tanggal->lt(
+                        \Carbon\Carbon::parse($startDate)->startOfDay()
+                    )) {
+                        return false;
+                    }
+
+                    if ($endDate && $tanggal->gt(
+                        \Carbon\Carbon::parse($endDate)->endOfDay()
+                    )) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                ->values()
+        );
+    }
+
+    return view(
+        'daily-tracker.index',
+        compact(
+            'tasks',
+            'startDate',
+            'endDate'
+        )
+    );
+}
 
 
 
@@ -405,21 +405,13 @@ if(in_array($task->status,[
         $currentProgress = $task->progres_persen ?? 0;
 
 
-
-        if($request->progres < $currentProgress)
-        {
-
-            return back()
-
-            ->withErrors([
-
-                'progres'=>
-
-                'Progress tidak boleh lebih rendah dari progress sebelumnya.'
-
-            ]);
-
-        }
+if($request->progres < $currentProgress)
+{
+    return redirect()
+        ->back()
+        ->withInput()
+        ->with('error', 'Progress tidak boleh lebih rendah dari progress sebelumnya. Progress saat ini adalah '.$currentProgress.'%.');
+}
 
 
 

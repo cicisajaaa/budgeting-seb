@@ -47,7 +47,13 @@ class="back-btn">
 ✏️ Tambah Aktivitas
 </h2>
 
+@if(session('error'))
 
+    <div class="form-alert form-alert-error">
+        ⚠️ {{ session('error') }}
+    </div>
+
+@endif
 <form method="POST"
 action="{{ route('daily-tracker.store',$task->id) }}">
 
@@ -349,6 +355,62 @@ placeholder="Catatan tambahan">
 
 }
 
+.form-alert {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 11px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.form-alert div + div {
+    margin-top: 5px;
+}
+
+@media(max-width:600px){
+
+    .form-alert {
+        margin-bottom: 14px;
+        padding: 10px 11px;
+        border-radius: 10px;
+        font-size: 9px;
+    }
+
+}
+
+.form-alert {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border-radius: 11px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.form-alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+@media(max-width:600px){
+
+    .form-alert {
+        margin-bottom: 14px;
+        padding: 10px 11px;
+        border-radius: 10px;
+        font-size: 9px;
+    }
+
+}
 </style>
 
 

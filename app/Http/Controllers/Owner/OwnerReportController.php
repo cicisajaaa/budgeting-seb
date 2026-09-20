@@ -75,8 +75,42 @@ class OwnerReportController extends Controller
         $this->checkRole();
 
 
+if ($request->periode === 'bulan' && $request->bulan && $request->tahun) {
 
+    $startDate = Carbon::create(
+        $request->tahun,
+        $request->bulan,
+        1
+    )->startOfMonth();
 
+    $endDate = Carbon::create(
+        $request->tahun,
+        $request->bulan,
+        1
+    )->endOfMonth();
+
+    $request->merge([
+        'start_date' => $startDate->format('Y-m-d'),
+        'end_date' => $endDate->format('Y-m-d'),
+    ]);
+}
+
+if ($request->periode === 'tahun' && $request->tahun) {
+
+    $request->merge([
+        'start_date' => Carbon::create(
+            $request->tahun,
+            1,
+            1
+        )->startOfYear()->format('Y-m-d'),
+
+        'end_date' => Carbon::create(
+            $request->tahun,
+            12,
+            31
+        )->endOfYear()->format('Y-m-d'),
+    ]);
+}
         $totalPendapatan = SetoranProyek::query()
 
             ->when(
@@ -367,7 +401,9 @@ class OwnerReportController extends Controller
             ->count();
 
 
+$totalProjectBerjalan = $projectAktif;
 
+$saldo = $totalPendapatan - $totalPengeluaran;
 
 
 
@@ -411,39 +447,28 @@ class OwnerReportController extends Controller
 
 
 
-        return view(
+ 
 
-            'owner.reports.index',
-
-            compact(
-
-                'totalPendapatan',
-
-                'totalPengeluaran',
-
-                'profit',
-
-                'totalProject',
-
-                'projectAktif',
-
-                'totalAnggaranProject',
-
-                'rataProgress',
-
-                'totalProjectSelesai',
-
-                'totalProjectTerlambat',
-
-                'efisiensiDana',
-
-                'totalTransaksi',
-
-                'projects'
-
-            )
-
-        );
+           return view(
+    'owner.reports.index',
+    compact(
+        'totalPendapatan',
+        'totalPengeluaran',
+        'profit',
+        'totalProject',
+        'projectAktif',
+        'totalProjectBerjalan',
+        'totalAnggaranProject',
+        'rataProgress',
+        'totalProjectSelesai',
+        'totalProjectTerlambat',
+        'efisiensiDana',
+        'totalTransaksi',
+        'saldo',
+        'projects'
+    )
+);
+      
 
 
     }

@@ -39,81 +39,106 @@ Monitoring aktivitas pengguna perusahaan secara real-time.
 
 {{-- FILTER --}}
 
+<form
+    method="GET"
+    action="{{ route('owner.audit') }}"
+    class="audit-filter-box">
 
-<form method="GET"
-action="{{route('owner.audit')}}"
-class="filter-box">
+    <div class="audit-filter-field">
 
+        <label for="modul">
+            Modul
+        </label>
 
-<select name="modul">
+        <select name="modul" id="modul">
 
+            <option value="">
+                Semua Modul
+            </option>
 
-<option value="">
-Semua Modul
-</option>
+            <option
+                value="Keuangan"
+                {{ request('modul') == 'Keuangan' ? 'selected' : '' }}>
+                Keuangan
+            </option>
 
+            <option
+                value="Project"
+                {{ request('modul') == 'Project' ? 'selected' : '' }}>
+                Project
+            </option>
 
-<option value="Keuangan"
-{{request('modul')=='Keuangan'?'selected':''}}>
-Keuangan
-</option>
+            <option
+                value="Pengajuan Dana"
+                {{ request('modul') == 'Pengajuan Dana' ? 'selected' : '' }}>
+                Pengajuan Dana
+            </option>
 
+            <option
+                value="Approval Dana"
+                {{ request('modul') == 'Approval Dana' ? 'selected' : '' }}>
+                Approval Dana
+            </option>
 
+        </select>
 
-<option value="Project"
-{{request('modul')=='Project'?'selected':''}}>
-Project
-</option>
-
-
-
-<option value="Pengajuan Dana"
-{{request('modul')=='Pengajuan Dana'?'selected':''}}>
-Pengajuan Dana
-</option>
-
-
-
-<option value="Approval Dana"
-{{request('modul')=='Approval Dana'?'selected':''}}>
-Approval Dana
-</option>
-
-
-</select>
-
-
-
-
+    </div>
 
 
-<input 
-type="date"
-name="tanggal"
-value="{{request('tanggal')}}"
->
+    <div class="audit-filter-field">
+
+        <label for="tanggal">
+            Tanggal
+        </label>
+
+        <input
+            id="tanggal"
+            type="date"
+            name="tanggal"
+            value="{{ request('tanggal') }}">
+
+    </div>
 
 
+    <div class="audit-filter-actions">
+
+        <button
+            type="submit"
+            class="audit-filter-btn">
+
+            <i class="fas fa-filter"></i>
+
+            <span>Filter</span>
+
+        </button>
 
 
-<button type="submit">
+        @if(request('modul') || request('tanggal'))
 
-Cari
+            <a
+                href="{{ route('owner.audit') }}"
+                class="audit-reset-btn">
 
-</button>
+                <i class="fas fa-rotate-left"></i>
 
+                <span>Reset</span>
 
+            </a>
 
-
-
-<a href="{{route('owner.audit.history')}}"
-class="history-btn">
-
-📚 Semua Riwayat
-
-</a>
+        @endif
 
 
+        <a
+            href="{{ route('owner.audit.history') }}"
+            class="history-btn">
+
+            <i class="fas fa-book-open"></i>
+
+            <span>Semua Riwayat</span>
+
+        </a>
+
+    </div>
 
 </form>
 
@@ -356,53 +381,6 @@ Belum ada aktivitas tercatat.
    FILTER
 ================================ */
 
-.filter-box{
-    width:100%;
-    background:#fff;
-    padding:15px;
-    border-radius:17px;
-    border:1px solid #e2e8f0;
-    box-shadow:0 5px 18px rgba(15,23,42,.04);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:18px;
-    min-width:0;
-}
-
-.filter-box select,
-.filter-box input{
-    height:40px;
-    padding:0 12px;
-    min-width:170px;
-    border:1px solid #cbd5e1;
-    border-radius:10px;
-    background:#fff;
-    color:#334155;
-    font-size:11px;
-    outline:none;
-}
-
-.filter-box select:focus,
-.filter-box input:focus{
-    border-color:#94a3b8;
-}
-
-.filter-box button{
-    height:40px;
-    padding:0 20px;
-    border:none;
-    border-radius:10px;
-    background:#0f172a;
-    color:#fff;
-    font-size:11px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.filter-box button:hover{
-    background:#334155;
-}
 
 .history-btn{
     height:40px;
@@ -465,86 +443,122 @@ Belum ada aktivitas tercatat.
 /* ===============================
    ACTIVITY
 ================================ */
+.activity-row {
 
-.activity-row{
-    display:flex;
-    align-items:flex-start;
-    gap:13px;
-    padding:14px 6px;
-    border-bottom:1px solid #f1f5f9;
-    min-width:0;
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 15px 6px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    min-width: 0;
 }
 
-.activity-row:last-child{
-    border-bottom:none;
+
+.activity-row:last-child {
+
+    border-bottom: none;
 }
 
-.activity-icon{
-    width:36px;
-    height:36px;
-    border-radius:10px;
-    background:#f8fafc;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:15px;
-    flex-shrink:0;
+
+.activity-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
 }
 
-.activity-body{
-    flex:1;
-    min-width:0;
+
+.activity-body {
+
+    flex: 1;
+
+    min-width: 0;
 }
 
-.activity-body h4{
-    margin:0 0 5px;
-    font-size:12px;
-    line-height:1.4;
-    font-weight:800;
-    color:#172033;
-    overflow-wrap:anywhere;
+
+.activity-body h4 {
+
+    margin: 0 0 5px;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+
+    font-weight: 800;
+
+    color: #172033;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
-.user{
-    font-size:10px;
-    line-height:1.4;
-    color:#64748b;
+
+.user {
+
+    font-size: 10px;
+
+    line-height: 1.4;
+
+    color: #64748b;
+
 }
 
-.user strong{
-    color:#334155;
+
+.user strong {
+
+    color: #334155;
+
+    overflow-wrap: anywhere;
 }
 
-.activity-body p{
-    margin:7px 0;
-    font-size:11px;
-    line-height:1.55;
-    color:#64748b;
-    overflow-wrap:anywhere;
+
+.activity-body p {
+
+    margin: 7px 0;
+
+    font-size: 11px;
+
+    line-height: 1.55;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
-.activity-footer{
-    display:flex;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:7px;
-    margin-top:8px;
-}
 
-.module{
-    padding:5px 10px;
-    border-radius:999px;
-    font-size:9px;
-    line-height:1.3;
-    font-weight:700;
-    background:#e0f2fe;
-    color:#0369a1;
-}
+.activity-footer {
 
-.time{
-    font-size:9px;
-    color:#94a3b8;
-    white-space:nowrap;
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 9px;
 }
 
 /* ===============================
@@ -561,161 +575,124 @@ Belum ada aktivitas tercatat.
 /* ===============================
    TABLET
 ================================ */
+@media(max-width:900px) {
 
-@media(max-width:900px){
+    .audit-filter-box {
 
-    .dashboard-header{
-        padding:20px;
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
     }
 
-    .dashboard-header h1{
-        font-size:21px;
+
+    .audit-filter-field {
+
+        width: 100%;
+
+        flex: none;
+
     }
 
-    .filter-box{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:9px;
+
+    .audit-filter-actions {
+
+        grid-column: 1 / -1;
+
+        width: 100%;
+
     }
 
-    .filter-box select,
-    .filter-box input,
-    .filter-box button,
-    .history-btn{
-        width:100%;
-        min-width:0;
-    }
-
-    .panel{
-        padding:18px;
-    }
-
-    .panel-title{
-        align-items:flex-start;
-    }
 }
 
 /* ===============================
    MOBILE
 ================================ */
+@media(max-width:600px) {
 
-@media(max-width:600px){
+    .audit-filter-box {
 
-    .dashboard-header{
-        padding:18px;
-        border-radius:17px;
-        margin-bottom:14px;
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 9px;
+
+        padding: 13px;
+
+        margin-bottom: 14px;
+
+        border-radius: 15px;
+
     }
 
-    .label{
-        font-size:9px;
-        letter-spacing:1.5px;
+
+    .audit-filter-field {
+
+        width: 100%;
+
+        flex: none;
+
     }
 
-    .dashboard-header h1{
-        font-size:19px;
-        margin:6px 0;
+
+    .audit-filter-field label {
+
+        font-size: 9px;
+
     }
 
-    .dashboard-header p{
-        font-size:10px;
-        line-height:1.5;
+
+    .audit-filter-field select,
+    .audit-filter-field input {
+
+        width: 100%;
+
+        height: 40px;
+
+        font-size: 10px;
+
     }
 
-    /* FILTER */
 
-    .filter-box{
-        grid-template-columns:1fr;
-        padding:13px;
-        border-radius:15px;
-        gap:8px;
-        margin-bottom:14px;
+    .audit-filter-actions {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+
     }
 
-    .filter-box select,
-    .filter-box input{
-        height:40px;
-        font-size:10px;
+
+    .audit-filter-btn,
+    .audit-reset-btn {
+
+        width: 100%;
+
+        height: 40px;
+
     }
 
-    .filter-box button,
-    .history-btn{
-        height:40px;
-        font-size:10px;
+
+    .history-btn {
+
+        width: 100%;
+
+        height: 40px;
+
+        grid-column: 1 / -1;
+
     }
 
-    /* PANEL */
-
-    .panel{
-        padding:15px;
-        border-radius:17px;
-    }
-
-    .panel-title{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:5px;
-        margin-bottom:9px;
-    }
-
-    .panel-title h3{
-        font-size:13px;
-        padding-left:8px;
-        border-left-width:3px;
-    }
-
-    .panel-title span{
-        font-size:9px;
-    }
-
-    /* ACTIVITY */
-
-    .activity-row{
-        gap:10px;
-        padding:13px 3px;
-    }
-
-    .activity-icon{
-        width:33px;
-        height:33px;
-        border-radius:9px;
-        font-size:14px;
-    }
-
-    .activity-body h4{
-        font-size:11px;
-        line-height:1.45;
-    }
-
-    .user{
-        font-size:9px;
-    }
-
-    .activity-body p{
-        font-size:10px;
-        line-height:1.55;
-        margin:6px 0;
-    }
-
-    .activity-footer{
-        gap:6px;
-    }
-
-    .module{
-        padding:4px 9px;
-        font-size:8px;
-    }
-
-    .time{
-        font-size:8px;
-    }
-
-    .empty{
-        padding:28px 10px;
-        font-size:10px;
-    }
 }
-
 /* ===============================
    SMALL MOBILE
 ================================ */
@@ -734,7 +711,246 @@ Belum ada aktivitas tercatat.
         font-size:9px;
     }
 }
+/* ===============================
+   AUDIT FILTER
+================================ */
 
+.audit-filter-box {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 16px;
+
+    margin-bottom: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 5px 18px rgba(15,23,42,.04);
+
+    box-sizing: border-box;
+}
+
+
+.audit-filter-field {
+
+    width: 240px;
+
+    flex: 0 0 240px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.audit-filter-field label {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #64748b;
+
+    line-height: 1.3;
+}
+
+
+.audit-filter-field select,
+.audit-filter-field input {
+
+    width: 100%;
+
+    height: 40px;
+
+    padding: 0 12px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition: .2s;
+}
+
+
+.audit-filter-field select:focus,
+.audit-filter-field input:focus {
+
+    border-color: #64748b;
+
+    box-shadow:
+        0 0 0 3px rgba(100,116,139,.08);
+}
+
+
+/* ACTION */
+
+.audit-filter-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex: 0 0 auto;
+}
+
+
+/* FILTER BUTTON */
+
+.audit-filter-btn {
+
+    height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 17px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #0f172a;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    font-family: inherit;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+.audit-filter-btn:hover {
+
+    background: #334155;
+}
+
+
+/* RESET */
+
+.audit-reset-btn {
+
+    height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 15px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition: .2s;
+}
+
+
+.audit-reset-btn:hover {
+
+    background: #f1f5f9;
+
+    color: #334155;
+}
+
+
+/* HISTORY */
+
+.history-btn {
+
+    height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #334155;
+
+    white-space: nowrap;
+
+    transition: .2s;
+}
+
+
+.history-btn:hover {
+
+    background: #f1f5f9;
+
+    border-color: #cbd5e1;
+}
 </style>
 
 

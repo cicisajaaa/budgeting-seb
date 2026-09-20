@@ -241,84 +241,90 @@ Pilih periode transaksi dana
 
 
 
+<form
+    method="GET"
+    action="{{ route('finance.expense.index') }}"
+    class="expense-filter-form">
+
+    <div class="expense-filter-grid">
+
+        {{-- TANGGAL MULAI --}}
+        <div class="expense-filter-field">
+
+            <label for="start_date">
+                Tanggal Mulai
+            </label>
+
+            <div class="expense-date-input">
+
+                <i class="fas fa-calendar-alt"></i>
+
+                <input
+                    id="start_date"
+                    type="date"
+                    name="start_date"
+                    value="{{ request('start_date') }}">
+
+            </div>
+
+        </div>
 
 
-<form method="GET"
-action="{{route('finance.expense.index')}}">
+        {{-- TANGGAL AKHIR --}}
+        <div class="expense-filter-field">
+
+            <label for="end_date">
+                Tanggal Akhir
+            </label>
+
+            <div class="expense-date-input">
+
+                <i class="fas fa-calendar-alt"></i>
+
+                <input
+                    id="end_date"
+                    type="date"
+                    name="end_date"
+                    value="{{ request('end_date') }}">
+
+            </div>
+
+        </div>
 
 
-<div class="filter-box">
+        {{-- ACTION --}}
+        <div class="expense-filter-actions">
+
+            <button
+                type="submit"
+                class="expense-filter-submit">
+
+                <i class="fas fa-filter"></i>
+
+                <span>Tampilkan</span>
+
+            </button>
 
 
+            @if(request('start_date') || request('end_date'))
 
-<div>
+                <a
+                    href="{{ route('finance.expense.index') }}"
+                    class="expense-filter-reset">
 
-<label>
-Tanggal Mulai
-</label>
+                    <i class="fas fa-rotate-left"></i>
 
+                    <span>Reset</span>
 
-<input
+                </a>
 
-type="date"
+            @endif
 
-name="start_date"
+        </div>
 
-value="{{$request->start_date ?? ''}}"
-
->
-
-
-</div>
-
-
-
-
-
-<div>
-
-<label>
-Tanggal Akhir
-</label>
-
-
-<input
-
-type="date"
-
-name="end_date"
-
-value="{{$request->end_date ?? ''}}"
-
->
-
-
-</div>
-
-
-
-
-
-
-<button>
-Filter
-</button>
-
-
-
-
-
-<a href="{{route('finance.expense.index')}}">
-Reset
-</a>
-
-
-
-</div>
-
+    </div>
 
 </form>
-
 
 </div>
 
@@ -360,24 +366,30 @@ Riwayat transaksi dana yang sudah berhasil dicairkan
 <div class="export-group">
 
 
-<a href="{{route('finance.expense.export.excel')}}"
-class="export-btn excel">
+<a
+    href="{{ route('finance.expense.export.excel', [
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date
+    ]) }}"
+    class="export-btn excel">
 
-Export Excel
-
-</a>
-
-
-
-
-
-<a href="{{route('finance.expense.export.pdf')}}"
-class="export-btn pdf">
-
-Export PDF
+    Export Excel
 
 </a>
 
+
+
+
+<a
+    href="{{ route('finance.expense.export.pdf', [
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date
+    ]) }}"
+    class="export-btn pdf">
+
+    Export PDF
+
+</a>
 
 
 </div>
@@ -1726,7 +1738,227 @@ RESPONSIVE
     }
 
 }
+/* =====================================================
+   EXPENSE FILTER
+===================================================== */
 
+.expense-filter-form {
+    width: 100%;
+}
+
+.expense-filter-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
+    align-items: end;
+    gap: 14px;
+
+    width: 100%;
+    padding: 18px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    box-sizing: border-box;
+}
+
+.expense-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.expense-filter-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+/* DATE INPUT */
+
+.expense-date-input {
+    position: relative;
+    width: 100%;
+}
+
+.expense-date-input > i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #94a3b8;
+    font-size: 13px;
+
+    pointer-events: none;
+    z-index: 1;
+}
+
+.expense-date-input input {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 13px 0 38px;
+
+    border: 1px solid #dbe2ea;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #334155;
+
+    font-size: 12px;
+    font-family: inherit;
+
+    box-sizing: border-box;
+
+    transition: .2s;
+    cursor: pointer;
+}
+
+.expense-date-input input:hover {
+    border-color: #cbd5e1;
+}
+
+.expense-date-input input:focus {
+    outline: none;
+
+    border-color: #64748b;
+
+    box-shadow:
+        0 0 0 3px rgba(100,116,139,.08);
+}
+
+/* ACTION */
+
+.expense-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* TAMPILKAN */
+
+.expense-filter-submit {
+    height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 17px;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #334155;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.expense-filter-submit:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+.expense-filter-submit:active {
+    transform: translateY(0);
+}
+
+/* RESET */
+
+.expense-filter-reset {
+    height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 15px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: .2s;
+}
+
+.expense-filter-reset:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .expense-filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .expense-filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .expense-filter-grid {
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+        padding: 15px;
+
+        border-radius: 14px;
+    }
+
+    .expense-filter-actions {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .expense-filter-submit,
+    .expense-filter-reset {
+        width: 100%;
+    }
+
+}
 </style>
 
 @endsection

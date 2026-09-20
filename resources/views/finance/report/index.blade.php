@@ -80,64 +80,85 @@ Monitoring pemasukan, pengeluaran, saldo dan aktivitas transaksi perusahaan.
 
 
 
+<form
+    method="GET"
+    action="{{ route('finance.report') }}"
+    class="finance-report-filter">
 
-<form method="GET"
-action="{{route('finance.report')}}"
-class="filter-area">
+    <div class="report-filter-field">
 
+        <label for="report_start_date">
+            Tanggal Mulai
+        </label>
 
+        <input
+            id="report_start_date"
+            type="date"
+            name="start_date"
+            value="{{ $startDate }}">
 
-<div>
-
-<label>
-Tanggal Mulai
-</label>
-
-<input type="date"
-name="start_date"
-value="{{$startDate}}">
-
-</div>
-
-
+    </div>
 
 
+    <div class="report-filter-field">
 
-<div>
+        <label for="report_end_date">
+            Tanggal Akhir
+        </label>
 
-<label>
-Tanggal Akhir
-</label>
+        <input
+            id="report_end_date"
+            type="date"
+            name="end_date"
+            value="{{ $endDate }}">
 
-<input type="date"
-name="end_date"
-value="{{$endDate}}">
-
-</div>
-
-
-
+    </div>
 
 
-<button class="btn-filter">
+    <div class="report-filter-actions">
 
-Tampilkan
+        <button
+            type="submit"
+            class="btn-filter">
 
-</button>
+            <i class="fas fa-filter"></i>
+
+            Tampilkan
+
+        </button>
 
 
+        @if($startDate || $endDate)
+
+            <a
+                href="{{ route('finance.report') }}"
+                class="btn-reset">
+
+                <i class="fas fa-rotate-left"></i>
+
+                Reset
+
+            </a>
+
+        @endif
 
 
-<a href="{{route('finance.report.export',[
-'start_date'=>$startDate,
-'end_date'=>$endDate
-])}}"
-class="btn-export">
-⬇ Export Excel
-</a>
+        <a
+            href="{{ route('finance.report.export', [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ]) }}"
+            class="btn-export">
+
+            <i class="fas fa-file-excel"></i>
+
+            Export Excel
+
+        </a>
+
+    </div>
 
 </form>
-
 
 </div>
 
@@ -2124,6 +2145,249 @@ RESPONSIVE
         margin-top: 14px;
     }
 
+}
+/* =====================================================
+   FINANCE REPORT FILTER
+===================================================== */
+
+.finance-report-filter {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
+    align-items: end;
+    gap: 14px;
+    width: 100%;
+    padding: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+
+/* ===============================
+   FIELD
+================================ */
+
+.report-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.report-filter-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    line-height: 1.3;
+}
+
+.report-filter-field input {
+    width: 100%;
+    height: 44px;
+    padding: 0 13px;
+    border: 1px solid #dbe2ea;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 12px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.report-filter-field input:hover {
+    border-color: #cbd5e1;
+}
+
+.report-filter-field input:focus {
+    outline: none;
+    border-color: #64748b;
+    box-shadow: 0 0 0 3px rgba(100, 116, 139, .08);
+}
+
+
+/* ===============================
+   ACTION
+================================ */
+
+.report-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+
+/* ===============================
+   ALL BUTTON
+================================ */
+
+.report-filter-actions .btn-filter,
+.report-filter-actions .btn-reset,
+.report-filter-actions .btn-export {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 16px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+
+/* ===============================
+   TAMPILKAN
+================================ */
+
+.report-filter-actions .btn-filter {
+    border: none;
+    background: #334155;
+    color: #ffffff;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.report-filter-actions .btn-filter:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+.report-filter-actions .btn-filter:active {
+    transform: translateY(0);
+}
+
+
+/* ===============================
+   RESET
+================================ */
+
+.report-filter-actions .btn-reset {
+    background: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.report-filter-actions .btn-reset:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+
+/* ===============================
+   EXPORT EXCEL
+================================ */
+
+.report-filter-actions .btn-export {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.report-filter-actions .btn-export:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1050px) {
+
+    .finance-report-filter {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .report-filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .finance-report-filter {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 15px;
+        border-radius: 14px;
+    }
+
+    .report-filter-field {
+        width: 100%;
+    }
+
+    .report-filter-field label {
+        font-size: 9px;
+    }
+
+    .report-filter-field input {
+        height: 40px;
+        font-size: 11px;
+    }
+
+    .report-filter-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .report-filter-actions .btn-filter,
+    .report-filter-actions .btn-reset {
+        width: 100%;
+        height: 40px;
+        padding: 0 10px;
+        font-size: 10px;
+    }
+
+    .report-filter-actions .btn-export {
+        width: 100%;
+        height: 40px;
+        grid-column: 1 / -1;
+        padding: 0 10px;
+        font-size: 10px;
+    }
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .finance-report-filter {
+        padding: 12px;
+    }
+
+    .report-filter-actions {
+        gap: 7px;
+    }
+
+    .report-filter-actions .btn-filter,
+    .report-filter-actions .btn-reset,
+    .report-filter-actions .btn-export {
+        font-size: 9px;
+    }
 }
 </style>
 

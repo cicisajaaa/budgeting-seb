@@ -233,23 +233,63 @@ Project aktif
 
 
 <div>
+<div class="panel-header distribution-header">
 
-<div class="panel-title">
-Riwayat Distribusi Dana
+    <div>
+
+        <div class="panel-title">
+            Riwayat Distribusi Dana
+        </div>
+
+        <small>
+            Detail pembagian dana project ke setiap divisi
+        </small>
+
+    </div>
+
+
+    <form
+        method="GET"
+        action="{{ route('finance.distribution') }}"
+        class="distribution-search-form">
+
+        <div class="distribution-search">
+
+            <i class="fas fa-search"></i>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ $request->search ?? '' }}"
+                placeholder="Cari project atau divisi...">
+
+        </div>
+
+
+        @if($request->filled('search'))
+
+            <a
+                href="{{ route('finance.distribution') }}"
+                class="distribution-reset">
+
+                Reset
+
+            </a>
+
+        @endif
+
+
+        <button
+            type="submit"
+            class="distribution-search-btn">
+
+            Cari
+
+        </button>
+
+    </form>
+
 </div>
-
-
-<small>
-Detail pembagian dana project ke setiap divisi
-</small>
-
-
-</div>
-
-
-
-</div>
-
 
 
 
@@ -1349,7 +1389,181 @@ color:#16a34a;
     }
 
 }
+/* =====================================================
+DISTRIBUTION SEARCH
+===================================================== */
 
+.distribution-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+
+.distribution-search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+
+.distribution-search {
+    position: relative;
+    width: 280px;
+}
+
+
+.distribution-search i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+
+.distribution-search input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 14px 0 38px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+
+    background: #f8fafc;
+    color: #334155;
+
+    font-size: 12px;
+
+    transition: .2s;
+}
+
+
+.distribution-search input::placeholder {
+    color: #94a3b8;
+}
+
+
+.distribution-search input:focus {
+    outline: none;
+
+    background: white;
+
+    border-color: #64748b;
+
+    box-shadow:
+        0 0 0 3px rgba(100,116,139,.08);
+}
+
+
+.distribution-search-btn,
+.distribution-reset {
+
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.distribution-search-btn {
+
+    border: none;
+
+    background: #334155;
+    color: white;
+
+    transition: .2s;
+}
+
+
+.distribution-search-btn:hover {
+    background: #1e293b;
+}
+
+
+.distribution-reset {
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+.distribution-reset:hover {
+
+    background: #f1f5f9;
+
+    color: #334155;
+}
+
+
+@media(max-width:900px) {
+
+    .distribution-header {
+        align-items: stretch;
+    }
+
+    .distribution-search-form {
+        width: 100%;
+    }
+
+    .distribution-search {
+        flex: 1;
+        min-width: 200px;
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .distribution-search-form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        width: 100%;
+    }
+
+    .distribution-search {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .distribution-search-btn,
+    .distribution-reset {
+        width: 100%;
+    }
+
+    .distribution-search-btn {
+        grid-column: 2;
+    }
+
+    .distribution-reset {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+}
 </style>
 
 

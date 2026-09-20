@@ -9,6 +9,8 @@ use App\Models\Proyek;
 use App\Models\Divisi;
 use App\Models\AlokasiProyekDivisi;
 use App\Models\SaldoDivisi;
+use App\Models\DistribusiSetoran;
+
 
 use Illuminate\Http\Request;
 
@@ -59,135 +61,90 @@ class AllocationController extends Controller
 
 
 
+public function store(Request $request, $project)
+{
+    $project = Proyek::findOrFail($project);
 
+    // Cek apakah proyek sudah pernah menerima setoran
+    $hasDeposit = \App\Models\SetoranProyek::where(
+        'proyek_id',
+        $project->id
+    )->exists();
 
-
-
-
-    public function store(Request $request,$project)
+    if ($hasDeposit)
     {
+        return back()
+            ->with(
+                'error',
+                'Alokasi dana tidak dapat ditambahkan karena proyek sudah memiliki transaksi setoran.'
+            );
+    }
 
+    $request->validate([
 
-        $project = Proyek::findOrFail($project);
+        'divisi_id' => [
+            'required',
+            'exists:divisi,id',
+        ],
 
+        'persentase' => [
+            'required',
+            'numeric',
+            'min:1',
+            'max:100'
+        ]
 
+    ]);
 
-        $request->validate([
+    $cekDivisi = AlokasiProyekDivisi::where([
 
+        'proyek_id' => $project->id,
 
-            'divisi_id'=>[
-                'required',
-                'exists:divisi,id',
-            ],
+        'divisi_id' => $request->divisi_id
 
+    ])
+    ->exists();
 
-            'persentase'=>[
-                'required',
-                'numeric',
-                'min:1',
-                'max:100'
-            ]
-
-
-        ]);
-
-
-
-
-
-        $cekDivisi = AlokasiProyekDivisi::where([
-
-            'proyek_id'=>$project->id,
-
-            'divisi_id'=>$request->divisi_id
-
-        ])
-        ->exists();
-
-
-
-
-
-        if($cekDivisi)
-        {
-
-            return back()
-
+    if ($cekDivisi)
+    {
+        return back()
             ->with(
                 'error',
                 'Divisi tersebut sudah memiliki alokasi dana'
             );
+    }
 
-        }
+    $total = AlokasiProyekDivisi::where(
+        'proyek_id',
+        $project->id
+    )
+    ->sum('persentase');
 
-
-
-
-
-
-
-
-        $total = AlokasiProyekDivisi::where(
-
-            'proyek_id',
-
-            $project->id
-
-        )
-        ->sum('persentase');
-
-
-
-
-
-
-        if($total + $request->persentase > 100)
-        {
-
-            return back()
-
+    if ($total + $request->persentase > 100)
+    {
+        return back()
             ->with(
                 'error',
                 'Total pembagian dana melebihi 100%'
             );
+    }
 
-        }
+    AlokasiProyekDivisi::create([
 
+        'proyek_id' => $project->id,
 
+        'divisi_id' => $request->divisi_id,
 
+        'persentase' => $request->persentase,
 
+    ]);
 
-
-
-        AlokasiProyekDivisi::create([
-
-            'proyek_id'=>$project->id,
-
-            'divisi_id'=>$request->divisi_id,
-
-            'persentase'=>$request->persentase,
-
-        ]);
-
-
-
-
-
-
-        return back()
-
+    return back()
         ->with(
             'success',
             'Pembagian dana berhasil ditambahkan'
         );
-
-
-    }
-
-
-
-
-
+}
 
 
 
@@ -236,10 +193,32 @@ class AllocationController extends Controller
 
 
 
-
 public function update(Request $request,$id)
 {
     $allocation = AlokasiProyekDivisi::findOrFail($id);
+
+    $usedSaldo = SaldoDivisi::where([
+        'proyek_id' => $allocation->proyek_id,
+        'divisi_id' => $allocation->divisi_id
+    ])->exists();
+
+    $usedDistribution = DistribusiSetoran::where(
+        'divisi_id',
+        $allocation->divisi_id
+    )
+    ->whereHas('setoranProyek', function ($query) use ($allocation) {
+        $query->where('proyek_id', $allocation->proyek_id);
+    })
+    ->exists();
+
+    if($usedSaldo || $usedDistribution)
+    {
+        return back()
+            ->with(
+                'error',
+                'Alokasi tidak dapat diubah karena sudah digunakan dalam transaksi dana.'
+            );
+    }
 
     $request->validate([
 
@@ -326,40 +305,36 @@ public function update(Request $request,$id)
 
 
 
-
 public function destroy($allocation)
 {
     $allocation = AlokasiProyekDivisi::findOrFail($allocation);
 
-
-   $used = SaldoDivisi::where([
+    $usedSaldo = SaldoDivisi::where([
         'proyek_id' => $allocation->proyek_id,
         'divisi_id' => $allocation->divisi_id
-    ])
-    ->exists();
+    ])->exists();
 
+    $usedDistribution = DistribusiSetoran::where('divisi_id', $allocation->divisi_id)
+        ->whereHas('setoranProyek', function ($query) use ($allocation) {
+            $query->where('proyek_id', $allocation->proyek_id);
+        })
+        ->exists();
 
-
-    if($used)
+    if($usedSaldo || $usedDistribution)
     {
         return back()
             ->with(
                 'error',
-                'Alokasi tidak dapat dihapus karena sudah memiliki histori saldo.'
+                'Alokasi tidak dapat dihapus karena sudah digunakan dalam transaksi dana.'
             );
     }
 
-
-
     $allocation->delete();
 
-
-
     return back()
-    ->with(
-        'success',
-        'Alokasi berhasil dihapus'
-    );
+        ->with(
+            'success',
+            'Alokasi berhasil dihapus'
+        );
 }
-
 }

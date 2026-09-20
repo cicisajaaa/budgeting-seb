@@ -98,35 +98,34 @@ Project
 
 <div class="budget-status">
 
+    <span>
+        Total Pembagian
+    </span>
 
-<span>
+    <h2>
+        {{$allocations->sum('persentase')}} %
+    </h2>
 
-Total Pembagian
+    <div class="progress-track">
+        <div style="width:{{ min($allocations->sum('persentase'), 100) }}%">
+        </div>
+    </div>
 
-</span>
+    @if($allocations->sum('persentase') < 100)
 
+        <small class="allocation-remaining">
+            Sisa {{100 - $allocations->sum('persentase')}}%
+        </small>
 
-<h2>
+    @else
 
-{{$allocations->sum('persentase')}} %
+        <small class="allocation-complete">
+            ✓ Lengkap
+        </small>
 
-</h2>
-
-
-<div class="progress-track">
-
-
-<div style="width:{{$allocations->sum('persentase')}}%">
+    @endif
 
 </div>
-
-
-</div>
-
-
-</div>
-
-
 
 </div>
 
@@ -178,18 +177,6 @@ Saat ini:
 
 
 
-
-@if(session('error'))
-
-
-<div class="error-alert">
-
-{{session('error')}}
-
-</div>
-
-
-@endif
 
 
 
@@ -1419,7 +1406,21 @@ ACTION BUTTON
 
 
 
+.allocation-remaining,
+.allocation-complete{
+    display:block;
+    margin-top:7px;
+    font-size:10px;
+    font-weight:800;
+}
 
+.allocation-remaining{
+    color:#92400e;
+}
+
+.allocation-complete{
+    color:#166534;
+}
 /* ===============================
 RESPONSIVE
 ================================ */

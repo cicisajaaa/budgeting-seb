@@ -26,91 +26,123 @@ Ringkasan kondisi keuangan, proyek, dan performa bisnis perusahaan.
 
 
 
-
-
 {{-- FILTER --}}
-
 <form method="GET"
-action="{{route('owner.reports')}}"
-class="report-filter">
+      action="{{ route('owner.reports') }}"
+      class="report-filter">
+
+    <div>
+        <label>Periode</label>
+
+        <select name="periode" id="periode">
+
+            <option value=""
+                {{ request('periode') == '' ? 'selected' : '' }}>
+                Semua Periode
+            </option>
+
+            <option value="bulan"
+                {{ request('periode') == 'bulan' ? 'selected' : '' }}>
+                Bulanan
+            </option>
+
+            <option value="tahun"
+                {{ request('periode') == 'tahun' ? 'selected' : '' }}>
+                Tahunan
+            </option>
+
+        </select>
+    </div>
 
 
-<div>
+    <div id="bulan-field">
 
-<label>
-Periode
-</label>
+        <label>Bulan</label>
 
+        <select name="bulan">
 
-<select name="periode">
+            <option value="">Pilih Bulan</option>
 
+            <option value="1" {{ request('bulan') == '1' ? 'selected' : '' }}>
+                Januari
+            </option>
 
-<option value="">
-Semua Periode
-</option>
+            <option value="2" {{ request('bulan') == '2' ? 'selected' : '' }}>
+                Februari
+            </option>
 
+            <option value="3" {{ request('bulan') == '3' ? 'selected' : '' }}>
+                Maret
+            </option>
 
-<option value="bulan">
-Bulanan
-</option>
+            <option value="4" {{ request('bulan') == '4' ? 'selected' : '' }}>
+                April
+            </option>
 
+            <option value="5" {{ request('bulan') == '5' ? 'selected' : '' }}>
+                Mei
+            </option>
 
-<option value="tahun">
-Tahunan
-</option>
+            <option value="6" {{ request('bulan') == '6' ? 'selected' : '' }}>
+                Juni
+            </option>
 
+            <option value="7" {{ request('bulan') == '7' ? 'selected' : '' }}>
+                Juli
+            </option>
 
-</select>
+            <option value="8" {{ request('bulan') == '8' ? 'selected' : '' }}>
+                Agustus
+            </option>
 
-</div>
+            <option value="9" {{ request('bulan') == '9' ? 'selected' : '' }}>
+                September
+            </option>
 
+            <option value="10" {{ request('bulan') == '10' ? 'selected' : '' }}>
+                Oktober
+            </option>
 
+            <option value="11" {{ request('bulan') == '11' ? 'selected' : '' }}>
+                November
+            </option>
 
+            <option value="12" {{ request('bulan') == '12' ? 'selected' : '' }}>
+                Desember
+            </option>
 
+        </select>
 
-<div>
-
-<label>
-Tanggal Mulai
-</label>
-
-
-<input
-type="date"
-name="start_date"
-value="{{request('start_date')}}">
-
-</div>
-
-
-
-
-
-<div>
-
-<label>
-Tanggal Akhir
-</label>
-
-
-<input
-type="date"
-name="end_date"
-value="{{request('end_date')}}">
-
-</div>
+    </div>
 
 
+    <div id="tahun-field">
+
+        <label>Tahun</label>
+
+        <select name="tahun">
+
+            <option value="">Pilih Tahun</option>
+
+            @for($tahun = now()->year; $tahun >= now()->year - 5; $tahun--)
+
+                <option value="{{ $tahun }}"
+                    {{ request('tahun') == $tahun ? 'selected' : '' }}>
+                    {{ $tahun }}
+                </option>
+
+            @endfor
+
+        </select>
+
+    </div>
 
 
-
-<button type="submit">
-Tampilkan
-</button>
-
+    <button type="submit">
+        Tampilkan
+    </button>
 
 </form>
-
 
 
 
@@ -1168,5 +1200,37 @@ body{
 }
 </style>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
+    const periode = document.getElementById('periode');
+    const bulanField = document.getElementById('bulan-field');
+    const tahunField = document.getElementById('tahun-field');
+
+    function updateFilter() {
+
+        if (periode.value === 'bulan') {
+
+            bulanField.style.display = 'block';
+            tahunField.style.display = 'block';
+
+        } else if (periode.value === 'tahun') {
+
+            bulanField.style.display = 'none';
+            tahunField.style.display = 'block';
+
+        } else {
+
+            bulanField.style.display = 'none';
+            tahunField.style.display = 'none';
+
+        }
+    }
+
+    periode.addEventListener('change', updateFilter);
+
+    updateFilter();
+
+});
+</script>
 @endsection

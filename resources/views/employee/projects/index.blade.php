@@ -988,87 +988,90 @@ Belum ada project
 
 
 
-
 /* ================= SEARCH ================= */
 
-
-
-.project-search{
-
-    background:white;
-
-    padding:15px;
-
-    border-radius:18px;
-
-    border:1px solid #e2e8f0;
-
-    display:flex;
-
-    gap:10px;
-
-    margin-bottom:25px;
-
+.project-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    box-sizing: border-box;
 }
 
-
-
-.project-search input{
-
-    flex:1;
-
-    height:42px;
-
-    padding:0 15px;
-
-    border-radius:12px;
-
-    border:1px solid #cbd5e1;
-
-    font-size:14px;
-
+.project-search input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 44px;
+    padding: 0 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #172033;
+    font-size: 13px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: .2s;
 }
 
-
-
-.project-search button{
-
-    height:42px;
-
-    padding:0 25px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#0f172a;
-
-    color:white;
-
-    font-weight:700;
-
+.project-search input::placeholder {
+    color: #94a3b8;
 }
 
-
-
-.project-search a{
-
-    display:flex;
-
-    align-items:center;
-
-    padding:0 20px;
-
-    background:#f1f5f9;
-
-    color:#334155;
-
-    border-radius:12px;
-
-    text-decoration:none;
-
+.project-search input:hover {
+    border-color: #94a3b8;
 }
 
+.project-search input:focus {
+    outline: none;
+    border-color: #64748b;
+    box-shadow: 0 0 0 3px rgba(100, 116, 139, .08);
+}
+
+.project-search button {
+    flex: 0 0 auto;
+    height: 44px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.project-search button:hover {
+    background: #1e293b;
+}
+
+.project-search a {
+    flex: 0 0 auto;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    background: #f1f5f9;
+    color: #334155;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    box-sizing: border-box;
+    transition: .2s;
+}
+
+.project-search a:hover {
+    background: #e2e8f0;
+}
 
 
 
@@ -1706,25 +1709,34 @@ Belum ada project
 }
 
 
-
-.project-search{
-
-    flex-direction:column;
-
+.project-search {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 9px;
+    padding: 12px;
 }
 
-
+.project-search input {
+    width: 100%;
+    height: 42px;
+    font-size: 12px;
+}
 
 .project-search button,
-.project-search a{
-
-    width:100%;
-
-    justify-content:center;
-
+.project-search a {
+    width: 100%;
+    height: 40px;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
+.project-search button {
+    font-size: 11px;
+}
 
+.project-search a {
+    font-size: 11px;
+}
 
 .project-summary{
 

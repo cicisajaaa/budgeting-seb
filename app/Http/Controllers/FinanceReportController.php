@@ -59,27 +59,26 @@ class FinanceReportController extends Controller
 
 
 
+if ($startDate) {
 
-        if($startDate && $endDate)
-        {
+    $depositQuery->whereDate(
+        'tanggal_setoran',
+        '>=',
+        $startDate
+    );
 
-
-            $depositQuery->whereBetween(
-
-                'tanggal_setoran',
-
-                [
-
-                    $startDate,
-
-                    $endDate
-
-                ]
-
-            );
+}
 
 
-        }
+if ($endDate) {
+
+    $depositQuery->whereDate(
+        'tanggal_setoran',
+        '<=',
+        $endDate
+    );
+
+}
 
 
 
@@ -130,30 +129,26 @@ class FinanceReportController extends Controller
 
 
 
+if ($startDate) {
+
+    $expenseQuery->whereDate(
+        'tanggal',
+        '>=',
+        $startDate
+    );
+
+}
 
 
-        if($startDate && $endDate)
-        {
+if ($endDate) {
 
+    $expenseQuery->whereDate(
+        'tanggal',
+        '<=',
+        $endDate
+    );
 
-            $expenseQuery->whereBetween(
-
-                'tanggal',
-
-                [
-
-                    $startDate,
-
-                    $endDate
-
-                ]
-
-            );
-
-
-        }
-
-
+}
 
 
 
@@ -171,16 +166,25 @@ $mutasiQuery = MutasiKeuangan::with(
     'rekeningBank'
 );
 
+if ($startDate) {
 
-if($startDate && $endDate)
-{
-    $mutasiQuery->whereBetween(
+    $mutasiQuery->whereDate(
         'tanggal',
-        [
-            $startDate,
-            $endDate
-        ]
+        '>=',
+        $startDate
     );
+
+}
+
+
+if ($endDate) {
+
+    $mutasiQuery->whereDate(
+        'tanggal',
+        '<=',
+        $endDate
+    );
+
 }
 
 

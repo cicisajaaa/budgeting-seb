@@ -284,47 +284,82 @@ Divisi
 
 
 
-
 <div class="form-group">
 
+    <label for="password">
+        Password
+    </label>
 
-<label>
-Password
-</label>
+    <div class="password-input-wrapper">
 
+        <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Masukkan password"
+            autocomplete="new-password"
+            required>
 
-<input
+<button
+    type="button"
+    class="password-toggle"
+    data-target="password"
+    aria-label="Tampilkan password"
+    aria-pressed="false">
 
-type="password"
+    <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </svg>
 
-name="password"
+    <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 3l18 18"></path>
+        <path d="M10.6 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-3.1 3.9"></path>
+        <path d="M6.6 6.6C3.6 8.4 2 12 2 12s3.5 7 10 7a10.8 10.8 0 0 0 4.2-.8"></path>
+    </svg>
 
-placeholder="Masukkan password"
-
-required>
-
-
+</button>
+    </div>
 
 </div>
 
+
 <div class="form-group">
 
+    <label for="password_confirmation">
+        Konfirmasi Password
+    </label>
 
-<label>
-Konfirmasi Password
-</label>
+    <div class="password-input-wrapper">
 
+        <input
+            id="password_confirmation"
+            type="password"
+            name="password_confirmation"
+            placeholder="Ulangi password"
+            autocomplete="new-password"
+            required>
+<button
+    type="button"
+    class="password-toggle"
+    data-target="password_confirmation"
+    aria-label="Tampilkan konfirmasi password"
+    aria-pressed="false">
 
-<input
+    <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </svg>
 
-type="password"
+    <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 3l18 18"></path>
+        <path d="M10.6 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-3.1 3.9"></path>
+        <path d="M6.6 6.6C3.6 8.4 2 12 2 12s3.5 7 10 7a10.8 10.8 0 0 0 4.2-.8"></path>
+    </svg>
 
-name="password_confirmation"
+</button>
 
-placeholder="Ulangi password"
-
-required>
-
+    </div>
 
 </div>
 
@@ -1042,7 +1077,117 @@ RESPONSIVE
     }
 
 }
+
+/* ===============================
+PASSWORD TOGGLE
+================================ */
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 45px !important;
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 45px !important;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: #334155;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+.password-toggle svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.password-toggle .eye-closed {
+    display: none;
+}
+
+.password-toggle.active .eye-open {
+    display: none;
+}
+
+.password-toggle.active .eye-closed {
+    display: block;
+}
 </style>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
+    document.querySelectorAll('.password-toggle').forEach(function (button) {
+
+        button.addEventListener('click', function () {
+
+            const targetId = this.dataset.target;
+            const input = document.getElementById(targetId);
+
+            if (!input) {
+                return;
+            }
+
+            if (input.type === 'password') {
+
+                input.type = 'text';
+
+                this.classList.add('active');
+                this.setAttribute('aria-label', 'Sembunyikan password');
+                this.setAttribute('aria-pressed', 'true');
+
+            } else {
+
+                input.type = 'password';
+
+                this.classList.remove('active');
+                this.setAttribute('aria-label', 'Tampilkan password');
+                this.setAttribute('aria-pressed', 'false');
+
+            }
+
+        });
+
+    });
+
+});
+</script>
 @endsection

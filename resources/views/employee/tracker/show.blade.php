@@ -218,7 +218,13 @@ width:{{min($task->progres_persen ?? 0,100)}}%
 </div>
 
 
+@if(session('error'))
 
+    <div class="form-alert form-alert-error">
+        ⚠️ {{ session('error') }}
+    </div>
+
+@endif
 @if(in_array($task->status,['selesai','done','dibatalkan']))
 
 <div class="note">
@@ -1411,7 +1417,33 @@ color:#94a3b8;
 
 }
 
+.form-alert {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border-radius: 11px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 600;
+}
 
+.form-alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+@media(max-width:600px){
+
+    .form-alert {
+        margin-bottom: 14px;
+        padding: 10px 11px;
+        border-radius: 10px;
+        font-size: 9px;
+    }
+
+}
 </style>
 
 
