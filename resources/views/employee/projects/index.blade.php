@@ -1717,9 +1717,17 @@ Belum ada project
 }
 
 .project-search input {
+
     width: 100%;
+
     height: 42px;
+
+    padding: 0 14px;
+
     font-size: 12px;
+
+    box-sizing: border-box;
+
 }
 
 .project-search button,
@@ -1740,10 +1748,9 @@ Belum ada project
 
 .project-summary{
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr;
 
 }
-
 
 
 .project-summary strong{

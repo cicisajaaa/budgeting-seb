@@ -1858,6 +1858,13 @@ MOBILE IMPROVEMENT
 
     }
 
+}
+
+@media(max-width:600px){
+
+    .dashboard-grid{
+        padding-bottom:40px;
+    }
 
 }
 </style>

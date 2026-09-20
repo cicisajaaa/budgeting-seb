@@ -2007,10 +2007,13 @@ RESPONSIVE
         width:100%;
     }
 
-    .stat-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
+.stat-grid{
+
+    grid-template-columns:1fr;
+
+    gap:12px;
+
+}
 
     .stat-card{
         padding:14px;
@@ -2081,10 +2084,11 @@ RESPONSIVE
 
 
 @media(max-width:600px){
+.stat-grid{
 
-    .stat-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
+    grid-template-columns:1fr;
+
+}
 
     .stat-card{
         gap:10px;

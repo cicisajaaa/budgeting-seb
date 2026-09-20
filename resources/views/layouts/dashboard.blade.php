@@ -376,7 +376,7 @@ border-radius:50%;
 
 
 <body>
-<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+ 
 
 <aside class="sidebar">
 
@@ -868,7 +868,7 @@ System Online
 
 </aside>
 
-
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 
 

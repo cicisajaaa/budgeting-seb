@@ -951,6 +951,59 @@ Belum ada aktivitas tercatat.
 
     border-color: #cbd5e1;
 }
+
+@media(max-width:600px){
+
+    .audit-filter-box{
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+        justify-content:flex-start !important;
+        gap:9px !important;
+        padding:13px !important;
+        margin-bottom:14px !important;
+        height:auto !important;
+        min-height:0 !important;
+    }
+
+    .audit-filter-field{
+        width:100% !important;
+        flex:none !important;
+        gap:7px !important;
+    }
+
+    .audit-filter-field label{
+        font-size:9px !important;
+    }
+
+    .audit-filter-field select,
+    .audit-filter-field input{
+        width:100% !important;
+        height:40px !important;
+        font-size:10px !important;
+    }
+
+    .audit-filter-actions{
+        width:100% !important;
+        display:grid !important;
+        grid-template-columns:1fr 1fr !important;
+        gap:8px !important;
+        align-items:stretch !important;
+    }
+
+    .audit-filter-btn,
+    .audit-reset-btn{
+        width:100% !important;
+        height:40px !important;
+    }
+
+    .history-btn{
+        width:100% !important;
+        height:40px !important;
+        grid-column:1 / -1 !important;
+    }
+
+}
 </style>
 
 
