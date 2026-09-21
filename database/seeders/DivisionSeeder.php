@@ -47,7 +47,14 @@ class DivisionSeeder extends Seeder
         ];
 
 
-        DB::table('divisi')->insert($divisions);
+        foreach ($divisions as $division) {
+    DB::table('divisi')->updateOrInsert(
+        [
+            'nama_divisi' => $division['nama_divisi']
+        ],
+        $division
+    );
+}
 
     }
 }
