@@ -112,7 +112,7 @@ required>
 
             <option
                 value="{{ $item->id }}"
-                {{ old('perusahaan_id', $task->proyek->perusahaan_id ?? '') == $item->id ? 'selected' : '' }}
+                {{ old('perusahaan_id', $task->proyek?->perusahaan_id ?? '') == $item->id ? 'selected' : '' }}
             >
                 {{ $item->nama_perusahaan }}
             </option>

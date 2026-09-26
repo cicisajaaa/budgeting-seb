@@ -507,7 +507,7 @@ Project Perusahaan
 
 <strong>
 
-{{$project->perusahaan->nama_perusahaan ?? '-'}}
+{{ $project->perusahaan?->nama_perusahaan ?? '-' }}
 
 </strong>
 

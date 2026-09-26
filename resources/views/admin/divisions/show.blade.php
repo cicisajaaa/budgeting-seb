@@ -102,7 +102,7 @@ Tanggal Dibuat
 
 <strong>
 
-{{$division->created_at->format('d M Y')}}
+{{ $division->created_at?->format('d M Y') ?? '-' }}
 
 </strong>
 
@@ -299,7 +299,7 @@ Role
 
 <td>
 
-{{$karyawan->pengguna->email ?? '-'}}
+{{ $karyawan->pengguna?->email ?? '-' }}
 
 </td>
 

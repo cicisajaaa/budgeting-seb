@@ -114,7 +114,7 @@ Project
 
 <strong>
 
-{{$task->proyek->nama_proyek ?? '-'}}
+{{ $task->proyek?->nama_proyek ?? '-' }}
 
 </strong>
 
@@ -128,7 +128,7 @@ Project
     </span>
 
     <strong>
-        {{$task->proyek->perusahaan->nama_perusahaan ?? '-'}}
+        {{ $task->proyek?->perusahaan?->nama_perusahaan ?? '-' }}
     </strong>
 </div>
 
@@ -141,7 +141,7 @@ PIC
 
 <strong>
 
-{{$task->karyawan->nama_karyawan ?? '-'}}
+{{ $task->karyawan?->nama_karyawan ?? '-' }}
 
 </strong>
 
@@ -160,7 +160,7 @@ Divisi
 
 <strong>
 
-{{$task->divisi->nama_divisi ?? '-'}}
+{{ $task->divisi?->nama_divisi ?? '-' }}
 
 </strong>
 
@@ -202,15 +202,10 @@ Deadline
 <strong>
 
 @if($task->deadline)
-
-{{\Carbon\Carbon::parse($task->deadline)->format('d M Y')}}
-
+    {{ \Carbon\Carbon::parse($task->deadline)->format('d M Y') }}
 @else
-
--
-
+    -
 @endif
-
 </strong>
 
 </div>

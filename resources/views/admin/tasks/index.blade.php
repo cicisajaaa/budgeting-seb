@@ -803,7 +803,7 @@ Detail
 
 <strong>
 
-{{$task->proyek->nama_proyek ?? '-'}}
+{{ $task->proyek?->nama_proyek ?? '-' }}
 
 </strong>
 
@@ -828,7 +828,7 @@ Project ID : {{$task->proyek_id}}
 
 <td>
 
-{{$task->karyawan->nama_karyawan ?? '-'}}
+{{ $task->karyawan?->nama_karyawan ?? '-' }}
 
 </td>
 
@@ -840,7 +840,7 @@ Project ID : {{$task->proyek_id}}
 
 <td>
 
-{{$task->divisi->nama_divisi ?? '-'}}
+{{ $task->divisi?->nama_divisi ?? '-' }}
 
 </td>
 

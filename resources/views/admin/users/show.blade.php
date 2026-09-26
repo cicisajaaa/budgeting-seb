@@ -160,7 +160,7 @@ Tanggal Registrasi
 </span>
 
 <strong>
-{{$user->created_at->format('d M Y')}}
+{{ $user->created_at?->format('d M Y') ?? '-' }}
 </strong>
 
 </div>
@@ -209,7 +209,7 @@ Divisi
 </span>
 
 <strong>
-{{$user->karyawan->divisi->nama_divisi ?? '-'}}
+{{ $user->karyawan->divisi?->nama_divisi ?? '-' }}
 </strong>
 
 </div>
@@ -389,7 +389,7 @@ Pengajuan Dana
 
 
 <small>
-{{$audit->created_at->format('d M Y H:i')}}
+{{ $audit->created_at?->format('d M Y H:i') ?? '-' }}
 </small>
 
 

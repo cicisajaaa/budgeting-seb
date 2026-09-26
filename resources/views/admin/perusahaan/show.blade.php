@@ -542,12 +542,11 @@ $project->total_anggaran,
 
 <td>
 
-
-{{$project->tanggal_mulai
-?
-$project->tanggal_mulai->format('d M Y')
-:'-'}}
-
+@if($project->tanggal_mulai)
+    {{ $project->tanggal_mulai->format('d M Y') }}
+@else
+    -
+@endif
 
 </td>
 

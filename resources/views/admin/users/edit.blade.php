@@ -246,7 +246,7 @@ name="nama_karyawan"
 
 value="{{old(
 'nama_karyawan',
-$user->karyawan->nama_karyawan ?? $user->name
+$user->karyawan?->nama_karyawan ?? $user->name
 )}}">
 
 </div>
@@ -277,7 +277,7 @@ Divisi
 
 {{old(
 'divisi_id',
-$user->karyawan->divisi_id ?? ''
+$user->karyawan?->divisi_id ?? ''
 )==$item->id?'selected':''}}
 
 >

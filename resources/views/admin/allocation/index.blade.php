@@ -454,7 +454,7 @@ Aksi
 
 </div>
 
-{{$allocation->divisi->nama_divisi ?? '-'}}
+{{ $allocation->divisi?->nama_divisi ?? '-' }}
 
 
 </div>

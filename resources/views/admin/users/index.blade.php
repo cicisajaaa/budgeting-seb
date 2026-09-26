@@ -402,17 +402,8 @@ Akun Sistem
 
 
 @if($user->karyawan)
-
-
-{{$user->karyawan->divisi->nama_divisi ?? '-'}}
-
-
-@else
-
--
-
+    {{ $user->karyawan->divisi?->nama_divisi ?? '-' }}
 @endif
-
 
 </td>
 

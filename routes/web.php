@@ -69,6 +69,45 @@ Route::get('/', function(){
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| PUBLIC FINANCE
+|--------------------------------------------------------------------------
+|
+| Halaman keuangan yang dapat diakses tanpa login.
+| Bersifat read-only.
+|
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/public/keuangan', [
+    FinanceDashboardController::class,
+    'public'
+])->name('public.finance');
+/*
+|--------------------------------------------------------------------------
+| PUBLIC FINANCE
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/public/keuangan', [
+    App\Http\Controllers\FinanceDashboardController::class,
+    'public'
+])->name('public.finance');
+
+// TAMBAHKAN RUTE EXPORT DI SINI
+Route::get('/public/keuangan/export', [
+    App\Http\Controllers\FinanceDashboardController::class,
+    'export'
+])->name('public.finance.export');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth'])->group(function(){
 
@@ -291,9 +330,6 @@ Route::post('/expense/{id}/disburse',[
 
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | FINANCE MANAGEMENT
@@ -302,20 +338,7 @@ Route::post('/expense/{id}/disburse',[
 Route::middleware('role:keuangan')->group(function(){
 
 
-    Route::get(
-    '/finance/dashboard',
-    [
-        FinanceDashboardController::class,
-        'index'
-    ]
-)
-->name('finance.dashboard');
 
-    Route::get('/finance/deposit',[
-        FinanceDepositController::class,
-        'index'
-    ])
-    ->name('finance.deposit');
 
 
 
@@ -335,12 +358,6 @@ Route::middleware('role:keuangan')->group(function(){
 
 
 
-    Route::get('/finance/distribution',[
-        DepositDistributionController::class,
-        'index'
-    ])
-    ->name('finance.distribution');
-
 
 
     Route::resource(
@@ -355,7 +372,29 @@ Route::middleware('role:keuangan')->group(function(){
 
 
 
+/*
+|--------------------------------------------------------------------------
+| PUBLIC FINANCE
+|--------------------------------------------------------------------------
+*/
 
+Route::get('/finance/dashboard',[
+    FinanceDashboardController::class,
+    'index'
+])
+->name('finance.dashboard');
+
+Route::get('/finance/deposit',[
+    FinanceDepositController::class,
+    'index'
+])
+->name('finance.deposit');
+
+Route::get('/finance/distribution',[
+    DepositDistributionController::class,
+    'index'
+])
+->name('finance.distribution');
 
 
 
@@ -364,19 +403,6 @@ Route::middleware('role:keuangan')->group(function(){
 | FINANCE BALANCE
 |--------------------------------------------------------------------------
 */
-
-
-Route::middleware('role:owner,keuangan')->group(function(){
-
-
-
-    Route::get('/finance/balance',[
-        DivisionBalanceController::class,
-        'index'
-    ])
-    ->name('finance.balance');
-
-});
 
 
 
@@ -397,75 +423,12 @@ Route::middleware('role:keuangan,owner')->group(function(){
 
 
 
-    Route::get('/finance/report',[
-        FinanceReportController::class,
-        'index'
-    ])
-    ->name('finance.report');
-
-
-
-    Route::get('/finance/report/export',[
-        FinanceReportController::class,
-        'exportExcel'
-    ])
-    ->name('finance.report.export');
-
-
 
     Route::get('/expense/approval/history',[
         ExpenseApprovalController::class,
         'history'
     ])
     ->name('expense.approval.history');
-
-Route::get(
-    '/finance/reconciliation',
-    [
-        FinanceReportController::class,
-        'reconciliation'
-    ]
-)->name('finance.reconciliation');
-
-
-
-
-Route::get(
-    '/finance/expense',
-    [
-        FinanceExpenseController::class,
-        'index'
-    ]
-)
-->name('finance.expense.index');
-Route::get(
-    '/finance/expense/export/excel',
-    [
-        FinanceExpenseController::class,
-        'exportExcel'
-    ]
-)
-->name('finance.expense.export.excel');
-
-
-
-Route::get(
-    '/finance/expense/export/pdf',
-    [
-        FinanceExpenseController::class,
-        'exportPdf'
-    ]
-)
-->name('finance.expense.export.pdf');
-
-Route::get(
-    '/finance/expense/{transaction}',
-    [
-        FinanceExpenseController::class,
-        'show'
-    ]
-)
-->name('finance.expense.show');
 
 
 
@@ -962,5 +925,123 @@ Route::get(
 ->name('report.performance.pdf');
 });
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC FINANCE
+|--------------------------------------------------------------------------
+| Halaman keuangan yang dapat dilihat umum.
+| Bersifat read-only.
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/finance/dashboard', [
+    FinanceDashboardController::class,
+    'index'
+])->name('finance.dashboard');
+
+
+Route::get('/finance/deposit', [
+    FinanceDepositController::class,
+    'index'
+])->name('finance.deposit');
+
+
+Route::get('/finance/distribution', [
+    DepositDistributionController::class,
+    'index'
+])->name('finance.distribution');
+
+
+Route::get('/finance/balance',[
+    DivisionBalanceController::class,
+    'index'
+])
+->name('finance.balance');
+
+
+Route::get('/finance/report',[
+    FinanceReportController::class,
+    'index'
+])
+->name('finance.report');
+
+Route::get('/finance/report/export',[
+    FinanceReportController::class,
+    'exportExcel'
+])
+->name('finance.report.export');
+
+Route::get('/finance/reconciliation',[
+    FinanceReportController::class,
+    'reconciliation'
+])
+->name('finance.reconciliation');
+
+Route::get('/finance/expense',[
+    FinanceExpenseController::class,
+    'index'
+])
+->name('finance.expense.index');
+
+Route::get('/finance/expense/export/excel',[
+    FinanceExpenseController::class,
+    'exportExcel'
+])
+->name('finance.expense.export.excel');
+
+Route::get('/finance/expense/export/pdf',[
+    FinanceExpenseController::class,
+    'exportPdf'
+])
+->name('finance.expense.export.pdf');
+
+Route::get('/finance/expense/{transaction}',[
+    FinanceExpenseController::class,
+    'show'
+])
+->name('finance.expense.show');
+Route::get('/finance/report', [
+    FinanceReportController::class,
+    'index'
+])->name('finance.report');
+
+
+Route::get('/finance/report/export', [
+    FinanceReportController::class,
+    'exportExcel'
+])->name('finance.report.export');
+
+
+Route::get('/finance/reconciliation', [
+    FinanceReportController::class,
+    'reconciliation'
+])->name('finance.reconciliation');
+
+
+Route::get('/finance/expense', [
+    FinanceExpenseController::class,
+    'index'
+])->name('finance.expense.index');
+
+
+Route::get('/finance/expense/export/excel', [
+    FinanceExpenseController::class,
+    'exportExcel'
+])->name('finance.expense.export.excel');
+
+
+Route::get('/finance/expense/export/pdf', [
+    FinanceExpenseController::class,
+    'exportPdf'
+])->name('finance.expense.export.pdf');
+
+
+Route::get('/finance/expense/{transaction}', [
+    FinanceExpenseController::class,
+    'show'
+])->name('finance.expense.show');
+
 
 require __DIR__.'/auth.php';

@@ -98,7 +98,7 @@ Perusahaan
 
 <h3>
 
-{{$project->perusahaan->nama_perusahaan ?? '-'}}
+{{ $project->perusahaan?->nama_perusahaan ?? '-' }}
 
 </h3>
 
@@ -419,7 +419,7 @@ Perusahaan
 <td>
 <strong class="company-name">
 
-{{$project->perusahaan->nama_perusahaan ?? '-'}}
+{{ $project->perusahaan?->nama_perusahaan ?? '-' }}
 
 </strong>
 
