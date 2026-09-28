@@ -10,21 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* =========================================================
+           SWEETALERT CUSTOM STYLING
+        ========================================================= */
+        .swal2-container {
+            z-index: 99999 !important;
+        }
 
         .swal-custom-popup {
-    border-radius: 20px !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
-}
+            border-radius: 20px !important;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+        }
 
-/* Memaksa SweetAlert tampil di atas overlay form login */
-.swal2-container {
-    z-index: 99999 !important;
-}
-
-.swal-custom-popup {
-    border-radius: 20px !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
-}
         /* =========================================================
            ROOT & BASE
         ========================================================= */
@@ -56,7 +53,7 @@
         }
 
         /* =========================================================
-           NAVBAR
+           NAVBAR (DENGAN HAMBURGER UNTUK MOBILE)
         ========================================================= */
         .navbar {
             position: fixed;
@@ -83,6 +80,7 @@
             gap: 12px;
             text-decoration: none;
             color: var(--white);
+            min-width: 0;
         }
 
         .brand img {
@@ -92,12 +90,16 @@
             object-fit: contain;
             background: var(--white);
             padding: 4px;
+            flex-shrink: 0;
         }
 
         .brand-text {
             font-size: 15px;
             font-weight: 700;
             line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .brand-text span {
@@ -133,49 +135,103 @@
             font-weight: 700;
         }
 
-/* =========================================================
-   NAVBAR LOGIN BUTTON (AESTHETIC & INTERACTIVE)
-========================================================= */
-.nav-login-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* Jarak teks dengan ikon */
-    padding: 10px 24px;
-    border-radius: 50px; /* Bentuk melengkung (pill) */
-    background: linear-gradient(135deg, var(--primary), var(--gold));
-    color: var(--white) !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.15); /* Garis batas tipis */
-    box-shadow: 0 4px 15px rgba(107, 79, 29, 0.3); /* Bayangan dasar glow */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1 !important;
-}
+        /* Tombol Hamburger Mobile */
+        .mobile-menu-toggle {
+            display: none;
+            font-size: 22px;
+            color: var(--white);
+            cursor: pointer;
+            padding: 8px;
+            z-index: 10001;
+        }
 
-.nav-login-btn:hover {
-    transform: translateY(-2px); /* Efek tombol terangkat */
-    box-shadow: 0 8px 25px rgba(166, 124, 46, 0.6); /* Efek glow emas membesar */
-    background: linear-gradient(135deg, #7c5c22, #b88a33); /* Warna sedikit lebih terang saat di-hover */
-}
+        /* Tombol Masuk Navbar */
+        .nav-login-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            color: var(--white) !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 15px rgba(107, 79, 29, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1 !important;
+        }
 
-.nav-login-btn:active {
-    transform: translateY(1px); /* Efek saat ditekan (klik) */
-    box-shadow: 0 2px 10px rgba(107, 79, 29, 0.4);
-}
-
-.nav-login-btn i {
-    font-size: 13px;
-    transition: transform 0.3s ease; /* Transisi pergerakan ikon */
-}
-
-.nav-login-btn:hover i {
-    transform: translateX(4px); /* Ikon panah bergeser ke kanan saat di-hover */
-}
         .nav-login-btn:hover {
-            background: #c9982f;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(166, 124, 46, 0.6);
+            background: linear-gradient(135deg, #7c5c22, #b88a33);
+        }
+
+        /* Media Query untuk Hamburger Menu di Mobile / Tablet */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 24px !important;
+                height: 70px !important;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                padding: 40px 20px;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                z-index: 99998;
+            }
+
+            .nav-menu.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .nav-menu a {
+                font-size: 15px !important;
+                font-weight: 600 !important;
+                color: #cbd5e1 !important;
+                padding: 12px 24px;
+                border-radius: 12px;
+                width: 80%;
+                max-width: 280px;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                transition: 0.2s;
+            }
+
+            .nav-menu a:hover,
+            .nav-menu .nav-active {
+                color: #fff !important;
+                background: rgba(166, 124, 46, 0.2);
+                border-color: rgba(166, 124, 46, 0.4);
+            }
+
+            .nav-login-btn {
+                width: 80% !important;
+                max-width: 280px !important;
+            }
         }
 
         /* =========================================================
@@ -284,7 +340,7 @@
             box-shadow: 0 0 15px #22c55e;
         }
 
-        /* HERO FEATURES (Glassmorphism) */
+        /* HERO FEATURES */
         .features {
             display: flex;
             gap: 15px;
@@ -367,7 +423,7 @@
         }
 
         /* =========================================================
-           SYSTEM SECTION (Fitur Sistem)
+           SYSTEM SECTION
         ========================================================= */
         .system-section {
             padding: 90px 70px;
@@ -429,7 +485,6 @@
             margin-top: 45px;
         }
 
-        /* Gaya Kartu senada dengan Keuangan */
         .system-card {
             background: var(--white);
             padding: 30px;
@@ -494,360 +549,364 @@
             line-height: 1.7;
             color: #334155;
         }
-/* =========================================================
-   ENTERPRISE MODERN LOGIN MODAL (APPLE / STRIPE STYLE)
-========================================================= */
-.login-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(15, 23, 42, 0.4); 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-    z-index: 10000;
-}
 
-.login-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-}
+        /* =========================================================
+           ENTERPRISE MODERN LOGIN MODAL
+        ========================================================= */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.4); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 10000;
+        }
 
-.login-box {
-    width: 900px;
-    min-height: 520px;
-    display: flex;
-    background: var(--white);
-    border-radius: 28px;
-    overflow: hidden;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
-    margin: 20px;
-    position: relative;
-    
-    opacity: 0;
-    transform: scale(0.96) translateY(20px);
-    transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
-}
+        .login-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-.login-overlay.show .login-box {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-}
-/* ================= KIRI - CORPORATE ELEGANCE ================= */
-.login-left {
-    flex: 0 0 42%;
-    position: relative;
-    background: url('{{ asset("images/company-bg.png") }}') center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
+        .login-box {
+            width: 900px;
+            min-height: 520px;
+            display: flex;
+            background: var(--white);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.96) translateY(20px);
+            transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+        }
 
-/* Overlay Gradien Elegan (Dongker ke Emas Gelap) */
-.login-left-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(107, 79, 29, 0.85) 100%);
-    z-index: 1;
-}
+        .login-overlay.show .login-box {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
 
-.login-content-left {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: var(--white);
-    padding: 40px;
-}
+        /* MODAL KIRI */
+        .login-left {
+            flex: 0 0 42%;
+            position: relative;
+            background: url('{{ asset("images/company-bg.png") }}') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
 
-/* Logo Bulat Solid */
-.login-logo {
-    width: 100px;
-    height: 100px;
-    background: var(--white); /* Latar putih solid agar logo jelas */
-    padding: 12px;
-    border-radius: 50%;
-    margin-bottom: 25px;
-    object-fit: contain;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    transition: transform 0.4s ease;
-}
+        .login-left-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(107, 79, 29, 0.85) 100%);
+            z-index: 1;
+        }
 
-.login-left:hover .login-logo {
-    transform: translateY(-5px);
-}
-
-.login-company {
-    font-size: 26px;
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
-}
-
-.login-divider {
-    width: 40px;
-    height: 3px;
-    background: var(--gold);
-    margin: 15px auto;
-    border-radius: 10px;
-}
-
-.login-content-left p {
-    font-size: 14px;
-    color: #e2e8f0;
-    line-height: 1.6;
-    font-weight: 400;
-}
-
-
-/* ================= KANAN - FORM & CLOSE BTN ================= */
-.login-right {
-    flex: 1;
-    background: var(--white);
-    padding: 60px 70px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.modal-close-btn {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #f1f5f9;
-    border: none;
-    color: #64748b;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-close-btn:hover {
-    background: #e2e8f0;
-    color: var(--dark);
-    transform: rotate(90deg);
-}
-
-.login-right-inner {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.1s;
-}
-
-.login-overlay.show .login-right-inner {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.login-header {
-    margin-bottom: 35px;
-}
-
-.login-header h2 {
-    font-size: 30px;
-    font-weight: 800;
-    color: var(--dark);
-    margin-bottom: 8px;
-    letter-spacing: -1px;
-}
-
-.login-header p {
-    font-size: 14px;
-    color: #64748b;
-}
-
-/* ================= FLOATING LABELS INPUT ================= */
-.form-floating {
-    position: relative;
-    margin-bottom: 22px;
-}
-
-.input-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    font-size: 16px;
-    transition: 0.3s ease;
-    z-index: 2;
-}
-
-.form-floating input {
-    width: 100%;
-    height: 62px;
-    border-radius: 16px;
-    border: 2px solid transparent;
-    background: #f8fafc;
-    /* Padding atas lebih besar untuk memberi ruang label melayang */
-    padding: 24px 20px 8px 52px; 
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--dark);
-    transition: all 0.3s ease;
-}
-
-.form-floating label {
-    position: absolute;
-    left: 52px;
-    top: 22px;
-    color: #94a3b8;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.25s ease;
-    pointer-events: none;
-    transform-origin: left top;
-}
-
-/* Animasi Teks Mengecil dan Naik saat di-klik atau terisi */
-.form-floating input:focus ~ label,
-.form-floating input:not(:placeholder-shown) ~ label {
-    transform: translateY(-12px) scale(0.85);
-    color: var(--gold);
-    font-weight: 700;
-}
-
-.form-floating input:focus {
-    outline: none;
-    background: var(--white);
-    border-color: var(--gold);
-    box-shadow: 0 4px 15px rgba(166, 124, 46, 0.1);
-}
-
-.form-floating input:focus ~ .input-icon {
-    color: var(--gold);
-}
-
-.toggle-password {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #94a3b8;
-    font-size: 16px;
-    transition: 0.3s;
-    z-index: 3;
-}
-
-.toggle-password:hover {
-    color: var(--gold);
-}
-
-
-/* ================= OPSI BAWAH ================= */
-.login-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-    position: relative; /* Wajib ada */
-    z-index: 9999; /* Pastikan ia berada di lapisan teratas agar bisa diklik */
-    pointer-events: auto; /* Memaksa elemen ini bisa menerima interaksi klik */
-}
-
-.custom-checkbox-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
-}
-
-.custom-checkbox-wrapper input {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--gold);
-    cursor: pointer;
-}
-
-.forgot-link {
-    font-size: 13px;
-    font-weight: 700;
-    color: #64748b;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.forgot-link:hover {
-    color: var(--gold);
-}
-
-/* ================= SHIMMER BUTTON ================= */
-.submit-btn-shimmer {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    height: 56px;
-    border-radius: 14px;
-    border: none;
-    background: var(--primary);
-    color: var(--white);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(107, 79, 29, 0.3);
-    transition: all 0.3s ease;
-}
-
-/* Efek Shimmer Bergerak Halus */
-.submit-btn-shimmer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -150%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transform: skewX(-20deg);
-    animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-    0% { left: -150%; }
-    50%, 100% { left: 150%; }
-}
-
-.submit-btn-shimmer:hover {
-    background: var(--gold);
-    transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(166, 124, 46, 0.4);
-}
-
-.submit-btn-shimmer i {
-    transition: transform 0.3s ease;
-}
-
-.submit-btn-shimmer:hover i {
-    transform: translateX(4px);
-}
-        .footer {
-            margin-top: 18px;
+        .login-content-left {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            font-size: 12px;
+            color: var(--white);
+            padding: 40px;
+        }
+
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            background: var(--white);
+            padding: 12px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            object-fit: contain;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .login-left:hover .login-logo {
+            transform: translateY(-5px);
+        }
+
+        .login-company {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .login-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--gold);
+            margin: 15px auto;
+            border-radius: 10px;
+        }
+
+        .login-content-left p {
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* MODAL KANAN */
+        .login-right {
+            flex: 1;
+            background: var(--white);
+            padding: 60px 70px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* FIX TOMBOL CLOSE LOGIN MOBILE & DESKTOP */
+        .modal-close-btn {
+            position: absolute !important;
+            top: 18px !important;
+            right: 18px !important;
+            width: 42px !important;
+            height: 42px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+            outline: none !important;
+            border-radius: 50% !important;
+            background: rgba(15, 23, 42, 0.08) !important;
+            color: #172033 !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            z-index: 99999 !important;
+            pointer-events: auto !important;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close-btn i {
+            pointer-events: none !important;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(15, 23, 42, 0.14) !important;
+            transform: rotate(90deg);
+        }
+
+        .modal-close-btn:active {
+            transform: scale(0.94);
+        }
+
+        .login-right-inner {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.1s;
+        }
+
+        .login-overlay.show .login-right-inner {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .login-header {
+            margin-bottom: 35px;
+        }
+
+        .login-header h2 {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* FLOATING LABELS INPUT */
+        .form-floating {
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             color: #94a3b8;
+            font-size: 16px;
+            transition: 0.3s ease;
+            z-index: 2;
+        }
+
+        .form-floating input {
+            width: 100%;
+            height: 62px;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            background: #f8fafc;
+            padding: 24px 20px 8px 52px; 
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        .form-floating label {
+            position: absolute;
+            left: 52px;
+            top: 22px;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            transform-origin: left top;
+        }
+
+        .form-floating input:focus ~ label,
+        .form-floating input:not(:placeholder-shown) ~ label {
+            transform: translateY(-12px) scale(0.85);
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .form-floating input:focus {
+            outline: none;
+            background: var(--white);
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(166, 124, 46, 0.1);
+        }
+
+        .form-floating input:focus ~ .input-icon {
+            color: var(--gold);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 16px;
+            transition: 0.3s;
+            z-index: 3;
+        }
+
+        .toggle-password:hover {
+            color: var(--gold);
+        }
+
+        /* OPSI BAWAH FORM */
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 99;
+            pointer-events: auto;
+        }
+
+        .custom-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .custom-checkbox-wrapper input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--gold);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .forgot-link:hover {
+            color: var(--gold);
+        }
+
+        /* SHIMMER BUTTON */
+        .submit-btn-shimmer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            height: 56px;
+            border-radius: 14px;
+            border: none;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(107, 79, 29, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn-shimmer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: skewX(-20deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -150%; }
+            50%, 100% { left: 150%; }
+        }
+
+        .submit-btn-shimmer:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(166, 124, 46, 0.4);
+        }
+
+        .submit-btn-shimmer i {
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn-shimmer:hover i {
+            transform: translateX(4px);
         }
 
         /* =========================================================
-           RESPONSIVE
+           RESPONSIVE FIXES (NAVBAR & MODAL MOBILE)
         ========================================================= */
         @media (max-width: 900px) {
             .hero {
@@ -868,10 +927,38 @@
                 padding: 70px 30px;
             }
             .navbar {
-                padding: 0 30px;
+                height: auto !important;
+                min-height: 70px;
+                padding: 12px 24px !important;
+            }
+            .navbar-container {
+                flex-wrap: wrap;
+                gap: 12px;
             }
             .nav-menu {
+                display: flex !important;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                overflow-y: hidden;
+                justify-content: flex-start;
+                gap: 22px !important;
+                padding: 8px 2px 4px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .nav-menu::-webkit-scrollbar {
                 display: none;
+            }
+            .nav-menu a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 12px !important;
+            }
+            .nav-login-btn {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                padding: 8px 16px !important;
             }
             .company {
                 font-size: 36px;
@@ -879,31 +966,12 @@
             .features {
                 flex-direction: column;
             }
-            .brand img {
-                width: 45px;
-                height: 45px;
-            }
         }
 
         @media (max-width: 600px) {
             .navbar {
-                height: 70px;
-                padding: 0 18px;
+                padding: 10px 18px !important;
             }
-            .brand {
-                gap: 8px;
-            }
-            .brand img {
-                width: 42px;
-                height: 42px;
-            }
-            .brand-text {
-                font-size: 12px;
-            }
-            .brand-text span {
-                font-size: 9px;
-            }
-
             .hero {
                 padding: 100px 20px 50px;
                 align-items: flex-start;
@@ -915,26 +983,12 @@
             }
             .company {
                 font-size: 29px;
-                line-height: 1.2;
-                letter-spacing: -0.5px;
             }
             .system {
                 font-size: 17px;
-                line-height: 1.4;
             }
             .description {
                 font-size: 13px;
-                line-height: 1.7;
-            }
-            
-            .features {
-                gap: 10px;
-                margin-top: 25px;
-            }
-            .feature {
-                width: 100%;
-                padding: 17px;
-                border-radius: 15px;
             }
             .btn-login {
                 width: 100%;
@@ -943,23 +997,14 @@
                 margin-top: 25px;
                 font-size: 14px;
             }
-
             .system-section {
                 padding: 60px 18px;
             }
             .system-container h2 {
                 font-size: 25px;
-                line-height: 1.3;
             }
-            .system-grid {
-                gap: 15px;
-                margin-top: 30px;
-            }
-            .system-card {
-                padding: 22px;
-            }
-
-            /* Modal Responsive */
+            
+            /* Responsive Modal Login */
             .login-overlay {
                 padding: 15px;
             }
@@ -975,9 +1020,6 @@
                 width: 100%;
                 min-height: 170px;
                 padding: 25px 15px;
-            }
-            .login-left > div {
-                transform: none;
             }
             .login-logo {
                 width: 75px;
@@ -995,12 +1037,56 @@
                 font-size: 23px;
                 margin-bottom: 8px;
             }
+            .modal-close-btn {
+                top: 12px !important;
+                right: 12px !important;
+                width: 40px !important;
+                height: 40px !important;
+            }
+        }
+
+        /* Tombol Back to Top Melayang */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 10px 25px rgba(107, 79, 29, 0.4);
+            cursor: pointer;
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-to-top.show-btn {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(166, 124, 46, 0.6);
         }
     </style>
 </head>
 
 <body id="home">
-
+<!-- Tombol Kembali ke Atas -->
+    <div class="back-to-top" id="backToTopBtn" onclick="goHome()" title="Kembali ke atas">
+        <i class="fa-solid fa-arrow-up"></i>
+    </div>
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <a href="#" onclick="goHome(); return false;" class="brand">
@@ -1010,16 +1096,21 @@
                 <span>Sistem Manajemen Keuangan</span>
             </div>
         </a>
-<div class="nav-menu">
-    <a href="#" onclick="goHome(); return false;" class="nav-active">Beranda</a>
-    <a href="#system" onclick="goSystem(); return false;">Fitur Sistem</a>
-    <a href="{{ route('public.finance') }}">Keuangan</a>
-    
-    <!-- Tombol Masuk Baru -->
-    <a href="javascript:void(0)" onclick="openLogin()" class="nav-login-btn">
-        Masuk <i class="fa-solid fa-arrow-right-to-bracket"></i>
-    </a>
-</div>
+
+        <!-- Tombol Hamburger Mobile -->
+        <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fa-solid fa-bars" id="menuIcon"></i>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <a href="#" onclick="goHome(); closeMobileMenu(); return false;" class="nav-active">Beranda</a>
+            <a href="#system" onclick="goSystem(); closeMobileMenu(); return false;">Fitur Sistem</a>
+            <a href="{{ route('public.finance') }}" onclick="closeMobileMenu()">Keuangan</a>
+            
+            <a href="javascript:void(0)" onclick="openLogin(); closeMobileMenu();" class="nav-login-btn">
+                Masuk <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </a>
+        </div>
     </nav>
 
     <!-- HERO -->
@@ -1063,16 +1154,17 @@
             </div>
         </div>
 
-        <div class="hero-right">
+<div class="hero-right">
             <div class="dashboard-preview">
                 <div class="preview-title">Ringkasan Sistem</div>
                 <div class="preview-card">
                     <div class="preview-label">Pemantauan Keuangan</div>
                     <div class="preview-value">Aktif</div>
                 </div>
-                <div class="preview-card">
+               <div class="preview-card">
                     <div class="preview-label">Proyek Aktif</div>
-                    <div class="preview-value">12 Proyek</div>
+                    <!-- Nilai diambil otomatis dari database, dengan fallback angka 137 jika kosong -->
+                    <div class="preview-value" data-target="{{ $totalProyek ?? 137 }}">0</div>
                 </div>
                 <div class="preview-card">
                     <div class="preview-label">Status Sistem</div>
@@ -1162,89 +1254,90 @@
             </div>
         </div>
     </section>
-<!-- LOGIN MODAL -->
-<div class="login-overlay" id="login">
-    <div class="login-box">
-        
-        <!-- BAGIAN KIRI (AURA GLOW BACKGROUND) -->
-<!-- BAGIAN KIRI (CORPORATE ELEGANCE) -->
-<div class="login-left">
-    <div class="login-left-overlay"></div>
-    <div class="login-content-left">
-        <img src="{{ asset('images/logo-cv.png') }}" class="login-logo" alt="Logo">
-        <div class="login-company">Sahabat Eksplorasi Banua</div>
-        <div class="login-divider"></div>
-        <p>Sistem Manajemen Keuangan & Proyek</p>
-    </div>
-</div>
-        <!-- BAGIAN KANAN (FORM DENGAN FLOATING LABELS) -->
-        <div class="login-right">
-            <!-- Tombol Close di Sudut Kanan Atas -->
-            <button class="modal-close-btn" onclick="closeLogin()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
 
-            <div class="login-right-inner">
-                <div class="login-header">
-                    <h2>Masuk ke Portal</h2>
-                    <p>Selamat datang kembali! Silakan masuk ke akun Anda.</p>
+    <!-- LOGIN MODAL -->
+    <div class="login-overlay" id="login">
+        <div class="login-box">
+            <!-- MODAL KIRI -->
+            <div class="login-left">
+                <div class="login-left-overlay"></div>
+                <div class="login-content-left">
+                    <img src="{{ asset('images/logo-cv.png') }}" class="login-logo" alt="Logo">
+                    <div class="login-company">Sahabat Eksplorasi Banua</div>
+                    <div class="login-divider"></div>
+                    <p>Sistem Manajemen Keuangan & Proyek</p>
                 </div>
-
-                <form method="POST" action="{{ route('login') }}" class="modern-form">
-                    @csrf
-                    
-                    <!-- Input Email dengan Floating Label -->
-                    <div class="form-floating">
-                        <i class="fa-regular fa-envelope input-icon"></i>
-                        <!-- PENTING: placeholder=" " (spasi) diperlukan untuk trik CSS floating label -->
-                        <input type="email" id="email" name="email" required placeholder=" ">
-                        <label for="email">Email Perusahaan</label>
-                    </div>
-                    
-                    <!-- Input Password dengan Floating Label -->
-                    <div class="form-floating">
-                        <i class="fa-solid fa-lock input-icon"></i>
-                        <input type="password" id="password" name="password" required placeholder=" ">
-                        <label for="password">Kata Sandi</label>
-                        <span class="toggle-password" onclick="togglePassword()">
-                            <i class="fa-solid fa-eye"></i>
-                        </span>
-                    </div>
-
-
-
-<div class="login-options" style="position: relative; z-index: 10;">
-    <label class="custom-checkbox-wrapper">
-        <input type="checkbox" name="remember">
-        <span class="checkmark"></span>
-        Ingat Sesi Saya
-    </label>
-    
-    <!-- Panggil fungsi showForgotAlert() -->
-    <span onclick="showForgotAlert()" class="forgot-link" style="position: relative; z-index: 50; cursor: pointer;">
-        Lupa Sandi?
-    </span>
-</div>
-                    <button type="submit" class="submit-btn-shimmer">
-                        <span>MASUK KE SISTEM</span>
-                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    </button>
-                </form>
             </div>
-        </div> 
-        
-    </div>
-</div>
 
+            <!-- MODAL KANAN -->
+            <div class="login-right">
+                <button type="button" class="modal-close-btn" onclick="closeLogin()" aria-label="Tutup">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="login-right-inner">
+                    <div class="login-header">
+                        <h2>Masuk ke Portal</h2>
+                        <p>Selamat datang kembali! Silakan masuk ke akun Anda.</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('login') }}" class="modern-form">
+                        @csrf
+
+                        @if ($errors->any())
+                            <div style="background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; animation: fadeIn 0.3s ease;">
+                                <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px; flex-shrink: 0;"></i>
+                                <span>Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali.</span>
+                            </div>
+                        @endif
+                        
+                        <div class="form-floating">
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                            <input type="email" id="email" name="email" required placeholder=" ">
+                            <label for="email">Email Perusahaan</label>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="password" name="password" required placeholder=" ">
+                            <label for="password">Kata Sandi</label>
+                            <span class="toggle-password" onclick="togglePassword()">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </div>
+
+                        <div class="login-options">
+                            <label class="custom-checkbox-wrapper">
+                                <input type="checkbox" name="remember">
+                                Ingat Sesi Saya
+                            </label>
+                            
+                            <span onclick="showForgotAlert()" class="forgot-link">
+                                Lupa Sandi?
+                            </span>
+                        </div>
+
+                        <button type="submit" class="submit-btn-shimmer">
+                            <span>MASUK KE SISTEM</span>
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        </button>
+                    </form>
+                </div>
+            </div> 
+        </div>
+    </div>
 
     <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function openLogin() {
             document.getElementById('login').classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLogin() {
             document.getElementById('login').classList.remove('show');
+            document.body.style.overflow = 'auto';
         }
 
         function goSystem() {
@@ -1287,12 +1380,7 @@
                 icon.classList.add("fa-eye");
             }
         }
-    </script>
-   <!-- ... kode lainnya ... -->
 
-    <!-- SCRIPTS SWEETALERT & CUSTOM FUNCTION -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
         function showForgotAlert() {
             Swal.fire({
                 icon: 'info',
@@ -1308,6 +1396,102 @@
                 }
             });
         }
+
+        // Toggle Hamburger Menu Mobile
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            navMenu.classList.toggle('show');
+            
+            if (navMenu.classList.contains('show')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            navMenu.classList.remove('show');
+            menuIcon.classList.remove('fa-xmark');
+            menuIcon.classList.add('fa-bars');
+            document.body.style.overflow = 'auto';
+        }
+
+// Efek loading saat form dikirim (Dipaksa tampil dengan jeda waktu)
+        document.querySelector('.modern-form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Pastikan input sudah terisi (lolos validasi required)
+            if (email && password) {
+                // Tahan pengiriman form default browser agar animasi sempat muncul
+                e.preventDefault(); 
+
+                const btn = this.querySelector('.submit-btn-shimmer');
+                const span = btn.querySelector('span');
+                
+                // Ubah teks dan tampilkan ikon berputar
+                span.innerHTML = 'MEMPROSES... <i class="fa-solid fa-spinner fa-spin"></i>';
+                btn.style.opacity = '0.8';
+                btn.style.pointerEvents = 'none'; // Cegah klik ganda
+
+                // Kirim form ke server setelah jeda 450 milidetik (animasi terlihat jelas)
+                setTimeout(() => {
+                    this.submit();
+                }, 450);
+            }
+        });
+
+       // Efek Counter Animation untuk Angka Proyek Aktif (Dinamis)
+        document.addEventListener("DOMContentLoaded", () => {
+            const counterElement = document.querySelector('.preview-value[data-target]');
+            if (!counterElement) return;
+
+            const target = +counterElement.getAttribute('data-target');
+            let count = 0;
+            
+            // Kecepatan disesuaikan agar angka ratusan tetap cepat dan mulus
+            const speed = target > 100 ? 40 : 200; 
+
+            const updateCount = () => {
+                const increment = Math.ceil(target / 50); // Membagi animasi dalam 50 langkah
+                count += increment;
+
+                if (count < target) {
+                    counterElement.innerText = count;
+                    setTimeout(updateCount, 25);
+                } else {
+                    counterElement.innerText = target; // Berhenti pas di angka asli database
+                }
+            };
+
+            updateCount();
+        });
+
+        // Otomatis buka modal login kembali jika ada pesan error dari Laravel
+        @if ($errors->any())
+            window.addEventListener("DOMContentLoaded", () => {
+                openLogin();
+            });
+        @endif
+
+        // Munculkan atau sembunyikan tombol Back to Top berdasarkan posisi scroll
+        window.addEventListener("scroll", function() {
+            const backToTopBtn = document.getElementById("backToTopBtn");
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("show-btn");
+            } else {
+                backToTopBtn.classList.remove("show-btn");
+            }
+        });
     </script>
 </body>
 </html>

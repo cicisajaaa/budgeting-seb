@@ -44,7 +44,7 @@ use App\Http\Controllers\Owner\OwnerApprovalController;
 use App\Http\Controllers\Owner\OwnerAuditController;
 use App\Http\Controllers\Owner\OwnerReportController;
 
-
+use App\Models\Project; // Sesuaikan dengan model proyek Anda
 
 /*
 |--------------------------------------------------------------------------
@@ -53,12 +53,14 @@ use App\Http\Controllers\Owner\OwnerReportController;
 */
 
 
+
+
 Route::get('/', function(){
+    // Mengambil jumlah total proyek dari database secara otomatis
+    $totalProyek = Project::count(); 
 
-    return view('welcome');
-
+    return view('welcome', compact('totalProyek'));
 });
-
 
 
 

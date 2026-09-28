@@ -33,20 +33,44 @@ class FinanceDashboardController extends Controller
         */
 
 
-        // Total dana masuk
-        $totalDeposit = SetoranProyek::sum('jumlah_setoran');;
+// ===============================
+// TOTAL DANA MASUK
+// ===============================
+
+$totalDepositQuery = SetoranProyek::query();
+
+if (!empty($bulan)) {
+    $totalDepositQuery->whereMonth('tanggal_setoran', $bulan);
+}
+
+if (!empty($tahun)) {
+    $totalDepositQuery->whereYear('tanggal_setoran', $tahun);
+}
+
+$totalDeposit = $totalDepositQuery->sum('jumlah_setoran');
 
 
+// ===============================
+// TOTAL PENGELUARAN
+// ===============================
 
-        // Total pengeluaran yang sudah disetujui
-$totalExpense = TransaksiDana::sum('jumlah');
+$totalExpenseQuery = TransaksiDana::query();
 
+if (!empty($bulan)) {
+    $totalExpenseQuery->whereMonth('tanggal', $bulan);
+}
+
+if (!empty($tahun)) {
+    $totalExpenseQuery->whereYear('tanggal', $tahun);
+}
+
+$totalExpense = $totalExpenseQuery->sum('jumlah');
 // Saldo aktif rekening perusahaan
 $totalSaldoBank = RekeningBank::sum('saldo');
 
 $totalSaldoSistem = RekeningBank::sum('saldo_awal')
     +
-    DB::table('mutasi_keuangan')
+    DB::table('mutasi_keuangan')    
         ->where('jenis','masuk')
         ->sum('nominal')
     -
@@ -161,18 +185,52 @@ $expenseThisMonth = TransaksiDana::whereMonth(
 // PUBLIC FINANCE DETAIL
 // ===============================
 
-// Detail dana masuk
-$publicDeposits = SetoranProyek::with('proyek')
+// ===============================
+// FILTER PUBLIC FINANCE
+// ===============================
+
+$bulan = request('bulan');
+$tahun = request('tahun');
+
+// ===============================
+// DETAIL DANA MASUK
+// ===============================
+
+$publicDepositsQuery = SetoranProyek::with('proyek');
+
+if (!empty($bulan)) {
+    $publicDepositsQuery->whereMonth('tanggal_setoran', $bulan);
+}
+
+if (!empty($tahun)) {
+    $publicDepositsQuery->whereYear('tanggal_setoran', $tahun);
+}
+
+$publicDeposits = $publicDepositsQuery
     ->latest('tanggal_setoran')
     ->get();
 
-// Detail pengeluaran
-$publicExpenses = TransaksiDana::with([
-    'pengajuanDana.proyek'
-])
+
+// ===============================
+// DETAIL PENGELUARAN
+// ===============================
+
+$publicExpensesQuery = TransaksiDana::with([
+    'pengajuanDana.proyek',
+    'pengajuanDana.divisi',
+]);
+
+if (!empty($bulan)) {
+    $publicExpensesQuery->whereMonth('tanggal', $bulan);
+}
+
+if (!empty($tahun)) {
+    $publicExpensesQuery->whereYear('tanggal', $tahun);
+}
+
+$publicExpenses = $publicExpensesQuery
     ->latest('tanggal')
     ->get();
-
 
         /*
         |--------------------------------------------------------------------------
@@ -339,13 +397,18 @@ $cashFlowChart = [
         );
 
     }
-public function public(Request $request)
+
+
+
+    public function public(Request $request)
 {
     // Ambil input filter dari URL
     $filterBulan = $request->input('bulan');
     $filterTahun = $request->input('tahun');
+    $tanggalMulai = $request->input('tanggal_mulai');
+    $tanggalSelesai = $request->input('tanggal_selesai');
 
-    // Default: Ambil semua data (Ringkasan tetap global kecuali difilter spesifik)
+    // Default: Ambil semua data ringkasan global
     $totalDeposit = SetoranProyek::sum('jumlah_setoran');
     $totalExpense = TransaksiDana::sum('jumlah');
     $totalSaldoBank = RekeningBank::sum('saldo');
@@ -357,34 +420,40 @@ public function public(Request $request)
     $expenseThisMonth = TransaksiDana::whereMonth('tanggal', Carbon::now()->month)->whereYear('tanggal', Carbon::now()->year)->sum('jumlah');
 
     // ===============================
-    // TABEL DETAIL (DENGAN FILTER)
+    // TABEL DETAIL (DENGAN FILTER PERIODE / BULAN / TAHUN)
     // ===============================
     $queryDeposits = SetoranProyek::with('proyek')->latest('tanggal_setoran');
     $queryExpenses = TransaksiDana::with(['pengajuanDana.proyek', 'pengajuanDana.divisi'])->latest('tanggal');
 
-    // Terapkan Filter jika ada parameter 'bulan'
-    if ($filterBulan) {
-        $queryDeposits->whereMonth('tanggal_setoran', $filterBulan);
-        $queryExpenses->whereMonth('tanggal', $filterBulan);
+    // Terapkan Filter Rentang Tanggal jika diisi
+    if ($tanggalMulai && $tanggalSelesai) {
+        $queryDeposits->whereBetween('tanggal_setoran', [$tanggalMulai, $tanggalSelesai]);
+        $queryExpenses->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai]);
+    } else {
+        // Jika tidak pakai rentang tanggal, cek filter bulan/tahun biasa
+        if ($filterBulan) {
+            $queryDeposits->whereMonth('tanggal_setoran', $filterBulan);
+            $queryExpenses->whereMonth('tanggal', $filterBulan);
+        }
+
+        if ($filterTahun) {
+            $queryDeposits->whereYear('tanggal_setoran', $filterTahun);
+            $queryExpenses->whereYear('tanggal', $filterTahun);
+        }
     }
 
-    // Terapkan Filter jika ada parameter 'tahun'
-    if ($filterTahun) {
-        $queryDeposits->whereYear('tanggal_setoran', $filterTahun);
-        $queryExpenses->whereYear('tanggal', $filterTahun);
-    }
-
-  $publicDeposits = $queryDeposits->paginate(10, ['*'], 'deposits_page')->withQueryString();
+    $publicDeposits = $queryDeposits->paginate(10, ['*'], 'deposits_page')->withQueryString();
     $publicExpenses = $queryExpenses->paginate(10, ['*'], 'expenses_page')->withQueryString();
-// Rekap Keuangan Per Project (Gunakan Paginate, bukan Get)
+    
+    // Rekap Keuangan Per Project
     $publicProjectFinance = Proyek::with([
         'setoranProyek', 'saldoDivisi', 'alokasiDivisi', 'tugas',
         'pengajuanDana.transaksiDana', 'pengajuanDana.divisi',
     ])->paginate(10, ['*'], 'projects_page')->withQueryString();
-   // ===============================
+
+    // ===============================
     // CHART CASH FLOW (Dinamis Mengikuti Filter Tahun)
     // ===============================
-    // Gunakan tahun dari filter, jika tidak ada, gunakan tahun ini
     $tahunChart = $filterTahun ? $filterTahun : Carbon::now()->year;
 
     $monthlyIncome = SetoranProyek::whereYear('tanggal_setoran', $tahunChart)
@@ -401,23 +470,53 @@ public function public(Request $request)
         'expense' => collect(range(1, 12))->map(fn($bulan) => $monthlyExpense[$bulan] ?? 0),
     ];
 
+    // --- TAMBAHKAN DI DALAM METHOD public() ---
+    
+    // Ambil semua proyek dengan relasi keuangan untuk dihitung status kesehatannya
+    $allProjectsForHealth = Proyek::with(['setoranProyek', 'pengajuanDana.transaksiDana'])->get();
+    
+    $proyekSehat = 0;
+    $proyekKritis = 0;
+
+    foreach ($allProjectsForHealth as $proj) {
+        $pExp = $proj->pengajuanDana->flatMap(fn($p) => $p->transaksiDana)->sum('jumlah');
+        $pDep = $proj->setoranProyek->sum('jumlah_setoran');
+        $pBal = $pDep - $pExp;
+        
+        // Jika sisa saldo kurang dari 10% dari anggaran atau minus, kategorikan kritis/perhatian
+        $anggaran = $proj->total_anggaran > 0 ? $proj->total_anggaran : 1;
+        $persenTerpakai = ($pExp / $anggaran) * 100;
+
+        if ($pBal < 0 || $persenTerpakai >= 90) {
+            $proyekKritis++;
+        } else {
+            $proyekSehat++;
+        }
+    }
+
     return view('dashboard.keuangan-public', compact(
         'totalDeposit', 'totalExpense', 'sisaDana', 'totalSaldoDivisi', 'totalSaldoBank',
         'totalTransaction', 'totalBudget', 'totalProject', 'expenseThisMonth',
-        'publicDeposits', 'publicExpenses', 'publicProjectFinance', 'publicCashFlow'
+        'publicDeposits', 'publicExpenses', 'publicProjectFinance', 'publicCashFlow',
+        'tanggalMulai', 'tanggalSelesai'
     ));
 }
-
 public function export(Request $request)
-    {
-        $filterBulan = $request->input('bulan');
-        $filterTahun = $request->input('tahun');
-        $type = $request->input('type'); // 'pdf' atau 'excel'
+{
+    $filterBulan = $request->input('bulan');
+    $filterTahun = $request->input('tahun');
+    $tanggalMulai = $request->input('tanggal_mulai');
+    $tanggalSelesai = $request->input('tanggal_selesai');
+    $type = $request->input('type'); // 'pdf' atau 'excel'
 
-        // 1. Ambil Data (Bisa difilter)
-        $queryDeposits = SetoranProyek::with('proyek')->latest('tanggal_setoran');
-        $queryExpenses = TransaksiDana::with(['pengajuanDana.proyek', 'pengajuanDana.divisi'])->latest('tanggal');
+    // 1. Ambil Data dengan Filter
+    $queryDeposits = SetoranProyek::with('proyek')->latest('tanggal_setoran');
+    $queryExpenses = TransaksiDana::with(['pengajuanDana.proyek', 'pengajuanDana.divisi'])->latest('tanggal');
 
+    if ($tanggalMulai && $tanggalSelesai) {
+        $queryDeposits->whereBetween('tanggal_setoran', [$tanggalMulai, $tanggalSelesai]);
+        $queryExpenses->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai]);
+    } else {
         if ($filterBulan) {
             $queryDeposits->whereMonth('tanggal_setoran', $filterBulan);
             $queryExpenses->whereMonth('tanggal', $filterBulan);
@@ -427,30 +526,26 @@ public function export(Request $request)
             $queryDeposits->whereYear('tanggal_setoran', $filterTahun);
             $queryExpenses->whereYear('tanggal', $filterTahun);
         }
-
-        $deposits = $queryDeposits->get();
-        $expenses = $queryExpenses->get();
-
-
-
-   // 2. Eksekusi Export
-        if ($type === 'pdf') {
-            // Render PDF memanggil file export-keuangan
-            $pdf = Pdf::loadView('dashboard.export-keuangan', compact('deposits', 'expenses', 'filterBulan', 'filterTahun', 'type'));
-            return $pdf->download('Laporan_Keuangan_SEB.pdf');
-            
-        } elseif ($type === 'excel') {
-            $fileName = "Laporan_Keuangan_SEB.xls";
-            header("Content-Type: application/vnd.ms-excel");
-            header("Content-Disposition: attachment; filename=\"$fileName\"");
-            
-            // 👇 PERHATIKAN BARIS INI: Harus ada tambahan -excel 👇
-            return view('dashboard.export-keuangan-excel', compact('deposits', 'expenses', 'filterBulan', 'filterTahun', 'type'));
-        }
-
-        return redirect()->back();
     }
 
+    $deposits = $queryDeposits->get();
+    $expenses = $queryExpenses->get();
+
+    // 2. Eksekusi Export
+    if ($type === 'pdf') {
+        $pdf = Pdf::loadView('dashboard.export-keuangan', compact('deposits', 'expenses', 'filterBulan', 'filterTahun', 'tanggalMulai', 'tanggalSelesai', 'type'));
+        return $pdf->download('Laporan_Keuangan_SEB.pdf');
+        
+    } elseif ($type === 'excel') {
+        $fileName = "Laporan_Keuangan_SEB.xls";
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
+        
+        return view('dashboard.export-keuangan-excel', compact('deposits', 'expenses', 'filterBulan', 'filterTahun', 'tanggalMulai', 'tanggalSelesai', 'type'));
+    }
+
+    return redirect()->back();
+}
 
 
 }
