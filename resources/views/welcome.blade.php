@@ -170,7 +170,7 @@
             background: linear-gradient(135deg, #7c5c22, #b88a33);
         }
 
-        /* Media Query untuk Hamburger Menu di Mobile / Tablet */
+        /* Media Query Navbar Mobile Berstandar Overlay */
         @media (max-width: 900px) {
             .navbar {
                 padding: 0 24px !important;
@@ -926,40 +926,9 @@
                 scroll-margin-top: 80px;
                 padding: 70px 30px;
             }
-            .navbar {
-                height: auto !important;
-                min-height: 70px;
-                padding: 12px 24px !important;
-            }
-            .navbar-container {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-            .nav-menu {
-                display: flex !important;
-                width: 100%;
-                max-width: 100%;
-                overflow-x: auto;
-                overflow-y: hidden;
-                justify-content: flex-start;
-                gap: 22px !important;
-                padding: 8px 2px 4px;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-            }
-            .nav-menu::-webkit-scrollbar {
-                display: none;
-            }
-            .nav-menu a {
-                flex: 0 0 auto;
-                white-space: nowrap;
-                font-size: 12px !important;
-            }
-            .nav-login-btn {
-                flex: 0 0 auto;
-                white-space: nowrap;
-                padding: 8px 16px !important;
-            }
+            
+            /* KODE CSS NAVBAR YANG BERTABRAKAN TELAH DIHAPUS DI SINI */
+
             .company {
                 font-size: 36px;
             }
@@ -969,9 +938,6 @@
         }
 
         @media (max-width: 600px) {
-            .navbar {
-                padding: 10px 18px !important;
-            }
             .hero {
                 padding: 100px 20px 50px;
                 align-items: flex-start;
@@ -1425,25 +1391,20 @@
             document.body.style.overflow = 'auto';
         }
 
-// Efek loading saat form dikirim (Dipaksa tampil dengan jeda waktu)
+        // Efek loading saat form dikirim
         document.querySelector('.modern-form').addEventListener('submit', function(e) {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Pastikan input sudah terisi (lolos validasi required)
             if (email && password) {
-                // Tahan pengiriman form default browser agar animasi sempat muncul
                 e.preventDefault(); 
-
                 const btn = this.querySelector('.submit-btn-shimmer');
                 const span = btn.querySelector('span');
                 
-                // Ubah teks dan tampilkan ikon berputar
                 span.innerHTML = 'MEMPROSES... <i class="fa-solid fa-spinner fa-spin"></i>';
                 btn.style.opacity = '0.8';
-                btn.style.pointerEvents = 'none'; // Cegah klik ganda
+                btn.style.pointerEvents = 'none'; 
 
-                // Kirim form ke server setelah jeda 450 milidetik (animasi terlihat jelas)
                 setTimeout(() => {
                     this.submit();
                 }, 450);
@@ -1458,18 +1419,17 @@
             const target = +counterElement.getAttribute('data-target');
             let count = 0;
             
-            // Kecepatan disesuaikan agar angka ratusan tetap cepat dan mulus
             const speed = target > 100 ? 40 : 200; 
 
             const updateCount = () => {
-                const increment = Math.ceil(target / 50); // Membagi animasi dalam 50 langkah
+                const increment = Math.ceil(target / 50); 
                 count += increment;
 
                 if (count < target) {
                     counterElement.innerText = count;
                     setTimeout(updateCount, 25);
                 } else {
-                    counterElement.innerText = target; // Berhenti pas di angka asli database
+                    counterElement.innerText = target; 
                 }
             };
 

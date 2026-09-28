@@ -71,22 +71,22 @@
         ========================================================= */
         .public-navbar {
             position: fixed; top: 0; left: 0; right: 0; height: 80px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 6%; color: #fff; z-index: 9999; background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
+            padding: 0 70px; color: #fff; z-index: 9999; background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: background 0.3s ease;
         }
         .public-navbar.scrolled { background: rgba(15, 23, 42, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .navbar-container { width: 100%; max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
         
-        .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: #fff; min-width: 0; }
-        .brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: contain; background: #fff; padding: 4px; flex-shrink: 0; }
-        .brand-text { font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .brand-text span { display: block; font-size: 11px; color: var(--brand-gold); font-weight: 500; letter-spacing: 0.5px; }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; min-width: 0; }
+        .brand img { width: 45px; height: 45px; border-radius: 50%; object-fit: contain; background: #fff; padding: 4px; flex-shrink: 0; }
+        .brand-text { font-size: 15px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .brand-text span { display: block; font-size: 11px; color: #d7b787; font-weight: 400; }
         
-        .nav-menu { display: flex; align-items: center; gap: 36px; }
-        .nav-menu a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
-        .nav-menu a:hover, .nav-menu .nav-active { color: #fff; }
-        .nav-menu .nav-active { font-weight: 700; position: relative; }
-        .nav-menu .nav-active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background: var(--brand-gold); border-radius: 2px; }
+        .nav-menu { display: flex; align-items: center; gap: 35px; }
+        .nav-menu a { color: #fff; text-decoration: none; font-size: 13px; opacity: 0.8; font-weight: 500; transition: 0.3s; }
+        .nav-menu a:hover, .nav-menu .nav-active { opacity: 1; color: #d7b787; }
+        .nav-menu .nav-active { opacity: 1; color: #d7b787; font-weight: 700; position: relative; }
+        .nav-menu .nav-active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background: #d7b787; border-radius: 2px; }
 
         /* Tombol Hamburger Menu Mobile */
         .mobile-menu-toggle {
@@ -250,53 +250,78 @@
         /* =========================================================
            7. RESPONSIVE MEDIA QUERIES (HAMBURGER NAVBAR & MOBILE FIXES)
         ========================================================= */
-        @media (max-width: 1024px) {
-            .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-            .widget-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .finance-hero { padding: 120px 40px 60px !important; }
+        @media (max-width: 900px) {
+            .public-navbar {
+                padding: 0 24px !important;
+                height: 70px !important;
+            }
 
-            .mobile-menu-toggle { display: block; }
+            .mobile-menu-toggle {
+                display: block;
+            }
 
             .nav-menu {
                 position: fixed;
-                top: 80px;
+                top: 0;
                 left: 0;
-                right: 0;
+                width: 100vw;
+                height: 100vh;
                 background: rgba(15, 23, 42, 0.98);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                gap: 24px;
+                gap: 16px;
                 padding: 40px 20px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                
                 opacity: 0;
                 pointer-events: none;
-                transform: translateY(-10px);
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 9998;
+                transition: opacity 0.3s ease;
+                z-index: 99998;
             }
 
             .nav-menu.show {
                 opacity: 1;
                 pointer-events: auto;
-                transform: translateY(0);
             }
 
-            .nav-menu a { font-size: 16px !important; }
-            .nav-menu .nav-active::after { bottom: -4px; }
+            .nav-menu a {
+                font-size: 15px !important;
+                font-weight: 600 !important;
+                color: #cbd5e1 !important;
+                padding: 12px 24px;
+                border-radius: 12px;
+                width: 80%;
+                max-width: 280px;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                transition: 0.2s;
+            }
+
+            .nav-menu a:hover,
+            .nav-menu .nav-active {
+                color: #fff !important;
+                background: rgba(166, 124, 46, 0.2);
+                border-color: rgba(166, 124, 46, 0.4);
+            }
+            .nav-menu .nav-active::after { display: none; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+            .widget-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .finance-hero { padding: 120px 40px 60px !important; }
         }
 
         @media (max-width: 768px) {
             html, body { width: 100%; max-width: 100%; overflow-x: hidden !important; }
-            .public-navbar { position: fixed !important; height: 80px !important; padding: 0 20px !important; }
+            .public-navbar { position: fixed !important; height: 70px !important; padding: 0 20px !important; }
             .navbar-container { width: 100%; display: flex; justify-content: space-between; align-items: center; }
             .brand { width: auto; flex: 1; min-width: 0; gap: 9px; }
-            .finance-hero { min-height: auto !important; padding: 145px 20px 55px !important; }
+            .finance-hero { min-height: auto !important; padding: 125px 20px 55px !important; }
             .hero-inner { grid-template-columns: 1fr !important; gap: 28px; }
             .hero-title { font-size: 38px !important; }
             .finance-content { width: 100% !important; padding: 42px 14px 60px !important; }
@@ -334,7 +359,62 @@
             .modal-wrap { padding: 12px !important; }
             .receipt-card { width: 100% !important; max-width: 100% !important; max-height: calc(100vh - 24px); overflow-y: auto !important; }
         }
+@media (max-width: 768px) {
+            /* Perbaiki kontainer widget agar tidak keluar layar */
+            .widget-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 20px !important;
+                width: 100% !important;
+            }
 
+            .widget-box {
+                width: 100% !important;
+                padding: 16px !important;
+                overflow: hidden !important; /* Mencegah elemen di dalam meluber keluar */
+            }
+
+            /* Perbaiki ukuran kotak grafik Arus Kas Bulanan */
+            .chart-wrap {
+                height: 220px !important; /* Tinggi disesuaikan untuk layar HP */
+                width: 100% !important;
+                position: relative !important;
+            }
+
+            #cashFlowChart {
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            /* Perbaiki tampilan Rekapitulasi Anggaran agar teks nominal tidak turun/terpotong */
+            .rekap-item {
+                display: flex !important;
+                flex-direction: row !important; /* Biar tetap sejajar kiri-kanan */
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 10px !important;
+                padding: 12px 0 !important;
+            }
+
+            .r-info {
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+
+            .r-name {
+                font-size: 11.5px !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+
+            .r-amount {
+                font-size: 12.5px !important;
+                text-align: right !important;
+                padding-left: 0 !important;
+                white-space: nowrap !important;
+            }
+        }
         @media (max-width: 480px) {
             .hero-title { font-size: 32px !important; }
             .export-actions { grid-template-columns: 1fr !important; }
@@ -445,6 +525,7 @@
                     </div>
                     <div class="summary-value tabular-nums" style="color: var(--white);">Rp {{ number_format($sisaDana ?? 0, 0, ',', '.') }}</div>
                 </div>
+            </div>
         </div>
     </section>
 
@@ -457,7 +538,7 @@
             <p>Pemantauan statistik keseluruhan operasional keuangan dan proyek untuk tahun berjalan.</p>
         </div>
 
-       {{-- 1. TOP CARDS (DIPERKAYA DENGAN STATUS KESEHATAN PROYEK) --}}
+       {{-- 1. TOP CARDS --}}
         <div class="stats-grid animate-fade delay-2">
             <div class="stat-card">
                 <div class="stat-icon icon-blue"><i class="fa-solid fa-arrow-down-long"></i></div>
@@ -481,23 +562,22 @@
                 </div>
             </div>
             
-            {{-- Card Kesehatan Proyek Pengganti / Tambahan --}}
             <div class="stat-card">
-    <div class="stat-icon icon-gold"><i class="fa-solid fa-chart-pie"></i></div>
-    <div class="stat-info">
-        <span class="stat-label">Status Anggaran Proyek</span>
-        <div style="display: flex; gap: 12px; margin-top: 4px;">
-            <span style="font-size: 13px; font-weight: 700; color: var(--success);">
-                <i class="fa-solid fa-circle-check"></i> {{ $proyekSehat ?? 0 }} Sehat
-            </span>
-            @if(($proyekKritis ?? 0) > 0)
-                <span style="font-size: 13px; font-weight: 700; color: var(--danger);">
-                    <i class="fa-solid fa-triangle-exclamation"></i> {{ $proyekKritis }} Kritis
-                </span>
-            @endif
-        </div>
-    </div>
-</div>
+                <div class="stat-icon icon-gold"><i class="fa-solid fa-chart-pie"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Status Anggaran Proyek</span>
+                    <div style="display: flex; gap: 12px; margin-top: 4px;">
+                        <span style="font-size: 13px; font-weight: 700; color: var(--success);">
+                            <i class="fa-solid fa-circle-check"></i> {{ $proyekSehat ?? 0 }} Sehat
+                        </span>
+                        @if(($proyekKritis ?? 0) > 0)
+                            <span style="font-size: 13px; font-weight: 700; color: var(--danger);">
+                                <i class="fa-solid fa-triangle-exclamation"></i> {{ $proyekKritis }} Kritis
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- 2. WIDGETS (CHART & REKAP) --}}
@@ -552,7 +632,6 @@
         {{-- 3. DATA CENTER (FILTER, TAB & TABEL) --}}
         <div class="data-center animate-fade delay-2" id="laporan">
             
-            {{-- INDIKATOR FILTER AKTIF & JUDUL LAPORAN --}}
             <div class="widget-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div class="widget-title" style="font-size: 18px;">Laporan Terperinci</div>
                 
@@ -574,19 +653,16 @@
             <div class="data-toolbar">
                 <form method="GET" action="{{ route('public.finance') }}#laporan" class="filter-form" style="width: 100%; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                     
-                    <!-- Input Dari Tanggal -->
                     <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 140px;">
                         <label style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Dari Tanggal</label>
                         <input type="date" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}" class="filter-select" style="width: 100%; height: 42px;">
                     </div>
 
-                    <!-- Input Sampai Tanggal -->
                     <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 140px;">
                         <label style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Sampai Tanggal</label>
                         <input type="date" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}" class="filter-select" style="width: 100%; height: 42px;">
                     </div>
 
-                    <!-- Filter Bulan -->
                     <div style="display: flex; flex-direction: column; gap: 4px; min-width: 120px;">
                         <label style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Bulan</label>
                         <select name="bulan" class="filter-select" style="height: 42px;">
@@ -599,7 +675,6 @@
                         </select>
                     </div>
 
-                    <!-- Filter Tahun -->
                     <div style="display: flex; flex-direction: column; gap: 4px; min-width: 110px;">
                         <label style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Tahun</label>
                         <select name="tahun" class="filter-select" style="height: 42px;">
@@ -611,7 +686,6 @@
                         </select>
                     </div>
 
-                    <!-- Tombol Aksi -->
                     <div style="display: flex; align-items: flex-end; gap: 8px; margin-top: auto;">
                         <button type="submit" class="btn-filter" style="height: 42px;"><i class="fa-solid fa-filter"></i> Terapkan</button>
                         @if(request('tanggal_mulai') || request('tanggal_selesai') || request('bulan') || request('tahun'))
@@ -621,7 +695,6 @@
                 </form>
 
                 <div class="export-actions" style="margin-top: 10px; width: 100%; display: flex; justify-content: flex-end;">
-
                     <button onclick="copyFilterLink()" class="btn-export" style="background: var(--border-light); color: var(--text-primary); border-color: var(--border); cursor: pointer;" title="Salin Tautan Laporan Ini">
                         <i class="fa-solid fa-link"></i> Salin Tautan
                     </button>
@@ -634,8 +707,6 @@
                     <a href="{{ route('public.finance.export', ['type' => 'excel'] + request()->all()) }}" class="btn-export excel">
                         <i class="fa-solid fa-file-excel"></i> Excel
                     </a>
-
-
                 </div>
             </div>
 
@@ -652,8 +723,6 @@
                     <input type="text" id="liveSearchInput" placeholder="Cari project, tanggal, atau nominal..." 
                            style="width: 100%; padding: 12px 16px 12px 42px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; outline: none; transition: 0.3s; box-shadow: var(--shadow-sm);">
                 </div>
-
-                
             </div>
 
             <!-- Tab 1: Dana Masuk -->
@@ -728,7 +797,7 @@
                 @endif
             </div>
 
-    <!-- Tab 3: Project -->
+            <!-- Tab 3: Project -->
             <div id="tab-project" class="tab-content {{ request('tab') == 'project' ? 'active' : '' }}">
                 <div class="table-container">
                     <table class="fintech-table">
@@ -736,7 +805,7 @@
                             <tr>
                                 <th>Nama Project</th>
                                 <th>Anggaran Disetujui</th>
-                             <th class="right">
+                               <th class="right">
                                     <div style="display: inline-flex; align-items: center; justify-content: flex-end; width: 100%;">
                                         <span>Status Saldo</span>
                                         <span class="info-tooltip" onclick="showInfoModal('Informasi Status Saldo', 'Selisih antara total dana masuk proyek dikurangi total pengeluaran riil proyek.')">
@@ -780,6 +849,7 @@
                 @endif
             </div>
         </div>
+
         {{-- CATATAN AKUNTABILITAS PUBLIK --}}
         <div style="margin-top: 40px; padding: 24px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
             <div style="width: 48px; height: 48px; min-width: 48px; border-radius: 14px; background: var(--brand-gold-light); color: var(--brand-gold); display: flex; align-items: center; justify-content: center; font-size: 20px;">
@@ -841,7 +911,7 @@
     </div>
     @endforeach
 
-    {{-- MODAL PROJECT YANG DIPERKAYA DENGAN TABEL MUTASI RINCI --}}
+    {{-- MODAL PROJECT --}}
     @foreach($publicProjectFinance as $index => $project)
         @php
             $projectExpense = $project->pengajuanDana->flatMap(function ($p) { return $p->transaksiDana; });
@@ -860,7 +930,6 @@
             </div>
             
             <div class="receipt-body" style="max-height: 60vh; overflow-y: auto; padding: 25px 20px;">
-                <!-- Ringkasan Anggaran -->
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; text-align: center;">
                     <div style="background: var(--bg-body); padding: 12px 8px; border-radius: 12px; border: 1px solid var(--border);">
                         <div style="font-size: 10px; color: var(--text-secondary); font-weight: 700;">ANGGARAN</div>
@@ -876,7 +945,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Riwayat Dana Masuk Proyek -->
                 <div style="margin-bottom: 20px;">
                     <div style="font-size: 12px; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                         <i class="fa-solid fa-arrow-down" style="color: var(--success);"></i> Riwayat Dana Masuk
@@ -903,7 +971,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Riwayat Pengeluaran Proyek -->
                 <div>
                     <div style="font-size: 12px; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                         <i class="fa-solid fa-arrow-up" style="color: var(--danger);"></i> Riwayat Pengeluaran
@@ -1156,9 +1223,11 @@
             if (navMenu.classList.contains('show')) {
                 menuIcon.classList.remove('fa-bars');
                 menuIcon.classList.add('fa-xmark');
+                document.body.style.overflow = 'hidden';
             } else {
                 menuIcon.classList.remove('fa-xmark');
                 menuIcon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
             }
         }
 
@@ -1169,10 +1238,10 @@
             navMenu.classList.remove('show');
             menuIcon.classList.remove('fa-xmark');
             menuIcon.classList.add('fa-bars');
+            document.body.style.overflow = 'auto';
         }
 
-
-// Fungsi Salin Tautan Filter
+        // Fungsi Salin Tautan Filter
         function copyFilterLink() {
             navigator.clipboard.writeText(window.location.href).then(() => {
                 alert('Tautan laporan berhasil disalin! Anda dapat membagikannya langsung.');
@@ -1181,9 +1250,8 @@
             });
         }
 
-        // Fungsi Pop-up Informasi Sederhana yang Aman dari Tenggelam
+        // Fungsi Pop-up Informasi Sederhana
         function showInfoModal(title, message) {
-            // Cek apakah modal info sudah ada, jika belum buat elemennya secara dinamis
             let existingModal = document.getElementById('infoPopupModal');
             if (existingModal) {
                 existingModal.remove();
@@ -1197,11 +1265,12 @@
                         </div>
                         <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">${title}</div>
                         <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">${message}</div>
-                        <button onclick="document.getElementById('infoPopupModal').remove()" style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--text-primary); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">Mengerti</button>
+                        <button onclick="document.getElementById('infoPopupModal').remove(); document.body.style.overflow='auto';" style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--text-primary); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">Mengerti</button>
                     </div>
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.body.style.overflow = 'hidden';
         }
     </script>
 </body>
