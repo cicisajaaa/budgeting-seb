@@ -277,7 +277,7 @@ Route::get('/expense/divisions/{project}',[
 */
 
 
-Route::middleware('role:keuangan')->group(function(){
+Route::middleware('role:admin,keuangan')->group(function(){
 
 
 
@@ -337,7 +337,7 @@ Route::post('/expense/{id}/disburse',[
 | FINANCE MANAGEMENT
 |--------------------------------------------------------------------------
 */
-Route::middleware('role:keuangan')->group(function(){
+Route::middleware('role:admin,keuangan')->group(function(){
 
 
 
@@ -421,7 +421,7 @@ Route::get('/finance/distribution',[
 */
 
 
-Route::middleware('role:keuangan,owner')->group(function(){
+Route::middleware('role:admin,keuangan,owner')->group(function(){
 
 
 

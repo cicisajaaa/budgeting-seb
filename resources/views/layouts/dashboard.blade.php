@@ -524,6 +524,93 @@ Monitoring Tugas
 
 
 
+{{-- ================= ADMIN + KEUANGAN ================= --}}
+
+
+@if(auth()->user()->role=='admin')
+
+
+<div class="menu-title">
+FINANCE
+</div>
+
+
+<a href="{{route('finance.dashboard')}}"
+class="{{request()->routeIs('finance.dashboard') || request()->is('finance/dashboard') ? 'active':''}}">
+<div class="icon">⌂</div>
+Dashboard Keuangan
+</a>
+
+
+<a href="{{route('finance.deposit')}}"
+class="{{request()->routeIs('finance.deposit')?'active':''}}">
+<div class="icon">💰</div>
+Pembayaran Masuk
+</a>
+
+
+<a href="{{route('finance.bank.index')}}"
+class="{{request()->routeIs('finance.bank.*')?'active':''}}">
+<div class="icon">🏦</div>
+Rekening Bank
+</a>
+
+
+<a href="{{route('finance.balance')}}"
+class="{{request()->routeIs('finance.balance')?'active':''}}">
+<div class="icon">💳</div>
+Saldo Divisi
+</a>
+
+
+<a href="{{route('finance.distribution')}}"
+class="{{request()->routeIs('finance.distribution')?'active':''}}">
+<div class="icon">📤</div>
+Distribusi Dana
+</a>
+
+
+<a href="{{route('finance.expense.index')}}"
+class="{{request()->routeIs('finance.expense.*')?'active':''}}">
+<div class="icon">💸</div>
+Riwayat Pengeluaran
+</a>
+
+
+<a href="{{route('expense.approval')}}"
+class="{{request()->routeIs('expense.approval')?'active':''}}">
+<div class="icon">✓</div>
+Approval Dana
+@if(isset($pendingApproval) && $pendingApproval > 0)
+<span class="menu-badge">{{$pendingApproval}}</span>
+@endif
+</a>
+
+
+<a href="{{route('expense.approval.history')}}"
+class="{{request()->routeIs('expense.approval.history*')?'active':''}}">
+<div class="icon">📄</div>
+Riwayat Approval
+</a>
+
+
+<a href="{{route('finance.report')}}"
+class="{{request()->routeIs('finance.report')?'active':''}}">
+<div class="icon">📊</div>
+Laporan
+</a>
+
+
+<a href="{{route('finance.reconciliation')}}"
+class="{{request()->routeIs('finance.reconciliation')?'active':''}}">
+<div class="icon">🏦</div>
+Rekonsiliasi Bank
+</a>
+
+
+@endif
+
+
 {{-- ================= OWNER ================= --}}
 
 
